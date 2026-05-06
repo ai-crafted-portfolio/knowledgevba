@@ -1,0 +1,58 @@
+---
+title: ナレッジ管理ツール (VBA 製)
+description: Excel VBA で実装したナレッジ管理ツールの仕様・操作・アーキテクチャまとめ
+tags:
+  - excel
+  - vba
+  - knowledge-base
+---
+
+# ナレッジ管理ツール (VBA 製)
+
+職場 PC で社内ノウハウ・トラブル対応メモ・手順書をテキストファイル（`.txt`、Shift_JIS + CRLF）で蓄積し、Excel から横断検索・サムネ画像つきプレビューできるようにする内製ツールです。現行リリースは **release v2 + image_ext rev1**（2026-05-04）。
+
+## このツールで解決したいこと
+
+- 過去の障害メモや手順を「あのとき書いたはずだ」で終わらせない
+- ChromaDB / RAG への移行前に、最低限のスコアリング検索 UI を VBA で先行提供する
+- 子プロセス起動禁止・社内エンドポイントセキュリティポリシーで動かない外部ツールを諦め、**Excel プロセス内で完結**する
+
+## 想定読者
+
+- 同ツールを職場 PC に展開する予定のメンバー
+- VBA モジュール構成・検索スコアリング設計をレビューする人
+- 利用者向け操作手順を確認したい人 → [操作手順](operations.md) へ
+
+## 全体像
+
+```mermaid
+flowchart LR
+    User([利用者]) -->|キーワード| MainSheet[メインシート]
+    MainSheet --> SearchSheet[検索シート]
+    SearchSheet -->|検索実行| Engine[clsSearchEngine]
+    Engine -->|.txt 走査| Data[(dataFolder /<br/>*.txt SJIS+CRLF)]
+    Engine -->|サムネ取得| Images[(kb_images /<br/>KnwNo.png)]
+    Engine -->|Score 降順| Result[結果一覧<br/>サムネ + Score 列]
+    Result -->|行選択 + Macro| Form[spec 駆動 UserForm<br/>詳細プレビュー]
+```
+
+## 主要機能
+
+ナレッジ一覧でメタデータを管理し、検索画面でキーワード一致をスコアリング（タイトル ×3 + 対象フィールド ×2 + 出現回数）して降順ソート、結果一覧の H 列にサムネ（60×40px）、I 列に Score を表示します。結果行を選択して `Macro_ShowSearchResultPreview` を実行すると、`clsFormSpec` で宣言した DSL から `modFormBuilder` が UserForm を実行時生成して詳細プレビューを表示します。設定画面で `dataFolder` を切り替えれば複数ナレッジ集を運用でき、`<dataFolder の親>/kb_images/<KnwNo>.png` の規約で画像が解決されます。`ImagePath=` スタンザを `.txt` 末尾に書けばパス上書きも可能です。
+
+## 設計方針のハイライト
+
+- **モジュール配布 + セルフセットアップ** — `.xlsm` 本体は配布せず、`.bas`/`.cls` 24 個 + セットアップマクロ 1 回実行という形で各 PC に展開（[ADR-0008](architecture.md#5-adr)）
+- **VBA 子プロセス全面禁止** — `Shell` / `WScript.Shell.Run` 等は職場 PC で動かないので使わず、すべて Excel プロセス内で完結（[ADR-0002](architecture.md#5-adr)）
+- **層分離** — エントリポイント / ビジネスロジック / ユーティリティ / インストーラ / 特殊 の 5 層で責務を分離。詳細は [アーキテクチャ](architecture.md) 参照
+- **ChromaDB 移行を見据えた境界** — `clsSearchEngine` 1 ファイルだけ差し替えれば txt 走査 → Range 走査に切り替えられる構造
+
+## ページ構成
+
+- [概要](index.md)（このページ）
+- [仕様](spec.md) — モジュール 24 個、検索スコアリング、画像解決、`clsFormSpec` DSL、ChromaDB 切替ポイント、テスト構成
+- [操作手順](operations.md) — マクロ有効化、初回セットアップ、デモデータ投入、検索実行、トラブルシューティング
+- [アーキテクチャ](architecture.md) — 層分離図、依存関係、配布パターン、関連 ADR への参照
+
+!!! note "公開可視性"
+    本サイトは職場利用を想定したツールのドキュメントのため、全ページ `noindex,nofollow` を設定しています。検索エンジンへの indexing は意図的に抑止しています。
