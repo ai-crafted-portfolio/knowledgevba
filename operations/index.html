@@ -1,0 +1,1126 @@
+
+<!doctype html>
+<html lang="ja" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="マクロ有効化、初回セットアップ、検索実行、画像表示確認、トラブルシューティング、拡張テスト">
+      
+      
+        <meta name="author" content="ai-crafted-portfolio">
+      
+      
+        <link rel="canonical" href="https://ai-crafted-portfolio.github.io/knowledgevba/operations/">
+      
+      
+        <link rel="prev" href="../spec/">
+      
+      
+        <link rel="next" href="../architecture/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>操作手順 - ナレッジ管理ツール (VBA 製)</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+JP:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Noto Sans JP";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  <meta name="robots" content="noindex,nofollow">
+
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          コンテンツにスキップ
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="ヘッダー">
+    <a href=".." title="ナレッジ管理ツール (VBA 製)" class="md-header__button md-logo" aria-label="ナレッジ管理ツール (VBA 製)" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ナレッジ管理ツール (VBA 製)
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              操作手順
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="ダークモードに切替"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="ダークモードに切替" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="ライトモードに切替"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="ライトモードに切替" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="検索" placeholder="検索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="検索">
+        
+        <button type="reset" class="md-search__icon md-icon" title="クリア" aria-label="クリア" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            検索を初期化
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="タブ" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  概要
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../spec/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  仕様
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  操作手順
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../architecture/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  アーキテクチャ
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="ナビゲーション" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="ナレッジ管理ツール (VBA 製)" class="md-nav__button md-logo" aria-label="ナレッジ管理ツール (VBA 製)" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    ナレッジ管理ツール (VBA 製)
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    概要
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../spec/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    仕様
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    操作手順
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    操作手順
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目次">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目次
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#0" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0. 前提環境
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-import" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 配布パッケージを使う場合（モジュール手動 import）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. 配布パッケージを使う場合（モジュール手動 import）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-11-xlsm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1.1 マクロ有効化と新規 .xlsm 作成
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-12-vbe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1.2 VBE を開いて全モジュールをインポート
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-13-thisworkbook" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1.3 ThisWorkbook の中身を貼り付け（インポートではない）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-14" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1.4 コンパイル確認
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-15" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1.5 セットアップマクロを実行
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-16" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1.6 保存して再オープン
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-knowledge_test_v2_demo_v2xlsm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. デモパッケージを使う場合（knowledge_test_v2_demo_v2.xlsm）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. デモパッケージを使う場合（knowledge_test_v2_demo_v2.xlsm）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-21" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2.1 パッケージをローカルにコピー
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-22-xlsm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2.2 .xlsm を開く
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-23" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2.3 自動初期化を待つ
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-24" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2.4 検索を実行
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-25-image_ext-rev1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2.5 詳細プレビューフォーム（image_ext rev1、任意）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. トラブルシューティング
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. トラブルシューティング">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#q1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q1. 開いた直後の自動初期化が走らない
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q2. 「コンパイルエラー」が出る
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q3-h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q3. 検索結果の H 列に画像が表示されない
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q4-setupsheetsandbuttons" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q4. SetupSheetsAndButtons マクロが見つからない
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q5. 「コンパイルエラー: メソッドまたはデータ メンバーが見つかりません」
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q6. 起動時に「インデックスが有効範囲にありません」
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q7. ボタンが既存の表示と重なって見えにくい
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q8. セットアップを最初からやり直したい
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 拡張テストの実行手順
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. このパッケージが触る範囲・触らない範囲
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    アーキテクチャ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="_1">操作手順<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
+<p>このページは <strong>モジュールを受け取った利用者が職場 PC でセットアップして使い始める手順</strong> と、Cowork デモ用に同梱された <code>knowledge_test_v2_demo_v2.xlsm</code> の使い方を併記します。</p>
+<h2 id="0">0. 前提環境<a class="headerlink" href="#0" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Microsoft Excel 2019 / 2021 / 365（Windows 版推奨）</li>
+<li>書込権限のあるローカルフォルダ（ネットワークドライブ直下は避ける）</li>
+<li>マクロ有効化が許可されているプロファイル</li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Excel for Mac の制約</p>
+<p><code>Forms.*</code> ProgID が無いため <code>Macro_ShowSearchResultPreview</code>（spec 駆動 UserForm）は動作しません。検索のみなら可。</p>
+</div>
+<hr />
+<h2 id="1-import">1. 配布パッケージを使う場合（モジュール手動 import）<a class="headerlink" href="#1-import" title="Permanent link">&para;</a></h2>
+<p>職場本番展開向け。配布物は <code>release_v2/</code> ZIP（VBA モジュール 24 個 + サンプル <code>kb_images/</code> + README）で <code>.xlsm</code> 本体は含みません。</p>
+<h3 id="step-11-xlsm">Step 1.1 マクロ有効化と新規 .xlsm 作成<a class="headerlink" href="#step-11-xlsm" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Excel を起動</li>
+<li><code>[ファイル] → [新規] → [空白のブック]</code></li>
+<li><code>[ファイル] → [名前を付けて保存]</code> で <strong>必ず <code>.xlsm</code>（Excel マクロ有効ブック）</strong> として保存<ul>
+<li>ファイルの種類で「<strong>Excel マクロ有効ブック (<code>*.xlsm</code>)</strong>」を選択</li>
+<li>任意のファイル名（例: <code>ナレッジ管理.xlsm</code>）</li>
+</ul>
+</li>
+</ol>
+<h3 id="step-12-vbe">Step 1.2 VBE を開いて全モジュールをインポート<a class="headerlink" href="#step-12-vbe" title="Permanent link">&para;</a></h3>
+<ol>
+<li><code>Alt + F11</code> で VBE（Visual Basic Editor）を開く</li>
+<li>左の「プロジェクト」ツリーから対象ブックを右クリック → <code>[ファイルのインポート...]</code></li>
+<li>以下のフォルダ別ファイル群を順次インポート</li>
+</ol>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:5"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><input id="__tabbed_1_5" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">エントリポイント層 (5)</label><label for="__tabbed_1_2">ビジネスロジック層 (7)</label><label for="__tabbed_1_3">ユーティリティ層 (5)</label><label for="__tabbed_1_4">インストーラ層 (1)</label><label for="__tabbed_1_5">image_ext rev1 追加分 (4)</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<ul>
+<li><code>modEntryFormat.bas</code></li>
+<li><code>modEntryKnowledge.bas</code></li>
+<li><code>modEntryMain.bas</code></li>
+<li><code>modEntrySearch.bas</code></li>
+<li><code>modEntrySettings.bas</code></li>
+</ul>
+</div>
+<div class="tabbed-block">
+<ul>
+<li><code>clsFieldMigrator.cls</code></li>
+<li><code>clsFormatManager.cls</code></li>
+<li><code>clsKnowledgeManager.cls</code></li>
+<li><code>clsLogger.cls</code></li>
+<li><code>clsSearchEngine.cls</code></li>
+<li><code>clsStorageResolver.cls</code></li>
+<li><code>clsTaskController.cls</code></li>
+</ul>
+</div>
+<div class="tabbed-block">
+<ul>
+<li><code>clsLogEntry.cls</code></li>
+<li><code>modCommon.bas</code></li>
+<li><code>modDateUtil.bas</code></li>
+<li><code>modFileIO.bas</code></li>
+<li><code>modStringUtil.bas</code></li>
+</ul>
+</div>
+<div class="tabbed-block">
+<ul>
+<li><code>modSetup.bas</code></li>
+</ul>
+</div>
+<div class="tabbed-block">
+<ul>
+<li><code>clsControlSpec.cls</code></li>
+<li><code>clsFormSpec.cls</code></li>
+<li><code>modFormBuilder.bas</code></li>
+<li><code>modImageRender.bas</code></li>
+<li><code>modSpecExamples.bas</code></li>
+</ul>
+</div>
+</div>
+</div>
+<h3 id="step-13-thisworkbook">Step 1.3 ThisWorkbook の中身を貼り付け（インポートではない）<a class="headerlink" href="#step-13-thisworkbook" title="Permanent link">&para;</a></h3>
+<p><code>ThisWorkbook.cls</code> だけは「インポート」ではなく <strong>中身のコピペ</strong> が必要です。VBE は新しい <code>ThisWorkbook</code> を作れず、既存の <code>ThisWorkbook</code> に上書きする必要があるためです。</p>
+<ol>
+<li>VBE 左ペインで <strong><code>Microsoft Excel Objects</code> → <code>ThisWorkbook</code></strong> をダブルクリック</li>
+<li>右側のコードペインを開く（現状は空のはず）</li>
+<li>テキストエディタ（メモ帳・サクラエディタ等）で <code>vba_modules/特殊モジュール/ThisWorkbook.cls</code> を開く</li>
+<li>
+<p>先頭から下記の <strong>9 行のヘッダーを除いた</strong>残り全部を選択してコピー</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>VERSION 1.0 CLASS
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>BEGIN
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>  MultiUse = -1  &#39;True
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>END
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>Attribute VB_Name = &quot;ThisWorkbook&quot;
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>Attribute VB_GlobalNameSpace = False
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>Attribute VB_Creatable = False
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>Attribute VB_PredeclaredId = True
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>Attribute VB_Exposed = True
+</code></pre></div>
+</li>
+<li>
+<p>VBE の <code>ThisWorkbook</code> コードペインに貼り付け</p>
+</li>
+<li>確認: 先頭が <code>Option Explicit</code> で始まっていれば OK</li>
+</ol>
+<h3 id="step-14">Step 1.4 コンパイル確認<a class="headerlink" href="#step-14" title="Permanent link">&para;</a></h3>
+<p>VBE の <code>[デバッグ] → [VBAProject のコンパイル]</code> を実行。エラーが出なければ次へ。</p>
+<h3 id="step-15">Step 1.5 セットアップマクロを実行<a class="headerlink" href="#step-15" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Excel に戻る（<code>Alt + F11</code> で再度切り替え）</li>
+<li><code>[開発] → [マクロ]</code> または <strong><code>Alt + F8</code></strong> でマクロダイアログを開く</li>
+<li>リストから <strong><code>SetupSheetsAndButtons</code></strong> を選択</li>
+<li><strong><code>[実行]</code></strong> をクリック</li>
+<li>完了ダイアログ「セットアップ完了。」が出たら成功</li>
+</ol>
+<p>このマクロは以下を実行します。</p>
+<ul>
+<li>必要シート 14 個（<code>メイン</code>, <code>検索</code>, <code>ログ</code> 等）を自動生成</li>
+<li>ログシートのヘッダー行（日時/モジュール名/関数名/メッセージ種別/メッセージ内容）を書込</li>
+<li>設定シート C6 にテストモードフラグ（<code>"FALSE"</code> = 本番モード）を設定</li>
+<li>メインシート B25:E26 にタスクボタン用ラベルを書込</li>
+<li><strong>フォームコントロールボタン 29 個</strong> を全シートに配置 + マクロ割り当て</li>
+<li>メインシート以外を非表示（起動時はメインのみ表示）</li>
+<li>既定の空 Sheet1 を削除</li>
+</ul>
+<h3 id="step-16">Step 1.6 保存して再オープン<a class="headerlink" href="#step-16" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong><code>Ctrl + S</code></strong> で保存</li>
+<li>Excel を一度閉じる</li>
+<li>再度同じ <code>.xlsm</code> を開く → <code>Workbook_Open</code> が走り、メインシートが表示される</li>
+</ol>
+<p>メインシート行 25-26 に 8 個のボタン（<code>▶初回セットアップ</code> 等）が並んでいれば成功です。</p>
+<hr />
+<h2 id="2-knowledge_test_v2_demo_v2xlsm">2. デモパッケージを使う場合（<code>knowledge_test_v2_demo_v2.xlsm</code>）<a class="headerlink" href="#2-knowledge_test_v2_demo_v2xlsm" title="Permanent link">&para;</a></h2>
+<p>Cowork デモ用。<code>Workbook_Open</code> イベントが自動でセットアップとデモデータ投入を実行するので、ユーザは <strong>コンテンツの有効化を押して待つだけ</strong> です。</p>
+<h3 id="step-21">Step 2.1 パッケージをローカルにコピー<a class="headerlink" href="#step-21" title="Permanent link">&para;</a></h3>
+<p><code>Downloads\knowledge_test_v2_demo\</code> 一式を任意の書込権限のあるローカルフォルダにコピーします（例: <code>C:\Users\&lt;あなた&gt;\Documents\knowledge_demo\</code>）。<code>data/</code> と <code>kb_images/</code> は <code>.xlsm</code> と同じ階層を維持してください。</p>
+<h3 id="step-22-xlsm">Step 2.2 .xlsm を開く<a class="headerlink" href="#step-22-xlsm" title="Permanent link">&para;</a></h3>
+<p><code>knowledge_test_v2_demo_v2.xlsm</code> をダブルクリック → 黄色の警告帯が出たら <strong><code>[コンテンツの有効化]</code></strong> をクリック。</p>
+<div class="admonition tip">
+<p class="admonition-title">インターネットゾーンブロック対策</p>
+<p>ファイル右クリック → プロパティ → セキュリティ欄に「許可する」チェックボックスがあれば ON にしてから開いてください。Excel 365 のインターネットゾーンブロックで <code>Workbook_Open</code> が走らないことがあります。</p>
+</div>
+<h3 id="step-23">Step 2.3 自動初期化を待つ<a class="headerlink" href="#step-23" title="Permanent link">&para;</a></h3>
+<p><code>[コンテンツの有効化]</code> 後、<code>Workbook_Open</code> イベントが自動で:</p>
+<ol>
+<li><strong>シート未生成なら</strong> <code>SetupSheetsAndButtons</code> を実行（14 シート + 29 ボタン + 検索 14 行目 9 列ヘッダ生成）</li>
+<li><strong>デモデータ未投入なら</strong> <code>Macro_SeedDemoData</code> を実行（DEMO-MEMO フォーマット登録 + dataFolder 設定 + ナレッジ一覧 5 件投入）</li>
+<li>ログクリア + 起動ログ書込</li>
+<li>メインシートのみ表示</li>
+</ol>
+<p>完了すると「セットアップ完了。」「デモデータの初期化が完了しました。」のメッセージが順に出ます（各 <code>OK</code> で閉じる）。</p>
+<div class="admonition info">
+<p class="admonition-title">冪等性</p>
+<p>既にセットアップ済の状態（検索シート存在 &amp; ナレッジ一覧 row 3 にデータあり）で開けば自動初期化はスキップされます。何度開いても破綻しません。</p>
+</div>
+<h3 id="step-24">Step 2.4 検索を実行<a class="headerlink" href="#step-24" title="Permanent link">&para;</a></h3>
+<ol>
+<li>メインシートの <strong><code>検索</code></strong> ボタンをクリック → 検索シートに遷移</li>
+<li>検索シートには既に以下が入力済（デモ初期化により）<ul>
+<li><strong>FormatID</strong>: <code>DEMO-MEMO</code></li>
+<li><strong>キーワード</strong>: <code>メモ</code></li>
+<li><strong>検索モード</strong>: <code>AND</code></li>
+<li><strong>TargetField</strong>: <code>(全フィールド)</code></li>
+</ul>
+</li>
+<li><strong><code>検索実行</code></strong> ボタンをクリック</li>
+<li>14 行目以降に <strong>スコア降順</strong> で結果が並び、<strong>H 列にサムネ画像（60×40px）</strong>、<strong>I 列に Score 値</strong></li>
+</ol>
+<p>期待される検索結果は <a href="../spec/#3">仕様 §3</a> の表を参照。</p>
+<h3 id="step-25-image_ext-rev1">Step 2.5 詳細プレビューフォーム（image_ext rev1、任意）<a class="headerlink" href="#step-25-image_ext-rev1" title="Permanent link">&para;</a></h3>
+<ol>
+<li>検索シートで結果行を選択</li>
+<li><strong><code>Alt + F8</code></strong> → <strong><code>Macro_ShowSearchResultPreview</code></strong> → <strong><code>[実行]</code></strong></li>
+<li>spec 駆動 UserForm が開く</li>
+</ol>
+<div class="admonition warning">
+<p class="admonition-title">前提条件</p>
+<p><code>[ファイル] → [オプション] → [トラスト センター] → [トラスト センターの設定] → [マクロの設定] → [VBA プロジェクト オブジェクト モデルへのアクセスを信頼する]</code> を <strong>ON</strong> にする必要あり（検索のみなら OFF でも可）。</p>
+</div>
+<hr />
+<h2 id="3">3. トラブルシューティング<a class="headerlink" href="#3" title="Permanent link">&para;</a></h2>
+<h3 id="q1">Q1. 開いた直後の自動初期化が走らない<a class="headerlink" href="#q1" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>原因 A</strong>: マクロが無効。<strong>対処</strong>: <code>[コンテンツの有効化]</code> をクリック。</li>
+<li><strong>原因 B</strong>: <code>Workbook_Open</code> がエラーで止まった（MsgBox で「自動初期化に失敗しました: ...」が出る）。<strong>対処</strong>: <code>Alt + F8</code> → <code>SetupSheetsAndButtons</code> 手動実行 → <code>Macro_SeedDemoData</code> 手動実行。</li>
+</ul>
+<h3 id="q2">Q2. 「コンパイルエラー」が出る<a class="headerlink" href="#q2" title="Permanent link">&para;</a></h3>
+<p>v2 の修正で <strong>VB_Base 注入</strong> + <strong>▶ ChrW 化</strong> + <strong>〜 ASCII 化</strong> を実施済みです。それでも出る場合は次の順で確認します。</p>
+<ol>
+<li>VBE（<code>Alt + F11</code>） → <code>[デバッグ] → [VBAProject のコンパイル]</code></li>
+<li>赤くなる行のモジュール名 / 行番号 / メッセージを記録</li>
+<li>（一時回避）該当モジュールを VBE 上で右クリック → 解放 → 再 Import</li>
+</ol>
+<h3 id="q3-h">Q3. 検索結果の H 列に画像が表示されない<a class="headerlink" href="#q3-h" title="Permanent link">&para;</a></h3>
+<p><code>kb_images/</code> フォルダが <code>.xlsm</code> と同じ階層にあるか確認してください。規約は <code>&lt;dataFolder の親&gt;/kb_images/&lt;KnwNo&gt;.png</code>。例: <code>dataFolder = C:\knowledge\data\</code> なら画像は <code>C:\knowledge\kb_images\</code>。</p>
+<p>ImagePath スタンザを使う場合は <code>.txt</code> 末尾に <code>ImagePath=KN-2026-0420.png</code> 等を書いてください（<a href="../spec/#42-imagepath">仕様 §4.2</a>）。</p>
+<h3 id="q4-setupsheetsandbuttons">Q4. <code>SetupSheetsAndButtons</code> マクロが見つからない<a class="headerlink" href="#q4-setupsheetsandbuttons" title="Permanent link">&para;</a></h3>
+<p><code>modSetup.bas</code> のインポート漏れの可能性。<code>Alt + F11</code> の VBE 左ペインで <code>インストーラ層 → modSetup</code>（または標準モジュールに <code>modSetup</code>）があるか確認してください。</p>
+<h3 id="q5">Q5. 「コンパイルエラー: メソッドまたはデータ メンバーが見つかりません」<a class="headerlink" href="#q5" title="Permanent link">&para;</a></h3>
+<p>どこかのモジュールがインポート漏れの可能性。VBE 左ペインで以下が全て揃っているか確認:</p>
+<ul>
+<li>標準モジュール（<code>mod*</code>）: 9 個（<code>modCommon</code>, <code>modDateUtil</code>, <code>modEntry系5</code>, <code>modFileIO</code>, <code>modStringUtil</code>, <code>modSetup</code>）</li>
+<li>クラスモジュール（<code>cls*</code>）: 8 個（<code>clsFieldMigrator</code>, <code>clsFormatManager</code>, <code>clsKnowledgeManager</code>, <code>clsLogger</code>, <code>clsLogEntry</code>, <code>clsSearchEngine</code>, <code>clsStorageResolver</code>, <code>clsTaskController</code>）</li>
+<li>Microsoft Excel Objects: <code>ThisWorkbook</code>（中身が貼られている）</li>
+</ul>
+<h3 id="q6">Q6. 起動時に「インデックスが有効範囲にありません」<a class="headerlink" href="#q6" title="Permanent link">&para;</a></h3>
+<p><code>SetupSheetsAndButtons</code> の実行を忘れていないか確認してください。シートが無いと <code>Workbook_Open</code> がメインシートを参照できず本エラーになります。</p>
+<h3 id="q7">Q7. ボタンが既存の表示と重なって見えにくい<a class="headerlink" href="#q7" title="Permanent link">&para;</a></h3>
+<p>新規 <code>.xlsm</code> の既定の列幅・行高さのため、ボタンが小さく見える場合があります。各シートの該当行（例: メイン 25-26 行目）の高さを増やすか、列幅を広げると見栄えが改善します。本マクロは機能配置のみで装飾は最小化しています。</p>
+<h3 id="q8">Q8. セットアップを最初からやり直したい<a class="headerlink" href="#q8" title="Permanent link">&para;</a></h3>
+<p><code>SetupSheetsAndButtons</code> は <strong>何度実行しても安全</strong>（既存ボタンは削除→再配置、シートは存在チェック後スキップ）です。再度マクロを実行してください。シート自体を消したい場合は、対象シートを手動削除してから <code>SetupSheetsAndButtons</code> を再実行すれば再生成されます。</p>
+<hr />
+<h2 id="4">4. 拡張テストの実行手順<a class="headerlink" href="#4" title="Permanent link">&para;</a></h2>
+<p>dev 専用テスト（<code>modTestRunnerExt.bas</code>）を別途インポートしている場合のみ実行できます。配布物には含まれません。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>Application.Run &quot;TestRunner_RunAll&quot;      &#39; 既存 82 件
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>Application.Run &quot;TestRunnerExt_RunAll&quot;   &#39; 拡張 7 件
+</code></pre></div>
+<p>合計 <strong>PASS 89 / SKIP 4 / FAIL 0</strong> が完了条件です。</p>
+<hr />
+<h2 id="5">5. このパッケージが触る範囲・触らない範囲<a class="headerlink" href="#5" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>セットアップマクロが触るか</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>必要シート 14 個の作成</td>
+<td>あり（既存スキップ、不在分のみ作成）</td>
+</tr>
+<tr>
+<td>ログシート 1 行目ヘッダー</td>
+<td>あり（上書き）</td>
+</tr>
+<tr>
+<td>設定シート C6（テストモード）</td>
+<td>あり（<code>"FALSE"</code> 設定）</td>
+</tr>
+<tr>
+<td>メインシート B24:E26</td>
+<td>あり（案内テキスト + ボタン用ラベル書込）</td>
+</tr>
+<tr>
+<td>各シートのフォームコントロールボタン</td>
+<td>あり（同名は削除→再配置、29 個）</td>
+</tr>
+<tr>
+<td>各シートの初期可視性</td>
+<td>あり（メインのみ表示、他は非表示）</td>
+</tr>
+<tr>
+<td>空の既定 Sheet1</td>
+<td>あり（削除、データ・シェイプがあれば残す）</td>
+</tr>
+<tr>
+<td>その他のセル内容</td>
+<td>なし</td>
+</tr>
+<tr>
+<td>ユーザフォーム</td>
+<td>なし</td>
+</tr>
+<tr>
+<td>Excel シートの書式・色</td>
+<td>なし</td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  ページトップへ戻る
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2026 ai-crafted-portfolio
+    </div>
+  
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.indexes", "toc.integrate", "search.highlight", "search.suggest", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u30b3\u30d4\u30fc\u3057\u307e\u3057\u305f", "clipboard.copy": "\u30af\u30ea\u30c3\u30d7\u30dc\u30fc\u30c9\u3078\u30b3\u30d4\u30fc", "search.result.more.one": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3082\u30461\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.more.other": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3042\u3068#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.none": "\u4f55\u3082\u898b\u3064\u304b\u308a\u307e\u305b\u3093\u3067\u3057\u305f", "search.result.one": "1\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.other": "#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.placeholder": "\u691c\u7d22\u30ad\u30fc\u30ef\u30fc\u30c9\u3092\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044", "search.result.term.missing": "\u691c\u7d22\u306b\u542b\u307e\u308c\u306a\u3044", "select.version": "\u30d0\u30fc\u30b8\u30e7\u30f3\u5207\u308a\u66ff\u3048"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

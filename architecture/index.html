@@ -1,0 +1,902 @@
+
+<!doctype html>
+<html lang="ja" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="層分離図、依存関係、配布パターン、関連 ADR">
+      
+      
+        <meta name="author" content="ai-crafted-portfolio">
+      
+      
+        <link rel="canonical" href="https://ai-crafted-portfolio.github.io/knowledgevba/architecture/">
+      
+      
+        <link rel="prev" href="../operations/">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>アーキテクチャ - ナレッジ管理ツール (VBA 製)</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+JP:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Noto Sans JP";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  <meta name="robots" content="noindex,nofollow">
+
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          コンテンツにスキップ
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="ヘッダー">
+    <a href=".." title="ナレッジ管理ツール (VBA 製)" class="md-header__button md-logo" aria-label="ナレッジ管理ツール (VBA 製)" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ナレッジ管理ツール (VBA 製)
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              アーキテクチャ
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="ダークモードに切替"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="ダークモードに切替" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="ライトモードに切替"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="ライトモードに切替" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="検索" placeholder="検索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="検索">
+        
+        <button type="reset" class="md-search__icon md-icon" title="クリア" aria-label="クリア" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            検索を初期化
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="タブ" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  概要
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../spec/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  仕様
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../operations/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  操作手順
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  アーキテクチャ
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="ナビゲーション" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="ナレッジ管理ツール (VBA 製)" class="md-nav__button md-logo" aria-label="ナレッジ管理ツール (VBA 製)" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    ナレッジ管理ツール (VBA 製)
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    概要
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../spec/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    仕様
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../operations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    操作手順
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    アーキテクチャ
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    アーキテクチャ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目次">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目次
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 層分離
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 依存方向の制約
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 配布パターン
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 配布パターン">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-xlsm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 「.xlsm 本体は配布しない、モジュールだけ配布する」アプローチ
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 セットアップフロー
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 利点と欠点
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. データフロー
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-adr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 関連 ADR
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. テスト戦略
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. 拡張ポイント
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="_1">アーキテクチャ<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
+<h2 id="1">1. 層分離<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
+<p>VBA モジュールは責務ごとに 5 層に分離されています。依存方向は上から下への一方向のみで、ユーティリティ層がビジネスロジック層を呼ぶことはありません。</p>
+<pre class="mermaid"><code>flowchart TB
+    subgraph Entry [エントリポイント層]
+        EM[modEntryMain]
+        ES[modEntrySearch]
+        EK[modEntryKnowledge]
+        EF[modEntryFormat]
+        ESt[modEntrySettings]
+        EX[modSpecExamples]
+    end
+    subgraph Biz [ビジネスロジック層]
+        SE[clsSearchEngine]
+        KM[clsKnowledgeManager]
+        FM[clsFormatManager]
+        TC[clsTaskController]
+        SR[clsStorageResolver]
+        FMig[clsFieldMigrator]
+        LG[clsLogger]
+        FS[clsFormSpec]
+        CS[clsControlSpec]
+        FB[modFormBuilder]
+    end
+    subgraph Util [ユーティリティ層]
+        UC[modCommon]
+        US[modStringUtil]
+        UD[modDateUtil]
+        UF[modFileIO]
+        UI[modImageRender]
+        ULE[clsLogEntry]
+    end
+    subgraph Special [特殊]
+        TW[ThisWorkbook]
+    end
+    subgraph Inst [インストーラ層]
+        SU[modSetup]
+    end
+
+    Entry --&gt; Biz
+    Biz --&gt; Util
+    TW --&gt; Inst
+    TW --&gt; Entry
+    SU --&gt; Util
+    FB --&gt; CS
+    FS --&gt; CS</code></pre>
+<p>各層の責務は次のとおり。</p>
+<table>
+<thead>
+<tr>
+<th>層</th>
+<th>役割</th>
+<th>典型ファイル</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>エントリポイント層</td>
+<td>フォームコントロールボタンから直接呼ばれる Public Sub。引数なしまたは <code>ByVal</code> 単純型のみ受け取り、ビジネスロジック層に委譲する</td>
+<td><code>modEntry*.bas</code></td>
+</tr>
+<tr>
+<td>ビジネスロジック層</td>
+<td>クラス中心。検索、ナレッジ管理、フォーマット定義、タスク制御、ストレージ解決、フィールド移行、ログ、UserForm 動的生成</td>
+<td><code>cls*.cls</code> + <code>modFormBuilder.bas</code></td>
+</tr>
+<tr>
+<td>ユーティリティ層</td>
+<td>純粋関数とヘルパ。日付、文字列、ファイル I/O、画像描画。<strong>上位層への依存ゼロ</strong></td>
+<td><code>mod*Util.bas</code> + <code>modCommon.bas</code> + <code>modImageRender.bas</code></td>
+</tr>
+<tr>
+<td>インストーラ層</td>
+<td>1 回限りのセットアップ処理。シート 14 個と 29 ボタンを実行時生成</td>
+<td><code>modSetup.bas</code></td>
+</tr>
+<tr>
+<td>特殊モジュール</td>
+<td><code>ThisWorkbook</code>。<code>Workbook_Open</code> で初回起動時のみ自動初期化を起動</td>
+<td><code>ThisWorkbook.cls</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="2">2. 依存方向の制約<a class="headerlink" href="#2" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>エントリポイント → ビジネスロジック → ユーティリティ</strong> の一方向のみ</li>
+<li><strong>ユーティリティ層から上位層を呼ぶことを禁止</strong>（循環依存防止）</li>
+<li><strong><code>ThisWorkbook</code> は例外的にインストーラ層を呼ぶ</strong>（初回起動時のセットアップ起動のため）</li>
+<li><strong><code>modFormBuilder</code> のみ <code>VBProject.VBComponents</code> を参照</strong>（spec 駆動 UserForm 生成のため。他モジュールはオブジェクトモデル参照を持たない）</li>
+</ul>
+<h2 id="3">3. 配布パターン<a class="headerlink" href="#3" title="Permanent link">&para;</a></h2>
+<h3 id="31-xlsm">3.1 「.xlsm 本体は配布しない、モジュールだけ配布する」アプローチ<a class="headerlink" href="#31-xlsm" title="Permanent link">&para;</a></h3>
+<p>完成した <code>.xlsm</code> をそのまま配布する案には次の問題があります。</p>
+<ol>
+<li>ユーザがダウンロード時に Excel の保護ビューで開きマクロが既定で無効化される</li>
+<li>配布物の <code>.xlsm</code> を更新するたびにユーザが手動でファイル差し替える必要がある</li>
+<li>開発側が事前に「シート構造 + ボタン配置」を作り込んだ <code>.xlsm</code> を毎回保守する必要がある（フォームコントロールを Python 側から書き込むと Excel の修復ダイアログを誘発する）</li>
+</ol>
+<p>そこで本ツールは <strong><code>.bas</code>/<code>.cls</code> モジュール一式を ZIP で配布し、ユーザは新規 <code>.xlsm</code> に VBE から手動 import → セットアップマクロを 1 回実行する</strong> 配布アーキテクチャを採用しています。</p>
+<h3 id="32">3.2 セットアップフロー<a class="headerlink" href="#32" title="Permanent link">&para;</a></h3>
+<pre class="mermaid"><code>sequenceDiagram
+    participant User as 利用者
+    participant Excel as 新規 .xlsm
+    participant VBE as VBE
+    participant Setup as modSetup.RunSetup
+
+    User-&gt;&gt;Excel: 新規 .xlsm 作成（マクロ有効）
+    User-&gt;&gt;VBE: Alt+F11 で開く
+    User-&gt;&gt;VBE: 23 モジュールを Import
+    User-&gt;&gt;VBE: ThisWorkbook の中身をコピペ
+    User-&gt;&gt;VBE: コンパイル確認
+    User-&gt;&gt;Excel: Alt+F8 → SetupSheetsAndButtons
+    Excel-&gt;&gt;Setup: 実行
+    Setup-&gt;&gt;Excel: 14 シート生成
+    Setup-&gt;&gt;Excel: 29 ボタン配置 + マクロ割当
+    Setup-&gt;&gt;Excel: 初期可視性設定（メインのみ表示）
+    Setup--&gt;&gt;User: 「セットアップ完了。」MsgBox
+    User-&gt;&gt;Excel: Ctrl+S 保存 → 閉じる → 再オープン
+    Excel-&gt;&gt;Excel: Workbook_Open でメインシート表示</code></pre>
+<h3 id="33">3.3 利点と欠点<a class="headerlink" href="#33" title="Permanent link">&para;</a></h3>
+<p><strong>利点</strong></p>
+<ul>
+<li>配布物に <code>.xlsm</code> が含まれないため、Excel 修復ダイアログ問題から完全に解放</li>
+<li>モジュール単位で diff が見えるため、変更レビューが容易</li>
+<li>ユーザが既存の自分の <code>.xlsm</code> にも import できる（複数の <code>.xlsm</code> への展開が容易）</li>
+<li>開発側で「シート構造 + ボタン配置を作り込んだ template <code>.xlsm</code>」を保守せずに済む</li>
+</ul>
+<p><strong>欠点</strong></p>
+<ul>
+<li>ユーザが初回セットアップで VBE を開いて手動 import する手間</li>
+<li>VBE を開く操作に不慣れなユーザ向けに丁寧な手順書（<a href="../operations/">操作手順</a>）が必要</li>
+<li>セットアップマクロが何らかの理由で失敗した場合の状態が中途半端になり得る（途中までシートだけ生成された等）</li>
+</ul>
+<h2 id="4">4. データフロー<a class="headerlink" href="#4" title="Permanent link">&para;</a></h2>
+<pre class="mermaid"><code>flowchart LR
+    subgraph FS [ファイルシステム]
+        Txt[(dataFolder /&lt;br/&gt;*.txt SJIS+CRLF)]
+        Img[(kb_images /&lt;br/&gt;KnwNo.png)]
+    end
+    subgraph Excel [Excel プロセス内]
+        Search[検索シート]
+        SE[clsSearchEngine]
+        KL[ナレッジ一覧]
+        FM[clsFormatManager]
+        Disp[ナレッジ表示]
+        Form[UserForm&lt;br/&gt;spec 駆動]
+        Log[ログシート]
+    end
+
+    Search --&gt;|キーワード| SE
+    SE --&gt;|.txt 走査| Txt
+    SE --&gt;|FormatID 照合| FM
+    SE --&gt;|Score 降順| Search
+    Search --&gt;|サムネ取得| Img
+    Search --&gt;|行選択| Form
+    Form --&gt;|詳細画像| Img
+    Disp --&gt;|単票表示| KL
+    Disp --&gt;|詳細画像| Img
+    SE --&gt;|ログ出力| Log</code></pre>
+<h2 id="5-adr">5. 関連 ADR<a class="headerlink" href="#5-adr" title="Permanent link">&para;</a></h2>
+<p>本ツールの設計判断は <code>C:\decisions\adr\</code> 配下の Architecture Decision Records に記録されています。サイト公開上は要約のみ:</p>
+<table>
+<thead>
+<tr>
+<th>ADR</th>
+<th>タイトル</th>
+<th>要旨</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ADR-0002</td>
+<td>VBA からの子プロセス起動を全面禁止する</td>
+<td>職場 PC では UAC 昇格や黙殺が発生するため、<code>Shell</code> / <code>WScript.Shell.Run</code> 等は全面禁止。すべて Excel プロセス内で完結</td>
+</tr>
+<tr>
+<td>ADR-0008</td>
+<td>VBA は <code>.bas</code>/<code>.cls</code> モジュールで配布しユーザ側 <code>.xlsm</code> に手動 import する</td>
+<td><code>.xlsm</code> テンプレートを配布する案は Excel 修復ダイアログ問題を誘発するため、モジュール配布 + セルフセットアップを採用</td>
+</tr>
+<tr>
+<td>ADR-0009</td>
+<td>xlsm ビルドは aspose-cells-python で実施する</td>
+<td>開発時の <code>.xlsm</code> 自動生成方式を規定（配布物には影響なし、開発反復用）</td>
+</tr>
+</tbody>
+</table>
+<h2 id="6">6. テスト戦略<a class="headerlink" href="#6" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>レイヤ</th>
+<th>テスト対象</th>
+<th>件数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ユーティリティ層</td>
+<td>純粋関数（文字列、日付、ファイル I/O）</td>
+<td>大半が単体テスト</td>
+</tr>
+<tr>
+<td>ビジネスロジック層</td>
+<td>検索スコアリング、ImagePath 解決、FormSpec</td>
+<td>T10/T11 系</td>
+</tr>
+<tr>
+<td>配布パターン</td>
+<td>セットアップマクロの冪等性、シート存在チェック、ボタン重複削除</td>
+<td>M6 系</td>
+</tr>
+</tbody>
+</table>
+<p>合計 <strong>PASS 89 / SKIP 4 / FAIL 0</strong>（既存 82 + image_ext rev1 拡張 7）が完了条件です。詳細は <a href="../spec/#8">仕様 §8</a> を参照。</p>
+<h2 id="7">7. 拡張ポイント<a class="headerlink" href="#7" title="Permanent link">&para;</a></h2>
+<p>将来の変更時に触る予定のファイルを限定するための境界:</p>
+<ul>
+<li><strong>ChromaDB 移行</strong> — <code>clsSearchEngine.cls</code> 1 ファイルのみ差し替え（txt 走査 → Range 走査）</li>
+<li><strong>新フォーマット追加</strong> — <code>clsFormatManager</code> のフォーマット定義テーブルを追加、<code>clsFieldMigrator</code> で旧→新の写像を定義</li>
+<li><strong>新しい UserForm を spec 駆動で追加</strong> — <code>modSpecExamples.bas</code> を雛形にして <code>clsFormSpec.AddControl</code> で宣言、<code>modFormBuilder.BuildAndShow</code> で起動</li>
+<li><strong>新シート追加</strong> — <code>modSetup.bas</code> の <code>RequiredSheets</code> 配列に追加、ボタン配置の Anchor 範囲も追記</li>
+</ul>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  ページトップへ戻る
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2026 ai-crafted-portfolio
+    </div>
+  
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.indexes", "toc.integrate", "search.highlight", "search.suggest", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u30b3\u30d4\u30fc\u3057\u307e\u3057\u305f", "clipboard.copy": "\u30af\u30ea\u30c3\u30d7\u30dc\u30fc\u30c9\u3078\u30b3\u30d4\u30fc", "search.result.more.one": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3082\u30461\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.more.other": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3042\u3068#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.none": "\u4f55\u3082\u898b\u3064\u304b\u308a\u307e\u305b\u3093\u3067\u3057\u305f", "search.result.one": "1\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.other": "#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.placeholder": "\u691c\u7d22\u30ad\u30fc\u30ef\u30fc\u30c9\u3092\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044", "search.result.term.missing": "\u691c\u7d22\u306b\u542b\u307e\u308c\u306a\u3044", "select.version": "\u30d0\u30fc\u30b8\u30e7\u30f3\u5207\u308a\u66ff\u3048"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
