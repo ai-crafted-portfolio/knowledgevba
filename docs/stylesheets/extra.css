@@ -1,0 +1,33 @@
+/* knowledgevba — 独立 extra.css（既存 mkdocs プロジェクトとは分離） */
+
+/* 本文の読みやすさを微調整 */
+.md-typeset h1 {
+  font-weight: 700;
+}
+
+.md-typeset h2 {
+  margin-top: 1.6em;
+  border-bottom: 1px solid var(--md-default-fg-color--lightest);
+  padding-bottom: 0.2em;
+}
+
+/* テーブルを少しコンパクトに */
+.md-typeset table:not([class]) {
+  font-size: 0.85em;
+}
+
+/* インラインコードの背景を主張しすぎない */
+.md-typeset code {
+  border-radius: 3px;
+}
+
+/* mermaid 図の中央寄せ */
+.md-typeset .mermaid {
+  text-align: center;
+}
+
+/* 画像の最大幅 */
+.md-typeset img {
+  max-width: 100%;
+  height: auto;
+}
