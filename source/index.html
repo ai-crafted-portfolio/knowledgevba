@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="VBA モジュール 27 本の全ソースをコピペ可能な形で公開">
+        <meta name="description" content="VBA モジュール 28 本の全ソースをコピペ可能な形で公開（v13 最新）">
       
       
         <meta name="author" content="ai-crafted-portfolio">
@@ -1908,7 +1908,10 @@
 
 
 <h1 id="_1">ソースコード<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
-<p>VBA モジュール 27 本（本番 24 + 特殊 1 + Cowork デモ専用 3 −1 重複）の全ソースをコピペ可能な形で公開しています。各ページ右上のコピーボタンから VBE に直接貼り付けできます。</p>
+<p>VBA モジュール 28 本（本番 25 + 特殊 1 + Cowork デモ専用 3 −1 重複）の全ソースをコピペ可能な形で公開しています。各ページ右上のコピーボタンから VBE に直接貼り付けできます。</p>
+<blockquote>
+<p><strong>このページが対応する版</strong>: <code>release_v2 + image_ext + v13</code> (2026-05-07)。v8〜v13 の修正をすべて反映済みです。最新コミット情報は本ページ末尾の「バージョン」セクションを参照してください。</p>
+</blockquote>
 <div class="admonition note">
 <p class="admonition-title">公開可視性</p>
 <p>本ページ群も <code>noindex,nofollow</code> を設定しています。職場利用想定のため、検索エンジンへの indexing は意図的に抑止しています。</p>
@@ -2006,7 +2009,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="5">ユーティリティ層 (5)<a class="headerlink" href="#5" title="Permanent link">&para;</a></h3>
+<h3 id="6_1">ユーティリティ層 (6)<a class="headerlink" href="#6_1" title="Permanent link">&para;</a></h3>
 <p>副作用を持たない純粋関数群と共通定数。</p>
 <table>
 <thead>
@@ -2034,7 +2037,11 @@
 </tr>
 <tr>
 <td><a href="utility/modimagerender/">modImageRender.bas</a></td>
-<td>Shapes.AddPicture によるサムネ画像配置</td>
+<td>Shapes.AddPicture によるサムネ画像配置 (Object late binding 化済)</td>
+</tr>
+<tr>
+<td><a href="utility/modformatcolumns.md">modFormatColumns.bas</a></td>
+<td>フォーマット一覧シート列番号定数 (v12 で clsFormatManager から切出し / ADR-0027)</td>
 </tr>
 </tbody>
 </table>
@@ -2121,7 +2128,46 @@
 <li>ChromaDB 連携無効化 (<a href="../architecture/#5-adr">ADR-0004</a>) — <code>clsSearchEngine</code> 1 ファイルだけ差し替えれば txt 走査 → Range 走査に切り替えられる構造</li>
 </ul>
 <h2 id="_5">バージョン<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
-<p>ベースは <code>release_v2 + image_ext rev1</code>（2026-05-04 / 本番 24 モジュール）に Cowork デモ用 v6 ビルド（2026-05-06）の追加 3 モジュールを合わせた構成です。</p>
+<p>ベースは <code>release_v2 + image_ext rev1</code>（2026-05-04 / 本番 24 モジュール）に Cowork デモ用 v6 ビルド（2026-05-06）の追加 3 モジュールを合わせた構成。さらに v8〜v13 の累積修正（2026-05-07）を反映しています。</p>
+<h3 id="v8v13">v8〜v13 で反映された主な修正<a class="headerlink" href="#v8v13" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>版</th>
+<th>内容</th>
+<th>関連 ADR / モジュール</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>v8〜v10</td>
+<td>コンパイル/参照不整合の解消、Setup の冪等性強化</td>
+<td><code>modSetup</code> 改修</td>
+</tr>
+<tr>
+<td><strong>v11</strong></td>
+<td>バイナリ互換性の解決（VBE 側で発生していたインポート不整合の修正）</td>
+<td><code>modSetup</code>, <code>modImageRender</code></td>
+</tr>
+<tr>
+<td><strong>v12</strong></td>
+<td><code>Public Const FL_COL_*</code> をクラスから標準モジュールへ切出し（実 Excel が <code>Public Const</code> をクラス内で reject する仕様への対応）</td>
+<td><strong>新規 <code>modFormatColumns.bas</code></strong> / ADR 0027</td>
+</tr>
+<tr>
+<td><strong>v13</strong></td>
+<td><code>clsFieldMigrator.MigrateFields</code> を Sub → Function に変更し、<code>Exit Sub</code> を <code>Exit Function</code> に修正（戻り値型整合）</td>
+<td><code>clsFieldMigrator</code> / ADR 0028</td>
+</tr>
+<tr>
+<td>その他</td>
+<td><code>modImageRender</code> を Object late binding 化、<code>modSetup</code> に <code>silent</code> 引数を追加、<code>ThisWorkbook</code> の OnTime 経由 auto-init を簡素化、Cowork デモ専用の <code>modAutoInit</code> を分離</td>
+<td><code>modImageRender</code>, <code>modSetup</code>, <code>ThisWorkbook (デモ版)</code>, <code>modAutoInit</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="uat">UAT ステータス<a class="headerlink" href="#uat" title="Permanent link">&para;</a></h3>
+<p>v13 で UAT 完走済（2026-05-07）。本ページのソースコードは UAT 通過時点のものです。</p>
 
 
 
