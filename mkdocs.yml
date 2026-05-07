@@ -67,3 +67,39 @@ nav:
   - 仕様: spec.md
   - 操作手順: operations.md
   - アーキテクチャ: architecture.md
+  - ソースコード:
+      - 一覧: source/index.md
+      - エントリポイント:
+          - modEntryMain: source/entrypoint/modentrymain.md
+          - modEntrySearch: source/entrypoint/modentrysearch.md
+          - modEntryKnowledge: source/entrypoint/modentryknowledge.md
+          - modEntryFormat: source/entrypoint/modentryformat.md
+          - modEntrySettings: source/entrypoint/modentrysettings.md
+          - modSpecExamples: source/entrypoint/modspecexamples.md
+      - ビジネスロジック:
+          - clsSearchEngine: source/business-logic/clssearchengine.md
+          - clsKnowledgeManager: source/business-logic/clsknowledgemanager.md
+          - clsFormatManager: source/business-logic/clsformatmanager.md
+          - clsTaskController: source/business-logic/clstaskcontroller.md
+          - clsStorageResolver: source/business-logic/clsstorageresolver.md
+          - clsFieldMigrator: source/business-logic/clsfieldmigrator.md
+          - clsFormSpec: source/business-logic/clsformspec.md
+          - clsControlSpec: source/business-logic/clscontrolspec.md
+          - modFormBuilder: source/business-logic/modformbuilder.md
+      - ユーティリティ:
+          - modCommon: source/utility/modcommon.md
+          - modFileIO: source/utility/modfileio.md
+          - modStringUtil: source/utility/modstringutil.md
+          - modDateUtil: source/utility/moddateutil.md
+          - modImageRender: source/utility/modimagerender.md
+      - インストーラ:
+          - modSetup: source/infrastructure/modsetup.md
+      - ログ:
+          - clsLogger: source/logger/clslogger.md
+          - clsLogEntry: source/logger/clslogentry.md
+      - 特殊モジュール:
+          - ThisWorkbook (本番版): source/special/thisworkbook.md
+      - Cowork デモ専用:
+          - ThisWorkbook (デモ版): source/cowork-demo/thisworkbook.md
+          - modAutoInit: source/cowork-demo/modautoinit.md
+          - modDemoSeeder: source/cowork-demo/moddemoseeder.md
