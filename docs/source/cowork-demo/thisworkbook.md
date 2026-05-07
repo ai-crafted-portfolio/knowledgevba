@@ -19,17 +19,9 @@ VBE のプロジェクトツリーで `ThisWorkbook` モジュールを開き、
 
 下のコードブロック右上にカーソルを当てるとコピーボタンが表示されます。
 
+**注**: 自動生成された VBA ファイルヘッダ部（`VERSION`, `BEGIN..END`, `Attribute VB_*`）は除外済みです。下のコードを VBE の ThisWorkbook コードペインにそのまま貼り付けて使えます（ヘッダ部は VBE が自動管理します）。
+
 ```vbnet linenums="1"
-VERSION 1.0 CLASS
-BEGIN
-  MultiUse = -1  'True
-END
-Attribute VB_Name = "ThisWorkbook"
-Attribute VB_Base = "0{00020819-0000-0000-C000-000000000046}"
-Attribute VB_GlobalNameSpace = False
-Attribute VB_Creatable = False
-Attribute VB_PredeclaredId = True
-Attribute VB_Exposed = True
 Option Explicit
 
 ' ================================================================
@@ -85,5 +77,4 @@ End Sub
 ## 関連
 
 - 呼び出す: `modAutoInit`, `modEntryMain`
-- - 呼び出される: `Excel イベントから直接呼び出し`
-  - 
+- 呼び出される: `Excel イベントから直接呼び出し`
