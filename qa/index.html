@@ -6,35 +6,37 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Excel VBA で実装したナレッジ管理ツールの仕様・操作・アーキテクチャまとめ">
+        <meta name="description" content="Excel VBA ベースのナレッジ管理ツール - 仕様書・操作手順・アーキテクチャ">
       
       
         <meta name="author" content="ai-crafted-portfolio">
       
       
-        <link rel="canonical" href="https://ai-crafted-portfolio.github.io/knowledgevba/">
+        <link rel="canonical" href="https://ai-crafted-portfolio.github.io/knowledgevba/qa/">
       
       
+        <link rel="prev" href="../architecture/">
       
-        <link rel="next" href="spec/">
+      
+        <link rel="next" href="../source/">
       
       
         
       
       
-      <link rel="icon" href="assets/images/favicon.png">
+      <link rel="icon" href="../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
     
     
       
-        <title>ナレッジ管理ツール (VBA 製) - ナレッジ管理ツール (VBA 製)</title>
+        <title>Q&A (なぜこの設計？) - ナレッジ管理ツール (VBA 製)</title>
       
     
     
-      <link rel="stylesheet" href="assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
       
         
-        <link rel="stylesheet" href="assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
       
       
 
@@ -53,9 +55,9 @@
       
     
     
-      <link rel="stylesheet" href="stylesheets/extra.css">
+      <link rel="stylesheet" href="../stylesheets/extra.css">
     
-    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -82,7 +84,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#vba" class="md-skip">
+        <a href="#qa" class="md-skip">
           コンテンツにスキップ
         </a>
       
@@ -96,7 +98,7 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="ヘッダー">
-    <a href="." title="ナレッジ管理ツール (VBA 製)" class="md-header__button md-logo" aria-label="ナレッジ管理ツール (VBA 製)" data-md-component="logo">
+    <a href=".." title="ナレッジ管理ツール (VBA 製)" class="md-header__button md-logo" aria-label="ナレッジ管理ツール (VBA 製)" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -116,7 +118,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              ナレッジ管理ツール (VBA 製)
+              Q&A (なぜこの設計？)
             
           </span>
         </div>
@@ -215,11 +217,9 @@
   
   
   
-    
   
-  
-    <li class="md-tabs__item md-tabs__item--active">
-      <a href="." class="md-tabs__link">
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
         
   
   
@@ -238,7 +238,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="spec/" class="md-tabs__link">
+      <a href="../spec/" class="md-tabs__link">
         
   
   
@@ -257,7 +257,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="setup/" class="md-tabs__link">
+      <a href="../setup/" class="md-tabs__link">
         
   
   
@@ -276,7 +276,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="operations/" class="md-tabs__link">
+      <a href="../operations/" class="md-tabs__link">
         
   
   
@@ -295,7 +295,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="architecture/" class="md-tabs__link">
+      <a href="../architecture/" class="md-tabs__link">
         
   
   
@@ -312,9 +312,11 @@
   
   
   
+    
   
-    <li class="md-tabs__item">
-      <a href="qa/" class="md-tabs__link">
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
         
   
   
@@ -335,7 +337,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="source/" class="md-tabs__link">
+        <a href="../source/" class="md-tabs__link">
           
   
   
@@ -373,7 +375,7 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="ナビゲーション" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="." title="ナレッジ管理ツール (VBA 製)" class="md-nav__button md-logo" aria-label="ナレッジ管理ツール (VBA 製)" data-md-component="logo">
+    <a href=".." title="ナレッジ管理ツール (VBA 製)" class="md-nav__button md-logo" aria-label="ナレッジ管理ツール (VBA 製)" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -388,37 +390,10 @@
       
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    概要
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="." class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
         
   
   
@@ -434,142 +409,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="目次">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      目次
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        このツールで解決したいこと
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        想定読者
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        全体像
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        主要機能
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        設計方針のハイライト
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        ページ構成
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#todo" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        TODO・制約・既知の限界
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="TODO・制約・既知の限界">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        制約
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#_8" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        既知の限界
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#todov15" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        TODO（v15 以降のロードマップ）
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -581,7 +420,7 @@
   
   
     <li class="md-nav__item">
-      <a href="spec/" class="md-nav__link">
+      <a href="../spec/" class="md-nav__link">
         
   
   
@@ -608,7 +447,7 @@
   
   
     <li class="md-nav__item">
-      <a href="setup/" class="md-nav__link">
+      <a href="../setup/" class="md-nav__link">
         
   
   
@@ -635,7 +474,7 @@
   
   
     <li class="md-nav__item">
-      <a href="operations/" class="md-nav__link">
+      <a href="../operations/" class="md-nav__link">
         
   
   
@@ -662,7 +501,7 @@
   
   
     <li class="md-nav__item">
-      <a href="architecture/" class="md-nav__link">
+      <a href="../architecture/" class="md-nav__link">
         
   
   
@@ -686,10 +525,37 @@
       
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="qa/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Q&A (なぜこの設計？)
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -705,6 +571,103 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目次">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目次
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#q1-vba-python-web" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q1. VBA で十分か？ Python や Web アプリの方がモダンでは？
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#q2-chromadb" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q2. ChromaDB と連携しないなら検索が遅くないか？
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#q3-excel-notion-obsidian" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q3. Excel ナレッジ管理は時代遅れではないか？Notion / Obsidian の方が良くない？
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#q4-public-const-net" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q4. クラスモジュール内 Public Const 禁止 等の制約があるなら .NET にすべきでは？
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#q5-pc-excel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q5. なぜ職場 PC で個人ナレッジ管理を Excel で？
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#q6-vba" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q6. VBA 子プロセス禁止は不便ではないか？
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#adr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        関連 ADR
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -753,7 +716,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="source/" class="md-nav__link ">
+            <a href="../source/" class="md-nav__link ">
               
   
   
@@ -863,7 +826,7 @@
   
   
     <li class="md-nav__item">
-      <a href="source/entrypoint/modentrymain/" class="md-nav__link">
+      <a href="../source/entrypoint/modentrymain/" class="md-nav__link">
         
   
   
@@ -891,7 +854,7 @@
   
   
     <li class="md-nav__item">
-      <a href="source/entrypoint/modentrysearch/" class="md-nav__link">
+      <a href="../source/entrypoint/modentrysearch/" class="md-nav__link">
         
   
   
@@ -919,7 +882,7 @@
   
   
     <li class="md-nav__item">
-      <a href="source/entrypoint/modentryknowledge/" class="md-nav__link">
+      <a href="../source/entrypoint/modentryknowledge/" class="md-nav__link">
         
   
   
@@ -947,7 +910,7 @@
   
   
     <li class="md-nav__item">
-      <a href="source/entrypoint/modentryformat/" class="md-nav__link">
+      <a href="../source/entrypoint/modentryformat/" class="md-nav__link">
         
   
   
@@ -975,7 +938,7 @@
   
   
     <li class="md-nav__item">
-      <a href="source/entrypoint/modentrysettings/" class="md-nav__link">
+      <a href="../source/entrypoint/modentrysettings/" class="md-nav__link">
         
   
   
@@ -1003,7 +966,7 @@
   
   
     <li class="md-nav__item">
-      <a href="source/entrypoint/modspecexamples/" class="md-nav__link">
+      <a href="../source/entrypoint/modspecexamples/" class="md-nav__link">
         
   
   
@@ -1111,7 +1074,7 @@
   
   
     <li class="md-nav__item">
-      <a href="source/business-logic/clssearchengine/" class="md-nav__link">
+      <a href="../source/business-logic/clssearchengine/" class="md-nav__link">
         
   
   
@@ -1139,7 +1102,7 @@
   
   
     <li class="md-nav__item">
-      <a href="source/business-logic/clsknowledgemanager/" class="md-nav__link">
+      <a href="../source/business-logic/clsknowledgemanager/" class="md-nav__link">
         
   
   
@@ -1167,7 +1130,7 @@
   
   
     <li class="md-nav__item">
-      <a href="source/business-logic/clsformatmanager/" class="md-nav__link">
+      <a href="../source/business-logic/clsformatmanager/" class="md-nav__link">
         
   
   
@@ -1195,7 +1158,7 @@
   
   
     <li class="md-nav__item">
-      <a href="source/business-logic/clstaskcontroller/" class="md-nav__link">
+      <a href="../source/business-logic/clstaskcontroller/" class="md-nav__link">
         
   
   
@@ -1223,7 +1186,7 @@
   
   
     <li class="md-nav__item">
-      <a href="source/business-logic/clsstorageresolver/" class="md-nav__link">
+      <a href="../source/business-logic/clsstorageresolver/" class="md-nav__link">
         
   
   
@@ -1251,7 +1214,7 @@
   
   
     <li class="md-nav__item">
-      <a href="source/business-logic/clsfieldmigrator/" class="md-nav__link">
+      <a href="../source/business-logic/clsfieldmigrator/" class="md-nav__link">
         
   
   
@@ -1279,7 +1242,7 @@
   
   
     <li class="md-nav__item">
-      <a href="source/business-logic/clsformspec/" class="md-nav__link">
+      <a href="../source/business-logic/clsformspec/" class="md-nav__link">
         
   
   
@@ -1307,7 +1270,7 @@
   
   
     <li class="md-nav__item">
-      <a href="source/business-logic/clscontrolspec/" class="md-nav__link">
+      <a href="../source/business-logic/clscontrolspec/" class="md-nav__link">
         
   
   
@@ -1335,7 +1298,7 @@
   
   
     <li class="md-nav__item">
-      <a href="source/business-logic/modformbuilder/" class="md-nav__link">
+      <a href="../source/business-logic/modformbuilder/" class="md-nav__link">
         
   
   
@@ -1437,7 +1400,7 @@
   
   
     <li class="md-nav__item">
-      <a href="source/utility/modcommon/" class="md-nav__link">
+      <a href="../source/utility/modcommon/" class="md-nav__link">
         
   
   
@@ -1465,7 +1428,7 @@
   
   
     <li class="md-nav__item">
-      <a href="source/utility/modfileio/" class="md-nav__link">
+      <a href="../source/utility/modfileio/" class="md-nav__link">
         
   
   
@@ -1493,7 +1456,7 @@
   
   
     <li class="md-nav__item">
-      <a href="source/utility/modstringutil/" class="md-nav__link">
+      <a href="../source/utility/modstringutil/" class="md-nav__link">
         
   
   
@@ -1521,7 +1484,7 @@
   
   
     <li class="md-nav__item">
-      <a href="source/utility/moddateutil/" class="md-nav__link">
+      <a href="../source/utility/moddateutil/" class="md-nav__link">
         
   
   
@@ -1549,7 +1512,7 @@
   
   
     <li class="md-nav__item">
-      <a href="source/utility/modimagerender/" class="md-nav__link">
+      <a href="../source/utility/modimagerender/" class="md-nav__link">
         
   
   
@@ -1577,7 +1540,7 @@
   
   
     <li class="md-nav__item">
-      <a href="source/utility/modformatcolumns/" class="md-nav__link">
+      <a href="../source/utility/modformatcolumns/" class="md-nav__link">
         
   
   
@@ -1669,7 +1632,7 @@
   
   
     <li class="md-nav__item">
-      <a href="source/infrastructure/modsetup/" class="md-nav__link">
+      <a href="../source/infrastructure/modsetup/" class="md-nav__link">
         
   
   
@@ -1763,7 +1726,7 @@
   
   
     <li class="md-nav__item">
-      <a href="source/logger/clslogger/" class="md-nav__link">
+      <a href="../source/logger/clslogger/" class="md-nav__link">
         
   
   
@@ -1791,7 +1754,7 @@
   
   
     <li class="md-nav__item">
-      <a href="source/logger/clslogentry/" class="md-nav__link">
+      <a href="../source/logger/clslogentry/" class="md-nav__link">
         
   
   
@@ -1883,7 +1846,7 @@
   
   
     <li class="md-nav__item">
-      <a href="source/special/thisworkbook/" class="md-nav__link">
+      <a href="../source/special/thisworkbook/" class="md-nav__link">
         
   
   
@@ -1979,7 +1942,7 @@
   
   
     <li class="md-nav__item">
-      <a href="source/cowork-demo/thisworkbook/" class="md-nav__link">
+      <a href="../source/cowork-demo/thisworkbook/" class="md-nav__link">
         
   
   
@@ -2007,7 +1970,7 @@
   
   
     <li class="md-nav__item">
-      <a href="source/cowork-demo/modautoinit/" class="md-nav__link">
+      <a href="../source/cowork-demo/modautoinit/" class="md-nav__link">
         
   
   
@@ -2035,7 +1998,7 @@
   
   
     <li class="md-nav__item">
-      <a href="source/cowork-demo/moddemoseeder/" class="md-nav__link">
+      <a href="../source/cowork-demo/moddemoseeder/" class="md-nav__link">
         
   
   
@@ -2088,84 +2051,113 @@
 
 
 
-<h1 id="vba">ナレッジ管理ツール (VBA 製)<a class="headerlink" href="#vba" title="Permanent link">&para;</a></h1>
-<p>職場 PC で社内ノウハウ・トラブル対応メモ・手順書をテキストファイル（<code>.txt</code>、Shift_JIS + CRLF）で蓄積し、Excel から横断検索・サムネ画像つきプレビューできるようにする内製ツールです。現行リリースは <strong>release v2 + image_ext rev1</strong>（2026-05-04）。</p>
-<h2 id="_1">このツールで解決したいこと<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
-<ul>
-<li>過去の障害メモや手順を「あのとき書いたはずだ」で終わらせない</li>
-<li>ChromaDB / RAG への移行前に、最低限のスコアリング検索 UI を VBA で先行提供する</li>
-<li>子プロセス起動禁止・社内エンドポイントセキュリティポリシーで動かない外部ツールを諦め、<strong>Excel プロセス内で完結</strong>する</li>
-</ul>
-<h2 id="_2">想定読者<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
-<ul>
-<li>同ツールを職場 PC に展開する予定のメンバー</li>
-<li>VBA モジュール構成・検索スコアリング設計をレビューする人</li>
-<li>利用者向け操作手順を確認したい人 → <a href="operations/">操作手順</a> へ</li>
-</ul>
-<h2 id="_3">全体像<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
-<pre class="mermaid"><code>flowchart LR
-    User([利用者]) --&gt;|キーワード| MainSheet[メインシート]
-    MainSheet --&gt; SearchSheet[検索シート]
-    SearchSheet --&gt;|検索実行| Engine[clsSearchEngine]
-    Engine --&gt;|.txt 走査| Data[(dataFolder /&lt;br/&gt;*.txt SJIS+CRLF)]
-    Engine --&gt;|サムネ取得| Images[(kb_images /&lt;br/&gt;KnwNo.png)]
-    Engine --&gt;|Score 降順| Result[結果一覧&lt;br/&gt;サムネ + Score 列]
-    Result --&gt;|行選択 + Macro| Form[spec 駆動 UserForm&lt;br/&gt;詳細プレビュー]</code></pre>
-<h2 id="_4">主要機能<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
-<p>ナレッジ一覧でメタデータを管理し、検索画面でキーワード一致をスコアリング（タイトル ×3 + 対象フィールド ×2 + 出現回数）して降順ソート、結果一覧の H 列にサムネ（60×40px）、I 列に Score を表示します。結果行を選択して <code>Macro_ShowSearchResultPreview</code> を実行すると、<code>clsFormSpec</code> で宣言した DSL から <code>modFormBuilder</code> が UserForm を実行時生成して詳細プレビューを表示します。設定画面で <code>dataFolder</code> を切り替えれば複数ナレッジ集を運用でき、<code>&lt;dataFolder の親&gt;/kb_images/&lt;KnwNo&gt;.png</code> の規約で画像が解決されます。<code>ImagePath=</code> スタンザを <code>.txt</code> 末尾に書けばパス上書きも可能です。</p>
-<h2 id="_5">設計方針のハイライト<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
-<ul>
-<li><strong>モジュール配布 + セルフセットアップ</strong> — <code>.xlsm</code> 本体は配布せず、<code>.bas</code>/<code>.cls</code> 24 個 + セットアップマクロ 1 回実行という形で各 PC に展開（<a href="architecture/#5-adr">ADR-0008</a>）</li>
-<li><strong>VBA 子プロセス全面禁止</strong> — <code>Shell</code> / <code>WScript.Shell.Run</code> 等は職場 PC で動かないので使わず、すべて Excel プロセス内で完結（<a href="architecture/#5-adr">ADR-0002</a>）</li>
-<li><strong>層分離</strong> — エントリポイント / ビジネスロジック / ユーティリティ / インストーラ / 特殊 の 5 層で責務を分離。詳細は <a href="architecture/">アーキテクチャ</a> 参照</li>
-<li><strong>ChromaDB 移行を見据えた境界</strong> — <code>clsSearchEngine</code> 1 ファイルだけ差し替えれば txt 走査 → Range 走査に切り替えられる構造</li>
-</ul>
-<h2 id="_6">ページ構成<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
-<ul>
-<li><a href="./">概要</a>（このページ）</li>
-<li><a href="spec/">仕様</a> — モジュール 24 個、検索スコアリング、画像解決、<code>clsFormSpec</code> DSL、ChromaDB 切替ポイント、テスト構成</li>
-<li><a href="operations/">操作手順</a> — マクロ有効化、初回セットアップ、デモデータ投入、検索実行、トラブルシューティング</li>
-<li><a href="architecture/">アーキテクチャ</a> — 層分離図、依存関係、配布パターン、関連 ADR への参照</li>
-</ul>
-<div class="admonition note">
-<p class="admonition-title">公開可視性</p>
-<p>本サイトは職場利用を想定したツールのドキュメントのため、全ページ <code>noindex,nofollow</code> を設定しています。検索エンジンへの indexing は意図的に抑止しています。</p>
-</div>
 <hr />
-<h2 id="todo">TODO・制約・既知の限界<a class="headerlink" href="#todo" title="Permanent link">&para;</a></h2>
-<h3 id="_7">制約<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
+<p>title: Q&amp;A: なぜこの設計？
+description: ナレッジ管理ツール (VBA 製) の設計判断とよくある反論への回答</p>
+<hr />
+<h1 id="qa">Q&amp;A: なぜこの設計？<a class="headerlink" href="#qa" title="Permanent link">&para;</a></h1>
+<p>このツールが「なぜこういう作りなのか」「他の選択肢はなかったのか」をまとめます。設計判断の背景は ADR（Architectural Decision Records）にも記録されています。</p>
+<h2 id="q1-vba-python-web">Q1. VBA で十分か？ Python や Web アプリの方がモダンでは？<a class="headerlink" href="#q1-vba-python-web" title="Permanent link">&para;</a></h2>
+<p><strong>答え</strong>: 職場 PC の制約下（Python サブプロセス禁止、Shell 実行不可、外部ネットワーク制限）では VBA が最も現実的な選択肢です。</p>
+<p><strong>理由</strong>:
+- 職場 PC には Python ランタイムが入っているとは限らない
+- Shell / WScript.Shell / Run / Exec の子プロセス起動は社内ポリシーで禁止 (ADR-0002)
+- Excel は標準で全社配布されており、VBA は追加インストール不要で動く
+- Web アプリは社内サーバ手配が必要、個人ナレッジ用途には過剰</p>
+<p><strong>トレードオフ</strong>: VBA は Mac/Web Excel で動作しない、64bit/32bit 差異がある、並列処理が苦手。これらは Excel 単体動作という制約と引き換え。</p>
+<h2 id="q2-chromadb">Q2. ChromaDB と連携しないなら検索が遅くないか？<a class="headerlink" href="#q2-chromadb" title="Permanent link">&para;</a></h2>
+<p><strong>答え</strong>: 数千ナレッジ規模までは O(n) 線形検索で実用十分。スケーラビリティが課題になっても <strong>ChromaDB 連携は採用しない方針</strong> が確定しています (ADR-0004)。</p>
+<p><strong>現状の性能</strong>:
+- 100 ナレッジで検索 &lt; 0.5 秒
+- 1,000 ナレッジで検索 &lt; 5 秒
+- 10,000 ナレッジ超で 30 秒超 → 別アプローチで対処</p>
+<p><strong>スケール対応の選択肢（ChromaDB 以外）</strong>:
+- Excel ファイルを部署/年度等で分割
+- インデックスシートの先行構築（事前計算）
+- 別ツール（Notion / Obsidian 等）への移行検討（職場ポリシー許諾下で）</p>
+<p><strong>ChromaDB 連携を恒久的にしない理由</strong>:
+- 職場利用ツールは Cowork / ChromaDB と一切連携しない (ADR-0004)
+- データ漏洩防止の構造的隔離
+- 外部依存ゼロのファイルベース運用が職場 PC ポリシーに最適</p>
+<h2 id="q3-excel-notion-obsidian">Q3. Excel ナレッジ管理は時代遅れではないか？Notion / Obsidian の方が良くない？<a class="headerlink" href="#q3-excel-notion-obsidian" title="Permanent link">&para;</a></h2>
+<p><strong>答え</strong>: 職場利用前提では Excel が最強です。</p>
+<p><strong>比較</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>ツール</th>
+<th>職場利用</th>
+<th>データローカル</th>
+<th>検索性能</th>
+<th>学習コスト</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Excel + VBA</td>
+<td>◎ 標準配布</td>
+<td>◎ ファイルベース</td>
+<td>○ 線形</td>
+<td>△ VBA 学習</td>
+</tr>
+<tr>
+<td>Notion</td>
+<td>△ クラウド前提</td>
+<td>×</td>
+<td>◎</td>
+<td>○</td>
+</tr>
+<tr>
+<td>Obsidian</td>
+<td>○ ローカル DB</td>
+<td>◎</td>
+<td>◎</td>
+<td>○</td>
+</tr>
+</tbody>
+</table>
+<p>職場 PC では Notion/Obsidian の追加インストール禁止のケースが多く、データはローカル管理が必須。Excel は <strong>「既に入っている」</strong> ことが最大の利点。</p>
+<h2 id="q4-public-const-net">Q4. クラスモジュール内 Public Const 禁止 等の制約があるなら .NET にすべきでは？<a class="headerlink" href="#q4-public-const-net" title="Permanent link">&para;</a></h2>
+<p><strong>答え</strong>: VBA の制約は学習可能な範囲です。.NET 化は overengineering。</p>
+<p><strong>VBA 制約の代表</strong>:
+- クラスモジュール内 <code>Public Const</code> 禁止 → 標準モジュールに切出し (ADR-0027)
+- Function 内 <code>Exit Sub</code> 禁止 → <code>Exit Function</code> 使用 (ADR-0028)
+- Late binding の型チェック緩い → 静的検証スクリプトでカバー</p>
+<p>これらは <strong>構造的に検出可能</strong>で、Rule 1〜6 の verify_vba_*.py で機械的にチェックされます。</p>
+<h2 id="q5-pc-excel">Q5. なぜ職場 PC で個人ナレッジ管理を Excel で？<a class="headerlink" href="#q5-pc-excel" title="Permanent link">&para;</a></h2>
+<p><strong>答え</strong>: 業務知識を体系化する個人作業であり、ファイルベースで管理することで漏洩リスクが最小化されます。</p>
+<p><strong>用途</strong>:
+- 過去のトラブルシューティングを再利用可能な形で蓄積
+- 顧客固有の対応パターンを類型化
+- 業務ノウハウの個人内継承（自分自身の引き継ぎ用）</p>
+<p>クラウド SaaS や外部 RAG では機密情報漏洩リスクがあり、職場ポリシー的にも実用的でも Excel ファイルベースが最適解。</p>
+<h2 id="q6-vba">Q6. VBA 子プロセス禁止は不便ではないか？<a class="headerlink" href="#q6-vba" title="Permanent link">&para;</a></h2>
+<p><strong>答え</strong>: 不便ですが、それを補う設計で十分機能します。</p>
+<p><strong>禁止される代表機能</strong>:
+- 外部 API 呼出 → 不要（ChromaDB 連携は明示的に無効化）
+- Python ML スクリプト連携 → 不要（VBA 単体で動作）
+- WSL / PowerShell 起動 → 不要（VBA 単体で動作）</p>
+<p><strong>代替手段</strong>:
+- Web スクレイピング → 不要（職場利用なので外部 Web は使わない）
+- 大規模計算 → Excel ワークシート関数で対応
+- ファイル I/O → ADODB / FileSystemObject で対応</p>
+<p>すべての必要機能は VBA 標準機能で実装可能。</p>
+<h2 id="adr">関連 ADR<a class="headerlink" href="#adr" title="Permanent link">&para;</a></h2>
+<p>設計判断の詳細は ADR で追跡可能:</p>
 <ul>
-<li>VBA 子プロセス禁止（Shell/Run/WScript.Shell/Exec）— 職場 PC ポリシー (ADR-0002)</li>
-<li>ChromaDB 等の外部 RAG 連携無効化 — Cowork 隔離 (ADR-0004)</li>
-<li>クラスモジュール (.cls) 内の <code>Public Const/Type/Declare/Static</code> 禁止 (ADR-0027)</li>
-<li>aspose-cells-python 単独では VBA binary stub のみ生成、real Excel COM 必須 (ADR-0026)</li>
-<li>mkdocs Material のモバイル UX が完璧ではない（ナビ collapse は OK、図解の細部は要確認）</li>
+<li><a href="https://github.com/ai-crafted-portfolio/knowledgevba">ADR-0002: VBA 子プロセス禁止</a></li>
+<li><a href="https://github.com/ai-crafted-portfolio/knowledgevba">ADR-0004: 職場利用ツールは Cowork/ChromaDB と隔離</a></li>
+<li><a href="https://github.com/ai-crafted-portfolio/knowledgevba">ADR-0008: VBA モジュール手動 import + Setup マクロ配布</a></li>
+<li><a href="https://github.com/ai-crafted-portfolio/knowledgevba">ADR-0026: real Excel COM ビルド経路</a></li>
+<li><a href="https://github.com/ai-crafted-portfolio/knowledgevba">ADR-0027: クラスモジュール内 Public Const 禁止</a></li>
+<li><a href="https://github.com/ai-crafted-portfolio/knowledgevba">ADR-0028: Function/Sub Exit 文の整合性</a></li>
 </ul>
-<h3 id="_8">既知の限界<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
-<ul>
-<li>Excel 単体動作のため Web/モバイルでは利用不可</li>
-<li>同時編集なし（ファイルベース、Git 等での並行編集が必要）</li>
-<li>検索性能はモジュール数 O(n) 線形（数千ナレッジまでは実用、それ以上は ChromaDB 移行検討）</li>
-</ul>
-<h3 id="todov15">TODO（v15 以降のロードマップ）<a class="headerlink" href="#todov15" title="Permanent link">&para;</a></h3>
-<ul>
-<li>M-5: modImageRender の RowHeight 副作用排除</li>
-<li>D-3: clsKnowledgeManager / clsSearchEngine / clsTaskController に Worksheet DI 追加</li>
-<li>D-5: 責務固有の Const をクラス側へ移動</li>
-<li>Minor m-1: SHEET_<em> / FIELD_TYPE_</em> の Enum 化</li>
-<li>ベンチマーク取得（A+ 到達条件）</li>
-<li>単体テストカバレッジ整備（A+ 到達条件）</li>
-</ul>
-<p>詳細は ADR (<a href="https://github.com/ai-crafted-portfolio/knowledgevba">0001-0033</a>) を参照。</p>
 
 
 
 
 
 
-
-  
-  
 
 
 
@@ -2214,10 +2206,10 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.indexes", "toc.integrate", "search.highlight", "search.suggest", "content.code.copy"], "search": "assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u30b3\u30d4\u30fc\u3057\u307e\u3057\u305f", "clipboard.copy": "\u30af\u30ea\u30c3\u30d7\u30dc\u30fc\u30c9\u3078\u30b3\u30d4\u30fc", "search.result.more.one": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3082\u30461\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.more.other": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3042\u3068#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.none": "\u4f55\u3082\u898b\u3064\u304b\u308a\u307e\u305b\u3093\u3067\u3057\u305f", "search.result.one": "1\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.other": "#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.placeholder": "\u691c\u7d22\u30ad\u30fc\u30ef\u30fc\u30c9\u3092\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044", "search.result.term.missing": "\u691c\u7d22\u306b\u542b\u307e\u308c\u306a\u3044", "select.version": "\u30d0\u30fc\u30b8\u30e7\u30f3\u5207\u308a\u66ff\u3048"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.indexes", "toc.integrate", "search.highlight", "search.suggest", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u30b3\u30d4\u30fc\u3057\u307e\u3057\u305f", "clipboard.copy": "\u30af\u30ea\u30c3\u30d7\u30dc\u30fc\u30c9\u3078\u30b3\u30d4\u30fc", "search.result.more.one": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3082\u30461\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.more.other": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3042\u3068#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.none": "\u4f55\u3082\u898b\u3064\u304b\u308a\u307e\u305b\u3093\u3067\u3057\u305f", "search.result.one": "1\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.other": "#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.placeholder": "\u691c\u7d22\u30ad\u30fc\u30ef\u30fc\u30c9\u3092\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044", "search.result.term.missing": "\u691c\u7d22\u306b\u542b\u307e\u308c\u306a\u3044", "select.version": "\u30d0\u30fc\u30b8\u30e7\u30f3\u5207\u308a\u66ff\u3048"}, "version": null}</script>
     
     
-      <script src="assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
       
     
   </body>
