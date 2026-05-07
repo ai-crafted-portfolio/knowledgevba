@@ -571,12 +571,12 @@ End Function
 ' 概要:   ITEM 行から指定キーの値を抽出
 ' ================================================================
 Private Function ExtractKeyFromItem(ByVal line As String, _
-                                      ByVal key As String) As String
+                                      ByVal keyName As String) As String
     Dim searchKey As String
     Dim startPos As Long
     Dim endPos As Long
 
-    searchKey = key & "="
+    searchKey = keyName & "="
     startPos = InStr(line, searchKey)
     If startPos = 0 Then
         ExtractKeyFromItem = ""
@@ -597,14 +597,14 @@ End Function
 ' 概要:   スタンザ Key=Value 形式から単純抽出
 ' ================================================================
 Private Function ExtractStanzaValue(ByVal content As String, _
-                                      ByVal key As String) As String
+                                      ByVal keyName As String) As String
     Dim lines() As String
     Dim i As Long
 
     lines = Split(content, vbCrLf)
     For i = LBound(lines) To UBound(lines)
-        If InStr(lines(i), key & "=") = 1 Then
-            ExtractStanzaValue = Mid(lines(i), Len(key) + 2)
+        If InStr(lines(i), keyName & "=") = 1 Then
+            ExtractStanzaValue = Mid(lines(i), Len(keyName) + 2)
             Exit Function
         End If
     Next i
@@ -816,7 +816,7 @@ Private Sub RenderKnowledgeToDisplay(ByVal ws As Worksheet, _
         If InStr(lines(i), "FieldNo=") > 0 And _
            InStr(lines(i), "FieldName=") > 0 Then
             ws.Cells(targetRow, KD_COL_FIELD_NO).Value = _
-                ExtractKeyFromItem(lines(i), "FieldNo")
+                ExtractKeyFromItem(lines(i), "FieldNao")
             ws.Cells(targetRow, KD_COL_FIELD_NAME).Value = _
                 ExtractKeyFromItem(lines(i), "FieldName")
             ws.Cells(targetRow, KD_COL_FIELD_VALUE).NumberFormat = "@"
@@ -861,7 +861,7 @@ Private Function CombineFilePath(ByVal folder As String, _
 End Function
 ```
 
-## 関連
+## 関、逡
 
 - 呼び出す: `modCommon`, `modFileIO`, `modImageRender`, `clsLogger`
 - 呼び出される: `modEntrySearch`
