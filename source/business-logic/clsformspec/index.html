@@ -12,13 +12,13 @@
         <meta name="author" content="ai-crafted-portfolio">
       
       
-        <link rel="canonical" href="https://ai-crafted-portfolio.github.io/knowledgevba/source/business-logic/clscontrolspec/">
+        <link rel="canonical" href="https://ai-crafted-portfolio.github.io/knowledgevba/source/business-logic/clsformspec/">
       
       
-        <link rel="prev" href="../clsformspec/">
+        <link rel="prev" href="../clsfieldmigrator/">
       
       
-        <link rel="next" href="../../logger/clslogentry/">
+        <link rel="next" href="../clscontrolspec/">
       
       
         
@@ -29,7 +29,7 @@
     
     
       
-        <title>clsControlSpec.cls - ナレッジ管理ツール (VBA 製)</title>
+        <title>clsFormSpec.cls - ナレッジ管理ツール (VBA 製)</title>
       
     
     
@@ -84,7 +84,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#clscontrolspeccls" class="md-skip">
+        <a href="#clsformspeccls" class="md-skip">
           コンテンツにスキップ
         </a>
       
@@ -118,7 +118,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              clsControlSpec.cls
+              clsFormSpec.cls
             
           </span>
         </div>
@@ -1053,34 +1053,6 @@
                 
   
   
-  
-  
-    <li class="md-nav__item">
-      <a href="../clsformspec/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    clsFormSpec
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
     
   
   
@@ -1100,7 +1072,7 @@
   <span class="md-ellipsis">
     
   
-    clsControlSpec
+    clsFormSpec
   
 
     
@@ -1118,7 +1090,7 @@
   <span class="md-ellipsis">
     
   
-    clsControlSpec
+    clsFormSpec
   
 
     
@@ -1180,6 +1152,34 @@
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../clscontrolspec/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsControlSpec
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -1930,7 +1930,7 @@
 
 
 
-<h1 id="clscontrolspeccls">clsControlSpec.cls<a class="headerlink" href="#clscontrolspeccls" title="Permanent link">&para;</a></h1>
+<h1 id="clsformspeccls">clsFormSpec.cls<a class="headerlink" href="#clsformspeccls" title="Permanent link">&para;</a></h1>
 <table>
 <thead>
 <tr>
@@ -1949,139 +1949,119 @@
 </tr>
 <tr>
 <td>役割</td>
-<td>コントロール仕様 DSL (Label / TextBox / Image / Button)</td>
+<td>詳細プレビュー UserForm 仕様 DSL (ルート)</td>
 </tr>
 <tr>
 <td>行数</td>
-<td>117 行</td>
+<td>97 行</td>
 </tr>
 </tbody>
 </table>
 <h2 id="_1">配置先<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
-<p>VBE で <code>挿入 &gt; クラスモジュール</code>、F4 でプロパティ → <code>(オブジェクト名)</code> を <code>clsControlSpec</code> に変更してから、コードペインに貼り付けます。</p>
+<p>VBE で <code>挿入 &gt; クラスモジュール</code>、F4 でプロパティ → <code>(オブジェクト名)</code> を <code>clsFormSpec</code> に変更してから、コードペインに貼り付けます。</p>
 <h2 id="_2">ソースコード（コピペ可）<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <p>下のコードブロック右上にカーソルを当てるとコピーボタンが表示されます。</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">  1</a></span>
-<span class="normal"><a href="#__codelineno-0-2">  2</a></span>
-<span class="normal"><a href="#__codelineno-0-3">  3</a></span>
-<span class="normal"><a href="#__codelineno-0-4">  4</a></span>
-<span class="normal"><a href="#__codelineno-0-5">  5</a></span>
-<span class="normal"><a href="#__codelineno-0-6">  6</a></span>
-<span class="normal"><a href="#__codelineno-0-7">  7</a></span>
-<span class="normal"><a href="#__codelineno-0-8">  8</a></span>
-<span class="normal"><a href="#__codelineno-0-9">  9</a></span>
-<span class="normal"><a href="#__codelineno-0-10"> 10</a></span>
-<span class="normal"><a href="#__codelineno-0-11"> 11</a></span>
-<span class="normal"><a href="#__codelineno-0-12"> 12</a></span>
-<span class="normal"><a href="#__codelineno-0-13"> 13</a></span>
-<span class="normal"><a href="#__codelineno-0-14"> 14</a></span>
-<span class="normal"><a href="#__codelineno-0-15"> 15</a></span>
-<span class="normal"><a href="#__codelineno-0-16"> 16</a></span>
-<span class="normal"><a href="#__codelineno-0-17"> 17</a></span>
-<span class="normal"><a href="#__codelineno-0-18"> 18</a></span>
-<span class="normal"><a href="#__codelineno-0-19"> 19</a></span>
-<span class="normal"><a href="#__codelineno-0-20"> 20</a></span>
-<span class="normal"><a href="#__codelineno-0-21"> 21</a></span>
-<span class="normal"><a href="#__codelineno-0-22"> 22</a></span>
-<span class="normal"><a href="#__codelineno-0-23"> 23</a></span>
-<span class="normal"><a href="#__codelineno-0-24"> 24</a></span>
-<span class="normal"><a href="#__codelineno-0-25"> 25</a></span>
-<span class="normal"><a href="#__codelineno-0-26"> 26</a></span>
-<span class="normal"><a href="#__codelineno-0-27"> 27</a></span>
-<span class="normal"><a href="#__codelineno-0-28"> 28</a></span>
-<span class="normal"><a href="#__codelineno-0-29"> 29</a></span>
-<span class="normal"><a href="#__codelineno-0-30"> 30</a></span>
-<span class="normal"><a href="#__codelineno-0-31"> 31</a></span>
-<span class="normal"><a href="#__codelineno-0-32"> 32</a></span>
-<span class="normal"><a href="#__codelineno-0-33"> 33</a></span>
-<span class="normal"><a href="#__codelineno-0-34"> 34</a></span>
-<span class="normal"><a href="#__codelineno-0-35"> 35</a></span>
-<span class="normal"><a href="#__codelineno-0-36"> 36</a></span>
-<span class="normal"><a href="#__codelineno-0-37"> 37</a></span>
-<span class="normal"><a href="#__codelineno-0-38"> 38</a></span>
-<span class="normal"><a href="#__codelineno-0-39"> 39</a></span>
-<span class="normal"><a href="#__codelineno-0-40"> 40</a></span>
-<span class="normal"><a href="#__codelineno-0-41"> 41</a></span>
-<span class="normal"><a href="#__codelineno-0-42"> 42</a></span>
-<span class="normal"><a href="#__codelineno-0-43"> 43</a></span>
-<span class="normal"><a href="#__codelineno-0-44"> 44</a></span>
-<span class="normal"><a href="#__codelineno-0-45"> 45</a></span>
-<span class="normal"><a href="#__codelineno-0-46"> 46</a></span>
-<span class="normal"><a href="#__codelineno-0-47"> 47</a></span>
-<span class="normal"><a href="#__codelineno-0-48"> 48</a></span>
-<span class="normal"><a href="#__codelineno-0-49"> 49</a></span>
-<span class="normal"><a href="#__codelineno-0-50"> 50</a></span>
-<span class="normal"><a href="#__codelineno-0-51"> 51</a></span>
-<span class="normal"><a href="#__codelineno-0-52"> 52</a></span>
-<span class="normal"><a href="#__codelineno-0-53"> 53</a></span>
-<span class="normal"><a href="#__codelineno-0-54"> 54</a></span>
-<span class="normal"><a href="#__codelineno-0-55"> 55</a></span>
-<span class="normal"><a href="#__codelineno-0-56"> 56</a></span>
-<span class="normal"><a href="#__codelineno-0-57"> 57</a></span>
-<span class="normal"><a href="#__codelineno-0-58"> 58</a></span>
-<span class="normal"><a href="#__codelineno-0-59"> 59</a></span>
-<span class="normal"><a href="#__codelineno-0-60"> 60</a></span>
-<span class="normal"><a href="#__codelineno-0-61"> 61</a></span>
-<span class="normal"><a href="#__codelineno-0-62"> 62</a></span>
-<span class="normal"><a href="#__codelineno-0-63"> 63</a></span>
-<span class="normal"><a href="#__codelineno-0-64"> 64</a></span>
-<span class="normal"><a href="#__codelineno-0-65"> 65</a></span>
-<span class="normal"><a href="#__codelineno-0-66"> 66</a></span>
-<span class="normal"><a href="#__codelineno-0-67"> 67</a></span>
-<span class="normal"><a href="#__codelineno-0-68"> 68</a></span>
-<span class="normal"><a href="#__codelineno-0-69"> 69</a></span>
-<span class="normal"><a href="#__codelineno-0-70"> 70</a></span>
-<span class="normal"><a href="#__codelineno-0-71"> 71</a></span>
-<span class="normal"><a href="#__codelineno-0-72"> 72</a></span>
-<span class="normal"><a href="#__codelineno-0-73"> 73</a></span>
-<span class="normal"><a href="#__codelineno-0-74"> 74</a></span>
-<span class="normal"><a href="#__codelineno-0-75"> 75</a></span>
-<span class="normal"><a href="#__codelineno-0-76"> 76</a></span>
-<span class="normal"><a href="#__codelineno-0-77"> 77</a></span>
-<span class="normal"><a href="#__codelineno-0-78"> 78</a></span>
-<span class="normal"><a href="#__codelineno-0-79"> 79</a></span>
-<span class="normal"><a href="#__codelineno-0-80"> 80</a></span>
-<span class="normal"><a href="#__codelineno-0-81"> 81</a></span>
-<span class="normal"><a href="#__codelineno-0-82"> 82</a></span>
-<span class="normal"><a href="#__codelineno-0-83"> 83</a></span>
-<span class="normal"><a href="#__codelineno-0-84"> 84</a></span>
-<span class="normal"><a href="#__codelineno-0-85"> 85</a></span>
-<span class="normal"><a href="#__codelineno-0-86"> 86</a></span>
-<span class="normal"><a href="#__codelineno-0-87"> 87</a></span>
-<span class="normal"><a href="#__codelineno-0-88"> 88</a></span>
-<span class="normal"><a href="#__codelineno-0-89"> 89</a></span>
-<span class="normal"><a href="#__codelineno-0-90"> 90</a></span>
-<span class="normal"><a href="#__codelineno-0-91"> 91</a></span>
-<span class="normal"><a href="#__codelineno-0-92"> 92</a></span>
-<span class="normal"><a href="#__codelineno-0-93"> 93</a></span>
-<span class="normal"><a href="#__codelineno-0-94"> 94</a></span>
-<span class="normal"><a href="#__codelineno-0-95"> 95</a></span>
-<span class="normal"><a href="#__codelineno-0-96"> 96</a></span>
-<span class="normal"><a href="#__codelineno-0-97"> 97</a></span>
-<span class="normal"><a href="#__codelineno-0-98"> 98</a></span>
-<span class="normal"><a href="#__codelineno-0-99"> 99</a></span>
-<span class="normal"><a href="#__codelineno-0-100">100</a></span>
-<span class="normal"><a href="#__codelineno-0-101">101</a></span>
-<span class="normal"><a href="#__codelineno-0-102">102</a></span>
-<span class="normal"><a href="#__codelineno-0-103">103</a></span>
-<span class="normal"><a href="#__codelineno-0-104">104</a></span>
-<span class="normal"><a href="#__codelineno-0-105">105</a></span>
-<span class="normal"><a href="#__codelineno-0-106">106</a></span>
-<span class="normal"><a href="#__codelineno-0-107">107</a></span>
-<span class="normal"><a href="#__codelineno-0-108">108</a></span>
-<span class="normal"><a href="#__codelineno-0-109">109</a></span>
-<span class="normal"><a href="#__codelineno-0-110">110</a></span>
-<span class="normal"><a href="#__codelineno-0-111">111</a></span>
-<span class="normal"><a href="#__codelineno-0-112">112</a></span>
-<span class="normal"><a href="#__codelineno-0-113">113</a></span>
-<span class="normal"><a href="#__codelineno-0-114">114</a></span>
-<span class="normal"><a href="#__codelineno-0-115">115</a></span>
-<span class="normal"><a href="#__codelineno-0-116">116</a></span>
-<span class="normal"><a href="#__codelineno-0-117">117</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="n">VERSION</span><span class="w"> </span><span class="mf">1.0</span><span class="w"> </span><span class="k">CLASS</span>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-0-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-0-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-0-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-0-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-0-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-0-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-0-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-0-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-0-10">10</a></span>
+<span class="normal"><a href="#__codelineno-0-11">11</a></span>
+<span class="normal"><a href="#__codelineno-0-12">12</a></span>
+<span class="normal"><a href="#__codelineno-0-13">13</a></span>
+<span class="normal"><a href="#__codelineno-0-14">14</a></span>
+<span class="normal"><a href="#__codelineno-0-15">15</a></span>
+<span class="normal"><a href="#__codelineno-0-16">16</a></span>
+<span class="normal"><a href="#__codelineno-0-17">17</a></span>
+<span class="normal"><a href="#__codelineno-0-18">18</a></span>
+<span class="normal"><a href="#__codelineno-0-19">19</a></span>
+<span class="normal"><a href="#__codelineno-0-20">20</a></span>
+<span class="normal"><a href="#__codelineno-0-21">21</a></span>
+<span class="normal"><a href="#__codelineno-0-22">22</a></span>
+<span class="normal"><a href="#__codelineno-0-23">23</a></span>
+<span class="normal"><a href="#__codelineno-0-24">24</a></span>
+<span class="normal"><a href="#__codelineno-0-25">25</a></span>
+<span class="normal"><a href="#__codelineno-0-26">26</a></span>
+<span class="normal"><a href="#__codelineno-0-27">27</a></span>
+<span class="normal"><a href="#__codelineno-0-28">28</a></span>
+<span class="normal"><a href="#__codelineno-0-29">29</a></span>
+<span class="normal"><a href="#__codelineno-0-30">30</a></span>
+<span class="normal"><a href="#__codelineno-0-31">31</a></span>
+<span class="normal"><a href="#__codelineno-0-32">32</a></span>
+<span class="normal"><a href="#__codelineno-0-33">33</a></span>
+<span class="normal"><a href="#__codelineno-0-34">34</a></span>
+<span class="normal"><a href="#__codelineno-0-35">35</a></span>
+<span class="normal"><a href="#__codelineno-0-36">36</a></span>
+<span class="normal"><a href="#__codelineno-0-37">37</a></span>
+<span class="normal"><a href="#__codelineno-0-38">38</a></span>
+<span class="normal"><a href="#__codelineno-0-39">39</a></span>
+<span class="normal"><a href="#__codelineno-0-40">40</a></span>
+<span class="normal"><a href="#__codelineno-0-41">41</a></span>
+<span class="normal"><a href="#__codelineno-0-42">42</a></span>
+<span class="normal"><a href="#__codelineno-0-43">43</a></span>
+<span class="normal"><a href="#__codelineno-0-44">44</a></span>
+<span class="normal"><a href="#__codelineno-0-45">45</a></span>
+<span class="normal"><a href="#__codelineno-0-46">46</a></span>
+<span class="normal"><a href="#__codelineno-0-47">47</a></span>
+<span class="normal"><a href="#__codelineno-0-48">48</a></span>
+<span class="normal"><a href="#__codelineno-0-49">49</a></span>
+<span class="normal"><a href="#__codelineno-0-50">50</a></span>
+<span class="normal"><a href="#__codelineno-0-51">51</a></span>
+<span class="normal"><a href="#__codelineno-0-52">52</a></span>
+<span class="normal"><a href="#__codelineno-0-53">53</a></span>
+<span class="normal"><a href="#__codelineno-0-54">54</a></span>
+<span class="normal"><a href="#__codelineno-0-55">55</a></span>
+<span class="normal"><a href="#__codelineno-0-56">56</a></span>
+<span class="normal"><a href="#__codelineno-0-57">57</a></span>
+<span class="normal"><a href="#__codelineno-0-58">58</a></span>
+<span class="normal"><a href="#__codelineno-0-59">59</a></span>
+<span class="normal"><a href="#__codelineno-0-60">60</a></span>
+<span class="normal"><a href="#__codelineno-0-61">61</a></span>
+<span class="normal"><a href="#__codelineno-0-62">62</a></span>
+<span class="normal"><a href="#__codelineno-0-63">63</a></span>
+<span class="normal"><a href="#__codelineno-0-64">64</a></span>
+<span class="normal"><a href="#__codelineno-0-65">65</a></span>
+<span class="normal"><a href="#__codelineno-0-66">66</a></span>
+<span class="normal"><a href="#__codelineno-0-67">67</a></span>
+<span class="normal"><a href="#__codelineno-0-68">68</a></span>
+<span class="normal"><a href="#__codelineno-0-69">69</a></span>
+<span class="normal"><a href="#__codelineno-0-70">70</a></span>
+<span class="normal"><a href="#__codelineno-0-71">71</a></span>
+<span class="normal"><a href="#__codelineno-0-72">72</a></span>
+<span class="normal"><a href="#__codelineno-0-73">73</a></span>
+<span class="normal"><a href="#__codelineno-0-74">74</a></span>
+<span class="normal"><a href="#__codelineno-0-75">75</a></span>
+<span class="normal"><a href="#__codelineno-0-76">76</a></span>
+<span class="normal"><a href="#__codelineno-0-77">77</a></span>
+<span class="normal"><a href="#__codelineno-0-78">78</a></span>
+<span class="normal"><a href="#__codelineno-0-79">79</a></span>
+<span class="normal"><a href="#__codelineno-0-80">80</a></span>
+<span class="normal"><a href="#__codelineno-0-81">81</a></span>
+<span class="normal"><a href="#__codelineno-0-82">82</a></span>
+<span class="normal"><a href="#__codelineno-0-83">83</a></span>
+<span class="normal"><a href="#__codelineno-0-84">84</a></span>
+<span class="normal"><a href="#__codelineno-0-85">85</a></span>
+<span class="normal"><a href="#__codelineno-0-86">86</a></span>
+<span class="normal"><a href="#__codelineno-0-87">87</a></span>
+<span class="normal"><a href="#__codelineno-0-88">88</a></span>
+<span class="normal"><a href="#__codelineno-0-89">89</a></span>
+<span class="normal"><a href="#__codelineno-0-90">90</a></span>
+<span class="normal"><a href="#__codelineno-0-91">91</a></span>
+<span class="normal"><a href="#__codelineno-0-92">92</a></span>
+<span class="normal"><a href="#__codelineno-0-93">93</a></span>
+<span class="normal"><a href="#__codelineno-0-94">94</a></span>
+<span class="normal"><a href="#__codelineno-0-95">95</a></span>
+<span class="normal"><a href="#__codelineno-0-96">96</a></span>
+<span class="normal"><a href="#__codelineno-0-97">97</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="n">VERSION</span><span class="w"> </span><span class="mf">1.0</span><span class="w"> </span><span class="k">CLASS</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="nc">BEGIN</span>
 <a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="w">  </span><span class="n">MultiUse</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="w">  </span><span class="c">&#39;True</span>
 <a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="k">END</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="n">Attribute</span><span class="w"> </span><span class="n">VB_Name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;clsControlSpec&quot;</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="n">Attribute</span><span class="w"> </span><span class="n">VB_Name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;clsFormSpec&quot;</span>
 <a id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="n">Attribute</span><span class="w"> </span><span class="n">VB_GlobalNameSpace</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">False</span>
 <a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="n">Attribute</span><span class="w"> </span><span class="n">VB_Creatable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">False</span>
 <a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="n">Attribute</span><span class="w"> </span><span class="n">VB_PredeclaredId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">False</span>
@@ -2089,116 +2069,96 @@
 <a id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="k">Option</span><span class="w"> </span><span class="n">Explicit</span>
 <a id="__codelineno-0-11" name="__codelineno-0-11"></a>
 <a id="__codelineno-0-12" name="__codelineno-0-12"></a><span class="c">&#39; ================================================================</span>
-<a id="__codelineno-0-13" name="__codelineno-0-13"></a><span class="c">&#39; クラス: clsControlSpec (ビジネスロジック層 / 値オブジェクト)</span>
-<a id="__codelineno-0-14" name="__codelineno-0-14"></a><span class="c">&#39; 概要:   1 つの UserForm 上 Control の宣言情報を保持する ValueObject。</span>
-<a id="__codelineno-0-15" name="__codelineno-0-15"></a><span class="c">&#39;         ControlType / Name / Left / Top / Width / Height / Caption / OnClick</span>
-<a id="__codelineno-0-16" name="__codelineno-0-16"></a><span class="c">&#39;         を Private 変数 + Property Get/Let で公開する (R11 準拠)。</span>
-<a id="__codelineno-0-17" name="__codelineno-0-17"></a><span class="c">&#39; 依存先: なし</span>
-<a id="__codelineno-0-18" name="__codelineno-0-18"></a><span class="c">&#39; 備考:   状態を持つので .cls (vba-coding-standards R10/R11)。</span>
-<a id="__codelineno-0-19" name="__codelineno-0-19"></a><span class="c">&#39;         OnClick はマクロ名 (Application.Run で呼ぶ)。</span>
-<a id="__codelineno-0-20" name="__codelineno-0-20"></a><span class="c">&#39; ================================================================</span>
-<a id="__codelineno-0-21" name="__codelineno-0-21"></a>
-<a id="__codelineno-0-22" name="__codelineno-0-22"></a><span class="k">Private</span><span class="w"> </span><span class="n">m_controlType</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">String</span>
-<a id="__codelineno-0-23" name="__codelineno-0-23"></a><span class="k">Private</span><span class="w"> </span><span class="n">m_name</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">String</span>
-<a id="__codelineno-0-24" name="__codelineno-0-24"></a><span class="k">Private</span><span class="w"> </span><span class="n">m_left</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">Long</span>
-<a id="__codelineno-0-25" name="__codelineno-0-25"></a><span class="k">Private</span><span class="w"> </span><span class="n">m_top</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">Long</span>
-<a id="__codelineno-0-26" name="__codelineno-0-26"></a><span class="k">Private</span><span class="w"> </span><span class="n">m_width</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">Long</span>
-<a id="__codelineno-0-27" name="__codelineno-0-27"></a><span class="k">Private</span><span class="w"> </span><span class="n">m_height</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">Long</span>
-<a id="__codelineno-0-28" name="__codelineno-0-28"></a><span class="k">Private</span><span class="w"> </span><span class="n">m_caption</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">String</span>
-<a id="__codelineno-0-29" name="__codelineno-0-29"></a><span class="k">Private</span><span class="w"> </span><span class="n">m_onClick</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">String</span>
-<a id="__codelineno-0-30" name="__codelineno-0-30"></a>
-<a id="__codelineno-0-31" name="__codelineno-0-31"></a><span class="c">&#39; --- ControlType ---</span>
-<a id="__codelineno-0-32" name="__codelineno-0-32"></a><span class="k">Public</span><span class="w"> </span><span class="k">Property</span><span class="w"> </span><span class="nf">Get</span><span class="w"> </span><span class="n">ControlType</span><span class="p">()</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">String</span>
-<a id="__codelineno-0-33" name="__codelineno-0-33"></a><span class="w">    </span><span class="n">ControlType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_controlType</span>
-<a id="__codelineno-0-34" name="__codelineno-0-34"></a><span class="k">End</span><span class="w"> </span><span class="k">Property</span>
-<a id="__codelineno-0-35" name="__codelineno-0-35"></a><span class="k">Public</span><span class="w"> </span><span class="k">Property</span><span class="w"> </span><span class="nf">Let</span><span class="w"> </span><span class="n">ControlType</span><span class="p">(</span><span class="k">ByVal</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">String</span><span class="p">)</span>
-<a id="__codelineno-0-36" name="__codelineno-0-36"></a><span class="w">    </span><span class="n">m_controlType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">v</span>
-<a id="__codelineno-0-37" name="__codelineno-0-37"></a><span class="k">End</span><span class="w"> </span><span class="k">Property</span>
-<a id="__codelineno-0-38" name="__codelineno-0-38"></a>
-<a id="__codelineno-0-39" name="__codelineno-0-39"></a><span class="c">&#39; --- Name ---</span>
-<a id="__codelineno-0-40" name="__codelineno-0-40"></a><span class="k">Public</span><span class="w"> </span><span class="k">Property</span><span class="w"> </span><span class="nf">Get</span><span class="w"> </span><span class="n">Name</span><span class="p">()</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">String</span>
-<a id="__codelineno-0-41" name="__codelineno-0-41"></a><span class="w">    </span><span class="n">Name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_name</span>
-<a id="__codelineno-0-42" name="__codelineno-0-42"></a><span class="k">End</span><span class="w"> </span><span class="k">Property</span>
-<a id="__codelineno-0-43" name="__codelineno-0-43"></a><span class="k">Public</span><span class="w"> </span><span class="k">Property</span><span class="w"> </span><span class="nf">Let</span><span class="w"> </span><span class="n">Name</span><span class="p">(</span><span class="k">ByVal</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">String</span><span class="p">)</span>
-<a id="__codelineno-0-44" name="__codelineno-0-44"></a><span class="w">    </span><span class="n">m_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">v</span>
-<a id="__codelineno-0-45" name="__codelineno-0-45"></a><span class="k">End</span><span class="w"> </span><span class="k">Property</span>
-<a id="__codelineno-0-46" name="__codelineno-0-46"></a>
-<a id="__codelineno-0-47" name="__codelineno-0-47"></a><span class="c">&#39; --- Left ---</span>
-<a id="__codelineno-0-48" name="__codelineno-0-48"></a><span class="k">Public</span><span class="w"> </span><span class="k">Property</span><span class="w"> </span><span class="nf">Get</span><span class="w"> </span><span class="n">Left</span><span class="p">()</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">Long</span>
-<a id="__codelineno-0-49" name="__codelineno-0-49"></a><span class="w">    </span><span class="n">Left</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_left</span>
-<a id="__codelineno-0-50" name="__codelineno-0-50"></a><span class="k">End</span><span class="w"> </span><span class="k">Property</span>
-<a id="__codelineno-0-51" name="__codelineno-0-51"></a><span class="k">Public</span><span class="w"> </span><span class="k">Property</span><span class="w"> </span><span class="nf">Let</span><span class="w"> </span><span class="n">Left</span><span class="p">(</span><span class="k">ByVal</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">Long</span><span class="p">)</span>
-<a id="__codelineno-0-52" name="__codelineno-0-52"></a><span class="w">    </span><span class="n">m_left</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">v</span>
-<a id="__codelineno-0-53" name="__codelineno-0-53"></a><span class="k">End</span><span class="w"> </span><span class="k">Property</span>
-<a id="__codelineno-0-54" name="__codelineno-0-54"></a>
-<a id="__codelineno-0-55" name="__codelineno-0-55"></a><span class="c">&#39; --- Top ---</span>
-<a id="__codelineno-0-56" name="__codelineno-0-56"></a><span class="k">Public</span><span class="w"> </span><span class="k">Property</span><span class="w"> </span><span class="nf">Get</span><span class="w"> </span><span class="n">Top</span><span class="p">()</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">Long</span>
-<a id="__codelineno-0-57" name="__codelineno-0-57"></a><span class="w">    </span><span class="n">Top</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_top</span>
-<a id="__codelineno-0-58" name="__codelineno-0-58"></a><span class="k">End</span><span class="w"> </span><span class="k">Property</span>
-<a id="__codelineno-0-59" name="__codelineno-0-59"></a><span class="k">Public</span><span class="w"> </span><span class="k">Property</span><span class="w"> </span><span class="nf">Let</span><span class="w"> </span><span class="n">Top</span><span class="p">(</span><span class="k">ByVal</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">Long</span><span class="p">)</span>
-<a id="__codelineno-0-60" name="__codelineno-0-60"></a><span class="w">    </span><span class="n">m_top</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">v</span>
-<a id="__codelineno-0-61" name="__codelineno-0-61"></a><span class="k">End</span><span class="w"> </span><span class="k">Property</span>
-<a id="__codelineno-0-62" name="__codelineno-0-62"></a>
-<a id="__codelineno-0-63" name="__codelineno-0-63"></a><span class="c">&#39; --- Width ---</span>
-<a id="__codelineno-0-64" name="__codelineno-0-64"></a><span class="k">Public</span><span class="w"> </span><span class="k">Property</span><span class="w"> </span><span class="nf">Get</span><span class="w"> </span><span class="n">Width</span><span class="p">()</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">Long</span>
-<a id="__codelineno-0-65" name="__codelineno-0-65"></a><span class="w">    </span><span class="n">Width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_width</span>
-<a id="__codelineno-0-66" name="__codelineno-0-66"></a><span class="k">End</span><span class="w"> </span><span class="k">Property</span>
-<a id="__codelineno-0-67" name="__codelineno-0-67"></a><span class="k">Public</span><span class="w"> </span><span class="k">Property</span><span class="w"> </span><span class="nf">Let</span><span class="w"> </span><span class="n">Width</span><span class="p">(</span><span class="k">ByVal</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">Long</span><span class="p">)</span>
-<a id="__codelineno-0-68" name="__codelineno-0-68"></a><span class="w">    </span><span class="n">m_width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">v</span>
-<a id="__codelineno-0-69" name="__codelineno-0-69"></a><span class="k">End</span><span class="w"> </span><span class="k">Property</span>
-<a id="__codelineno-0-70" name="__codelineno-0-70"></a>
-<a id="__codelineno-0-71" name="__codelineno-0-71"></a><span class="c">&#39; --- Height ---</span>
-<a id="__codelineno-0-72" name="__codelineno-0-72"></a><span class="k">Public</span><span class="w"> </span><span class="k">Property</span><span class="w"> </span><span class="nf">Get</span><span class="w"> </span><span class="n">Height</span><span class="p">()</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">Long</span>
-<a id="__codelineno-0-73" name="__codelineno-0-73"></a><span class="w">    </span><span class="n">Height</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_height</span>
-<a id="__codelineno-0-74" name="__codelineno-0-74"></a><span class="k">End</span><span class="w"> </span><span class="k">Property</span>
-<a id="__codelineno-0-75" name="__codelineno-0-75"></a><span class="k">Public</span><span class="w"> </span><span class="k">Property</span><span class="w"> </span><span class="nf">Let</span><span class="w"> </span><span class="n">Height</span><span class="p">(</span><span class="k">ByVal</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">Long</span><span class="p">)</span>
-<a id="__codelineno-0-76" name="__codelineno-0-76"></a><span class="w">    </span><span class="n">m_height</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">v</span>
-<a id="__codelineno-0-77" name="__codelineno-0-77"></a><span class="k">End</span><span class="w"> </span><span class="k">Property</span>
-<a id="__codelineno-0-78" name="__codelineno-0-78"></a>
-<a id="__codelineno-0-79" name="__codelineno-0-79"></a><span class="c">&#39; --- Caption ---</span>
-<a id="__codelineno-0-80" name="__codelineno-0-80"></a><span class="k">Public</span><span class="w"> </span><span class="k">Property</span><span class="w"> </span><span class="nf">Get</span><span class="w"> </span><span class="n">Caption</span><span class="p">()</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">String</span>
-<a id="__codelineno-0-81" name="__codelineno-0-81"></a><span class="w">    </span><span class="n">Caption</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_caption</span>
-<a id="__codelineno-0-82" name="__codelineno-0-82"></a><span class="k">End</span><span class="w"> </span><span class="k">Property</span>
-<a id="__codelineno-0-83" name="__codelineno-0-83"></a><span class="k">Public</span><span class="w"> </span><span class="k">Property</span><span class="w"> </span><span class="nf">Let</span><span class="w"> </span><span class="n">Caption</span><span class="p">(</span><span class="k">ByVal</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">String</span><span class="p">)</span>
-<a id="__codelineno-0-84" name="__codelineno-0-84"></a><span class="w">    </span><span class="n">m_caption</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">v</span>
-<a id="__codelineno-0-85" name="__codelineno-0-85"></a><span class="k">End</span><span class="w"> </span><span class="k">Property</span>
-<a id="__codelineno-0-86" name="__codelineno-0-86"></a>
-<a id="__codelineno-0-87" name="__codelineno-0-87"></a><span class="c">&#39; --- OnClick (マクロ名) ---</span>
-<a id="__codelineno-0-88" name="__codelineno-0-88"></a><span class="k">Public</span><span class="w"> </span><span class="k">Property</span><span class="w"> </span><span class="nf">Get</span><span class="w"> </span><span class="n">OnClick</span><span class="p">()</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">String</span>
-<a id="__codelineno-0-89" name="__codelineno-0-89"></a><span class="w">    </span><span class="n">OnClick</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_onClick</span>
-<a id="__codelineno-0-90" name="__codelineno-0-90"></a><span class="k">End</span><span class="w"> </span><span class="k">Property</span>
-<a id="__codelineno-0-91" name="__codelineno-0-91"></a><span class="k">Public</span><span class="w"> </span><span class="k">Property</span><span class="w"> </span><span class="nf">Let</span><span class="w"> </span><span class="n">OnClick</span><span class="p">(</span><span class="k">ByVal</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">String</span><span class="p">)</span>
-<a id="__codelineno-0-92" name="__codelineno-0-92"></a><span class="w">    </span><span class="n">m_onClick</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">v</span>
-<a id="__codelineno-0-93" name="__codelineno-0-93"></a><span class="k">End</span><span class="w"> </span><span class="k">Property</span>
-<a id="__codelineno-0-94" name="__codelineno-0-94"></a>
-<a id="__codelineno-0-95" name="__codelineno-0-95"></a><span class="c">&#39; ================================================================</span>
-<a id="__codelineno-0-96" name="__codelineno-0-96"></a><span class="c">&#39; 関数名: Init</span>
-<a id="__codelineno-0-97" name="__codelineno-0-97"></a><span class="c">&#39; 概要:   全プロパティを 1 回でセットする初期化メソッド</span>
-<a id="__codelineno-0-98" name="__codelineno-0-98"></a><span class="c">&#39; 引数:   cType   - &quot;Label&quot;/&quot;TextBox&quot;/&quot;Button&quot;/&quot;Image&quot;/&quot;ListBox&quot;/&quot;ComboBox&quot;</span>
-<a id="__codelineno-0-99" name="__codelineno-0-99"></a><span class="c">&#39;         nm      - Control 名 (Form 内で一意)</span>
-<a id="__codelineno-0-100" name="__codelineno-0-100"></a><span class="c">&#39;         l/t/w/h - Left/Top/Width/Height (points)</span>
-<a id="__codelineno-0-101" name="__codelineno-0-101"></a><span class="c">&#39;         cap     - Caption (Label/Button/CheckBox 用、省略可)</span>
-<a id="__codelineno-0-102" name="__codelineno-0-102"></a><span class="c">&#39;         onClk   - OnClick マクロ名 (Button 用、省略可)</span>
-<a id="__codelineno-0-103" name="__codelineno-0-103"></a><span class="c">&#39; ================================================================</span>
-<a id="__codelineno-0-104" name="__codelineno-0-104"></a><span class="k">Public</span><span class="w"> </span><span class="k">Sub</span><span class="w"> </span><span class="nf">Init</span><span class="p">(</span><span class="k">ByVal</span><span class="w"> </span><span class="k">cType</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">String</span><span class="p">,</span><span class="w"> </span><span class="k">ByVal</span><span class="w"> </span><span class="n">nm</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">String</span><span class="p">,</span><span class="w"> </span>_
-<a id="__codelineno-0-105" name="__codelineno-0-105"></a><span class="w">                 </span><span class="k">ByVal</span><span class="w"> </span><span class="n">l</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">Long</span><span class="p">,</span><span class="w"> </span><span class="k">ByVal</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">Long</span><span class="p">,</span><span class="w"> </span>_
-<a id="__codelineno-0-106" name="__codelineno-0-106"></a><span class="w">                 </span><span class="k">ByVal</span><span class="w"> </span><span class="n">w</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">Long</span><span class="p">,</span><span class="w"> </span><span class="k">ByVal</span><span class="w"> </span><span class="n">h</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">Long</span><span class="p">,</span><span class="w"> </span>_
-<a id="__codelineno-0-107" name="__codelineno-0-107"></a><span class="w">                 </span><span class="k">Optional</span><span class="w"> </span><span class="k">ByVal</span><span class="w"> </span><span class="n">cap</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">String</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">,</span><span class="w"> </span>_
-<a id="__codelineno-0-108" name="__codelineno-0-108"></a><span class="w">                 </span><span class="k">Optional</span><span class="w"> </span><span class="k">ByVal</span><span class="w"> </span><span class="n">onClk</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">String</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">)</span>
-<a id="__codelineno-0-109" name="__codelineno-0-109"></a><span class="w">    </span><span class="n">m_controlType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">cType</span>
-<a id="__codelineno-0-110" name="__codelineno-0-110"></a><span class="w">    </span><span class="n">m_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">nm</span>
-<a id="__codelineno-0-111" name="__codelineno-0-111"></a><span class="w">    </span><span class="n">m_left</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">l</span>
-<a id="__codelineno-0-112" name="__codelineno-0-112"></a><span class="w">    </span><span class="n">m_top</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">t</span>
-<a id="__codelineno-0-113" name="__codelineno-0-113"></a><span class="w">    </span><span class="n">m_width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">w</span>
-<a id="__codelineno-0-114" name="__codelineno-0-114"></a><span class="w">    </span><span class="n">m_height</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">h</span>
-<a id="__codelineno-0-115" name="__codelineno-0-115"></a><span class="w">    </span><span class="n">m_caption</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cap</span>
-<a id="__codelineno-0-116" name="__codelineno-0-116"></a><span class="w">    </span><span class="n">m_onClick</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">onClk</span>
-<a id="__codelineno-0-117" name="__codelineno-0-117"></a><span class="k">End</span><span class="w"> </span><span class="k">Sub</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13"></a><span class="c">&#39; クラス: clsFormSpec (ビジネスロジック層)</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14"></a><span class="c">&#39; 概要:   1 つの UserForm の宣言情報を保持。</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15"></a><span class="c">&#39;         FormTitle / Width / Height + Controls Collection。</span>
+<a id="__codelineno-0-16" name="__codelineno-0-16"></a><span class="c">&#39;         AddControl で clsControlSpec を追加する DSL を提供。</span>
+<a id="__codelineno-0-17" name="__codelineno-0-17"></a><span class="c">&#39; 依存先: clsControlSpec</span>
+<a id="__codelineno-0-18" name="__codelineno-0-18"></a><span class="c">&#39; 備考:   modFormBuilder.BuildAndShow に渡して動的フォーム生成する。</span>
+<a id="__codelineno-0-19" name="__codelineno-0-19"></a><span class="c">&#39; ================================================================</span>
+<a id="__codelineno-0-20" name="__codelineno-0-20"></a>
+<a id="__codelineno-0-21" name="__codelineno-0-21"></a><span class="k">Private</span><span class="w"> </span><span class="n">m_formTitle</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">String</span>
+<a id="__codelineno-0-22" name="__codelineno-0-22"></a><span class="k">Private</span><span class="w"> </span><span class="n">m_width</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">Long</span>
+<a id="__codelineno-0-23" name="__codelineno-0-23"></a><span class="k">Private</span><span class="w"> </span><span class="n">m_height</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">Long</span>
+<a id="__codelineno-0-24" name="__codelineno-0-24"></a><span class="k">Private</span><span class="w"> </span><span class="n">m_controls</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="n">Collection</span>
+<a id="__codelineno-0-25" name="__codelineno-0-25"></a>
+<a id="__codelineno-0-26" name="__codelineno-0-26"></a><span class="k">Private</span><span class="w"> </span><span class="k">Sub</span><span class="w"> </span><span class="nf">Class_Initialize</span><span class="p">()</span>
+<a id="__codelineno-0-27" name="__codelineno-0-27"></a><span class="w">    </span><span class="k">Set</span><span class="w"> </span><span class="n">m_controls</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">New</span><span class="w"> </span><span class="n">Collection</span>
+<a id="__codelineno-0-28" name="__codelineno-0-28"></a><span class="w">    </span><span class="n">m_width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">480</span>
+<a id="__codelineno-0-29" name="__codelineno-0-29"></a><span class="w">    </span><span class="n">m_height</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">360</span>
+<a id="__codelineno-0-30" name="__codelineno-0-30"></a><span class="w">    </span><span class="n">m_formTitle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Untitled&quot;</span>
+<a id="__codelineno-0-31" name="__codelineno-0-31"></a><span class="k">End</span><span class="w"> </span><span class="k">Sub</span>
+<a id="__codelineno-0-32" name="__codelineno-0-32"></a>
+<a id="__codelineno-0-33" name="__codelineno-0-33"></a><span class="c">&#39; --- FormTitle ---</span>
+<a id="__codelineno-0-34" name="__codelineno-0-34"></a><span class="k">Public</span><span class="w"> </span><span class="k">Property</span><span class="w"> </span><span class="nf">Get</span><span class="w"> </span><span class="n">FormTitle</span><span class="p">()</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">String</span>
+<a id="__codelineno-0-35" name="__codelineno-0-35"></a><span class="w">    </span><span class="n">FormTitle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_formTitle</span>
+<a id="__codelineno-0-36" name="__codelineno-0-36"></a><span class="k">End</span><span class="w"> </span><span class="k">Property</span>
+<a id="__codelineno-0-37" name="__codelineno-0-37"></a><span class="k">Public</span><span class="w"> </span><span class="k">Property</span><span class="w"> </span><span class="nf">Let</span><span class="w"> </span><span class="n">FormTitle</span><span class="p">(</span><span class="k">ByVal</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">String</span><span class="p">)</span>
+<a id="__codelineno-0-38" name="__codelineno-0-38"></a><span class="w">    </span><span class="n">m_formTitle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">v</span>
+<a id="__codelineno-0-39" name="__codelineno-0-39"></a><span class="k">End</span><span class="w"> </span><span class="k">Property</span>
+<a id="__codelineno-0-40" name="__codelineno-0-40"></a>
+<a id="__codelineno-0-41" name="__codelineno-0-41"></a><span class="c">&#39; --- Width ---</span>
+<a id="__codelineno-0-42" name="__codelineno-0-42"></a><span class="k">Public</span><span class="w"> </span><span class="k">Property</span><span class="w"> </span><span class="nf">Get</span><span class="w"> </span><span class="n">Width</span><span class="p">()</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">Long</span>
+<a id="__codelineno-0-43" name="__codelineno-0-43"></a><span class="w">    </span><span class="n">Width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_width</span>
+<a id="__codelineno-0-44" name="__codelineno-0-44"></a><span class="k">End</span><span class="w"> </span><span class="k">Property</span>
+<a id="__codelineno-0-45" name="__codelineno-0-45"></a><span class="k">Public</span><span class="w"> </span><span class="k">Property</span><span class="w"> </span><span class="nf">Let</span><span class="w"> </span><span class="n">Width</span><span class="p">(</span><span class="k">ByVal</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">Long</span><span class="p">)</span>
+<a id="__codelineno-0-46" name="__codelineno-0-46"></a><span class="w">    </span><span class="n">m_width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">v</span>
+<a id="__codelineno-0-47" name="__codelineno-0-47"></a><span class="k">End</span><span class="w"> </span><span class="k">Property</span>
+<a id="__codelineno-0-48" name="__codelineno-0-48"></a>
+<a id="__codelineno-0-49" name="__codelineno-0-49"></a><span class="c">&#39; --- Height ---</span>
+<a id="__codelineno-0-50" name="__codelineno-0-50"></a><span class="k">Public</span><span class="w"> </span><span class="k">Property</span><span class="w"> </span><span class="nf">Get</span><span class="w"> </span><span class="n">Height</span><span class="p">()</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">Long</span>
+<a id="__codelineno-0-51" name="__codelineno-0-51"></a><span class="w">    </span><span class="n">Height</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_height</span>
+<a id="__codelineno-0-52" name="__codelineno-0-52"></a><span class="k">End</span><span class="w"> </span><span class="k">Property</span>
+<a id="__codelineno-0-53" name="__codelineno-0-53"></a><span class="k">Public</span><span class="w"> </span><span class="k">Property</span><span class="w"> </span><span class="nf">Let</span><span class="w"> </span><span class="n">Height</span><span class="p">(</span><span class="k">ByVal</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">Long</span><span class="p">)</span>
+<a id="__codelineno-0-54" name="__codelineno-0-54"></a><span class="w">    </span><span class="n">m_height</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">v</span>
+<a id="__codelineno-0-55" name="__codelineno-0-55"></a><span class="k">End</span><span class="w"> </span><span class="k">Property</span>
+<a id="__codelineno-0-56" name="__codelineno-0-56"></a>
+<a id="__codelineno-0-57" name="__codelineno-0-57"></a><span class="c">&#39; --- Controls (read-only Collection) ---</span>
+<a id="__codelineno-0-58" name="__codelineno-0-58"></a><span class="k">Public</span><span class="w"> </span><span class="k">Property</span><span class="w"> </span><span class="nf">Get</span><span class="w"> </span><span class="n">Controls</span><span class="p">()</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="n">Collection</span>
+<a id="__codelineno-0-59" name="__codelineno-0-59"></a><span class="w">    </span><span class="k">Set</span><span class="w"> </span><span class="n">Controls</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_controls</span>
+<a id="__codelineno-0-60" name="__codelineno-0-60"></a><span class="k">End</span><span class="w"> </span><span class="k">Property</span>
+<a id="__codelineno-0-61" name="__codelineno-0-61"></a>
+<a id="__codelineno-0-62" name="__codelineno-0-62"></a><span class="c">&#39; ================================================================</span>
+<a id="__codelineno-0-63" name="__codelineno-0-63"></a><span class="c">&#39; 関数名: AddControl</span>
+<a id="__codelineno-0-64" name="__codelineno-0-64"></a><span class="c">&#39; 概要:   clsControlSpec を生成して Controls Collection に追加する DSL。</span>
+<a id="__codelineno-0-65" name="__codelineno-0-65"></a><span class="c">&#39;         同名 Control が既にあれば例外を投げる (Collection の挙動)。</span>
+<a id="__codelineno-0-66" name="__codelineno-0-66"></a><span class="c">&#39; 引数:   cType / nm / l / t / w / h / cap / onClk - clsControlSpec.Init と同じ</span>
+<a id="__codelineno-0-67" name="__codelineno-0-67"></a><span class="c">&#39; 戻り値: clsControlSpec - 追加された ControlSpec (チェイン用)</span>
+<a id="__codelineno-0-68" name="__codelineno-0-68"></a><span class="c">&#39; ================================================================</span>
+<a id="__codelineno-0-69" name="__codelineno-0-69"></a><span class="k">Public</span><span class="w"> </span><span class="k">Function</span><span class="w"> </span><span class="nf">AddControl</span><span class="p">(</span><span class="k">ByVal</span><span class="w"> </span><span class="k">cType</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">String</span><span class="p">,</span><span class="w"> </span><span class="k">ByVal</span><span class="w"> </span><span class="n">nm</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">String</span><span class="p">,</span><span class="w"> </span>_
+<a id="__codelineno-0-70" name="__codelineno-0-70"></a><span class="w">                            </span><span class="k">ByVal</span><span class="w"> </span><span class="n">l</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">Long</span><span class="p">,</span><span class="w"> </span><span class="k">ByVal</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">Long</span><span class="p">,</span><span class="w"> </span>_
+<a id="__codelineno-0-71" name="__codelineno-0-71"></a><span class="w">                            </span><span class="k">ByVal</span><span class="w"> </span><span class="n">w</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">Long</span><span class="p">,</span><span class="w"> </span><span class="k">ByVal</span><span class="w"> </span><span class="n">h</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">Long</span><span class="p">,</span><span class="w"> </span>_
+<a id="__codelineno-0-72" name="__codelineno-0-72"></a><span class="w">                            </span><span class="k">Optional</span><span class="w"> </span><span class="k">ByVal</span><span class="w"> </span><span class="n">cap</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">String</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">,</span><span class="w"> </span>_
+<a id="__codelineno-0-73" name="__codelineno-0-73"></a><span class="w">                            </span><span class="k">Optional</span><span class="w"> </span><span class="k">ByVal</span><span class="w"> </span><span class="n">onClk</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">String</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">)</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="n">clsControlSpec</span>
+<a id="__codelineno-0-74" name="__codelineno-0-74"></a><span class="w">    </span><span class="k">Dim</span><span class="w"> </span><span class="n">cs</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="n">clsControlSpec</span>
+<a id="__codelineno-0-75" name="__codelineno-0-75"></a><span class="w">    </span><span class="k">Set</span><span class="w"> </span><span class="n">cs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">New</span><span class="w"> </span><span class="n">clsControlSpec</span>
+<a id="__codelineno-0-76" name="__codelineno-0-76"></a><span class="w">    </span><span class="n">cs</span><span class="p">.</span><span class="n">Init</span><span class="w"> </span><span class="k">cType</span><span class="p">,</span><span class="w"> </span><span class="n">nm</span><span class="p">,</span><span class="w"> </span><span class="n">l</span><span class="p">,</span><span class="w"> </span><span class="n">t</span><span class="p">,</span><span class="w"> </span><span class="n">w</span><span class="p">,</span><span class="w"> </span><span class="n">h</span><span class="p">,</span><span class="w"> </span><span class="n">cap</span><span class="p">,</span><span class="w"> </span><span class="n">onClk</span>
+<a id="__codelineno-0-77" name="__codelineno-0-77"></a><span class="w">    </span><span class="n">m_controls</span><span class="p">.</span><span class="n">Add</span><span class="w"> </span><span class="n">cs</span><span class="p">,</span><span class="w"> </span><span class="n">nm</span>
+<a id="__codelineno-0-78" name="__codelineno-0-78"></a><span class="w">    </span><span class="k">Set</span><span class="w"> </span><span class="n">AddControl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cs</span>
+<a id="__codelineno-0-79" name="__codelineno-0-79"></a><span class="k">End</span><span class="w"> </span><span class="k">Function</span>
+<a id="__codelineno-0-80" name="__codelineno-0-80"></a>
+<a id="__codelineno-0-81" name="__codelineno-0-81"></a><span class="c">&#39; ================================================================</span>
+<a id="__codelineno-0-82" name="__codelineno-0-82"></a><span class="c">&#39; 関数名: ControlByName</span>
+<a id="__codelineno-0-83" name="__codelineno-0-83"></a><span class="c">&#39; 概要:   指定名の Control Spec を取得 (なければ Nothing)</span>
+<a id="__codelineno-0-84" name="__codelineno-0-84"></a><span class="c">&#39; ================================================================</span>
+<a id="__codelineno-0-85" name="__codelineno-0-85"></a><span class="k">Public</span><span class="w"> </span><span class="k">Function</span><span class="w"> </span><span class="nf">ControlByName</span><span class="p">(</span><span class="k">ByVal</span><span class="w"> </span><span class="n">nm</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">String</span><span class="p">)</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="n">clsControlSpec</span>
+<a id="__codelineno-0-86" name="__codelineno-0-86"></a><span class="w">    </span><span class="k">On</span><span class="w"> </span><span class="k">Error</span><span class="w"> </span><span class="k">Resume</span><span class="w"> </span><span class="k">Next</span>
+<a id="__codelineno-0-87" name="__codelineno-0-87"></a><span class="w">    </span><span class="k">Set</span><span class="w"> </span><span class="n">ControlByName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_controls</span><span class="p">(</span><span class="n">nm</span><span class="p">)</span>
+<a id="__codelineno-0-88" name="__codelineno-0-88"></a><span class="w">    </span><span class="k">On</span><span class="w"> </span><span class="k">Error</span><span class="w"> </span><span class="k">GoTo</span><span class="w"> </span><span class="mi">0</span>
+<a id="__codelineno-0-89" name="__codelineno-0-89"></a><span class="k">End</span><span class="w"> </span><span class="k">Function</span>
+<a id="__codelineno-0-90" name="__codelineno-0-90"></a>
+<a id="__codelineno-0-91" name="__codelineno-0-91"></a><span class="c">&#39; ================================================================</span>
+<a id="__codelineno-0-92" name="__codelineno-0-92"></a><span class="c">&#39; 関数名: ControlCount</span>
+<a id="__codelineno-0-93" name="__codelineno-0-93"></a><span class="c">&#39; 概要:   Controls Collection の件数</span>
+<a id="__codelineno-0-94" name="__codelineno-0-94"></a><span class="c">&#39; ================================================================</span>
+<a id="__codelineno-0-95" name="__codelineno-0-95"></a><span class="k">Public</span><span class="w"> </span><span class="k">Function</span><span class="w"> </span><span class="nf">ControlCount</span><span class="p">()</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">Long</span>
+<a id="__codelineno-0-96" name="__codelineno-0-96"></a><span class="w">    </span><span class="n">ControlCount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_controls</span><span class="p">.</span><span class="n">Count</span>
+<a id="__codelineno-0-97" name="__codelineno-0-97"></a><span class="k">End</span><span class="w"> </span><span class="k">Function</span>
 </code></pre></div></td></tr></table></div>
 <h2 id="_3">関連<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <ul>
-<li>呼び出す: なし</li>
-<li>呼び出される: <code>clsFormSpec</code></li>
+<li>呼び出す: <code>clsControlSpec</code></li>
+<li>呼び出される: <code>modSpecExamples</code>, <code>modFormBuilder</code></li>
 </ul>
 
 
