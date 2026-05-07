@@ -65,6 +65,7 @@ extra_css:
 nav:
   - 概要: index.md
   - 仕様: spec.md
+  - セットアップ: setup.md
   - 操作手順: operations.md
   - アーキテクチャ: architecture.md
   - ソースコード:
@@ -92,6 +93,7 @@ nav:
           - modStringUtil: source/utility/modstringutil.md
           - modDateUtil: source/utility/moddateutil.md
           - modImageRender: source/utility/modimagerender.md
+          - modFormatColumns: source/utility/modformatcolumns.md
       - インストーラ:
           - modSetup: source/infrastructure/modsetup.md
       - ログ:
