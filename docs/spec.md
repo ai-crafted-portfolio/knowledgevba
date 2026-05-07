@@ -187,3 +187,33 @@ End Sub
 - **release v2** — rev21 ベース（M6-002/003/004 の検索結合セル対策、ボタン配置のセルアンカー対応を含む）
 - **image_ext rev1（2026-05-04）** — 検索結果画像列追加 + UserForm spec 駆動生成基盤
 - 配布物は **モジュールのみ** 構成。シート/ボタン生成は同梱の `modSetup.bas` の `SetupSheetsAndButtons` マクロで実施。
+
+
+---
+
+## TODO・制約・既知の限界
+
+### 制約
+
+- VBA 子プロセス禁止（Shell/Run/WScript.Shell/Exec）— 職場 PC ポリシー (ADR-0002)
+- ChromaDB 等の外部 RAG 連携無効化 — Cowork 隔離 (ADR-0004)
+- クラスモジュール (.cls) 内の `Public Const/Type/Declare/Static` 禁止 (ADR-0027)
+- aspose-cells-python 単独では VBA binary stub のみ生成、real Excel COM 必須 (ADR-0026)
+- mkdocs Material のモバイル UX が完璧ではない（ナビ collapse は OK、図解の細部は要確認）
+
+### 既知の限界
+
+- Excel 単体動作のため Web/モバイルでは利用不可
+- 同時編集なし（ファイルベース、Git 等での並行編集が必要）
+- 検索性能はモジュール数 O(n) 線形（数千ナレッジまでは実用、それ以上は ChromaDB 移行検討）
+
+### TODO（v15 以降のロードマップ）
+
+- M-5: modImageRender の RowHeight 副作用排除
+- D-3: clsKnowledgeManager / clsSearchEngine / clsTaskController に Worksheet DI 追加
+- D-5: 責務固有の Const をクラス側へ移動
+- Minor m-1: SHEET_* / FIELD_TYPE_* の Enum 化
+- ベンチマーク取得（A+ 到達条件）
+- 単体テストカバレッジ整備（A+ 到達条件）
+
+詳細は ADR ([0001-0033](https://github.com/ai-crafted-portfolio/knowledgevba)) を参照。
