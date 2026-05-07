@@ -2020,6 +2020,7 @@
 <p>VBE のプロジェクトツリーで <code>ThisWorkbook</code> モジュールを開き、コードペインに<strong>置換貼り付け</strong>します。新規モジュールとしてインポートしないでください。</p>
 <h2 id="_2">ソースコード（コピペ可）<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <p>下のコードブロック右上にカーソルを当てるとコピーボタンが表示されます。</p>
+<p><strong>注</strong>: 自動生成された VBA ファイルヘッダ部（<code>VERSION</code>, <code>BEGIN..END</code>, <code>Attribute VB_*</code>）は除外済みです。下のコードを VBE の ThisWorkbook コードペインにそのまま貼り付けて使えます（ヘッダ部は VBE が自動管理します）。</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1"> 1</a></span>
 <span class="normal"><a href="#__codelineno-0-2"> 2</a></span>
 <span class="normal"><a href="#__codelineno-0-3"> 3</a></span>
@@ -2069,86 +2070,61 @@
 <span class="normal"><a href="#__codelineno-0-47">47</a></span>
 <span class="normal"><a href="#__codelineno-0-48">48</a></span>
 <span class="normal"><a href="#__codelineno-0-49">49</a></span>
-<span class="normal"><a href="#__codelineno-0-50">50</a></span>
-<span class="normal"><a href="#__codelineno-0-51">51</a></span>
-<span class="normal"><a href="#__codelineno-0-52">52</a></span>
-<span class="normal"><a href="#__codelineno-0-53">53</a></span>
-<span class="normal"><a href="#__codelineno-0-54">54</a></span>
-<span class="normal"><a href="#__codelineno-0-55">55</a></span>
-<span class="normal"><a href="#__codelineno-0-56">56</a></span>
-<span class="normal"><a href="#__codelineno-0-57">57</a></span>
-<span class="normal"><a href="#__codelineno-0-58">58</a></span>
-<span class="normal"><a href="#__codelineno-0-59">59</a></span>
-<span class="normal"><a href="#__codelineno-0-60">60</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="n">VERSION</span><span class="w"> </span><span class="mf">1.0</span><span class="w"> </span><span class="k">CLASS</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="nc">BEGIN</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="w">  </span><span class="n">MultiUse</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="w">  </span><span class="c">&#39;True</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="k">END</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="n">Attribute</span><span class="w"> </span><span class="n">VB_Name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;ThisWorkbook&quot;</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="n">Attribute</span><span class="w"> </span><span class="n">VB_Base</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;0{00020819-0000-0000-C000-000000000046}&quot;</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="n">Attribute</span><span class="w"> </span><span class="n">VB_GlobalNameSpace</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">False</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="n">Attribute</span><span class="w"> </span><span class="n">VB_Creatable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">False</span>
-<a id="__codelineno-0-9" name="__codelineno-0-9"></a><span class="n">Attribute</span><span class="w"> </span><span class="n">VB_PredeclaredId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">True</span>
-<a id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="n">Attribute</span><span class="w"> </span><span class="n">VB_Exposed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">True</span>
-<a id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="k">Option</span><span class="w"> </span><span class="n">Explicit</span>
-<a id="__codelineno-0-12" name="__codelineno-0-12"></a>
-<a id="__codelineno-0-13" name="__codelineno-0-13"></a><span class="c">&#39; ================================================================</span>
-<a id="__codelineno-0-14" name="__codelineno-0-14"></a><span class="c">&#39; クラス: ThisWorkbook (ドキュメントモジュール、Cowork デモ v3)</span>
-<a id="__codelineno-0-15" name="__codelineno-0-15"></a><span class="c">&#39; 概要:   ブックイベントを薄く受け取り、auto-init は modAutoInit に委譲。</span>
-<a id="__codelineno-0-16" name="__codelineno-0-16"></a><span class="c">&#39;         - Workbook_Open: Application.OnTime で 1 ティック遅延の</span>
-<a id="__codelineno-0-17" name="__codelineno-0-17"></a><span class="c">&#39;           RunAutoInitDeferred を予約するだけ。</span>
-<a id="__codelineno-0-18" name="__codelineno-0-18"></a><span class="c">&#39;           本体ロジック (シート判定 / Setup / Seed / アクティブ化) は</span>
-<a id="__codelineno-0-19" name="__codelineno-0-19"></a><span class="c">&#39;           全て modAutoInit.RunAutoInitDeferred 内。</span>
-<a id="__codelineno-0-20" name="__codelineno-0-20"></a><span class="c">&#39;         - Workbook_BeforeClose: 終了ログのみ。</span>
-<a id="__codelineno-0-21" name="__codelineno-0-21"></a><span class="c">&#39; 依存先: modAutoInit (RunAutoInitDeferred), modEntryMain (BuildLogger)</span>
-<a id="__codelineno-0-22" name="__codelineno-0-22"></a><span class="c">&#39; 備考:   D-1 部分対応: ThisWorkbook を「OnTime を呼ぶだけ」にすることで</span>
-<a id="__codelineno-0-23" name="__codelineno-0-23"></a><span class="c">&#39;         本番 release_v2 の ThisWorkbook (auto-init 無し) との差分を最小化。</span>
-<a id="__codelineno-0-24" name="__codelineno-0-24"></a><span class="c">&#39;         本番展開時はこの Workbook_Open 1 行を削除すれば等価になる。</span>
-<a id="__codelineno-0-25" name="__codelineno-0-25"></a><span class="c">&#39; ================================================================</span>
-<a id="__codelineno-0-26" name="__codelineno-0-26"></a>
-<a id="__codelineno-0-27" name="__codelineno-0-27"></a><span class="c">&#39; ================================================================</span>
-<a id="__codelineno-0-28" name="__codelineno-0-28"></a><span class="c">&#39; 関数名: Workbook_Open</span>
-<a id="__codelineno-0-29" name="__codelineno-0-29"></a><span class="c">&#39; 概要:   ブックオープン時のイベント。</span>
-<a id="__codelineno-0-30" name="__codelineno-0-30"></a><span class="c">&#39;         auto-init は Application.OnTime 経由で 1 ティック遅延起動する</span>
-<a id="__codelineno-0-31" name="__codelineno-0-31"></a><span class="c">&#39;         (C-1: Workbook_Open context 内での Application.Run 不安定回避)。</span>
-<a id="__codelineno-0-32" name="__codelineno-0-32"></a><span class="c">&#39; 引数:   なし</span>
-<a id="__codelineno-0-33" name="__codelineno-0-33"></a><span class="c">&#39; 戻り値: なし</span>
+<span class="normal"><a href="#__codelineno-0-50">50</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="k">Option</span><span class="w"> </span><span class="n">Explicit</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2"></a>
+<a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="c">&#39; ================================================================</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="c">&#39; クラス: ThisWorkbook (ドキュメントモジュール、Cowork デモ v3)</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="c">&#39; 概要:   ブックイベントを薄く受け取り、auto-init は modAutoInit に委譲。</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="c">&#39;         - Workbook_Open: Application.OnTime で 1 ティック遅延の</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="c">&#39;           RunAutoInitDeferred を予約するだけ。</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="c">&#39;           本体ロジック (シート判定 / Setup / Seed / アクティブ化) は</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9"></a><span class="c">&#39;           全て modAutoInit.RunAutoInitDeferred 内。</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="c">&#39;         - Workbook_BeforeClose: 終了ログのみ。</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="c">&#39; 依存先: modAutoInit (RunAutoInitDeferred), modEntryMain (BuildLogger)</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12"></a><span class="c">&#39; 備考:   D-1 部分対応: ThisWorkbook を「OnTime を呼ぶだけ」にすることで</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13"></a><span class="c">&#39;         本番 release_v2 の ThisWorkbook (auto-init 無し) との差分を最小化。</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14"></a><span class="c">&#39;         本番展開時はこの Workbook_Open 1 行を削除すれば等価になる。</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15"></a><span class="c">&#39; ================================================================</span>
+<a id="__codelineno-0-16" name="__codelineno-0-16"></a>
+<a id="__codelineno-0-17" name="__codelineno-0-17"></a><span class="c">&#39; ================================================================</span>
+<a id="__codelineno-0-18" name="__codelineno-0-18"></a><span class="c">&#39; 関数名: Workbook_Open</span>
+<a id="__codelineno-0-19" name="__codelineno-0-19"></a><span class="c">&#39; 概要:   ブックオープン時のイベント。</span>
+<a id="__codelineno-0-20" name="__codelineno-0-20"></a><span class="c">&#39;         auto-init は Application.OnTime 経由で 1 ティック遅延起動する</span>
+<a id="__codelineno-0-21" name="__codelineno-0-21"></a><span class="c">&#39;         (C-1: Workbook_Open context 内での Application.Run 不安定回避)。</span>
+<a id="__codelineno-0-22" name="__codelineno-0-22"></a><span class="c">&#39; 引数:   なし</span>
+<a id="__codelineno-0-23" name="__codelineno-0-23"></a><span class="c">&#39; 戻り値: なし</span>
+<a id="__codelineno-0-24" name="__codelineno-0-24"></a><span class="c">&#39; ================================================================</span>
+<a id="__codelineno-0-25" name="__codelineno-0-25"></a><span class="k">Private</span><span class="w"> </span><span class="k">Sub</span><span class="w"> </span><span class="nf">Workbook_Open</span><span class="p">()</span>
+<a id="__codelineno-0-26" name="__codelineno-0-26"></a><span class="w">    </span><span class="k">On</span><span class="w"> </span><span class="k">Error</span><span class="w"> </span><span class="k">GoTo</span><span class="w"> </span><span class="n">ErrHandler</span>
+<a id="__codelineno-0-27" name="__codelineno-0-27"></a><span class="w">    </span><span class="n">Application</span><span class="p">.</span><span class="n">OnTime</span><span class="w"> </span><span class="n">Now</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;RunAutoInitDeferred&quot;</span>
+<a id="__codelineno-0-28" name="__codelineno-0-28"></a><span class="w">    </span><span class="k">Exit</span><span class="w"> </span><span class="k">Sub</span>
+<a id="__codelineno-0-29" name="__codelineno-0-29"></a><span class="nf">ErrHandler</span><span class="p">:</span>
+<a id="__codelineno-0-30" name="__codelineno-0-30"></a><span class="w">    </span><span class="n">MsgBox</span><span class="w"> </span><span class="s">&quot;起動に失敗しました: &quot;</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">Err</span><span class="p">.</span><span class="n">Description</span><span class="p">,</span><span class="w"> </span>_
+<a id="__codelineno-0-31" name="__codelineno-0-31"></a><span class="w">           </span><span class="n">vbCritical</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Workbook_Open エラー&quot;</span>
+<a id="__codelineno-0-32" name="__codelineno-0-32"></a><span class="k">End</span><span class="w"> </span><span class="k">Sub</span>
+<a id="__codelineno-0-33" name="__codelineno-0-33"></a>
 <a id="__codelineno-0-34" name="__codelineno-0-34"></a><span class="c">&#39; ================================================================</span>
-<a id="__codelineno-0-35" name="__codelineno-0-35"></a><span class="k">Private</span><span class="w"> </span><span class="k">Sub</span><span class="w"> </span><span class="nf">Workbook_Open</span><span class="p">()</span>
-<a id="__codelineno-0-36" name="__codelineno-0-36"></a><span class="w">    </span><span class="k">On</span><span class="w"> </span><span class="k">Error</span><span class="w"> </span><span class="k">GoTo</span><span class="w"> </span><span class="n">ErrHandler</span>
-<a id="__codelineno-0-37" name="__codelineno-0-37"></a><span class="w">    </span><span class="n">Application</span><span class="p">.</span><span class="n">OnTime</span><span class="w"> </span><span class="n">Now</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;RunAutoInitDeferred&quot;</span>
-<a id="__codelineno-0-38" name="__codelineno-0-38"></a><span class="w">    </span><span class="k">Exit</span><span class="w"> </span><span class="k">Sub</span>
-<a id="__codelineno-0-39" name="__codelineno-0-39"></a><span class="nf">ErrHandler</span><span class="p">:</span>
-<a id="__codelineno-0-40" name="__codelineno-0-40"></a><span class="w">    </span><span class="n">MsgBox</span><span class="w"> </span><span class="s">&quot;起動に失敗しました: &quot;</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">Err</span><span class="p">.</span><span class="n">Description</span><span class="p">,</span><span class="w"> </span>_
-<a id="__codelineno-0-41" name="__codelineno-0-41"></a><span class="w">           </span><span class="n">vbCritical</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Workbook_Open エラー&quot;</span>
-<a id="__codelineno-0-42" name="__codelineno-0-42"></a><span class="k">End</span><span class="w"> </span><span class="k">Sub</span>
-<a id="__codelineno-0-43" name="__codelineno-0-43"></a>
-<a id="__codelineno-0-44" name="__codelineno-0-44"></a><span class="c">&#39; ================================================================</span>
-<a id="__codelineno-0-45" name="__codelineno-0-45"></a><span class="c">&#39; 関数名: Workbook_BeforeClose</span>
-<a id="__codelineno-0-46" name="__codelineno-0-46"></a><span class="c">&#39; 概要:   ブックを閉じる直前のイベント。終了ログのみ。</span>
-<a id="__codelineno-0-47" name="__codelineno-0-47"></a><span class="c">&#39; 引数:   Cancel - キャンセルフラグ</span>
-<a id="__codelineno-0-48" name="__codelineno-0-48"></a><span class="c">&#39; 戻り値: なし</span>
-<a id="__codelineno-0-49" name="__codelineno-0-49"></a><span class="c">&#39; ================================================================</span>
-<a id="__codelineno-0-50" name="__codelineno-0-50"></a><span class="k">Private</span><span class="w"> </span><span class="k">Sub</span><span class="w"> </span><span class="nf">Workbook_BeforeClose</span><span class="p">(</span><span class="n">Cancel</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">Boolean</span><span class="p">)</span>
-<a id="__codelineno-0-51" name="__codelineno-0-51"></a><span class="w">    </span><span class="k">On</span><span class="w"> </span><span class="k">Error</span><span class="w"> </span><span class="k">GoTo</span><span class="w"> </span><span class="n">ErrHandler</span>
-<a id="__codelineno-0-52" name="__codelineno-0-52"></a>
-<a id="__codelineno-0-53" name="__codelineno-0-53"></a><span class="w">    </span><span class="k">Dim</span><span class="w"> </span><span class="n">logger</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="n">clsLogger</span>
-<a id="__codelineno-0-54" name="__codelineno-0-54"></a><span class="w">    </span><span class="k">Set</span><span class="w"> </span><span class="n">logger</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">BuildLogger</span><span class="p">()</span>
-<a id="__codelineno-0-55" name="__codelineno-0-55"></a><span class="w">    </span><span class="n">logger</span><span class="p">.</span><span class="n">LogInfo</span><span class="w"> </span><span class="s">&quot;ThisWorkbook&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Workbook_BeforeClose&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;システム終了&quot;</span>
-<a id="__codelineno-0-56" name="__codelineno-0-56"></a><span class="w">    </span><span class="k">Exit</span><span class="w"> </span><span class="k">Sub</span>
-<a id="__codelineno-0-57" name="__codelineno-0-57"></a>
-<a id="__codelineno-0-58" name="__codelineno-0-58"></a><span class="nf">ErrHandler</span><span class="p">:</span>
-<a id="__codelineno-0-59" name="__codelineno-0-59"></a><span class="w">    </span><span class="c">&#39; 終了時エラーは握りつぶす (ブックを閉じる妨げにしない)</span>
-<a id="__codelineno-0-60" name="__codelineno-0-60"></a><span class="k">End</span><span class="w"> </span><span class="k">Sub</span>
+<a id="__codelineno-0-35" name="__codelineno-0-35"></a><span class="c">&#39; 関数名: Workbook_BeforeClose</span>
+<a id="__codelineno-0-36" name="__codelineno-0-36"></a><span class="c">&#39; 概要:   ブックを閉じる直前のイベント。終了ログのみ。</span>
+<a id="__codelineno-0-37" name="__codelineno-0-37"></a><span class="c">&#39; 引数:   Cancel - キャンセルフラグ</span>
+<a id="__codelineno-0-38" name="__codelineno-0-38"></a><span class="c">&#39; 戻り値: なし</span>
+<a id="__codelineno-0-39" name="__codelineno-0-39"></a><span class="c">&#39; ================================================================</span>
+<a id="__codelineno-0-40" name="__codelineno-0-40"></a><span class="k">Private</span><span class="w"> </span><span class="k">Sub</span><span class="w"> </span><span class="nf">Workbook_BeforeClose</span><span class="p">(</span><span class="n">Cancel</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">Boolean</span><span class="p">)</span>
+<a id="__codelineno-0-41" name="__codelineno-0-41"></a><span class="w">    </span><span class="k">On</span><span class="w"> </span><span class="k">Error</span><span class="w"> </span><span class="k">GoTo</span><span class="w"> </span><span class="n">ErrHandler</span>
+<a id="__codelineno-0-42" name="__codelineno-0-42"></a>
+<a id="__codelineno-0-43" name="__codelineno-0-43"></a><span class="w">    </span><span class="k">Dim</span><span class="w"> </span><span class="n">logger</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="n">clsLogger</span>
+<a id="__codelineno-0-44" name="__codelineno-0-44"></a><span class="w">    </span><span class="k">Set</span><span class="w"> </span><span class="n">logger</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">BuildLogger</span><span class="p">()</span>
+<a id="__codelineno-0-45" name="__codelineno-0-45"></a><span class="w">    </span><span class="n">logger</span><span class="p">.</span><span class="n">LogInfo</span><span class="w"> </span><span class="s">&quot;ThisWorkbook&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Workbook_BeforeClose&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;システム終了&quot;</span>
+<a id="__codelineno-0-46" name="__codelineno-0-46"></a><span class="w">    </span><span class="k">Exit</span><span class="w"> </span><span class="k">Sub</span>
+<a id="__codelineno-0-47" name="__codelineno-0-47"></a>
+<a id="__codelineno-0-48" name="__codelineno-0-48"></a><span class="nf">ErrHandler</span><span class="p">:</span>
+<a id="__codelineno-0-49" name="__codelineno-0-49"></a><span class="w">    </span><span class="c">&#39; 終了時エラーは握りつぶす (ブックを閉じる妨げにしない)</span>
+<a id="__codelineno-0-50" name="__codelineno-0-50"></a><span class="k">End</span><span class="w"> </span><span class="k">Sub</span>
 </code></pre></div></td></tr></table></div>
 <h2 id="_3">関連<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <ul>
 <li>呼び出す: <code>modAutoInit</code>, <code>modEntryMain</code></li>
-<li>
-<ul>
 <li>呼び出される: <code>Excel イベントから直接呼び出し</code></li>
-</ul>
-</li>
-<li></li>
 </ul>
 
 
