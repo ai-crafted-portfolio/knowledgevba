@@ -293,7 +293,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../source/index.md" class="md-tabs__link">
+        <a href="../source/" class="md-tabs__link">
           
   
   
@@ -460,6 +460,8 @@
     
       
         
+          
+        
       
         
       
@@ -491,8 +493,9 @@
         <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
         
           
-          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
-            
+          <div class="md-nav__link md-nav__container">
+            <a href="../source/" class="md-nav__link ">
+              
   
   
   <span class="md-ellipsis">
@@ -506,8 +509,14 @@
   
   
 
-            <span class="md-nav__icon md-icon"></span>
-          </label>
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
         
         <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_5">
@@ -520,32 +529,6 @@
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../source/index.md" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    一覧
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
               
             
               
@@ -1900,7 +1883,7 @@
 </div>
 </div>
 </div>
-<p>各モジュールの中身は <a href="source/index.md">ソースコード</a> ページから直接コピペすることもできます（コピーボタン付き）。</p>
+<p>各モジュールの中身は <a href="../source/">ソースコード</a> ページから直接コピペすることもできます（コピーボタン付き）。</p>
 <h3 id="step-14-thisworkbook">Step 1.4 ThisWorkbook の中身を貼り付け（インポートではない）<a class="headerlink" href="#step-14-thisworkbook" title="Permanent link">&para;</a></h3>
 <p><code>ThisWorkbook.cls</code> だけは「インポート」ではなく <strong>中身のコピペ</strong> が必要です。VBE は新しい <code>ThisWorkbook</code> を作れず、既存の <code>ThisWorkbook</code> に上書きする必要があるためです。</p>
 <ol>
