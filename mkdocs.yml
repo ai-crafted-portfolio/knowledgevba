@@ -68,6 +68,7 @@ nav:
   - セットアップ: setup.md
   - 操作手順: operations.md
   - アーキテクチャ: architecture.md
+  - Q&A (なぜこの設計？): qa.md
   - ソースコード:
       - 一覧: source/index.md
       - エントリポイント:
