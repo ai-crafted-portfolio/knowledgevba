@@ -9,7 +9,7 @@ title: clsFormatManager.cls
 | 層 | ビジネスロジック層 |
 | 種別 | クラスモジュール (.cls) |
 | 役割 | フォーマット一覧シート管理 / フィールド DSL 解決 |
-| 行数 | 473 行 |
+| 行数 | 464 行 |
 
 ## 配置先
 
@@ -31,6 +31,9 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
+' v12 注記: FL_COL_* / FL_START_ROW は modFormatColumns.bas へ移動 (ADR 0027)
+'           VBA 仕様で .cls 内の Public Const が禁止のため標準モジュールに切出し。
+
 ' ================================================================
 ' Phase 6 レビュー: 17 subs/funcs に 9 error handlers。
 ' 状態管理の core class、各 Public method に ErrHandler ある程度完備。
@@ -51,18 +54,6 @@ Option Explicit
 ' ================================================================
 
 ' --- フォーマット一覧シートの列番号 ---
-Public Const FL_COL_NO As Long = 1  ' D-2: 公開
-Public Const FL_COL_FMT_ID As Long = 2  ' D-2: 公開
-Public Const FL_COL_FMT_NAME As Long = 3  ' D-2: 公開
-Public Const FL_COL_ID_PATTERN As Long = 4  ' D-2: 公開
-Public Const FL_COL_CURRENT_NUM As Long = 5  ' D-2: 公開
-Public Const FL_COL_NEXT_NUM As Long = 6  ' D-2: 公開
-Public Const FL_COL_VERSION As Long = 7  ' D-2: 公開
-Public Const FL_COL_FIELD_COUNT As Long = 8  ' D-2: 公開
-Public Const FL_COL_KNW_COUNT As Long = 9  ' D-2: 公開
-Public Const FL_COL_CREATED As Long = 10  ' D-2: 公開
-Public Const FL_COL_UPDATED As Long = 11  ' D-2: 公開
-Public Const FL_START_ROW As Long = 3  ' D-2: 公開
 
 ' --- フォーマット設計シートのセル位置 ---
 Private Const FD_ROW_FMT_ID As Long = 1
@@ -331,7 +322,7 @@ End Function
 
 ' ================================================================
 ' 関数名: FindFormatRow
-' 概要:   フォーマット一覧から指定IDの行番号を返す
+' 概要:   フォーマット一覧から指孪iDの行番号を返す
 ' 引数:   listWs   - フォーマット一覧シート
 '         formatId - 探すフォーマットID
 ' 戻り値: Long - 行番号（見つからない場合は 0）
@@ -379,7 +370,7 @@ Private Sub AppendFormatToList(ByVal listWs As Worksheet, _
     listWs.Cells(nextRow, FL_COL_UPDATED).Value = Format(Date, "yyyy-mm-dd")
 End Sub
 
-' 既存フォーマットを更新（バージョン+1）
+' 既存フォーマットを更新（バージョン） 
 Private Sub UpdateFormatInList(ByVal listWs As Worksheet, _
                                  ByVal designWs As Worksheet, _
                                  ByVal formatId As String, _
@@ -398,10 +389,10 @@ End Sub
 
 ' 指定列で最初の空セル行を返す
 Private Function FindFirstEmptyRow(ByVal ws As Worksheet, _
-                                     ByVal col As Long) As Long
+                                     ByVal targetCol As Long) As Long
     Dim i As Long
     For i = FL_START_ROW To 10000
-        If ws.Cells(i, col).Value = "" Then
+        If ws.Cells(i, targetCol).Value = "" Then
             FindFirstEmptyRow = i
             Exit Function
         End If
