@@ -9,7 +9,7 @@ title: modImageRender.bas
 | 層 | ユーティリティ層 |
 | 種別 | 標準モジュール (.bas) |
 | 役割 | Shapes.AddPicture によるサムネ画像配置 (MsoTriState 配慮) |
-| 行数 | 221 行 |
+| 行数 | 233 行 |
 
 ## 配置先
 
@@ -71,27 +71,31 @@ Private Const PAD_PIXELS As Double = 2#
 ' 備考:   Shape 名は PREFIX_THUMB & "<row>_" & knwNo 形式。
 '         再描画時は ClearShapesByPrefix で全削除→再生成 (idempotent)。
 ' ================================================================
-Public Sub RenderThumb(ByVal ws As Worksheet, ByVal row As Long, _
-                         ByVal col As Long, ByVal imageFull As String, _
+Public Sub RenderThumb(ByVal ws As Worksheet, ByVal targetRow As Long, _
+                         ByVal targetCol As Long, ByVal imageFull As String, _
                          ByVal knwNo As String)
     On Error GoTo ErrHandler
     If imageFull = "" Then Exit Sub
     If Dir(imageFull) = "" Then Exit Sub
 
     Dim cell As Range
-    Set cell = ws.Cells(row, col)
+    Set cell = ws.Cells(targetRow, targetCol)
 
     Dim shp As Shape
-    ' v6: 位置指定 + 数値リテラル直書き (ADR 0020)
+    ' v8: Object 型 late binding で AddPicture を呼ぶ (ADR 0023)
+    '     typed Shapes 経由だと MsoTriState 引数の数値リテラル暗黙変換が
+    '     real Excel で reject される。Object 経由なら compile-time 型チェック skip。
     '     第 2 引数 LinkToFile = 0 (msoFalse), 第 3 引数 SaveWithDocument = -1 (msoTrue)
-    Set shp = ws.Shapes.AddPicture(imageFull, 0, -1, _
+    Dim shapesObj As Object
+    Set shapesObj = ws.Shapes
+    Set shp = shapesObj.AddPicture(imageFull, 0, -1, _
         cell.Left + PAD_PIXELS, cell.Top + PAD_PIXELS, _
         KB_THUMB_WIDTH, KB_THUMB_HEIGHT)
-    shp.Name = PREFIX_THUMB & CStr(row) & "_" & knwNo
+    shp.Name = PREFIX_THUMB & CStr(targetRow) & "_" & knwNo
 
     ' 行高をサムネに合わせる (狭ければ拡大)
-    If ws.Rows(row).RowHeight < (KB_THUMB_HEIGHT + PAD_PIXELS * 2#) Then
-        ws.Rows(row).RowHeight = KB_THUMB_HEIGHT + PAD_PIXELS * 2#
+    If ws.Rows(targetRow).RowHeight < (KB_THUMB_HEIGHT + PAD_PIXELS * 2#) Then
+        ws.Rows(targetRow).RowHeight = KB_THUMB_HEIGHT + PAD_PIXELS * 2#
     End If
     Exit Sub
 ErrHandler:
@@ -134,14 +138,22 @@ Public Sub RenderDetailImage(ByVal ws As Worksheet, _
     End If
 
     Dim shp As Shape
-    ' v6: 位置指定 + 数値リテラル直書き (ADR 0020)
+    ' v8: Object 型 late binding で AddPicture を呼ぶ (ADR 0023)
     '     第 2 引数 LinkToFile = 0 (msoFalse), 第 3 引数 SaveWithDocument = -1 (msoTrue)
     '     Width=-1 / Height=-1 はオリジナルサイズで読込 (AddPicture 仕様)
-    Set shp = ws.Shapes.AddPicture(imageFull, 0, -1, _
+    Dim shapesObj2 As Object
+    Set shapesObj2 = ws.Shapes
+    Set shp = shapesObj2.AddPicture(imageFull, 0, -1, _
         r1.Left + PAD_PIXELS, r1.Top + PAD_PIXELS, _
         -1, -1)
     shp.Name = PREFIX_DETAIL & knwNo
-    shp.LockAspectRatio = -1  ' v6: msoTrue (MsoTriState 暗黙変換、ADR 0020)
+    ' v8: Object 型 late binding で LockAspectRatio を設定 (ADR 0023)
+    '     v7 の Variant 中継でも real Excel が typed Shape 経由の MsoTriState 代入を
+    '     reject する事例があるため、Shape を Object 経由にラップして compile-time
+    '     型チェック自体を skip する。
+    Dim shpObj As Object
+    Set shpObj = shp
+    shpObj.LockAspectRatio = -1  ' msoTrue (Object 経由なので数値リテラル OK)
 
     ' 領域内に収まるようリサイズ
     Dim ratioW As Double, ratioH As Double
