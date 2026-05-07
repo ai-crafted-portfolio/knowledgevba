@@ -9,7 +9,7 @@ title: clsFieldMigrator.cls
 | 層 | ビジネスロジック層 |
 | 種別 | クラスモジュール (.cls) |
 | 役割 | フォーマット定義変更時のスキーマ移行 (旧 .txt → 新 .txt) |
-| 行数 | 305 行 |
+| 行数 | 308 行 |
 
 ## 配置先
 
@@ -80,8 +80,11 @@ Public Function MigrateFields(ByVal formatId As String) As Long
     files = ListFilesInFolder(m_dataFolder, "txt")
 
     ' M-4 guard: 空配列なら早期 return (UBound エラー防止)
-
-    If (Not Not files) = 0 Then Exit Sub
+    ' v13 ADR 0028: MigrateFields は Function なので Exit Function に修正
+    If (Not Not files) = 0 Then
+        MigrateFields = 0
+        Exit Function
+    End If
     
     Dim newHeader As String
     newHeader = m_formatMgr.GetFormatHeaderAsStanza(formatId)
@@ -264,12 +267,12 @@ End Function
 
 ' ITEM行から指定キーの値を抽出
 Private Function ExtractItemValue(ByVal line As String, _
-                                    ByVal key As String) As String
+                                    ByVal keyName As String) As String
     Dim searchKey As String
     Dim startPos As Long
     Dim endPos As Long
     
-    searchKey = key & "="
+    searchKey = keyName & "="
     startPos = InStr(line, searchKey)
     If startPos = 0 Then
         ExtractItemValue = ""
@@ -287,14 +290,14 @@ End Function
 
 ' スタンザKey=Value形式から単純抽出
 Private Function ExtractStanzaValue(ByVal content As String, _
-                                      ByVal key As String) As String
+                                      ByVal keyName As String) As String
     Dim lines() As String
     Dim i As Long
     
     lines = Split(content, vbCrLf)
     For i = LBound(lines) To UBound(lines)
-        If InStr(lines(i), key & "=") = 1 Then
-            ExtractStanzaValue = Mid(lines(i), Len(key) + 2)
+        If InStr(lines(i), keyName & "=") = 1 Then
+            ExtractStanzaValue = Mid(lines(i), Len(keyName) + 2)
             Exit Function
         End If
     Next i
