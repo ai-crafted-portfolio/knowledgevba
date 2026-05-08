@@ -372,7 +372,7 @@ End Sub
 ' 概要:   1 つのナレッジファイル内容にスコアを付与
 '         0 = フィルタで弾かれた (該当なし)
 '         1 以上 = キーワード出現回数 × ブースト係数
-' 引数:   IsMatch とほぼ同じ + ブースト計算
+' 引数:   IsMatch とほぼ同じ � ブースト計算
 ' 戻り値: Double - スコア (0 = 該当なし)
 ' 備考:   既存 IsMatch (Boolean) はテスト互換性のため残してあり、
 '         本関数で完全に上位互換できる。
@@ -743,7 +743,7 @@ Private Sub PopulateResults(ByVal ws As Worksheet, _
             ExtractStanzaValue(content, "CreatedDate")
         ws.Cells(targetRow, SS_RESULT_COL_UPDATED).Value = _
             ExtractStanzaValue(content, "UpdatedDate")
-        ' "▶ 詳細" は CP932 で ▶ が encode 失敗するため ChrW で動的構築する
+        ' "> 詳細" は CP932 で > が encode 失敗するため ChrW で動的構築する
         ws.Cells(targetRow, SS_RESULT_COL_DETAIL).Value = ChrW(&H25B6) & " 詳細"
 
         ' --- サムネ Shape 配置 (列 H) ---
@@ -816,7 +816,7 @@ Private Sub RenderKnowledgeToDisplay(ByVal ws As Worksheet, _
         If InStr(lines(i), "FieldNo=") > 0 And _
            InStr(lines(i), "FieldName=") > 0 Then
             ws.Cells(targetRow, KD_COL_FIELD_NO).Value = _
-                ExtractKeyFromItem(lines(i), "FieldNao")
+                ExtractKeyFromItem(lines(i), "FieldNo")
             ws.Cells(targetRow, KD_COL_FIELD_NAME).Value = _
                 ExtractKeyFromItem(lines(i), "FieldName")
             ws.Cells(targetRow, KD_COL_FIELD_VALUE).NumberFormat = "@"
@@ -861,7 +861,7 @@ Private Function CombineFilePath(ByVal folder As String, _
 End Function
 ```
 
-## 関、逡
+## 関連
 
 - 呼び出す: `modCommon`, `modFileIO`, `modImageRender`, `clsLogger`
 - 呼び出される: `modEntrySearch`
