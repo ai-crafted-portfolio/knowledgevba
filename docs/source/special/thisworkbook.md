@@ -9,7 +9,7 @@ title: ThisWorkbook.cls
 | 層 | 特殊モジュール |
 | 種別 | ドキュメントモジュール (ThisWorkbook) |
 | 役割 | 本番版 ThisWorkbook (Workbook_Open 等のイベント / 自動初期化なし) |
-| 行数 | 93 行 |
+| 行数 | 84 行 |
 
 ## 配置先
 
@@ -19,16 +19,9 @@ VBE のプロジェクトツリーで `ThisWorkbook` モジュールを開き、
 
 下のコードブロック右上にカーソルを当てるとコピーボタンが表示されます。
 
+**注**: 自動生成された VBA ファイルヘッダ部（`VERSION`, `BEGIN..END`, `Attribute VB_*`）は除外済みです。下のコードを VBE の ThisWorkbook コードペインにそのまま貼り付けて使えます（ヘッダ部は VBE が自動管理します）。
+
 ```vbnet linenums="1"
-VERSION 1.0 CLASS
-BEGIN
-  MultiUse = -1  'True
-END
-Attribute VB_Name = "ThisWorkbook"
-Attribute VB_GlobalNameSpace = False
-Attribute VB_Creatable = False
-Attribute VB_PredeclaredId = True
-Attribute VB_Exposed = True
 Option Explicit
 
 ' ================================================================
