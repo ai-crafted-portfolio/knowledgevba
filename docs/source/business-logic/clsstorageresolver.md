@@ -230,7 +230,7 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
-' Phase 6 レビュー: GetStorageConfig は O(N) だが N ≤ MAX_STORAGE_SCAN_ROWS=1000。
+' Phase 6 レビュー: GetStorageConfig は O(N) だが N <= MAX_STORAGE_SCAN_ROWS=1000。
 ' 現状想定 (docType 数十件) では十分。指摘なし。
 
 ' ================================================================
