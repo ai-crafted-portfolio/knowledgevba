@@ -40,7 +40,7 @@ Option Explicit
 
 Private m_logSheet As Worksheet
 Private m_debugLevel As String
-Private m_nextRow As Long  ' M-3: O(N²) 防止のためキャッシュ (0=未初期化)
+Private m_nextRow As Long  ' M-3: O(N^2) 防止のためキャッシュ (0=未初期化)
 
 ' m-12: マジックナンバー 100000 を Const 化
 Private Const MAX_LOG_SCAN_ROWS As Long = 100000
