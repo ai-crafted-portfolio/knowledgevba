@@ -304,7 +304,7 @@ End Function
 ' 戻り値: Variant - ファイル名の配列（拡張子込み）。0件の場合は空配列
 ' 備考:   サブフォルダは辿らない
 ' ================================================================
-' M-4: 空配列ガード — 呼出側は IsEmpty / UBound < LBound チェック必須
+' M-4: 空配列ガード - 呼出側は IsEmpty / UBound < LBound チェック必須
 '        本関数は ReDim 済み配列を返すが、Dir 失敗時は ReDim Preserve なしで返る場合がある
 ' s-2 contract: 本モジュール内の Kill / MkDir / Open For Output に渡されるパスは
 '                呼出側で IsValidKnowledgeId / 自前パス検証済みであること。
