@@ -574,6 +574,56 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#faq" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        困ったとき（FAQ）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="困ったとき（FAQ）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#q1-access-to-the-vba-project-is-not-trusted" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q1. 「access to the VBA Project is not trusted」と出て止まる
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q2. 黒い窓が一瞬出てすぐ消える
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q3-step-3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q3. もう一度 STEP 3 を実行しても大丈夫？
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -2233,7 +2283,25 @@ Windows 11 のセキュリティ機能（Mark of the Web）が原因です。</p
 画面上部に出ることがあります。<strong>「コンテンツの有効化」</strong> ボタンを押してください
 （マクロを使うので、この一手間だけ必要です）。</p>
 <p>すると <strong>「メイン」</strong> シートに <strong>「初回セットアップ」「設定変更」「ナレッジ登録」「検索」</strong>
-などのボタンが</p>
+などのボタンが並んで表示されます。</p>
+<p><img alt="完了後のメイン画面" src="../images/installer/06_after_install.png" /></p>
+<p>ここまで来たら導入は完了です。あとはボタンを押して使い始めるだけ。</p>
+<blockquote>
+<p>一番上の <strong>「初回セットアップ」</strong> を 1 回押すと、必要なシート（格納先設定 / 設定 など）
+が自動で作られます。最初の 1 回だけ押してください。</p>
+</blockquote>
+<hr />
+<h2 id="faq">困ったとき（FAQ）<a class="headerlink" href="#faq" title="Permanent link">&para;</a></h2>
+<h3 id="q1-access-to-the-vba-project-is-not-trusted">Q1. 「access to the VBA Project is not trusted」と出て止まる<a class="headerlink" href="#q1-access-to-the-vba-project-is-not-trusted" title="Permanent link">&para;</a></h3>
+<p>STEP 1 のチェックボックスが入っていません。Excel に戻って STEP 1 をもう一度やり直してください。</p>
+<h3 id="q2">Q2. 黒い窓が一瞬出てすぐ消える<a class="headerlink" href="#q2" title="Permanent link">&para;</a></h3>
+<p>ダブルクリックで bat を開いただけだと、エラーメッセージが見えずに閉じます。
+<strong>bat に Excel ブックをドラッグ＆ドロップ</strong> で起動してください
+（bat 単体起動は使い方として想定していません）。</p>
+<h3 id="q3-step-3">Q3. もう一度 STEP 3 を実行しても大丈夫？<a class="headerlink" href="#q3-step-3" title="Permanent link">&para;</a></h3>
+<p>大丈夫です。何度でも安全に実行できます。同じ <code>.xlsm</code> を再度ドラッグすれば
+最新の VBA に上書きされます。<strong>シート上のデータ（あなたが登録したナレッジ）は
+消えません</strong>。</p>
 
 
 
