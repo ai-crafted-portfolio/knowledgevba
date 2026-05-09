@@ -63,7 +63,7 @@ extra_css:
   - stylesheets/extra.css
 
 nav:
-  - 繧､繝ｳ繧ｹ繝医・繝ｩ: installer.md
+  - インストーラ: installer.md
   - 概要: index.md
   - 仕様: spec.md
   - セットアップ: setup.md
