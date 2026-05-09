@@ -63,11 +63,10 @@ extra_css:
   - stylesheets/extra.css
 
 nav:
-  - インストーラ: installer.md
   - 概要: index.md
-  - 仕様: spec.md
   - セットアップ: setup.md
-  - 操作手順: operations.md
+  - 操作マニュアル: operations.md
+  - 仕様: spec.md
   - アーキテクチャ: architecture.md
   - Q&A (なぜこの設計？): qa.md
   - ソースコード:
