@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="各シート別の操作手順、ボタン名、画面構成">
+        <meta name="description" content="日常運用での画面別操作手順とボタン配置">
       
       
         <meta name="author" content="ai-crafted-portfolio">
@@ -542,21 +542,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        メイン画面
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. ナレッジ登録
+        1. メイン
       
     </span>
   </a>
@@ -567,7 +556,7 @@
   <a href="#2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. ナレッジ修正
+        2. ナレッジ登録
       
     </span>
   </a>
@@ -578,7 +567,7 @@
   <a href="#3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. ナレッジ一覧
+        3. ナレッジ修正
       
     </span>
   </a>
@@ -589,7 +578,7 @@
   <a href="#4" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. 検索
+        4. ナレッジ一覧
       
     </span>
   </a>
@@ -600,7 +589,7 @@
   <a href="#5" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5. ナレッジ表示
+        5. 検索
       
     </span>
   </a>
@@ -611,7 +600,7 @@
   <a href="#6" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6. フォーマット設計
+        6. ナレッジ表示
       
     </span>
   </a>
@@ -622,7 +611,7 @@
   <a href="#7" class="md-nav__link">
     <span class="md-ellipsis">
       
-        7. フォーマット一覧
+        7. フォーマット設計
       
     </span>
   </a>
@@ -633,7 +622,7 @@
   <a href="#8" class="md-nav__link">
     <span class="md-ellipsis">
       
-        8. フォーマットプレビュー
+        8. フォーマット一覧
       
     </span>
   </a>
@@ -644,7 +633,7 @@
   <a href="#9" class="md-nav__link">
     <span class="md-ellipsis">
       
-        9. 既存データへのフィールド反映
+        9. フォーマットプレビュー
       
     </span>
   </a>
@@ -655,7 +644,7 @@
   <a href="#10" class="md-nav__link">
     <span class="md-ellipsis">
       
-        10. 格納先設定
+        10. 既存データへのフィールド反映
       
     </span>
   </a>
@@ -666,7 +655,7 @@
   <a href="#11" class="md-nav__link">
     <span class="md-ellipsis">
       
-        11. 設定
+        11. 格納先設定
       
     </span>
   </a>
@@ -677,7 +666,29 @@
   <a href="#12" class="md-nav__link">
     <span class="md-ellipsis">
       
-        12. ログ確認
+        12. 設定
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13. データファイル形式
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#14" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14. ログ
       
     </span>
   </a>
@@ -2072,195 +2083,221 @@
 
 
 <h1 id="_1">操作マニュアル<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
-<p>このページでは、ナレッジ管理ツールの各シートで「何ができるか」「どのボタンを押すと何が起きるか」を機能別に説明します。</p>
-<p>セットアップは完了済の前提です。本ツールを開くと <strong>メイン</strong> シートが表示され、画面下部の 8 個のタスクボタンから目的の画面を選びます。</p>
+<p>このページは <strong>すでにセットアップ済の方が日常運用で使う</strong> ときの画面別操作手順です。各シートの「何ができるか」「ボタンを押すと何が起きるか」「次にどの画面へ進むか」を順に説明します。</p>
+<p>ファイルを開くと最初に <strong>メイン</strong> 画面が表示されます。メイン画面下部の 8 個のタスクボタンから目的の画面を選ぶと、関連シートだけが下部のタブに表示される設計です。</p>
 <hr />
-<h2 id="_2">メイン画面<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
-<p>メインシート下部に 8 個のタスク選択ボタンが並んでいます。各ボタンを押すと対応するシートだけが表示されます。</p>
+<h2 id="1">1. メイン<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
+<p>入口の画面です。下部にタスクボタンが 8 個並んでおり、選んだタスクに応じて関連するシートだけが表示されます。</p>
+<p><img alt="メイン画面" src="../images/operations/01_main.png" /></p>
+<p><strong>タスクボタンと遷移先</strong></p>
 <table>
 <thead>
 <tr>
 <th>ボタン</th>
-<th>遷移先 / 役割</th>
+<th>この画面に遷移</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>&gt; 初回セットアップ</strong></td>
-<td>（セットアップ済の運用では使用しません）</td>
+<td>▶設定変更</td>
+<td>格納先設定 / 設定</td>
 </tr>
 <tr>
-<td><strong>&gt; 設定変更</strong></td>
-<td>設定 シート</td>
+<td>▶フォーマット管理</td>
+<td>フォーマット一覧 / フォーマット設計 / フォーマットプレビュー</td>
 </tr>
 <tr>
-<td><strong>&gt; フォーマット管理</strong></td>
-<td>フォーマット一覧 シート</td>
+<td>▶ナレッジ登録</td>
+<td>ナレッジ登録</td>
 </tr>
 <tr>
-<td><strong>&gt; ナレッジ登録</strong></td>
-<td>ナレッジ登録 シート</td>
+<td>▶検索・確認</td>
+<td>検索 / ナレッジ表示 / ナレッジ修正</td>
 </tr>
 <tr>
-<td><strong>&gt; 検索・確認</strong></td>
-<td>検索 シート</td>
+<td>▶ナレッジ修正</td>
+<td>ナレッジ修正 / 検索 / ナレッジ表示</td>
 </tr>
 <tr>
-<td><strong>&gt; ナレッジ修正</strong></td>
-<td>ナレッジ修正 シート</td>
+<td>▶ナレッジ削除</td>
+<td>ナレッジ一覧</td>
 </tr>
 <tr>
-<td><strong>&gt; ナレッジ削除</strong></td>
-<td>ナレッジ一覧 シート</td>
-</tr>
-<tr>
-<td><strong>&gt; 既存データ反映</strong></td>
-<td>既存データへのフィールド反映 シート</td>
+<td>▶既存データ反映</td>
+<td>既存データへのフィールド反映</td>
 </tr>
 </tbody>
 </table>
+<p>メインに戻りたいときは、下部タブの <strong>メイン</strong> をクリックしてください。</p>
 <hr />
-<h2 id="1">1. ナレッジ登録<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
-<p>新規のナレッジ（ノウハウ・トラブル対応メモ・手順書等）を登録するシートです。</p>
+<h2 id="2">2. ナレッジ登録<a class="headerlink" href="#2" title="Permanent link">&para;</a></h2>
+<p>新規ナレッジを 1 件入力して保存する画面です。フォーマットを選択するとフィールド構成が画面に展開され、入力欄にデータを入れて保存します。</p>
+<p><img alt="ナレッジ登録画面" src="../images/operations/02_register.png" /></p>
 <p><strong>操作手順</strong></p>
 <ol>
-<li>メイン → <strong>&gt; ナレッジ登録</strong> ボタンをクリック</li>
-<li>ナレッジ登録シートが表示される</li>
-<li>上部の <strong>FormatID</strong> 欄でフォーマットを選択（フォーマット未作成なら「フォーマット管理」で先に定義）</li>
-<li>フォーマットに従って各フィールドを入力</li>
-<li><strong>&gt; 保存</strong> ボタンをクリックすると、格納先設定で指定したフォルダにテキストファイルとして保存される</li>
-<li>続けて入力する場合は <strong>&gt; クリア</strong> ボタンで入力欄を初期化</li>
+<li>メイン → <strong>▶ナレッジ登録</strong> をクリック</li>
+<li>上部の FormatID 欄からフォーマットを選択</li>
+<li>各フィールドに値を入力</li>
+<li><strong>▶保存</strong> をクリック → 指定の格納先にファイルが書き込まれます</li>
+<li>続けて入力する場合は <strong>▶クリア</strong> で入力欄を空にする</li>
 </ol>
 <p><strong>主なボタン</strong></p>
 <ul>
-<li><strong>&gt; 保存</strong> … 入力中のフィールドをファイルに書き出す</li>
-<li><strong>&gt; クリア</strong> … 入力欄を空にする</li>
+<li><strong>▶保存</strong> … 入力中のフィールドを 1 件のナレッジとして書き出す</li>
+<li><strong>▶クリア</strong> … 入力欄をすべて空にする</li>
 </ul>
+<p>入力に使うフォーマットがまだ無い場合は、先に <strong>6. フォーマット設計</strong> で定義してください。</p>
 <hr />
-<h2 id="2">2. ナレッジ修正<a class="headerlink" href="#2" title="Permanent link">&para;</a></h2>
-<p>既存ナレッジを呼び出して内容を上書きするシートです。</p>
+<h2 id="3">3. ナレッジ修正<a class="headerlink" href="#3" title="Permanent link">&para;</a></h2>
+<p>既存のナレッジを呼び出して内容を上書き保存する画面です。</p>
+<p><img alt="ナレッジ修正画面" src="../images/operations/03_edit.png" /></p>
 <p><strong>操作手順</strong></p>
 <ol>
-<li>メイン → <strong>&gt; ナレッジ修正</strong> ボタンをクリック</li>
-<li>KnwNo（ナレッジ番号）を上部の入力欄に入れる</li>
-<li><strong>&gt; 読込</strong> ボタンをクリックすると、各フィールドに既存値が展開される</li>
+<li>メイン → <strong>▶ナレッジ修正</strong> をクリック</li>
+<li>上部の入力欄に対象の KnwNo（ナレッジ番号）を入れる</li>
+<li><strong>▶読込</strong> をクリック → 既存内容が各フィールドに展開される</li>
 <li>必要箇所を編集</li>
-<li><strong>&gt; 上書保存</strong> ボタンで反映</li>
+<li><strong>▶上書保存</strong> をクリックして反映</li>
 </ol>
 <p><strong>主なボタン</strong></p>
 <ul>
-<li><strong>&gt; 読込</strong> … 指定 KnwNo の既存ナレッジを画面に展開</li>
-<li><strong>&gt; 上書保存</strong> … 編集内容で既存ファイルを上書き</li>
+<li><strong>▶読込</strong> … 指定 KnwNo の既存ナレッジを画面に展開</li>
+<li><strong>▶上書保存</strong> … 編集内容で既存ファイルを上書き</li>
 </ul>
+<p>KnwNo がわからない場合は、<strong>5. 検索</strong> で目的のナレッジを探してから本画面に遷移する流れが便利です。</p>
 <hr />
-<h2 id="3">3. ナレッジ一覧<a class="headerlink" href="#3" title="Permanent link">&para;</a></h2>
-<p>登録済ナレッジを一覧表示し、削除もここから行うシートです。</p>
+<h2 id="4">4. ナレッジ一覧<a class="headerlink" href="#4" title="Permanent link">&para;</a></h2>
+<p>登録済ナレッジの一覧を表示し、不要なものを削除する画面です。</p>
+<p><img alt="ナレッジ一覧画面" src="../images/operations/04_list.png" /></p>
 <p><strong>操作手順</strong></p>
 <ol>
-<li>メイン → <strong>&gt; ナレッジ削除</strong> ボタンをクリック（一覧シートが開く）</li>
-<li><strong>&gt; リロード</strong> ボタンで最新の登録状況を再読み込み</li>
+<li>メイン → <strong>▶ナレッジ削除</strong> をクリック</li>
+<li><strong>▶リロード</strong> をクリックして最新の登録状況を取得</li>
 <li>削除したい行を選択</li>
-<li><strong>&gt; 選択行を削除</strong> ボタンをクリック</li>
-<li>確認ダイアログで OK → ファイルが削除される</li>
+<li><strong>▶選択行を削除</strong> をクリック → 確認ダイアログで OK</li>
 </ol>
 <p><strong>主なボタン</strong></p>
 <ul>
-<li><strong>&gt; リロード</strong> … 一覧を再構築</li>
-<li><strong>&gt; 選択行を削除</strong> … 選択中の行に紐づくファイルを削除</li>
+<li><strong>▶リロード</strong> … 一覧を再構築</li>
+<li><strong>▶選択行を削除</strong> … 選択中の行に紐づくファイルを削除</li>
 </ul>
 <hr />
-<h2 id="4">4. 検索<a class="headerlink" href="#4" title="Permanent link">&para;</a></h2>
-<p>登録されたナレッジを横断検索するシートです。スコアリング順に結果が並びます。</p>
+<h2 id="5">5. 検索<a class="headerlink" href="#5" title="Permanent link">&para;</a></h2>
+<p>登録済ナレッジを横断検索する画面です。スコアリングされた結果が一覧に表示されます。</p>
+<p><img alt="検索画面" src="../images/operations/05_search.png" /></p>
 <p><strong>操作手順</strong></p>
 <ol>
-<li>メイン → <strong>&gt; 検索・確認</strong> ボタンをクリック</li>
-<li><strong>キーワード</strong> 欄に検索語を入力（複数語はスペース区切り）</li>
-<li><strong>モード</strong> で AND / OR を選択</li>
-<li><strong>TargetField</strong> で検索範囲（全フィールド / タイトルのみ / 本文のみ等）を指定</li>
-<li><strong>&gt; 検索</strong> ボタンをクリックすると結果が下方の一覧に表示される</li>
-<li>詳細を見たい行を選択 → <strong>&gt; 詳細</strong> ボタンで「ナレッジ表示」シートに遷移</li>
-<li>直接 KnwNo がわかっている場合は、上部欄に番号を入れて <strong>&gt; 表示</strong> ボタン</li>
+<li>メイン → <strong>▶検索・確認</strong> をクリック</li>
+<li>キーワード欄に検索語を入力（複数語はスペース区切り）</li>
+<li>モードで AND / OR を選択</li>
+<li>TargetField で検索範囲（全フィールド / タイトルのみ等）を指定</li>
+<li><strong>▶検索</strong> をクリック → 結果が下部一覧に表示</li>
+<li>詳細を見たい行を選択 → <strong>▶詳細</strong> をクリックして <strong>6. ナレッジ表示</strong> に遷移</li>
+<li>KnwNo がわかっている場合は、上部に番号を入れて <strong>▶表示</strong></li>
 </ol>
 <p><strong>主なボタン</strong></p>
 <ul>
-<li><strong>&gt; 検索</strong> … キーワード検索を実行</li>
-<li><strong>&gt; 表示</strong> … 直接 KnwNo 指定で開く</li>
-<li><strong>&gt; クリア</strong> … 入力条件と結果をクリア</li>
-<li><strong>&gt; 詳細</strong> … 選択行のナレッジを表示画面で開く</li>
+<li><strong>▶検索</strong> … キーワード検索を実行</li>
+<li><strong>▶表示</strong> … 直接 KnwNo 指定で開く</li>
+<li><strong>▶クリア</strong> … 入力条件と結果をクリア</li>
+<li><strong>▶詳細</strong> … 選択行のナレッジを表示画面で開く</li>
 </ul>
 <hr />
-<h2 id="5">5. ナレッジ表示<a class="headerlink" href="#5" title="Permanent link">&para;</a></h2>
-<p>検索結果から開いた個別ナレッジの詳細表示シートです。本文と関連画像（サムネ・詳細画像）が表示されます。</p>
+<h2 id="6">6. ナレッジ表示<a class="headerlink" href="#6" title="Permanent link">&para;</a></h2>
+<p>検索結果から開いた個別ナレッジの詳細表示画面です。本文と関連画像（サムネ・詳細画像）が表示されます。</p>
+<p><img alt="ナレッジ表示画面" src="../images/operations/06_view.png" /></p>
 <p><strong>主なボタン</strong></p>
 <ul>
-<li><strong>&lt; 検索に戻る</strong> … 検索シートへ戻る</li>
-<li><strong>&gt; 修正に遷移</strong> … 表示中のナレッジを修正シートに引き継いで開く</li>
+<li><strong>←検索に戻る</strong> … 検索画面へ戻る</li>
+<li><strong>▶修正に遷移</strong> … 表示中のナレッジを <strong>3. ナレッジ修正</strong> に引き継いで開く</li>
 </ul>
 <hr />
-<h2 id="6">6. フォーマット設計<a class="headerlink" href="#6" title="Permanent link">&para;</a></h2>
-<p>ナレッジのフィールド構造を定義する画面です。フォーマット ID ごとにフィールド名・型を宣言します。</p>
+<h2 id="7">7. フォーマット設計<a class="headerlink" href="#7" title="Permanent link">&para;</a></h2>
+<p>ナレッジのフィールド構造を定義する画面です。FormatID ごとにフィールド名・型を宣言します。</p>
+<p><img alt="フォーマット設計画面" src="../images/operations/07_design.png" /></p>
 <p><strong>操作手順</strong></p>
 <ol>
-<li>メイン → <strong>&gt; フォーマット管理</strong> → 一覧シートで <strong>&gt; 新規作成</strong> または既存行を選んで <strong>&gt; 選択行を編集</strong></li>
-<li>フォーマット設計シートが開く</li>
-<li>フォーマット ID と各フィールドを上から順に定義</li>
-<li><strong>&gt; 保存</strong> ボタンで保存</li>
-<li><strong>&gt; プレビュー</strong> ボタンで設計内容の確認画面を表示</li>
-<li><strong>&lt; 一覧に戻る</strong> で一覧シートへ</li>
+<li>メイン → <strong>▶フォーマット管理</strong> で <strong>8. フォーマット一覧</strong> を開く</li>
+<li><strong>▶新規作成</strong> または既存行を選んで <strong>▶選択行を編集</strong> で本画面が開く</li>
+<li>FormatID と各フィールドを上から定義</li>
+<li><strong>▶保存</strong> で保存</li>
+<li><strong>▶プレビュー</strong> で <strong>9. フォーマットプレビュー</strong> を確認</li>
 </ol>
 <p><strong>主なボタン</strong></p>
 <ul>
-<li><strong>&gt; 読込</strong> … 既存フォーマットを読み込む</li>
-<li><strong>&gt; 保存</strong> … 設計内容を保存</li>
-<li><strong>&gt; プレビュー</strong> … プレビュー画面を開く</li>
-<li><strong>&lt; 一覧に戻る</strong> … フォーマット一覧へ</li>
+<li><strong>▶読込</strong> … 既存フォーマットを読み込む</li>
+<li><strong>▶保存</strong> … 設計内容を保存</li>
+<li><strong>▶プレビュー</strong> … プレビュー画面を開く</li>
+<li><strong>←一覧に戻る</strong> … フォーマット一覧へ</li>
 </ul>
 <hr />
-<h2 id="7">7. フォーマット一覧<a class="headerlink" href="#7" title="Permanent link">&para;</a></h2>
-<p>定義済フォーマットを一覧表示するシートです。</p>
+<h2 id="8">8. フォーマット一覧<a class="headerlink" href="#8" title="Permanent link">&para;</a></h2>
+<p>定義済フォーマットを一覧表示する画面です。</p>
+<p><img alt="フォーマット一覧画面" src="../images/operations/08_format_list.png" /></p>
 <p><strong>主なボタン</strong></p>
 <ul>
-<li><strong>&gt; 新規作成</strong> … 新規フォーマット設計画面を開く</li>
-<li><strong>&gt; 選択行を編集</strong> … 選択行のフォーマットを設計画面で開く</li>
-<li><strong>&gt; プレビュー</strong> … 選択行のプレビュー表示</li>
+<li><strong>▶新規作成</strong> … 新規フォーマット設計画面を開く</li>
+<li><strong>▶選択行を編集</strong> … 選択行のフォーマットを設計画面で開く</li>
+<li><strong>▶プレビュー</strong> … 選択行のプレビュー表示</li>
 </ul>
 <hr />
-<h2 id="8">8. フォーマットプレビュー<a class="headerlink" href="#8" title="Permanent link">&para;</a></h2>
-<p>設計中または既存フォーマットのフィールド構成を視覚的に確認する画面です。<strong>フォーマット設計</strong> または <strong>フォーマット一覧</strong> から <strong>&gt; プレビュー</strong> ボタンで開きます。</p>
+<h2 id="9">9. フォーマットプレビュー<a class="headerlink" href="#9" title="Permanent link">&para;</a></h2>
+<p>設計中または既存フォーマットのフィールド構成を視覚的に確認する画面です。<strong>7. フォーマット設計</strong> または <strong>8. フォーマット一覧</strong> から <strong>▶プレビュー</strong> で開きます。</p>
+<p><img alt="フォーマットプレビュー画面" src="../images/operations/09_preview.png" /></p>
+<p>設計内容が反映された見た目を確認できる、参照専用の画面です。</p>
 <hr />
-<h2 id="9">9. 既存データへのフィールド反映<a class="headerlink" href="#9" title="Permanent link">&para;</a></h2>
-<p>フォーマットを変更したあとに、過去ナレッジへ新フィールドを追加・写像するシートです。</p>
+<h2 id="10">10. 既存データへのフィールド反映<a class="headerlink" href="#10" title="Permanent link">&para;</a></h2>
+<p>フォーマットを変更したあと、既存ナレッジへ新しいフィールドを追加・写像するための画面です。</p>
+<p><img alt="既存データへのフィールド反映画面" src="../images/operations/10_migration.png" /></p>
 <p><strong>操作手順</strong></p>
 <ol>
-<li>メイン → <strong>&gt; 既存データ反映</strong> ボタンをクリック</li>
-<li>シートで対象フォーマット ID と反映ルールを指定</li>
-<li><strong>&gt; 反映実行</strong> ボタンをクリック</li>
-<li>結果ログが出力される</li>
+<li>メイン → <strong>▶既存データ反映</strong> をクリック</li>
+<li>対象の FormatID と反映ルールを画面で指定</li>
+<li><strong>▶反映実行</strong> をクリック</li>
+<li>結果は <strong>14. ログ</strong> で確認できます</li>
 </ol>
 <p><strong>主なボタン</strong></p>
 <ul>
-<li><strong>&gt; 反映実行</strong> … 対象ナレッジに新フィールドを書き込む</li>
+<li><strong>▶反映実行</strong> … 対象ナレッジに新フィールドを書き込む</li>
 </ul>
 <hr />
-<h2 id="10">10. 格納先設定<a class="headerlink" href="#10" title="Permanent link">&para;</a></h2>
-<p>ドキュメントタイプごとに保存先フォルダを設定するシートです。「共有フォルダ」「BOX」等の保存先タイプとパスを定義します。</p>
+<h2 id="11">11. 格納先設定<a class="headerlink" href="#11" title="Permanent link">&para;</a></h2>
+<p>ドキュメントタイプごとに保存先フォルダを設定する画面です。「共有フォルダ」「BOX」等の保存先タイプとパスを 1 行ずつ書き込みます。</p>
+<p><img alt="格納先設定画面" src="../images/operations/11_kakuno.png" /></p>
 <p><strong>操作手順</strong></p>
 <ol>
-<li>メイン → <strong>&gt; 設定変更</strong> → 設定シートまたは格納先設定シートに遷移</li>
+<li>メイン → <strong>▶設定変更</strong> をクリック</li>
+<li>表示された画面下部のタブから <strong>格納先設定</strong> を選択</li>
 <li>表に DocType / 保存先タイプ / パス を 1 行ずつ書き込む</li>
-<li>シートを切り替えると即時保存される（ボタンなし）</li>
+<li>シートを切り替えると即時保存されます（保存ボタンはありません）</li>
 </ol>
+<p>設定変更後は、<strong>2. ナレッジ登録</strong> で新規入力するナレッジが指定の格納先に保存されるようになります。</p>
 <hr />
-<h2 id="11">11. 設定<a class="headerlink" href="#11" title="Permanent link">&para;</a></h2>
-<p>データフォルダの基準パス、ログレベル等を設定するシートです。</p>
+<h2 id="12">12. 設定<a class="headerlink" href="#12" title="Permanent link">&para;</a></h2>
+<p>データフォルダの基準パス、テストモードのオン/オフ等の全体設定を行う画面です。</p>
+<p><img alt="設定画面" src="../images/operations/12_settei.png" /></p>
 <p><strong>主なボタン</strong></p>
 <ul>
-<li><strong>&gt; リセット</strong> … ログをクリアする</li>
+<li><strong>▶リセット</strong> … 蓄積されたログ（<strong>14. ログ</strong>）をクリアする</li>
 </ul>
+<p>テストモードを TRUE にすると一部の処理が試験用の動作になります。通常運用は FALSE のままで問題ありません。</p>
 <hr />
-<h2 id="12">12. ログ確認<a class="headerlink" href="#12" title="Permanent link">&para;</a></h2>
-<p>ログは設定シートの下部または専用ログシートに直近の実行結果が時系列で記録されます。エラーや警告はここで確認できます。</p>
-<p>ログは <strong>&gt; リセット</strong> ボタン（設定シート）で初期化できます。</p>
+<h2 id="13">13. データファイル形式<a class="headerlink" href="#13" title="Permanent link">&para;</a></h2>
+<p>ナレッジを保存するときのファイル形式を定義するための画面です。</p>
+<p><img alt="データファイル形式画面" src="../images/operations/13_dataformat.png" /></p>
+<p>通常は標準のままで動作します。組織独自のファイル形式を持っている場合に、ここで形式の変換ルールを管理します。</p>
+<hr />
+<h2 id="14">14. ログ<a class="headerlink" href="#14" title="Permanent link">&para;</a></h2>
+<p>各操作の実行履歴と、エラー・警告が時系列に記録される画面です。</p>
+<p><img alt="ログ画面" src="../images/operations/14_log.png" /></p>
+<p><strong>列の意味</strong></p>
+<ul>
+<li><strong>日時</strong> … 操作が起きた時刻</li>
+<li><strong>モジュール名 / 関数名</strong> … 操作の発生元</li>
+<li><strong>メッセージ種別</strong> … 「情報」「警告」「エラー」のいずれか</li>
+<li><strong>メッセージ内容</strong> … 操作内容や警告・エラーの詳細</li>
+</ul>
+<p>ログをクリアしたいときは、<strong>12. 設定</strong> の <strong>▶リセット</strong> をクリックしてください。エラーが起きたときは、まずこの画面の <strong>メッセージ種別</strong> が「エラー」の行を確認してください。</p>
 
 
 
