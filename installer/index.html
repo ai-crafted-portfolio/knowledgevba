@@ -473,7 +473,7 @@
   <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        ダウンロード
+        必要なもの
       
     </span>
   </a>
@@ -481,44 +481,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#step-1-excel-1-1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        動作環境
+        STEP 1. Excel の設定を 1 か所だけ変更（最初の 1 回だけ）
       
     </span>
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        事前設定（一度だけ必須）
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        使い方
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="使い方">
+    <nav class="md-nav" aria-label="STEP 1. Excel の設定を 1 か所だけ変更（最初の 1 回だけ）">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#1" class="md-nav__link">
+  <a href="#1-1-excel" class="md-nav__link">
     <span class="md-ellipsis">
       
-        方法 1: ドラッグ &amp; ドロップ（推奨）
+        1-1. Excel を起動して「オプション」を開く
       
     </span>
   </a>
@@ -526,10 +504,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#2" class="md-nav__link">
+  <a href="#1-2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        方法 2: コマンドプロンプトから
+        1-2. 「トラスト センター」 → 「トラスト センターの設定」を押す
       
     </span>
   </a>
@@ -537,10 +515,21 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#3-cowork" class="md-nav__link">
+  <a href="#1-3-on" class="md-nav__link">
     <span class="md-ellipsis">
       
-        方法 3: Cowork デモモード
+        1-3. 「マクロの設定」のチェックボックスを ON にする
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1-4-ok-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1-4. 「OK」を 2 回押して閉じる
       
     </span>
   </a>
@@ -553,10 +542,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#step-2-2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        何をしているか
+        STEP 2. インストーラ 2 ファイルをダウンロードする
       
     </span>
   </a>
@@ -564,82 +553,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
+  <a href="#step-3-excel-bat" class="md-nav__link">
     <span class="md-ellipsis">
       
-        トラブルシューティング
+        STEP 3. あなたの Excel ブックを bat にドラッグ
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="トラブルシューティング">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#q1-access-to-the-vba-project-is-not-trusted" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Q1. 「access to the VBA Project is not trusted」エラー
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#q2-compile-error-invalid-procedure-call" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Q2. 「Compile error: invalid procedure call」または「ステートメントの最後」が出る
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#q3-26-import" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Q3. 26 モジュール全部 import されない
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#q4" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Q4. 既存ナレッジデータが消える？
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#q5" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Q5. もう一度実行するとどうなる？
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#adr" class="md-nav__link">
+  <a href="#step-4-excel" class="md-nav__link">
     <span class="md-ellipsis">
       
-        関連 ADR
+        STEP 4. Excel で開いて動作確認
       
     </span>
   </a>
@@ -2196,135 +2124,116 @@
 
 
 <h1 id="_1">インストーラ<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
-<p>knowledgevba の VBA モジュール 26 本を、既存の <code>.xlsm</code> に <strong>1 クリックで一括 import + 初期化</strong>
-するためのインストーラです。<code>.bat</code> に <code>.xlsm</code> をドラッグ &amp; ドロップするだけで、
-ダウンロード → CP932 サニタイズ → CRLF 正規化 → VBComponents.Import → SetupSheetsAndButtons
-までを完走します。</p>
+<p>knowledgevba をあなたの Excel ブックに紐づけて、「ナレッジ登録 / 検索」のボタンが
+並んだ画面が使えるようにするためのツールです。</p>
+<p>下の <strong>STEP 1 〜 STEP 4</strong> の順にやれば、初めての方でも 10 分ほどで完了します。
+各 STEP に画像を添えてあるので、画面上の同じ場所をクリックしてください。</p>
 <hr />
-<h2 id="_2">ダウンロード<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
-<p>以下 3 ファイルを同じフォルダに保存してください（Windows のエクスプローラから右クリック →
-「名前を付けてリンク先を保存」）。</p>
+<h2 id="_2">必要なもの<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Windows 11 か Windows 10 の PC（Windows 標準の機能だけで動きます）</li>
+<li>Microsoft Excel が入っていること（バージョンは何でも OK）</li>
+</ul>
+<p>それだけです。GitHub のアカウントや Python・PowerShell の知識はいりません。</p>
+<hr />
+<h2 id="step-1-excel-1-1">STEP 1. Excel の設定を 1 か所だけ変更（最初の 1 回だけ）<a class="headerlink" href="#step-1-excel-1-1" title="Permanent link">&para;</a></h2>
+<p>このインストーラは VBA（Excel の中で動くマクロ）を、あなたのブックに自動で取り込みます。
+Excel の初期設定だと「VBA の自動取り込み」がブロックされているので、最初に 1 か所だけ
+チェックを入れます。<strong>この作業は最初の 1 回だけ</strong>で OK です。</p>
+<h3 id="1-1-excel">1-1. Excel を起動して「オプション」を開く<a class="headerlink" href="#1-1-excel" title="Permanent link">&para;</a></h3>
+<p>Excel を起動した直後の画面（または何かブックを開いた状態でも OK）で、
+画面左下にある <strong>「オプション」</strong> をクリックしてください。</p>
+<p><img alt="Excel のオプションを開く" src="../images/installer/01_file_options.png" /></p>
+<blockquote>
+<p>もし「オプション」が画面左下に見えない場合は、左側のメニュー（ホーム / 新規 / 開く …）を
+一番下までスクロールしてください。<strong>アカウント</strong> の下に <strong>オプション</strong> があります。</p>
+</blockquote>
+<h3 id="1-2">1-2. 「トラスト センター」 → 「トラスト センターの設定」を押す<a class="headerlink" href="#1-2" title="Permanent link">&para;</a></h3>
+<p>「Excel のオプション」というウィンドウが開きます。</p>
+<ol>
+<li>左メニューの一番下にある <strong>「トラスト センター」</strong> をクリック</li>
+<li>右側の画面が切り替わるので、出てきた <strong>「トラスト センターの設定(T)…」</strong> という
+   ボタンを押す（下の画像の赤枠）</li>
+</ol>
+<p><img alt="トラスト センターの設定ボタン" src="../images/installer/02_trust_center_button.png" /></p>
+<h3 id="1-3-on">1-3. 「マクロの設定」のチェックボックスを ON にする<a class="headerlink" href="#1-3-on" title="Permanent link">&para;</a></h3>
+<p>新しく開いた「トラスト センター」ウィンドウで、左メニューから <strong>「マクロの設定」</strong> を
+クリック。右側に <strong>「VBA プロジェクト オブジェクト モデルへのアクセスを信頼する」</strong>
+というチェックボックスが出てくるので、これに <strong>チェックを入れて</strong> ください。</p>
+<p><img alt="チェックボックスを ON にする" src="../images/installer/03_check_vbom.png" /></p>
+<h3 id="1-4-ok-2">1-4. 「OK」を 2 回押して閉じる<a class="headerlink" href="#1-4-ok-2" title="Permanent link">&para;</a></h3>
+<p>「トラスト センター」の <strong>OK</strong> → 「Excel のオプション」の <strong>OK</strong> の順に押して、
+両方のウィンドウを閉じます。これで Excel 側の事前設定は完了です。</p>
+<blockquote>
+<p>この設定は Excel に保存されるので、次から STEP 1 はやらなくて OK です。</p>
+</blockquote>
+<hr />
+<h2 id="step-2-2">STEP 2. インストーラ 2 ファイルをダウンロードする<a class="headerlink" href="#step-2-2" title="Permanent link">&para;</a></h2>
+<p>下のリンクから <strong>2 つのファイル</strong> を、<strong>同じフォルダに</strong> ダウンロードしてください。
+（保存先は迷ったら <strong>「ダウンロード」フォルダ</strong> で OK です。）</p>
 <table>
 <thead>
 <tr>
 <th>ファイル</th>
+<th>役割</th>
 <th>リンク</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>Install-KnowledgevbaModules.bat</code></td>
-<td><a href="https://raw.githubusercontent.com/ai-crafted-portfolio/knowledgevba/main/installer/Install-KnowledgevbaModules.bat">raw を保存</a></td>
+<td>これに Excel ブックをドラッグするやつ</td>
+<td><a href="https://raw.githubusercontent.com/ai-crafted-portfolio/knowledgevba/main/installer/Install-KnowledgevbaModules.bat">ダウンロード</a></td>
 </tr>
 <tr>
 <td><code>Install-KnowledgevbaModules.ps1</code></td>
-<td><a href="https://raw.githubusercontent.com/ai-crafted-portfolio/knowledgevba/main/installer/Install-KnowledgevbaModules.ps1">raw を保存</a></td>
-</tr>
-<tr>
-<td><code>README.md</code>（使い方の詳細）</td>
-<td><a href="https://raw.githubusercontent.com/ai-crafted-portfolio/knowledgevba/main/installer/README.md">raw を保存</a></td>
+<td>bat の中で動く処理本体</td>
+<td><a href="https://raw.githubusercontent.com/ai-crafted-portfolio/knowledgevba/main/installer/Install-KnowledgevbaModules.ps1">ダウンロード</a></td>
 </tr>
 </tbody>
 </table>
-<p>PowerShell 経由でまとめてダウンロードする場合:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nv">$base</span> <span class="p">=</span> <span class="s2">&quot;https://raw.githubusercontent.com/ai-crafted-portfolio/knowledgevba/main/installer&quot;</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nv">$dst</span>  <span class="p">=</span> <span class="s2">&quot;$env:USERPROFILE\Downloads\knowledgevba_installer&quot;</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nb">New-Item</span> <span class="n">-ItemType</span> <span class="n">Directory</span> <span class="n">-Force</span> <span class="n">-Path</span> <span class="nv">$dst</span> <span class="p">|</span> <span class="nb">Out-Null</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="k">foreach</span> <span class="p">(</span><span class="nv">$f</span> <span class="k">in</span> <span class="s1">&#39;Install-KnowledgevbaModules.bat&#39;</span><span class="p">,</span><span class="s1">&#39;Install-KnowledgevbaModules.ps1&#39;</span><span class="p">,</span><span class="s1">&#39;README.md&#39;</span><span class="p">)</span> <span class="p">{</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    <span class="nb">Invoke-WebRequest</span> <span class="s2">&quot;$base/$f&quot;</span> <span class="n">-OutFile</span> <span class="s2">&quot;$dst\$f&quot;</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="p">}</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="n">explorer</span> <span class="nv">$dst</span>
-</code></pre></div>
+<p>リンクを <strong>右クリック → 「名前を付けてリンク先を保存」</strong> で保存できます。
+解凍などは不要です。</p>
+<p>ダウンロード後、エクスプローラで保存先フォルダを開くと、下の画像のように
+<strong>あなたの Excel ブック（例：<code>your_book.xlsm</code>） + bat + ps1 の 3 ファイルが
+同じフォルダに並んでいる</strong> 状態にしてください（あなたの xlsm をこのフォルダに
+コピーしてくれば OK です）。</p>
+<p><img alt="3 ファイルを同じフォルダに置く" src="../images/installer/04_three_files.png" /></p>
+<blockquote>
+<p><strong>チェック</strong>: ファイル名の末尾は <code>.bat</code> と <code>.ps1</code> です。Windows の設定で拡張子が
+表示されていない場合、見た目では区別がつきにくいですが、種類欄に
+「Windows バッチ ファイル」「Windows PowerShell スクリプト ファイル」と書かれていれば OK。</p>
+<p><strong>もしダウンロードした bat / ps1 が「ブロックされています」と警告されたら</strong>:
+ファイルを右クリック → プロパティ → 一番下の <strong>「許可する」</strong> にチェックを入れて OK。
+Windows 11 のセキュリティ機能（Mark of the Web）が原因です。</p>
+</blockquote>
 <hr />
-<h2 id="_3">動作環境<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
-<ul>
-<li>Windows 10 / 11</li>
-<li>Microsoft Excel（VBA 有効化）</li>
-<li>PowerShell 5.1 以上（Windows 標準）</li>
-</ul>
-<hr />
-<h2 id="_4">事前設定（一度だけ必須）<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
-<p>PowerShell から <code>VBProject.VBComponents.Import</code> を呼ぶには、Excel の以下のオプションが ON
-になっている必要があります。OFF だとインストーラが「access to the VBA Project is not trusted」
-で停止します。</p>
+<h2 id="step-3-excel-bat">STEP 3. あなたの Excel ブックを bat にドラッグ<a class="headerlink" href="#step-3-excel-bat" title="Permanent link">&para;</a></h2>
 <ol>
-<li>Excel を起動 → <strong>ファイル</strong> → <strong>オプション</strong></li>
-<li><strong>トラスト センター</strong> → <strong>トラスト センターの設定</strong></li>
-<li><strong>マクロの設定</strong> → <strong>「VBA プロジェクト オブジェクト モデルへのアクセスを信頼する」をチェック</strong></li>
-<li><strong>OK</strong> で閉じる</li>
+<li>インストール対象の <strong><code>.xlsm</code> ファイルを Excel で開いていたら、まず閉じてください</strong>
+   （bat が裏で Excel を起動するので、二重起動を避けるためです）</li>
+<li>ドラッグ前のフォルダ画面（STEP 2 の画像と同じ状態）を出して、
+   <strong>あなたの <code>.xlsm</code> を <code>Install-KnowledgevbaModules.bat</code> の上にドラッグ＆ドロップ</strong> します</li>
+<li>黒い窓（PowerShell）が立ち上がり、自動でモジュールのダウンロード → 取り込み →
+   シートとボタンの自動生成が走ります（30 秒〜1 分くらい）</li>
+<li>最後に <strong>「Done.」</strong> と表示されて <strong>「続行するには何かキーを押してください . . .」</strong>
+   で待機状態になったら成功です。Enter キーで閉じてください。</li>
 </ol>
-<p>この設定は Excel のユーザプロファイル単位で保存されます（マシン単位ではない）。
-一度設定すれば次回以降は自動で有効です。</p>
+<p><img alt="インストーラ完了画面" src="../images/installer/05_console_done.png" /></p>
+<blockquote>
+<p><strong>もし <code>.xlsm</code> を持っていない場合</strong>:
+新しい空の Excel ブックを作って、<strong>「ファイル」 → 「名前を付けて保存」</strong> で
+ファイルの種類を <strong>「Excel マクロ有効ブック (.xlsm)」</strong> にして保存してください。
+拡張子が <code>.xlsm</code> のファイルが必要です（<code>.xlsx</code> だと VBA が入らないので使えません）。</p>
+</blockquote>
 <hr />
-<h2 id="_5">使い方<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
-<h3 id="1">方法 1: ドラッグ &amp; ドロップ（推奨）<a class="headerlink" href="#1" title="Permanent link">&para;</a></h3>
-<ol>
-<li>インストール対象の <code>.xlsm</code> を <strong><code>Install-KnowledgevbaModules.bat</code> の上にドラッグ &amp; ドロップ</strong></li>
-<li>PowerShell が起動して 26 モジュールをダウンロード + import + 初期化</li>
-<li>完了したら <code>pause</code> で待機（Enter で閉じる）</li>
-<li>対象 <code>.xlsm</code> を再度開いて、シートとボタンが生成されていることを確認</li>
-</ol>
-<h3 id="2">方法 2: コマンドプロンプトから<a class="headerlink" href="#2" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>cd %USERPROFILE%\Downloads\knowledgevba_installer
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>Install-KnowledgevbaModules.bat &quot;C:\path\to\your_book.xlsm&quot;
-</code></pre></div>
-<h3 id="3-cowork">方法 3: Cowork デモモード<a class="headerlink" href="#3-cowork" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>Install-KnowledgevbaModules.bat &quot;C:\path\to\demo_book.xlsm&quot; /demo
-</code></pre></div>
-<p><code>/demo</code> フラグを付けると、ThisWorkbook が <strong>OnTime auto-init 版</strong> に置き換わります
-（コンテンツ有効化の 1〜2 秒後にシート + ボタン + デモナレッジが自動投入される）。
-省略時は <strong>本番版</strong>（auto-init なし、起動時にユーザが手動で <code>SetupSheetsAndButtons</code> を実行する想定）。</p>
-<hr />
-<h2 id="_6">何をしているか<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
-<p>PowerShell スクリプトは内部で以下を実行します。</p>
-<ol>
-<li><code>https://raw.githubusercontent.com/ai-crafted-portfolio/knowledgevba/main/docs/source/&lt;layer&gt;/&lt;name&gt;.md</code>
-   から各モジュール .md を取得</li>
-<li>各 .md の <code>```vba ... ```</code> コードブロックを抽出</li>
-<li>.bas / .cls ヘッダ（<code>Attribute VB_Name = "..."</code> / <code>VERSION 1.0 CLASS</code> 等）を補完</li>
-<li><strong>Sanitize-ForCp932 関数で CP932 非互換文字（<code>▶</code> <code>²</code> <code>≤</code> <code>–</code> 等）を <code>?</code> に置換</strong></li>
-<li><strong>改行を <code>\r\n</code>（CRLF）に正規化</strong>（VBE Import が LF を受理しないため）</li>
-<li><strong>Shift_JIS（CP932）エンコード</strong>で <code>%TEMP%\knowledgevba_modules\</code> に保存</li>
-<li>Excel COM で対象 .xlsm を開き <code>VBProject.VBComponents.Import()</code> で投入</li>
-<li>ThisWorkbook は <code>CodeModule.AddFromString()</code> で本体だけ差し替え（Import 不可のため）</li>
-<li><code>Application.Run("SetupSheetsAndButtons", false)</code> で 14 シート + 29 ボタンを生成</li>
-<li>保存して Excel を quit、作業フォルダを清掃</li>
-</ol>
-<hr />
-<h2 id="_7">トラブルシューティング<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
-<h3 id="q1-access-to-the-vba-project-is-not-trusted">Q1. 「access to the VBA Project is not trusted」エラー<a class="headerlink" href="#q1-access-to-the-vba-project-is-not-trusted" title="Permanent link">&para;</a></h3>
-<p>事前設定の「VBA プロジェクト オブジェクト モデルへのアクセスを信頼する」が OFF です。
-Excel オプションで ON にしてください（上記 <a href="#一度だけ必須">事前設定</a> を参照）。</p>
-<h3 id="q2-compile-error-invalid-procedure-call">Q2. 「Compile error: invalid procedure call」または「ステートメントの最後」が出る<a class="headerlink" href="#q2-compile-error-invalid-procedure-call" title="Permanent link">&para;</a></h3>
-<p>サイトの md ソースに CP932 非互換文字が残っている、または改行が LF のままになっている可能性。
-本スクリプトは Sanitize-ForCp932 と CRLF 正規化を import 前に実施しますが、サニタイズ後も残った
-コンパイルエラーがあれば該当行をスクショ + モジュール名を連絡してください
-（2026-05-08 の cp932 commits で網羅修正済の想定です）。</p>
-<h3 id="q3-26-import">Q3. 26 モジュール全部 import されない<a class="headerlink" href="#q3-26-import" title="Permanent link">&para;</a></h3>
-<p>bat ウィンドウのコンソール出力を見ると <code>+ imported XXX</code> のログが出ます。
-出ていないモジュールは:</p>
-<ul>
-<li>ダウンロード失敗（サイト 404 / ネットワーク）</li>
-<li>該当 .md にコードブロックが無い（フロントマター修正待ち）</li>
-</ul>
-<p>のどちらか。出力で <code>[WARN]</code> 行があるはずなのでそれを確認してください。</p>
-<h3 id="q4">Q4. 既存ナレッジデータが消える？<a class="headerlink" href="#q4" title="Permanent link">&para;</a></h3>
-<p><strong>消えません</strong>。このスクリプトは VBA モジュールの差替えだけで、シート上のデータは触りません。
-ただし <code>SetupSheetsAndButtons</code> は不足しているシート + ボタンを追加するので、
-<strong>新規シートが増える可能性</strong>はあります（既存シートは保持）。</p>
-<h3 id="q5">Q5. もう一度実行するとどうなる？<a class="headerlink" href="#q5" title="Permanent link">&para;</a></h3>
-<p>何度実行しても OK（idempotent）。同名モジュールは削除 → 再 import で常に最新版に揃います。
-ThisWorkbook も DeleteLines + AddFromString で完全置換されます。</p>
-<hr />
-<h2 id="adr">関連 ADR<a class="headerlink" href="#adr" title="Permanent link">&para;</a></h2>
-<ul>
-<li>ADR 0008: VBA 配布パターン（モジュール手動 import + Setup マクロ）</li>
-<li>ADR 0026: real Excel COM ビルド経路（aspose binary stub の罠回避）</li>
-<li>ADR 0027: クラスモジュール内 Public Const 禁止</li>
-<li>ADR 0028: Function/Sub Exit 文の整合性</li>
-<li>ADR 0035: VBA source の CP932 互換性（ユーザ入力 SJIS 整合）</li>
-</ul>
-<p>このインストーラ自体の方針は実質 ADR-0008 + 0026 + 0035 の組合せです。</p>
+<h2 id="step-4-excel">STEP 4. Excel で開いて動作確認<a class="headerlink" href="#step-4-excel" title="Permanent link">&para;</a></h2>
+<p>完了した <code>.xlsm</code> を <strong>ダブルクリックして再度開いてください</strong>。</p>
+<p>開くと <strong>「セキュリティの警告 マクロが無効にされました」</strong> という黄色いバーが
+画面上部に出ることがあります。<strong>「コンテンツの有効化」</strong> ボタンを押してください
+（マクロを使うので、この一手間だけ必要です）。</p>
+<p>すると <strong>「メイン」</strong> シートに <strong>「初回セットアップ」「設定変更」「ナレッジ登録」「検索」</strong>
+などのボタンが</p>
 
 
 
