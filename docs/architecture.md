@@ -169,37 +169,9 @@ flowchart LR
 
 ## 6. 拡張ポイント
 
-将来の変更時に触る予定のファイルを限定するための境界:
+拡張時に触るファイルの境界:
 
 - **新フォーマット追加** — `clsFormatManager` のフォーマット定義テーブルを追加、`clsFieldMigrator` で旧→新の写像を定義
 - **新しい UserForm を spec 駆動で追加** — `modSpecExamples.bas` を雛形にして `clsFormSpec.AddControl` で宣言、`modFormBuilder.BuildAndShow` で起動
 - **新シート追加** — `modSetup.bas` の `RequiredSheets` 配列に追加、ボタン配置の Anchor 範囲も追記
 
-
----
-
-## TODO・制約・既知の限界
-
-### 制約
-
-- VBA 子プロセス禁止（Shell/Run/WScript.Shell/Exec）— 職場 PC ポリシー (ADR-0002)
-- クラスモジュール (.cls) 内の `Public Const/Type/Declare/Static` 禁止 (ADR-0027)
-- aspose-cells-python 単独では VBA binary stub のみ生成、real Excel COM 必須 (ADR-0026)
-- mkdocs Material のモバイル UX が完璧ではない（ナビ collapse は OK、図解の細部は要確認）
-
-### 既知の限界
-
-- Excel 単体動作のため Web/モバイルでは利用不可
-- 同時編集なし（ファイルベース、Git 等での並行編集が必要）
-- 検索性能はモジュール数 O(n) 線形（数千ナレッジまでは実用）
-
-### TODO（v15 以降のロードマップ）
-
-- M-5: modImageRender の RowHeight 副作用排除
-- D-3: clsKnowledgeManager / clsSearchEngine / clsTaskController に Worksheet DI 追加
-- D-5: 責務固有の Const をクラス側へ移動
-- Minor m-1: SHEET_* / FIELD_TYPE_* の Enum 化
-- ベンチマーク取得（A+ 到達条件）
-- 単体テストカバレッジ整備（A+ 到達条件）
-
-詳細は ADR ([0001-0033](https://github.com/ai-crafted-portfolio/knowledgevba)) を参照。

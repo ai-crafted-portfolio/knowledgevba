@@ -33,7 +33,7 @@ Option Explicit
 
 ' Phase 6 レビュー: 9 subs/funcs に対し On Error GoTo は 1 件のみ。
 ' Public method (Init / RunMigration) は ErrHandler 補強推奨だが、
-' 既存 89 テスト互換性のため本 v4 では指摘記録のみ (v5 で対応予定)。
+' 既存 89 テスト互換性のため本 v4 では指摘記録のみ。
 
 ' ================================================================
 ' クラス: clsFieldMigrator（ビジネスロジック層）
