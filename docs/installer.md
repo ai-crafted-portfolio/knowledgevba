@@ -1,150 +1,122 @@
 # インストーラ
 
-knowledgevba の VBA モジュール 26 本を、既存の `.xlsm` に **1 クリックで一括 import + 初期化**
-するためのインストーラです。`.bat` に `.xlsm` をドラッグ & ドロップするだけで、
-ダウンロード → CP932 サニタイズ → CRLF 正規化 → VBComponents.Import → SetupSheetsAndButtons
-までを完走します。
+knowledgevba をあなたの Excel ブックに紐づけて、「ナレッジ登録 / 検索」のボタンが
+並んだ画面が使えるようにするためのツールです。
+
+下の **STEP 1 〜 STEP 4** の順にやれば、初めての方でも 10 分ほどで完了します。
+各 STEP に画像を添えてあるので、画面上の同じ場所をクリックしてください。
 
 ---
 
-## ダウンロード
+## 必要なもの
 
-以下 3 ファイルを同じフォルダに保存してください（Windows のエクスプローラから右クリック →
-「名前を付けてリンク先を保存」）。
+- Windows 11 か Windows 10 の PC（Windows 標準の機能だけで動きます）
+- Microsoft Excel が入っていること（バージョンは何でも OK）
 
-| ファイル | リンク |
-| --- | --- |
-| `Install-KnowledgevbaModules.bat` | [raw を保存](https://raw.githubusercontent.com/ai-crafted-portfolio/knowledgevba/main/installer/Install-KnowledgevbaModules.bat) |
-| `Install-KnowledgevbaModules.ps1` | [raw を保存](https://raw.githubusercontent.com/ai-crafted-portfolio/knowledgevba/main/installer/Install-KnowledgevbaModules.ps1) |
-| `README.md`（使い方の詳細） | [raw を保存](https://raw.githubusercontent.com/ai-crafted-portfolio/knowledgevba/main/installer/README.md) |
-
-PowerShell 経由でまとめてダウンロードする場合:
-
-```powershell
-$base = "https://raw.githubusercontent.com/ai-crafted-portfolio/knowledgevba/main/installer"
-$dst  = "$env:USERPROFILE\Downloads\knowledgevba_installer"
-New-Item -ItemType Directory -Force -Path $dst | Out-Null
-foreach ($f in 'Install-KnowledgevbaModules.bat','Install-KnowledgevbaModules.ps1','README.md') {
-    Invoke-WebRequest "$base/$f" -OutFile "$dst\$f"
-}
-explorer $dst
-```
+それだけです。GitHub のアカウントや Python・PowerShell の知識はいりません。
 
 ---
 
-## 動作環境
+## STEP 1. Excel の設定を 1 か所だけ変更（最初の 1 回だけ）
 
-- Windows 10 / 11
-- Microsoft Excel（VBA 有効化）
-- PowerShell 5.1 以上（Windows 標準）
+このインストーラは VBA（Excel の中で動くマクロ）を、あなたのブックに自動で取り込みます。
+Excel の初期設定だと「VBA の自動取り込み」がブロックされているので、最初に 1 か所だけ
+チェックを入れます。**この作業は最初の 1 回だけ**で OK です。
 
----
+### 1-1. Excel を起動して「オプション」を開く
 
-## 事前設定（一度だけ必須）
+Excel を起動した直後の画面（または何かブックを開いた状態でも OK）で、
+画面左下にある **「オプション」** をクリックしてください。
 
-PowerShell から `VBProject.VBComponents.Import` を呼ぶには、Excel の以下のオプションが ON
-になっている必要があります。OFF だとインストーラが「access to the VBA Project is not trusted」
-で停止します。
+![Excel のオプションを開く](images/installer/01_file_options.png)
 
-1. Excel を起動 → **ファイル** → **オプション**
-2. **トラスト センター** → **トラスト センターの設定**
-3. **マクロの設定** → **「VBA プロジェクト オブジェクト モデルへのアクセスを信頼する」をチェック**
-4. **OK** で閉じる
+> もし「オプション」が画面左下に見えない場合は、左側のメニュー（ホーム / 新規 / 開く …）を
+> 一番下までスクロールしてください。**アカウント** の下に **オプション** があります。
 
-この設定は Excel のユーザプロファイル単位で保存されます（マシン単位ではない）。
-一度設定すれば次回以降は自動で有効です。
+### 1-2. 「トラスト センター」 → 「トラスト センターの設定」を押す
 
----
+「Excel のオプション」というウィンドウが開きます。
 
-## 使い方
+1. 左メニューの一番下にある **「トラスト センター」** をクリック
+2. 右側の画面が切り替わるので、出てきた **「トラスト センターの設定(T)…」** という
+   ボタンを押す（下の画像の赤枠）
 
-### 方法 1: ドラッグ & ドロップ（推奨）
+![トラスト センターの設定ボタン](images/installer/02_trust_center_button.png)
 
-1. インストール対象の `.xlsm` を **`Install-KnowledgevbaModules.bat` の上にドラッグ & ドロップ**
-2. PowerShell が起動して 26 モジュールをダウンロード + import + 初期化
-3. 完了したら `pause` で待機（Enter で閉じる）
-4. 対象 `.xlsm` を再度開いて、シートとボタンが生成されていることを確認
+### 1-3. 「マクロの設定」のチェックボックスを ON にする
 
-### 方法 2: コマンドプロンプトから
+新しく開いた「トラスト センター」ウィンドウで、左メニューから **「マクロの設定」** を
+クリック。右側に **「VBA プロジェクト オブジェクト モデルへのアクセスを信頼する」**
+というチェックボックスが出てくるので、これに **チェックを入れて** ください。
 
-```cmd
-cd %USERPROFILE%\Downloads\knowledgevba_installer
-Install-KnowledgevbaModules.bat "C:\path\to\your_book.xlsm"
-```
+![チェックボックスを ON にする](images/installer/03_check_vbom.png)
 
-### 方法 3: Cowork デモモード
+### 1-4. 「OK」を 2 回押して閉じる
 
-```cmd
-Install-KnowledgevbaModules.bat "C:\path\to\demo_book.xlsm" /demo
-```
+「トラスト センター」の **OK** → 「Excel のオプション」の **OK** の順に押して、
+両方のウィンドウを閉じます。これで Excel 側の事前設定は完了です。
 
-`/demo` フラグを付けると、ThisWorkbook が **OnTime auto-init 版** に置き換わります
-（コンテンツ有効化の 1〜2 秒後にシート + ボタン + デモナレッジが自動投入される）。
-省略時は **本番版**（auto-init なし、起動時にユーザが手動で `SetupSheetsAndButtons` を実行する想定）。
+> この設定は Excel に保存されるので、次から STEP 1 はやらなくて OK です。
 
 ---
 
-## 何をしているか
+## STEP 2. インストーラ 2 ファイルをダウンロードする
 
-PowerShell スクリプトは内部で以下を実行します。
+下のリンクから **2 つのファイル** を、**同じフォルダに** ダウンロードしてください。
+（保存先は迷ったら **「ダウンロード」フォルダ** で OK です。）
 
-1. `https://raw.githubusercontent.com/ai-crafted-portfolio/knowledgevba/main/docs/source/<layer>/<name>.md`
-   から各モジュール .md を取得
-2. 各 .md の ` ```vba ... ``` ` コードブロックを抽出
-3. .bas / .cls ヘッダ（`Attribute VB_Name = "..."` / `VERSION 1.0 CLASS` 等）を補完
-4. **Sanitize-ForCp932 関数で CP932 非互換文字（`▶` `²` `≤` `–` 等）を `?` に置換**
-5. **改行を `\r\n`（CRLF）に正規化**（VBE Import が LF を受理しないため）
-6. **Shift_JIS（CP932）エンコード**で `%TEMP%\knowledgevba_modules\` に保存
-7. Excel COM で対象 .xlsm を開き `VBProject.VBComponents.Import()` で投入
-8. ThisWorkbook は `CodeModule.AddFromString()` で本体だけ差し替え（Import 不可のため）
-9. `Application.Run("SetupSheetsAndButtons", false)` で 14 シート + 29 ボタンを生成
-10. 保存して Excel を quit、作業フォルダを清掃
+| ファイル | 役割 | リンク |
+| --- | --- | --- |
+| `Install-KnowledgevbaModules.bat` | これに Excel ブックをドラッグするやつ | [ダウンロード](https://raw.githubusercontent.com/ai-crafted-portfolio/knowledgevba/main/installer/Install-KnowledgevbaModules.bat) |
+| `Install-KnowledgevbaModules.ps1` | bat の中で動く処理本体 | [ダウンロード](https://raw.githubusercontent.com/ai-crafted-portfolio/knowledgevba/main/installer/Install-KnowledgevbaModules.ps1) |
 
----
+リンクを **右クリック → 「名前を付けてリンク先を保存」** で保存できます。
+解凍などは不要です。
 
-## トラブルシューティング
+ダウンロード後、エクスプローラで保存先フォルダを開くと、下の画像のように
+**あなたの Excel ブック（例：`your_book.xlsm`） + bat + ps1 の 3 ファイルが
+同じフォルダに並んでいる** 状態にしてください（あなたの xlsm をこのフォルダに
+コピーしてくれば OK です）。
 
-### Q1. 「access to the VBA Project is not trusted」エラー
+![3 ファイルを同じフォルダに置く](images/installer/04_three_files.png)
 
-事前設定の「VBA プロジェクト オブジェクト モデルへのアクセスを信頼する」が OFF です。
-Excel オプションで ON にしてください（上記 [事前設定](#一度だけ必須) を参照）。
+> **チェック**: ファイル名の末尾は `.bat` と `.ps1` です。Windows の設定で拡張子が
+> 表示されていない場合、見た目では区別がつきにくいですが、種類欄に
+> 「Windows バッチ ファイル」「Windows PowerShell スクリプト ファイル」と書かれていれば OK。
 
-### Q2. 「Compile error: invalid procedure call」または「ステートメントの最後」が出る
-
-サイトの md ソースに CP932 非互換文字が残っている、または改行が LF のままになっている可能性。
-本スクリプトは Sanitize-ForCp932 と CRLF 正規化を import 前に実施しますが、サニタイズ後も残った
-コンパイルエラーがあれば該当行をスクショ + モジュール名を連絡してください
-（2026-05-08 の cp932 commits で網羅修正済の想定です）。
-
-### Q3. 26 モジュール全部 import されない
-
-bat ウィンドウのコンソール出力を見ると `+ imported XXX` のログが出ます。
-出ていないモジュールは:
-
-- ダウンロード失敗（サイト 404 / ネットワーク）
-- 該当 .md にコードブロックが無い（フロントマター修正待ち）
-
-のどちらか。出力で `[WARN]` 行があるはずなのでそれを確認してください。
-
-### Q4. 既存ナレッジデータが消える？
-
-**消えません**。このスクリプトは VBA モジュールの差替えだけで、シート上のデータは触りません。
-ただし `SetupSheetsAndButtons` は不足しているシート + ボタンを追加するので、
-**新規シートが増える可能性**はあります（既存シートは保持）。
-
-### Q5. もう一度実行するとどうなる？
-
-何度実行しても OK（idempotent）。同名モジュールは削除 → 再 import で常に最新版に揃います。
-ThisWorkbook も DeleteLines + AddFromString で完全置換されます。
+> **もしダウンロードした bat / ps1 が「ブロックされています」と警告されたら**:
+> ファイルを右クリック → プロパティ → 一番下の **「許可する」** にチェックを入れて OK。
+> Windows 11 のセキュリティ機能（Mark of the Web）が原因です。
 
 ---
 
-## 関連 ADR
+## STEP 3. あなたの Excel ブックを bat にドラッグ
 
-- ADR 0008: VBA 配布パターン（モジュール手動 import + Setup マクロ）
-- ADR 0026: real Excel COM ビルド経路（aspose binary stub の罠回避）
-- ADR 0027: クラスモジュール内 Public Const 禁止
-- ADR 0028: Function/Sub Exit 文の整合性
-- ADR 0035: VBA source の CP932 互換性（ユーザ入力 SJIS 整合）
+1. インストール対象の **`.xlsm` ファイルを Excel で開いていたら、まず閉じてください**
+   （bat が裏で Excel を起動するので、二重起動を避けるためです）
+2. ドラッグ前のフォルダ画面（STEP 2 の画像と同じ状態）を出して、
+   **あなたの `.xlsm` を `Install-KnowledgevbaModules.bat` の上にドラッグ＆ドロップ** します
+3. 黒い窓（PowerShell）が立ち上がり、自動でモジュールのダウンロード → 取り込み →
+   シートとボタンの自動生成が走ります（30 秒〜1 分くらい）
+4. 最後に **「Done.」** と表示されて **「続行するには何かキーを押してください . . .」**
+   で待機状態になったら成功です。Enter キーで閉じてください。
 
-このインストーラ自体の方針は実質 ADR-0008 + 0026 + 0035 の組合せです。
+![インストーラ完了画面](images/installer/05_console_done.png)
+
+> **もし `.xlsm` を持っていない場合**:
+> 新しい空の Excel ブックを作って、**「ファイル」 → 「名前を付けて保存」** で
+> ファイルの種類を **「Excel マクロ有効ブック (.xlsm)」** にして保存してください。
+> 拡張子が `.xlsm` のファイルが必要です（`.xlsx` だと VBA が入らないので使えません）。
+
+---
+
+## STEP 4. Excel で開いて動作確認
+
+完了した `.xlsm` を **ダブルクリックして再度開いてください**。
+
+開くと **「セキュリティの警告 マクロが無効にされました」** という黄色いバーが
+画面上部に出ることがあります。**「コンテンツの有効化」** ボタンを押してください
+（マクロを使うので、この一手間だけ必要です）。
+
+すると **「メイン」** シートに **「初回セットアップ」「設定変更」「ナレッジ登録」「検索」**
+などのボタンが
