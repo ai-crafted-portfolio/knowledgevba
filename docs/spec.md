@@ -1,6 +1,6 @@
 ---
 title: 仕様
-description: モジュール構成、検索スコアリング、画像解決規則、spec 駆動 UserForm DSL、ChromaDB 切替ポイント、テスト構成
+description: モジュール構成、検索スコアリング、画像解決規則、spec 駆動 UserForm DSL、テスト構成
 tags:
   - excel
   - vba
@@ -57,10 +57,10 @@ $$
 | 順位 | KnwNo | タイトル | 備考 |
 |---|---|---|---|
 | 1 | KN-2026-0420 | メモリ枯渇エラー対処メモ | タイトル「メモ」2 回 ×3 ブースト + 本文出現 |
-| 2 | KN-2026-0421 | ChromaDB HNSW 再構築手順メモ | — |
+| 2 | KN-2026-0421 | サーバ再起動手順メモ | — |
 | 3 | KN-2026-0424 | サムネ画像の自動配置メモ | — |
 | 4 | KN-2026-0422 | VBA ADODB.Stream の代替メモ | — |
-| 5 | KN-2026-0423 | RAG 検索のスコアリング設計 | タイトル「メモ」なし、本文ヒットのみ |
+| 5 | KN-2026-0423 | スコアリング設計メモ | タイトル「メモ」なし、本文ヒットのみ |
 
 検索モードは `AND` / `OR` を切替可能。`TargetField` で「全フィールド」「タイトルのみ」「本文のみ」等のスコープを絞れます。
 
@@ -136,19 +136,7 @@ End Sub
 
 `clsFieldMigrator` は旧フォーマットから新フォーマットへフィールド名を写像する役割で、フォーマット定義を変更しても既存ナレッジを壊さずに済むようになっています。
 
-## 7. ChromaDB 連動切替ポイント
-
-本実装は `<dataFolder>/*.txt` を ADODB で SJIS 読込する **モック実装** です。本番では `clsSearchEngine.cls` 冒頭のコメントブロックに記載の手順で:
-
-1. 事前 ETL で chunks を `Sheet "Data"` に export しておく
-2. `ScanAndMatch` の txt ループ箇所を Range 走査に置換する
-
-この変更点は `clsSearchEngine` 1 ファイルに局所化されており、上位エントリポイントには影響しません。
-
-!!! danger "VBA からの子プロセス起動禁止"
-    `Shell` / `VBA.Shell` / `WScript.Shell.Run` / `WScript.Shell.Exec` 等の子プロセス起動は職場 PC では UAC 昇格や黙殺が発生して動かないため、本ツールでは **全面禁止** です（[ADR-0002](architecture.md#5-adr)）。ChromaDB 連携も外部プロセス起動ではなく、事前 ETL → Excel 内 Range 走査の方式を採ります。
-
-## 8. テスト構成
+## 7. テスト構成
 
 | 区分 | 件数 | 実行方法 |
 |---|---|---|
@@ -170,7 +158,7 @@ End Sub
 
 拡張テスト本体（`modTestRunnerExt.bas`）は dev 専用で、配布物には含まれません。
 
-## 9. v1 → v2 → v3 の差分
+## 8. v1 → v2 → v3 の差分
 
 | 項目 | v1 | v2 | v3（最新） |
 |---|---|---|---|
@@ -182,7 +170,7 @@ End Sub
 
 職場本番展開（`release_v2/`）には `clsSearchEngine` の修正のみが恒久反映されます。Workbook_Open 自動初期化と `modDemoSeeder` はデモ専用です。
 
-## 10. バージョン
+## 9. バージョン
 
 - **release v2** — rev21 ベース（M6-002/003/004 の検索結合セル対策、ボタン配置のセルアンカー対応を含む）
 - **image_ext rev1（2026-05-04）** — 検索結果画像列追加 + UserForm spec 駆動生成基盤
@@ -196,7 +184,6 @@ End Sub
 ### 制約
 
 - VBA 子プロセス禁止（Shell/Run/WScript.Shell/Exec）— 職場 PC ポリシー (ADR-0002)
-- ChromaDB 等の外部 RAG 連携無効化 — Cowork 隔離 (ADR-0004)
 - クラスモジュール (.cls) 内の `Public Const/Type/Declare/Static` 禁止 (ADR-0027)
 - aspose-cells-python 単独では VBA binary stub のみ生成、real Excel COM 必須 (ADR-0026)
 - mkdocs Material のモバイル UX が完璧ではない（ナビ collapse は OK、図解の細部は要確認）
@@ -205,7 +192,7 @@ End Sub
 
 - Excel 単体動作のため Web/モバイルでは利用不可
 - 同時編集なし（ファイルベース、Git 等での並行編集が必要）
-- 検索性能はモジュール数 O(n) 線形（数千ナレッジまでは実用、それ以上は ChromaDB 移行検討）
+- 検索性能はモジュール数 O(n) 線形（数千ナレッジまでは実用）
 
 ### TODO（v15 以降のロードマップ）
 

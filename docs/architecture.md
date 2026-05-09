@@ -175,13 +175,12 @@ flowchart LR
 | ビジネスロジック層 | 検索スコアリング、ImagePath 解決、FormSpec | T10/T11 系 |
 | 配布パターン | セットアップマクロの冪等性、シート存在チェック、ボタン重複削除 | M6 系 |
 
-合計 **PASS 89 / SKIP 4 / FAIL 0**（既存 82 + image_ext rev1 拡張 7）が完了条件です。詳細は [仕様 §8](spec.md#8) を参照。
+合計 **PASS 89 / SKIP 4 / FAIL 0**（既存 82 + image_ext rev1 拡張 7）が完了条件です。詳細は [仕様 §7](spec.md#7) を参照。
 
 ## 7. 拡張ポイント
 
 将来の変更時に触る予定のファイルを限定するための境界:
 
-- **ChromaDB 移行** — `clsSearchEngine.cls` 1 ファイルのみ差し替え（txt 走査 → Range 走査）
 - **新フォーマット追加** — `clsFormatManager` のフォーマット定義テーブルを追加、`clsFieldMigrator` で旧→新の写像を定義
 - **新しい UserForm を spec 駆動で追加** — `modSpecExamples.bas` を雛形にして `clsFormSpec.AddControl` で宣言、`modFormBuilder.BuildAndShow` で起動
 - **新シート追加** — `modSetup.bas` の `RequiredSheets` 配列に追加、ボタン配置の Anchor 範囲も追記
@@ -194,7 +193,6 @@ flowchart LR
 ### 制約
 
 - VBA 子プロセス禁止（Shell/Run/WScript.Shell/Exec）— 職場 PC ポリシー (ADR-0002)
-- ChromaDB 等の外部 RAG 連携無効化 — Cowork 隔離 (ADR-0004)
 - クラスモジュール (.cls) 内の `Public Const/Type/Declare/Static` 禁止 (ADR-0027)
 - aspose-cells-python 単独では VBA binary stub のみ生成、real Excel COM 必須 (ADR-0026)
 - mkdocs Material のモバイル UX が完璧ではない（ナビ collapse は OK、図解の細部は要確認）
@@ -203,7 +201,7 @@ flowchart LR
 
 - Excel 単体動作のため Web/モバイルでは利用不可
 - 同時編集なし（ファイルベース、Git 等での並行編集が必要）
-- 検索性能はモジュール数 O(n) 線形（数千ナレッジまでは実用、それ以上は ChromaDB 移行検討）
+- 検索性能はモジュール数 O(n) 線形（数千ナレッジまでは実用）
 
 ### TODO（v15 以降のロードマップ）
 

@@ -41,14 +41,6 @@ Option Explicit
 '         modImageRender (新規; サムネ/詳細画像 Shape 描画)
 ' ================================================================
 '
-' ====================================================================
-' [真版 ChromaDB 連動 切替ポイント]
-' 本クラスはモック実装として <dataFolder>/*.txt を ADODB で SJIS 読込し
-' スタンザを line-split して match 判定する。真版では事前 ETL で
-' "Data" シートに chunks を export しておき ScanAndMatch の txt ループを
-' Range 走査に置き換える。VBA 子プロセス禁止 (Shell/Run/Exec/CreateObject
-' Exec 系全部禁止) のため、本クラスから外部プロセスを起動しない。
-' ====================================================================
 
 ' --- 検索シートのセル位置 ---
 Private Const SS_ROW_DIRECT_NO As Long = 3

@@ -222,9 +222,9 @@ Private Sub SeedKnowledgeListPlaceholder()
     Dim arr As Variant
     arr = Array( _
         Array("KN-2026-0420", "メモリ枯渇エラー対処メモ"), _
-        Array("KN-2026-0421", "ChromaDB HNSW 再構築手順"), _
+        Array("KN-2026-0421", "サーバ再起動手順"), _
         Array("KN-2026-0422", "VBA ADODB.Stream の代替"), _
-        Array("KN-2026-0423", "RAG 検索のスコアリング設計"), _
+        Array("KN-2026-0423", "スコアリング設計"), _
         Array("KN-2026-0424", "サムネ画像の自動配置メモ") _
     )
 

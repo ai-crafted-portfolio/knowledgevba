@@ -101,7 +101,7 @@ Public Sub Macro_ShowSearchResultPreview()
     Set spec = NewSearchResultSpec(knwNo, "", _
                                      "Title: " & title & vbCrLf & _
                                      "Score: " & score & vbCrLf & vbCrLf & _
-                                     "(画像と本文は ChromaDB 連動真版で展開)")
+                                     "(画像と本文は本番版で展開)")
 
     Call BuildAndShow(spec, True)
     Exit Sub

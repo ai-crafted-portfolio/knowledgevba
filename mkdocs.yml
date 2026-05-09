@@ -67,6 +67,7 @@ nav:
   - 仕様: spec.md
   - アーキテクチャ: architecture.md
   - Q&A (なぜこの設計？): qa.md
+  - 操作マニュアル: operations.md
   - ソースコード:
       - 一覧: source/index.md
       - エントリポイント:

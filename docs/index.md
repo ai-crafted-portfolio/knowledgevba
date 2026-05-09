@@ -14,7 +14,6 @@ tags:
 ## このツールで解決したいこと
 
 - 過去の障害メモや手順を「あのとき書いたはずだ」で終わらせない
-- ChromaDB / RAG への移行前に、最低限のスコアリング検索 UI を VBA で先行提供する
 - 子プロセス起動禁止・社内エンドポイントセキュリティポリシーで動かない外部ツールを諦め、**Excel プロセス内で完結**する
 
 ## 想定読者
@@ -44,12 +43,12 @@ flowchart LR
 - **モジュール配布 + セルフセットアップ** — `.xlsm` 本体は配布せず、`.bas`/`.cls` 24 個 + セットアップマクロ 1 回実行という形で各 PC に展開（[ADR-0008](architecture.md#5-adr)）
 - **VBA 子プロセス全面禁止** — `Shell` / `WScript.Shell.Run` 等は職場 PC で動かないので使わず、すべて Excel プロセス内で完結（[ADR-0002](architecture.md#5-adr)）
 - **層分離** — エントリポイント / ビジネスロジック / ユーティリティ / インストーラ / 特殊 の 5 層で責務を分離。詳細は [アーキテクチャ](architecture.md) 参照
-- **ChromaDB 移行を見据えた境界** — `clsSearchEngine` 1 ファイルだけ差し替えれば txt 走査 → Range 走査に切り替えられる構造
 
 ## ページ構成
 
 - [概要](index.md)（このページ）
-- [仕様](spec.md) — モジュール 24 個、検索スコアリング、画像解決、`clsFormSpec` DSL、ChromaDB 切替ポイント、テスト構成
+- [仕様](spec.md) — モジュール 24 個、検索スコアリング、画像解決、`clsFormSpec` DSL、テスト構成
+- [操作マニュアル](operations.md) — 各シートの操作手順、ボタン名、画面遷移
 - [アーキテクチャ](architecture.md) — 層分離図、依存関係、配布パターン、関連 ADR への参照
 
 !!! note "公開可視性"
@@ -63,7 +62,6 @@ flowchart LR
 ### 制約
 
 - VBA 子プロセス禁止（Shell/Run/WScript.Shell/Exec）— 職場 PC ポリシー (ADR-0002)
-- ChromaDB 等の外部 RAG 連携無効化 — Cowork 隔離 (ADR-0004)
 - クラスモジュール (.cls) 内の `Public Const/Type/Declare/Static` 禁止 (ADR-0027)
 - aspose-cells-python 単独では VBA binary stub のみ生成、real Excel COM 必須 (ADR-0026)
 - mkdocs Material のモバイル UX が完璧ではない（ナビ collapse は OK、図解の細部は要確認）
@@ -72,7 +70,7 @@ flowchart LR
 
 - Excel 単体動作のため Web/モバイルでは利用不可
 - 同時編集なし（ファイルベース、Git 等での並行編集が必要）
-- 検索性能はモジュール数 O(n) 線形（数千ナレッジまでは実用、それ以上は ChromaDB 移行検討）
+- 検索性能はモジュール数 O(n) 線形（数千ナレッジまでは実用）
 
 ### TODO（v15 以降のロードマップ）
 
