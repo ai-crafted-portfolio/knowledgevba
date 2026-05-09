@@ -6,31 +6,37 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Excel VBA ベースのナレッジ管理ツール - 仕様書・操作手順・アーキテクチャ">
+        <meta name="description" content="各シート別の操作手順、ボタン名、画面構成">
       
       
         <meta name="author" content="ai-crafted-portfolio">
       
       
+        <link rel="canonical" href="https://ai-crafted-portfolio.github.io/knowledgevba/operations/">
       
+      
+        <link rel="prev" href="../qa/">
+      
+      
+        <link rel="next" href="../source/">
       
       
         
       
       
-      <link rel="icon" href="/knowledgevba/assets/images/favicon.png">
+      <link rel="icon" href="../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
     
     
       
-        <title>ナレッジ管理ツール (VBA 製)</title>
+        <title>操作マニュアル - ナレッジ管理ツール (VBA 製)</title>
       
     
     
-      <link rel="stylesheet" href="/knowledgevba/assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
       
         
-        <link rel="stylesheet" href="/knowledgevba/assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
       
       
 
@@ -49,9 +55,9 @@
       
     
     
-      <link rel="stylesheet" href="/knowledgevba/stylesheets/extra.css">
+      <link rel="stylesheet" href="../stylesheets/extra.css">
     
-    <script>__md_scope=new URL("/knowledgevba/",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -77,6 +83,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#_1" class="md-skip">
+          コンテンツにスキップ
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -87,7 +98,7 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="ヘッダー">
-    <a href="/knowledgevba/." title="ナレッジ管理ツール (VBA 製)" class="md-header__button md-logo" aria-label="ナレッジ管理ツール (VBA 製)" data-md-component="logo">
+    <a href=".." title="ナレッジ管理ツール (VBA 製)" class="md-header__button md-logo" aria-label="ナレッジ管理ツール (VBA 製)" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -107,7 +118,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              
+              操作マニュアル
             
           </span>
         </div>
@@ -208,7 +219,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="/knowledgevba/." class="md-tabs__link">
+      <a href=".." class="md-tabs__link">
         
   
   
@@ -227,7 +238,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="/knowledgevba/spec/" class="md-tabs__link">
+      <a href="../spec/" class="md-tabs__link">
         
   
   
@@ -246,7 +257,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="/knowledgevba/architecture/" class="md-tabs__link">
+      <a href="../architecture/" class="md-tabs__link">
         
   
   
@@ -265,7 +276,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="/knowledgevba/qa/" class="md-tabs__link">
+      <a href="../qa/" class="md-tabs__link">
         
   
   
@@ -282,9 +293,11 @@
   
   
   
+    
   
-    <li class="md-tabs__item">
-      <a href="/knowledgevba/operations/" class="md-tabs__link">
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
         
   
   
@@ -305,7 +318,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="/knowledgevba/source/" class="md-tabs__link">
+        <a href="../source/" class="md-tabs__link">
           
   
   
@@ -343,7 +356,7 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="ナビゲーション" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="/knowledgevba/." title="ナレッジ管理ツール (VBA 製)" class="md-nav__button md-logo" aria-label="ナレッジ管理ツール (VBA 製)" data-md-component="logo">
+    <a href=".." title="ナレッジ管理ツール (VBA 製)" class="md-nav__button md-logo" aria-label="ナレッジ管理ツール (VBA 製)" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -361,7 +374,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/knowledgevba/." class="md-nav__link">
+      <a href=".." class="md-nav__link">
         
   
   
@@ -388,7 +401,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/knowledgevba/spec/" class="md-nav__link">
+      <a href="../spec/" class="md-nav__link">
         
   
   
@@ -415,7 +428,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/knowledgevba/architecture/" class="md-nav__link">
+      <a href="../architecture/" class="md-nav__link">
         
   
   
@@ -442,7 +455,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/knowledgevba/qa/" class="md-nav__link">
+      <a href="../qa/" class="md-nav__link">
         
   
   
@@ -466,10 +479,37 @@
       
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="/knowledgevba/operations/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    操作マニュアル
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -485,6 +525,169 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目次">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目次
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        メイン画面
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. ナレッジ登録
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. ナレッジ修正
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. ナレッジ一覧
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 検索
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. ナレッジ表示
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. フォーマット設計
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. フォーマット一覧
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. フォーマットプレビュー
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. 既存データへのフィールド反映
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. 格納先設定
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. 設定
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12. ログ確認
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -533,7 +736,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="/knowledgevba/source/" class="md-nav__link ">
+            <a href="../source/" class="md-nav__link ">
               
   
   
@@ -643,7 +846,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/knowledgevba/source/entrypoint/modentrymain/" class="md-nav__link">
+      <a href="../source/entrypoint/modentrymain/" class="md-nav__link">
         
   
   
@@ -671,7 +874,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/knowledgevba/source/entrypoint/modentrysearch/" class="md-nav__link">
+      <a href="../source/entrypoint/modentrysearch/" class="md-nav__link">
         
   
   
@@ -699,7 +902,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/knowledgevba/source/entrypoint/modentryknowledge/" class="md-nav__link">
+      <a href="../source/entrypoint/modentryknowledge/" class="md-nav__link">
         
   
   
@@ -727,7 +930,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/knowledgevba/source/entrypoint/modentryformat/" class="md-nav__link">
+      <a href="../source/entrypoint/modentryformat/" class="md-nav__link">
         
   
   
@@ -755,7 +958,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/knowledgevba/source/entrypoint/modentrysettings/" class="md-nav__link">
+      <a href="../source/entrypoint/modentrysettings/" class="md-nav__link">
         
   
   
@@ -783,7 +986,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/knowledgevba/source/entrypoint/modspecexamples/" class="md-nav__link">
+      <a href="../source/entrypoint/modspecexamples/" class="md-nav__link">
         
   
   
@@ -891,7 +1094,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/knowledgevba/source/business-logic/clssearchengine/" class="md-nav__link">
+      <a href="../source/business-logic/clssearchengine/" class="md-nav__link">
         
   
   
@@ -919,7 +1122,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/knowledgevba/source/business-logic/clsknowledgemanager/" class="md-nav__link">
+      <a href="../source/business-logic/clsknowledgemanager/" class="md-nav__link">
         
   
   
@@ -947,7 +1150,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/knowledgevba/source/business-logic/clsformatmanager/" class="md-nav__link">
+      <a href="../source/business-logic/clsformatmanager/" class="md-nav__link">
         
   
   
@@ -975,7 +1178,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/knowledgevba/source/business-logic/clstaskcontroller/" class="md-nav__link">
+      <a href="../source/business-logic/clstaskcontroller/" class="md-nav__link">
         
   
   
@@ -1003,7 +1206,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/knowledgevba/source/business-logic/clsstorageresolver/" class="md-nav__link">
+      <a href="../source/business-logic/clsstorageresolver/" class="md-nav__link">
         
   
   
@@ -1031,7 +1234,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/knowledgevba/source/business-logic/clsfieldmigrator/" class="md-nav__link">
+      <a href="../source/business-logic/clsfieldmigrator/" class="md-nav__link">
         
   
   
@@ -1059,7 +1262,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/knowledgevba/source/business-logic/clsformspec/" class="md-nav__link">
+      <a href="../source/business-logic/clsformspec/" class="md-nav__link">
         
   
   
@@ -1087,7 +1290,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/knowledgevba/source/business-logic/clscontrolspec/" class="md-nav__link">
+      <a href="../source/business-logic/clscontrolspec/" class="md-nav__link">
         
   
   
@@ -1115,7 +1318,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/knowledgevba/source/business-logic/modformbuilder/" class="md-nav__link">
+      <a href="../source/business-logic/modformbuilder/" class="md-nav__link">
         
   
   
@@ -1217,7 +1420,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/knowledgevba/source/utility/modcommon/" class="md-nav__link">
+      <a href="../source/utility/modcommon/" class="md-nav__link">
         
   
   
@@ -1245,7 +1448,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/knowledgevba/source/utility/modfileio/" class="md-nav__link">
+      <a href="../source/utility/modfileio/" class="md-nav__link">
         
   
   
@@ -1273,7 +1476,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/knowledgevba/source/utility/modstringutil/" class="md-nav__link">
+      <a href="../source/utility/modstringutil/" class="md-nav__link">
         
   
   
@@ -1301,7 +1504,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/knowledgevba/source/utility/moddateutil/" class="md-nav__link">
+      <a href="../source/utility/moddateutil/" class="md-nav__link">
         
   
   
@@ -1329,7 +1532,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/knowledgevba/source/utility/modimagerender/" class="md-nav__link">
+      <a href="../source/utility/modimagerender/" class="md-nav__link">
         
   
   
@@ -1357,7 +1560,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/knowledgevba/source/utility/modformatcolumns/" class="md-nav__link">
+      <a href="../source/utility/modformatcolumns/" class="md-nav__link">
         
   
   
@@ -1449,7 +1652,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/knowledgevba/source/infrastructure/modsetup/" class="md-nav__link">
+      <a href="../source/infrastructure/modsetup/" class="md-nav__link">
         
   
   
@@ -1543,7 +1746,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/knowledgevba/source/logger/clslogger/" class="md-nav__link">
+      <a href="../source/logger/clslogger/" class="md-nav__link">
         
   
   
@@ -1571,7 +1774,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/knowledgevba/source/logger/clslogentry/" class="md-nav__link">
+      <a href="../source/logger/clslogentry/" class="md-nav__link">
         
   
   
@@ -1663,7 +1866,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/knowledgevba/source/special/thisworkbook/" class="md-nav__link">
+      <a href="../source/special/thisworkbook/" class="md-nav__link">
         
   
   
@@ -1759,7 +1962,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/knowledgevba/source/cowork-demo/thisworkbook/" class="md-nav__link">
+      <a href="../source/cowork-demo/thisworkbook/" class="md-nav__link">
         
   
   
@@ -1787,7 +1990,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/knowledgevba/source/cowork-demo/modautoinit/" class="md-nav__link">
+      <a href="../source/cowork-demo/modautoinit/" class="md-nav__link">
         
   
   
@@ -1815,7 +2018,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/knowledgevba/source/cowork-demo/moddemoseeder/" class="md-nav__link">
+      <a href="../source/cowork-demo/moddemoseeder/" class="md-nav__link">
         
   
   
@@ -1864,8 +2067,216 @@
               
               <article class="md-content__inner md-typeset">
                 
-  <h1>404 - Not found</h1>
+                  
 
+
+
+<h1 id="_1">操作マニュアル<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
+<p>このページでは、ナレッジ管理ツールの各シートで「何ができるか」「どのボタンを押すと何が起きるか」を機能別に説明します。</p>
+<p>セットアップは完了済の前提です。本ツールを開くと <strong>メイン</strong> シートが表示され、画面下部の 8 個のタスクボタンから目的の画面を選びます。</p>
+<hr />
+<h2 id="_2">メイン画面<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p>メインシート下部に 8 個のタスク選択ボタンが並んでいます。各ボタンを押すと対応するシートだけが表示されます。</p>
+<table>
+<thead>
+<tr>
+<th>ボタン</th>
+<th>遷移先 / 役割</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>&gt; 初回セットアップ</strong></td>
+<td>（セットアップ済の運用では使用しません）</td>
+</tr>
+<tr>
+<td><strong>&gt; 設定変更</strong></td>
+<td>設定 シート</td>
+</tr>
+<tr>
+<td><strong>&gt; フォーマット管理</strong></td>
+<td>フォーマット一覧 シート</td>
+</tr>
+<tr>
+<td><strong>&gt; ナレッジ登録</strong></td>
+<td>ナレッジ登録 シート</td>
+</tr>
+<tr>
+<td><strong>&gt; 検索・確認</strong></td>
+<td>検索 シート</td>
+</tr>
+<tr>
+<td><strong>&gt; ナレッジ修正</strong></td>
+<td>ナレッジ修正 シート</td>
+</tr>
+<tr>
+<td><strong>&gt; ナレッジ削除</strong></td>
+<td>ナレッジ一覧 シート</td>
+</tr>
+<tr>
+<td><strong>&gt; 既存データ反映</strong></td>
+<td>既存データへのフィールド反映 シート</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="1">1. ナレッジ登録<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
+<p>新規のナレッジ（ノウハウ・トラブル対応メモ・手順書等）を登録するシートです。</p>
+<p><strong>操作手順</strong></p>
+<ol>
+<li>メイン → <strong>&gt; ナレッジ登録</strong> ボタンをクリック</li>
+<li>ナレッジ登録シートが表示される</li>
+<li>上部の <strong>FormatID</strong> 欄でフォーマットを選択（フォーマット未作成なら「フォーマット管理」で先に定義）</li>
+<li>フォーマットに従って各フィールドを入力</li>
+<li><strong>&gt; 保存</strong> ボタンをクリックすると、格納先設定で指定したフォルダにテキストファイルとして保存される</li>
+<li>続けて入力する場合は <strong>&gt; クリア</strong> ボタンで入力欄を初期化</li>
+</ol>
+<p><strong>主なボタン</strong></p>
+<ul>
+<li><strong>&gt; 保存</strong> … 入力中のフィールドをファイルに書き出す</li>
+<li><strong>&gt; クリア</strong> … 入力欄を空にする</li>
+</ul>
+<hr />
+<h2 id="2">2. ナレッジ修正<a class="headerlink" href="#2" title="Permanent link">&para;</a></h2>
+<p>既存ナレッジを呼び出して内容を上書きするシートです。</p>
+<p><strong>操作手順</strong></p>
+<ol>
+<li>メイン → <strong>&gt; ナレッジ修正</strong> ボタンをクリック</li>
+<li>KnwNo（ナレッジ番号）を上部の入力欄に入れる</li>
+<li><strong>&gt; 読込</strong> ボタンをクリックすると、各フィールドに既存値が展開される</li>
+<li>必要箇所を編集</li>
+<li><strong>&gt; 上書保存</strong> ボタンで反映</li>
+</ol>
+<p><strong>主なボタン</strong></p>
+<ul>
+<li><strong>&gt; 読込</strong> … 指定 KnwNo の既存ナレッジを画面に展開</li>
+<li><strong>&gt; 上書保存</strong> … 編集内容で既存ファイルを上書き</li>
+</ul>
+<hr />
+<h2 id="3">3. ナレッジ一覧<a class="headerlink" href="#3" title="Permanent link">&para;</a></h2>
+<p>登録済ナレッジを一覧表示し、削除もここから行うシートです。</p>
+<p><strong>操作手順</strong></p>
+<ol>
+<li>メイン → <strong>&gt; ナレッジ削除</strong> ボタンをクリック（一覧シートが開く）</li>
+<li><strong>&gt; リロード</strong> ボタンで最新の登録状況を再読み込み</li>
+<li>削除したい行を選択</li>
+<li><strong>&gt; 選択行を削除</strong> ボタンをクリック</li>
+<li>確認ダイアログで OK → ファイルが削除される</li>
+</ol>
+<p><strong>主なボタン</strong></p>
+<ul>
+<li><strong>&gt; リロード</strong> … 一覧を再構築</li>
+<li><strong>&gt; 選択行を削除</strong> … 選択中の行に紐づくファイルを削除</li>
+</ul>
+<hr />
+<h2 id="4">4. 検索<a class="headerlink" href="#4" title="Permanent link">&para;</a></h2>
+<p>登録されたナレッジを横断検索するシートです。スコアリング順に結果が並びます。</p>
+<p><strong>操作手順</strong></p>
+<ol>
+<li>メイン → <strong>&gt; 検索・確認</strong> ボタンをクリック</li>
+<li><strong>キーワード</strong> 欄に検索語を入力（複数語はスペース区切り）</li>
+<li><strong>モード</strong> で AND / OR を選択</li>
+<li><strong>TargetField</strong> で検索範囲（全フィールド / タイトルのみ / 本文のみ等）を指定</li>
+<li><strong>&gt; 検索</strong> ボタンをクリックすると結果が下方の一覧に表示される</li>
+<li>詳細を見たい行を選択 → <strong>&gt; 詳細</strong> ボタンで「ナレッジ表示」シートに遷移</li>
+<li>直接 KnwNo がわかっている場合は、上部欄に番号を入れて <strong>&gt; 表示</strong> ボタン</li>
+</ol>
+<p><strong>主なボタン</strong></p>
+<ul>
+<li><strong>&gt; 検索</strong> … キーワード検索を実行</li>
+<li><strong>&gt; 表示</strong> … 直接 KnwNo 指定で開く</li>
+<li><strong>&gt; クリア</strong> … 入力条件と結果をクリア</li>
+<li><strong>&gt; 詳細</strong> … 選択行のナレッジを表示画面で開く</li>
+</ul>
+<hr />
+<h2 id="5">5. ナレッジ表示<a class="headerlink" href="#5" title="Permanent link">&para;</a></h2>
+<p>検索結果から開いた個別ナレッジの詳細表示シートです。本文と関連画像（サムネ・詳細画像）が表示されます。</p>
+<p><strong>主なボタン</strong></p>
+<ul>
+<li><strong>&lt; 検索に戻る</strong> … 検索シートへ戻る</li>
+<li><strong>&gt; 修正に遷移</strong> … 表示中のナレッジを修正シートに引き継いで開く</li>
+</ul>
+<hr />
+<h2 id="6">6. フォーマット設計<a class="headerlink" href="#6" title="Permanent link">&para;</a></h2>
+<p>ナレッジのフィールド構造を定義する画面です。フォーマット ID ごとにフィールド名・型を宣言します。</p>
+<p><strong>操作手順</strong></p>
+<ol>
+<li>メイン → <strong>&gt; フォーマット管理</strong> → 一覧シートで <strong>&gt; 新規作成</strong> または既存行を選んで <strong>&gt; 選択行を編集</strong></li>
+<li>フォーマット設計シートが開く</li>
+<li>フォーマット ID と各フィールドを上から順に定義</li>
+<li><strong>&gt; 保存</strong> ボタンで保存</li>
+<li><strong>&gt; プレビュー</strong> ボタンで設計内容の確認画面を表示</li>
+<li><strong>&lt; 一覧に戻る</strong> で一覧シートへ</li>
+</ol>
+<p><strong>主なボタン</strong></p>
+<ul>
+<li><strong>&gt; 読込</strong> … 既存フォーマットを読み込む</li>
+<li><strong>&gt; 保存</strong> … 設計内容を保存</li>
+<li><strong>&gt; プレビュー</strong> … プレビュー画面を開く</li>
+<li><strong>&lt; 一覧に戻る</strong> … フォーマット一覧へ</li>
+</ul>
+<hr />
+<h2 id="7">7. フォーマット一覧<a class="headerlink" href="#7" title="Permanent link">&para;</a></h2>
+<p>定義済フォーマットを一覧表示するシートです。</p>
+<p><strong>主なボタン</strong></p>
+<ul>
+<li><strong>&gt; 新規作成</strong> … 新規フォーマット設計画面を開く</li>
+<li><strong>&gt; 選択行を編集</strong> … 選択行のフォーマットを設計画面で開く</li>
+<li><strong>&gt; プレビュー</strong> … 選択行のプレビュー表示</li>
+</ul>
+<hr />
+<h2 id="8">8. フォーマットプレビュー<a class="headerlink" href="#8" title="Permanent link">&para;</a></h2>
+<p>設計中または既存フォーマットのフィールド構成を視覚的に確認する画面です。<strong>フォーマット設計</strong> または <strong>フォーマット一覧</strong> から <strong>&gt; プレビュー</strong> ボタンで開きます。</p>
+<hr />
+<h2 id="9">9. 既存データへのフィールド反映<a class="headerlink" href="#9" title="Permanent link">&para;</a></h2>
+<p>フォーマットを変更したあとに、過去ナレッジへ新フィールドを追加・写像するシートです。</p>
+<p><strong>操作手順</strong></p>
+<ol>
+<li>メイン → <strong>&gt; 既存データ反映</strong> ボタンをクリック</li>
+<li>シートで対象フォーマット ID と反映ルールを指定</li>
+<li><strong>&gt; 反映実行</strong> ボタンをクリック</li>
+<li>結果ログが出力される</li>
+</ol>
+<p><strong>主なボタン</strong></p>
+<ul>
+<li><strong>&gt; 反映実行</strong> … 対象ナレッジに新フィールドを書き込む</li>
+</ul>
+<hr />
+<h2 id="10">10. 格納先設定<a class="headerlink" href="#10" title="Permanent link">&para;</a></h2>
+<p>ドキュメントタイプごとに保存先フォルダを設定するシートです。「共有フォルダ」「BOX」等の保存先タイプとパスを定義します。</p>
+<p><strong>操作手順</strong></p>
+<ol>
+<li>メイン → <strong>&gt; 設定変更</strong> → 設定シートまたは格納先設定シートに遷移</li>
+<li>表に DocType / 保存先タイプ / パス を 1 行ずつ書き込む</li>
+<li>シートを切り替えると即時保存される（ボタンなし）</li>
+</ol>
+<hr />
+<h2 id="11">11. 設定<a class="headerlink" href="#11" title="Permanent link">&para;</a></h2>
+<p>データフォルダの基準パス、ログレベル等を設定するシートです。</p>
+<p><strong>主なボタン</strong></p>
+<ul>
+<li><strong>&gt; リセット</strong> … ログをクリアする</li>
+</ul>
+<hr />
+<h2 id="12">12. ログ確認<a class="headerlink" href="#12" title="Permanent link">&para;</a></h2>
+<p>ログは設定シートの下部または専用ログシートに直近の実行結果が時系列で記録されます。エラーや警告はここで確認できます。</p>
+<p>ログは <strong>&gt; リセット</strong> ボタン（設定シート）で初期化できます。</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
               </article>
             </div>
           
@@ -1907,10 +2318,10 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "/knowledgevba/", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.indexes", "toc.integrate", "search.highlight", "search.suggest", "content.code.copy"], "search": "/knowledgevba/assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u30b3\u30d4\u30fc\u3057\u307e\u3057\u305f", "clipboard.copy": "\u30af\u30ea\u30c3\u30d7\u30dc\u30fc\u30c9\u3078\u30b3\u30d4\u30fc", "search.result.more.one": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3082\u30461\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.more.other": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3042\u3068#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.none": "\u4f55\u3082\u898b\u3064\u304b\u308a\u307e\u305b\u3093\u3067\u3057\u305f", "search.result.one": "1\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.other": "#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.placeholder": "\u691c\u7d22\u30ad\u30fc\u30ef\u30fc\u30c9\u3092\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044", "search.result.term.missing": "\u691c\u7d22\u306b\u542b\u307e\u308c\u306a\u3044", "select.version": "\u30d0\u30fc\u30b8\u30e7\u30f3\u5207\u308a\u66ff\u3048"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.indexes", "toc.integrate", "search.highlight", "search.suggest", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u30b3\u30d4\u30fc\u3057\u307e\u3057\u305f", "clipboard.copy": "\u30af\u30ea\u30c3\u30d7\u30dc\u30fc\u30c9\u3078\u30b3\u30d4\u30fc", "search.result.more.one": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3082\u30461\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.more.other": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3042\u3068#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.none": "\u4f55\u3082\u898b\u3064\u304b\u308a\u307e\u305b\u3093\u3067\u3057\u305f", "search.result.one": "1\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.other": "#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.placeholder": "\u691c\u7d22\u30ad\u30fc\u30ef\u30fc\u30c9\u3092\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044", "search.result.term.missing": "\u691c\u7d22\u306b\u542b\u307e\u308c\u306a\u3044", "select.version": "\u30d0\u30fc\u30b8\u30e7\u30f3\u5207\u308a\u66ff\u3048"}, "version": null}</script>
     
     
-      <script src="/knowledgevba/assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
       
     
   </body>
