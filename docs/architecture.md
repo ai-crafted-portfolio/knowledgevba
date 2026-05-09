@@ -1,6 +1,6 @@
 ---
 title: アーキテクチャ
-description: 層分離図、依存関係、配布パターン、関連 ADR
+description: 層分離図、依存関係、配布パターン
 tags:
   - excel
   - vba
@@ -157,17 +157,7 @@ flowchart LR
     SE -->|ログ出力| Log
 ```
 
-## 5. 関連 ADR
-
-本ツールの設計判断は `C:\decisions\adr\` 配下の Architecture Decision Records に記録されています。サイト公開上は要約のみ:
-
-| ADR | タイトル | 要旨 |
-|---|---|---|
-| ADR-0002 | VBA からの子プロセス起動を全面禁止する | 職場 PC では UAC 昇格や黙殺が発生するため、`Shell` / `WScript.Shell.Run` 等は全面禁止。すべて Excel プロセス内で完結 |
-| ADR-0008 | VBA は `.bas`/`.cls` モジュールで配布しユーザ側 `.xlsm` に手動 import する | `.xlsm` テンプレートを配布する案は Excel 修復ダイアログ問題を誘発するため、モジュール配布 + セルフセットアップを採用 |
-| ADR-0009 | xlsm ビルドは aspose-cells-python で実施する | 開発時の `.xlsm` 自動生成方式を規定（配布物には影響なし、開発反復用） |
-
-## 6. テスト戦略
+## 5. テスト戦略
 
 | レイヤ | テスト対象 | 件数 |
 |---|---|---|
@@ -175,9 +165,9 @@ flowchart LR
 | ビジネスロジック層 | 検索スコアリング、ImagePath 解決、FormSpec | T10/T11 系 |
 | 配布パターン | セットアップマクロの冪等性、シート存在チェック、ボタン重複削除 | M6 系 |
 
-合計 **PASS 89 / SKIP 4 / FAIL 0**（既存 82 + image_ext rev1 拡張 7）が完了条件です。詳細は [仕様 §7](spec.md#7) を参照。
+合計 **PASS 89 / SKIP 4 / FAIL 0**（既存 82 + image_ext rev1 拡張 7）が完了条件です。
 
-## 7. 拡張ポイント
+## 6. 拡張ポイント
 
 将来の変更時に触る予定のファイルを限定するための境界:
 

@@ -15,7 +15,7 @@ title: modFormatColumns.bas
 
 VBE で `挿入 > 標準モジュール`、F4 でプロパティ → `(オブジェクト名)` を `modFormatColumns` に変更してから、コードペインに貼り付けます。
 
-> v12 で新規追加。v11 までは `clsFormatManager.cls` 内で `Public Const FL_COL_*` を定義していたが、VBA 仕様上クラスモジュールでは `Public Const` を使えず、本物の Excel が compile-time に reject する。標準モジュールへ切り出して合法化した（ADR 0027 参照）。値は v11 と同一で後方互換。
+> v12 で新規追加。v11 までは `clsFormatManager.cls` 内で `Public Const FL_COL_*` を定義していたが、VBA 仕様上クラスモジュールでは `Public Const` を使えず、本物の Excel が compile-time に reject する。標準モジュールへ切り出して合法化した。値は v11 と同一で後方互換。
 
 ## ソースコード（コピペ可）
 
@@ -30,12 +30,11 @@ Option Explicit
 ' 概要:       フォーマット一覧シートの列番号定数を Public 公開する。
 '             v11 までは clsFormatManager.cls 内で Public Const 定義していたが、
 '             VBA 仕様上「クラスモジュールで Public Const は不可」のため
-'             real Excel が compile-time に reject (ADR 0027)。
+'             real Excel が compile-time に reject。
 '             本モジュール (.bas = 標準モジュール) に移動して合法化。
 ' 依存先:     なし
 ' 備考:       clsFormatManager 内部、modDemoSeeder 外部の両方から参照可能。
 '             値は v11 までと同一で互換性維持。
-' 関連 ADR:   0017 (D-2 Public 化), 0027 (cls 内 Public Const 禁止対応)
 ' ================================================================
 
 ' --- フォーマット一覧シート 列番号 ---
@@ -59,5 +58,4 @@ Public Const FL_START_ROW As Long = 3
 
 - 呼び出される: `clsFormatManager`, `modDemoSeeder`
 - 呼び出す: なし
-- 関連 ADR: ADR 0017 (定数 Public 化), ADR 0027 (cls 内 Public Const 禁止対応)
 - 関連コミット: v12 (Public Const 切出し)
