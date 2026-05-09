@@ -1916,12 +1916,8 @@
 <blockquote>
 <p><strong>このページが対応する版</strong>: <code>release_v2 + image_ext + v13</code> (2026-05-07)。v8〜v13 の修正をすべて反映済みです。最新コミット情報は本ページ末尾の「バージョン」セクションを参照してください。</p>
 </blockquote>
-<div class="admonition note">
-<p class="admonition-title">公開可視性</p>
-<p>本ページ群も <code>noindex,nofollow</code> を設定しています。職場利用想定のため、検索エンジンへの indexing は意図的に抑止しています。</p>
-</div>
 <h2 id="_2">配布パターン<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
-<p><a href="../architecture/#5-adr">ADR-0008 モジュール配布パターン</a> に従って次の手順で展開します。</p>
+<p>次の手順で展開します。</p>
 <ol>
 <li>このサイト上のソースコードを VBE に貼り付け（標準モジュール / クラスモジュール / ThisWorkbook の区別はページ内「配置先」セクション参照）</li>
 <li><code>Alt+F8</code> から <code>SetupSheetsAndButtons</code> を 1 回実行 → 14 シート + 29 ボタン自動生成</li>
@@ -2045,12 +2041,12 @@
 </tr>
 <tr>
 <td><a href="utility/modformatcolumns/">modFormatColumns.bas</a></td>
-<td>フォーマット一覧シート列番号定数 (v12 で clsFormatManager から切出し / ADR-0027)</td>
+<td>フォーマット一覧シート列番号定数 (v12 で clsFormatManager から切出し)</td>
 </tr>
 </tbody>
 </table>
 <h3 id="1">インストーラ層 (1)<a class="headerlink" href="#1" title="Permanent link">&para;</a></h3>
-<p>新規 <code>.xlsm</code> に必要なシート 14 個とフォームコントロールボタン 29 個を VBA だけで自動生成するセットアップマクロを置く層です。本ツールは <code>.xlsm</code> 本体を配布せずモジュールだけ配布する方針（<a href="../architecture/#5-adr">ADR-0008</a>）のため、シート構造とボタン配置はインストール時に各 PC で生成します。<code>ThisWorkbook</code> からのみ呼ばれます。</p>
+<p>新規 <code>.xlsm</code> に必要なシート 14 個とフォームコントロールボタン 29 個を VBA だけで自動生成するセットアップマクロを置く層です。本ツールは <code>.xlsm</code> 本体を配布せずモジュールだけ配布する方針のため、シート構造とボタン配置はインストール時に各 PC で生成します。<code>ThisWorkbook</code> からのみ呼ばれます。</p>
 <table>
 <thead>
 <tr>
@@ -2061,7 +2057,7 @@
 <tbody>
 <tr>
 <td><a href="infrastructure/modsetup/">modSetup.bas</a></td>
-<td>14 シート + 29 ボタンを 1 回実行で自動生成 (ADR-0008)</td>
+<td>14 シート + 29 ボタンを 1 回実行で自動生成</td>
 </tr>
 </tbody>
 </table>

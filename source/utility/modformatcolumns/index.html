@@ -2019,7 +2019,7 @@
 <h2 id="_1">配置先<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <p>VBE で <code>挿入 &gt; 標準モジュール</code>、F4 でプロパティ → <code>(オブジェクト名)</code> を <code>modFormatColumns</code> に変更してから、コードペインに貼り付けます。</p>
 <blockquote>
-<p>v12 で新規追加。v11 までは <code>clsFormatManager.cls</code> 内で <code>Public Const FL_COL_*</code> を定義していたが、VBA 仕様上クラスモジュールでは <code>Public Const</code> を使えず、本物の Excel が compile-time に reject する。標準モジュールへ切り出して合法化した（ADR 0027 参照）。値は v11 と同一で後方互換。</p>
+<p>v12 で新規追加。v11 までは <code>clsFormatManager.cls</code> 内で <code>Public Const FL_COL_*</code> を定義していたが、VBA 仕様上クラスモジュールでは <code>Public Const</code> を使えず、本物の Excel が compile-time に reject する。標準モジュールへ切り出して合法化した。値は v11 と同一で後方互換。</p>
 </blockquote>
 <h2 id="_2">ソースコード（コピペ可）<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <p>下のコードブロック右上にカーソルを当てるとコピーボタンが表示されます。</p>
@@ -2052,8 +2052,7 @@
 <span class="normal"><a href="#__codelineno-0-27">27</a></span>
 <span class="normal"><a href="#__codelineno-0-28">28</a></span>
 <span class="normal"><a href="#__codelineno-0-29">29</a></span>
-<span class="normal"><a href="#__codelineno-0-30">30</a></span>
-<span class="normal"><a href="#__codelineno-0-31">31</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="n">Attribute</span><span class="w"> </span><span class="n">VB_Name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;modFormatColumns&quot;</span>
+<span class="normal"><a href="#__codelineno-0-30">30</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="n">Attribute</span><span class="w"> </span><span class="n">VB_Name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;modFormatColumns&quot;</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="k">Option</span><span class="w"> </span><span class="n">Explicit</span>
 <a id="__codelineno-0-3" name="__codelineno-0-3"></a>
 <a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="c">&#39; ================================================================</span>
@@ -2061,35 +2060,33 @@
 <a id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="c">&#39; 概要:       フォーマット一覧シートの列番号定数を Public 公開する。</span>
 <a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="c">&#39;             v11 までは clsFormatManager.cls 内で Public Const 定義していたが、</span>
 <a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="c">&#39;             VBA 仕様上「クラスモジュールで Public Const は不可」のため</span>
-<a id="__codelineno-0-9" name="__codelineno-0-9"></a><span class="c">&#39;             real Excel が compile-time に reject (ADR 0027)。</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9"></a><span class="c">&#39;             real Excel が compile-time に reject。</span>
 <a id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="c">&#39;             本モジュール (.bas = 標準モジュール) に移動して合法化。</span>
 <a id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="c">&#39; 依存先:     なし</span>
 <a id="__codelineno-0-12" name="__codelineno-0-12"></a><span class="c">&#39; 備考:       clsFormatManager 内部、modDemoSeeder 外部の両方から参照可能。</span>
 <a id="__codelineno-0-13" name="__codelineno-0-13"></a><span class="c">&#39;             値は v11 までと同一で互換性維持。</span>
-<a id="__codelineno-0-14" name="__codelineno-0-14"></a><span class="c">&#39; 関連 ADR:   0017 (D-2 Public 化), 0027 (cls 内 Public Const 禁止対応)</span>
-<a id="__codelineno-0-15" name="__codelineno-0-15"></a><span class="c">&#39; ================================================================</span>
-<a id="__codelineno-0-16" name="__codelineno-0-16"></a>
-<a id="__codelineno-0-17" name="__codelineno-0-17"></a><span class="c">&#39; --- フォーマット一覧シート 列番号 ---</span>
-<a id="__codelineno-0-18" name="__codelineno-0-18"></a><span class="k">Public</span><span class="w"> </span><span class="k">Const</span><span class="w"> </span><span class="n">FL_COL_NO</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">Long</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span>
-<a id="__codelineno-0-19" name="__codelineno-0-19"></a><span class="k">Public</span><span class="w"> </span><span class="k">Const</span><span class="w"> </span><span class="n">FL_COL_FMT_ID</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">Long</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span>
-<a id="__codelineno-0-20" name="__codelineno-0-20"></a><span class="k">Public</span><span class="w"> </span><span class="k">Const</span><span class="w"> </span><span class="n">FL_COL_FMT_NAME</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">Long</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span>
-<a id="__codelineno-0-21" name="__codelineno-0-21"></a><span class="k">Public</span><span class="w"> </span><span class="k">Const</span><span class="w"> </span><span class="n">FL_COL_ID_PATTERN</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">Long</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span>
-<a id="__codelineno-0-22" name="__codelineno-0-22"></a><span class="k">Public</span><span class="w"> </span><span class="k">Const</span><span class="w"> </span><span class="n">FL_COL_CURRENT_NUM</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">Long</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span>
-<a id="__codelineno-0-23" name="__codelineno-0-23"></a><span class="k">Public</span><span class="w"> </span><span class="k">Const</span><span class="w"> </span><span class="n">FL_COL_NEXT_NUM</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">Long</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">6</span>
-<a id="__codelineno-0-24" name="__codelineno-0-24"></a><span class="k">Public</span><span class="w"> </span><span class="k">Const</span><span class="w"> </span><span class="n">FL_COL_VERSION</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">Long</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">7</span>
-<a id="__codelineno-0-25" name="__codelineno-0-25"></a><span class="k">Public</span><span class="w"> </span><span class="k">Const</span><span class="w"> </span><span class="n">FL_COL_FIELD_COUNT</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">Long</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">8</span>
-<a id="__codelineno-0-26" name="__codelineno-0-26"></a><span class="k">Public</span><span class="w"> </span><span class="k">Const</span><span class="w"> </span><span class="n">FL_COL_KNW_COUNT</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">Long</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">9</span>
-<a id="__codelineno-0-27" name="__codelineno-0-27"></a><span class="k">Public</span><span class="w"> </span><span class="k">Const</span><span class="w"> </span><span class="n">FL_COL_CREATED</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">Long</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span>
-<a id="__codelineno-0-28" name="__codelineno-0-28"></a><span class="k">Public</span><span class="w"> </span><span class="k">Const</span><span class="w"> </span><span class="n">FL_COL_UPDATED</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">Long</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">11</span>
-<a id="__codelineno-0-29" name="__codelineno-0-29"></a>
-<a id="__codelineno-0-30" name="__codelineno-0-30"></a><span class="c">&#39; --- フォーマット一覧シート データ開始行 (1=ヘッダー領域) ---</span>
-<a id="__codelineno-0-31" name="__codelineno-0-31"></a><span class="k">Public</span><span class="w"> </span><span class="k">Const</span><span class="w"> </span><span class="n">FL_START_ROW</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">Long</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14"></a><span class="c">&#39; ================================================================</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15"></a>
+<a id="__codelineno-0-16" name="__codelineno-0-16"></a><span class="c">&#39; --- フォーマット一覧シート 列番号 ---</span>
+<a id="__codelineno-0-17" name="__codelineno-0-17"></a><span class="k">Public</span><span class="w"> </span><span class="k">Const</span><span class="w"> </span><span class="n">FL_COL_NO</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">Long</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span>
+<a id="__codelineno-0-18" name="__codelineno-0-18"></a><span class="k">Public</span><span class="w"> </span><span class="k">Const</span><span class="w"> </span><span class="n">FL_COL_FMT_ID</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">Long</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span>
+<a id="__codelineno-0-19" name="__codelineno-0-19"></a><span class="k">Public</span><span class="w"> </span><span class="k">Const</span><span class="w"> </span><span class="n">FL_COL_FMT_NAME</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">Long</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span>
+<a id="__codelineno-0-20" name="__codelineno-0-20"></a><span class="k">Public</span><span class="w"> </span><span class="k">Const</span><span class="w"> </span><span class="n">FL_COL_ID_PATTERN</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">Long</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span>
+<a id="__codelineno-0-21" name="__codelineno-0-21"></a><span class="k">Public</span><span class="w"> </span><span class="k">Const</span><span class="w"> </span><span class="n">FL_COL_CURRENT_NUM</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">Long</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span>
+<a id="__codelineno-0-22" name="__codelineno-0-22"></a><span class="k">Public</span><span class="w"> </span><span class="k">Const</span><span class="w"> </span><span class="n">FL_COL_NEXT_NUM</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">Long</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">6</span>
+<a id="__codelineno-0-23" name="__codelineno-0-23"></a><span class="k">Public</span><span class="w"> </span><span class="k">Const</span><span class="w"> </span><span class="n">FL_COL_VERSION</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">Long</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">7</span>
+<a id="__codelineno-0-24" name="__codelineno-0-24"></a><span class="k">Public</span><span class="w"> </span><span class="k">Const</span><span class="w"> </span><span class="n">FL_COL_FIELD_COUNT</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">Long</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">8</span>
+<a id="__codelineno-0-25" name="__codelineno-0-25"></a><span class="k">Public</span><span class="w"> </span><span class="k">Const</span><span class="w"> </span><span class="n">FL_COL_KNW_COUNT</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">Long</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">9</span>
+<a id="__codelineno-0-26" name="__codelineno-0-26"></a><span class="k">Public</span><span class="w"> </span><span class="k">Const</span><span class="w"> </span><span class="n">FL_COL_CREATED</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">Long</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span>
+<a id="__codelineno-0-27" name="__codelineno-0-27"></a><span class="k">Public</span><span class="w"> </span><span class="k">Const</span><span class="w"> </span><span class="n">FL_COL_UPDATED</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">Long</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">11</span>
+<a id="__codelineno-0-28" name="__codelineno-0-28"></a>
+<a id="__codelineno-0-29" name="__codelineno-0-29"></a><span class="c">&#39; --- フォーマット一覧シート データ開始行 (1=ヘッダー領域) ---</span>
+<a id="__codelineno-0-30" name="__codelineno-0-30"></a><span class="k">Public</span><span class="w"> </span><span class="k">Const</span><span class="w"> </span><span class="n">FL_START_ROW</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">Long</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span>
 </code></pre></div></td></tr></table></div>
 <h2 id="_3">関連<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <ul>
 <li>呼び出される: <code>clsFormatManager</code>, <code>modDemoSeeder</code></li>
 <li>呼び出す: なし</li>
-<li>関連 ADR: ADR 0017 (定数 Public 化), ADR 0027 (cls 内 Public Const 禁止対応)</li>
 <li>関連コミット: v12 (Public Const 切出し)</li>
 </ul>
 

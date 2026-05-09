@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="層分離図、依存関係、配布パターン、関連 ADR">
+        <meta name="description" content="層分離図、依存関係、配布パターン">
       
       
         <meta name="author" content="ai-crafted-portfolio">
@@ -571,10 +571,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#5-adr" class="md-nav__link">
+  <a href="#5" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5. 関連 ADR
+        5. テスト戦略
       
     </span>
   </a>
@@ -585,71 +585,10 @@
   <a href="#6" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6. テスト戦略
+        6. 拡張ポイント
       
     </span>
   </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#7" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        7. 拡張ポイント
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#todo" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        TODO・制約・既知の限界
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="TODO・制約・既知の限界">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        制約
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        既知の限界
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#todov15" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        TODO（v15 以降のロードマップ）
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -2253,35 +2192,7 @@
     Disp --&gt;|単票表示| KL
     Disp --&gt;|詳細画像| Img
     SE --&gt;|ログ出力| Log</code></pre>
-<h2 id="5-adr">5. 関連 ADR<a class="headerlink" href="#5-adr" title="Permanent link">&para;</a></h2>
-<p>本ツールの設計判断は <code>C:\decisions\adr\</code> 配下の Architecture Decision Records に記録されています。サイト公開上は要約のみ:</p>
-<table>
-<thead>
-<tr>
-<th>ADR</th>
-<th>タイトル</th>
-<th>要旨</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>ADR-0002</td>
-<td>VBA からの子プロセス起動を全面禁止する</td>
-<td>職場 PC では UAC 昇格や黙殺が発生するため、<code>Shell</code> / <code>WScript.Shell.Run</code> 等は全面禁止。すべて Excel プロセス内で完結</td>
-</tr>
-<tr>
-<td>ADR-0008</td>
-<td>VBA は <code>.bas</code>/<code>.cls</code> モジュールで配布しユーザ側 <code>.xlsm</code> に手動 import する</td>
-<td><code>.xlsm</code> テンプレートを配布する案は Excel 修復ダイアログ問題を誘発するため、モジュール配布 + セルフセットアップを採用</td>
-</tr>
-<tr>
-<td>ADR-0009</td>
-<td>xlsm ビルドは aspose-cells-python で実施する</td>
-<td>開発時の <code>.xlsm</code> 自動生成方式を規定（配布物には影響なし、開発反復用）</td>
-</tr>
-</tbody>
-</table>
-<h2 id="6">6. テスト戦略<a class="headerlink" href="#6" title="Permanent link">&para;</a></h2>
+<h2 id="5">5. テスト戦略<a class="headerlink" href="#5" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
@@ -2308,39 +2219,14 @@
 </tr>
 </tbody>
 </table>
-<p>合計 <strong>PASS 89 / SKIP 4 / FAIL 0</strong>（既存 82 + image_ext rev1 拡張 7）が完了条件です。詳細は <a href="../spec/#7">仕様 §7</a> を参照。</p>
-<h2 id="7">7. 拡張ポイント<a class="headerlink" href="#7" title="Permanent link">&para;</a></h2>
-<p>将来の変更時に触る予定のファイルを限定するための境界:</p>
+<p>合計 <strong>PASS 89 / SKIP 4 / FAIL 0</strong>（既存 82 + image_ext rev1 拡張 7）が完了条件です。</p>
+<h2 id="6">6. 拡張ポイント<a class="headerlink" href="#6" title="Permanent link">&para;</a></h2>
+<p>拡張時に触るファイルの境界:</p>
 <ul>
 <li><strong>新フォーマット追加</strong> — <code>clsFormatManager</code> のフォーマット定義テーブルを追加、<code>clsFieldMigrator</code> で旧→新の写像を定義</li>
 <li><strong>新しい UserForm を spec 駆動で追加</strong> — <code>modSpecExamples.bas</code> を雛形にして <code>clsFormSpec.AddControl</code> で宣言、<code>modFormBuilder.BuildAndShow</code> で起動</li>
 <li><strong>新シート追加</strong> — <code>modSetup.bas</code> の <code>RequiredSheets</code> 配列に追加、ボタン配置の Anchor 範囲も追記</li>
 </ul>
-<hr />
-<h2 id="todo">TODO・制約・既知の限界<a class="headerlink" href="#todo" title="Permanent link">&para;</a></h2>
-<h3 id="_2">制約<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
-<ul>
-<li>VBA 子プロセス禁止（Shell/Run/WScript.Shell/Exec）— 職場 PC ポリシー (ADR-0002)</li>
-<li>クラスモジュール (.cls) 内の <code>Public Const/Type/Declare/Static</code> 禁止 (ADR-0027)</li>
-<li>aspose-cells-python 単独では VBA binary stub のみ生成、real Excel COM 必須 (ADR-0026)</li>
-<li>mkdocs Material のモバイル UX が完璧ではない（ナビ collapse は OK、図解の細部は要確認）</li>
-</ul>
-<h3 id="_3">既知の限界<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
-<ul>
-<li>Excel 単体動作のため Web/モバイルでは利用不可</li>
-<li>同時編集なし（ファイルベース、Git 等での並行編集が必要）</li>
-<li>検索性能はモジュール数 O(n) 線形（数千ナレッジまでは実用）</li>
-</ul>
-<h3 id="todov15">TODO（v15 以降のロードマップ）<a class="headerlink" href="#todov15" title="Permanent link">&para;</a></h3>
-<ul>
-<li>M-5: modImageRender の RowHeight 副作用排除</li>
-<li>D-3: clsKnowledgeManager / clsSearchEngine / clsTaskController に Worksheet DI 追加</li>
-<li>D-5: 責務固有の Const をクラス側へ移動</li>
-<li>Minor m-1: SHEET_<em> / FIELD_TYPE_</em> の Enum 化</li>
-<li>ベンチマーク取得（A+ 到達条件）</li>
-<li>単体テストカバレッジ整備（A+ 到達条件）</li>
-</ul>
-<p>詳細は ADR (<a href="https://github.com/ai-crafted-portfolio/knowledgevba">0001-0033</a>) を参照。</p>
 
 
 

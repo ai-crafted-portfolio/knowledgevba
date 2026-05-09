@@ -497,56 +497,6 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#todo" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        TODO・制約・既知の限界
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="TODO・制約・既知の限界">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        制約
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#_8" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        既知の限界
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#todov15" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        TODO（v15 以降のロードマップ）
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
     </ul>
   
 </nav>
@@ -2043,15 +1993,15 @@
 
 
 <h1 id="vba">ナレッジ管理ツール (VBA 製)<a class="headerlink" href="#vba" title="Permanent link">&para;</a></h1>
-<p>職場 PC で社内ノウハウ・トラブル対応メモ・手順書をテキストファイル（<code>.txt</code>、Shift_JIS + CRLF）で蓄積し、Excel から横断検索・サムネ画像つきプレビューできるようにする内製ツールです。現行リリースは <strong>release v2 + image_ext rev1</strong>（2026-05-04）。</p>
+<p>PC 上にノウハウ・トラブル対応メモ・手順書をテキストファイル（<code>.txt</code>、Shift_JIS + CRLF）で蓄積し、Excel から横断検索・サムネ画像つきプレビューできるようにするツールです。現行リリースは <strong>release v2 + image_ext rev1</strong>（2026-05-04）。</p>
 <h2 id="_1">このツールで解決したいこと<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <ul>
 <li>過去の障害メモや手順を「あのとき書いたはずだ」で終わらせない</li>
-<li>子プロセス起動禁止・社内エンドポイントセキュリティポリシーで動かない外部ツールを諦め、<strong>Excel プロセス内で完結</strong>する</li>
+<li>子プロセス起動禁止のセキュリティポリシーで動かない外部ツールを諦め、<strong>Excel プロセス内で完結</strong>する</li>
 </ul>
 <h2 id="_2">想定読者<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <ul>
-<li>同ツールを職場 PC に展開する予定のメンバー</li>
+<li>同ツールを PC に展開するメンバー</li>
 <li>VBA モジュール構成・検索スコアリング設計をレビューする人</li>
 </ul>
 <h2 id="_3">全体像<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
@@ -2067,8 +2017,8 @@
 <p>ナレッジ一覧でメタデータを管理し、検索画面でキーワード一致をスコアリング（タイトル ×3 + 対象フィールド ×2 + 出現回数）して降順ソート、結果一覧の H 列にサムネ（60×40px）、I 列に Score を表示します。結果行を選択して <code>Macro_ShowSearchResultPreview</code> を実行すると、<code>clsFormSpec</code> で宣言した DSL から <code>modFormBuilder</code> が UserForm を実行時生成して詳細プレビューを表示します。設定画面で <code>dataFolder</code> を切り替えれば複数ナレッジ集を運用でき、<code>&lt;dataFolder の親&gt;/kb_images/&lt;KnwNo&gt;.png</code> の規約で画像が解決されます。<code>ImagePath=</code> スタンザを <code>.txt</code> 末尾に書けばパス上書きも可能です。</p>
 <h2 id="_5">設計方針のハイライト<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>モジュール配布 + セルフセットアップ</strong> — <code>.xlsm</code> 本体は配布せず、<code>.bas</code>/<code>.cls</code> 24 個 + セットアップマクロ 1 回実行という形で各 PC に展開（<a href="architecture/#5-adr">ADR-0008</a>）</li>
-<li><strong>VBA 子プロセス全面禁止</strong> — <code>Shell</code> / <code>WScript.Shell.Run</code> 等は職場 PC で動かないので使わず、すべて Excel プロセス内で完結（<a href="architecture/#5-adr">ADR-0002</a>）</li>
+<li><strong>モジュール配布 + セルフセットアップ</strong> — <code>.xlsm</code> 本体は配布せず、<code>.bas</code>/<code>.cls</code> 24 個 + セットアップマクロ 1 回実行という形で各 PC に展開</li>
+<li><strong>VBA 子プロセス全面禁止</strong> — <code>Shell</code> / <code>WScript.Shell.Run</code> 等は使わず、すべて Excel プロセス内で完結</li>
 <li><strong>層分離</strong> — エントリポイント / ビジネスロジック / ユーティリティ / インストーラ / 特殊 の 5 層で責務を分離。詳細は <a href="architecture/">アーキテクチャ</a> 参照</li>
 </ul>
 <h2 id="_6">ページ構成<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
@@ -2076,37 +2026,8 @@
 <li><a href="./">概要</a>（このページ）</li>
 <li><a href="spec/">仕様</a> — モジュール 24 個、検索スコアリング、画像解決、<code>clsFormSpec</code> DSL、テスト構成</li>
 <li><a href="operations/">操作マニュアル</a> — 各シートの操作手順、ボタン名、画面遷移</li>
-<li><a href="architecture/">アーキテクチャ</a> — 層分離図、依存関係、配布パターン、関連 ADR への参照</li>
+<li><a href="architecture/">アーキテクチャ</a> — 層分離図、依存関係、配布パターン</li>
 </ul>
-<div class="admonition note">
-<p class="admonition-title">公開可視性</p>
-<p>本サイトは職場利用を想定したツールのドキュメントのため、全ページ <code>noindex,nofollow</code> を設定しています。検索エンジンへの indexing は意図的に抑止しています。</p>
-</div>
-<hr />
-<h2 id="todo">TODO・制約・既知の限界<a class="headerlink" href="#todo" title="Permanent link">&para;</a></h2>
-<h3 id="_7">制約<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
-<ul>
-<li>VBA 子プロセス禁止（Shell/Run/WScript.Shell/Exec）— 職場 PC ポリシー (ADR-0002)</li>
-<li>クラスモジュール (.cls) 内の <code>Public Const/Type/Declare/Static</code> 禁止 (ADR-0027)</li>
-<li>aspose-cells-python 単独では VBA binary stub のみ生成、real Excel COM 必須 (ADR-0026)</li>
-<li>mkdocs Material のモバイル UX が完璧ではない（ナビ collapse は OK、図解の細部は要確認）</li>
-</ul>
-<h3 id="_8">既知の限界<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
-<ul>
-<li>Excel 単体動作のため Web/モバイルでは利用不可</li>
-<li>同時編集なし（ファイルベース、Git 等での並行編集が必要）</li>
-<li>検索性能はモジュール数 O(n) 線形（数千ナレッジまでは実用）</li>
-</ul>
-<h3 id="todov15">TODO（v15 以降のロードマップ）<a class="headerlink" href="#todov15" title="Permanent link">&para;</a></h3>
-<ul>
-<li>M-5: modImageRender の RowHeight 副作用排除</li>
-<li>D-3: clsKnowledgeManager / clsSearchEngine / clsTaskController に Worksheet DI 追加</li>
-<li>D-5: 責務固有の Const をクラス側へ移動</li>
-<li>Minor m-1: SHEET_<em> / FIELD_TYPE_</em> の Enum 化</li>
-<li>ベンチマーク取得（A+ 到達条件）</li>
-<li>単体テストカバレッジ整備（A+ 到達条件）</li>
-</ul>
-<p>詳細は ADR (<a href="https://github.com/ai-crafted-portfolio/knowledgevba">0001-0033</a>) を参照。</p>
 
 
 
