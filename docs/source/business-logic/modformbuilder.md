@@ -218,9 +218,5 @@ Public Function ProgIDFromType(ByVal t As String) As String
             ProgIDFromType = PROGID_LABEL
     End Select
 End Function
+
 ```
-
-## 関連
-
-- 呼び出す: `clsFormSpec`, `clsControlSpec`
-- 呼び出される: `modSpecExamples`

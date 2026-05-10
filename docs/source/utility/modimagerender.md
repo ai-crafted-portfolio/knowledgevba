@@ -253,9 +253,5 @@ Public Function HasShapeWithPrefix(ByVal ws As Worksheet, _
 ErrHandler:
     HasShapeWithPrefix = False
 End Function
+
 ```
-
-## 関連
-
-- 呼び出す: なし
-- 呼び出される: `clsSearchEngine`

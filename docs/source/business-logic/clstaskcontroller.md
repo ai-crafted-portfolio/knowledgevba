@@ -9,7 +9,7 @@ title: clsTaskController.cls
 | 層 | ビジネスロジック層 |
 | 種別 | クラスモジュール (.cls) |
 | 役割 | ナレッジ操作 (登録 / 編集) のトランザクション制御 |
-| 行数 | 187 行 |
+| 行数 | 195 行 |
 
 ## 配置先
 
@@ -166,25 +166,33 @@ End Sub
 ' 備考:   未定義のタスク名の場合はメインシートのみの配列を返す
 ' ================================================================
 Private Function GetTaskDefinition(ByVal taskName As String) As Variant
+    ' v20 改修: polished mock M-01 v19 準拠で 12 タスクに対応
     Select Case taskName
-        Case TASK_SETUP
-            GetTaskDefinition = Array(SHEET_MAIN, SHEET_SETTINGS, SHEET_STORAGE)
-        Case TASK_CONFIG
-            GetTaskDefinition = Array(SHEET_MAIN, SHEET_SETTINGS, SHEET_STORAGE)
+        Case TASK_SEARCH
+            GetTaskDefinition = Array(SHEET_MAIN, SHEET_SEARCH, SHEET_KNW_DISPLAY)
+        Case TASK_REGISTER
+            GetTaskDefinition = Array(SHEET_MAIN, SHEET_KNW_SAVE, SHEET_FORMAT_PREVIEW)
+        Case TASK_MODIFY
+            GetTaskDefinition = Array(SHEET_MAIN, SHEET_KNW_EDIT, SHEET_KNW_DISPLAY)
+        Case TASK_LIST
+            GetTaskDefinition = Array(SHEET_MAIN, SHEET_KNW_LIST, SHEET_KNW_DISPLAY)
         Case TASK_FORMAT
             GetTaskDefinition = Array(SHEET_MAIN, SHEET_FORMAT_LIST, _
                                        SHEET_FORMAT_DESIGN, SHEET_FORMAT_PREVIEW)
-        Case TASK_REGISTER
-            GetTaskDefinition = Array(SHEET_MAIN, SHEET_KNW_SAVE)
-        Case TASK_SEARCH
-            GetTaskDefinition = Array(SHEET_MAIN, SHEET_SEARCH, SHEET_KNW_DISPLAY)
-        Case TASK_EDIT
-            GetTaskDefinition = Array(SHEET_MAIN, SHEET_KNW_EDIT, _
-                                       SHEET_SEARCH, SHEET_KNW_DISPLAY)
-        Case TASK_DELETE
-            GetTaskDefinition = Array(SHEET_MAIN, SHEET_KNW_LIST)
-        Case TASK_MIGRATE
+        Case TASK_FIELD_REFLECT
             GetTaskDefinition = Array(SHEET_MAIN, SHEET_MIGRATION)
+        Case TASK_STORAGE
+            GetTaskDefinition = Array(SHEET_MAIN, SHEET_STORAGE)
+        Case TASK_SYS_SETTINGS
+            GetTaskDefinition = Array(SHEET_MAIN, SHEET_SETTINGS)
+        Case TASK_LOG
+            GetTaskDefinition = Array(SHEET_MAIN, SHEET_LOG)
+        Case TASK_FILE_FORMAT
+            GetTaskDefinition = Array(SHEET_MAIN, SHEET_FILE_FORMAT)
+        Case TASK_INIT_SETUP
+            GetTaskDefinition = Array(SHEET_MAIN, SHEET_STORAGE, SHEET_SETTINGS, SHEET_FILE_FORMAT)
+        Case TASK_HELP_VERSION
+            GetTaskDefinition = Array(SHEET_MAIN)
         Case Else
             GetTaskDefinition = Array(SHEET_MAIN)
     End Select
@@ -207,9 +215,5 @@ Private Function IsInArray(ByVal target As String, ByVal arr As Variant) As Bool
     Next i
     IsInArray = False
 End Function
+
 ```
-
-## 関連
-
-- 呼び出す: `clsKnowledgeManager`, `clsFormatManager`, `clsLogger`
-- 呼び出される: `modEntryKnowledge`

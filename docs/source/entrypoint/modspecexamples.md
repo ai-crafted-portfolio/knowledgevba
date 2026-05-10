@@ -101,7 +101,7 @@ Public Sub Macro_ShowSearchResultPreview()
     Set spec = NewSearchResultSpec(knwNo, "", _
                                      "Title: " & title & vbCrLf & _
                                      "Score: " & score & vbCrLf & vbCrLf & _
-                                     "(画像と本文は本番版で展開)")
+                                     "(画像と本文は ChromaDB 連動真版で展開)")
 
     Call BuildAndShow(spec, True)
     Exit Sub
@@ -122,9 +122,5 @@ Public Sub frmCallback_searchResult_close(ByVal frm As Object)
     On Error Resume Next
     Unload frm
 End Sub
+
 ```
-
-## 関連
-
-- 呼び出す: `clsFormSpec`, `clsControlSpec`, `modFormBuilder`
-- 呼び出される: `modEntrySearch (Macro_ShowSearchResultPreview)`

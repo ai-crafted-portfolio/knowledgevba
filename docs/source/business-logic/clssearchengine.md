@@ -41,6 +41,14 @@ Option Explicit
 '         modImageRender (新規; サムネ/詳細画像 Shape 描画)
 ' ================================================================
 '
+' ====================================================================
+' [真版 ChromaDB 連動 切替ポイント]
+' 本クラスはモック実装として <dataFolder>/*.txt を ADODB で SJIS 読込し
+' スタンザを line-split して match 判定する。真版では事前 ETL で
+' "Data" シートに chunks を export しておき ScanAndMatch の txt ループを
+' Range 走査に置き換える。VBA 子プロセス禁止 (Shell/Run/Exec/CreateObject
+' Exec 系全部禁止) のため、本クラスから外部プロセスを起動しない。
+' ====================================================================
 
 ' --- 検索シートのセル位置 ---
 Private Const SS_ROW_DIRECT_NO As Long = 3
@@ -364,7 +372,7 @@ End Sub
 ' 概要:   1 つのナレッジファイル内容にスコアを付与
 '         0 = フィルタで弾かれた (該当なし)
 '         1 以上 = キーワード出現回数 × ブースト係数
-' 引数:   IsMatch とほぼ同じ � ブースト計算
+' 引数:   IsMatch とほぼ同じ + ブースト計算
 ' 戻り値: Double - スコア (0 = 該当なし)
 ' 備考:   既存 IsMatch (Boolean) はテスト互換性のため残してあり、
 '         本関数で完全に上位互換できる。
@@ -735,7 +743,7 @@ Private Sub PopulateResults(ByVal ws As Worksheet, _
             ExtractStanzaValue(content, "CreatedDate")
         ws.Cells(targetRow, SS_RESULT_COL_UPDATED).Value = _
             ExtractStanzaValue(content, "UpdatedDate")
-        ' "> 詳細" は CP932 で > が encode 失敗するため ChrW で動的構築する
+        ' "▶ 詳細" は CP932 で ▶ が encode 失敗するため ChrW で動的構築する
         ws.Cells(targetRow, SS_RESULT_COL_DETAIL).Value = ChrW(&H25B6) & " 詳細"
 
         ' --- サムネ Shape 配置 (列 H) ---
@@ -851,9 +859,5 @@ Private Function CombineFilePath(ByVal folder As String, _
         CombineFilePath = folder & "" & fileName
     End If
 End Function
+
 ```
-
-## 関連
-
-- 呼び出す: `modCommon`, `modFileIO`, `modImageRender`, `clsLogger`
-- 呼び出される: `modEntrySearch`

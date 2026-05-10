@@ -123,9 +123,5 @@ Public Function Pad2(ByVal n As Long) As String
         Pad2 = CStr(n)
     End If
 End Function
+
 ```
-
-## 関連
-
-- 呼び出す: なし
-- 呼び出される: `clsKnowledgeManager`, `clsLogger`

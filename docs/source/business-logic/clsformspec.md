@@ -117,9 +117,5 @@ End Function
 Public Function ControlCount() As Long
     ControlCount = m_controls.Count
 End Function
+
 ```
-
-## 関連
-
-- 呼び出す: `clsControlSpec`
-- 呼び出される: `modSpecExamples`, `modFormBuilder`

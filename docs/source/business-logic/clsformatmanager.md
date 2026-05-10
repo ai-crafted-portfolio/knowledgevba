@@ -322,7 +322,7 @@ End Function
 
 ' ================================================================
 ' 関数名: FindFormatRow
-' 概要:   フォーマット一覧から指孪iDの行番号を返す
+' 概要:   フォーマット一覧から指定IDの行番号を返す
 ' 引数:   listWs   - フォーマット一覧シート
 '         formatId - 探すフォーマットID
 ' 戻り値: Long - 行番号（見つからない場合は 0）
@@ -370,7 +370,7 @@ Private Sub AppendFormatToList(ByVal listWs As Worksheet, _
     listWs.Cells(nextRow, FL_COL_UPDATED).Value = Format(Date, "yyyy-mm-dd")
 End Sub
 
-' 既存フォーマットを更新（バージョン） 
+' 既存フォーマットを更新（バージョン+1）
 Private Sub UpdateFormatInList(ByVal listWs As Worksheet, _
                                  ByVal designWs As Worksheet, _
                                  ByVal formatId As String, _
@@ -484,9 +484,5 @@ Private Sub RenderFormatPreview(ByVal ws As Worksheet, _
         previewRow = previewRow + 1
     Next i
 End Sub
+
 ```
-
-## 関連
-
-- 呼び出す: `modCommon`, `clsFieldMigrator`
-- 呼び出される: `modEntryFormat`, `clsKnowledgeManager`

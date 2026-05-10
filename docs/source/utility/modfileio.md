@@ -9,7 +9,7 @@ title: modFileIO.bas
 | 層 | ユーティリティ層 |
 | 種別 | 標準モジュール (.bas) |
 | 役割 | Shift_JIS + CRLF ファイル I/O / フォルダ操作 (3 段フォールバック) |
-| 行数 | 380 行 |
+| 行数 | 386 行 |
 
 ## 配置先
 
@@ -304,11 +304,17 @@ End Function
 ' 戻り値: Variant - ファイル名の配列（拡張子込み）。0件の場合は空配列
 ' 備考:   サブフォルダは辿らない
 ' ================================================================
-' M-4: 空配列ガード - 呼出側は IsEmpty / UBound < LBound チェック必須
+' M-4: 空配列ガード — 呼出側は IsEmpty / UBound < LBound チェック必須
 '        本関数は ReDim 済み配列を返すが、Dir 失敗時は ReDim Preserve なしで返る場合がある
 ' s-2 contract: 本モジュール内の Kill / MkDir / Open For Output に渡されるパスは
 '                呼出側で IsValidKnowledgeId / 自前パス検証済みであること。
 '                本モジュールはパス検証責任を負わない (低レイヤ I/O 専念)。
+' v14 D-4: UNO 段は LibreOffice 対応用 (本プロジェクトでは未使用)。
+'          将来 LibreOffice 互換が必要なら別 modFileIO_UNO に切出し、本モジュールは
+'          Excel 専用 ADODB + Open For Output の 2 段フォールバックに専念する。
+' v14 s-3: ADODB fallback (Open For Output) で SJIS が壊れる可能性。
+'          modFileIO は循環依存回避のため Logger 非依存だが、呼出側で
+'          ADODB 失敗 → fallback 経路選択時に Logger.LogWarn で通知すること。
 Public Function ListFilesInFolder(ByVal folderPath As String, _
                                     ByVal extension As String) As Variant
     On Error GoTo ErrHandler
@@ -400,9 +406,5 @@ Private Function ConvertLocalPathToURL(ByVal localPath As String) As String
         End If
     End If
 End Function
+
 ```
-
-## 関連
-
-- 呼び出す: なし
-- 呼び出される: `clsSearchEngine`, `clsKnowledgeManager`, `clsStorageResolver`

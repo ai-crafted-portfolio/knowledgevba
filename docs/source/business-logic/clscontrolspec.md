@@ -137,9 +137,5 @@ Public Sub Init(ByVal cType As String, ByVal nm As String, _
     m_caption = cap
     m_onClick = onClk
 End Sub
+
 ```
-
-## 関連
-
-- 呼び出す: なし
-- 呼び出される: `clsFormSpec`

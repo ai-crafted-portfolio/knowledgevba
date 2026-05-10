@@ -9,7 +9,7 @@ title: modEntryMain.bas
 | 層 | エントリポイント層 |
 | 種別 | 標準モジュール (.bas) |
 | 役割 | 本番モード起点 / 共通 BuildLogger 提供 |
-| 行数 | 315 行 |
+| 行数 | 241 行 |
 
 ## 配置先
 
@@ -25,213 +25,183 @@ Option Explicit
 
 ' ================================================================
 ' モジュール: modEntryMain（エントリポイント層）
-' 概要:       メインシートの8つのタスク選択ボタンに割り当てるマクロ群
-' 依存先:     clsLogger, clsTaskController, modCommon
+' 概要:   メインシートの 12 タスク選択ボタン + 各画面の「メインに戻る」
+'         ボタンに割り当てるマクロ群。
+'         polished mock M-01 v19 準拠で 8 → 12 ボタン化。
+' 依存先: clsLogger, clsTaskController, modCommon, modFactory
 ' ================================================================
 
 ' ================================================================
-' 関数名: Btn_TaskSetup
-' 概要:   タスク「初回セットアップ」に切替
-' 引数:   なし
-' 戻り値: なし
+' --- 12 タスク切替ボタン (M-01 メイン) ---
 ' ================================================================
-Public Sub Btn_TaskSetup()
-    On Error GoTo ErrHandler
-    Call SwitchTaskCommon(TASK_SETUP, "Btn_TaskSetup")
-    Exit Sub
-ErrHandler:
-    Call ShowError("タスク切替", Err.Description, _
-                    "再度ボタンを押してください")
-End Sub
 
-' ================================================================
-' 関数名: Btn_TaskConfig
-' 概要:   タスク「設定変更」に切替
-' ================================================================
-Public Sub Btn_TaskConfig()
-    On Error GoTo ErrHandler
-    Call SwitchTaskCommon(TASK_CONFIG, "Btn_TaskConfig")
-    Exit Sub
-ErrHandler:
-    Call ShowError("タスク切替", Err.Description, _
-                    "再度ボタンを押してください")
-End Sub
-
-' ================================================================
-' 関数名: Btn_TaskFormat
-' 概要:   タスク「フォーマット管理」に切替
-' ================================================================
-Public Sub Btn_TaskFormat()
-    On Error GoTo ErrHandler
-    Call SwitchTaskCommon(TASK_FORMAT, "Btn_TaskFormat")
-    Exit Sub
-ErrHandler:
-    Call ShowError("タスク切替", Err.Description, _
-                    "再度ボタンを押してください")
-End Sub
-
-' ================================================================
-' 関数名: Btn_TaskRegister
-' 概要:   タスク「ナレッジ登録」に切替
-' ================================================================
-Public Sub Btn_TaskRegister()
-    On Error GoTo ErrHandler
-    Call SwitchTaskCommon(TASK_REGISTER, "Btn_TaskRegister")
-    Exit Sub
-ErrHandler:
-    Call ShowError("タスク切替", Err.Description, _
-                    "再度ボタンを押してください")
-End Sub
-
-' ================================================================
-' 関数名: Btn_TaskSearch
-' 概要:   タスク「検索・確認」に切替
-' ================================================================
 Public Sub Btn_TaskSearch()
-    On Error GoTo ErrHandler
     Call SwitchTaskCommon(TASK_SEARCH, "Btn_TaskSearch")
+End Sub
+
+Public Sub Btn_TaskRegister()
+    Call SwitchTaskCommon(TASK_REGISTER, "Btn_TaskRegister")
+End Sub
+
+Public Sub Btn_TaskModify()
+    Call SwitchTaskCommon(TASK_MODIFY, "Btn_TaskModify")
+End Sub
+
+Public Sub Btn_TaskList()
+    Call SwitchTaskCommon(TASK_LIST, "Btn_TaskList")
+End Sub
+
+Public Sub Btn_TaskFormat()
+    Call SwitchTaskCommon(TASK_FORMAT, "Btn_TaskFormat")
+End Sub
+
+Public Sub Btn_TaskFieldReflect()
+    Call SwitchTaskCommon(TASK_FIELD_REFLECT, "Btn_TaskFieldReflect")
+End Sub
+
+Public Sub Btn_TaskStorage()
+    Call SwitchTaskCommon(TASK_STORAGE, "Btn_TaskStorage")
+End Sub
+
+Public Sub Btn_TaskSysSettings()
+    Call SwitchTaskCommon(TASK_SYS_SETTINGS, "Btn_TaskSysSettings")
+End Sub
+
+Public Sub Btn_TaskLog()
+    Call SwitchTaskCommon(TASK_LOG, "Btn_TaskLog")
+End Sub
+
+Public Sub Btn_TaskFileFormat()
+    Call SwitchTaskCommon(TASK_FILE_FORMAT, "Btn_TaskFileFormat")
+End Sub
+
+Public Sub Btn_TaskInitSetup()
+    On Error GoTo ErrHandler
+    Call modSetup.SetupSheetsAndButtons(False)
     Exit Sub
 ErrHandler:
-    Call ShowError("タスク切替", Err.Description, _
-                    "再度ボタンを押してください")
+    Call ShowError("再セットアップ", Err.Description, "再度ボタンを押してください")
+End Sub
+
+Public Sub Btn_TaskHelpVersion()
+    On Error GoTo ErrHandler
+    MsgBox "ナレッジ管理システム v2.0" & vbCrLf & _
+           "ビルド: 2026-05-10" & vbCrLf & _
+           "ライセンス: 社内利用限定", _
+           vbInformation, "ヘルプ / バージョン"
+    Exit Sub
+ErrHandler:
+    Call ShowError("バージョン表示", Err.Description, "")
 End Sub
 
 ' ================================================================
-' 関数名: Btn_TaskEdit
-' 概要:   タスク「ナレッジ修正」に切替
+' --- 全画面共通: メインに戻る ボタン ---
 ' ================================================================
+
+Public Sub Btn_BackToMain()
+    On Error GoTo ErrHandler
+    Dim w As Worksheet
+    For Each w In ThisWorkbook.Worksheets
+        If w.Name = SHEET_MAIN Then
+            w.Visible = xlSheetVisible
+        Else
+            w.Visible = xlSheetHidden
+        End If
+    Next w
+    ThisWorkbook.Worksheets(SHEET_MAIN).Activate
+    ThisWorkbook.Worksheets(SHEET_MAIN).Range("D7").Value = "(未選択)"
+    Exit Sub
+ErrHandler:
+    Call ShowError("メインに戻る", Err.Description, "再度ボタンを押してください")
+End Sub
+
+' ================================================================
+' --- 後方互換ボタン（旧 8 タスク → 新 12 タスクへのリダイレクト） ---
+' ================================================================
+
+Public Sub Btn_TaskSetup()
+    Call Btn_TaskInitSetup
+End Sub
+
+Public Sub Btn_TaskConfig()
+    Call Btn_TaskSysSettings
+End Sub
+
 Public Sub Btn_TaskEdit()
-    On Error GoTo ErrHandler
-    Call SwitchTaskCommon(TASK_EDIT, "Btn_TaskEdit")
-    Exit Sub
-ErrHandler:
-    Call ShowError("タスク切替", Err.Description, _
-                    "再度ボタンを押してください")
+    Call Btn_TaskModify
 End Sub
 
-' ================================================================
-' 関数名: Btn_TaskDelete
-' 概要:   タスク「ナレッジ削除」に切替
-' ================================================================
 Public Sub Btn_TaskDelete()
-    On Error GoTo ErrHandler
-    Call SwitchTaskCommon(TASK_DELETE, "Btn_TaskDelete")
-    Exit Sub
-ErrHandler:
-    Call ShowError("タスク切替", Err.Description, _
-                    "再度ボタンを押してください")
+    Call Btn_TaskModify
 End Sub
 
-' ================================================================
-' 関数名: Btn_TaskMigrate
-' 概要:   タスク「既存データ反映」に切替
-' ================================================================
 Public Sub Btn_TaskMigrate()
-    On Error GoTo ErrHandler
-    Call SwitchTaskCommon(TASK_MIGRATE, "Btn_TaskMigrate")
-    Exit Sub
-ErrHandler:
-    Call ShowError("タスク切替", Err.Description, _
-                    "再度ボタンを押してください")
+    Call Btn_TaskFieldReflect
 End Sub
 
 ' ================================================================
-' 関数名: SwitchTaskCommon
-' 概要:   タスク切替の共通処理（Logger生成、Controller実行）
-' 引数:   taskName    - 切替先タスク名
-'         callerName  - 呼び出し元関数名（ログ用）
-' 戻り値: なし
+' --- 共通処理 ---
 ' ================================================================
-Private Sub SwitchTaskCommon(ByVal taskName As String, _
-                               ByVal callerName As String)
+
+Private Sub SwitchTaskCommon(ByVal taskName As String, ByVal callerName As String)
+    On Error GoTo ErrHandler
     Dim logger As clsLogger
     Set logger = BuildLogger()
     logger.LogInfo "modEntryMain", callerName, _
                     "タスク切替開始: " & taskName
-    
+
     Dim controller As clsTaskController
     Set controller = New clsTaskController
     controller.Init logger
     controller.SwitchToTask taskName
+    Exit Sub
+ErrHandler:
+    Call ShowError("タスク切替", Err.Description, "再度ボタンを押してください")
 End Sub
 
-' ================================================================
-' 関数名: BuildLogger
-' 概要:   設定シートの値を読み取ってLoggerインスタンスを生成
-' 引数:   なし
-' 戻り値: clsLogger - 初期化済みLogger
-' ================================================================
 Public Function BuildLogger() As clsLogger
     Dim logger As clsLogger
     Set logger = New clsLogger
-    logger.Init ThisWorkbook.Worksheets(SHEET_LOG), _
-                 GetDebugLevel()
+    logger.Init ThisWorkbook.Worksheets(SHEET_LOG), GetDebugLevel()
     Set BuildLogger = logger
 End Function
 
-' ================================================================
-' 関数名: GetDebugLevel
-' 概要:   設定シートからデバッグレベルの値を取得
-' 引数:   なし
-' 戻り値: String - "OFF" または "ON"
-' ================================================================
 Public Function GetDebugLevel() As String
+    On Error GoTo ErrHandler
     Dim ws As Worksheet
     Set ws = ThisWorkbook.Worksheets(SHEET_SETTINGS)
     Dim lvl As String
     lvl = CStr(ws.Cells(SETTINGS_ROW_DEBUGLEVEL, SETTINGS_COL_VALUE).Value)
-    If lvl <> DEBUG_ON Then
-        lvl = DEBUG_OFF
-    End If
+    If lvl <> DEBUG_ON Then lvl = DEBUG_OFF
     GetDebugLevel = lvl
+    Exit Function
+ErrHandler:
+    GetDebugLevel = DEBUG_OFF
 End Function
 
-' ================================================================
-' 関数名: GetDataFolder
-' 概要:   設定シートからデータフォルダパスを取得
-' 引数:   なし
-' 戻り値: String - データフォルダのUNCパス
-' ================================================================
 Public Function GetDataFolder() As String
+    On Error GoTo ErrHandler
     Dim ws As Worksheet
     Set ws = ThisWorkbook.Worksheets(SHEET_SETTINGS)
     GetDataFolder = CStr(ws.Cells(SETTINGS_ROW_DATAFOLDER, SETTINGS_COL_VALUE).Value)
+    Exit Function
+ErrHandler:
+    GetDataFolder = ""
 End Function
 
-' ================================================================
-' 関数名: IsTestMode
-' 概要:   テストモードが有効か判定
-'         有効時は MsgBox 系関数がダイアログを出さずログのみ出力
-' 引数:   なし
-' 戻り値: Boolean - テストモード有効なら True
-' 備考:   設定シート 行6 C列 = "TRUE" でテストモード有効
-'         通常運用時は空または"FALSE"
-' ================================================================
 Public Function IsTestMode() As Boolean
     On Error GoTo ErrHandler
     Dim ws As Worksheet
     Set ws = ThisWorkbook.Worksheets(SHEET_SETTINGS)
     Dim v As String
-    v = UCase(CStr(ws.Cells(6, SETTINGS_COL_VALUE).Value))
-    IsTestMode = (v = "TRUE")
+    v = UCase(CStr(ws.Cells(SETTINGS_ROW_TESTMODE, SETTINGS_COL_VALUE).Value))
+    IsTestMode = (v = TESTMODE_ON)
     Exit Function
 ErrHandler:
     IsTestMode = False
 End Function
 
-' ================================================================
-' 関数名: ShowError
-' 概要:   統一フォーマットのエラーメッセージ表示
-'         ユーザビリティ点検の積み残し#6「エラーメッセージ統一」に対応
-'         テストモード時はログのみ出力してダイアログは抑制
-' 引数:   operation - 操作名
-'         detail    - エラー内容
-'         action    - 推奨アクション
-' 戻り値: なし
-' ================================================================
-Public Sub ShowError(ByVal operation As String, _
-                       ByVal detail As String, _
-                       ByVal action As String)
+Public Sub ShowError(ByVal operation As String, ByVal detail As String, ByVal action As String)
     If IsTestMode() Then
         Call LogDialogSuppressed("ShowError", operation, detail, action)
         Exit Sub
@@ -242,18 +212,7 @@ Public Sub ShowError(ByVal operation As String, _
             vbCritical, "エラー"
 End Sub
 
-' ================================================================
-' 関数名: ShowWarning
-' 概要:   統一フォーマットの警告メッセージ表示
-'         テストモード時はログのみ出力してダイアログは抑制
-' 引数:   operation - 操作名
-'         detail    - 警告内容
-'         action    - 推奨アクション
-' 戻り値: なし
-' ================================================================
-Public Sub ShowWarning(ByVal operation As String, _
-                        ByVal detail As String, _
-                        ByVal action As String)
+Public Sub ShowWarning(ByVal operation As String, ByVal detail As String, ByVal action As String)
     If IsTestMode() Then
         Call LogDialogSuppressed("ShowWarning", operation, detail, action)
         Exit Sub
@@ -264,14 +223,6 @@ Public Sub ShowWarning(ByVal operation As String, _
             vbExclamation, "警告"
 End Sub
 
-' ================================================================
-' 関数名: ShowInfo
-' 概要:   統一フォーマットの情報メッセージ表示
-'         テストモード時はログのみ出力してダイアログは抑制
-' 引数:   operation - 操作名
-'         detail    - 情報内容
-' 戻り値: なし
-' ================================================================
 Public Sub ShowInfo(ByVal operation As String, ByVal detail As String)
     If IsTestMode() Then
         Call LogDialogSuppressed("ShowInfo", operation, detail, "")
@@ -282,16 +233,7 @@ Public Sub ShowInfo(ByVal operation As String, ByVal detail As String)
             vbInformation, "情報"
 End Sub
 
-' ================================================================
-' 関数名: ConfirmAction
-' 概要:   ユーザーに確認を求めるダイアログ（Yes/No）
-'         テストモード時は無条件で True を返し、ログに記録
-' 引数:   operation - 操作名
-'         detail    - 確認内容
-' 戻り値: Boolean - Yesなら True（テストモード時は常に True）
-' ================================================================
-Public Function ConfirmAction(ByVal operation As String, _
-                                ByVal detail As String) As Boolean
+Public Function ConfirmAction(ByVal operation As String, ByVal detail As String) As Boolean
     If IsTestMode() Then
         Call LogDialogSuppressed("ConfirmAction", operation, detail, "自動Yes")
         ConfirmAction = True
@@ -305,39 +247,18 @@ Public Function ConfirmAction(ByVal operation As String, _
     ConfirmAction = (result = vbYes)
 End Function
 
-' ================================================================
-' 関数名: LogDialogSuppressed
-' 概要:   テストモード時に抑制されたダイアログ内容をログに記録
-' 引数:   dialogType - ダイアログ種別（ShowError等）
-'         operation  - 操作名
-'         detail     - 内容
-'         action     - 推奨アクション（Infoの場合は空）
-' 戻り値: なし
-' ================================================================
 Private Sub LogDialogSuppressed(ByVal dialogType As String, _
                                   ByVal operation As String, _
                                   ByVal detail As String, _
                                   ByVal action As String)
-    On Error GoTo ErrHandler
+    On Error Resume Next
     Dim logger As clsLogger
     Set logger = BuildLogger()
-    
     Dim msg As String
-    msg = "[" & dialogType & "抑制] 操作=" & operation & _
-           ", 内容=" & detail
-    If action <> "" Then
-        msg = msg & ", 対処=" & action
-    End If
-    
+    msg = "[" & dialogType & "抑制] 操作=" & operation & ", 内容=" & detail
+    If action <> "" Then msg = msg & ", 対処=" & action
     logger.LogInfo "modEntryMain", "LogDialogSuppressed", msg
-    Exit Sub
-
-ErrHandler:
-    ' ログ失敗時は握りつぶす
+    Err.Clear
 End Sub
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
 ```
-
-## 関連
-
-- 呼び出す: `modCommon`, `clsLogger`
-- 呼び出される: `ThisWorkbook (本番)`

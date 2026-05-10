@@ -33,7 +33,7 @@ Option Explicit
 
 ' Phase 6 レビュー: 9 subs/funcs に対し On Error GoTo は 1 件のみ。
 ' Public method (Init / RunMigration) は ErrHandler 補強推奨だが、
-' 既存 89 テスト互換性のため本 v4 では指摘記録のみ。
+' 既存 89 テスト互換性のため本 v4 では指摘記録のみ (v5 で対応予定)。
 
 ' ================================================================
 ' クラス: clsFieldMigrator（ビジネスロジック層）
@@ -328,9 +328,5 @@ Private Function CombineFilePath(ByVal folder As String, _
         CombineFilePath = folder & "\" & fileName
     End If
 End Function
+
 ```
-
-## 関連
-
-- 呼び出す: `modFileIO`, `modStringUtil`
-- 呼び出される: `clsFormatManager`

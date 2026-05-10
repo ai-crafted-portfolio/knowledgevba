@@ -259,9 +259,5 @@ Public Function IsValidKnowledgeId(ByVal knwNo As String) As Boolean
 ErrHandler:
     IsValidKnowledgeId = False
 End Function
+
 ```
-
-## 関連
-
-- 呼び出す: `modCommon`
-- 呼び出される: `clsKnowledgeManager`, `clsFieldMigrator`

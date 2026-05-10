@@ -9,7 +9,7 @@ title: modCommon.bas
 | 層 | ユーティリティ層 |
 | 種別 | 標準モジュール (.bas) |
 | 役割 | 全モジュール共通定数 (シート名 / 列番号 / 行番号など) |
-| 行数 | 101 行 |
+| 行数 | 129 行 |
 
 ## 配置先
 
@@ -83,15 +83,43 @@ Public Const SETTINGS_ROW_DEBUGLEVEL As Long = 5
 Public Const SETTINGS_COL_NAME As Long = 2
 Public Const SETTINGS_COL_VALUE As Long = 3
 
-' --- タスク名定数（8タスク） ---
-Public Const TASK_SETUP As String = "初回セットアップ"
-Public Const TASK_CONFIG As String = "設定変更"
-Public Const TASK_FORMAT As String = "フォーマット管理"
+' --- タスク名定数（12タスク — polished mock M-01 v19 準拠） ---
+' v20 改修: 8 → 12 ボタン化。後方互換のため旧 8 タスク名も保持。
+Public Const TASK_SEARCH As String = "検索"
 Public Const TASK_REGISTER As String = "ナレッジ登録"
-Public Const TASK_SEARCH As String = "検索・確認"
+Public Const TASK_MODIFY As String = "ナレッジ修正"
+Public Const TASK_LIST As String = "ナレッジ一覧"
+Public Const TASK_FORMAT As String = "フォーマット管理"
+Public Const TASK_FIELD_REFLECT As String = "フィールド反映"
+Public Const TASK_STORAGE As String = "格納先設定"
+Public Const TASK_SYS_SETTINGS As String = "システム設定"
+Public Const TASK_LOG As String = "ログ確認"
+Public Const TASK_FILE_FORMAT As String = "ファイル形式"
+Public Const TASK_INIT_SETUP As String = "初回セットアップ"
+Public Const TASK_HELP_VERSION As String = "ヘルプ"
+
+' --- 旧 8 タスク名（後方互換用、廃止予定） ---
+Public Const TASK_SETUP As String = "初回セットアップ"
+Public Const TASK_CONFIG As String = "システム設定"
 Public Const TASK_EDIT As String = "ナレッジ修正"
-Public Const TASK_DELETE As String = "ナレッジ削除"
-Public Const TASK_MIGRATE As String = "既存データ反映"
+Public Const TASK_DELETE As String = "ナレッジ修正"
+Public Const TASK_MIGRATE As String = "フィールド反映"
+
+' --- カラー定数（polished mock 準拠 — spec.md §2 の表に対応） ---
+Public Const COLOR_TITLE_DEEP_BLUE As String = "#1F3864"
+Public Const COLOR_TITLE_BLUE As String = "#1F4E78"
+Public Const COLOR_SECTION_BLUE As String = "#2F5496"
+Public Const COLOR_SECTION_BLUE2 As String = "#4472C4"
+Public Const COLOR_BTN_PRIMARY As String = "#5B9BD5"
+Public Const COLOR_BTN_NAV As String = "#70AD47"
+Public Const COLOR_BTN_SUB As String = "#BFBFBF"
+Public Const COLOR_BTN_DANGER As String = "#ED7D31"
+Public Const COLOR_DESTROY_BAR As String = "#C00000"
+Public Const COLOR_REQUIRED_RED As String = "#C00000"
+Public Const COLOR_HINT_YELLOW As String = "#FFF2CC"
+Public Const COLOR_HINT_BAR As String = "#DEEBF7"
+Public Const COLOR_HEADER_LIGHT As String = "#B4C7E7"
+Public Const COLOR_HINT_GREEN As String = "#E2EFDA"
 
 ' --- テストモード関連定数 ---
 Public Const SETTINGS_ROW_TESTMODE As Long = 6
@@ -121,9 +149,5 @@ Public Function SheetExists(ByVal sheetName As String) As Boolean
     Err.Clear
     On Error GoTo 0
 End Function
+
 ```
-
-## 関連
-
-- 呼び出す: なし
-- 呼び出される: `全モジュール`
