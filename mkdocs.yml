@@ -64,9 +64,9 @@ extra_css:
 
 nav:
   - 概要: index.md
+  - インストール: install.md
   - 仕様: spec.md
   - アーキテクチャ: architecture.md
-  - Q&A (なぜこの設計？): qa.md
   - 操作マニュアル: operations.md
   - ソースコード:
       - 一覧: source/index.md
