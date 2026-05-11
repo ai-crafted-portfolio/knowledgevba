@@ -9,15 +9,11 @@
          <lastmod>2026-05-11</lastmod>
     </url>
     <url>
-         <loc>https://ai-crafted-portfolio.github.io/knowledgevba/install/</loc>
-         <lastmod>2026-05-11</lastmod>
-    </url>
-    <url>
          <loc>https://ai-crafted-portfolio.github.io/knowledgevba/operations/</loc>
          <lastmod>2026-05-11</lastmod>
     </url>
     <url>
-         <loc>https://ai-crafted-portfolio.github.io/knowledgevba/qa/</loc>
+         <loc>https://ai-crafted-portfolio.github.io/knowledgevba/setup/</loc>
          <lastmod>2026-05-11</lastmod>
     </url>
     <url>
@@ -113,18 +109,6 @@
          <lastmod>2026-05-11</lastmod>
     </url>
     <url>
-         <loc>https://ai-crafted-portfolio.github.io/knowledgevba/source/cowork-demo/modautoinit/</loc>
-         <lastmod>2026-05-11</lastmod>
-    </url>
-    <url>
-         <loc>https://ai-crafted-portfolio.github.io/knowledgevba/source/cowork-demo/moddemoseeder/</loc>
-         <lastmod>2026-05-11</lastmod>
-    </url>
-    <url>
-         <loc>https://ai-crafted-portfolio.github.io/knowledgevba/source/cowork-demo/thisworkbook/</loc>
-         <lastmod>2026-05-11</lastmod>
-    </url>
-    <url>
          <loc>https://ai-crafted-portfolio.github.io/knowledgevba/source/entrypoint/modentryformat/</loc>
          <lastmod>2026-05-11</lastmod>
     </url>
@@ -153,71 +137,67 @@
          <lastmod>2026-05-11</lastmod>
     </url>
     <url>
-         <loc>https://ai-crafted-portfolio.github.io/knowledgevba/source/logger/clslogentry/</loc>
+         <loc>https://ai-crafted-portfolio.github.io/knowledgevba/source/screen/clsfileformatscreen/</loc>
          <lastmod>2026-05-11</lastmod>
     </url>
     <url>
-         <loc>https://ai-crafted-portfolio.github.io/knowledgevba/source/logger/clslogger/</loc>
+         <loc>https://ai-crafted-portfolio.github.io/knowledgevba/source/screen/clsformatdesignscreen/</loc>
          <lastmod>2026-05-11</lastmod>
     </url>
     <url>
-         <loc>https://ai-crafted-portfolio.github.io/knowledgevba/source/screens/clsfileformatscreen/</loc>
+         <loc>https://ai-crafted-portfolio.github.io/knowledgevba/source/screen/clsformatlistscreen/</loc>
          <lastmod>2026-05-11</lastmod>
     </url>
     <url>
-         <loc>https://ai-crafted-portfolio.github.io/knowledgevba/source/screens/clsformatdesignscreen/</loc>
+         <loc>https://ai-crafted-portfolio.github.io/knowledgevba/source/screen/clsformatpreviewscreen/</loc>
          <lastmod>2026-05-11</lastmod>
     </url>
     <url>
-         <loc>https://ai-crafted-portfolio.github.io/knowledgevba/source/screens/clsformatlistscreen/</loc>
+         <loc>https://ai-crafted-portfolio.github.io/knowledgevba/source/screen/clsknowledgeeditscreen/</loc>
          <lastmod>2026-05-11</lastmod>
     </url>
     <url>
-         <loc>https://ai-crafted-portfolio.github.io/knowledgevba/source/screens/clsformatpreviewscreen/</loc>
+         <loc>https://ai-crafted-portfolio.github.io/knowledgevba/source/screen/clsknowledgelistscreen/</loc>
          <lastmod>2026-05-11</lastmod>
     </url>
     <url>
-         <loc>https://ai-crafted-portfolio.github.io/knowledgevba/source/screens/clsknowledgeeditscreen/</loc>
+         <loc>https://ai-crafted-portfolio.github.io/knowledgevba/source/screen/clsknowledgeregisterscreen/</loc>
          <lastmod>2026-05-11</lastmod>
     </url>
     <url>
-         <loc>https://ai-crafted-portfolio.github.io/knowledgevba/source/screens/clsknowledgelistscreen/</loc>
+         <loc>https://ai-crafted-portfolio.github.io/knowledgevba/source/screen/clsknowledgeviewscreen/</loc>
          <lastmod>2026-05-11</lastmod>
     </url>
     <url>
-         <loc>https://ai-crafted-portfolio.github.io/knowledgevba/source/screens/clsknowledgeregisterscreen/</loc>
+         <loc>https://ai-crafted-portfolio.github.io/knowledgevba/source/screen/clslogscreen/</loc>
          <lastmod>2026-05-11</lastmod>
     </url>
     <url>
-         <loc>https://ai-crafted-portfolio.github.io/knowledgevba/source/screens/clsknowledgeviewscreen/</loc>
+         <loc>https://ai-crafted-portfolio.github.io/knowledgevba/source/screen/clsmainscreen/</loc>
          <lastmod>2026-05-11</lastmod>
     </url>
     <url>
-         <loc>https://ai-crafted-portfolio.github.io/knowledgevba/source/screens/clslogscreen/</loc>
+         <loc>https://ai-crafted-portfolio.github.io/knowledgevba/source/screen/clsmigrationscreen/</loc>
          <lastmod>2026-05-11</lastmod>
     </url>
     <url>
-         <loc>https://ai-crafted-portfolio.github.io/knowledgevba/source/screens/clsmainscreen/</loc>
+         <loc>https://ai-crafted-portfolio.github.io/knowledgevba/source/screen/clssearchscreen/</loc>
          <lastmod>2026-05-11</lastmod>
     </url>
     <url>
-         <loc>https://ai-crafted-portfolio.github.io/knowledgevba/source/screens/clsmigrationscreen/</loc>
+         <loc>https://ai-crafted-portfolio.github.io/knowledgevba/source/screen/clsstoragescreen/</loc>
          <lastmod>2026-05-11</lastmod>
     </url>
     <url>
-         <loc>https://ai-crafted-portfolio.github.io/knowledgevba/source/screens/clssearchscreen/</loc>
-         <lastmod>2026-05-11</lastmod>
-    </url>
-    <url>
-         <loc>https://ai-crafted-portfolio.github.io/knowledgevba/source/screens/clsstoragescreen/</loc>
-         <lastmod>2026-05-11</lastmod>
-    </url>
-    <url>
-         <loc>https://ai-crafted-portfolio.github.io/knowledgevba/source/screens/clssystemsettingsscreen/</loc>
+         <loc>https://ai-crafted-portfolio.github.io/knowledgevba/source/screen/clssystemsettingsscreen/</loc>
          <lastmod>2026-05-11</lastmod>
     </url>
     <url>
          <loc>https://ai-crafted-portfolio.github.io/knowledgevba/source/special/thisworkbook/</loc>
+         <lastmod>2026-05-11</lastmod>
+    </url>
+    <url>
+         <loc>https://ai-crafted-portfolio.github.io/knowledgevba/source/utility/clslogentry/</loc>
          <lastmod>2026-05-11</lastmod>
     </url>
     <url>

@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="層分離図、依存関係、配布パターン">
+        <meta name="description" content="層分離図、依存関係、配布パターン、関連 ADR">
       
       
         <meta name="author" content="ai-crafted-portfolio">
@@ -15,10 +15,10 @@
         <link rel="canonical" href="https://ai-crafted-portfolio.github.io/knowledgevba/architecture/">
       
       
-        <link rel="prev" href="../spec/">
+        <link rel="prev" href="../operations/">
       
       
-        <link rel="next" href="../operations/">
+        <link rel="next" href="../source/">
       
       
         
@@ -238,13 +238,13 @@
   
   
     <li class="md-tabs__item">
-      <a href="../install/" class="md-tabs__link">
+      <a href="../spec/" class="md-tabs__link">
         
   
   
     
   
-  インストール
+  仕様
 
       </a>
     </li>
@@ -257,13 +257,32 @@
   
   
     <li class="md-tabs__item">
-      <a href="../spec/" class="md-tabs__link">
+      <a href="../setup/" class="md-tabs__link">
         
   
   
     
   
-  仕様
+  セットアップ
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../operations/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  操作手順
 
       </a>
     </li>
@@ -285,25 +304,6 @@
     
   
   アーキテクチャ
-
-      </a>
-    </li>
-  
-
-      
-        
-  
-  
-  
-  
-    <li class="md-tabs__item">
-      <a href="../operations/" class="md-tabs__link">
-        
-  
-  
-    
-  
-  操作マニュアル
 
       </a>
     </li>
@@ -401,14 +401,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../install/" class="md-nav__link">
+      <a href="../spec/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    インストール
+    仕様
   
 
     
@@ -428,14 +428,41 @@
   
   
     <li class="md-nav__item">
-      <a href="../spec/" class="md-nav__link">
+      <a href="../setup/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    仕様
+    セットアップ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../operations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    操作手順
   
 
     
@@ -601,7 +628,7 @@
   <a href="#5" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5. テスト戦略
+        5. 主な設計上の前提
       
     </span>
   </a>
@@ -613,6 +640,17 @@
     <span class="md-ellipsis">
       
         6. 拡張ポイント
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. 既知の制約
       
     </span>
   </a>
@@ -633,42 +671,11 @@
   
   
   
-    <li class="md-nav__item">
-      <a href="../operations/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    操作マニュアル
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
     
     
       
         
           
-        
-      
-        
-      
         
       
         
@@ -1028,6 +1035,8 @@
       
         
       
+        
+      
     
     
     
@@ -1080,210 +1089,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../source/business-logic/iscreenrenderer/" class="md-nav__link">
+      <a href="../source/business-logic/clsbuttonspec/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    IScreenRenderer
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../source/business-logic/clssearchengine/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    clsSearchEngine
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../source/business-logic/clsknowledgemanager/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    clsKnowledgeManager
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../source/business-logic/clsformatmanager/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    clsFormatManager
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../source/business-logic/clstaskcontroller/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    clsTaskController
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../source/business-logic/clsstorageresolver/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    clsStorageResolver
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../source/business-logic/clsfieldmigrator/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    clsFieldMigrator
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../source/business-logic/clsformspec/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    clsFormSpec
+    clsButtonSpec
   
 
     
@@ -1332,14 +1145,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../source/business-logic/clsbuttonspec/" class="md-nav__link">
+      <a href="../source/business-logic/clsfieldmigrator/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    clsButtonSpec
+    clsFieldMigrator
   
 
     
@@ -1388,6 +1201,118 @@
   
   
     <li class="md-nav__item">
+      <a href="../source/business-logic/clsformspec/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsFormSpec
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../source/business-logic/clsformatmanager/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsFormatManager
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../source/business-logic/clsknowledgemanager/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsKnowledgeManager
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../source/business-logic/clslogger/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsLogger
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../source/business-logic/clsscreenspec/" class="md-nav__link">
         
   
@@ -1396,6 +1321,34 @@
     
   
     clsScreenSpec
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../source/business-logic/clssearchengine/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsSearchEngine
   
 
     
@@ -1500,6 +1453,62 @@
   
   
     <li class="md-nav__item">
+      <a href="../source/business-logic/clsstorageresolver/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsStorageResolver
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../source/business-logic/clstaskcontroller/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsTaskController
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../source/business-logic/clsuserformrenderer/" class="md-nav__link">
         
   
@@ -1508,6 +1517,34 @@
     
   
     clsUserFormRenderer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../source/business-logic/iscreenrenderer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IScreenRenderer
   
 
     
@@ -1662,22 +1699,6 @@
       
         
       
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
     
     
     
@@ -1701,7 +1722,7 @@
   <span class="md-ellipsis">
     
   
-    画面層
+    ユーティリティ
   
 
     
@@ -1717,475 +1738,39 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    画面層
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../source/screens/clsmainscreen/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    clsMainScreen (M-01)
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../source/screens/clsformatlistscreen/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    clsFormatListScreen (M-02)
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../source/screens/clsformatdesignscreen/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    clsFormatDesignScreen (M-03)
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../source/screens/clsformatpreviewscreen/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    clsFormatPreviewScreen (M-04)
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../source/screens/clsknowledgeregisterscreen/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    clsKnowledgeRegisterScreen (M-05)
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../source/screens/clsknowledgeeditscreen/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    clsKnowledgeEditScreen (M-06)
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../source/screens/clsknowledgelistscreen/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    clsKnowledgeListScreen (M-07)
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../source/screens/clssearchscreen/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    clsSearchScreen (M-08)
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../source/screens/clsknowledgeviewscreen/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    clsKnowledgeViewScreen (M-09)
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../source/screens/clsstoragescreen/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    clsStorageScreen (M-10)
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../source/screens/clssystemsettingsscreen/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    clsSystemSettingsScreen (M-11)
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../source/screens/clsmigrationscreen/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    clsMigrationScreen (M-12)
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../source/screens/clsfileformatscreen/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    clsFileFormatScreen (M-13)
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../source/screens/clslogscreen/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    clsLogScreen (M-14)
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    
-    
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-    
-    
-    
-      
-      
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_5" >
-        
-          
-          <label class="md-nav__link" for="__nav_6_5" id="__nav_6_5_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    ユーティリティ
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_5_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_6_5">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
     ユーティリティ
   
 
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../source/utility/clslogentry/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsLogEntry
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
             
               
                 
@@ -2202,62 +1787,6 @@
     
   
     modCommon
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../source/utility/modfileio/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    modFileIO
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../source/utility/modstringutil/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    modStringUtil
   
 
     
@@ -2306,6 +1835,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../source/utility/modfileio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    modFileIO
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../source/utility/modimagerender/" class="md-nav__link">
         
   
@@ -2314,6 +1871,516 @@
     
   
     modImageRender
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../source/utility/modstringutil/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    modStringUtil
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_6_5" id="__nav_6_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    画面層
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    画面層
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../source/screen/clsmainscreen/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsMainScreen (M-01)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../source/screen/clsformatlistscreen/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsFormatListScreen (M-02)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../source/screen/clsformatdesignscreen/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsFormatDesignScreen (M-03)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../source/screen/clsformatpreviewscreen/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsFormatPreviewScreen (M-04)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../source/screen/clsknowledgeregisterscreen/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsKnowledgeRegisterScreen (M-05)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../source/screen/clsknowledgeeditscreen/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsKnowledgeEditScreen (M-06)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../source/screen/clsknowledgelistscreen/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsKnowledgeListScreen (M-07)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../source/screen/clssearchscreen/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsSearchScreen (M-08)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../source/screen/clsknowledgeviewscreen/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsKnowledgeViewScreen (M-09)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../source/screen/clsstoragescreen/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsStorageScreen (M-10)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../source/screen/clssystemsettingsscreen/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsSystemSettingsScreen (M-11)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../source/screen/clsmigrationscreen/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsMigrationScreen (M-12)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../source/screen/clsfileformatscreen/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsFileFormatScreen (M-13)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../source/screen/clslogscreen/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsLogScreen (M-14)
   
 
     
@@ -2438,8 +2505,6 @@
       
         
       
-        
-      
     
     
     
@@ -2463,7 +2528,7 @@
   <span class="md-ellipsis">
     
   
-    ログ
+    特殊モジュール
   
 
     
@@ -2476,126 +2541,6 @@
         
         <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_7_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_6_7">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    ログ
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../source/logger/clslogger/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    clsLogger
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../source/logger/clslogentry/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    clsLogEntry
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    
-    
-      
-        
-      
-    
-    
-    
-      
-      
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_8" >
-        
-          
-          <label class="md-nav__link" for="__nav_6_8" id="__nav_6_8_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    特殊モジュール
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_8_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_6_8">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -2619,159 +2564,7 @@
   <span class="md-ellipsis">
     
   
-    ThisWorkbook (本番版)
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    
-    
-      
-        
-      
-        
-      
-        
-      
-    
-    
-    
-      
-      
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_9" >
-        
-          
-          <label class="md-nav__link" for="__nav_6_9" id="__nav_6_9_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Cowork デモ専用
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_9_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_6_9">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Cowork デモ専用
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../source/cowork-demo/thisworkbook/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    ThisWorkbook (デモ版)
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../source/cowork-demo/modautoinit/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    modAutoInit
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../source/cowork-demo/moddemoseeder/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    modDemoSeeder
+    ThisWorkbook
   
 
     
@@ -2820,6 +2613,10 @@
 <h1 id="_1">アーキテクチャ<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
 <h2 id="1">1. 層分離<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
 <p>VBA モジュールは責務ごとに 5 層に分離されています。依存方向は上から下への一方向のみで、ユーティリティ層がビジネスロジック層を呼ぶことはありません。</p>
+<div class="admonition tip">
+<p class="admonition-title">層分離の狙い</p>
+<p>上位の層で発生した UI イベントを、薄いアダプタ（エントリポイント層）でドメインロジック（ビジネスロジック層）に橋渡しし、副作用の無い純粋関数（ユーティリティ層）を共有資産として配置する構造です。これにより、検索バックエンドの差し替えや新フォーマット追加など、変更が必要なファイルを局所化できます。</p>
+</div>
 <pre class="mermaid"><code>flowchart TB
     subgraph Entry [エントリポイント層]
         EM[modEntryMain]
@@ -2890,7 +2687,7 @@
 </tr>
 <tr>
 <td>インストーラ層</td>
-<td>1 回限りのセットアップ処理。シート 14 個と 29 ボタンを実行時生成</td>
+<td>1 回限りのセットアップ処理。シート 14 個と 68 ボタンを実行時生成</td>
 <td><code>modSetup.bas</code></td>
 </tr>
 <tr>
@@ -2925,13 +2722,13 @@
 
     User-&gt;&gt;Excel: 新規 .xlsm 作成（マクロ有効）
     User-&gt;&gt;VBE: Alt+F11 で開く
-    User-&gt;&gt;VBE: 23 モジュールを Import
+    User-&gt;&gt;VBE: 48 モジュールを Import
     User-&gt;&gt;VBE: ThisWorkbook の中身をコピペ
     User-&gt;&gt;VBE: コンパイル確認
     User-&gt;&gt;Excel: Alt+F8 → SetupSheetsAndButtons
     Excel-&gt;&gt;Setup: 実行
     Setup-&gt;&gt;Excel: 14 シート生成
-    Setup-&gt;&gt;Excel: 29 ボタン配置 + マクロ割当
+    Setup-&gt;&gt;Excel: 68 ボタン配置 + マクロ割当
     Setup-&gt;&gt;Excel: 初期可視性設定（メインのみ表示）
     Setup--&gt;&gt;User: 「セットアップ完了。」MsgBox
     User-&gt;&gt;Excel: Ctrl+S 保存 → 閉じる → 再オープン
@@ -2947,7 +2744,7 @@
 <p><strong>欠点</strong></p>
 <ul>
 <li>ユーザが初回セットアップで VBE を開いて手動 import する手間</li>
-<li>VBE を開く操作に不慣れなユーザ向けに丁寧な手順書が必要</li>
+<li>VBE を開く操作に不慣れなユーザ向けに丁寧な手順書（<a href="../operations/">操作手順</a>）が必要</li>
 <li>セットアップマクロが何らかの理由で失敗した場合の状態が中途半端になり得る（途中までシートだけ生成された等）</li>
 </ul>
 <h2 id="4">4. データフロー<a class="headerlink" href="#4" title="Permanent link">&para;</a></h2>
@@ -2976,40 +2773,44 @@
     Disp --&gt;|単票表示| KL
     Disp --&gt;|詳細画像| Img
     SE --&gt;|ログ出力| Log</code></pre>
-<h2 id="5">5. テスト戦略<a class="headerlink" href="#5" title="Permanent link">&para;</a></h2>
+<h2 id="5">5. 主な設計上の前提<a class="headerlink" href="#5" title="Permanent link">&para;</a></h2>
+<p>本ツールが選択した設計上の主な前提は次のとおりです。</p>
 <table>
 <thead>
 <tr>
-<th>レイヤ</th>
-<th>テスト対象</th>
-<th>件数</th>
+<th>前提</th>
+<th>内容</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>ユーティリティ層</td>
-<td>純粋関数（文字列、日付、ファイル I/O）</td>
-<td>大半が単体テスト</td>
+<td>VBA 子プロセス起動は使わない</td>
+<td><code>Shell</code> / <code>WScript.Shell.Run</code> 等は使わず、外部ツール連携が必要な機能はすべて Excel プロセス内で代替実装</td>
 </tr>
 <tr>
-<td>ビジネスロジック層</td>
-<td>検索スコアリング、ImagePath 解決、FormSpec</td>
-<td>T10/T11 系</td>
+<td><code>.xlsm</code> テンプレート配布ではなく モジュール配布 + セルフセットアップ</td>
+<td><code>.xlsm</code> テンプレート配布は Excel 修復ダイアログ問題を誘発するため、モジュール配布 + 初回セットアップマクロ方式を採用</td>
 </tr>
 <tr>
-<td>配布パターン</td>
-<td>セットアップマクロの冪等性、シート存在チェック、ボタン重複削除</td>
-<td>M6 系</td>
+<td>画面 spec 駆動</td>
+<td>各業務画面（M-01〜M-14）は <code>clsScreenSpec</code> の宣言情報を <code>clsSheetRenderer</code> が物理配置することで、画面追加時の差分を 1 spec 定義に局所化</td>
 </tr>
 </tbody>
 </table>
-<p>合計 <strong>PASS 89 / SKIP 4 / FAIL 0</strong>（既存 82 + image_ext rev1 拡張 7）が完了条件です。</p>
 <h2 id="6">6. 拡張ポイント<a class="headerlink" href="#6" title="Permanent link">&para;</a></h2>
-<p>拡張時に触るファイルの境界:</p>
+<p>将来の変更時に触る予定のファイルを限定するための境界:</p>
 <ul>
+<li><strong>検索バックエンド差替</strong> — <code>clsSearchEngine.cls</code> 1 ファイルのみ差し替え（txt 走査 → Range 走査などへ）</li>
 <li><strong>新フォーマット追加</strong> — <code>clsFormatManager</code> のフォーマット定義テーブルを追加、<code>clsFieldMigrator</code> で旧→新の写像を定義</li>
 <li><strong>新しい UserForm を spec 駆動で追加</strong> — <code>modSpecExamples.bas</code> を雛形にして <code>clsFormSpec.AddControl</code> で宣言、<code>modFormBuilder.BuildAndShow</code> で起動</li>
-<li><strong>新シート追加</strong> — <code>modSetup.bas</code> の <code>RequiredSheets</code> 配列に追加、ボタン配置の Anchor 範囲も追記</li>
+<li><strong>新シート追加</strong> — <code>modScreenSpecRegistry.bas</code> に画面 spec を 1 件追加、<code>modFactory</code> 経由で対応する画面層クラスを生成</li>
+</ul>
+<h2 id="7">7. 既知の制約<a class="headerlink" href="#7" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>VBA 子プロセス禁止</strong> — 全モジュール共通の規約。<code>Shell</code> / <code>WScript.Shell.Run</code> / <code>CreateObject("WScript.Shell").Run</code> 等は使いません</li>
+<li><strong>層は一方向依存</strong> — エントリポイント → ビジネスロジック → ユーティリティ。逆方向の参照は循環依存を防ぐため禁止しています</li>
+<li><strong><code>ThisWorkbook</code> だけはインストーラ層を呼んでよい</strong> — 初回起動時のセットアップ起動という性質上、特例として認めています</li>
+<li><strong>VBE Import 時の改行コード</strong> — <code>.bas</code> / <code>.cls</code> ファイルが LF だと Excel VBE が正しく取り込めない場合があります。配布パッケージは CRLF で固定しています</li>
 </ul>
 
 

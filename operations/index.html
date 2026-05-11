@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="各画面の操作手順、ボタン配置、トラブル時対応">
+        <meta name="description" content="検索 / 詳細表示 / ナレッジ登録・編集 / 画像添付 / ログ確認の日常操作手順">
       
       
         <meta name="author" content="ai-crafted-portfolio">
@@ -15,10 +15,10 @@
         <link rel="canonical" href="https://ai-crafted-portfolio.github.io/knowledgevba/operations/">
       
       
-        <link rel="prev" href="../architecture/">
+        <link rel="prev" href="../setup/">
       
       
-        <link rel="next" href="../source/">
+        <link rel="next" href="../architecture/">
       
       
         
@@ -29,7 +29,7 @@
     
     
       
-        <title>操作マニュアル - ナレッジ管理ツール (VBA 製)</title>
+        <title>操作手順 - ナレッジ管理ツール (VBA 製)</title>
       
     
     
@@ -118,7 +118,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              操作マニュアル
+              操作手順
             
           </span>
         </div>
@@ -238,25 +238,6 @@
   
   
     <li class="md-tabs__item">
-      <a href="../install/" class="md-tabs__link">
-        
-  
-  
-    
-  
-  インストール
-
-      </a>
-    </li>
-  
-
-      
-        
-  
-  
-  
-  
-    <li class="md-tabs__item">
       <a href="../spec/" class="md-tabs__link">
         
   
@@ -276,13 +257,13 @@
   
   
     <li class="md-tabs__item">
-      <a href="../architecture/" class="md-tabs__link">
+      <a href="../setup/" class="md-tabs__link">
         
   
   
     
   
-  アーキテクチャ
+  セットアップ
 
       </a>
     </li>
@@ -303,7 +284,26 @@
   
     
   
-  操作マニュアル
+  操作手順
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../architecture/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  アーキテクチャ
 
       </a>
     </li>
@@ -401,33 +401,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../install/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    インストール
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../spec/" class="md-nav__link">
         
   
@@ -455,14 +428,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../architecture/" class="md-nav__link">
+      <a href="../setup/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    アーキテクチャ
+    セットアップ
   
 
     
@@ -498,7 +471,7 @@
   <span class="md-ellipsis">
     
   
-    操作マニュアル
+    操作手順
   
 
     
@@ -516,7 +489,7 @@
   <span class="md-ellipsis">
     
   
-    操作マニュアル
+    操作手順
   
 
     
@@ -542,33 +515,22 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        目次
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        第 1 章 起動とメイン画面
+        1. ナレッジを検索する
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="第 1 章 起動とメイン画面">
+    <nav class="md-nav" aria-label="1. ナレッジを検索する">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#11" class="md-nav__link">
+  <a href="#step-11" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1.1 アプリを起動する
+        Step 1.1 検索シートを開く
       
     </span>
   </a>
@@ -576,10 +538,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#12" class="md-nav__link">
+  <a href="#step-12" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1.2 メイン画面の見方
+        Step 1.2 検索条件を入力
       
     </span>
   </a>
@@ -587,10 +549,21 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#13-12" class="md-nav__link">
+  <a href="#step-13" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1.3 タスクの選択 (12 個のボタン)
+        Step 1.3 検索実行
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-14" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1.4 スコアの読み方
       
     </span>
   </a>
@@ -606,19 +579,19 @@
   <a href="#2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        第 2 章 ナレッジを記録する
+        2. 検索結果から詳細を表示する
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="第 2 章 ナレッジを記録する">
+    <nav class="md-nav" aria-label="2. 検索結果から詳細を表示する">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#21" class="md-nav__link">
+  <a href="#a" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2.1 新規ナレッジを登録する
+        方法 A: ナレッジ表示シートで開く
       
     </span>
   </a>
@@ -626,41 +599,13 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#22" class="md-nav__link">
+  <a href="#b-userform-image_ext-rev1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2.2 多人数で同時に登録した場合
+        方法 B: 詳細プレビュー UserForm を開く（image_ext rev1）
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="2.2 多人数で同時に登録した場合">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#1-1" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        ケース ① 通常リトライ (1〜数回で衝突解消)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2-10" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        ケース ② 10 回連続失敗 (極めて稀)
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
         
@@ -673,19 +618,19 @@
   <a href="#3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        第 3 章 ナレッジを探す
+        3. ナレッジを新規登録する
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="第 3 章 ナレッジを探す">
+    <nav class="md-nav" aria-label="3. ナレッジを新規登録する">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#31" class="md-nav__link">
+  <a href="#step-31" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3.1 ナレッジ一覧を見る
+        Step 3.1 フォーマットを確認
       
     </span>
   </a>
@@ -693,10 +638,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#32" class="md-nav__link">
+  <a href="#step-32" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3.2 キーワードで検索する
+        Step 3.2 ナレッジ登録シートを開く
       
     </span>
   </a>
@@ -704,22 +649,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#33-4" class="md-nav__link">
+  <a href="#step-33" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3.3 検索条件の詳細 (4 種類)
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="3.3 検索条件の詳細 (4 種類)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#and" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        AND 検索
+        Step 3.3 メタ情報を入力
       
     </span>
   </a>
@@ -727,10 +660,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#step-34" class="md-nav__link">
     <span class="md-ellipsis">
       
-        完全一致
+        Step 3.4 フィールドを入力
       
     </span>
   </a>
@@ -738,29 +671,13 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#step-35" class="md-nav__link">
     <span class="md-ellipsis">
       
-        期間絞込
+        Step 3.5 保存
       
     </span>
   </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        対象フィールド
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
         
@@ -773,19 +690,19 @@
   <a href="#4" class="md-nav__link">
     <span class="md-ellipsis">
       
-        第 4 章 ナレッジを表示・修正・削除する
+        4. ナレッジを編集・更新する
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="第 4 章 ナレッジを表示・修正・削除する">
+    <nav class="md-nav" aria-label="4. ナレッジを編集・更新する">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#41" class="md-nav__link">
+  <a href="#step-41" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4.1 ナレッジを表示する
+        Step 4.1 編集対象を読み込む
       
     </span>
   </a>
@@ -793,63 +710,13 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#42" class="md-nav__link">
+  <a href="#step-42" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4.2 ナレッジを修正する
+        Step 4.2 値を編集して保存
       
     </span>
   </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#43" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        4.3 ナレッジを削除する
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="4.3 ナレッジを削除する">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#1_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        方法 ① 一覧から削除
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        方法 ② 修正画面から削除
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        💡 誤って削除した場合の復旧方法
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
         
@@ -862,49 +729,10 @@
   <a href="#5" class="md-nav__link">
     <span class="md-ellipsis">
       
-        第 5 章 フォーマットを管理する
+        5. ナレッジを削除する
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="第 5 章 フォーマットを管理する">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#51" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        5.1 フォーマット一覧を見る
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#52" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        5.2 フォーマットを設計する
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#53" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        5.3 プレビューで試打する
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -912,19 +740,19 @@
   <a href="#6" class="md-nav__link">
     <span class="md-ellipsis">
       
-        第 6 章 設定を変える
+        6. 画像（サムネ）を添付する
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="第 6 章 設定を変える">
+    <nav class="md-nav" aria-label="6. 画像（サムネ）を添付する">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#61" class="md-nav__link">
+  <a href="#a_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6.1 格納先 (保存場所) を設定する
+        規約 A: ナレッジ番号と同名（推奨）
       
     </span>
   </a>
@@ -932,10 +760,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#62" class="md-nav__link">
+  <a href="#b-imagepath" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6.2 システム設定 (既定値の変更)
+        規約 B: ImagePath スタンザで明示指定
       
     </span>
   </a>
@@ -943,10 +771,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#63" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6.3 出力ファイル形式を選ぶ
+        画像が表示されない場合
       
     </span>
   </a>
@@ -962,19 +790,19 @@
   <a href="#7" class="md-nav__link">
     <span class="md-ellipsis">
       
-        第 7 章 フィールド反映とログ確認
+        7. ログを確認する
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="第 7 章 フィールド反映とログ確認">
+    <nav class="md-nav" aria-label="7. ログを確認する">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
   <a href="#71" class="md-nav__link">
     <span class="md-ellipsis">
       
-        7.1 フォーマット変更を既存ナレッジに反映
+        7.1 操作ログを見る
       
     </span>
   </a>
@@ -985,7 +813,7 @@
   <a href="#72" class="md-nav__link">
     <span class="md-ellipsis">
       
-        7.2 操作ログを確認する
+        7.2 ログをクリアする
       
     </span>
   </a>
@@ -998,22 +826,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#8" class="md-nav__link">
+  <a href="#8-datafolder" class="md-nav__link">
     <span class="md-ellipsis">
       
-        第 8 章 困ったとき (トラブル時)
+        8. dataFolder を切り替える
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="第 8 章 困ったとき (トラブル時)">
+    <nav class="md-nav" aria-label="8. dataFolder を切り替える">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#81" class="md-nav__link">
+  <a href="#step-81" class="md-nav__link">
     <span class="md-ellipsis">
       
-        8.1 デバッグモードを有効にする
+        Step 8.1 設定シートを開く
       
     </span>
   </a>
@@ -1021,10 +849,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#82" class="md-nav__link">
+  <a href="#step-82" class="md-nav__link">
     <span class="md-ellipsis">
       
-        8.2 よくあるエラーメッセージと対処
+        Step 8.2 フォルダパスを入力
       
     </span>
   </a>
@@ -1032,10 +860,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#83" class="md-nav__link">
+  <a href="#step-83" class="md-nav__link">
     <span class="md-ellipsis">
       
-        8.3 解決しないとき (管理者への連絡)
+        Step 8.3 反映確認
       
     </span>
   </a>
@@ -1048,10 +876,204 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
+  <a href="#9" class="md-nav__link">
     <span class="md-ellipsis">
       
-        動作環境
+        9. フォーマットを管理する
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9. フォーマットを管理する">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#91" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.1 フォーマット一覧を開く
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#92" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.2 新規フォーマットを追加
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#93" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.3 既存フォーマットを編集
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. ショートカット一覧
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. 拡張テストの実行（任意 / 開発者向け）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12. 操作時のトラブルシューティング
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="12. 操作時のトラブルシューティング">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#q1-h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q1. 検索結果の H 列に画像が表示されない
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q2-0" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q2. 検索しても 0 件しかヒットしない
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q3-userform" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q3. UserForm が開かない / マクロが実行できない
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q4. ナレッジ登録時に「フォーマットが見つかりません」と出る
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q5-datafolder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q5. dataFolder を切り替えたら検索が空になる
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Q6. 画像が縦横比おかしく表示される
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13. 既知の制約・運用上の注意
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="13. 既知の制約・運用上の注意">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        制約
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        よくある運用ミス（チェックリスト）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        関連
       
     </span>
   </a>
@@ -1072,15 +1094,38 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    アーキテクチャ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
     
     
       
         
           
-        
-      
-        
-      
         
       
         
@@ -1440,6 +1485,8 @@
       
         
       
+        
+      
     
     
     
@@ -1492,210 +1539,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../source/business-logic/iscreenrenderer/" class="md-nav__link">
+      <a href="../source/business-logic/clsbuttonspec/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    IScreenRenderer
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../source/business-logic/clssearchengine/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    clsSearchEngine
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../source/business-logic/clsknowledgemanager/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    clsKnowledgeManager
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../source/business-logic/clsformatmanager/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    clsFormatManager
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../source/business-logic/clstaskcontroller/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    clsTaskController
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../source/business-logic/clsstorageresolver/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    clsStorageResolver
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../source/business-logic/clsfieldmigrator/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    clsFieldMigrator
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../source/business-logic/clsformspec/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    clsFormSpec
+    clsButtonSpec
   
 
     
@@ -1744,14 +1595,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../source/business-logic/clsbuttonspec/" class="md-nav__link">
+      <a href="../source/business-logic/clsfieldmigrator/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    clsButtonSpec
+    clsFieldMigrator
   
 
     
@@ -1800,6 +1651,118 @@
   
   
     <li class="md-nav__item">
+      <a href="../source/business-logic/clsformspec/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsFormSpec
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../source/business-logic/clsformatmanager/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsFormatManager
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../source/business-logic/clsknowledgemanager/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsKnowledgeManager
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../source/business-logic/clslogger/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsLogger
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../source/business-logic/clsscreenspec/" class="md-nav__link">
         
   
@@ -1808,6 +1771,34 @@
     
   
     clsScreenSpec
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../source/business-logic/clssearchengine/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsSearchEngine
   
 
     
@@ -1912,6 +1903,62 @@
   
   
     <li class="md-nav__item">
+      <a href="../source/business-logic/clsstorageresolver/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsStorageResolver
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../source/business-logic/clstaskcontroller/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsTaskController
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../source/business-logic/clsuserformrenderer/" class="md-nav__link">
         
   
@@ -1920,6 +1967,34 @@
     
   
     clsUserFormRenderer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../source/business-logic/iscreenrenderer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IScreenRenderer
   
 
     
@@ -2074,22 +2149,6 @@
       
         
       
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
     
     
     
@@ -2113,7 +2172,7 @@
   <span class="md-ellipsis">
     
   
-    画面層
+    ユーティリティ
   
 
     
@@ -2129,475 +2188,39 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    画面層
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../source/screens/clsmainscreen/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    clsMainScreen (M-01)
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../source/screens/clsformatlistscreen/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    clsFormatListScreen (M-02)
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../source/screens/clsformatdesignscreen/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    clsFormatDesignScreen (M-03)
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../source/screens/clsformatpreviewscreen/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    clsFormatPreviewScreen (M-04)
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../source/screens/clsknowledgeregisterscreen/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    clsKnowledgeRegisterScreen (M-05)
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../source/screens/clsknowledgeeditscreen/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    clsKnowledgeEditScreen (M-06)
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../source/screens/clsknowledgelistscreen/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    clsKnowledgeListScreen (M-07)
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../source/screens/clssearchscreen/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    clsSearchScreen (M-08)
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../source/screens/clsknowledgeviewscreen/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    clsKnowledgeViewScreen (M-09)
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../source/screens/clsstoragescreen/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    clsStorageScreen (M-10)
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../source/screens/clssystemsettingsscreen/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    clsSystemSettingsScreen (M-11)
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../source/screens/clsmigrationscreen/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    clsMigrationScreen (M-12)
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../source/screens/clsfileformatscreen/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    clsFileFormatScreen (M-13)
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../source/screens/clslogscreen/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    clsLogScreen (M-14)
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    
-    
-      
-        
-      
-        
-      
-        
-      
-        
-      
-        
-      
-    
-    
-    
-      
-      
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_5" >
-        
-          
-          <label class="md-nav__link" for="__nav_6_5" id="__nav_6_5_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    ユーティリティ
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_5_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_6_5">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
     ユーティリティ
   
 
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../source/utility/clslogentry/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsLogEntry
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
             
               
                 
@@ -2614,62 +2237,6 @@
     
   
     modCommon
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../source/utility/modfileio/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    modFileIO
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../source/utility/modstringutil/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    modStringUtil
   
 
     
@@ -2718,6 +2285,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../source/utility/modfileio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    modFileIO
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../source/utility/modimagerender/" class="md-nav__link">
         
   
@@ -2726,6 +2321,516 @@
     
   
     modImageRender
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../source/utility/modstringutil/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    modStringUtil
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_6_5" id="__nav_6_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    画面層
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    画面層
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../source/screen/clsmainscreen/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsMainScreen (M-01)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../source/screen/clsformatlistscreen/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsFormatListScreen (M-02)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../source/screen/clsformatdesignscreen/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsFormatDesignScreen (M-03)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../source/screen/clsformatpreviewscreen/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsFormatPreviewScreen (M-04)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../source/screen/clsknowledgeregisterscreen/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsKnowledgeRegisterScreen (M-05)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../source/screen/clsknowledgeeditscreen/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsKnowledgeEditScreen (M-06)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../source/screen/clsknowledgelistscreen/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsKnowledgeListScreen (M-07)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../source/screen/clssearchscreen/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsSearchScreen (M-08)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../source/screen/clsknowledgeviewscreen/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsKnowledgeViewScreen (M-09)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../source/screen/clsstoragescreen/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsStorageScreen (M-10)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../source/screen/clssystemsettingsscreen/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsSystemSettingsScreen (M-11)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../source/screen/clsmigrationscreen/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsMigrationScreen (M-12)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../source/screen/clsfileformatscreen/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsFileFormatScreen (M-13)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../source/screen/clslogscreen/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsLogScreen (M-14)
   
 
     
@@ -2850,8 +2955,6 @@
       
         
       
-        
-      
     
     
     
@@ -2875,7 +2978,7 @@
   <span class="md-ellipsis">
     
   
-    ログ
+    特殊モジュール
   
 
     
@@ -2888,126 +2991,6 @@
         
         <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_7_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_6_7">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    ログ
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../source/logger/clslogger/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    clsLogger
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../source/logger/clslogentry/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    clsLogEntry
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    
-    
-      
-        
-      
-    
-    
-    
-      
-      
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_8" >
-        
-          
-          <label class="md-nav__link" for="__nav_6_8" id="__nav_6_8_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    特殊モジュール
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_8_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_6_8">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -3031,159 +3014,7 @@
   <span class="md-ellipsis">
     
   
-    ThisWorkbook (本番版)
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    
-    
-      
-        
-      
-        
-      
-        
-      
-    
-    
-    
-      
-      
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_9" >
-        
-          
-          <label class="md-nav__link" for="__nav_6_9" id="__nav_6_9_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Cowork デモ専用
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_9_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_6_9">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Cowork デモ専用
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../source/cowork-demo/thisworkbook/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    ThisWorkbook (デモ版)
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../source/cowork-demo/modautoinit/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    modAutoInit
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../source/cowork-demo/moddemoseeder/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    modDemoSeeder
+    ThisWorkbook
   
 
     
@@ -3229,519 +3060,369 @@
 
 
 
-<h1 id="_1">操作マニュアル<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
-<p>本アプリを実際に操作する利用者向けの操作マニュアルです。</p>
-<p>各章で <strong>画面コピー</strong> と <strong>操作手順</strong> を順を追って解説します。まずは「第 1 章 起動とメイン画面」から読んでください。</p>
+<h1 id="_1">操作手順<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
+<p>このページは、セットアップ完了後の <strong>日常操作（検索・登録・編集・画像添付・ログ確認）</strong> を集約しています。インストールやセットアップマクロの実行手順は <a href="../setup/">セットアップ</a> を参照してください。</p>
+<div class="admonition tip">
+<p class="admonition-title">ページ構成</p>
+<p>検索 → 詳細表示 → 登録 → 編集 → 画像添付 → ログ確認 → dataFolder 切替 → フォーマット管理 → ショートカット → 拡張テスト → トラブルシューティング、の順に並んでいます。目的の操作は左ナビゲーションまたは目次（右側）から直接ジャンプできます。</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">前提</p>
+<p><a href="../setup/">セットアップ</a> を完了し、<code>SetupSheetsAndButtons</code> 実行後の状態であること。メインシートに 12 個のボタンが並んでいる状態。</p>
+</div>
 <hr />
-<h2 id="_2">目次<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<h2 id="1">1. ナレッジを検索する<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
+<h3 id="step-11">Step 1.1 検索シートを開く<a class="headerlink" href="#step-11" title="Permanent link">&para;</a></h3>
+<p>メインシートの <strong><code>▶検索</code></strong> ボタンをクリック → 検索シートに自動遷移します。</p>
+<h3 id="step-12">Step 1.2 検索条件を入力<a class="headerlink" href="#step-12" title="Permanent link">&para;</a></h3>
+<p>検索シート上部の入力欄に検索条件を記入します。</p>
 <table>
 <thead>
 <tr>
-<th>章</th>
-<th>タイトル</th>
-<th>関連画面</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>第 1 章</td>
-<td><a href="#第-1-章-起動とメイン画面">起動とメイン画面</a></td>
-<td>M-01</td>
-</tr>
-<tr>
-<td>第 2 章</td>
-<td><a href="#第-2-章-ナレッジを記録する">ナレッジを記録する</a></td>
-<td>M-05</td>
-</tr>
-<tr>
-<td>第 3 章</td>
-<td><a href="#第-3-章-ナレッジを探す">ナレッジを探す</a></td>
-<td>M-07 / M-08</td>
-</tr>
-<tr>
-<td>第 4 章</td>
-<td><a href="#第-4-章-ナレッジを表示修正削除する">ナレッジを表示・修正・削除する</a></td>
-<td>M-09 / M-06</td>
-</tr>
-<tr>
-<td>第 5 章</td>
-<td><a href="#第-5-章-フォーマットを管理する">フォーマットを管理する</a></td>
-<td>M-02 / M-03 / M-04</td>
-</tr>
-<tr>
-<td>第 6 章</td>
-<td><a href="#第-6-章-設定を変える">設定を変える</a></td>
-<td>M-10 / M-11 / M-13</td>
-</tr>
-<tr>
-<td>第 7 章</td>
-<td><a href="#第-7-章-フィールド反映とログ確認">フィールド反映とログ確認</a></td>
-<td>M-12 / M-14</td>
-</tr>
-<tr>
-<td>第 8 章</td>
-<td><a href="#第-8-章-困ったとき-トラブル時">困ったとき (トラブル時)</a></td>
-<td>デバッグモード</td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h2 id="1">第 1 章 起動とメイン画面<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
-<h3 id="11">1.1 アプリを起動する<a class="headerlink" href="#11" title="Permanent link">&para;</a></h3>
-<p>事前にインストール (<code>.bas</code> インポート + セットアップ実行) が完了していることが前提です。</p>
-<p><strong>起動手順:</strong></p>
-<ol>
-<li><strong>ファイルを開く</strong>: インストール済みの <code>.xlsm</code> ファイル (例: <code>ナレッジ管理.xlsm</code>) をダブルクリックして開く</li>
-<li><strong>マクロを有効化</strong>: Excel 上部に黄色いバー「セキュリティの警告 マクロが無効にされました」が表示されたら、「コンテンツの有効化」ボタンをクリック</li>
-<li><strong>メイン画面が表示</strong>: 自動的にメイン画面 (M-01) のみが表示されます。それ以外のシートは「完全非表示」状態となり、業務に必要なシートだけが見える状態になります</li>
-<li><strong>初回起動の場合</strong>: 初回起動時は「データフォルダが見つかりません」と表示される場合があります。メイン → ▶システム設定 でデータフォルダパスを設定してください</li>
-</ol>
-<h3 id="12">1.2 メイン画面の見方<a class="headerlink" href="#12" title="Permanent link">&para;</a></h3>
-<p><img alt="メイン画面 (M-01)" src="../images/operations/M-01.png" /></p>
-<p>画面上のボタンから次に行いたい作業を選択します。例えば「▶ナレッジ登録」を押すとナレッジ登録画面 (M-05) に切り替わり、「▶検索」を押すと検索画面 (M-08) に切り替わります。</p>
-<p>各作業画面では、右下の「← メインに戻る」ボタンでいつでもこの画面に戻れます。</p>
-<h3 id="13-12">1.3 タスクの選択 (12 個のボタン)<a class="headerlink" href="#13-12" title="Permanent link">&para;</a></h3>
-<p>メイン画面から各機能に移動するハブ&amp;スポーク型の構成です。</p>
-<table>
-<thead>
-<tr>
-<th>ボタン</th>
-<th>用途</th>
-<th>遷移先</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>▶検索</td>
-<td>キーワードでナレッジを探す</td>
-<td>M-08</td>
-</tr>
-<tr>
-<td>▶ナレッジ登録</td>
-<td>新しいナレッジを記録する</td>
-<td>M-05</td>
-</tr>
-<tr>
-<td>▶ナレッジ修正</td>
-<td>既存ナレッジを編集・削除する</td>
-<td>M-06</td>
-</tr>
-<tr>
-<td>▶ナレッジ一覧</td>
-<td>保存済みナレッジを一覧で見る</td>
-<td>M-07</td>
-</tr>
-<tr>
-<td>▶フォーマット管理</td>
-<td>ナレッジの「型」を作る/編集する</td>
-<td>M-02 / M-03</td>
-</tr>
-<tr>
-<td>▶フィールド反映</td>
-<td>型変更を既存データに一括反映する</td>
-<td>M-12</td>
-</tr>
-<tr>
-<td>▶格納先設定</td>
-<td>ナレッジの保存場所を管理する</td>
-<td>M-10</td>
-</tr>
-<tr>
-<td>▶システム設定</td>
-<td>アプリ全体の設定</td>
-<td>M-11</td>
-</tr>
-<tr>
-<td>▶ログ確認</td>
-<td>操作履歴を見る</td>
-<td>M-14</td>
-</tr>
-<tr>
-<td>▶ファイル形式</td>
-<td>出力ファイル形式を選ぶ</td>
-<td>M-13</td>
-</tr>
-<tr>
-<td>▶初回セットアップ</td>
-<td>再セットアップを実行する</td>
-<td>-</td>
-</tr>
-<tr>
-<td>▶ヘルプ/バージョン</td>
-<td>アプリ情報を表示する</td>
-<td>-</td>
-</tr>
-</tbody>
-</table>
-<blockquote>
-<p>💡 <strong>ポイント</strong>: ボタンを押すと関連シートだけが見える状態になります (それ以外は完全非表示)。これにより、業務に関係ないシートを誤って開いて構造を壊すリスクを防いでいます。</p>
-</blockquote>
-<hr />
-<h2 id="2">第 2 章 ナレッジを記録する<a class="headerlink" href="#2" title="Permanent link">&para;</a></h2>
-<h3 id="21">2.1 新規ナレッジを登録する<a class="headerlink" href="#21" title="Permanent link">&para;</a></h3>
-<p><img alt="ナレッジ登録画面 (M-05)" src="../images/operations/M-05.png" /></p>
-<p><strong>操作手順:</strong></p>
-<ol>
-<li>メイン画面 → <strong>▶ナレッジ登録</strong> をクリック</li>
-<li>フォーマット (例: 障害対応) を選択</li>
-<li><code>*</code> マークの必須項目をすべて入力</li>
-<li>事象や対処内容は <strong>Alt+Enter</strong> でセル内改行可</li>
-<li>画面下の「登録」ボタンをクリック</li>
-<li>完了 MsgBox で番号確認 (例: <code>KN-2026-0420</code>)</li>
-</ol>
-<blockquote>
-<p>💡 <strong>ポイント</strong>: <code>*</code> マークが付いた項目は必須入力。未入力で登録するとエラーになります。</p>
-</blockquote>
-<h3 id="22">2.2 多人数で同時に登録した場合<a class="headerlink" href="#22" title="Permanent link">&para;</a></h3>
-<p>別の利用者が同じ予定番号で同時に保存しようとした場合、システムが自動で次の番号でリトライします (最大 10 回まで)。</p>
-<h4 id="1-1">ケース ① 通常リトライ (1〜数回で衝突解消)<a class="headerlink" href="#1-1" title="Permanent link">&para;</a></h4>
-<p><strong>画面表示:</strong></p>
-<blockquote>
-<p>「予定番号 KN-2026-0420 は他で使われたため、KN-2026-0422 として登録しました」</p>
-</blockquote>
-<p><strong>あなたが行うこと:</strong></p>
-<ul>
-<li>OK ボタンを押すだけ。確定番号 (<code>KN-2026-0422</code>) でナレッジは正常に保存されています。</li>
-</ul>
-<h4 id="2-10">ケース ② 10 回連続失敗 (極めて稀)<a class="headerlink" href="#2-10" title="Permanent link">&para;</a></h4>
-<p><strong>画面表示:</strong></p>
-<blockquote>
-<p>「採番に失敗しました。しばらく時間を置いて再度お試しください」</p>
-</blockquote>
-<p><strong>あなたが行うこと:</strong></p>
-<ul>
-<li>入力内容は保持されているので、5〜10 分待ってから再度「登録」ボタンを押してください</li>
-<li>繰り返し発生する場合は管理者に連絡 (ログを確認してもらう)</li>
-</ul>
-<hr />
-<h2 id="3">第 3 章 ナレッジを探す<a class="headerlink" href="#3" title="Permanent link">&para;</a></h2>
-<h3 id="31">3.1 ナレッジ一覧を見る<a class="headerlink" href="#31" title="Permanent link">&para;</a></h3>
-<p><img alt="ナレッジ一覧画面 (M-07)" src="../images/operations/M-07.png" /></p>
-<p><strong>操作手順:</strong></p>
-<ol>
-<li>メイン画面 → <strong>▶ナレッジ一覧</strong> をクリック</li>
-<li>フォーマット ▼ で絞込 (任意)</li>
-<li>期間 from-to で絞込 (任意)</li>
-<li>「絞込」ボタンで再表示</li>
-<li>20 件ごとにページング (<code>1/N ページ</code> 表示)</li>
-<li>行の「表示」「修正」「削除」ボタンで遷移</li>
-</ol>
-<blockquote>
-<p>💡 <strong>ポイント</strong>: 一覧は手動で「リロード」ボタンを押すまで自動更新されません。</p>
-</blockquote>
-<h3 id="32">3.2 キーワードで検索する<a class="headerlink" href="#32" title="Permanent link">&para;</a></h3>
-<p><img alt="検索画面 (M-08)" src="../images/operations/M-08.png" /></p>
-<p><strong>操作手順:</strong></p>
-<ol>
-<li>メイン画面 → <strong>▶検索</strong> をクリック</li>
-<li>キーワード欄に検索文字を入力</li>
-<li>対象フィールド (件名/事象/原因 等) を選択</li>
-<li>フォーマット ▼ や期間で追加絞込 (任意)</li>
-<li>「検索」ボタンで結果表示</li>
-<li>結果から「表示」「修正」へ直接遷移可能</li>
-</ol>
-<blockquote>
-<p>💡 <strong>ポイント</strong>: スペース区切りで AND 検索 / <code>"完全一致"</code> でダブルクォート囲み。</p>
-</blockquote>
-<h3 id="33-4">3.3 検索条件の詳細 (4 種類)<a class="headerlink" href="#33-4" title="Permanent link">&para;</a></h3>
-<p>組み合わせて使うことで絞り込み精度が上がります。</p>
-<h4 id="and">AND 検索<a class="headerlink" href="#and" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>入力例: DB 遅延
-</code></pre></div>
-<p>スペース区切りで複数キーワードを書くと、すべてを含むナレッジが対象になります。
-例: 「DB 遅延」 → 「DB」かつ「遅延」を両方含む</p>
-<h4 id="_3">完全一致<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>入力例: &quot;応答遅延&quot;
-</code></pre></div>
-<p>ダブルクォートで囲むと、その文字列を完全に含むナレッジが対象。
-例: 「"応答遅延"」 → 「応答遅延」という連続文字列を含む</p>
-<h4 id="_4">期間絞込<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>入力例: 2026-01-01 〜 2026-04-30
-</code></pre></div>
-<p>登録日 / 更新日を範囲指定。期間外のナレッジは結果に含まれません。</p>
-<blockquote>
-<p>⚠ <strong>注意</strong>: 開始日が終了日より後だとエラーになります。</p>
-</blockquote>
-<h4 id="_5">対象フィールド<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>☑件名 ☑事象 ☑原因 ☑対処内容 ☐再発防止策
-</code></pre></div>
-<p>検索対象とするフィールドを限定 (チェック ON のフィールドのみ)。例: 件名だけで検索するとノイズが減って高速。</p>
-<hr />
-<h2 id="4">第 4 章 ナレッジを表示・修正・削除する<a class="headerlink" href="#4" title="Permanent link">&para;</a></h2>
-<h3 id="41">4.1 ナレッジを表示する<a class="headerlink" href="#41" title="Permanent link">&para;</a></h3>
-<p><img alt="ナレッジ表示画面 (M-09)" src="../images/operations/M-09.png" /></p>
-<p><strong>操作手順:</strong></p>
-<ol>
-<li>M-07 一覧 / M-08 検索結果から「表示」をクリック</li>
-<li>対象ナレッジが画面に表示される</li>
-<li>メタ情報 (登録日/更新日/担当者等) を確認</li>
-<li>本文 (事象/原因/対処内容/再発防止策) を確認</li>
-<li>「修正」ボタンで M-06 修正画面へ遷移</li>
-<li>「印刷」ボタンで Word/PDF 等に出力</li>
-</ol>
-<blockquote>
-<p>💡 <strong>ポイント</strong>: 長文の複数行フィールドも全文表示されます (行高自動調整で末尾切れなし)。</p>
-</blockquote>
-<h3 id="42">4.2 ナレッジを修正する<a class="headerlink" href="#42" title="Permanent link">&para;</a></h3>
-<p><img alt="ナレッジ修正画面 (M-06)" src="../images/operations/M-06.png" /></p>
-<p><strong>操作手順:</strong></p>
-<ol>
-<li>メイン → <strong>▶ナレッジ修正</strong> をクリック</li>
-<li>ナレッジ番号 (例: <code>KN-2026-0419</code>) を入力</li>
-<li>「読込」ボタンでフォームに値が表示</li>
-<li>修正したい項目を編集 (<code>Alt+Enter</code> で改行)</li>
-<li>画面下の「更新」ボタンで上書保存</li>
-<li>完了 MsgBox 「KN-2026-0419 を更新しました」</li>
-</ol>
-<blockquote>
-<p>💡 <strong>ポイント</strong>: 更新時は CreatedDate (作成日) は変えず、UpdatedDate (更新日) のみ今日に更新されます。</p>
-</blockquote>
-<h3 id="43">4.3 ナレッジを削除する<a class="headerlink" href="#43" title="Permanent link">&para;</a></h3>
-<p>削除には 2 つの方法があります。</p>
-<h4 id="1_1">方法 ① 一覧から削除<a class="headerlink" href="#1_1" title="Permanent link">&para;</a></h4>
-<ol>
-<li><strong>▶ナレッジ一覧</strong> を開く</li>
-<li>削除したい行の「削除」ボタンをクリック</li>
-<li>確認ダイアログ「KN-XXXX を削除しますか?」</li>
-<li>Yes でファイル物理削除</li>
-<li><code>backup/deleted_YYYYMMDD_HHMMSS/</code> に退避コピーが残る</li>
-</ol>
-<h4 id="2_1">方法 ② 修正画面から削除<a class="headerlink" href="#2_1" title="Permanent link">&para;</a></h4>
-<ol>
-<li><strong>▶ナレッジ修正</strong> で対象を読込</li>
-<li>内容を確認</li>
-<li>画面下の「このナレッジを削除」(赤色) ボタン</li>
-<li>確認ダイアログ</li>
-<li>Yes でファイル物理削除</li>
-<li>削除後は M-07 一覧画面に自動遷移</li>
-</ol>
-<h4 id="_6">💡 誤って削除した場合の復旧方法<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h4>
-<p>削除前のファイルは <code>backup/deleted_YYYYMMDD_HHMMSS/</code> フォルダに自動退避されています。</p>
-<p>エクスプローラーで該当フォルダを開き、<code>KN-XXXX.xml</code> ファイルをデータフォルダに手動コピーすれば復旧できます。</p>
-<p>復旧手順が分からない場合は管理者に連絡してください (バックアップフォルダのパスは M-11 設定で確認可)。</p>
-<hr />
-<h2 id="5">第 5 章 フォーマットを管理する<a class="headerlink" href="#5" title="Permanent link">&para;</a></h2>
-<h3 id="51">5.1 フォーマット一覧を見る<a class="headerlink" href="#51" title="Permanent link">&para;</a></h3>
-<p><img alt="フォーマット一覧画面 (M-02)" src="../images/operations/M-02.png" /></p>
-<p><strong>操作手順:</strong></p>
-<ol>
-<li>メイン → <strong>▶フォーマット管理</strong> をクリック</li>
-<li>フォーマット一覧画面 (M-02) が表示</li>
-<li>行の「設計」ボタンで M-03 へ遷移</li>
-<li>行の「複製」で別名コピーを作成</li>
-<li>行の「削除」ボタンで論理/物理削除</li>
-<li>「+ 新規」ボタンで新フォーマット作成</li>
-</ol>
-<blockquote>
-<p>💡 <strong>ポイント</strong>: 使用中フォーマットの削除は物理削除でなく論理削除 (フラグ設定) になります。</p>
-</blockquote>
-<h3 id="52">5.2 フォーマットを設計する<a class="headerlink" href="#52" title="Permanent link">&para;</a></h3>
-<p><img alt="フォーマット設計画面 (M-03)" src="../images/operations/M-03.png" /></p>
-<p><strong>操作手順:</strong></p>
-<ol>
-<li>M-02 で「+ 新規」または「設計」をクリック</li>
-<li>フォーマット名/ID を入力</li>
-<li>「+ フィールド追加」で行を追加</li>
-<li>各行で フィールド名/型/必須/行数 を入力</li>
-<li>↑↓ ボタンで並び順を変更</li>
-<li>「保存」ボタンで確定</li>
-</ol>
-<blockquote>
-<p>⚠ <strong>注意</strong>: 「行数」は複数行フィールドの初期高さ (5 行 = 約 90pt)。Excel 行を結合するわけではありません。</p>
-</blockquote>
-<h3 id="53">5.3 プレビューで試打する<a class="headerlink" href="#53" title="Permanent link">&para;</a></h3>
-<p><img alt="プレビュー画面 (M-04)" src="../images/operations/M-04.png" /></p>
-<p><strong>操作手順:</strong></p>
-<ol>
-<li>M-03 で「プレビュー」ボタンをクリック</li>
-<li>M-05 ナレッジ登録と同じ入力フォーム表示</li>
-<li>テスト入力で見た目・行高を確認</li>
-<li>修正が必要なら「← M-03 設計に戻る」</li>
-<li>入力試打のデータは保存されません</li>
-<li>満足いくまで M-03 ⇄ M-04 を往復</li>
-</ol>
-<blockquote>
-<p>💡 <strong>ポイント</strong>: プレビューでは登録ボタンが無効化されています (実データに保存されません)。</p>
-</blockquote>
-<hr />
-<h2 id="6">第 6 章 設定を変える<a class="headerlink" href="#6" title="Permanent link">&para;</a></h2>
-<h3 id="61">6.1 格納先 (保存場所) を設定する<a class="headerlink" href="#61" title="Permanent link">&para;</a></h3>
-<p><img alt="格納先設定画面 (M-10)" src="../images/operations/M-10.png" /></p>
-<p><strong>操作手順:</strong></p>
-<ol>
-<li>メイン → <strong>▶格納先設定</strong> をクリック</li>
-<li>格納先一覧から行を選択</li>
-<li>「+ 新規格納先を追加」で空行を追加</li>
-<li>格納先名/種別/パス を入力</li>
-<li>「テスト」ボタンで接続確認</li>
-<li>「保存」ボタンで設定を確定</li>
-</ol>
-<blockquote>
-<p>💡 <strong>ポイント</strong>: 3 種類対応 — ローカル (UNC/Local) / SharePoint / Confluence。各種別に応じた接続情報を入力。</p>
-</blockquote>
-<h3 id="62">6.2 システム設定 (既定値の変更)<a class="headerlink" href="#62" title="Permanent link">&para;</a></h3>
-<p><img alt="システム設定画面 (M-11)" src="../images/operations/M-11.png" /></p>
-<p><strong>操作手順:</strong></p>
-<ol>
-<li>メイン → <strong>▶システム設定</strong> をクリック</li>
-<li>既定フォーマット ▼ や担当者を選択</li>
-<li>ログレベル (INFO/DEBUG) を選択</li>
-<li>バックアップ保持期間を設定</li>
-<li>採番リトライ上限を設定 (規定 10 回)</li>
-<li>「保存」ボタンで設定を確定</li>
-</ol>
-<blockquote>
-<p>⚠ <strong>注意</strong>: 画面下部の赤帯セクション「リセット」「全ログ削除」は破壊的操作 (二重確認あり)。</p>
-</blockquote>
-<h3 id="63">6.3 出力ファイル形式を選ぶ<a class="headerlink" href="#63" title="Permanent link">&para;</a></h3>
-<p><img alt="ファイル形式画面 (M-13)" src="../images/operations/M-13.png" /></p>
-<p><strong>操作手順:</strong></p>
-<ol>
-<li>メイン → <strong>▶ファイル形式</strong> をクリック</li>
-<li>既定の出力形式 ▼ (Word/MD/HTML/PDF)</li>
-<li>ファイル名テンプレートを編集</li>
-<li>改行コード (CRLF/LF) を選択</li>
-<li>文字コード (UTF-8 BOM) を選択</li>
-<li>「保存」ボタンで確定</li>
-</ol>
-<blockquote>
-<p>💡 <strong>プレースホルダ</strong>: <code>$KNo$</code> (ナレッジ番号), <code>$YYYYMMDD$</code> (日付), <code>$Title$</code> (件名)</p>
-</blockquote>
-<hr />
-<h2 id="7">第 7 章 フィールド反映とログ確認<a class="headerlink" href="#7" title="Permanent link">&para;</a></h2>
-<h3 id="71">7.1 フォーマット変更を既存ナレッジに反映<a class="headerlink" href="#71" title="Permanent link">&para;</a></h3>
-<p><img alt="フィールド反映画面 (M-12)" src="../images/operations/M-12.png" /></p>
-<p><strong>操作手順:</strong></p>
-<ol>
-<li>メイン → <strong>▶フィールド反映</strong> をクリック</li>
-<li>対象フォーマット ▼ を選択</li>
-<li>「差分確認」で影響範囲を表示</li>
-<li>値マッピング (旧値 → 新値) を定義</li>
-<li>「反映実行」ボタン (確認ダイアログあり)</li>
-<li>事前バックアップ → 進捗表示 → 完了</li>
-</ol>
-<blockquote>
-<p>⚠ <strong>注意</strong>: 事前に <code>backup/reflect_YYYYMMDD_HHMMSS/</code> に全件退避されます。失敗ナレッジは別表に表示。</p>
-</blockquote>
-<h3 id="72">7.2 操作ログを確認する<a class="headerlink" href="#72" title="Permanent link">&para;</a></h3>
-<p><img alt="ログ画面 (M-14)" src="../images/operations/M-14.png" /></p>
-<p><strong>操作手順:</strong></p>
-<ol>
-<li>メイン → <strong>▶ログ確認</strong> をクリック</li>
-<li>期間/レベル/ユーザでフィルタ</li>
-<li>「絞込」で結果表示</li>
-<li>ERROR (赤) や WARN (橙) は要注意</li>
-<li>「CSV出力」で外部ファイル化</li>
-<li>「ログを再読込」で最新状態取得</li>
-</ol>
-<blockquote>
-<p>💡 <strong>ポイント</strong>: ログは 10000 行 or 30 日で自動ローテート (古いファイルは保持期間後に自動削除)。</p>
-</blockquote>
-<hr />
-<h2 id="8">第 8 章 困ったとき (トラブル時)<a class="headerlink" href="#8" title="Permanent link">&para;</a></h2>
-<h3 id="81">8.1 デバッグモードを有効にする<a class="headerlink" href="#81" title="Permanent link">&para;</a></h3>
-<p>システム異常時の調査用に、ログレベルを「DEBUG」に変更することで、内部処理の詳細メッセージが M-14 ログ画面に表示されます。</p>
-<p><strong>有効化手順:</strong></p>
-<ol>
-<li>M-01 メイン → <strong>▶システム設定</strong></li>
-<li>ログ設定の「ログレベル」を <code>INFO</code> → <code>DEBUG</code> に変更</li>
-<li>「保存」ボタンを押下</li>
-<li>問題が再現する操作を実行 (例: ナレッジ登録 → エラー)</li>
-<li>M-14 ログを開いて DEBUG 含む詳細メッセージを確認</li>
-<li>調査完了後、ログレベルを <code>INFO</code> に戻す</li>
-</ol>
-<blockquote>
-<p>⚠ <strong>注意</strong>: DEBUG モードはログ量が増えます。トラブル調査時のみ ON にし、調査完了後は必ず INFO に戻してください。</p>
-</blockquote>
-<h3 id="82">8.2 よくあるエラーメッセージと対処<a class="headerlink" href="#82" title="Permanent link">&para;</a></h3>
-<p>M-14 ログ画面で確認できるメッセージ別の推定原因:</p>
-<table>
-<thead>
-<tr>
-<th>レベル</th>
-<th>メッセージ</th>
-<th>原因</th>
-<th>対処</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>🔴 ERROR</strong></td>
-<td>「データフォルダが見つかりません」</td>
-<td>サーバ停止/ネットワーク切断 または ▶システム設定 でパス誤り</td>
-<td>① ネットワーク確認 / ② M-11 でパス再設定 → 「テスト」ボタンで OK 確認</td>
-</tr>
-<tr>
-<td><strong>🔴 ERROR</strong></td>
-<td>「採番に失敗しました。しばらく時間を置いて...」</td>
-<td>多人数同時保存で採番衝突が 10 回連続発生</td>
-<td>5〜10 分待って再度「登録」ボタン。継続発生時は管理者に連絡</td>
-</tr>
-<tr>
-<td><strong>🟠 WARN</strong></td>
-<td>「採番衝突 リトライ 5 回目」</td>
-<td>採番リトライが 5 回継続中 (多人数同時)</td>
-<td>通常リトライ範囲。5 回未満なら対処不要、頻発時は管理者に通知</td>
-</tr>
-<tr>
-<td><strong>🔴 ERROR</strong></td>
-<td>「指定されたナレッジは存在しません」</td>
-<td>番号誤入力 または 他利用者が削除済み</td>
-<td>① 番号を再確認 / ② M-07 一覧で実在確認 / ③ M-11 でデータフォルダパス確認</td>
-</tr>
-<tr>
-<td><strong>🟠 WARN</strong></td>
-<td>「フィールド反映: KN-XXX で値マッピング失敗」</td>
-<td>旧値が新選択肢に存在しない</td>
-<td>画面下「部分失敗一覧」で対象確認 → M-06 で個別修正 → 再反映</td>
-</tr>
-</tbody>
-</table>
-<h3 id="83">8.3 解決しないとき (管理者への連絡)<a class="headerlink" href="#83" title="Permanent link">&para;</a></h3>
-<p>本ガイドで解決しない場合は以下の情報を準備して管理者に連絡してください:</p>
-<table>
-<thead>
-<tr>
-<th>#</th>
 <th>項目</th>
+<th>入力例</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FormatID（行 6）</td>
+<td><code>DEMO-MEMO</code></td>
+<td>対象フォーマットの ID。空欄なら全フォーマット対象</td>
+</tr>
+<tr>
+<td>キーワード（行 7）</td>
+<td><code>メモ 障害</code></td>
+<td>スペース区切りで複数指定可</td>
+</tr>
+<tr>
+<td>検索モード（行 8）</td>
+<td><code>AND</code> または <code>OR</code></td>
+<td>複数キーワード時の論理</td>
+</tr>
+<tr>
+<td>TargetField（行 9）</td>
+<td><code>(全フィールド)</code> または特定フィールド名</td>
+<td>検索対象を限定する場合に指定</td>
+</tr>
+<tr>
+<td>作成日 From（行 10）</td>
+<td><code>2026-04-20</code></td>
+<td>任意。CreatedDate の下限</td>
+</tr>
+<tr>
+<td>作成日 To（行 11）</td>
+<td><code>2026-05-04</code></td>
+<td>任意。CreatedDate の上限</td>
+</tr>
+</tbody>
+</table>
+<h3 id="step-13">Step 1.3 検索実行<a class="headerlink" href="#step-13" title="Permanent link">&para;</a></h3>
+<p>検索シートの <strong><code>▶検索実行</code></strong> ボタンをクリックします。</p>
+<p>数秒で 14 行目以降に <strong>スコア降順</strong> で結果が並びます。</p>
+<table>
+<thead>
+<tr>
+<th>列</th>
 <th>内容</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>1</td>
-<td>操作内容</td>
-<td>何をしようとしていたか (例: ナレッジ登録、検索、フィールド反映 等)</td>
+<td>A</td>
+<td>通し番号（1 から）</td>
 </tr>
 <tr>
-<td>2</td>
-<td>画面表示</td>
-<td>エラー MsgBox の文言を写真撮影 or テキストコピー</td>
+<td>B</td>
+<td>ナレッジ番号 (<code>KN-2026-XXXX</code>)</td>
 </tr>
 <tr>
-<td>3</td>
-<td>ログ</td>
-<td>M-14 で「CSV出力」を実行 → <code>log_export_YYYYMMDD_HHMMSS.csv</code> を添付</td>
+<td>C</td>
+<td>フォーマット名</td>
 </tr>
 <tr>
-<td>4</td>
-<td>再現手順</td>
-<td>どの操作で問題が発生するか、毎回発生するか/たまに発生するか</td>
+<td>D</td>
+<td>タイトル</td>
 </tr>
 <tr>
-<td>5</td>
-<td>バージョン</td>
-<td>メイン → ▶ヘルプ/バージョン で表示される情報 (例: v2.0, ビルド 2026-04-30)</td>
+<td>E</td>
+<td>作成日</td>
+</tr>
+<tr>
+<td>F</td>
+<td>更新日</td>
+</tr>
+<tr>
+<td>G</td>
+<td>「▶ 詳細」ラベル（クリック対象）</td>
+</tr>
+<tr>
+<td>H</td>
+<td>サムネ画像 (60×40px)</td>
+</tr>
+<tr>
+<td>I</td>
+<td>スコア値（0.00 形式）</td>
 </tr>
 </tbody>
 </table>
-<p>本ガイドで解決しない場合 / 動作に疑問がある場合は、上記情報を揃えて管理者に連絡してください。</p>
+<h3 id="step-14">Step 1.4 スコアの読み方<a class="headerlink" href="#step-14" title="Permanent link">&para;</a></h3>
+<p>スコアは次の式で計算されます。詳細は <a href="../spec/#3-検索とスコアリング">仕様 §3</a> 参照。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>スコア = 出現回数(全フィールド) + 出現回数(タイトル) × 3 + 出現回数(対象フィールド) × 2
+</code></pre></div>
+<p>スコアが大きいほど検索条件にマッチしているナレッジです。スコア 0 のナレッジは結果に含まれません。</p>
 <hr />
-<h2 id="_7">動作環境<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
+<h2 id="2">2. 検索結果から詳細を表示する<a class="headerlink" href="#2" title="Permanent link">&para;</a></h2>
+<h3 id="a">方法 A: ナレッジ表示シートで開く<a class="headerlink" href="#a" title="Permanent link">&para;</a></h3>
+<ol>
+<li>検索結果の B 列（ナレッジ番号セル）をダブルクリック、または番号をコピー</li>
+<li>メインシートの <strong><code>▶ナレッジ表示</code></strong> ボタンをクリック → ナレッジ表示シートに遷移</li>
+<li>ナレッジ表示シートの C1 セルに番号を入力し <strong><code>▶表示実行</code></strong> をクリック</li>
+<li>各フィールドの値が一覧表示され、画像があれば J4:N20 にプレビューされる</li>
+</ol>
+<h3 id="b-userform-image_ext-rev1">方法 B: 詳細プレビュー UserForm を開く（image_ext rev1）<a class="headerlink" href="#b-userform-image_ext-rev1" title="Permanent link">&para;</a></h3>
+<ol>
+<li>検索シートで結果行の任意セルを選択（行が 1 つに決まればよい）</li>
+<li><strong><code>Alt + F8</code></strong> → <strong><code>Macro_ShowSearchResultPreview</code></strong> → <strong><code>[実行]</code></strong></li>
+<li>spec 駆動 UserForm が開く（タイトル / 本文 / 画像 / 各フィールド表示）</li>
+</ol>
+<div class="admonition warning">
+<p class="admonition-title">前提条件</p>
+<p><code>[トラスト センター] → [マクロの設定] → [VBA プロジェクト オブジェクト モデルへのアクセスを信頼する]</code> を <strong>ON</strong> にする必要あり（<a href="../setup/#step-12">セットアップ §1.2</a> 参照）。</p>
+</div>
+<hr />
+<h2 id="3">3. ナレッジを新規登録する<a class="headerlink" href="#3" title="Permanent link">&para;</a></h2>
+<h3 id="step-31">Step 3.1 フォーマットを確認<a class="headerlink" href="#step-31" title="Permanent link">&para;</a></h3>
+<p>新規ナレッジを登録するには、その記載フォーマットが「フォーマット一覧」シートに登録済である必要があります。デモ環境では <code>DEMO-MEMO</code> が登録済です。新規フォーマットを追加したい場合は <a href="#5">§5 フォーマット管理</a> 参照。</p>
+<h3 id="step-32">Step 3.2 ナレッジ登録シートを開く<a class="headerlink" href="#step-32" title="Permanent link">&para;</a></h3>
+<p>メインシートの <strong><code>▶ナレッジ登録</code></strong> ボタンをクリック。</p>
+<h3 id="step-33">Step 3.3 メタ情報を入力<a class="headerlink" href="#step-33" title="Permanent link">&para;</a></h3>
+<p>ナレッジ登録シートの上部に次を入力します。</p>
 <ul>
-<li><strong>OS</strong>: Windows 10 以上</li>
-<li><strong>Excel</strong>: Microsoft Excel 2016 以上 (.xlsm マクロ有効ブック対応)</li>
-<li><strong>ネットワーク</strong>: データフォルダへのアクセス可能であること</li>
+<li><strong>ナレッジ番号</strong> (C1): <code>KN-2026-XXXX</code> 形式。重複しない値</li>
+<li><strong>FormatID</strong> (C2): 利用するフォーマットの ID（例: <code>DEMO-MEMO</code>）</li>
+</ul>
+<h3 id="step-34">Step 3.4 フィールドを入力<a class="headerlink" href="#step-34" title="Permanent link">&para;</a></h3>
+<p>メタ情報入力後、<code>▶フォーマット読込</code> ボタンをクリックすると、フォーマット定義に基づくフィールドが 4 行目以降に展開されます。各フィールドの C 列に値を入力します。</p>
+<h3 id="step-35">Step 3.5 保存<a class="headerlink" href="#step-35" title="Permanent link">&para;</a></h3>
+<p><code>▶保存</code> ボタンをクリックすると、<code>&lt;dataFolder&gt;/&lt;ナレッジ番号&gt;.txt</code> が <strong>Shift_JIS + CRLF</strong> で書き出されます。同名ファイル既存時は上書き確認のダイアログが出ます。</p>
+<hr />
+<h2 id="4">4. ナレッジを編集・更新する<a class="headerlink" href="#4" title="Permanent link">&para;</a></h2>
+<h3 id="step-41">Step 4.1 編集対象を読み込む<a class="headerlink" href="#step-41" title="Permanent link">&para;</a></h3>
+<ol>
+<li>メインシートの <strong><code>▶ナレッジ登録</code></strong> ボタンをクリック → ナレッジ登録シートへ</li>
+<li>C1 に編集したい既存ナレッジ番号を入力</li>
+<li><code>▶読込</code> ボタンをクリック → 既存ファイルの内容が各フィールドにロードされる</li>
+</ol>
+<h3 id="step-42">Step 4.2 値を編集して保存<a class="headerlink" href="#step-42" title="Permanent link">&para;</a></h3>
+<p>各フィールドの値を編集後、<code>▶保存</code> をクリック。<code>UpdatedDate</code> が現在日時で自動更新されます（<code>CreatedDate</code> は維持）。</p>
+<hr />
+<h2 id="5">5. ナレッジを削除する<a class="headerlink" href="#5" title="Permanent link">&para;</a></h2>
+<ol>
+<li>メインシートの <strong><code>▶ナレッジ削除</code></strong> ボタンをクリック → ナレッジ削除シートへ</li>
+<li>C1 にナレッジ番号を入力</li>
+<li><code>▶削除実行</code> ボタンをクリック</li>
+<li>確認ダイアログが出るので <strong><code>OK</code></strong> で確定</li>
+</ol>
+<p><code>&lt;dataFolder&gt;/&lt;ナレッジ番号&gt;.txt</code> がファイルシステム上から削除されます（ゴミ箱には行きません）。サムネ画像 <code>kb_images/&lt;ナレッジ番号&gt;.png</code> は <strong>削除されません</strong>（画像は別管理）。</p>
+<div class="admonition danger">
+<p class="admonition-title">削除は元に戻せません</p>
+<p>削除前にバックアップを取ることを推奨します。</p>
+</div>
+<hr />
+<h2 id="6">6. 画像（サムネ）を添付する<a class="headerlink" href="#6" title="Permanent link">&para;</a></h2>
+<p>ナレッジには 1 件あたり 1 枚の画像を関連付けできます。</p>
+<h3 id="a_1">規約 A: ナレッジ番号と同名（推奨）<a class="headerlink" href="#a_1" title="Permanent link">&para;</a></h3>
+<p><code>&lt;dataFolder&gt;</code> の <strong>親フォルダ</strong> に <code>kb_images/</code> を作成し、<code>&lt;ナレッジ番号&gt;.png</code> を置きます。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>C:\Users\&lt;あなた&gt;\Documents\knowledge_demo\
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>├─ data\
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>│   ├─ KN-2026-0420.txt
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>│   └─ ...
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>├─ kb_images\
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>│   ├─ KN-2026-0420.png  ← この命名なら自動で紐づく
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>│   └─ ...
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>└─ knowledge_test_v2_demo_v6.xlsm
+</code></pre></div>
+<p>サイズの目安は 60×40px（サムネ表示時）〜 任意（詳細表示時は J4:N20 にフィット）。PNG / JPG / GIF / BMP に対応。</p>
+<h3 id="b-imagepath">規約 B: ImagePath スタンザで明示指定<a class="headerlink" href="#b-imagepath" title="Permanent link">&para;</a></h3>
+<p><code>.txt</code> ファイルの末尾に次の行を追加すると、任意のパスを画像として指定できます。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>ImagePath=C:\path\to\image.png
+</code></pre></div>
+<p>または <code>kb_images/</code> 配下の任意名で:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>ImagePath=custom_diagram.png
+</code></pre></div>
+<p>詳細は <a href="../spec/#42-imagepath">仕様 §4.2</a> 参照。</p>
+<h3 id="_2">画像が表示されない場合<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
+<p>検索結果 H 列に画像が出ない場合は次を確認します。</p>
+<ul>
+<li><code>kb_images/</code> フォルダが <code>&lt;dataFolder&gt;</code> の <strong>親階層</strong> にあるか</li>
+<li>ファイル名が <code>&lt;ナレッジ番号&gt;.png</code> (拡張子小文字) と一致しているか</li>
+<li>ImagePath スタンザを使っている場合、ファイルが実在するか</li>
+</ul>
+<hr />
+<h2 id="7">7. ログを確認する<a class="headerlink" href="#7" title="Permanent link">&para;</a></h2>
+<h3 id="71">7.1 操作ログを見る<a class="headerlink" href="#71" title="Permanent link">&para;</a></h3>
+<p>メインシートの <strong><code>▶ログ表示</code></strong> ボタンをクリック → ログシートに遷移。各操作（検索 / 登録 / 削除 / エラー）の履歴が新しい順で並んでいます。</p>
+<table>
+<thead>
+<tr>
+<th>列</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td>日時 (<code>yyyy-mm-dd hh:mm:ss</code>)</td>
+</tr>
+<tr>
+<td>B</td>
+<td>モジュール名</td>
+</tr>
+<tr>
+<td>C</td>
+<td>関数名</td>
+</tr>
+<tr>
+<td>D</td>
+<td>種別（<code>INFO</code> / <code>WARN</code> / <code>ERROR</code>）</td>
+</tr>
+<tr>
+<td>E</td>
+<td>メッセージ</td>
+</tr>
+</tbody>
+</table>
+<h3 id="72">7.2 ログをクリアする<a class="headerlink" href="#72" title="Permanent link">&para;</a></h3>
+<p>ログシートの最下部 ボタン <strong><code>▶ログクリア</code></strong> をクリック → 1 行目のヘッダーを除く全行を削除。</p>
+<p>ログは Workbook を開くたびに自動でクリアされる（デモ環境のみ）ため、操作トレースを取りたい場合は早めにエクスポート/コピーしてください。</p>
+<hr />
+<h2 id="8-datafolder">8. dataFolder を切り替える<a class="headerlink" href="#8-datafolder" title="Permanent link">&para;</a></h2>
+<p>複数のナレッジ集を運用したい場合、設定シートで <code>dataFolder</code> を切り替えます。</p>
+<h3 id="step-81">Step 8.1 設定シートを開く<a class="headerlink" href="#step-81" title="Permanent link">&para;</a></h3>
+<p>メインシートの <strong><code>▶設定</code></strong> ボタンをクリック。</p>
+<h3 id="step-82">Step 8.2 フォルダパスを入力<a class="headerlink" href="#step-82" title="Permanent link">&para;</a></h3>
+<p>設定シートの行 3 列 C（dataFolder）に新しいフォルダパスを直接入力するか、<code>▶フォルダ選択</code> ボタンで GUI 選択します。例:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>C:\Users\&lt;あなた&gt;\Documents\knowledge_workA\data
+</code></pre></div>
+<h3 id="step-83">Step 8.3 反映確認<a class="headerlink" href="#step-83" title="Permanent link">&para;</a></h3>
+<p>設定変更後、検索 / 登録 / 表示などの操作が新しい dataFolder を参照します。<code>kb_images/</code> も自動で <code>&lt;新しい dataFolder の親&gt;/kb_images/</code> を参照します。</p>
+<hr />
+<h2 id="9">9. フォーマットを管理する<a class="headerlink" href="#9" title="Permanent link">&para;</a></h2>
+<h3 id="91">9.1 フォーマット一覧を開く<a class="headerlink" href="#91" title="Permanent link">&para;</a></h3>
+<p>メインシートの <strong><code>▶フォーマット一覧</code></strong> ボタンをクリック。フォーマット一覧シートに遷移します。</p>
+<h3 id="92">9.2 新規フォーマットを追加<a class="headerlink" href="#92" title="Permanent link">&para;</a></h3>
+<ol>
+<li>行 3 以降の空行を 1 行確保</li>
+<li>列 A: FormatID（一意）</li>
+<li>列 B: フォーマット名</li>
+<li>列 C 以降: フィールド定義 DSL（<code>FieldNo=1 / FieldName=タイトル / Type=Text / Required=Y</code> 等）</li>
+</ol>
+<h3 id="93">9.3 既存フォーマットを編集<a class="headerlink" href="#93" title="Permanent link">&para;</a></h3>
+<p>定義変更時、既存ナレッジファイル（<code>.txt</code>）のスキーマも自動移行されます（<code>clsFieldMigrator</code> が処理）。詳細は <a href="../spec/#4-フォーマット定義-dsl">仕様 §4</a> 参照。</p>
+<hr />
+<h2 id="10">10. ショートカット一覧<a class="headerlink" href="#10" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>キー / ボタン</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>マクロダイアログを開く</td>
+<td><code>Alt + F8</code></td>
+</tr>
+<tr>
+<td>VBE を開く</td>
+<td><code>Alt + F11</code></td>
+</tr>
+<tr>
+<td>ブックを保存</td>
+<td><code>Ctrl + S</code></td>
+</tr>
+<tr>
+<td>検索シートへ移動</td>
+<td>メインシートの <code>▶検索</code> ボタン</td>
+</tr>
+<tr>
+<td>ナレッジ表示シートへ</td>
+<td>メインシートの <code>▶ナレッジ表示</code> ボタン</td>
+</tr>
+<tr>
+<td>ナレッジ登録シートへ</td>
+<td>メインシートの <code>▶ナレッジ登録</code> ボタン</td>
+</tr>
+<tr>
+<td>ナレッジ削除シートへ</td>
+<td>メインシートの <code>▶ナレッジ削除</code> ボタン</td>
+</tr>
+<tr>
+<td>設定シートへ</td>
+<td>メインシートの <code>▶設定</code> ボタン</td>
+</tr>
+<tr>
+<td>フォーマット一覧へ</td>
+<td>メインシートの <code>▶フォーマット一覧</code> ボタン</td>
+</tr>
+<tr>
+<td>ログシートへ</td>
+<td>メインシートの <code>▶ログ表示</code> ボタン</td>
+</tr>
+<tr>
+<td>詳細プレビュー UserForm</td>
+<td>検索シートで行選択後、<code>Alt+F8</code> → <code>Macro_ShowSearchResultPreview</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="11">11. 拡張テストの実行（任意 / 開発者向け）<a class="headerlink" href="#11" title="Permanent link">&para;</a></h2>
+<p>dev 専用テストモジュール（<code>modTestRunnerExt.bas</code>）を別途インポートしている場合のみ実行できます。配布物には含まれません。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>Application.Run &quot;TestRunner_RunAll&quot;      &#39; 既存 82 件
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>Application.Run &quot;TestRunnerExt_RunAll&quot;   &#39; 拡張 7 件
+</code></pre></div>
+<p>合計 <strong>PASS 89 / SKIP 4 / FAIL 0</strong> が完了条件です。</p>
+<hr />
+<h2 id="12">12. 操作時のトラブルシューティング<a class="headerlink" href="#12" title="Permanent link">&para;</a></h2>
+<h3 id="q1-h">Q1. 検索結果の H 列に画像が表示されない<a class="headerlink" href="#q1-h" title="Permanent link">&para;</a></h3>
+<p><a href="#6">§6 画像（サムネ）を添付する</a> の規約と確認手順を参照。最も多い原因は <code>kb_images/</code> フォルダが <code>dataFolder</code> と同階層に置かれているケース（<strong>親階層</strong> が正しい）。</p>
+<h3 id="q2-0">Q2. 検索しても 0 件しかヒットしない<a class="headerlink" href="#q2-0" title="Permanent link">&para;</a></h3>
+<ul>
+<li>FormatID を間違えていないか（空欄にして全フォーマット対象で再実行）</li>
+<li>キーワードが半角スペース区切りになっているか（全角空白は区切りにならない）</li>
+<li>検索モードが <code>AND</code> で全キーワードがそのファイルに無い場合は 0 件。<code>OR</code> で再実行</li>
+<li>作成日 From / To で対象期間を絞りすぎていないか（空欄にすると無制限）</li>
+</ul>
+<h3 id="q3-userform">Q3. UserForm が開かない / マクロが実行できない<a class="headerlink" href="#q3-userform" title="Permanent link">&para;</a></h3>
+<p><a href="../setup/#step-12">セットアップ §1.2</a> で「VBA プロジェクト オブジェクト モデルへのアクセスを信頼する」を <strong>ON</strong> にしているか確認。OFF の状態では <code>Forms.Add</code> が失敗します。</p>
+<h3 id="q4">Q4. ナレッジ登録時に「フォーマットが見つかりません」と出る<a class="headerlink" href="#q4" title="Permanent link">&para;</a></h3>
+<p>入力した FormatID がフォーマット一覧シートに存在しない可能性。フォーマット一覧で FormatID を確認してから再入力してください。</p>
+<h3 id="q5-datafolder">Q5. dataFolder を切り替えたら検索が空になる<a class="headerlink" href="#q5-datafolder" title="Permanent link">&para;</a></h3>
+<p>新しい dataFolder に <code>.txt</code> ファイルが入っているか確認してください。空フォルダを指定すると検索結果はゼロになります。</p>
+<h3 id="q6">Q6. 画像が縦横比おかしく表示される<a class="headerlink" href="#q6" title="Permanent link">&para;</a></h3>
+<p><code>Shapes.AddPicture</code> の <code>LockAspectRatio</code> 引数で MsoTriState の解釈差で起こる場合があります。v6 で修正済（<a href="../source/utility/modimagerender/">modImageRender</a> 参照）。古いバージョンを使っている場合は v6 ベースに更新してください。</p>
+<hr />
+<h2 id="13">13. 既知の制約・運用上の注意<a class="headerlink" href="#13" title="Permanent link">&para;</a></h2>
+<h3 id="_3">制約<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong><code>Macro_ShowSearchResultPreview</code> は Windows 版 Excel 限定</strong> — <code>Forms.*</code> ProgID が必要なため Mac 版では実行できません（<a href="../setup/#0-前提環境">セットアップ §0</a>）</li>
+<li><strong>検索は単純スコアリング</strong> — タイトル ×3 + 対象フィールド ×2 + 出現回数の単純加算で、ベクトル検索（意味検索）はできません。同義語や類義語による絞り込みが必要な場合は別系統の検索基盤への移行が必要</li>
+<li><strong>件数規模の上限の目安</strong> — 数百〜千件程度のテキストファイルなら実用速度で動作します。数千件以上では再評価が必要です</li>
+</ul>
+<h3 id="_4">よくある運用ミス（チェックリスト）<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
+<ul>
+<li>全角スペースで区切ってしまい、複数キーワードが認識されていない</li>
+<li><code>dataFolder</code> を変更したのに対応する <code>kb_images/</code> を <code>dataFolder の親</code> に置き忘れている</li>
+<li>新規フォーマットを追加したが、対応するナレッジファイルの <code>FormatID=</code> を未記入</li>
+</ul>
+<hr />
+<h2 id="_5">関連<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../setup/">セットアップ</a> - 利用開始までの準備手順</li>
+<li><a href="../spec/">仕様</a> - 内部構造・スコアリング詳細</li>
+<li><a href="../architecture/">アーキテクチャ</a> - 層構造と配布パターン</li>
+<li><a href="../source/">ソースコード</a> - VBA モジュール 48 本 + ThisWorkbook のソース</li>
 </ul>
 
 
