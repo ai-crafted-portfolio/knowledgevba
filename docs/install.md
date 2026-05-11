@@ -8042,7 +8042,7 @@ try {
     Write-Host '[run ] SetupSheetsAndButtons'
     try {
         $excel.DisplayAlerts = $false
-        $excel.Run('SetupSheetsAndButtons')
+        $excel.Run('SetupSheetsAndButtons', $true)
         Write-Host '[run ] SetupSheetsAndButtons OK'
     } catch {
         Write-Host ('[ERROR] SetupSheetsAndButtons 実行失敗: {0}' -f $_.Exception.Message) -ForegroundColor Red
