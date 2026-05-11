@@ -484,5 +484,4 @@ Private Sub RenderFormatPreview(ByVal ws As Worksheet, _
         previewRow = previewRow + 1
     Next i
 End Sub
-
 ```

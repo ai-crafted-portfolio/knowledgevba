@@ -8,8 +8,8 @@ title: modCommon.bas
 |---|---|
 | 層 | ユーティリティ層 |
 | 種別 | 標準モジュール (.bas) |
-| 役割 | 全モジュール共通定数 (シート名 / 列番号 / 行番号など) |
-| 行数 | 129 行 |
+| 役割 | 全モジュール共通定数 (シート名 / 列番号 / 行番号 / ログレベル / 外部ログパス) |
+| 行数 | 126 行 |
 
 ## 配置先
 
@@ -66,6 +66,11 @@ Public Const LOG_LEVEL_ERROR As String = "エラー"
 Public Const LOG_LEVEL_WARN As String = "警告"
 Public Const LOG_LEVEL_INFO As String = "情報"
 Public Const LOG_LEVEL_DEBUG As String = "デバッグ"
+Public Const LOG_LEVEL_TRACE As String = "トレース"
+
+' --- 外部ログファイルパス（C:\kvba\runtime.log に Append） ---
+'     診断目的: シートに書けない致命的場面でもファイルに痕跡を残す
+Public Const EXTERNAL_LOG_PATH As String = "C:\kvba\runtime.log"
 
 ' --- ログシート列番号 ---
 Public Const LOG_COL_TIMESTAMP As Long = 1
@@ -140,14 +145,5 @@ Public Const TEST_RESULT_SKIP As String = "SKIP"
 '         既存の Private 版は内部実装維持 (互換性のため)。
 ' 引数:   sheetName - 確認対象のシート名
 ' 戻り値: Boolean - 存在すれば True
-' ================================================================
-Public Function SheetExists(ByVal sheetName As String) As Boolean
-    Dim ws As Worksheet
-    On Error Resume Next
-    Set ws = ThisWorkbook.Worksheets(sheetName)
-    SheetExists = (Err.Number = 0 And Not ws Is Nothing)
-    Err.Clear
-    On Error GoTo 0
-End Function
-
+' =========================================
 ```

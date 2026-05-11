@@ -8,12 +8,12 @@ title: ThisWorkbook.cls
 |---|---|
 | 層 | 特殊モジュール |
 | 種別 | ドキュメントモジュール (ThisWorkbook) |
-| 役割 | 本番版 ThisWorkbook (Workbook_Open 等のイベント / 自動初期化なし) |
-| 行数 | 93 行 |
+| 役割 | 本番版 ThisWorkbook (Workbook_Open / Workbook_BeforeClose イベント / メイン画面初期表示) |
+| 行数 | 85 行 |
 
 ## 配置先
 
-ThisWorkbook はモジュール挿入ではなく、VBE 左ペインの ThisWorkbook をダブルクリックして開いたコードペインに貼り付けます。
+VBE のプロジェクトツリーで `ThisWorkbook` モジュールを開き、コードペインに **置換貼り付け** します。新規モジュールとしてインポートしないでください。コード冒頭の 9 行（`VERSION 1.0 CLASS` から始まるヘッダー）は **貼り付け対象外** です。
 
 ## ソースコード（コピペ可）
 
@@ -37,7 +37,11 @@ Option Explicit
 '         - Workbook_Open: ログクリア、起動ログ、初期表示
 '         - Workbook_BeforeClose: 終了ログ
 ' 依存先: clsLogger, clsTaskController, modEntryMain, modCommon
+' 備考:   v21 (E2E rerun) で起動/終了に詳細ログを注入。
+'         外部ログファイル C:\kvba\runtime.log にもセッションマーカーを残す。
 ' ================================================================
+
+Private Const MOD_NAME As String = "ThisWorkbook"
 
 ' ================================================================
 ' 関数名: Workbook_Open
@@ -50,68 +54,55 @@ Option Explicit
 ' ================================================================
 Private Sub Workbook_Open()
     On Error GoTo ErrHandler
-    
+    Dim stepName As String : stepName = "begin"
+
+    stepName = "BuildLogger"
     Dim logger As clsLogger
     Set logger = BuildLogger()
-    
-    ' ログシート自動クリア（セッション単位リセット）
-    logger.ClearLog
-    
-    ' 起動ログ
-    logger.LogInfo "ThisWorkbook", "Workbook_Open", "システム起動"
-    
+    If Not logger Is Nothing Then
+        logger.LogInfo MOD_NAME, "Workbook_Open", "=== セッション開始 (book=" & ThisWorkbook.Name & ") ==="
+        logger.LogTrace MOD_NAME, "Workbook_Open", "ENTER"
+    End If
+
+    stepName = "ClearLog"
+    If Not logger Is Nothing Then logger.ClearLog
+
+    ' クリア後の起動ログ
+    stepName = "startup log"
+    If Not logger Is Nothing Then
+        logger.LogInfo MOD_NAME, "Workbook_Open", _
+                        "システム起動 (book=" & ThisWorkbook.Name & ", sheets=" & ThisWorkbook.Worksheets.Count & ")"
+    End If
+
     ' 初期表示: メインシートのみ表示
+    stepName = "SetInitialVisibility"
     Call SetInitialVisibility
-    
+
     ' メインシートをアクティブに
+    stepName = "Activate メイン"
     ThisWorkbook.Worksheets(SHEET_MAIN).Activate
+
+    If Not logger Is Nothing Then
+        logger.LogTrace MOD_NAME, "Workbook_Open", "EXIT ok"
+    End If
     Exit Sub
 
 ErrHandler:
     ' 起動時エラーはメッセージボックスのみ（ログは使えない可能性あり）
-    MsgBox "起動時にエラーが発生しました: " & Err.Description, vbCritical
+    On Error Resume Next
+    Dim recoveryLogger As clsLogger
+    Set recoveryLogger = BuildLogger()
+    If Not recoveryLogger Is Nothing Then
+        recoveryLogger.LogErrorWithErr MOD_NAME, "Workbook_Open", stepName, Err.Number, Err.Description
+    End If
+    Err.Clear
+    MsgBox "起動時にエラーが発生しました:" & vbCrLf & _
+           "  step  : " & stepName & vbCrLf & _
+           "  desc  : " & Err.Description & vbCrLf & vbCrLf & _
+           "詳細は C:\kvba\runtime.log を確認してください。", _
+           vbCritical
 End Sub
 
 ' ================================================================
-' 関数名: Workbook_BeforeClose
-' 概要:   ブックを閉じる直前のイベント
-' 引数:   Cancel - キャンセルフラグ
-' 戻り値: なし
-' ================================================================
-Private Sub Workbook_BeforeClose(Cancel As Boolean)
-    On Error GoTo ErrHandler
-    
-    Dim logger As clsLogger
-    Set logger = BuildLogger()
-    logger.LogInfo "ThisWorkbook", "Workbook_BeforeClose", "システム終了"
-    Exit Sub
-
-ErrHandler:
-    ' 終了時エラーは握りつぶす（ブックを閉じる妨げにしない）
-End Sub
-
-' ================================================================
-' 関数名: SetInitialVisibility
-' 概要:   初期表示時のシート可視性を設定
-'         メインシート以外を非表示にする
-' 引数:   なし
-' 戻り値: なし
-' ================================================================
-Private Sub SetInitialVisibility()
-    On Error GoTo ErrHandler
-    
-    Dim ws As Worksheet
-    For Each ws In ThisWorkbook.Worksheets
-        If ws.Name = SHEET_MAIN Then
-            ws.Visible = xlSheetVisible
-        Else
-            ws.Visible = xlSheetHidden
-        End If
-    Next ws
-    Exit Sub
-
-ErrHandler:
-    ' エラー時は何もしない
-End Sub
-
+' 関数名: Workbook_BeforeCl
 ```

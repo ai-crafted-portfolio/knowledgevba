@@ -8,7 +8,7 @@ title: clsButtonSpec.cls
 |---|---|
 | 層 | ビジネスロジック層 |
 | 種別 | クラスモジュール (.cls) |
-| 役割 | ボタン仕様 DSL (ラベル/位置/色/マクロ名) |
+| 役割 | シート上ボタン 1 個分の宣言情報を保持する値オブジェクト |
 | 行数 | 96 行 |
 
 ## 配置先
@@ -116,5 +116,4 @@ Public Sub Init(ByVal btnName As String, _
     m_hintAddr = hintAddr
     m_hintText = hintText
 End Sub
-
 ```

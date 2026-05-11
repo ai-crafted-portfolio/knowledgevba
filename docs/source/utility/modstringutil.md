@@ -8,7 +8,7 @@ title: modStringUtil.bas
 |---|---|
 | 層 | ユーティリティ層 |
 | 種別 | 標準モジュール (.bas) |
-| 役割 | 文字列処理の純粋関数群 (トリム / エスケープ / Split 拡張) |
+| 役割 | 文字列処理の純粋関数群 |
 | 行数 | 239 行 |
 
 ## 配置先
@@ -259,5 +259,4 @@ Public Function IsValidKnowledgeId(ByVal knwNo As String) As Boolean
 ErrHandler:
     IsValidKnowledgeId = False
 End Function
-
 ```

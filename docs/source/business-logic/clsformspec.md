@@ -117,5 +117,4 @@ End Function
 Public Function ControlCount() As Long
     ControlCount = m_controls.Count
 End Function
-
 ```

@@ -7,13 +7,13 @@ title: IScreenRenderer.cls
 | 項目 | 値 |
 |---|---|
 | 層 | ビジネスロジック層 |
-| 種別 | クラスモジュール (.cls) |
-| 役割 | 画面描画インターフェース (画面層クラスが実装) |
+| 種別 | インターフェイスクラス (.cls) |
+| 役割 | 画面描画の抽象インターフェイス (clsSheetRenderer / clsUserFormRenderer の親) |
 | 行数 | 58 行 |
 
 ## 配置先
 
-VBE で `挿入 > クラスモジュール`、F4 でプロパティ → `(オブジェクト名)` を `IScreenRenderer` に変更してから、コードペインに貼り付けます。
+VBE で `挿入 > クラスモジュール`、F4 でプロパティ → `(オブジェクト名)` を `IScreenRenderer` に変更してから、コードペインに貼り付けます。このモジュールは Implements 宣言を受けるインターフェイスです。
 
 ## ソースコード（コピペ可）
 
@@ -78,5 +78,4 @@ End Sub
 
 Public Sub RenderEmptyState(ByVal cellAddr As String, ByVal message As String)
 End Sub
-
 ```

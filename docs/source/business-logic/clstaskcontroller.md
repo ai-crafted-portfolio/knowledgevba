@@ -8,7 +8,7 @@ title: clsTaskController.cls
 |---|---|
 | 層 | ビジネスロジック層 |
 | 種別 | クラスモジュール (.cls) |
-| 役割 | ナレッジ操作 (登録 / 編集) のトランザクション制御 |
+| 役割 | ナレッジ操作のトランザクション制御 |
 | 行数 | 195 行 |
 
 ## 配置先
@@ -215,5 +215,4 @@ Private Function IsInArray(ByVal target As String, ByVal arr As Variant) As Bool
     Next i
     IsInArray = False
 End Function
-
 ```

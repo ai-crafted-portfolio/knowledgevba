@@ -8,7 +8,7 @@ title: modDateUtil.bas
 |---|---|
 | 層 | ユーティリティ層 |
 | 種別 | 標準モジュール (.bas) |
-| 役割 | 日付・時刻処理の純粋関数群 (LibreOffice 互換配慮) |
+| 役割 | 日付・時刻処理の純粋関数群 |
 | 行数 | 103 行 |
 
 ## 配置先
@@ -123,5 +123,4 @@ Public Function Pad2(ByVal n As Long) As String
         Pad2 = CStr(n)
     End If
 End Function
-
 ```

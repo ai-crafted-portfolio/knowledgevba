@@ -8,8 +8,8 @@ title: clsKnowledgeEditScreen.cls
 |---|---|
 | 層 | 画面層 |
 | 種別 | クラスモジュール (.cls) |
-| 役割 | ナレッジ修正 (M-06) の ScreenSpec 構築 |
-| 行数 | 38 行 |
+| 役割 | M-06 ナレッジ編集画面の構築・再描画 |
+| 行数 | 33 行 |
 
 ## 配置先
 
@@ -49,14 +49,8 @@ End Sub
 
 Public Sub Setup()
     On Error GoTo ErrHandler
-    Call modScreenRender.RenderStandardScreen(m_renderer, m_spec)
-    Exit Sub
-ErrHandler:
-    Debug.Print "[clsKnowledgeEditScreen.Setup] ERROR: " & Err.Description
-End Sub
-
-Public Sub Render()
-    Call Setup
-End Sub
-
+    Dim stepName As String : stepName = "begin"
+    Call modScreenRender.LogScreenTrace("clsKnowledgeEditScreen", "Setup", "ENTER sid=" & m_spec.ScreenId)
+    stepName = "RenderStandardScreen"
+    Call modScreenRender.Render
 ```

@@ -8,7 +8,7 @@ title: clsFieldMigrator.cls
 |---|---|
 | 層 | ビジネスロジック層 |
 | 種別 | クラスモジュール (.cls) |
-| 役割 | フォーマット定義変更時のスキーマ移行 (旧 .txt → 新 .txt) |
+| 役割 | フォーマット定義変更時のスキーマ移行 |
 | 行数 | 308 行 |
 
 ## 配置先
@@ -328,5 +328,4 @@ Private Function CombineFilePath(ByVal folder As String, _
         CombineFilePath = folder & "\" & fileName
     End If
 End Function
-
 ```

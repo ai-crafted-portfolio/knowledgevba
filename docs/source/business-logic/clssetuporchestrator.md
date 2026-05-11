@@ -8,8 +8,8 @@ title: clsSetupOrchestrator.cls
 |---|---|
 | 層 | ビジネスロジック層 |
 | 種別 | クラスモジュール (.cls) |
-| 役割 | SetupSheetsAndButtons の実装本体 (14 シート + 29 ボタン生成) |
-| 行数 | 196 行 |
+| 役割 | セットアップ全工程 (シート生成 / spec 読込 / 描画依頼) を統括する制御クラス |
+| 行数 | 187 行 |
 
 ## 配置先
 
@@ -36,8 +36,12 @@ Option Explicit
 ' 概要:   初期セットアップの司令塔。14 シート作成 → 各画面の Setup 呼出 →
 '         初期可視性設定 → 既定 Sheet 削除 を順次実行。
 '         旧 modSetup.SetupSheetsAndButtons の責務を OOP で再構成したもの。
-' 依存先: IScreenRenderer, modFactory, modScreenSpecRegistry, modCommon
+' 依存先: IScreenRenderer, modFactory, modScreenSpecRegistry, modCommon, clsLogger
+' 備考:   v21 (E2E rerun) で全 Sub に ENTER/EXIT/step ログを注入。
+'         SetupOneScreen の silent NextScreen → LogError で必ず痕跡を残す。
 ' ================================================================
+
+Private Const MOD_NAME As String = "clsSetupOrchestrator"
 
 Private m_renderer As IScreenRenderer
 
@@ -61,24 +65,43 @@ End Sub
 ' ================================================================
 Public Sub RunFullSetup()
     On Error GoTo ErrHandler
+    Dim stepName As String : stepName = "begin"
 
     Application.ScreenUpdating = False
     Application.DisplayAlerts = False
 
+    stepName = "CreateRequiredSheets"
+    Call LogEnter("RunFullSetup", stepName)
     Call CreateRequiredSheets
+
+    ' この時点で SHEET_LOG が存在するため、これ以降は logger を使える
+    Call LogTraceSafe("RunFullSetup", "after CreateRequiredSheets - sheets created")
+
+    stepName = "SetupAllScreens"
+    Call LogTraceSafe("RunFullSetup", "STEP " & stepName)
     Call SetupAllScreens
-    Call InitializeLogSheet
+
+    stepName = "InitializeSettingsSheet"
+    Call LogTraceSafe("RunFullSetup", "STEP " & stepName)
     Call InitializeSettingsSheet
+
+    stepName = "SetInitialVisibility"
+    Call LogTraceSafe("RunFullSetup", "STEP " & stepName)
     Call SetInitialVisibility
+
+    stepName = "DeleteEmptyDefaultSheets"
+    Call LogTraceSafe("RunFullSetup", "STEP " & stepName)
     Call DeleteEmptyDefaultSheets
 
     Application.ScreenUpdating = True
     Application.DisplayAlerts = True
+    Call LogTraceSafe("RunFullSetup", "EXIT ok")
     Exit Sub
 
 ErrHandler:
     Application.ScreenUpdating = True
     Application.DisplayAlerts = True
+    Call LogErrorSafe("RunFullSetup", stepName, Err.Number, Err.Description)
     Err.Raise Err.Number, "clsSetupOrchestrator.RunFullSetup", Err.Description
 End Sub
 
@@ -87,25 +110,50 @@ End Sub
 ' 概要:   14 シートを順次作成（既存はスキップ）
 ' ================================================================
 Private Sub CreateRequiredSheets()
+    On Error GoTo ErrHandler
+    Dim stepName As String : stepName = "split CSV"
+
     Dim names() As String
     names = Split(REQUIRED_SHEETS_CSV, ",")
+
+    Dim createdCount As Long : createdCount = 0
+    Dim skippedCount As Long : skippedCount = 0
+
     Dim i As Long
     For i = LBound(names) To UBound(names)
         Dim sheetName As String
         sheetName = Trim$(names(i))
+        stepName = "check " & sheetName
         If Len(sheetName) > 0 Then
             If Not modCommon.SheetExists(sheetName) Then
+                stepName = "append " & sheetName
                 Call AppendNewSheet(sheetName)
+                createdCount = createdCount + 1
+            Else
+                skippedCount = skippedCount + 1
             End If
         End If
     Next i
+
+    Call LogTraceSafe("CreateRequiredSheets", _
+                       "created=" & createdCount & " skipped=" & skippedCount)
+    Exit Sub
+
+ErrHandler:
+    Call LogErrorSafe("CreateRequiredSheets", stepName, Err.Number, Err.Description)
+    Err.Raise Err.Number, MOD_NAME & ".CreateRequiredSheets", Err.Description
 End Sub
 
 Private Sub AppendNewSheet(ByVal sheetName As String)
+    On Error GoTo ErrHandler
     Dim ws As Worksheet
     Set ws = ThisWorkbook.Worksheets.Add( _
                 After:=ThisWorkbook.Worksheets(ThisWorkbook.Worksheets.Count))
     ws.Name = sheetName
+    Exit Sub
+ErrHandler:
+    Call LogErrorSafe("AppendNewSheet", "Add+Name " & sheetName, Err.Number, Err.Description)
+    Err.Raise Err.Number, MOD_NAME & ".AppendNewSheet", Err.Description
 End Sub
 
 ' ================================================================
@@ -113,108 +161,50 @@ End Sub
 ' 概要:   14 画面の Setup を順次実行（spec → screen → renderer）
 ' ================================================================
 Private Sub SetupAllScreens()
+    On Error GoTo ErrHandler
+    Dim stepName As String : stepName = "GetAllScreenIds"
+
     Dim screenIds As Variant
     screenIds = modScreenSpecRegistry.GetAllScreenIds()
+
+    Dim okCount As Long : okCount = 0
+    Dim ngCount As Long : ngCount = 0
+
     Dim i As Long
     For i = LBound(screenIds) To UBound(screenIds)
         Dim screenId As String
         screenId = CStr(screenIds(i))
-        Call SetupOneScreen(screenId)
+        stepName = "Setup " & screenId
+        Call LogTraceSafe("SetupAllScreens", "BEGIN " & screenId)
+        If SetupOneScreenLogged(screenId) Then
+            okCount = okCount + 1
+        Else
+            ngCount = ngCount + 1
+        End If
     Next i
+
+    Call LogTraceSafe("SetupAllScreens", _
+                       "EXIT ok=" & okCount & " ng=" & ngCount)
+    Exit Sub
+
+ErrHandler:
+    Call LogErrorSafe("SetupAllScreens", stepName, Err.Number, Err.Description)
+    Err.Raise Err.Number, MOD_NAME & ".SetupAllScreens", Err.Description
 End Sub
 
 ' ================================================================
-' 関数名: SetupOneScreen
-' 概要:   1 画面の Setup を実行（エラー耐性 ― 1 画面失敗しても他は続行）
+' 関数名: SetupOneScreenLogged
+' 概要:   1 画面の Setup を実行。失敗しても他画面の続行のため True/False で返す。
+'         失敗時は LogError で痕跡を残す（旧 SetupOneScreen の silent NextScreen
+'         を廃止し、必ず Err.Number/Description を記録）。
+' 戻り値: Boolean - Setup 成功なら True
 ' ================================================================
-Private Sub SetupOneScreen(ByVal screenId As String)
-    On Error GoTo NextScreen
+Private Function SetupOneScreenLogged(ByVal screenId As String) As Boolean
+    On Error GoTo ErrHandler
+    Dim stepName As String : stepName = "CreateScreen " & screenId
+
     Dim screen As Object
     Set screen = modFactory.CreateScreen(screenId, m_renderer)
-    If screen Is Nothing Then GoTo NextScreen
-    screen.Setup
-NextScreen:
-    If Err.Number <> 0 Then
-        Debug.Print "[clsSetupOrchestrator.SetupOneScreen] WARN " & screenId & ": " & Err.Description
-        Err.Clear
-    End If
-End Sub
-
-' ================================================================
-' 関数名: InitializeLogSheet
-' 概要:   ログシートのヘッダ行を初期化（既存ロジック踏襲）
-' ================================================================
-Private Sub InitializeLogSheet()
-    On Error Resume Next
-    Dim ws As Worksheet
-    Set ws = ThisWorkbook.Worksheets(SHEET_LOG)
-    If ws Is Nothing Then Exit Sub
-    ws.Cells(1, LOG_COL_TIMESTAMP).Value = "日時"
-    ws.Cells(1, LOG_COL_MODULE).Value = "モジュール名"
-    ws.Cells(1, LOG_COL_FUNCTION).Value = "関数名"
-    ws.Cells(1, LOG_COL_LEVEL).Value = "メッセージ種別"
-    ws.Cells(1, LOG_COL_MESSAGE).Value = "メッセージ内容"
-    Err.Clear
-    On Error GoTo 0
-End Sub
-
-' ================================================================
-' 関数名: InitializeSettingsSheet
-' 概要:   設定シートのテストモード初期値を書き込み
-' ================================================================
-Private Sub InitializeSettingsSheet()
-    On Error Resume Next
-    Dim ws As Worksheet
-    Set ws = ThisWorkbook.Worksheets(SHEET_SETTINGS)
-    If ws Is Nothing Then Exit Sub
-    ws.Cells(SETTINGS_ROW_TESTMODE, SETTINGS_COL_NAME).Value = "テストモード"
-    ws.Cells(SETTINGS_ROW_TESTMODE, SETTINGS_COL_VALUE).Value = TESTMODE_OFF
-    Err.Clear
-    On Error GoTo 0
-End Sub
-
-' ================================================================
-' 関数名: SetInitialVisibility
-' 概要:   メインのみ可視、その他は xlSheetHidden
-' ================================================================
-Private Sub SetInitialVisibility()
-    Dim ws As Worksheet
-    For Each ws In ThisWorkbook.Worksheets
-        If ws.Name = SHEET_MAIN Then
-            ws.Visible = xlSheetVisible
-        Else
-            ws.Visible = xlSheetHidden
-        End If
-    Next ws
-End Sub
-
-' ================================================================
-' 関数名: DeleteEmptyDefaultSheets
-' 概要:   空の Sheet1〜Sheet4 を削除
-' ================================================================
-Private Sub DeleteEmptyDefaultSheets()
-    Dim names() As String
-    names = Split(DEFAULT_SHEETS_CSV, ",")
-    Dim i As Long
-    For i = LBound(names) To UBound(names)
-        Call DeleteSheetIfEmpty(Trim$(names(i)))
-    Next i
-End Sub
-
-Private Sub DeleteSheetIfEmpty(ByVal sheetName As String)
-    If Len(sheetName) = 0 Then Exit Sub
-    If Not modCommon.SheetExists(sheetName) Then Exit Sub
-    Dim ws As Worksheet
-    Set ws = ThisWorkbook.Worksheets(sheetName)
-    Dim cellCount As Long
-    cellCount = WorksheetFunction.CountA(ws.Cells)
-    If cellCount > 0 Then Exit Sub
-    If ws.Shapes.Count > 0 Then Exit Sub
-    On Error Resume Next
-    ws.Visible = xlSheetVisible
-    ws.Delete
-    Err.Clear
-    On Error GoTo 0
-End Sub
-
+    If screen Is Nothing Then
+        Call LogWarnSafe("SetupOneScreenLogged", screenId & " screen=Nothing (spec missing or unknown id)"
 ```

@@ -8,7 +8,7 @@ title: clsFieldSpec.cls
 |---|---|
 | 層 | ビジネスロジック層 |
 | 種別 | クラスモジュール (.cls) |
-| 役割 | フィールド仕様 DSL (ラベル/型/必須/初期値) |
+| 役割 | シート上フィールド 1 件分の宣言情報を保持する値オブジェクト |
 | 行数 | 132 行 |
 
 ## 配置先
@@ -152,5 +152,4 @@ Public Sub SetCellAddrs(ByVal orderAddr As String, _
     m_typeAddr = typeAddr
     m_inputAddr = inputAddr
 End Sub
-
 ```

@@ -137,5 +137,4 @@ Public Sub Init(ByVal cType As String, ByVal nm As String, _
     m_caption = cap
     m_onClick = onClk
 End Sub
-
 ```

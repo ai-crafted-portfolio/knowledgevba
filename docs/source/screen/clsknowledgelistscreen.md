@@ -1,19 +1,19 @@
 ---
-title: clsFormatListScreen.cls
+title: clsKnowledgeListScreen.cls
 ---
 
-# clsFormatListScreen.cls
+# clsKnowledgeListScreen.cls
 
 | 項目 | 値 |
 |---|---|
 | 層 | 画面層 |
 | 種別 | クラスモジュール (.cls) |
-| 役割 | フォーマット一覧 (M-02) の ScreenSpec 構築 |
-| 行数 | 38 行 |
+| 役割 | M-07 ナレッジ一覧画面の構築・再描画 |
+| 行数 | 33 行 |
 
 ## 配置先
 
-VBE で `挿入 > クラスモジュール`、F4 でプロパティ → `(オブジェクト名)` を `clsFormatListScreen` に変更してから、コードペインに貼り付けます。
+VBE で `挿入 > クラスモジュール`、F4 でプロパティ → `(オブジェクト名)` を `clsKnowledgeListScreen` に変更してから、コードペインに貼り付けます。
 
 ## ソースコード（コピペ可）
 
@@ -24,7 +24,7 @@ VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
 END
-Attribute VB_Name = "clsFormatListScreen"
+Attribute VB_Name = "clsKnowledgeListScreen"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
@@ -32,8 +32,8 @@ Attribute VB_Exposed = False
 Option Explicit
 
 ' ================================================================
-' クラス: clsFormatListScreen（画面層）
-' 概要:   M-02 フォーマット一覧画面の構築・再描画。
+' クラス: clsKnowledgeListScreen（画面層）
+' 概要:   M-07 ナレッジ一覧画面の構築・再描画。
 '         spec を modScreenRender に委譲してタイトル/セクション帯/ボタン/
 '         フィールドラベル/一覧ヘッダ/←メインに戻る を一括描画する。
 ' 依存先: IScreenRenderer, clsScreenSpec, modScreenRender
@@ -49,14 +49,8 @@ End Sub
 
 Public Sub Setup()
     On Error GoTo ErrHandler
-    Call modScreenRender.RenderStandardScreen(m_renderer, m_spec)
-    Exit Sub
-ErrHandler:
-    Debug.Print "[clsFormatListScreen.Setup] ERROR: " & Err.Description
-End Sub
-
-Public Sub Render()
-    Call Setup
-End Sub
-
+    Dim stepName As String : stepName = "begin"
+    Call modScreenRender.LogScreenTrace("clsKnowledgeListScreen", "Setup", "ENTER sid=" & m_spec.ScreenId)
+    stepName = "RenderStandardScreen"
+    Call modScreenRender.Render
 ```

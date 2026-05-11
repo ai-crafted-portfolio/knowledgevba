@@ -218,5 +218,4 @@ Public Function ProgIDFromType(ByVal t As String) As String
             ProgIDFromType = PROGID_LABEL
     End Select
 End Function
-
 ```

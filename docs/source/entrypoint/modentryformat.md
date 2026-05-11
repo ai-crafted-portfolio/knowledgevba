@@ -243,5 +243,4 @@ ErrHandler:
     Call ShowError("シート遷移", Err.Description, _
                     "再度ボタンを押してください")
 End Sub
-
 ```

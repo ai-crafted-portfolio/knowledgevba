@@ -8,7 +8,7 @@ title: clsScreenSpec.cls
 |---|---|
 | 層 | ビジネスロジック層 |
 | 種別 | クラスモジュール (.cls) |
-| 役割 | 画面仕様 DSL (タイトル帯/セクション/フィールド/ボタン) |
+| 役割 | 1 画面分の宣言情報 (タイトル / セクション / ボタン / フィールド) を保持するルート spec |
 | 行数 | 135 行 |
 
 ## 配置先
@@ -155,5 +155,4 @@ End Sub
 Public Sub AddField(ByVal fld As clsFieldSpec)
     m_fields.Add fld
 End Sub
-
 ```

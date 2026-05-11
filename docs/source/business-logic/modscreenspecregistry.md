@@ -8,7 +8,7 @@ title: modScreenSpecRegistry.bas
 |---|---|
 | 層 | ビジネスロジック層 |
 | 種別 | 標準モジュール (.bas) |
-| 役割 | 画面ID → ScreenSpec の登録テーブル |
+| 役割 | M-01〜M-14 の各画面 spec をハードコードで定義するレジストリ |
 | 行数 | 556 行 |
 
 ## 配置先
@@ -576,5 +576,4 @@ Private Sub AddLabelField(ByVal s As clsScreenSpec, ByVal row As Long, _
     fld.SetCellAddrs "", "B" & row, "C" & row, "D" & row, "E" & row
     s.AddField fld
 End Sub
-
 ```

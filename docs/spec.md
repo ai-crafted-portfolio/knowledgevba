@@ -9,21 +9,25 @@ tags:
 
 # 仕様
 
-release v2 + image_ext rev1 時点（2026-05-04）の仕様を定義します。
+現バージョンの仕様を定義します。
 
-## 1. モジュール構成（24 個）
+!!! info "このページの読み方"
+    本ページは「現状の本ツールが何をどう実現しているか」を網羅的に記載するリファレンスです。手順を知りたい場合は [セットアップ](setup.md) / [操作手順](operations.md) へ、層構造や配布パターンを知りたい場合は [アーキテクチャ](architecture.md) へジャンプしてください。
 
-VBA モジュールは「層」ごとにフォルダ分割した形で配布されます。インポート対象は 23 個、`ThisWorkbook.cls` は中身コピペで合計 24 個です。
+## 1. モジュール構成（48 個 + ThisWorkbook）
 
-| 層 | モジュール |
-|---|---|
-| インストーラ層 | `modSetup.bas` |
-| エントリポイント層 | `modEntryMain.bas` / `modEntrySearch.bas` / `modEntryKnowledge.bas` / `modEntryFormat.bas` / `modEntrySettings.bas` / `modSpecExamples.bas` |
-| ビジネスロジック層 | `clsSearchEngine.cls` / `clsKnowledgeManager.cls` / `clsFormatManager.cls` / `clsTaskController.cls` / `clsStorageResolver.cls` / `clsFieldMigrator.cls` / `clsLogger.cls` / `clsControlSpec.cls` / `clsFormSpec.cls` / `modFormBuilder.bas` |
-| ユーティリティ層 | `modCommon.bas` / `modStringUtil.bas` / `modDateUtil.bas` / `modFileIO.bas` / `modImageRender.bas` / `clsLogEntry.cls` |
-| 特殊モジュール | `ThisWorkbook.cls` |
+VBA モジュールは「層」ごとにフォルダ分割した形で配布されます。インポート対象は 48 個、`ThisWorkbook.cls` は中身コピペで合計 49 ファイルです。
 
-image_ext rev1 で新規追加された 5 モジュール: `modImageRender` / `clsControlSpec` / `clsFormSpec` / `modFormBuilder` / `modSpecExamples`。
+| 層 | 個数 | 代表モジュール |
+|---|---|---|
+| インストーラ層 | 1 | `modSetup.bas` |
+| エントリポイント層 | 6 | `modEntryMain.bas` / `modEntrySearch.bas` / `modEntryKnowledge.bas` / `modEntryFormat.bas` / `modEntrySettings.bas` / `modSpecExamples.bas` |
+| ビジネスロジック層 | 21 | `clsSearchEngine.cls` / `clsKnowledgeManager.cls` / `clsFormatManager.cls` / `clsTaskController.cls` / `clsStorageResolver.cls` / `clsFieldMigrator.cls` / `clsLogger.cls` / `clsButtonSpec.cls` / `clsControlSpec.cls` / `clsFieldSpec.cls` / `clsFormSpec.cls` / `clsScreenSpec.cls` / `clsSectionSpec.cls` / `clsSetupOrchestrator.cls` / `clsSheetRenderer.cls` / `clsUserFormRenderer.cls` / `IScreenRenderer.cls` / `modFactory.bas` / `modFormBuilder.bas` / `modScreenRender.bas` / `modScreenSpecRegistry.bas` |
+| ユーティリティ層 | 6 | `modCommon.bas` / `modStringUtil.bas` / `modDateUtil.bas` / `modFileIO.bas` / `modImageRender.bas` / `clsLogEntry.cls` |
+| 画面層 | 14 | `clsMainScreen.cls`〜`clsLogScreen.cls`（M-01〜M-14 の各画面構築クラス） |
+| 特殊モジュール | 1 | `ThisWorkbook.cls` |
+
+全モジュールの詳細とソースコードは [ソースコード一覧](source/index.md) を参照してください。
 
 !!! info "層分離の方針"
     エントリポイント層は「ボタン配下から呼ばれる Public Sub」のみを置き、ビジネスロジック層のクラス群（`cls*`）に処理を委譲します。ユーティリティ層はビジネスロジック層から下方向にのみ依存し、上方向には依存しません。詳細は [アーキテクチャ](architecture.md) を参照。
@@ -42,7 +46,7 @@ image_ext rev1 で新規追加された 5 モジュール: `modImageRender` / `c
 | ログ | ログ | 5 列構成（日時 / モジュール名 / 関数名 / メッセージ種別 / メッセージ内容） |
 | その他 8 シート | フォーマット定義・タスク関連・各種台帳 | — |
 
-セットアップマクロは同時に **フォームコントロールボタン 29 個** を全シートに配置・マクロ割り当てまで実施します。
+セットアップマクロは同時に **フォームコントロールボタン 68 個** を全 14 シートに配置・マクロ割り当てまで実施します（メイン 12 個 + 業務 13 シート計 56 個）。
 
 ## 3. 検索スコアリング
 
@@ -57,10 +61,10 @@ $$
 | 順位 | KnwNo | タイトル | 備考 |
 |---|---|---|---|
 | 1 | KN-2026-0420 | メモリ枯渇エラー対処メモ | タイトル「メモ」2 回 ×3 ブースト + 本文出現 |
-| 2 | KN-2026-0421 | サーバ再起動手順メモ | — |
+| 2 | KN-2026-0421 | ChromaDB HNSW 再構築手順メモ | — |
 | 3 | KN-2026-0424 | サムネ画像の自動配置メモ | — |
 | 4 | KN-2026-0422 | VBA ADODB.Stream の代替メモ | — |
-| 5 | KN-2026-0423 | スコアリング設計メモ | タイトル「メモ」なし、本文ヒットのみ |
+| 5 | KN-2026-0423 | RAG 検索のスコアリング設計 | タイトル「メモ」なし、本文ヒットのみ |
 
 検索モードは `AND` / `OR` を切替可能。`TargetField` で「全フィールド」「タイトルのみ」「本文のみ」等のスコープを絞れます。
 
@@ -136,43 +140,28 @@ End Sub
 
 `clsFieldMigrator` は旧フォーマットから新フォーマットへフィールド名を写像する役割で、フォーマット定義を変更しても既存ナレッジを壊さずに済むようになっています。
 
-## 7. テスト構成
+## 7. 検索バックエンド差替境界
 
-| 区分 | 件数 | 実行方法 |
-|---|---|---|
-| 既存テスト（本番モジュール経由） | PASS 82 / SKIP 4 / FAIL 0 | `Application.Run "TestRunner_RunAll"` |
-| image_ext rev1 拡張テスト | PASS 7 | `Application.Run "TestRunnerExt_RunAll"` |
-| **合計** | **PASS 89 / SKIP 4 / FAIL 0** | 上記両方 |
+本実装は `<dataFolder>/*.txt` を ADODB で SJIS 読込する方式です。`clsSearchEngine.cls` 冒頭のコメントブロックに、別のデータソース（事前 ETL で `Sheet "Data"` に export しておくなど）に差し替える場合の指針が記載されています。具体的には:
 
-### image_ext rev1 拡張テストの内訳
+1. 事前 ETL で chunks を任意のシート（例: `Data`）に export しておく
+2. `ScanAndMatch` の txt ループ箇所を Range 走査に置換する
 
-| ID | テスト | カテゴリ |
-|---|---|---|
-| T10-001 | ScoreMatch=0（FormatID 不一致） | T10 |
-| T10-002 | ScoreMatch>0（キーワード一致） | T10 |
-| T10-003 | ImagePath スタンザ明示指定 | T10 |
-| T10-004 | ImagePath 既定値（`<KnwNo>.png`） | T10 |
-| T10-005 | ResolveImageFolder = parent/kb_images | T10 |
-| T11-001 | FormSpec.AddControl で 2 件追加 | T11 |
-| T11-002 | BuildOnly: `designer.Controls.Count=2` | T11 |
+この変更点は `clsSearchEngine` 1 ファイルに局所化されており、上位エントリポイントには影響しません。
 
-拡張テスト本体（`modTestRunnerExt.bas`）は dev 専用で、配布物には含まれません。
+!!! danger "VBA からの子プロセス起動は使わない"
+    `Shell` / `VBA.Shell` / `WScript.Shell.Run` / `WScript.Shell.Exec` 等の子プロセス起動は使いません。外部データ連携が必要な場合も、外部プロセス起動ではなく事前 ETL → Excel 内 Range 走査の方式を採ります。
 
-## 8. v1 → v2 → v3 の差分
+## 8. 既知の制約・トレードオフ
 
-| 項目 | v1 | v2 | v3（最新） |
-|---|---|---|---|
-| `ThisWorkbook` の `Attribute VB_Base` | 欠落（Excel 実機でコンパイルエラー） | `0{00020819-0000-0000-C000-000000000046}` を注入 | 同左 |
-| `clsSearchEngine` の `▶` 文字 | リテラル `"▶ 詳細"`（CP932 で `?` に化けていた） | `ChrW(&H25B6) & " 詳細"` で実行時構築 | 同左 |
-| `Workbook_Open` 自動初期化 | なし | あり（シート未生成なら Setup、デモデータ未投入なら Seed） | 同左 |
-| `modDemoSeeder` の `〜`（波ダッシュ） | あり | `-`（ASCII ハイフン）に置換 | 同左 |
-| C-1〜C-3 修正 | — | — | 反映済 |
+### 制約
 
-本番展開（`release_v2/`）には `clsSearchEngine` の修正のみが恒久反映されます。Workbook_Open 自動初期化と `modDemoSeeder` はデモ専用です。
+- **検索アルゴリズムは単純スコアリング** — タイトル ×3 + 対象フィールド ×2 + 出現回数の加算式で、意味検索（ベクトル類似度）や同義語展開は対象外です
+- **`clsFormSpec` DSL のコントロール種別は 4 種** — `Label` / `TextBox` / `Image` / `Button` のみ。`ListBox` / `ComboBox` 等の追加は将来検討（[§5.2](#52-サポートしているコントロール種別)）
+- **クラスモジュール内 `Public Const` 禁止** — VBA 仕様の制約。列番号などの共通定数は `modCommon.bas` に集約しています
+- **モバイル / Excel for Mac 不可** — `Forms.*` ProgID が無いため `Macro_ShowSearchResultPreview` は Windows 版 Excel でのみ動作します
 
-## 9. バージョン
+### 設計上のトレードオフ
 
-- **release v2** — rev21 ベース（M6-002/003/004 の検索結合セル対策、ボタン配置のセルアンカー対応を含む）
-- **image_ext rev1（2026-05-04）** — 検索結果画像列追加 + UserForm spec 駆動生成基盤
-- 配布物は **モジュールのみ** 構成。シート/ボタン生成は同梱の `modSetup.bas` の `SetupSheetsAndButtons` マクロで実施。
-
+- **txt フラットファイル方式 vs DB 方式** — DB（SQLite 等）採用ならばインデックス検索ができる代わりに、ファイル単位の閲覧性・テキストエディタでの直接編集容易性が落ちます。閲覧性を取って `.txt` を採用しています
+- **動的 UserForm 生成 vs 固定 UserForm** — 動的生成は Excel のオブジェクトモデルへの信頼設定が必要ですが、コントロール定義をコードで管理できる利点があります

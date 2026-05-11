@@ -8,8 +8,8 @@ title: clsSheetRenderer.cls
 |---|---|
 | 層 | ビジネスロジック層 |
 | 種別 | クラスモジュール (.cls) |
-| 役割 | ScreenSpec → ワークシートへの描画 |
-| 行数 | 361 行 |
+| 役割 | IScreenRenderer 実装。シート上にボタン / ラベル / 帯を物理配置する描画クラス |
+| 行数 | 381 行 |
 
 ## 配置先
 
@@ -38,10 +38,13 @@ Implements IScreenRenderer
 ' 概要:   IScreenRenderer のシート埋込型実装。
 '         ws.Range / ws.Shapes を使ってセル背景・ラベル・フォーム
 '         コントロールボタンを物理配置する。
-' 依存先: modCommon (カラー定数), clsButtonSpec, clsFieldSpec
+' 依存先: modCommon (カラー定数), clsButtonSpec, clsFieldSpec, clsLogger
 ' 備考:   将来 UserForm 切替する場合は clsUserFormRenderer に差し替え可。
 '         画面クラス側は IScreenRenderer 経由で呼ぶため変更不要。
+'         v21 (E2E rerun) で RenderButton に AddFormControl 失敗ログを注入。
 ' ================================================================
+
+Private Const MOD_NAME As String = "clsSheetRenderer"
 
 Private Const XL_BUTTON_CONTROL As Long = 0  ' xlButtonControl と同値（headless 互換）
 Private Const BTN_MIN_W As Double = 100#
@@ -139,13 +142,25 @@ End Sub
 '          グループ識別性を確保）。
 ' ================================================================
 Private Sub IScreenRenderer_RenderButton(ByVal btnSpec As Object)
-    If m_ws Is Nothing Then Exit Sub
+    Dim stepName As String : stepName = "begin"
+
+    If m_ws Is Nothing Then
+        Call LogWarnSafe("RenderButton", "m_ws=Nothing (BindSheet not called?)")
+        Exit Sub
+    End If
+
+    stepName = "cast spec"
     Dim spec As clsButtonSpec
     Set spec = btnSpec
 
+    Call LogTraceSafe("RenderButton", _
+                       "ENTER ws=" & m_ws.Name & " btnName=" & spec.BtnName & " addr=" & spec.CellAddr)
+
     ' 既存同名ボタン削除
+    stepName = "DeleteShapeByName"
     Call DeleteShapeByName(spec.BtnName)
 
+    stepName = "resolve Range " & spec.CellAddr
     Dim rng As Range
     Set rng = m_ws.Range(spec.CellAddr)
 
@@ -161,33 +176,55 @@ Private Sub IScreenRenderer_RenderButton(ByVal btnSpec As Object)
     If heightPt < BTN_MIN_H Then heightPt = BTN_MIN_H
 
     ' ボタン直下セルに色を塗る（グループ識別性 — フォームコントロール本体は色付け不可）
+    stepName = "tint cell"
     On Error Resume Next
     rng.Interior.Color = HexToRgb(spec.ColorHex)
     rng.Font.Color = RGB(255, 255, 255)
     rng.Font.Bold = True
-    Err.Clear
+    If Err.Number <> 0 Then
+        Call LogWarnSafe("RenderButton", "cell tint failed btnName=" & spec.BtnName & _
+                          " errNum=" & Err.Number & " desc=" & Err.Description)
+        Err.Clear
+    End If
     On Error GoTo 0
 
     ' フォームコントロールボタン配置（Object late binding で headless/Excel 互換確保）
+    stepName = "AddFormControl"
     Dim shp As Shape
     Dim shapesObj As Object
     Set shapesObj = m_ws.Shapes
+    Dim afcErrNum As Long : afcErrNum = 0
+    Dim afcErrDesc As String : afcErrDesc = ""
     On Error Resume Next
     Set shp = shapesObj.AddFormControl(XL_BUTTON_CONTROL, leftPt, topPt, widthPt, heightPt)
+    afcErrNum = Err.Number
+    afcErrDesc = Err.Description
     Err.Clear
     On Error GoTo 0
 
-    If shp Is Nothing Then Exit Sub
+    If shp Is Nothing Then
+        Call LogErrorWithErrSafe("RenderButton", _
+                                  "AddFormControl returned Nothing btnName=" & spec.BtnName & _
+                                  " ws=" & m_ws.Name & " addr=" & spec.CellAddr, _
+                                  afcErrNum, afcErrDesc)
+        Exit Sub
+    End If
 
+    stepName = "shp.Name"
     shp.Name = spec.BtnName
+
+    stepName = "SetButtonCaptionAndAction"
     Call SetButtonCaptionAndAction(shp, spec.Caption, spec.BtnName)
 
     ' ヒントテキスト（ボタン下の説明セル）
     If Len(spec.HintAddr) > 0 And Len(spec.HintText) > 0 Then
+        stepName = "hint " & spec.HintAddr
         m_ws.Range(spec.HintAddr).Value = spec.HintText
         m_ws.Range(spec.HintAddr).WrapText = True
         m_ws.Range(spec.HintAddr).Font.Size = 9
     End If
+
+    Call LogTraceSafe("RenderButton", "EXIT ok btnName=" & spec.BtnName)
 End Sub
 
 ' ================================================================
@@ -363,23 +400,5 @@ Private Sub DeleteShapeByName(ByVal shapeName As String)
     If Not shp Is Nothing Then shp.Delete
     Err.Clear
     On Error GoTo 0
-End Sub
-
-' ================================================================
-' 関数名: SetButtonCaptionAndAction
-' 概要:   フォームコントロールボタンにキャプション+OnAction 設定
-'         OLEFormat 経路を主、Shape.OnAction を保険として両方試す。
-' ================================================================
-Private Sub SetButtonCaptionAndAction(ByVal shp As Shape, _
-                                       ByVal btnCaption As String, _
-                                       ByVal macroName As String)
-    On Error Resume Next
-    shp.OLEFormat.Object.Caption = btnCaption
-    shp.OLEFormat.Object.OnAction = macroName
-    Err.Clear
-    shp.OnAction = macroName
-    Err.Clear
-    On Error GoTo 0
-End Sub
-
+En
 ```

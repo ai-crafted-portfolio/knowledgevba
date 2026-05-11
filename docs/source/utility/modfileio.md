@@ -8,7 +8,7 @@ title: modFileIO.bas
 |---|---|
 | 層 | ユーティリティ層 |
 | 種別 | 標準モジュール (.bas) |
-| 役割 | Shift_JIS + CRLF ファイル I/O / フォルダ操作 (3 段フォールバック) |
+| 役割 | Shift_JIS + CRLF ファイル I/O / フォルダ操作 |
 | 行数 | 386 行 |
 
 ## 配置先
@@ -406,5 +406,4 @@ Private Function ConvertLocalPathToURL(ByVal localPath As String) As String
         End If
     End If
 End Function
-
 ```

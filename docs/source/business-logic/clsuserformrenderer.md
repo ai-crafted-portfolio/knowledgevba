@@ -8,7 +8,7 @@ title: clsUserFormRenderer.cls
 |---|---|
 | 層 | ビジネスロジック層 |
 | 種別 | クラスモジュール (.cls) |
-| 役割 | ScreenSpec → UserForm への動的描画 |
+| 役割 | IScreenRenderer 実装の将来用スタブ (UserForm 描画を予定) |
 | 行数 | 81 行 |
 
 ## 配置先
@@ -101,5 +101,4 @@ Private Sub IScreenRenderer_RenderEmptyState(ByVal cellAddr As String, _
                                               ByVal message As String)
     Err.Raise NOT_IMPL_NUM, NOT_IMPL_SRC, NOT_IMPL_MSG
 End Sub
-
 ```

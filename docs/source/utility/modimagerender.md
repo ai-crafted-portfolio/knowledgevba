@@ -8,7 +8,7 @@ title: modImageRender.bas
 |---|---|
 | 層 | ユーティリティ層 |
 | 種別 | 標準モジュール (.bas) |
-| 役割 | Shapes.AddPicture によるサムネ画像配置 (MsoTriState 配慮) |
+| 役割 | Shapes.AddPicture によるサムネ画像配置 (Object late binding 化済) |
 | 行数 | 233 行 |
 
 ## 配置先
@@ -253,5 +253,4 @@ Public Function HasShapeWithPrefix(ByVal ws As Worksheet, _
 ErrHandler:
     HasShapeWithPrefix = False
 End Function
-
 ```

@@ -6,9 +6,9 @@ title: clsLogEntry.cls
 
 | 項目 | 値 |
 |---|---|
-| 層 | ログ |
+| 層 | ユーティリティ層 |
 | 種別 | クラスモジュール (.cls) |
-| 役割 | 1 行分のログレコード (時刻 / 種別 / メッセージ) |
+| 役割 | 1 行分のログレコード (値オブジェクト) |
 | 行数 | 86 行 |
 
 ## 配置先
@@ -106,5 +106,4 @@ Public Sub Init(ByVal ts As String, _
     m_level = lvl
     m_message = msg
 End Sub
-
 ```

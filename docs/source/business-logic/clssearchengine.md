@@ -859,5 +859,4 @@ Private Function CombineFilePath(ByVal folder As String, _
         CombineFilePath = folder & "" & fileName
     End If
 End Function
-
 ```

@@ -8,7 +8,7 @@ title: clsSectionSpec.cls
 |---|---|
 | 層 | ビジネスロジック層 |
 | 種別 | クラスモジュール (.cls) |
-| 役割 | セクション仕様 DSL (帯ラベル/ハイライト) |
+| 役割 | 1 画面内の 1 セクション (帯) の宣言情報を保持する値オブジェクト |
 | 行数 | 47 行 |
 
 ## 配置先
@@ -67,5 +67,4 @@ Public Sub Init(ByVal address As String, ByVal label As String, ByVal colorHex A
     m_label = label
     m_colorHex = colorHex
 End Sub
-
 ```

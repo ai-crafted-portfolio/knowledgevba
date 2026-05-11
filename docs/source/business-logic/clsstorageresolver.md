@@ -8,7 +8,7 @@ title: clsStorageResolver.cls
 |---|---|
 | 層 | ビジネスロジック層 |
 | 種別 | クラスモジュール (.cls) |
-| 役割 | dataFolder / kb_images の解決 (設定シート + 親ディレクトリ規約) |
+| 役割 | dataFolder / kb_images の解決 |
 | 行数 | 171 行 |
 
 ## 配置先
@@ -191,5 +191,4 @@ Private Function CombinePath(ByVal basePath As String, _
         CombinePath = basePath & sep & fileName
     End If
 End Function
-
 ```

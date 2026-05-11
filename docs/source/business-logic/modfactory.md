@@ -8,7 +8,7 @@ title: modFactory.bas
 |---|---|
 | 層 | ビジネスロジック層 |
 | 種別 | 標準モジュール (.bas) |
-| 役割 | ScreenSpec のファクトリ (各画面クラスの登録) |
+| 役割 | 画面層クラスと Renderer を生成するファクトリ。Init 注入の口を集約 |
 | 行数 | 109 行 |
 
 ## 配置先
@@ -129,5 +129,4 @@ Public Function CreateScreen(ByVal screenId As String, _
             Set CreateScreen = lg
     End Select
 End Function
-
 ```

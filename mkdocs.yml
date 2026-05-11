@@ -64,10 +64,10 @@ extra_css:
 
 nav:
   - 概要: index.md
-  - インストール: install.md
   - 仕様: spec.md
+  - セットアップ: setup.md
+  - 操作手順: operations.md
   - アーキテクチャ: architecture.md
-  - 操作マニュアル: operations.md
   - ソースコード:
       - 一覧: source/index.md
       - エントリポイント:
@@ -78,55 +78,50 @@ nav:
           - modEntrySettings: source/entrypoint/modentrysettings.md
           - modSpecExamples: source/entrypoint/modspecexamples.md
       - ビジネスロジック:
-          - IScreenRenderer: source/business-logic/iscreenrenderer.md
-          - clsSearchEngine: source/business-logic/clssearchengine.md
-          - clsKnowledgeManager: source/business-logic/clsknowledgemanager.md
-          - clsFormatManager: source/business-logic/clsformatmanager.md
-          - clsTaskController: source/business-logic/clstaskcontroller.md
-          - clsStorageResolver: source/business-logic/clsstorageresolver.md
-          - clsFieldMigrator: source/business-logic/clsfieldmigrator.md
-          - clsFormSpec: source/business-logic/clsformspec.md
-          - clsControlSpec: source/business-logic/clscontrolspec.md
           - clsButtonSpec: source/business-logic/clsbuttonspec.md
+          - clsControlSpec: source/business-logic/clscontrolspec.md
+          - clsFieldMigrator: source/business-logic/clsfieldmigrator.md
           - clsFieldSpec: source/business-logic/clsfieldspec.md
+          - clsFormSpec: source/business-logic/clsformspec.md
+          - clsFormatManager: source/business-logic/clsformatmanager.md
+          - clsKnowledgeManager: source/business-logic/clsknowledgemanager.md
+          - clsLogger: source/business-logic/clslogger.md
           - clsScreenSpec: source/business-logic/clsscreenspec.md
+          - clsSearchEngine: source/business-logic/clssearchengine.md
           - clsSectionSpec: source/business-logic/clssectionspec.md
           - clsSetupOrchestrator: source/business-logic/clssetuporchestrator.md
           - clsSheetRenderer: source/business-logic/clssheetrenderer.md
+          - clsStorageResolver: source/business-logic/clsstorageresolver.md
+          - clsTaskController: source/business-logic/clstaskcontroller.md
           - clsUserFormRenderer: source/business-logic/clsuserformrenderer.md
+          - IScreenRenderer: source/business-logic/iscreenrenderer.md
           - modFactory: source/business-logic/modfactory.md
           - modFormBuilder: source/business-logic/modformbuilder.md
           - modScreenRender: source/business-logic/modscreenrender.md
           - modScreenSpecRegistry: source/business-logic/modscreenspecregistry.md
-      - 画面層:
-          - clsMainScreen (M-01): source/screens/clsmainscreen.md
-          - clsFormatListScreen (M-02): source/screens/clsformatlistscreen.md
-          - clsFormatDesignScreen (M-03): source/screens/clsformatdesignscreen.md
-          - clsFormatPreviewScreen (M-04): source/screens/clsformatpreviewscreen.md
-          - clsKnowledgeRegisterScreen (M-05): source/screens/clsknowledgeregisterscreen.md
-          - clsKnowledgeEditScreen (M-06): source/screens/clsknowledgeeditscreen.md
-          - clsKnowledgeListScreen (M-07): source/screens/clsknowledgelistscreen.md
-          - clsSearchScreen (M-08): source/screens/clssearchscreen.md
-          - clsKnowledgeViewScreen (M-09): source/screens/clsknowledgeviewscreen.md
-          - clsStorageScreen (M-10): source/screens/clsstoragescreen.md
-          - clsSystemSettingsScreen (M-11): source/screens/clssystemsettingsscreen.md
-          - clsMigrationScreen (M-12): source/screens/clsmigrationscreen.md
-          - clsFileFormatScreen (M-13): source/screens/clsfileformatscreen.md
-          - clsLogScreen (M-14): source/screens/clslogscreen.md
       - ユーティリティ:
+          - clsLogEntry: source/utility/clslogentry.md
           - modCommon: source/utility/modcommon.md
-          - modFileIO: source/utility/modfileio.md
-          - modStringUtil: source/utility/modstringutil.md
           - modDateUtil: source/utility/moddateutil.md
+          - modFileIO: source/utility/modfileio.md
           - modImageRender: source/utility/modimagerender.md
+          - modStringUtil: source/utility/modstringutil.md
+      - 画面層:
+          - clsMainScreen (M-01): source/screen/clsmainscreen.md
+          - clsFormatListScreen (M-02): source/screen/clsformatlistscreen.md
+          - clsFormatDesignScreen (M-03): source/screen/clsformatdesignscreen.md
+          - clsFormatPreviewScreen (M-04): source/screen/clsformatpreviewscreen.md
+          - clsKnowledgeRegisterScreen (M-05): source/screen/clsknowledgeregisterscreen.md
+          - clsKnowledgeEditScreen (M-06): source/screen/clsknowledgeeditscreen.md
+          - clsKnowledgeListScreen (M-07): source/screen/clsknowledgelistscreen.md
+          - clsSearchScreen (M-08): source/screen/clssearchscreen.md
+          - clsKnowledgeViewScreen (M-09): source/screen/clsknowledgeviewscreen.md
+          - clsStorageScreen (M-10): source/screen/clsstoragescreen.md
+          - clsSystemSettingsScreen (M-11): source/screen/clssystemsettingsscreen.md
+          - clsMigrationScreen (M-12): source/screen/clsmigrationscreen.md
+          - clsFileFormatScreen (M-13): source/screen/clsfileformatscreen.md
+          - clsLogScreen (M-14): source/screen/clslogscreen.md
       - インストーラ:
           - modSetup: source/infrastructure/modsetup.md
-      - ログ:
-          - clsLogger: source/logger/clslogger.md
-          - clsLogEntry: source/logger/clslogentry.md
       - 特殊モジュール:
-          - ThisWorkbook (本番版): source/special/thisworkbook.md
-      - Cowork デモ専用:
-          - ThisWorkbook (デモ版): source/cowork-demo/thisworkbook.md
-          - modAutoInit: source/cowork-demo/modautoinit.md
-          - modDemoSeeder: source/cowork-demo/moddemoseeder.md
+          - ThisWorkbook: source/special/thisworkbook.md

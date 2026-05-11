@@ -1,6 +1,6 @@
 ---
 title: アーキテクチャ
-description: 層分離図、依存関係、配布パターン
+description: 層分離図、依存関係、配布パターン、関連 ADR
 tags:
   - excel
   - vba
@@ -12,6 +12,9 @@ tags:
 ## 1. 層分離
 
 VBA モジュールは責務ごとに 5 層に分離されています。依存方向は上から下への一方向のみで、ユーティリティ層がビジネスロジック層を呼ぶことはありません。
+
+!!! tip "層分離の狙い"
+    上位の層で発生した UI イベントを、薄いアダプタ（エントリポイント層）でドメインロジック（ビジネスロジック層）に橋渡しし、副作用の無い純粋関数（ユーティリティ層）を共有資産として配置する構造です。これにより、検索バックエンドの差し替えや新フォーマット追加など、変更が必要なファイルを局所化できます。
 
 ```mermaid
 flowchart TB
@@ -66,7 +69,7 @@ flowchart TB
 | エントリポイント層 | フォームコントロールボタンから直接呼ばれる Public Sub。引数なしまたは `ByVal` 単純型のみ受け取り、ビジネスロジック層に委譲する | `modEntry*.bas` |
 | ビジネスロジック層 | クラス中心。検索、ナレッジ管理、フォーマット定義、タスク制御、ストレージ解決、フィールド移行、ログ、UserForm 動的生成 | `cls*.cls` + `modFormBuilder.bas` |
 | ユーティリティ層 | 純粋関数とヘルパ。日付、文字列、ファイル I/O、画像描画。**上位層への依存ゼロ** | `mod*Util.bas` + `modCommon.bas` + `modImageRender.bas` |
-| インストーラ層 | 1 回限りのセットアップ処理。シート 14 個と 29 ボタンを実行時生成 | `modSetup.bas` |
+| インストーラ層 | 1 回限りのセットアップ処理。シート 14 個と 68 ボタンを実行時生成 | `modSetup.bas` |
 | 特殊モジュール | `ThisWorkbook`。`Workbook_Open` で初回起動時のみ自動初期化を起動 | `ThisWorkbook.cls` |
 
 ## 2. 依存方向の制約
@@ -99,13 +102,13 @@ sequenceDiagram
 
     User->>Excel: 新規 .xlsm 作成（マクロ有効）
     User->>VBE: Alt+F11 で開く
-    User->>VBE: 23 モジュールを Import
+    User->>VBE: 48 モジュールを Import
     User->>VBE: ThisWorkbook の中身をコピペ
     User->>VBE: コンパイル確認
     User->>Excel: Alt+F8 → SetupSheetsAndButtons
     Excel->>Setup: 実行
     Setup->>Excel: 14 シート生成
-    Setup->>Excel: 29 ボタン配置 + マクロ割当
+    Setup->>Excel: 68 ボタン配置 + マクロ割当
     Setup->>Excel: 初期可視性設定（メインのみ表示）
     Setup-->>User: 「セットアップ完了。」MsgBox
     User->>Excel: Ctrl+S 保存 → 閉じる → 再オープン
@@ -124,7 +127,7 @@ sequenceDiagram
 **欠点**
 
 - ユーザが初回セットアップで VBE を開いて手動 import する手間
-- VBE を開く操作に不慣れなユーザ向けに丁寧な手順書が必要
+- VBE を開く操作に不慣れなユーザ向けに丁寧な手順書（[操作手順](operations.md)）が必要
 - セットアップマクロが何らかの理由で失敗した場合の状態が中途半端になり得る（途中までシートだけ生成された等）
 
 ## 4. データフロー
@@ -157,21 +160,28 @@ flowchart LR
     SE -->|ログ出力| Log
 ```
 
-## 5. テスト戦略
+## 5. 主な設計上の前提
 
-| レイヤ | テスト対象 | 件数 |
-|---|---|---|
-| ユーティリティ層 | 純粋関数（文字列、日付、ファイル I/O） | 大半が単体テスト |
-| ビジネスロジック層 | 検索スコアリング、ImagePath 解決、FormSpec | T10/T11 系 |
-| 配布パターン | セットアップマクロの冪等性、シート存在チェック、ボタン重複削除 | M6 系 |
+本ツールが選択した設計上の主な前提は次のとおりです。
 
-合計 **PASS 89 / SKIP 4 / FAIL 0**（既存 82 + image_ext rev1 拡張 7）が完了条件です。
+| 前提 | 内容 |
+|---|---|
+| VBA 子プロセス起動は使わない | `Shell` / `WScript.Shell.Run` 等は使わず、外部ツール連携が必要な機能はすべて Excel プロセス内で代替実装 |
+| `.xlsm` テンプレート配布ではなく モジュール配布 + セルフセットアップ | `.xlsm` テンプレート配布は Excel 修復ダイアログ問題を誘発するため、モジュール配布 + 初回セットアップマクロ方式を採用 |
+| 画面 spec 駆動 | 各業務画面（M-01〜M-14）は `clsScreenSpec` の宣言情報を `clsSheetRenderer` が物理配置することで、画面追加時の差分を 1 spec 定義に局所化 |
 
 ## 6. 拡張ポイント
 
-拡張時に触るファイルの境界:
+将来の変更時に触る予定のファイルを限定するための境界:
 
+- **検索バックエンド差替** — `clsSearchEngine.cls` 1 ファイルのみ差し替え（txt 走査 → Range 走査などへ）
 - **新フォーマット追加** — `clsFormatManager` のフォーマット定義テーブルを追加、`clsFieldMigrator` で旧→新の写像を定義
 - **新しい UserForm を spec 駆動で追加** — `modSpecExamples.bas` を雛形にして `clsFormSpec.AddControl` で宣言、`modFormBuilder.BuildAndShow` で起動
-- **新シート追加** — `modSetup.bas` の `RequiredSheets` 配列に追加、ボタン配置の Anchor 範囲も追記
+- **新シート追加** — `modScreenSpecRegistry.bas` に画面 spec を 1 件追加、`modFactory` 経由で対応する画面層クラスを生成
 
+## 7. 既知の制約
+
+- **VBA 子プロセス禁止** — 全モジュール共通の規約。`Shell` / `WScript.Shell.Run` / `CreateObject("WScript.Shell").Run` 等は使いません
+- **層は一方向依存** — エントリポイント → ビジネスロジック → ユーティリティ。逆方向の参照は循環依存を防ぐため禁止しています
+- **`ThisWorkbook` だけはインストーラ層を呼んでよい** — 初回起動時のセットアップ起動という性質上、特例として認めています
+- **VBE Import 時の改行コード** — `.bas` / `.cls` ファイルが LF だと Excel VBE が正しく取り込めない場合があります。配布パッケージは CRLF で固定しています

@@ -264,5 +264,4 @@ ErrHandler:
     Call ShowError("修正遷移", Err.Description, _
                     "再度ボタンを押してください")
 End Sub
-
 ```

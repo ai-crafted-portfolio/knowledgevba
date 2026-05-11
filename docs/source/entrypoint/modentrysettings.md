@@ -55,5 +55,4 @@ ErrHandler:
     Call ShowError("ログリセット", Err.Description, _
                     "再度ボタンを押してください")
 End Sub
-
 ```

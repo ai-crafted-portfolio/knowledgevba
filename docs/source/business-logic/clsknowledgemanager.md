@@ -8,7 +8,7 @@ title: clsKnowledgeManager.cls
 |---|---|
 | 層 | ビジネスロジック層 |
 | 種別 | クラスモジュール (.cls) |
-| 役割 | ナレッジ一覧シートの行管理 (登録 / 編集 / 削除 / .txt 反映) |
+| 役割 | ナレッジ一覧シートの行管理 |
 | 行数 | 549 行 |
 
 ## 配置先
@@ -569,5 +569,4 @@ End Function
 Private Function ExtractCreatedDate(ByVal content As String) As String
     ExtractCreatedDate = ExtractStanzaValue(content, "CreatedDate")
 End Function
-
 ```
