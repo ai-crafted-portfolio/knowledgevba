@@ -102,7 +102,7 @@ exit /b !PS_EXIT!
 
 ## STEP 3: ps1 の保存
 
-下のコードを **同じフォルダ** に `Install-KnowledgevbaModules.ps1` というファイル名で保存します。VBA モジュール本体 (49 個) がすべて埋め込まれているため、ファイルサイズは約 315 KB あります。
+下のコードを **同じフォルダ** に `Install-KnowledgevbaModules.ps1` というファイル名で保存します。VBA モジュール本体 (49 個) がすべて埋め込まれているため、ファイルサイズは約 328 KB あります。
 
 !!! warning "保存時の注意"
     メモ帳の場合、**[名前を付けて保存]** で **文字コードを「UTF-8 (BOM 付き)」** にしてください。BOM 無し UTF-8 や ANSI で保存すると日本語コメントが文字化けし、コンパイルエラーになります。VS Code を使う場合は右下のエンコーディング表示を **`UTF-8 with BOM`** に切り替えてください。
@@ -356,7 +356,23 @@ Public Const TEST_RESULT_SKIP As String = "SKIP"
 '         既存の Private 版は内部実装維持 (互換性のため)。
 ' 引数:   sheetName - 確認対象のシート名
 ' 戻り値: Boolean - 存在すれば True
-' =========================================
+' ================================================================
+Public Function SheetExists(ByVal sheetName As String) As Boolean
+    Dim ws As Worksheet
+    On Error Resume Next
+    Set ws = ThisWorkbook.Worksheets(sheetName)
+    SheetExists = (Err.Number = 0 And Not ws Is Nothing)
+    Err.Clear
+    On Error GoTo 0
+End Function
+=======================
+Public Function SheetExists(ByVal sheetName As String) As Boolean
+    On Error Resume Next
+    Dim ws As Worksheet
+    Set ws = ThisWorkbook.Worksheets(sheetName)
+    SheetExists = Not (ws Is Nothing)
+    Err.Clear
+End Function
 '@ },
     @{ Name='modDateUtil'; Type='std'; Code=@'
 Option Explicit
@@ -3107,6 +3123,7 @@ Private m_debugLevel As String
 Private m_nextRow As Long  ' M-3: O(N^2) 防止のためキャッシュ (0=未初期化)
 Private m_externalPath As String
 Private m_externalDisabled As Boolean
+Private m_externalFailCount As Long
 
 ' m-12: マジックナンバー 100000 を Const 化
 Private Const MAX_LOG_SCAN_ROWS As Long = 100000
@@ -3258,10 +3275,53 @@ End Sub
 
 ' ================================================================
 ' 関数名: WriteLogInternal
-' 概要:   シート + 外部ファイル両方への書き込みを統括する内部関数。
-'         シート書込みが失敗しても外部ファイルへの試行は実施。
+' 概要: シート + 外部ファイル両方への書き込みを統括 (内部 helper)
+'       シート書込み失敗しても外部ファイル試行は継続
 ' ================================================================
 Private Sub WriteLogInternal(ByVal modName As String, _
+                              ByVal funcName As String, _
+                              ByVal level As String, _
+                              ByVal message As String)
+    Dim ts As String
+    ts = Format$(Now(), "yyyy-mm-dd hh:nn:ss")
+
+    ' 1) LogSheet 書込み
+    On Error Resume Next
+    If Not m_logSheet Is Nothing Then
+        Dim r As Long
+        r = m_logSheet.Cells(m_logSheet.Rows.Count, 1).End(-4162).Row + 1  ' xlUp = -4162
+        If r < 9 Then r = 9
+        m_logSheet.Cells(r, 1).Value = ts
+        m_logSheet.Cells(r, 2).Value = modName
+        m_logSheet.Cells(r, 3).Value = funcName
+        m_logSheet.Cells(r, 4).Value = level
+        m_logSheet.Cells(r, 5).Value = message
+    End If
+    Err.Clear
+    On Error GoTo 0
+
+    ' 2) 外部ファイル書込み (Append)
+    If m_externalDisabled Then Exit Sub
+    On Error Resume Next
+    Dim fno As Integer
+    fno = FreeFile
+    Open m_externalPath For Append As #fno
+    Print #fno, "[" & ts & "] [" & level & "] [" & modName & "." & funcName & "] " & message
+    Close #fno
+    If Err.Number <> 0 Then
+        m_externalFailCount = m_externalFailCount + 1
+        If m_externalFailCount > 3 Then m_externalDisabled = True
+        Err.Clear
+    End If
+    On Error GoTo 0
+End Sub
+
+Private Sub Class_Initialize()
+    m_externalPath = "C:\kvba\runtime.log"
+    m_externalDisabled = False
+    m_externalFailCount = 0
+    m_debugLevel = "INFO"
+End Sub
 '@ },
     @{ Name='clsScreenSpec'; Type='cls'; Code=@'
 Option Explicit
@@ -4441,7 +4501,104 @@ Private Function SetupOneScreenLogged(ByVal screenId As String) As Boolean
     Dim screen As Object
     Set screen = modFactory.CreateScreen(screenId, m_renderer)
     If screen Is Nothing Then
-        Call LogWarnSafe("SetupOneScreenLogged", screenId & " screen=Nothing (spec missing or unknown id)"
+        Call LogWarnSafe("SetupOneScreenLogged", screenId & " screen=Nothing (spec missing or unknown id)")
+        SetupOneScreenLogged = False
+        Exit Function
+    End If
+
+    stepName = "screen.Setup " & screenId
+    screen.Setup
+
+    Call LogTraceSafe("SetupOneScreenLogged", screenId & " EXIT ok")
+    SetupOneScreenLogged = True
+    Exit Function
+
+ErrHandler:
+    Call LogErrorSafe("SetupOneScreenLogged", _
+                       screenId & " step=" & stepName, Err.Number, Err.Description)
+    SetupOneScreenLogged = False
+    Err.Clear
+End Function
+
+' ================================================================
+' 関数名: InitializeSettingsSheet
+' 概要:   設定シートのテストモード初期値を書き込み
+' ================================================================
+Private Sub InitializeSettingsSheet()
+    On Error GoTo ErrHandler
+    Dim stepName As String : stepName = "open sheet"
+
+    Dim ws As Worksheet
+    On Error Resume Next
+    Set ws = ThisWorkbook.Worksheets(SHEET_SETTINGS)
+    Err.Clear
+    On Error GoTo ErrHandler
+
+    If ws Is Nothing Then
+        Call LogWarnSafe("InitializeSettingsSheet", SHEET_SETTINGS & " not found - skip")
+        Exit Sub
+    End If
+
+    stepName = "write testmode"
+    ws.Cells(SETTINGS_ROW_TESTMODE, SETTINGS_COL_NAME).Value = "テストモード"
+    ws.Cells(SETTINGS_ROW_TESTMODE, SETTINGS_COL_VALUE).Value = TESTMODE_OFF
+    Call LogTraceSafe("InitializeSettingsSheet", "testmode=" & TESTMODE_OFF)
+    Exit Sub
+
+ErrHandler:
+    Call LogErrorSafe("InitializeSettingsSheet", stepName, Err.Number, Err.Description)
+    ' 致命的でないので Raise せずに継続
+End Sub
+
+' ================================================================
+' 関数名: SetInitialVisibility
+' 概要:   メインのみ可視、その他は xlSheetHidden
+' ================================================================
+Private Sub SetInitialVisibility()
+    On Error Resume Next
+    Dim shown As Long, hidden As Long
+    Dim w As Worksheet
+    For Each w In ThisWorkbook.Worksheets
+        If w.Name = SHEET_MAIN Then
+            w.Visible = -1  ' xlSheetVisible
+            shown = shown + 1
+        Else
+            w.Visible = 0   ' xlSheetHidden
+            hidden = hidden + 1
+        End If
+    Next w
+    Call LogTraceSafe("SetInitialVisibility", "shown=" & shown & " hidden=" & hidden)
+End Sub
+
+' ================================================================
+' 関数名: DeleteEmptyDefaultSheets
+' 概要: Excel 既定の空 Sheet1/Sheet2/Sheet3 等を削除
+' ================================================================
+Private Sub DeleteEmptyDefaultSheets()
+    On Error Resume Next
+    Application.DisplayAlerts = False
+    Dim deleted As Long : deleted = 0
+    Dim names() As String
+    Dim cnt As Long : cnt = 0
+    ReDim names(0 To 100)
+    Dim w As Worksheet
+    For Each w In ThisWorkbook.Worksheets
+        If LCase$(Left$(w.Name, 5)) = "sheet" Then
+            ' Excel 既定 (Sheet1/Sheet2/...) と思われるもののみ
+            names(cnt) = w.Name
+            cnt = cnt + 1
+        End If
+    Next w
+    Dim i As Long
+    For i = 0 To cnt - 1
+        If ThisWorkbook.Worksheets.Count > 1 Then
+            ThisWorkbook.Worksheets(names(i)).Delete
+            deleted = deleted + 1
+        End If
+    Next i
+    Application.DisplayAlerts = True
+    Call LogTraceSafe("DeleteEmptyDefaultSheets", "deleted=" & deleted)
+End Sub
 '@ },
     @{ Name='clsSheetRenderer'; Type='cls'; Code=@'
 Option Explicit
@@ -4815,7 +4972,18 @@ Private Sub DeleteShapeByName(ByVal shapeName As String)
     If Not shp Is Nothing Then shp.Delete
     Err.Clear
     On Error GoTo 0
-En
+End Sub
+
+' ================================================================
+' 関数名: SetButtonCaptionAndAction
+' 概要: フォームコントロールボタンのキャプションと OnAction を設定
+' ================================================================
+Private Sub SetButtonCaptionAndAction(ByVal shp As Shape, ByVal caption As String, ByVal onAction As String)
+    On Error Resume Next
+    shp.OLEFormat.Object.Caption = caption
+    shp.TextFrame.Characters.Text = caption
+    shp.OnAction = onAction
+End Sub
 '@ },
     @{ Name='clsStorageResolver'; Type='cls'; Code=@'
 Option Explicit
@@ -5556,24 +5724,15 @@ End Function
 Option Explicit
 
 ' ================================================================
-' モジュール: modScreenRender（画面層 — ユーティリティ）
-' 概要:   各画面クラス（clsXxxScreen）が共通で使う「spec を Renderer に
-'         流し込む」標準描画ロジック。各画面クラスはこれを Call することで
-'         「タイトル / セクション帯 / ボタン / フィールドラベル / 一覧ヘッダ /
-'          ←メインに戻る ボタン / 空状態」を一括で描画できる。
-' 依存先: IScreenRenderer, clsScreenSpec, modCommon, clsLogger
-' 備考:   v21 (E2E rerun) で ENTER/EXIT/step ログを注入。
-'         各画面クラスから呼ぶ公開ヘルパー LogScreenTrace/LogScreenError も提供。
+' モジュール: modScreenRender (画面層 ユーティリティ)
+' 概要: 各画面クラスが共通で使う標準描画ロジック + 画面層ログヘルパー
+' 依存先: IScreenRenderer, clsScreenSpec, clsButtonSpec, clsSectionSpec,
+'         clsFieldSpec, modCommon, clsLogger, modEntryMain.BuildLogger
+' 備考: 2026-05-12 truncated 状態を完全再構築
 ' ================================================================
 
 Private Const MOD_NAME As String = "modScreenRender"
 
-' ================================================================
-' 関数名: RenderStandardScreen
-' 概要:   標準的な画面構築の流れを実行
-' 引数:   renderer - IScreenRenderer 実装
-'         spec     - clsScreenSpec データ
-' ================================================================
 Public Sub RenderStandardScreen(ByVal renderer As IScreenRenderer, _
                                  ByVal spec As clsScreenSpec)
     On Error GoTo ErrHandler
@@ -5589,13 +5748,11 @@ Public Sub RenderStandardScreen(ByVal renderer As IScreenRenderer, _
     stepName = "BindSheet " & spec.SheetName
     renderer.BindSheet spec.SheetName
 
-    ' 1) タイトル帯
     If Len(spec.Title) > 0 Then
         stepName = "RenderTitle"
         renderer.RenderTitle spec.ScreenId, spec.Title, spec.TitleColorHex
     End If
 
-    ' 2) セクション帯
     stepName = "Sections"
     Dim sec As clsSectionSpec
     Dim secCount As Long : secCount = 0
@@ -5604,7 +5761,6 @@ Public Sub RenderStandardScreen(ByVal renderer As IScreenRenderer, _
         secCount = secCount + 1
     Next sec
 
-    ' 3) ボタン群
     stepName = "Buttons"
     Dim btn As clsButtonSpec
     Dim btnCount As Long : btnCount = 0
@@ -5613,7 +5769,6 @@ Public Sub RenderStandardScreen(ByVal renderer As IScreenRenderer, _
         btnCount = btnCount + 1
     Next btn
 
-    ' 4) フィールドラベル群（データが空でも常時表示）
     stepName = "Fields"
     Dim fld As clsFieldSpec
     Dim fldCount As Long : fldCount = 0
@@ -5622,26 +5777,71 @@ Public Sub RenderStandardScreen(ByVal renderer As IScreenRenderer, _
         fldCount = fldCount + 1
     Next fld
 
-    ' 5) 一覧ヘッダ行（M-02/M-07/M-08 等の一覧系のみ）
     If Len(spec.HeaderRowAddr) > 0 Then
         stepName = "HeaderRow " & spec.HeaderRowAddr
         renderer.RenderHeaderRow spec.HeaderRowAddr, spec.HeaderLabels, COLOR_BTN_PRIMARY
     End If
 
-    ' 6) 空状態メッセージ（一覧系のみ）
     If Len(spec.EmptyStateAddr) > 0 Then
         stepName = "EmptyState " & spec.EmptyStateAddr
         renderer.RenderEmptyState spec.EmptyStateAddr, spec.EmptyStateText
     End If
 
-    ' 7) ←メインに戻る ボタン（メイン以外の全画面に必置）
     If Len(spec.BackToMainAddr) > 0 Then
         stepName = "BackToMainButton " & spec.BackToMainAddr
         Call PlaceBackToMainButton(renderer, spec.BackToMainAddr)
     End If
 
     Call LogScreenTrace(MOD_NAME, "RenderStandardScreen", _
-                         "EXIT sid=" & sid & " sec=" & secCount & " btn
+                         "EXIT sid=" & sid & " sec=" & secCount & " btn=" & btnCount & " fld=" & fldCount)
+    Exit Sub
+
+ErrHandler:
+    Call LogScreenError(MOD_NAME, "RenderStandardScreen", _
+                         "sid=" & sid & " step=" & stepName, Err.Number, Err.Description)
+End Sub
+
+Private Sub PlaceBackToMainButton(ByVal renderer As IScreenRenderer, _
+                                    ByVal cellAddr As String)
+    On Error GoTo ErrHandler
+    Dim s As clsButtonSpec
+    Set s = New clsButtonSpec
+    s.BtnName = "Btn_BackToMain"
+    s.Caption = ChrW(&H2190) & " メインに戻る"
+    s.CellAddr = cellAddr
+    s.ColorHex = COLOR_BTN_NAV
+    s.HintAddr = ""
+    s.HintText = ""
+    renderer.RenderButton s
+    Exit Sub
+ErrHandler:
+    Call LogScreenError(MOD_NAME, "PlaceBackToMainButton", _
+                         "cell=" & cellAddr, Err.Number, Err.Description)
+End Sub
+
+Public Sub LogScreenTrace(ByVal className As String, _
+                            ByVal funcName As String, _
+                            ByVal message As String)
+    On Error Resume Next
+    Dim lg As clsLogger
+    Set lg = BuildLogger()
+    If Not lg Is Nothing Then
+        lg.LogTrace className, funcName, message
+    End If
+End Sub
+
+Public Sub LogScreenError(ByVal className As String, _
+                            ByVal funcName As String, _
+                            ByVal stepName As String, _
+                            ByVal errNum As Long, _
+                            ByVal errDesc As String)
+    On Error Resume Next
+    Dim lg As clsLogger
+    Set lg = BuildLogger()
+    If Not lg Is Nothing Then
+        lg.LogErrorWithErr className, funcName, stepName, errNum, errDesc
+    End If
+End Sub
 '@ },
     @{ Name='modScreenSpecRegistry'; Type='std'; Code=@'
 Option Explicit
@@ -6204,11 +6404,11 @@ End Sub
 Option Explicit
 
 ' ================================================================
-' クラス: clsFileFormatScreen（画面層）
-' 概要:   M-13 データファイル形式画面の構築・再描画。
-'         spec を modScreenRender に委譲してタイトル/セクション帯/ボタン/
-'         フィールドラベル/一覧ヘッダ/←メインに戻る を一括描画する。
+' クラス: clsFileFormatScreen (画面層 - M-13)
+' 概要:   M-13 画面の構築・再描画。spec を modScreenRender に委譲。
 ' 依存先: IScreenRenderer, clsScreenSpec, modScreenRender
+' 備考:   E2E rerun (2026-05-12) で truncated 状態を全クラス同一テンプレで復旧。
+'         ENTER/EXIT トレース + ErrHandler で「どこで失敗」が分かる構造に統一。
 ' ================================================================
 
 Private m_renderer As IScreenRenderer
@@ -6223,18 +6423,30 @@ Public Sub Setup()
     On Error GoTo ErrHandler
     Dim stepName As String : stepName = "begin"
     Call modScreenRender.LogScreenTrace("clsFileFormatScreen", "Setup", "ENTER sid=" & m_spec.ScreenId)
+
     stepName = "RenderStandardScreen"
-    Call modScreenRender.Render
+    Call modScreenRender.RenderStandardScreen(m_renderer, m_spec)
+
+    Call modScreenRender.LogScreenTrace("clsFileFormatScreen", "Setup", "EXIT ok")
+    Exit Sub
+
+ErrHandler:
+    Call modScreenRender.LogScreenError("clsFileFormatScreen", "Setup", stepName, Err.Number, Err.Description)
+End Sub
+
+Public Sub Render()
+    Setup
+End Sub
 '@ },
     @{ Name='clsFormatDesignScreen'; Type='cls'; Code=@'
 Option Explicit
 
 ' ================================================================
-' クラス: clsFormatDesignScreen（画面層）
-' 概要:   M-03 フォーマット設計画面の構築・再描画。
-'         spec を modScreenRender に委譲してタイトル/セクション帯/ボタン/
-'         フィールドラベル/一覧ヘッダ/←メインに戻る を一括描画する。
+' クラス: clsFormatDesignScreen (画面層 - M-03)
+' 概要:   M-03 画面の構築・再描画。spec を modScreenRender に委譲。
 ' 依存先: IScreenRenderer, clsScreenSpec, modScreenRender
+' 備考:   E2E rerun (2026-05-12) で truncated 状態を全クラス同一テンプレで復旧。
+'         ENTER/EXIT トレース + ErrHandler で「どこで失敗」が分かる構造に統一。
 ' ================================================================
 
 Private m_renderer As IScreenRenderer
@@ -6249,18 +6461,30 @@ Public Sub Setup()
     On Error GoTo ErrHandler
     Dim stepName As String : stepName = "begin"
     Call modScreenRender.LogScreenTrace("clsFormatDesignScreen", "Setup", "ENTER sid=" & m_spec.ScreenId)
+
     stepName = "RenderStandardScreen"
-    Call modScreenRender.Render
+    Call modScreenRender.RenderStandardScreen(m_renderer, m_spec)
+
+    Call modScreenRender.LogScreenTrace("clsFormatDesignScreen", "Setup", "EXIT ok")
+    Exit Sub
+
+ErrHandler:
+    Call modScreenRender.LogScreenError("clsFormatDesignScreen", "Setup", stepName, Err.Number, Err.Description)
+End Sub
+
+Public Sub Render()
+    Setup
+End Sub
 '@ },
     @{ Name='clsFormatListScreen'; Type='cls'; Code=@'
 Option Explicit
 
 ' ================================================================
-' クラス: clsFormatListScreen（画面層）
-' 概要:   M-02 フォーマット一覧画面の構築・再描画。
-'         spec を modScreenRender に委譲してタイトル/セクション帯/ボタン/
-'         フィールドラベル/一覧ヘッダ/←メインに戻る を一括描画する。
+' クラス: clsFormatListScreen (画面層 - M-02)
+' 概要:   M-02 画面の構築・再描画。spec を modScreenRender に委譲。
 ' 依存先: IScreenRenderer, clsScreenSpec, modScreenRender
+' 備考:   E2E rerun (2026-05-12) で truncated 状態を全クラス同一テンプレで復旧。
+'         ENTER/EXIT トレース + ErrHandler で「どこで失敗」が分かる構造に統一。
 ' ================================================================
 
 Private m_renderer As IScreenRenderer
@@ -6275,18 +6499,30 @@ Public Sub Setup()
     On Error GoTo ErrHandler
     Dim stepName As String : stepName = "begin"
     Call modScreenRender.LogScreenTrace("clsFormatListScreen", "Setup", "ENTER sid=" & m_spec.ScreenId)
+
     stepName = "RenderStandardScreen"
-    Call modScreenRender.Render
+    Call modScreenRender.RenderStandardScreen(m_renderer, m_spec)
+
+    Call modScreenRender.LogScreenTrace("clsFormatListScreen", "Setup", "EXIT ok")
+    Exit Sub
+
+ErrHandler:
+    Call modScreenRender.LogScreenError("clsFormatListScreen", "Setup", stepName, Err.Number, Err.Description)
+End Sub
+
+Public Sub Render()
+    Setup
+End Sub
 '@ },
     @{ Name='clsFormatPreviewScreen'; Type='cls'; Code=@'
 Option Explicit
 
 ' ================================================================
-' クラス: clsFormatPreviewScreen（画面層）
-' 概要:   M-04 フォーマットプレビュー画面の構築・再描画。
-'         spec を modScreenRender に委譲してタイトル/セクション帯/ボタン/
-'         フィールドラベル/一覧ヘッダ/←メインに戻る を一括描画する。
+' クラス: clsFormatPreviewScreen (画面層 - M-04)
+' 概要:   M-04 画面の構築・再描画。spec を modScreenRender に委譲。
 ' 依存先: IScreenRenderer, clsScreenSpec, modScreenRender
+' 備考:   E2E rerun (2026-05-12) で truncated 状態を全クラス同一テンプレで復旧。
+'         ENTER/EXIT トレース + ErrHandler で「どこで失敗」が分かる構造に統一。
 ' ================================================================
 
 Private m_renderer As IScreenRenderer
@@ -6301,18 +6537,30 @@ Public Sub Setup()
     On Error GoTo ErrHandler
     Dim stepName As String : stepName = "begin"
     Call modScreenRender.LogScreenTrace("clsFormatPreviewScreen", "Setup", "ENTER sid=" & m_spec.ScreenId)
+
     stepName = "RenderStandardScreen"
-    Call modScreenRender.Render
+    Call modScreenRender.RenderStandardScreen(m_renderer, m_spec)
+
+    Call modScreenRender.LogScreenTrace("clsFormatPreviewScreen", "Setup", "EXIT ok")
+    Exit Sub
+
+ErrHandler:
+    Call modScreenRender.LogScreenError("clsFormatPreviewScreen", "Setup", stepName, Err.Number, Err.Description)
+End Sub
+
+Public Sub Render()
+    Setup
+End Sub
 '@ },
     @{ Name='clsKnowledgeEditScreen'; Type='cls'; Code=@'
 Option Explicit
 
 ' ================================================================
-' クラス: clsKnowledgeEditScreen（画面層）
-' 概要:   M-06 ナレッジ修正画面の構築・再描画。
-'         spec を modScreenRender に委譲してタイトル/セクション帯/ボタン/
-'         フィールドラベル/一覧ヘッダ/←メインに戻る を一括描画する。
+' クラス: clsKnowledgeEditScreen (画面層 - M-06)
+' 概要:   M-06 画面の構築・再描画。spec を modScreenRender に委譲。
 ' 依存先: IScreenRenderer, clsScreenSpec, modScreenRender
+' 備考:   E2E rerun (2026-05-12) で truncated 状態を全クラス同一テンプレで復旧。
+'         ENTER/EXIT トレース + ErrHandler で「どこで失敗」が分かる構造に統一。
 ' ================================================================
 
 Private m_renderer As IScreenRenderer
@@ -6327,18 +6575,30 @@ Public Sub Setup()
     On Error GoTo ErrHandler
     Dim stepName As String : stepName = "begin"
     Call modScreenRender.LogScreenTrace("clsKnowledgeEditScreen", "Setup", "ENTER sid=" & m_spec.ScreenId)
+
     stepName = "RenderStandardScreen"
-    Call modScreenRender.Render
+    Call modScreenRender.RenderStandardScreen(m_renderer, m_spec)
+
+    Call modScreenRender.LogScreenTrace("clsKnowledgeEditScreen", "Setup", "EXIT ok")
+    Exit Sub
+
+ErrHandler:
+    Call modScreenRender.LogScreenError("clsKnowledgeEditScreen", "Setup", stepName, Err.Number, Err.Description)
+End Sub
+
+Public Sub Render()
+    Setup
+End Sub
 '@ },
     @{ Name='clsKnowledgeListScreen'; Type='cls'; Code=@'
 Option Explicit
 
 ' ================================================================
-' クラス: clsKnowledgeListScreen（画面層）
-' 概要:   M-07 ナレッジ一覧画面の構築・再描画。
-'         spec を modScreenRender に委譲してタイトル/セクション帯/ボタン/
-'         フィールドラベル/一覧ヘッダ/←メインに戻る を一括描画する。
+' クラス: clsKnowledgeListScreen (画面層 - M-07)
+' 概要:   M-07 画面の構築・再描画。spec を modScreenRender に委譲。
 ' 依存先: IScreenRenderer, clsScreenSpec, modScreenRender
+' 備考:   E2E rerun (2026-05-12) で truncated 状態を全クラス同一テンプレで復旧。
+'         ENTER/EXIT トレース + ErrHandler で「どこで失敗」が分かる構造に統一。
 ' ================================================================
 
 Private m_renderer As IScreenRenderer
@@ -6353,17 +6613,30 @@ Public Sub Setup()
     On Error GoTo ErrHandler
     Dim stepName As String : stepName = "begin"
     Call modScreenRender.LogScreenTrace("clsKnowledgeListScreen", "Setup", "ENTER sid=" & m_spec.ScreenId)
+
     stepName = "RenderStandardScreen"
-    Call modScreenRender.Render
+    Call modScreenRender.RenderStandardScreen(m_renderer, m_spec)
+
+    Call modScreenRender.LogScreenTrace("clsKnowledgeListScreen", "Setup", "EXIT ok")
+    Exit Sub
+
+ErrHandler:
+    Call modScreenRender.LogScreenError("clsKnowledgeListScreen", "Setup", stepName, Err.Number, Err.Description)
+End Sub
+
+Public Sub Render()
+    Setup
+End Sub
 '@ },
     @{ Name='clsKnowledgeRegisterScreen'; Type='cls'; Code=@'
 Option Explicit
 
 ' ================================================================
-' クラス: clsKnowledgeRegisterScreen（画面層）
-' 概要:   M-05 ナレッジ登録画面の構築・再描画。
-'         入力フォームのフィールドラベルを常時展開（データ無しでも見える）。
+' クラス: clsKnowledgeRegisterScreen (画面層 - M-05)
+' 概要:   M-05 画面の構築・再描画。spec を modScreenRender に委譲。
 ' 依存先: IScreenRenderer, clsScreenSpec, modScreenRender
+' 備考:   E2E rerun (2026-05-12) で truncated 状態を全クラス同一テンプレで復旧。
+'         ENTER/EXIT トレース + ErrHandler で「どこで失敗」が分かる構造に統一。
 ' ================================================================
 
 Private m_renderer As IScreenRenderer
@@ -6378,18 +6651,30 @@ Public Sub Setup()
     On Error GoTo ErrHandler
     Dim stepName As String : stepName = "begin"
     Call modScreenRender.LogScreenTrace("clsKnowledgeRegisterScreen", "Setup", "ENTER sid=" & m_spec.ScreenId)
+
     stepName = "RenderStandardScreen"
-    Call modScreenRender.Render
+    Call modScreenRender.RenderStandardScreen(m_renderer, m_spec)
+
+    Call modScreenRender.LogScreenTrace("clsKnowledgeRegisterScreen", "Setup", "EXIT ok")
+    Exit Sub
+
+ErrHandler:
+    Call modScreenRender.LogScreenError("clsKnowledgeRegisterScreen", "Setup", stepName, Err.Number, Err.Description)
+End Sub
+
+Public Sub Render()
+    Setup
+End Sub
 '@ },
     @{ Name='clsKnowledgeViewScreen'; Type='cls'; Code=@'
 Option Explicit
 
 ' ================================================================
-' クラス: clsKnowledgeViewScreen（画面層）
-' 概要:   M-09 ナレッジ表示画面の構築・再描画。
-'         spec を modScreenRender に委譲してタイトル/セクション帯/ボタン/
-'         フィールドラベル/一覧ヘッダ/←メインに戻る を一括描画する。
+' クラス: clsKnowledgeViewScreen (画面層 - M-09)
+' 概要:   M-09 画面の構築・再描画。spec を modScreenRender に委譲。
 ' 依存先: IScreenRenderer, clsScreenSpec, modScreenRender
+' 備考:   E2E rerun (2026-05-12) で truncated 状態を全クラス同一テンプレで復旧。
+'         ENTER/EXIT トレース + ErrHandler で「どこで失敗」が分かる構造に統一。
 ' ================================================================
 
 Private m_renderer As IScreenRenderer
@@ -6404,18 +6689,30 @@ Public Sub Setup()
     On Error GoTo ErrHandler
     Dim stepName As String : stepName = "begin"
     Call modScreenRender.LogScreenTrace("clsKnowledgeViewScreen", "Setup", "ENTER sid=" & m_spec.ScreenId)
+
     stepName = "RenderStandardScreen"
-    Call modScreenRender.Render
+    Call modScreenRender.RenderStandardScreen(m_renderer, m_spec)
+
+    Call modScreenRender.LogScreenTrace("clsKnowledgeViewScreen", "Setup", "EXIT ok")
+    Exit Sub
+
+ErrHandler:
+    Call modScreenRender.LogScreenError("clsKnowledgeViewScreen", "Setup", stepName, Err.Number, Err.Description)
+End Sub
+
+Public Sub Render()
+    Setup
+End Sub
 '@ },
     @{ Name='clsLogScreen'; Type='cls'; Code=@'
 Option Explicit
 
 ' ================================================================
-' クラス: clsLogScreen（画面層）
-' 概要:   M-14 操作ログ画面の構築・再描画。
-'         spec を modScreenRender に委譲してタイトル/セクション帯/ボタン/
-'         フィールドラベル/一覧ヘッダ/←メインに戻る を一括描画する。
+' クラス: clsLogScreen (画面層 - M-14)
+' 概要:   M-14 画面の構築・再描画。spec を modScreenRender に委譲。
 ' 依存先: IScreenRenderer, clsScreenSpec, modScreenRender
+' 備考:   E2E rerun (2026-05-12) で truncated 状態を全クラス同一テンプレで復旧。
+'         ENTER/EXIT トレース + ErrHandler で「どこで失敗」が分かる構造に統一。
 ' ================================================================
 
 Private m_renderer As IScreenRenderer
@@ -6430,16 +6727,30 @@ Public Sub Setup()
     On Error GoTo ErrHandler
     Dim stepName As String : stepName = "begin"
     Call modScreenRender.LogScreenTrace("clsLogScreen", "Setup", "ENTER sid=" & m_spec.ScreenId)
+
     stepName = "RenderStandardScreen"
-    Call modScreenRender.Render
+    Call modScreenRender.RenderStandardScreen(m_renderer, m_spec)
+
+    Call modScreenRender.LogScreenTrace("clsLogScreen", "Setup", "EXIT ok")
+    Exit Sub
+
+ErrHandler:
+    Call modScreenRender.LogScreenError("clsLogScreen", "Setup", stepName, Err.Number, Err.Description)
+End Sub
+
+Public Sub Render()
+    Setup
+End Sub
 '@ },
     @{ Name='clsMainScreen'; Type='cls'; Code=@'
 Option Explicit
 
 ' ================================================================
-' クラス: clsMainScreen（画面層）
-' 概要:   M-01 メイン画面の構築・再描画。12 ボタンを 3 グループに整理。
-' 依存先: IScreenRenderer, clsScreenSpec, modScreenSpecRegistry, modCommon
+' クラス: clsMainScreen (画面層 - M-01)
+' 概要:   M-01 画面の構築・再描画。spec を modScreenRender に委譲。
+' 依存先: IScreenRenderer, clsScreenSpec, modScreenRender
+' 備考:   E2E rerun (2026-05-12) で truncated 状態を全クラス同一テンプレで復旧。
+'         ENTER/EXIT トレース + ErrHandler で「どこで失敗」が分かる構造に統一。
 ' ================================================================
 
 Private m_renderer As IScreenRenderer
@@ -6450,54 +6761,34 @@ Public Sub Init(ByVal renderer As IScreenRenderer, ByVal spec As clsScreenSpec)
     Set m_spec = spec
 End Sub
 
-' ================================================================
-' 関数名: Setup
-' 概要:   メイン画面の全要素（タイトル/グループ帯/12 ボタン+ヒント/凡例）を描画
-' 備考:   v21 (E2E rerun) で ENTER/EXIT/step ログを注入。Debug.Print 廃止。
-' ================================================================
 Public Sub Setup()
     On Error GoTo ErrHandler
     Dim stepName As String : stepName = "begin"
     Call modScreenRender.LogScreenTrace("clsMainScreen", "Setup", "ENTER sid=" & m_spec.ScreenId)
 
-    stepName = "BindSheet"
-    m_renderer.BindSheet m_spec.SheetName
-    stepName = "RenderTitle"
-    m_renderer.RenderTitle m_spec.ScreenId, m_spec.Title, m_spec.TitleColorHex
+    stepName = "RenderStandardScreen"
+    Call modScreenRender.RenderStandardScreen(m_renderer, m_spec)
 
-    ' ヘッダ（タスク表示 + バージョン）
-    ' Note: かつて ChrW(&H1F4DA) を使っていたが、VBA ChrW は Integer 16bit までしか
-    '       受け付けないため Overflow → ErrHandler 突入で全描画スキップしていた。
-    '       BMP 範囲内のシンボルに置換。
-    stepName = "Header labels"
-    m_renderer.RenderLabel "B6", ChrW(&H25A0) & " ナレッジ管理システム", COLOR_SECTION_BLUE
-    m_renderer.RenderLabel "B7", "現在のタスク:", ""
-    m_renderer.RenderLabel "D7", "(未選択)", "#E7E6E6"
-    m_renderer.RenderLabel "H7", "バージョン:", ""
-    m_renderer.RenderLabel "J7", "v2.0", "#E7E6E6"
+    Call modScreenRender.LogScreenTrace("clsMainScreen", "Setup", "EXIT ok")
+    Exit Sub
 
-    ' グループ帯
-    stepName = "Sections"
-    Dim secCount As Long : secCount = 0
-    Dim sec As clsSectionSpec
-    For Each sec In m_spec.Sections
-        m_renderer.RenderSection sec.Address, sec.Label, sec.ColorHex
-        secCount = secCount + 1
-    Next sec
+ErrHandler:
+    Call modScreenRender.LogScreenError("clsMainScreen", "Setup", stepName, Err.Number, Err.Description)
+End Sub
 
-    ' ボタン群
-    stepName = "Buttons"
-    Dim btnCount As Long :
+Public Sub Render()
+    Setup
+End Sub
 '@ },
     @{ Name='clsMigrationScreen'; Type='cls'; Code=@'
 Option Explicit
 
 ' ================================================================
-' クラス: clsMigrationScreen（画面層）
-' 概要:   M-12 既存データへのフィールド反映画面の構築・再描画。
-'         spec を modScreenRender に委譲してタイトル/セクション帯/ボタン/
-'         フィールドラベル/一覧ヘッダ/←メインに戻る を一括描画する。
+' クラス: clsMigrationScreen (画面層 - M-12)
+' 概要:   M-12 画面の構築・再描画。spec を modScreenRender に委譲。
 ' 依存先: IScreenRenderer, clsScreenSpec, modScreenRender
+' 備考:   E2E rerun (2026-05-12) で truncated 状態を全クラス同一テンプレで復旧。
+'         ENTER/EXIT トレース + ErrHandler で「どこで失敗」が分かる構造に統一。
 ' ================================================================
 
 Private m_renderer As IScreenRenderer
@@ -6512,18 +6803,30 @@ Public Sub Setup()
     On Error GoTo ErrHandler
     Dim stepName As String : stepName = "begin"
     Call modScreenRender.LogScreenTrace("clsMigrationScreen", "Setup", "ENTER sid=" & m_spec.ScreenId)
+
     stepName = "RenderStandardScreen"
-    Call modScreenRender.Render
+    Call modScreenRender.RenderStandardScreen(m_renderer, m_spec)
+
+    Call modScreenRender.LogScreenTrace("clsMigrationScreen", "Setup", "EXIT ok")
+    Exit Sub
+
+ErrHandler:
+    Call modScreenRender.LogScreenError("clsMigrationScreen", "Setup", stepName, Err.Number, Err.Description)
+End Sub
+
+Public Sub Render()
+    Setup
+End Sub
 '@ },
     @{ Name='clsSearchScreen'; Type='cls'; Code=@'
 Option Explicit
 
 ' ================================================================
-' クラス: clsSearchScreen（画面層）
-' 概要:   M-08 ナレッジ検索画面の構築・再描画。
-'         spec を modScreenRender に委譲してタイトル/セクション帯/ボタン/
-'         フィールドラベル/一覧ヘッダ/←メインに戻る を一括描画する。
+' クラス: clsSearchScreen (画面層 - M-08)
+' 概要:   M-08 画面の構築・再描画。spec を modScreenRender に委譲。
 ' 依存先: IScreenRenderer, clsScreenSpec, modScreenRender
+' 備考:   E2E rerun (2026-05-12) で truncated 状態を全クラス同一テンプレで復旧。
+'         ENTER/EXIT トレース + ErrHandler で「どこで失敗」が分かる構造に統一。
 ' ================================================================
 
 Private m_renderer As IScreenRenderer
@@ -6538,18 +6841,30 @@ Public Sub Setup()
     On Error GoTo ErrHandler
     Dim stepName As String : stepName = "begin"
     Call modScreenRender.LogScreenTrace("clsSearchScreen", "Setup", "ENTER sid=" & m_spec.ScreenId)
+
     stepName = "RenderStandardScreen"
-    Call modScreenRender.Render
+    Call modScreenRender.RenderStandardScreen(m_renderer, m_spec)
+
+    Call modScreenRender.LogScreenTrace("clsSearchScreen", "Setup", "EXIT ok")
+    Exit Sub
+
+ErrHandler:
+    Call modScreenRender.LogScreenError("clsSearchScreen", "Setup", stepName, Err.Number, Err.Description)
+End Sub
+
+Public Sub Render()
+    Setup
+End Sub
 '@ },
     @{ Name='clsStorageScreen'; Type='cls'; Code=@'
 Option Explicit
 
 ' ================================================================
-' クラス: clsStorageScreen（画面層）
-' 概要:   M-10 格納先設定画面の構築・再描画。
-'         spec を modScreenRender に委譲してタイトル/セクション帯/ボタン/
-'         フィールドラベル/一覧ヘッダ/←メインに戻る を一括描画する。
+' クラス: clsStorageScreen (画面層 - M-10)
+' 概要:   M-10 画面の構築・再描画。spec を modScreenRender に委譲。
 ' 依存先: IScreenRenderer, clsScreenSpec, modScreenRender
+' 備考:   E2E rerun (2026-05-12) で truncated 状態を全クラス同一テンプレで復旧。
+'         ENTER/EXIT トレース + ErrHandler で「どこで失敗」が分かる構造に統一。
 ' ================================================================
 
 Private m_renderer As IScreenRenderer
@@ -6564,18 +6879,30 @@ Public Sub Setup()
     On Error GoTo ErrHandler
     Dim stepName As String : stepName = "begin"
     Call modScreenRender.LogScreenTrace("clsStorageScreen", "Setup", "ENTER sid=" & m_spec.ScreenId)
+
     stepName = "RenderStandardScreen"
-    Call modScreenRender.Render
+    Call modScreenRender.RenderStandardScreen(m_renderer, m_spec)
+
+    Call modScreenRender.LogScreenTrace("clsStorageScreen", "Setup", "EXIT ok")
+    Exit Sub
+
+ErrHandler:
+    Call modScreenRender.LogScreenError("clsStorageScreen", "Setup", stepName, Err.Number, Err.Description)
+End Sub
+
+Public Sub Render()
+    Setup
+End Sub
 '@ },
     @{ Name='clsSystemSettingsScreen'; Type='cls'; Code=@'
 Option Explicit
 
 ' ================================================================
-' クラス: clsSystemSettingsScreen（画面層）
-' 概要:   M-11 システム設定画面の構築・再描画。
-'         spec を modScreenRender に委譲してタイトル/セクション帯/ボタン/
-'         フィールドラベル/一覧ヘッダ/←メインに戻る を一括描画する。
+' クラス: clsSystemSettingsScreen (画面層 - M-11)
+' 概要:   M-11 画面の構築・再描画。spec を modScreenRender に委譲。
 ' 依存先: IScreenRenderer, clsScreenSpec, modScreenRender
+' 備考:   E2E rerun (2026-05-12) で truncated 状態を全クラス同一テンプレで復旧。
+'         ENTER/EXIT トレース + ErrHandler で「どこで失敗」が分かる構造に統一。
 ' ================================================================
 
 Private m_renderer As IScreenRenderer
@@ -6590,8 +6917,20 @@ Public Sub Setup()
     On Error GoTo ErrHandler
     Dim stepName As String : stepName = "begin"
     Call modScreenRender.LogScreenTrace("clsSystemSettingsScreen", "Setup", "ENTER sid=" & m_spec.ScreenId)
+
     stepName = "RenderStandardScreen"
-    Call modScreenRender.Render
+    Call modScreenRender.RenderStandardScreen(m_renderer, m_spec)
+
+    Call modScreenRender.LogScreenTrace("clsSystemSettingsScreen", "Setup", "EXIT ok")
+    Exit Sub
+
+ErrHandler:
+    Call modScreenRender.LogScreenError("clsSystemSettingsScreen", "Setup", stepName, Err.Number, Err.Description)
+End Sub
+
+Public Sub Render()
+    Setup
+End Sub
 '@ },
     @{ Name='modEntryFormat'; Type='std'; Code=@'
 Option Explicit
@@ -7413,9 +7752,23 @@ Public Function ConfirmAction(ByVal operation As String, ByVal detail As String)
     ConfirmAction = (result = vbYes)
 End Function
 
-Private Sub LogDialogSuppressed(ByVal dialogType As String, _
-                                  ByVal operation As String, _
-                                  ByVal detail As String, _
+' ================================================================
+' BuildLogger: Workbook 内 LogSheet を取得して clsLogger を初期化
+' 失敗時は Nothing を返す (呼び出し側は IsNothing 判定で握りつぶす)
+' ================================================================
+Public Function BuildLogger() As clsLogger
+    On Error Resume Next
+    Dim ws As Worksheet
+    Set ws = ThisWorkbook.Worksheets(SHEET_LOG)
+    If ws Is Nothing Then
+        Set BuildLogger = Nothing
+        Exit Function
+    End If
+    Dim lg As clsLogger
+    Set lg = New clsLogger
+    lg.Init ws, LOG_LEVEL_INFO
+    Set BuildLogger = lg
+End Function
 '@ },
     @{ Name='modEntrySearch'; Type='std'; Code=@'
 Option Explicit
@@ -7874,7 +8227,28 @@ End Sub
 
 ' ================================================================
 ' 関数名: ResetAllScreens
-' 概要:   全 14 画面を再描画する（再セットアップ
+' 概要: 全 14 画面を再描画 (再セットアップ簡易版)
+' ================================================================
+Public Sub ResetAllScreens()
+    Call SetupSheetsAndButtons(True)
+End Sub
+
+' ================================================================
+' --- Safe ログヘルパー ---
+' ================================================================
+Private Sub LogTraceSafe(ByVal funcName As String, ByVal msg As String)
+    On Error Resume Next
+    Dim lg As clsLogger
+    Set lg = BuildLogger()
+    If Not lg Is Nothing Then lg.LogTrace "modSetup", funcName, msg
+End Sub
+
+Private Sub LogErrorSafe(ByVal funcName As String, ByVal stepName As String, ByVal errNum As Long, ByVal errDesc As String)
+    On Error Resume Next
+    Dim lg As clsLogger
+    Set lg = BuildLogger()
+    If Not lg Is Nothing Then lg.LogErrorWithErr "modSetup", funcName, stepName, errNum, errDesc
+End Sub
 '@ },
     @{ Name='ThisWorkbook'; Type='doc'; Code=@'
 Option Explicit
@@ -7953,6 +8327,18 @@ End Sub
 
 ' ================================================================
 ' 関数名: Workbook_BeforeCl
+' ================================================================
+' 関数名: Workbook_BeforeClose
+' 概要: ブッククローズ前のクリーンアップ
+' ================================================================
+Private Sub Workbook_BeforeClose(Cancel As Boolean)
+    On Error Resume Next
+    Dim lg As clsLogger
+    Set lg = BuildLogger()
+    If Not lg Is Nothing Then
+        lg.LogInfo "ThisWorkbook", "Workbook_BeforeClose", "=== セッション終了 ==="
+    End If
+End Sub
 '@ }
 )
 
