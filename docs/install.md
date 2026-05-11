@@ -112,7 +112,7 @@ exit /b !PS_EXIT!
 # Install-KnowledgevbaModules.ps1
 # -----------------------------------------------------------------------------
 # 同梱 VBA モジュール群を Excel COM 経由で対象 .xlsm に流し込み、
-# 続けて SetupSheetsAndButtons を実行してシート 14 個 + ボタン 29 個を生成する。
+# 続けて SetupSheetsAndButtons を実行してシート 14 個 + ボタン 68 個を生成する。
 # 引数で受け取った .xlsm/.xlsx を開き、保存して閉じるところまで自動で行う。
 #
 # 前提:
