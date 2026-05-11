@@ -8042,7 +8042,17 @@ try {
     Write-Host '[run ] SetupSheetsAndButtons'
     try {
         $excel.DisplayAlerts = $false
-        $excel.Run('SetupSheetsAndButtons', $true)
+        # 注意: hidden Excel (Visible=False) + COM で SetupSheetsAndButtons を呼ぶと、
+        # 内部のフォームコントロール配置 (Shapes.AddFormControl) が高確率で silent fail する
+        # （Excel の制限）。Setup 実行中だけ Visible=True にして UI 経路で完走させ、
+        # 終わったら再度 Hidden に戻す。
+        $prevVisible = $excel.Visible
+        $excel.Visible = $true
+        try {
+            $excel.Run('SetupSheetsAndButtons', $true)
+        } finally {
+            $excel.Visible = $prevVisible
+        }
         Write-Host '[run ] SetupSheetsAndButtons OK'
     } catch {
         Write-Host ('[ERROR] SetupSheetsAndButtons 実行失敗: {0}' -f $_.Exception.Message) -ForegroundColor Red
