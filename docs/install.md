@@ -121,7 +121,7 @@ exit /b !PS_EXIT!
 
 ## STEP 3: ps1 の保存
 
-下のコードを **同じフォルダ** に `Install-KnowledgevbaModules.ps1` というファイル名で保存します。VBA モジュール本体 (49 個) がすべて埋め込まれているため、ファイルサイズは約 330 KB あります。
+下のコードを **同じフォルダ** に `Install-KnowledgevbaModules.ps1` というファイル名で保存します。VBA モジュール本体 (49 個) がすべて埋め込まれているため、ファイルサイズは約 331 KB あります。
 
 !!! warning "保存時の注意"
     メモ帳の場合、**[名前を付けて保存]** で **文字コードを「UTF-8 (BOM 付き)」** にしてください。BOM 無し UTF-8 や ANSI で保存すると日本語コメントが文字化けし、コンパイルエラーになります。VS Code を使う場合は右下のエンコーディング表示を **`UTF-8 with BOM`** に切り替えてください。
@@ -8425,6 +8425,22 @@ Private Sub Workbook_BeforeClose(Cancel As Boolean)
     If Not lg Is Nothing Then
         lg.LogInfo "ThisWorkbook", "Workbook_BeforeClose", "=== セッション終了 ==="
     End If
+End Sub
+
+
+' ================================================================
+' SetInitialVisibility: メインのみ可視、その他 hidden (Workbook_Open helper)
+' ================================================================
+Private Sub SetInitialVisibility()
+    On Error Resume Next
+    Dim w As Worksheet
+    For Each w In ThisWorkbook.Worksheets
+        If w.Name = SHEET_MAIN Then
+            w.Visible = -1
+        Else
+            w.Visible = 0
+        End If
+    Next w
 End Sub
 '@ }
 )
