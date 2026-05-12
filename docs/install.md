@@ -121,7 +121,7 @@ exit /b !PS_EXIT!
 
 ## STEP 3: ps1 の保存
 
-下のコードを **同じフォルダ** に `Install-KnowledgevbaModules.ps1` というファイル名で保存します。VBA モジュール本体 (49 個) がすべて埋め込まれているため、ファイルサイズは約 331 KB あります。
+下のコードを **同じフォルダ** に `Install-KnowledgevbaModules.ps1` というファイル名で保存します。VBA モジュール本体 (49 個) がすべて埋め込まれているため、ファイルサイズは約 330 KB あります。
 
 !!! warning "保存時の注意"
     メモ帳の場合、**[名前を付けて保存]** で **文字コードを「UTF-8 (BOM 付き)」** にしてください。BOM 無し UTF-8 や ANSI で保存すると日本語コメントが文字化けし、コンパイルエラーになります。VS Code を使う場合は右下のエンコーディング表示を **`UTF-8 with BOM`** に切り替えてください。
@@ -253,13 +253,10 @@ End Sub
     @{ Name='modCommon'; Type='std'; Code=@'
 Option Explicit
 
-' ================================================================
-' モジュール: modCommon（ユーティリティ層）
+' ' モジュール: modCommon（ユーティリティ層）
 ' 概要:       全モジュールで共有する定数を定義する
 ' 依存先:     なし
-' ================================================================
-
-' --- シート名定数 ---
+' ' --- シート名定数 ---
 Public Const SHEET_MAIN As String = "メイン"
 Public Const SHEET_FORMAT_LIST As String = "フォーマット一覧"
 Public Const SHEET_FORMAT_DESIGN As String = "フォーマット設計"
@@ -367,8 +364,7 @@ Public Const TEST_RESULT_FAIL As String = "FAIL"
 Public Const TEST_RESULT_SKIP As String = "SKIP"
 
 
-' ================================================================
-' 関数名: SheetExists
+' ' 関数名: SheetExists
 ' 概要:   指定名のワークシートが ThisWorkbook 内に存在するか判定する共通ヘルパー。
 '         M-2: modSetup.IsSheetExists と modAutoInit.SheetExists の重複定義を
 '         本関数に集約し、新規モジュールはこちらを使うよう統一する。
@@ -384,7 +380,6 @@ Public Function SheetExists(ByVal sheetName As String) As Boolean
     Err.Clear
     On Error GoTo 0
 End Function
-=======================
 '@ },
     @{ Name='modDateUtil'; Type='std'; Code=@'
 Option Explicit
