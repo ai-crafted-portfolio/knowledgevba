@@ -121,7 +121,7 @@ exit /b !PS_EXIT!
 
 ## STEP 3: ps1 の保存
 
-下のコードを **同じフォルダ** に `Install-KnowledgevbaModules.ps1` というファイル名で保存します。VBA モジュール本体 (50 個) がすべて埋め込まれているため、ファイルサイズは約 335 KB あります。
+下のコードを **同じフォルダ** に `Install-KnowledgevbaModules.ps1` というファイル名で保存します。VBA モジュール本体 (50 個) がすべて埋め込まれているため、ファイルサイズは約 336 KB あります。
 
 !!! warning "保存時の注意"
     メモ帳の場合、**[名前を付けて保存]** で **文字コードを「UTF-8 (BOM 付き)」** にしてください。BOM 無し UTF-8 や ANSI で保存すると日本語コメントが文字化けし、コンパイルエラーになります。VS Code を使う場合は右下のエンコーディング表示を **`UTF-8 with BOM`** に切り替えてください。
@@ -6600,7 +6600,47 @@ Private Sub AddBtn(ByVal s As clsScreenSpec, _
     Dim btn As clsButtonSpec
     Set btn = New clsButtonSpec
     btn.Init btnName, caption, cellAddr, colorHex, groupName, hintAddr, hintText
-    s.AddBu
+    s.AddButton btn
+End Sub
+
+' ================================================================
+' 関数名: AddStandardFieldRows
+' 概要:   標準ナレッジフィールド（件名/発生日時/担当者/カテゴリ/優先度/事象/原因/対処内容）
+'         を指定行から順に追加。データ無くてもラベルが見える「空状態 UI」を実現。
+' 引数:   s         - clsScreenSpec
+'         startRow  - フィールド開始行
+' ================================================================
+Private Sub AddStandardFieldRows(ByVal s As clsScreenSpec, ByVal startRow As Long)
+    Dim names As Variant
+    Dim types As Variant
+    Dim reqs As Variant
+    Dim rows As Variant
+    Dim hints As Variant
+    names = Array("件名", "発生日時", "担当者", "カテゴリ", "優先度", "事象", "原因", "対処内容")
+    types = Array("単一行 1行", "日時 1行", "単一行 1行", "選択 1行", "選択 1行", "複数行 5行", "複数行 3行", "複数行 5行")
+    reqs  = Array(True,    True,    True,    True,    True,    True,    True,    True)
+    rows  = Array(1,       1,       1,       1,       1,       5,       3,       5)
+    hints = Array("(単一行入力)", "(現在日時を既定で表示)", "(単一行入力)", "(選択してください)", "(選択 ― 高/中/低)", _
+                   "(複数行入力 / Alt+Enter で改行)", "(複数行入力 / Alt+Enter で改行)", "(複数行入力 / Alt+Enter で改行)")
+    Dim i As Long
+    For i = LBound(names) To UBound(names)
+        Call AddLabelField(s, i + 1, CStr(names(i)), CStr(types(i)), CBool(reqs(i)))
+    Next i
+End Sub
+
+' ================================================================
+' AddLabelField: clsFieldSpec を生成して s.Fields に追加
+' ================================================================
+Private Sub AddLabelField(ByVal s As clsScreenSpec, _
+                           ByVal fieldOrder As Long, _
+                           ByVal label As String, _
+                           ByVal typeText As String, _
+                           ByVal required As Boolean)
+    Dim fld As clsFieldSpec
+    Set fld = New clsFieldSpec
+    fld.Init fieldOrder, label, typeText, required, 1, ""
+    s.AddField fld
+End Sub
 '@ },
     @{ Name='clsFileFormatScreen'; Type='cls'; Code=@'
 Option Explicit
