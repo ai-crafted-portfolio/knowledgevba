@@ -12,13 +12,13 @@
         <meta name="author" content="ai-crafted-portfolio">
       
       
-        <link rel="canonical" href="https://ai-crafted-portfolio.github.io/knowledgevba/source/utility/clslogentry/">
+        <link rel="canonical" href="https://ai-crafted-portfolio.github.io/knowledgevba/source/utility/moduiconfig/">
       
       
-        <link rel="prev" href="../../business-logic/modscreenspecregistry/">
+        <link rel="prev" href="../modstringutil/">
       
       
-        <link rel="next" href="../modcommon/">
+        <link rel="next" href="../../screen/clsmainscreen/">
       
       
         
@@ -29,7 +29,7 @@
     
     
       
-        <title>clsLogEntry.cls - ナレッジ管理ツール (VBA 製)</title>
+        <title>modUIConfig.bas - ナレッジ管理ツール (VBA 製)</title>
       
     
     
@@ -84,7 +84,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#clslogentrycls" class="md-skip">
+        <a href="#moduiconfigbas" class="md-skip">
           コンテンツにスキップ
         </a>
       
@@ -118,7 +118,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              clsLogEntry.cls
+              modUIConfig.bas
             
           </span>
         </div>
@@ -1649,37 +1649,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    clsLogEntry
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../clslogentry/" class="md-nav__link">
         
   
   
@@ -1695,48 +1668,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="目次">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      目次
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        配置先
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        ソースコード（コピペ可）
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -1886,10 +1817,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../moduiconfig/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    modUIConfig
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -1905,6 +1863,48 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目次">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目次
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        配置先
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ソースコード（コピペ可）
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -2617,7 +2617,7 @@
 
 
 
-<h1 id="clslogentrycls">clsLogEntry.cls<a class="headerlink" href="#clslogentrycls" title="Permanent link">&para;</a></h1>
+<h1 id="moduiconfigbas">modUIConfig.bas<a class="headerlink" href="#moduiconfigbas" title="Permanent link">&para;</a></h1>
 <table>
 <thead>
 <tr>
@@ -2632,20 +2632,17 @@
 </tr>
 <tr>
 <td>種別</td>
-<td>クラスモジュール (.cls)</td>
+<td>標準モジュール (.bas)</td>
 </tr>
 <tr>
 <td>役割</td>
-<td>1 行分のログレコード (値オブジェクト)</td>
-</tr>
-<tr>
-<td>行数</td>
-<td>86 行</td>
+<td>全画面の外観 (ボタンサイズ・フォント・行高) を集中管理する定数モジュール</td>
 </tr>
 </tbody>
 </table>
 <h2 id="_1">配置先<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
-<p>VBE で <code>挿入 &gt; クラスモジュール</code>、F4 でプロパティ → <code>(オブジェクト名)</code> を <code>clsLogEntry</code> に変更してから、コードペインに貼り付けます。</p>
+<p>VBE で <code>挿入 &gt; 標準モジュール</code>、F4 でプロパティ → <code>(オブジェクト名)</code> を <code>modUIConfig</code> に変更してから、コードペインに貼り付けます。</p>
+<p>カスタマイズの手順は <a href="../../../customize/">外観のカスタマイズ</a> を参照してください。</p>
 <h2 id="_2">ソースコード（コピペ可）<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <p>下のコードブロック右上にカーソルを当てるとコピーボタンが表示されます。</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1"> 1</a></span>
@@ -2683,143 +2680,44 @@
 <span class="normal"><a href="#__codelineno-0-33">33</a></span>
 <span class="normal"><a href="#__codelineno-0-34">34</a></span>
 <span class="normal"><a href="#__codelineno-0-35">35</a></span>
-<span class="normal"><a href="#__codelineno-0-36">36</a></span>
-<span class="normal"><a href="#__codelineno-0-37">37</a></span>
-<span class="normal"><a href="#__codelineno-0-38">38</a></span>
-<span class="normal"><a href="#__codelineno-0-39">39</a></span>
-<span class="normal"><a href="#__codelineno-0-40">40</a></span>
-<span class="normal"><a href="#__codelineno-0-41">41</a></span>
-<span class="normal"><a href="#__codelineno-0-42">42</a></span>
-<span class="normal"><a href="#__codelineno-0-43">43</a></span>
-<span class="normal"><a href="#__codelineno-0-44">44</a></span>
-<span class="normal"><a href="#__codelineno-0-45">45</a></span>
-<span class="normal"><a href="#__codelineno-0-46">46</a></span>
-<span class="normal"><a href="#__codelineno-0-47">47</a></span>
-<span class="normal"><a href="#__codelineno-0-48">48</a></span>
-<span class="normal"><a href="#__codelineno-0-49">49</a></span>
-<span class="normal"><a href="#__codelineno-0-50">50</a></span>
-<span class="normal"><a href="#__codelineno-0-51">51</a></span>
-<span class="normal"><a href="#__codelineno-0-52">52</a></span>
-<span class="normal"><a href="#__codelineno-0-53">53</a></span>
-<span class="normal"><a href="#__codelineno-0-54">54</a></span>
-<span class="normal"><a href="#__codelineno-0-55">55</a></span>
-<span class="normal"><a href="#__codelineno-0-56">56</a></span>
-<span class="normal"><a href="#__codelineno-0-57">57</a></span>
-<span class="normal"><a href="#__codelineno-0-58">58</a></span>
-<span class="normal"><a href="#__codelineno-0-59">59</a></span>
-<span class="normal"><a href="#__codelineno-0-60">60</a></span>
-<span class="normal"><a href="#__codelineno-0-61">61</a></span>
-<span class="normal"><a href="#__codelineno-0-62">62</a></span>
-<span class="normal"><a href="#__codelineno-0-63">63</a></span>
-<span class="normal"><a href="#__codelineno-0-64">64</a></span>
-<span class="normal"><a href="#__codelineno-0-65">65</a></span>
-<span class="normal"><a href="#__codelineno-0-66">66</a></span>
-<span class="normal"><a href="#__codelineno-0-67">67</a></span>
-<span class="normal"><a href="#__codelineno-0-68">68</a></span>
-<span class="normal"><a href="#__codelineno-0-69">69</a></span>
-<span class="normal"><a href="#__codelineno-0-70">70</a></span>
-<span class="normal"><a href="#__codelineno-0-71">71</a></span>
-<span class="normal"><a href="#__codelineno-0-72">72</a></span>
-<span class="normal"><a href="#__codelineno-0-73">73</a></span>
-<span class="normal"><a href="#__codelineno-0-74">74</a></span>
-<span class="normal"><a href="#__codelineno-0-75">75</a></span>
-<span class="normal"><a href="#__codelineno-0-76">76</a></span>
-<span class="normal"><a href="#__codelineno-0-77">77</a></span>
-<span class="normal"><a href="#__codelineno-0-78">78</a></span>
-<span class="normal"><a href="#__codelineno-0-79">79</a></span>
-<span class="normal"><a href="#__codelineno-0-80">80</a></span>
-<span class="normal"><a href="#__codelineno-0-81">81</a></span>
-<span class="normal"><a href="#__codelineno-0-82">82</a></span>
-<span class="normal"><a href="#__codelineno-0-83">83</a></span>
-<span class="normal"><a href="#__codelineno-0-84">84</a></span>
-<span class="normal"><a href="#__codelineno-0-85">85</a></span>
-<span class="normal"><a href="#__codelineno-0-86">86</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="n">VERSION</span><span class="w"> </span><span class="mf">1.0</span><span class="w"> </span><span class="k">CLASS</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="nc">BEGIN</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="w">  </span><span class="n">MultiUse</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="w">  </span><span class="c">&#39;True</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="k">END</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="n">Attribute</span><span class="w"> </span><span class="n">VB_Name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;clsLogEntry&quot;</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="n">Attribute</span><span class="w"> </span><span class="n">VB_GlobalNameSpace</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">False</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="n">Attribute</span><span class="w"> </span><span class="n">VB_Creatable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">False</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="n">Attribute</span><span class="w"> </span><span class="n">VB_PredeclaredId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">False</span>
-<a id="__codelineno-0-9" name="__codelineno-0-9"></a><span class="n">Attribute</span><span class="w"> </span><span class="n">VB_Exposed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">False</span>
-<a id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="k">Option</span><span class="w"> </span><span class="n">Explicit</span>
-<a id="__codelineno-0-11" name="__codelineno-0-11"></a>
-<a id="__codelineno-0-12" name="__codelineno-0-12"></a><span class="c">&#39; ================================================================</span>
-<a id="__codelineno-0-13" name="__codelineno-0-13"></a><span class="c">&#39; クラス: clsLogEntry（ValueObject）</span>
-<a id="__codelineno-0-14" name="__codelineno-0-14"></a><span class="c">&#39; 概要:   ログ1行の値を保持する軽量クラス</span>
-<a id="__codelineno-0-15" name="__codelineno-0-15"></a><span class="c">&#39; 依存先: なし</span>
-<a id="__codelineno-0-16" name="__codelineno-0-16"></a><span class="c">&#39; ================================================================</span>
-<a id="__codelineno-0-17" name="__codelineno-0-17"></a>
-<a id="__codelineno-0-18" name="__codelineno-0-18"></a><span class="k">Private</span><span class="w"> </span><span class="n">m_timestamp</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">String</span>
-<a id="__codelineno-0-19" name="__codelineno-0-19"></a><span class="k">Private</span><span class="w"> </span><span class="n">m_moduleName</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">String</span>
-<a id="__codelineno-0-20" name="__codelineno-0-20"></a><span class="k">Private</span><span class="w"> </span><span class="n">m_functionName</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">String</span>
-<a id="__codelineno-0-21" name="__codelineno-0-21"></a><span class="k">Private</span><span class="w"> </span><span class="n">m_level</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">String</span>
-<a id="__codelineno-0-22" name="__codelineno-0-22"></a><span class="k">Private</span><span class="w"> </span><span class="n">m_message</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">String</span>
-<a id="__codelineno-0-23" name="__codelineno-0-23"></a>
-<a id="__codelineno-0-24" name="__codelineno-0-24"></a><span class="c">&#39; --- Property Get/Let ---</span>
-<a id="__codelineno-0-25" name="__codelineno-0-25"></a>
-<a id="__codelineno-0-26" name="__codelineno-0-26"></a><span class="k">Public</span><span class="w"> </span><span class="k">Property</span><span class="w"> </span><span class="nf">Get</span><span class="w"> </span><span class="n">Timestamp</span><span class="p">()</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">String</span>
-<a id="__codelineno-0-27" name="__codelineno-0-27"></a><span class="w">    </span><span class="n">Timestamp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_timestamp</span>
-<a id="__codelineno-0-28" name="__codelineno-0-28"></a><span class="k">End</span><span class="w"> </span><span class="k">Property</span>
-<a id="__codelineno-0-29" name="__codelineno-0-29"></a>
-<a id="__codelineno-0-30" name="__codelineno-0-30"></a><span class="k">Public</span><span class="w"> </span><span class="k">Property</span><span class="w"> </span><span class="nf">Let</span><span class="w"> </span><span class="n">Timestamp</span><span class="p">(</span><span class="k">ByVal</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">String</span><span class="p">)</span>
-<a id="__codelineno-0-31" name="__codelineno-0-31"></a><span class="w">    </span><span class="n">m_timestamp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">value</span>
-<a id="__codelineno-0-32" name="__codelineno-0-32"></a><span class="k">End</span><span class="w"> </span><span class="k">Property</span>
-<a id="__codelineno-0-33" name="__codelineno-0-33"></a>
-<a id="__codelineno-0-34" name="__codelineno-0-34"></a><span class="k">Public</span><span class="w"> </span><span class="k">Property</span><span class="w"> </span><span class="nf">Get</span><span class="w"> </span><span class="n">ModuleName</span><span class="p">()</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">String</span>
-<a id="__codelineno-0-35" name="__codelineno-0-35"></a><span class="w">    </span><span class="n">ModuleName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_moduleName</span>
-<a id="__codelineno-0-36" name="__codelineno-0-36"></a><span class="k">End</span><span class="w"> </span><span class="k">Property</span>
-<a id="__codelineno-0-37" name="__codelineno-0-37"></a>
-<a id="__codelineno-0-38" name="__codelineno-0-38"></a><span class="k">Public</span><span class="w"> </span><span class="k">Property</span><span class="w"> </span><span class="nf">Let</span><span class="w"> </span><span class="n">ModuleName</span><span class="p">(</span><span class="k">ByVal</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">String</span><span class="p">)</span>
-<a id="__codelineno-0-39" name="__codelineno-0-39"></a><span class="w">    </span><span class="n">m_moduleName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">value</span>
-<a id="__codelineno-0-40" name="__codelineno-0-40"></a><span class="k">End</span><span class="w"> </span><span class="k">Property</span>
-<a id="__codelineno-0-41" name="__codelineno-0-41"></a>
-<a id="__codelineno-0-42" name="__codelineno-0-42"></a><span class="k">Public</span><span class="w"> </span><span class="k">Property</span><span class="w"> </span><span class="nf">Get</span><span class="w"> </span><span class="n">FunctionName</span><span class="p">()</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">String</span>
-<a id="__codelineno-0-43" name="__codelineno-0-43"></a><span class="w">    </span><span class="n">FunctionName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_functionName</span>
-<a id="__codelineno-0-44" name="__codelineno-0-44"></a><span class="k">End</span><span class="w"> </span><span class="k">Property</span>
-<a id="__codelineno-0-45" name="__codelineno-0-45"></a>
-<a id="__codelineno-0-46" name="__codelineno-0-46"></a><span class="k">Public</span><span class="w"> </span><span class="k">Property</span><span class="w"> </span><span class="nf">Let</span><span class="w"> </span><span class="n">FunctionName</span><span class="p">(</span><span class="k">ByVal</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">String</span><span class="p">)</span>
-<a id="__codelineno-0-47" name="__codelineno-0-47"></a><span class="w">    </span><span class="n">m_functionName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">value</span>
-<a id="__codelineno-0-48" name="__codelineno-0-48"></a><span class="k">End</span><span class="w"> </span><span class="k">Property</span>
-<a id="__codelineno-0-49" name="__codelineno-0-49"></a>
-<a id="__codelineno-0-50" name="__codelineno-0-50"></a><span class="k">Public</span><span class="w"> </span><span class="k">Property</span><span class="w"> </span><span class="nf">Get</span><span class="w"> </span><span class="n">Level</span><span class="p">()</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">String</span>
-<a id="__codelineno-0-51" name="__codelineno-0-51"></a><span class="w">    </span><span class="n">Level</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_level</span>
-<a id="__codelineno-0-52" name="__codelineno-0-52"></a><span class="k">End</span><span class="w"> </span><span class="k">Property</span>
-<a id="__codelineno-0-53" name="__codelineno-0-53"></a>
-<a id="__codelineno-0-54" name="__codelineno-0-54"></a><span class="k">Public</span><span class="w"> </span><span class="k">Property</span><span class="w"> </span><span class="nf">Let</span><span class="w"> </span><span class="n">Level</span><span class="p">(</span><span class="k">ByVal</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">String</span><span class="p">)</span>
-<a id="__codelineno-0-55" name="__codelineno-0-55"></a><span class="w">    </span><span class="n">m_level</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">value</span>
-<a id="__codelineno-0-56" name="__codelineno-0-56"></a><span class="k">End</span><span class="w"> </span><span class="k">Property</span>
-<a id="__codelineno-0-57" name="__codelineno-0-57"></a>
-<a id="__codelineno-0-58" name="__codelineno-0-58"></a><span class="k">Public</span><span class="w"> </span><span class="k">Property</span><span class="w"> </span><span class="nf">Get</span><span class="w"> </span><span class="n">Message</span><span class="p">()</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">String</span>
-<a id="__codelineno-0-59" name="__codelineno-0-59"></a><span class="w">    </span><span class="n">Message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_message</span>
-<a id="__codelineno-0-60" name="__codelineno-0-60"></a><span class="k">End</span><span class="w"> </span><span class="k">Property</span>
-<a id="__codelineno-0-61" name="__codelineno-0-61"></a>
-<a id="__codelineno-0-62" name="__codelineno-0-62"></a><span class="k">Public</span><span class="w"> </span><span class="k">Property</span><span class="w"> </span><span class="nf">Let</span><span class="w"> </span><span class="n">Message</span><span class="p">(</span><span class="k">ByVal</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">String</span><span class="p">)</span>
-<a id="__codelineno-0-63" name="__codelineno-0-63"></a><span class="w">    </span><span class="n">m_message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">value</span>
-<a id="__codelineno-0-64" name="__codelineno-0-64"></a><span class="k">End</span><span class="w"> </span><span class="k">Property</span>
-<a id="__codelineno-0-65" name="__codelineno-0-65"></a>
-<a id="__codelineno-0-66" name="__codelineno-0-66"></a><span class="c">&#39; ================================================================</span>
-<a id="__codelineno-0-67" name="__codelineno-0-67"></a><span class="c">&#39; 関数名: Init</span>
-<a id="__codelineno-0-68" name="__codelineno-0-68"></a><span class="c">&#39; 概要:   全プロパティを一括設定する初期化メソッド</span>
-<a id="__codelineno-0-69" name="__codelineno-0-69"></a><span class="c">&#39; 引数:   ts    - 日時文字列</span>
-<a id="__codelineno-0-70" name="__codelineno-0-70"></a><span class="c">&#39;         mod_  - モジュール名</span>
-<a id="__codelineno-0-71" name="__codelineno-0-71"></a><span class="c">&#39;         func  - 関数名</span>
-<a id="__codelineno-0-72" name="__codelineno-0-72"></a><span class="c">&#39;         lvl   - ログレベル</span>
-<a id="__codelineno-0-73" name="__codelineno-0-73"></a><span class="c">&#39;         msg   - メッセージ</span>
-<a id="__codelineno-0-74" name="__codelineno-0-74"></a><span class="c">&#39; 戻り値: なし</span>
-<a id="__codelineno-0-75" name="__codelineno-0-75"></a><span class="c">&#39; ================================================================</span>
-<a id="__codelineno-0-76" name="__codelineno-0-76"></a><span class="k">Public</span><span class="w"> </span><span class="k">Sub</span><span class="w"> </span><span class="nf">Init</span><span class="p">(</span><span class="k">ByVal</span><span class="w"> </span><span class="n">ts</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">String</span><span class="p">,</span><span class="w"> </span>_
-<a id="__codelineno-0-77" name="__codelineno-0-77"></a><span class="w">                 </span><span class="k">ByVal</span><span class="w"> </span><span class="n">mod_</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">String</span><span class="p">,</span><span class="w"> </span>_
-<a id="__codelineno-0-78" name="__codelineno-0-78"></a><span class="w">                 </span><span class="k">ByVal</span><span class="w"> </span><span class="n">func</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">String</span><span class="p">,</span><span class="w"> </span>_
-<a id="__codelineno-0-79" name="__codelineno-0-79"></a><span class="w">                 </span><span class="k">ByVal</span><span class="w"> </span><span class="n">lvl</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">String</span><span class="p">,</span><span class="w"> </span>_
-<a id="__codelineno-0-80" name="__codelineno-0-80"></a><span class="w">                 </span><span class="k">ByVal</span><span class="w"> </span><span class="n">msg</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">String</span><span class="p">)</span>
-<a id="__codelineno-0-81" name="__codelineno-0-81"></a><span class="w">    </span><span class="n">m_timestamp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ts</span>
-<a id="__codelineno-0-82" name="__codelineno-0-82"></a><span class="w">    </span><span class="n">m_moduleName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mod_</span>
-<a id="__codelineno-0-83" name="__codelineno-0-83"></a><span class="w">    </span><span class="n">m_functionName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">func</span>
-<a id="__codelineno-0-84" name="__codelineno-0-84"></a><span class="w">    </span><span class="n">m_level</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">lvl</span>
-<a id="__codelineno-0-85" name="__codelineno-0-85"></a><span class="w">    </span><span class="n">m_message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">msg</span>
-<a id="__codelineno-0-86" name="__codelineno-0-86"></a><span class="k">End</span><span class="w"> </span><span class="k">Sub</span>
+<span class="normal"><a href="#__codelineno-0-36">36</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="n">Attribute</span><span class="w"> </span><span class="n">VB_Name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;modUIConfig&quot;</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="k">Option</span><span class="w"> </span><span class="n">Explicit</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3"></a>
+<a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="c">&#39; ================================================================</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="c">&#39; モジュール: modUIConfig (ユーティリティ層 - UI 設定 SSOT)</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="c">&#39; ----------------------------------------------------------------</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="c">&#39; 概要:   全画面 (M-01〜M-14) の見た目に関わるパラメータを集約。</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="c">&#39;         clsSheetRenderer / modScreenRender / modScreenSpecRegistry は</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9"></a><span class="c">&#39;         本モジュールの Public Const を参照することで、ハードコードを</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="c">&#39;         一掃する。</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="c">&#39;</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12"></a><span class="c">&#39; カスタマイズしたい場合:</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13"></a><span class="c">&#39;   本モジュールの値を書き換えて Excel を再起動するだけで、</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14"></a><span class="c">&#39;   全画面が新しい設定で再描画される。シート毎に手作業する必要なし。</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15"></a><span class="c">&#39;   各 Const のコメントに「何を制御するか」「目安値」を記載。</span>
+<a id="__codelineno-0-16" name="__codelineno-0-16"></a><span class="c">&#39;</span>
+<a id="__codelineno-0-17" name="__codelineno-0-17"></a><span class="c">&#39; 依存先: なし (純粋な定数モジュール)</span>
+<a id="__codelineno-0-18" name="__codelineno-0-18"></a><span class="c">&#39; ================================================================</span>
+<a id="__codelineno-0-19" name="__codelineno-0-19"></a>
+<a id="__codelineno-0-20" name="__codelineno-0-20"></a><span class="c">&#39; --- ボタンの大きさ・形 ---</span>
+<a id="__codelineno-0-21" name="__codelineno-0-21"></a><span class="k">Public</span><span class="w"> </span><span class="k">Const</span><span class="w"> </span><span class="n">UI_BTN_WIDTH_PT</span><span class="w">  </span><span class="ow">As</span><span class="w"> </span><span class="kt">Double</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mi">110</span><span class="p">#</span>
+<a id="__codelineno-0-22" name="__codelineno-0-22"></a><span class="k">Public</span><span class="w"> </span><span class="k">Const</span><span class="w"> </span><span class="n">UI_BTN_HEIGHT_PT</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">Double</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mi">26</span><span class="p">#</span>
+<a id="__codelineno-0-23" name="__codelineno-0-23"></a><span class="k">Public</span><span class="w"> </span><span class="k">Const</span><span class="w"> </span><span class="n">UI_BTN_CELL_SPAN</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">Long</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span>
+<a id="__codelineno-0-24" name="__codelineno-0-24"></a><span class="k">Public</span><span class="w"> </span><span class="k">Const</span><span class="w"> </span><span class="n">UI_BTN_FONT_SIZE</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">Double</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">#</span>
+<a id="__codelineno-0-25" name="__codelineno-0-25"></a><span class="k">Public</span><span class="w"> </span><span class="k">Const</span><span class="w"> </span><span class="n">UI_BTN_CAPTION_PREFIX</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">String</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;&quot;</span>
+<a id="__codelineno-0-26" name="__codelineno-0-26"></a><span class="k">Public</span><span class="w"> </span><span class="k">Const</span><span class="w"> </span><span class="n">UI_BTN_ROW_HEIGHT_PT</span><span class="w">  </span><span class="ow">As</span><span class="w"> </span><span class="kt">Double</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">28</span><span class="p">#</span>
+<a id="__codelineno-0-27" name="__codelineno-0-27"></a><span class="k">Public</span><span class="w"> </span><span class="k">Const</span><span class="w"> </span><span class="n">UI_HINT_ROW_HEIGHT_PT</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">Double</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">32</span><span class="p">#</span>
+<a id="__codelineno-0-28" name="__codelineno-0-28"></a>
+<a id="__codelineno-0-29" name="__codelineno-0-29"></a><span class="c">&#39; --- 文字サイズ ---</span>
+<a id="__codelineno-0-30" name="__codelineno-0-30"></a><span class="k">Public</span><span class="w"> </span><span class="k">Const</span><span class="w"> </span><span class="n">UI_TITLE_FONT_SIZE</span><span class="w">   </span><span class="ow">As</span><span class="w"> </span><span class="kt">Double</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">14</span><span class="p">#</span>
+<a id="__codelineno-0-31" name="__codelineno-0-31"></a><span class="k">Public</span><span class="w"> </span><span class="k">Const</span><span class="w"> </span><span class="n">UI_TITLE_ROW_HEIGHT</span><span class="w">  </span><span class="ow">As</span><span class="w"> </span><span class="kt">Double</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">28</span><span class="p">#</span>
+<a id="__codelineno-0-32" name="__codelineno-0-32"></a><span class="k">Public</span><span class="w"> </span><span class="k">Const</span><span class="w"> </span><span class="n">UI_SECTION_FONT_SIZE</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">Double</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">11</span><span class="p">#</span>
+<a id="__codelineno-0-33" name="__codelineno-0-33"></a><span class="k">Public</span><span class="w"> </span><span class="k">Const</span><span class="w"> </span><span class="n">UI_SECTION_ROW_HEIGHT</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="kt">Double</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">20</span><span class="p">#</span>
+<a id="__codelineno-0-34" name="__codelineno-0-34"></a><span class="k">Public</span><span class="w"> </span><span class="k">Const</span><span class="w"> </span><span class="n">UI_LABEL_FONT_SIZE</span><span class="w">   </span><span class="ow">As</span><span class="w"> </span><span class="kt">Double</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">#</span>
+<a id="__codelineno-0-35" name="__codelineno-0-35"></a><span class="k">Public</span><span class="w"> </span><span class="k">Const</span><span class="w"> </span><span class="n">UI_HINT_FONT_SIZE</span><span class="w">    </span><span class="ow">As</span><span class="w"> </span><span class="kt">Double</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">9</span><span class="p">#</span>
+<a id="__codelineno-0-36" name="__codelineno-0-36"></a><span class="k">Public</span><span class="w"> </span><span class="k">Const</span><span class="w"> </span><span class="n">UI_HINT_CELL_WRAP</span><span class="w">    </span><span class="ow">As</span><span class="w"> </span><span class="kt">Boolean</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">True</span>
 </code></pre></div></td></tr></table></div>
+<p>完全版・コメント付きは <a href="../../../customize/">外観のカスタマイズ</a> でも閲覧できます。</p>
 
 
 
