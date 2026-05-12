@@ -7763,24 +7763,6 @@ Public Function ConfirmAction(ByVal operation As String, ByVal detail As String)
                       vbQuestion + vbYesNo, "確認")
     ConfirmAction = (result = vbYes)
 End Function
-
-' ================================================================
-' BuildLogger: Workbook 内 LogSheet を取得して clsLogger を初期化
-' 失敗時は Nothing を返す (呼び出し側は IsNothing 判定で握りつぶす)
-' ================================================================
-Public Function BuildLogger() As clsLogger
-    On Error Resume Next
-    Dim ws As Worksheet
-    Set ws = ThisWorkbook.Worksheets(SHEET_LOG)
-    If ws Is Nothing Then
-        Set BuildLogger = Nothing
-        Exit Function
-    End If
-    Dim lg As clsLogger
-    Set lg = New clsLogger
-    lg.Init ws, LOG_LEVEL_INFO
-    Set BuildLogger = lg
-End Function
 '@ },
     @{ Name='modEntrySearch'; Type='std'; Code=@'
 Option Explicit
