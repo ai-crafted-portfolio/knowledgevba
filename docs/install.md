@@ -121,7 +121,7 @@ exit /b !PS_EXIT!
 
 ## STEP 3: ps1 の保存
 
-下のコードを **同じフォルダ** に `Install-KnowledgevbaModules.ps1` というファイル名で保存します。VBA モジュール本体 (49 個) がすべて埋め込まれているため、ファイルサイズは約 328 KB あります。
+下のコードを **同じフォルダ** に `Install-KnowledgevbaModules.ps1` というファイル名で保存します。VBA モジュール本体 (49 個) がすべて埋め込まれているため、ファイルサイズは約 327 KB あります。
 
 !!! warning "保存時の注意"
     メモ帳の場合、**[名前を付けて保存]** で **文字コードを「UTF-8 (BOM 付き)」** にしてください。BOM 無し UTF-8 や ANSI で保存すると日本語コメントが文字化けし、コンパイルエラーになります。VS Code を使う場合は右下のエンコーディング表示を **`UTF-8 with BOM`** に切り替えてください。
@@ -385,13 +385,6 @@ Public Function SheetExists(ByVal sheetName As String) As Boolean
     On Error GoTo 0
 End Function
 =======================
-Public Function SheetExists(ByVal sheetName As String) As Boolean
-    On Error Resume Next
-    Dim ws As Worksheet
-    Set ws = ThisWorkbook.Worksheets(sheetName)
-    SheetExists = Not (ws Is Nothing)
-    Err.Clear
-End Function
 '@ },
     @{ Name='modDateUtil'; Type='std'; Code=@'
 Option Explicit
