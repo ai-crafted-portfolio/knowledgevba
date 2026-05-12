@@ -2519,18 +2519,37 @@
 <a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a><span class="k">echo</span> [info] 対象ファイル : <span class="nv">!XLSM_PATH!</span>
 <a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a><span class="k">echo</span> [run ] PowerShell インストーラ起動...
 <a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a><span class="k">echo</span>.
-<a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>powershell.exe -NoProfile -ExecutionPolicy Bypass -File <span class="s2">&quot;</span><span class="nv">%~dp0</span><span class="s2">Install-KnowledgevbaModules.ps1&quot;</span> -XlsmPath <span class="s2">&quot;</span><span class="nv">!XLSM_PATH!</span><span class="s2">&quot;</span>
-<a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a><span class="k">set</span> <span class="s2">&quot;PS_EXIT=!errorlevel!&quot;</span>
-<a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a>
-<a id="__codelineno-0-60" name="__codelineno-0-60" href="#__codelineno-0-60"></a><span class="k">echo</span>.
-<a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a><span class="k">if</span> <span class="nv">!PS_EXIT!</span> <span class="ow">NEQ</span> 0 <span class="p">(</span>
-<a id="__codelineno-0-62" name="__codelineno-0-62" href="#__codelineno-0-62"></a>    <span class="k">echo</span> [FAIL] インストールに失敗しました。上のメッセージを確認してください。
-<a id="__codelineno-0-63" name="__codelineno-0-63" href="#__codelineno-0-63"></a><span class="p">)</span> <span class="k">else</span> <span class="p">(</span>
-<a id="__codelineno-0-64" name="__codelineno-0-64" href="#__codelineno-0-64"></a>    <span class="k">echo</span> [DONE] インストール完了。Excel でファイルを開いて動作確認してください。
-<a id="__codelineno-0-65" name="__codelineno-0-65" href="#__codelineno-0-65"></a><span class="p">)</span>
-<a id="__codelineno-0-66" name="__codelineno-0-66" href="#__codelineno-0-66"></a><span class="k">echo</span>.
-<a id="__codelineno-0-67" name="__codelineno-0-67" href="#__codelineno-0-67"></a><span class="k">pause</span>
-<a id="__codelineno-0-68" name="__codelineno-0-68" href="#__codelineno-0-68"></a><span class="k">exit</span> /b <span class="nv">!PS_EXIT!</span>
+<a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>
+<a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a><span class="c1">REM ==== マクロセキュリティの一時緩和 ====</span>
+<a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a><span class="c1">REM 現在の設定を保存して &quot;全てのマクロを有効&quot; に切替。Setup 完了後に元に戻す。</span>
+<a id="__codelineno-0-60" name="__codelineno-0-60" href="#__codelineno-0-60"></a><span class="c1">REM 対象は HKCU 配下なので管理者権限不要。Excel 16 (2016/2019/2021/365) を想定。</span>
+<a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a><span class="k">set</span> <span class="s2">&quot;VBAW_ORIG=&quot;</span>
+<a id="__codelineno-0-62" name="__codelineno-0-62" href="#__codelineno-0-62"></a><span class="k">for</span> <span class="k">/f</span> <span class="s2">&quot;tokens=3&quot;</span> <span class="se">%%</span>A <span class="k">in</span> <span class="p">(</span><span class="s1">&#39;reg query &quot;HKCU\Software\Microsoft\Office.0\Excel\Security&quot; /v VBAWarnings 2^&gt;nul ^| find &quot;VBAWarnings&quot;&#39;</span><span class="p">)</span> <span class="k">do</span> <span class="k">set</span> <span class="s2">&quot;VBAW_ORIG=</span><span class="se">%%</span><span class="s2">A&quot;</span>
+<a id="__codelineno-0-63" name="__codelineno-0-63" href="#__codelineno-0-63"></a>reg add <span class="s2">&quot;HKCU\Software\Microsoft\Office.0\Excel\Security&quot;</span> /v VBAWarnings /t REG_DWORD /d 1 /f <span class="p">&gt;</span>nul <span class="mi">2</span><span class="p">&gt;&amp;</span><span class="mi">1</span>
+<a id="__codelineno-0-64" name="__codelineno-0-64" href="#__codelineno-0-64"></a><span class="k">echo</span> [trust] Excel マクロを一時的に <span class="s2">&quot;全て有効&quot;</span> に切替 <span class="se">^(</span>install 完了後に元に戻します<span class="se">^)</span>
+<a id="__codelineno-0-65" name="__codelineno-0-65" href="#__codelineno-0-65"></a>
+<a id="__codelineno-0-66" name="__codelineno-0-66" href="#__codelineno-0-66"></a>powershell.exe -NoProfile -ExecutionPolicy Bypass -File <span class="s2">&quot;</span><span class="nv">%~dp0</span><span class="s2">Install-KnowledgevbaModules.ps1&quot;</span> -XlsmPath <span class="s2">&quot;</span><span class="nv">!XLSM_PATH!</span><span class="s2">&quot;</span>
+<a id="__codelineno-0-67" name="__codelineno-0-67" href="#__codelineno-0-67"></a><span class="k">set</span> <span class="s2">&quot;PS_EXIT=!errorlevel!&quot;</span>
+<a id="__codelineno-0-68" name="__codelineno-0-68" href="#__codelineno-0-68"></a>
+<a id="__codelineno-0-69" name="__codelineno-0-69" href="#__codelineno-0-69"></a><span class="c1">REM ==== マクロセキュリティを元に戻す ====</span>
+<a id="__codelineno-0-70" name="__codelineno-0-70" href="#__codelineno-0-70"></a><span class="k">if</span> <span class="k">defined</span> <span class="nv">VBAW_ORIG</span> <span class="p">(</span>
+<a id="__codelineno-0-71" name="__codelineno-0-71" href="#__codelineno-0-71"></a>    reg add <span class="s2">&quot;HKCU\Software\Microsoft\Office.0\Excel\Security&quot;</span> /v VBAWarnings /t REG_DWORD /d <span class="nv">!VBAW_ORIG!</span> /f <span class="p">&gt;</span>nul <span class="mi">2</span><span class="p">&gt;&amp;</span><span class="mi">1</span>
+<a id="__codelineno-0-72" name="__codelineno-0-72" href="#__codelineno-0-72"></a>    <span class="k">echo</span> [trust] Excel マクロセキュリティを元の値 <span class="nv">!VBAW_ORIG!</span> に復元
+<a id="__codelineno-0-73" name="__codelineno-0-73" href="#__codelineno-0-73"></a><span class="p">)</span> <span class="k">else</span> <span class="p">(</span>
+<a id="__codelineno-0-74" name="__codelineno-0-74" href="#__codelineno-0-74"></a>    <span class="c1">REM 元値が取れない時は &quot;通知ありで無効&quot; (=2、デフォルト) に戻す</span>
+<a id="__codelineno-0-75" name="__codelineno-0-75" href="#__codelineno-0-75"></a>    reg add <span class="s2">&quot;HKCU\Software\Microsoft\Office.0\Excel\Security&quot;</span> /v VBAWarnings /t REG_DWORD /d 2 /f <span class="p">&gt;</span>nul <span class="mi">2</span><span class="p">&gt;&amp;</span><span class="mi">1</span>
+<a id="__codelineno-0-76" name="__codelineno-0-76" href="#__codelineno-0-76"></a>    <span class="k">echo</span> [trust] Excel マクロセキュリティを既定値 2 に戻しました
+<a id="__codelineno-0-77" name="__codelineno-0-77" href="#__codelineno-0-77"></a><span class="p">)</span>
+<a id="__codelineno-0-78" name="__codelineno-0-78" href="#__codelineno-0-78"></a>
+<a id="__codelineno-0-79" name="__codelineno-0-79" href="#__codelineno-0-79"></a><span class="k">echo</span>.
+<a id="__codelineno-0-80" name="__codelineno-0-80" href="#__codelineno-0-80"></a><span class="k">if</span> <span class="nv">!PS_EXIT!</span> <span class="ow">NEQ</span> 0 <span class="p">(</span>
+<a id="__codelineno-0-81" name="__codelineno-0-81" href="#__codelineno-0-81"></a>    <span class="k">echo</span> [FAIL] インストールに失敗しました。上のメッセージを確認してください。
+<a id="__codelineno-0-82" name="__codelineno-0-82" href="#__codelineno-0-82"></a><span class="p">)</span> <span class="k">else</span> <span class="p">(</span>
+<a id="__codelineno-0-83" name="__codelineno-0-83" href="#__codelineno-0-83"></a>    <span class="k">echo</span> [DONE] インストール完了。Excel でファイルを開いて動作確認してください。
+<a id="__codelineno-0-84" name="__codelineno-0-84" href="#__codelineno-0-84"></a><span class="p">)</span>
+<a id="__codelineno-0-85" name="__codelineno-0-85" href="#__codelineno-0-85"></a><span class="k">echo</span>.
+<a id="__codelineno-0-86" name="__codelineno-0-86" href="#__codelineno-0-86"></a><span class="k">pause</span>
+<a id="__codelineno-0-87" name="__codelineno-0-87" href="#__codelineno-0-87"></a><span class="k">exit</span> /b <span class="nv">!PS_EXIT!</span>
 </code></pre></div>
 <hr />
 <h2 id="step-3-ps1">STEP 3: ps1 の保存<a class="headerlink" href="#step-3-ps1" title="Permanent link">&para;</a></h2>
