@@ -121,7 +121,7 @@ exit /b !PS_EXIT!
 
 ## STEP 3: ps1 の保存
 
-下のコードを **同じフォルダ** に `Install-KnowledgevbaModules.ps1` というファイル名で保存します。VBA モジュール本体 (50 個) がすべて埋め込まれているため、ファイルサイズは約 334 KB あります。
+下のコードを **同じフォルダ** に `Install-KnowledgevbaModules.ps1` というファイル名で保存します。VBA モジュール本体 (50 個) がすべて埋め込まれているため、ファイルサイズは約 335 KB あります。
 
 !!! warning "保存時の注意"
     メモ帳の場合、**[名前を付けて保存]** で **文字コードを「UTF-8 (BOM 付き)」** にしてください。BOM 無し UTF-8 や ANSI で保存すると日本語コメントが文字化けし、コンパイルエラーになります。VS Code を使う場合は右下のエンコーディング表示を **`UTF-8 with BOM`** に切り替えてください。
@@ -248,14 +248,15 @@ Public Sub Init(ByVal ts As String, _
     m_functionName = func
     m_level = lvl
     m_message = msg
-End Sub'@ }
+End Sub
+'@ },
     @{ Name='modCommon'; Type='std'; Code=@'
 Option Explicit
 
-' ' モジュール: modCommon（ユーティリティ層）
+' モジュール: modCommon（ユーティリティ層）
 ' 概要:       全モジュールで共有する定数を定義する
 ' 依存先:     なし
-' ' --- シート名定数 ---
+' --- シート名定数 ---
 Public Const SHEET_MAIN As String = "メイン"
 Public Const SHEET_FORMAT_LIST As String = "フォーマット一覧"
 Public Const SHEET_FORMAT_DESIGN As String = "フォーマット設計"
@@ -378,7 +379,8 @@ Public Function SheetExists(ByVal sheetName As String) As Boolean
     SheetExists = (Err.Number = 0 And Not ws Is Nothing)
     Err.Clear
     On Error GoTo 0
-End Function'@ }
+End Function
+'@ },
     @{ Name='modDateUtil'; Type='std'; Code=@'
 Option Explicit
 
@@ -481,7 +483,8 @@ Public Function Pad2(ByVal n As Long) As String
     Else
         Pad2 = CStr(n)
     End If
-End Function'@ }
+End Function
+'@ },
     @{ Name='modFileIO'; Type='std'; Code=@'
 Option Explicit
 
@@ -867,7 +870,8 @@ Private Function ConvertLocalPathToURL(ByVal localPath As String) As String
             ConvertLocalPathToURL = "file:///" & result
         End If
     End If
-End Function'@ }
+End Function
+'@ },
     @{ Name='modImageRender'; Type='std'; Code=@'
 Option Explicit
 
@@ -1100,7 +1104,8 @@ Public Function HasShapeWithPrefix(ByVal ws As Worksheet, _
     Exit Function
 ErrHandler:
     HasShapeWithPrefix = False
-End Function'@ }
+End Function
+'@ },
     @{ Name='modStringUtil'; Type='std'; Code=@'
 Option Explicit
 
@@ -1339,7 +1344,8 @@ Public Function IsValidKnowledgeId(ByVal knwNo As String) As Boolean
 
 ErrHandler:
     IsValidKnowledgeId = False
-End Function'@ }
+End Function
+'@ },
     @{ Name='modUIConfig'; Type='std'; Code=@'
 Option Explicit
 
@@ -1457,7 +1463,8 @@ Public Const UI_HINT_CELL_WRAP As Boolean = True
 ' タイトル列幅 (A:L) - 既存挙動と同じ
 ' ----------------------------------------------------------------
 ' タイトル帯の塗り範囲は A〜L 列固定。変更したい場合は
-' clsSheetRenderer.IScreenRenderer_RenderTitle 内の Range("A1:L1") を編集。'@ }
+' clsSheetRenderer.IScreenRenderer_RenderTitle 内の Range("A1:L1") を編集。
+'@ },
     @{ Name='IScreenRenderer'; Type='cls'; Code=@'
 Option Explicit
 
@@ -1507,7 +1514,8 @@ Public Sub RenderHeaderRow(ByVal startAddr As String, ByVal headerLabels As Vari
 End Sub
 
 Public Sub RenderEmptyState(ByVal cellAddr As String, ByVal message As String)
-End Sub'@ }
+End Sub
+'@ },
     @{ Name='clsButtonSpec'; Type='cls'; Code=@'
 Option Explicit
 
@@ -1595,7 +1603,8 @@ Public Sub Init(ByVal btnName As String, _
     m_groupName = groupName
     m_hintAddr = hintAddr
     m_hintText = hintText
-End Sub'@ }
+End Sub
+'@ },
     @{ Name='clsControlSpec'; Type='cls'; Code=@'
 Option Explicit
 
@@ -1704,7 +1713,8 @@ Public Sub Init(ByVal cType As String, ByVal nm As String, _
     m_height = h
     m_caption = cap
     m_onClick = onClk
-End Sub'@ }
+End Sub
+'@ },
     @{ Name='clsFieldMigrator'; Type='cls'; Code=@'
 Option Explicit
 
@@ -2004,7 +2014,8 @@ Private Function CombineFilePath(ByVal folder As String, _
     Else
         CombineFilePath = folder & "\" & fileName
     End If
-End Function'@ }
+End Function
+'@ },
     @{ Name='clsFieldSpec'; Type='cls'; Code=@'
 Option Explicit
 
@@ -2128,7 +2139,8 @@ Public Sub SetCellAddrs(ByVal orderAddr As String, _
     m_labelAddr = labelAddr
     m_typeAddr = typeAddr
     m_inputAddr = inputAddr
-End Sub'@ }
+End Sub
+'@ },
     @{ Name='clsFormSpec'; Type='cls'; Code=@'
 Option Explicit
 
@@ -2217,7 +2229,8 @@ End Function
 ' ================================================================
 Public Function ControlCount() As Long
     ControlCount = m_controls.Count
-End Function'@ }
+End Function
+'@ },
     @{ Name='clsFormatManager'; Type='cls'; Code=@'
 Option Explicit
 
@@ -2673,7 +2686,8 @@ Private Sub RenderFormatPreview(ByVal ws As Worksheet, _
             "(" & designWs.Cells(i, FD_FIELD_COL_TYPE).Value & " 入力エリア)"
         previewRow = previewRow + 1
     Next i
-End Sub'@ }
+End Sub
+'@ },
     @{ Name='clsKnowledgeManager'; Type='cls'; Code=@'
 Option Explicit
 
@@ -3214,7 +3228,8 @@ End Function
 ' ファイル内容からCreatedDateを抽出
 Private Function ExtractCreatedDate(ByVal content As String) As String
     ExtractCreatedDate = ExtractStanzaValue(content, "CreatedDate")
-End Function'@ }
+End Function
+'@ },
     @{ Name='clsLogger'; Type='cls'; Code=@'
 Option Explicit
 
@@ -3473,7 +3488,8 @@ Private Function GetLastLogRow() As Long
     r = m_logSheet.Cells(m_logSheet.Rows.Count, 1).End(-4162).Row  ' xlUp = -4162
     If r < LOG_DATA_START_ROW Then r = LOG_DATA_START_ROW - 1
     GetLastLogRow = r
-End Function'@ }
+End Function
+'@ },
     @{ Name='clsScreenSpec'; Type='cls'; Code=@'
 Option Explicit
 
@@ -3600,7 +3616,8 @@ End Sub
 ' ================================================================
 Public Sub AddField(ByVal fld As clsFieldSpec)
     m_fields.Add fld
-End Sub'@ }
+End Sub
+'@ },
     @{ Name='clsSearchEngine'; Type='cls'; Code=@'
 Option Explicit
 
@@ -4431,7 +4448,8 @@ Private Function CombineFilePath(ByVal folder As String, _
     Else
         CombineFilePath = folder & "" & fileName
     End If
-End Function'@ }
+End Function
+'@ },
     @{ Name='clsSectionSpec'; Type='cls'; Code=@'
 Option Explicit
 
@@ -4470,7 +4488,8 @@ Public Sub Init(ByVal address As String, ByVal label As String, ByVal colorHex A
     m_address = address
     m_label = label
     m_colorHex = colorHex
-End Sub'@ }
+End Sub
+'@ },
     @{ Name='clsSetupOrchestrator'; Type='cls'; Code=@'
 Option Explicit
 
@@ -4778,7 +4797,8 @@ End Sub
 
 Private Sub LogEnter(ByVal funcName As String, ByVal stepName As String)
     Call LogTraceSafe(funcName, "STEP " & stepName)
-End Sub'@ }
+End Sub
+'@ },
     @{ Name='clsSheetRenderer'; Type='cls'; Code=@'
 Option Explicit
 
@@ -5184,7 +5204,8 @@ Private Sub DeleteShapeByName(ByVal shapeName As String)
     If m_ws Is Nothing Then Exit Sub
     Dim shp As Shape
     On Error Resume Next
-    Set shp = m_ws.Shapes(shapeN'@ }
+    Set shp = m_ws.Shapes(shapeN
+'@ },
     @{ Name='clsStorageResolver'; Type='cls'; Code=@'
 Option Explicit
 
@@ -5347,7 +5368,8 @@ Private Function CombinePath(ByVal basePath As String, _
     Else
         CombinePath = basePath & sep & fileName
     End If
-End Function'@ }
+End Function
+'@ },
     @{ Name='clsTaskController'; Type='cls'; Code=@'
 Option Explicit
 
@@ -5534,7 +5556,8 @@ Private Function IsInArray(ByVal target As String, ByVal arr As Variant) As Bool
         End If
     Next i
     IsInArray = False
-End Function'@ }
+End Function
+'@ },
     @{ Name='clsUserFormRenderer'; Type='cls'; Code=@'
 Option Explicit
 
@@ -5607,7 +5630,8 @@ End Sub
 Private Sub IScreenRenderer_RenderEmptyState(ByVal cellAddr As String, _
                                               ByVal message As String)
     Err.Raise NOT_IMPL_NUM, NOT_IMPL_SRC, NOT_IMPL_MSG
-End Sub'@ }
+End Sub
+'@ },
     @{ Name='modFactory'; Type='std'; Code=@'
 Option Explicit
 
@@ -5716,7 +5740,8 @@ Public Function CreateScreen(ByVal screenId As String, _
             lg.Init renderer, spec
             Set CreateScreen = lg
     End Select
-End Function'@ }
+End Function
+'@ },
     @{ Name='modFormBuilder'; Type='std'; Code=@'
 Option Explicit
 
@@ -5914,7 +5939,8 @@ Public Function ProgIDFromType(ByVal t As String) As String
         Case Else
             ProgIDFromType = PROGID_LABEL
     End Select
-End Function'@ }
+End Function
+'@ },
     @{ Name='modScreenRender'; Type='std'; Code=@'
 Option Explicit
 
@@ -6036,7 +6062,8 @@ Public Sub LogScreenError(ByVal className As String, _
     If Not lg Is Nothing Then
         lg.LogErrorWithErr className, funcName, stepName, errNum, errDesc
     End If
-End Sub'@ }
+End Sub
+'@ },
     @{ Name='modScreenSpecRegistry'; Type='std'; Code=@'
 Option Explicit
 
@@ -6573,7 +6600,8 @@ Private Sub AddBtn(ByVal s As clsScreenSpec, _
     Dim btn As clsButtonSpec
     Set btn = New clsButtonSpec
     btn.Init btnName, caption, cellAddr, colorHex, groupName, hintAddr, hintText
-    s.AddBu'@ }
+    s.AddBu
+'@ },
     @{ Name='clsFileFormatScreen'; Type='cls'; Code=@'
 Option Explicit
 
@@ -6610,7 +6638,8 @@ End Sub
 
 Public Sub Render()
     Setup
-End Sub'@ }
+End Sub
+'@ },
     @{ Name='clsFormatDesignScreen'; Type='cls'; Code=@'
 Option Explicit
 
@@ -6647,7 +6676,8 @@ End Sub
 
 Public Sub Render()
     Setup
-End Sub'@ }
+End Sub
+'@ },
     @{ Name='clsFormatListScreen'; Type='cls'; Code=@'
 Option Explicit
 
@@ -6684,7 +6714,8 @@ End Sub
 
 Public Sub Render()
     Setup
-End Sub'@ }
+End Sub
+'@ },
     @{ Name='clsFormatPreviewScreen'; Type='cls'; Code=@'
 Option Explicit
 
@@ -6721,7 +6752,8 @@ End Sub
 
 Public Sub Render()
     Setup
-End Sub'@ }
+End Sub
+'@ },
     @{ Name='clsKnowledgeEditScreen'; Type='cls'; Code=@'
 Option Explicit
 
@@ -6758,7 +6790,8 @@ End Sub
 
 Public Sub Render()
     Setup
-End Sub'@ }
+End Sub
+'@ },
     @{ Name='clsKnowledgeListScreen'; Type='cls'; Code=@'
 Option Explicit
 
@@ -6795,7 +6828,8 @@ End Sub
 
 Public Sub Render()
     Setup
-End Sub'@ }
+End Sub
+'@ },
     @{ Name='clsKnowledgeRegisterScreen'; Type='cls'; Code=@'
 Option Explicit
 
@@ -6832,7 +6866,8 @@ End Sub
 
 Public Sub Render()
     Setup
-End Sub'@ }
+End Sub
+'@ },
     @{ Name='clsKnowledgeViewScreen'; Type='cls'; Code=@'
 Option Explicit
 
@@ -6869,7 +6904,8 @@ End Sub
 
 Public Sub Render()
     Setup
-End Sub'@ }
+End Sub
+'@ },
     @{ Name='clsLogScreen'; Type='cls'; Code=@'
 Option Explicit
 
@@ -6906,7 +6942,8 @@ End Sub
 
 Public Sub Render()
     Setup
-End Sub'@ }
+End Sub
+'@ },
     @{ Name='clsMainScreen'; Type='cls'; Code=@'
 Option Explicit
 
@@ -6943,7 +6980,8 @@ End Sub
 
 Public Sub Render()
     Setup
-End Sub'@ }
+End Sub
+'@ },
     @{ Name='clsMigrationScreen'; Type='cls'; Code=@'
 Option Explicit
 
@@ -6980,7 +7018,8 @@ End Sub
 
 Public Sub Render()
     Setup
-End Sub'@ }
+End Sub
+'@ },
     @{ Name='clsSearchScreen'; Type='cls'; Code=@'
 Option Explicit
 
@@ -7017,7 +7056,8 @@ End Sub
 
 Public Sub Render()
     Setup
-End Sub'@ }
+End Sub
+'@ },
     @{ Name='clsStorageScreen'; Type='cls'; Code=@'
 Option Explicit
 
@@ -7054,7 +7094,8 @@ End Sub
 
 Public Sub Render()
     Setup
-End Sub'@ }
+End Sub
+'@ },
     @{ Name='clsSystemSettingsScreen'; Type='cls'; Code=@'
 Option Explicit
 
@@ -7091,7 +7132,8 @@ End Sub
 
 Public Sub Render()
     Setup
-End Sub'@ }
+End Sub
+'@ },
     @{ Name='modEntryFormat'; Type='std'; Code=@'
 Option Explicit
 
@@ -7314,7 +7356,8 @@ Public Sub Btn_BackToList()
 ErrHandler:
     Call ShowError("シート遷移", Err.Description, _
                     "再度ボタンを押してください")
-End Sub'@ }
+End Sub
+'@ },
     @{ Name='modEntryKnowledge'; Type='std'; Code=@'
 Option Explicit
 
@@ -7674,7 +7717,8 @@ Public Sub Btn_MigrateFields()
 ErrHandler:
     Call ShowError("フィールド反映", Err.Description, _
                     "フォーマットIDとデータフォルダを確認してから再度実行してください")
-End Sub'@ }
+End Sub
+'@ },
     @{ Name='modEntryMain'; Type='std'; Code=@'
 Option Explicit
 
@@ -7925,7 +7969,8 @@ Private Sub LogDialogSuppressed(ByVal dialogType As String, _
     If Not lg Is Nothing Then
         lg.LogInfo "modEntryMain", "LogDialogSuppressed", dialogType & " " & operation & " " & detail & " " & action
     End If
-End Sub'@ }
+End Sub
+'@ },
     @{ Name='modEntrySearch'; Type='std'; Code=@'
 Option Explicit
 
@@ -8169,7 +8214,8 @@ Public Sub Btn_GoToEdit()
 ErrHandler:
     Call ShowError("修正遷移", Err.Description, _
                     "再度ボタンを押してください")
-End Sub'@ }
+End Sub
+'@ },
     @{ Name='modEntrySettings'; Type='std'; Code=@'
 Option Explicit
 
@@ -8204,7 +8250,8 @@ Public Sub Btn_ResetLog()
 ErrHandler:
     Call ShowError("ログリセット", Err.Description, _
                     "再度ボタンを押してください")
-End Sub'@ }
+End Sub
+'@ },
     @{ Name='modSpecExamples'; Type='std'; Code=@'
 Option Explicit
 
@@ -8306,7 +8353,8 @@ End Sub
 Public Sub frmCallback_searchResult_close(ByVal frm As Object)
     On Error Resume Next
     Unload frm
-End Sub'@ }
+End Sub
+'@ },
     @{ Name='modSetup'; Type='std'; Code=@'
 Option Explicit
 
@@ -8401,7 +8449,8 @@ Private Sub LogErrorSafe(ByVal funcName As String, ByVal stepName As String, ByV
     Dim lg As clsLogger
     Set lg = BuildLogger()
     If Not lg Is Nothing Then lg.LogErrorWithErr "modSetup", funcName, stepName, errNum, errDesc
-End Sub'@ }
+End Sub
+'@ },
     @{ Name='ThisWorkbook'; Type='doc'; Code=@'
 Option Explicit
 
@@ -8506,7 +8555,8 @@ Private Sub SetInitialVisibility()
             w.Visible = 0
         End If
     Next w
-End Sub'@ }
+End Sub
+'@ }
 )
 
 Write-Host ('[info] 同梱モジュール数: {0}' -f $Modules.Count)
