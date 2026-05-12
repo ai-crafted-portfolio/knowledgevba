@@ -121,7 +121,7 @@ exit /b !PS_EXIT!
 
 ## STEP 3: ps1 の保存
 
-下のコードを **同じフォルダ** に `Install-KnowledgevbaModules.ps1` というファイル名で保存します。VBA モジュール本体 (50 個) がすべて埋め込まれているため、ファイルサイズは約 336 KB あります。
+下のコードを **同じフォルダ** に `Install-KnowledgevbaModules.ps1` というファイル名で保存します。VBA モジュール本体 (50 個) がすべて埋め込まれているため、ファイルサイズは約 337 KB あります。
 
 !!! warning "保存時の注意"
     メモ帳の場合、**[名前を付けて保存]** で **文字コードを「UTF-8 (BOM 付き)」** にしてください。BOM 無し UTF-8 や ANSI で保存すると日本語コメントが文字化けし、コンパイルエラーになります。VS Code を使う場合は右下のエンコーディング表示を **`UTF-8 with BOM`** に切り替えてください。
@@ -5204,7 +5204,29 @@ Private Sub DeleteShapeByName(ByVal shapeName As String)
     If m_ws Is Nothing Then Exit Sub
     Dim shp As Shape
     On Error Resume Next
-    Set shp = m_ws.Shapes(shapeN
+    Set shp = m_ws.Shapes(shapeName)
+    If Not shp Is Nothing Then shp.Delete
+    Err.Clear
+    On Error GoTo 0
+End Sub
+
+' ================================================================
+' 関数名: SetButtonCaptionAndAction
+' 概要: フォームコントロールボタンのキャプションと OnAction を設定
+'       + キャプションフォントサイズを UI_BTN_FONT_SIZE に揃える
+' ================================================================
+Private Sub SetButtonCaptionAndAction(ByVal shp As Shape, ByVal caption As String, ByVal onAction As String)
+    On Error Resume Next
+    shp.OLEFormat.Object.Caption = caption
+    shp.TextFrame.Characters.Text = caption
+    ' フォントサイズ反映 (失敗しても致命傷にならないように Resume Next 配下で実施)
+    shp.TextFrame.Characters.Font.Size = UI_BTN_FONT_SIZE
+    shp.OnAction = onAction
+End Sub
+
+' ================================================================
+' 関数名: ApplyCaptionPrefix
+'
 '@ },
     @{ Name='clsStorageResolver'; Type='cls'; Code=@'
 Option Explicit
