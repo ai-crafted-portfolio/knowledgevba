@@ -89,8 +89,8 @@ REM ==== マクロセキュリティの一時緩和 ====
 REM 現在の設定を保存して "全てのマクロを有効" に切替。Setup 完了後に元に戻す。
 REM 対象は HKCU 配下なので管理者権限不要。Excel 16 (2016/2019/2021/365) を想定。
 set "VBAW_ORIG="
-for /f "tokens=3" %%A in ('reg query "HKCU\Software\Microsoft\Office.0\Excel\Security" /v VBAWarnings 2^>nul ^| find "VBAWarnings"') do set "VBAW_ORIG=%%A"
-reg add "HKCU\Software\Microsoft\Office.0\Excel\Security" /v VBAWarnings /t REG_DWORD /d 1 /f >nul 2>&1
+for /f "tokens=3" %%A in ('reg query "HKCU\Software\Microsoft\Office\16.0\Excel\Security" /v VBAWarnings 2^>nul ^| find "VBAWarnings"') do set "VBAW_ORIG=%%A"
+reg add "HKCU\Software\Microsoft\Office\16.0\Excel\Security" /v VBAWarnings /t REG_DWORD /d 1 /f >nul 2>&1
 echo [trust] Excel マクロを一時的に "全て有効" に切替 ^(install 完了後に元に戻します^)
 
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0Install-KnowledgevbaModules.ps1" -XlsmPath "!XLSM_PATH!"
@@ -98,11 +98,11 @@ set "PS_EXIT=!errorlevel!"
 
 REM ==== マクロセキュリティを元に戻す ====
 if defined VBAW_ORIG (
-    reg add "HKCU\Software\Microsoft\Office.0\Excel\Security" /v VBAWarnings /t REG_DWORD /d !VBAW_ORIG! /f >nul 2>&1
+    reg add "HKCU\Software\Microsoft\Office\16.0\Excel\Security" /v VBAWarnings /t REG_DWORD /d !VBAW_ORIG! /f >nul 2>&1
     echo [trust] Excel マクロセキュリティを元の値 !VBAW_ORIG! に復元
 ) else (
     REM 元値が取れない時は "通知ありで無効" (=2、デフォルト) に戻す
-    reg add "HKCU\Software\Microsoft\Office.0\Excel\Security" /v VBAWarnings /t REG_DWORD /d 2 /f >nul 2>&1
+    reg add "HKCU\Software\Microsoft\Office\16.0\Excel\Security" /v VBAWarnings /t REG_DWORD /d 2 /f >nul 2>&1
     echo [trust] Excel マクロセキュリティを既定値 2 に戻しました
 )
 
