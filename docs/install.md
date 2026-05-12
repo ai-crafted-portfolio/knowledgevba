@@ -8444,13 +8444,21 @@ try {
     Write-Host '[save] (pre-setup)'
     $wb.Save()
 
+    # ==== 重要: ブックを一度クローズして再オープン ====
+    # COM で Open → モジュール Add → Save した直後に Application.Run すると、
+    # Excel のセキュリティ判定で「マクロが使用できない」エラーになる事が多い。
+    # 一度クローズしてから再オープンすると、保存済みマクロを伴う通常ブックとして
+    # Excel が認識し、Run が通る。
+    Write-Host '[close] reopening workbook to re-trust macros'
+    $wb.Close($true)
+    Start-Sleep -Milliseconds 500
+    $wb = $excel.Workbooks.Open($finalPath, 0, $false)
+
     Write-Host '[run ] SetupSheetsAndButtons'
     try {
         $excel.DisplayAlerts = $false
-        # 注意: hidden Excel (Visible=False) + COM で SetupSheetsAndButtons を呼ぶと、
-        # 内部のフォームコントロール配置 (Shapes.AddFormControl) が高確率で silent fail する
-        # （Excel の制限）。Setup 実行中だけ Visible=True にして UI 経路で完走させ、
-        # 終わったら再度 Hidden に戻す。
+        # Setup 実行中だけ Visible=True にして UI 経路で AddFormControl を完走させる
+        # (hidden COM Excel では Shapes.AddFormControl が silent fail する事例あり)
         $prevVisible = $excel.Visible
         $excel.Visible = $true
         try {
