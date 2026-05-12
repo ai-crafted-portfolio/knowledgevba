@@ -121,7 +121,7 @@ exit /b !PS_EXIT!
 
 ## STEP 3: ps1 の保存
 
-下のコードを **同じフォルダ** に `Install-KnowledgevbaModules.ps1` というファイル名で保存します。VBA モジュール本体 (50 個) がすべて埋め込まれているため、ファイルサイズは約 337 KB あります。
+下のコードを **同じフォルダ** に `Install-KnowledgevbaModules.ps1` というファイル名で保存します。VBA モジュール本体 (50 個) がすべて埋め込まれているため、ファイルサイズは約 339 KB あります。
 
 !!! warning "保存時の注意"
     メモ帳の場合、**[名前を付けて保存]** で **文字コードを「UTF-8 (BOM 付き)」** にしてください。BOM 無し UTF-8 や ANSI で保存すると日本語コメントが文字化けし、コンパイルエラーになります。VS Code を使う場合は右下のエンコーディング表示を **`UTF-8 with BOM`** に切り替えてください。
@@ -5225,8 +5225,40 @@ Private Sub SetButtonCaptionAndAction(ByVal shp As Shape, ByVal caption As Strin
 End Sub
 
 ' ================================================================
-' 関数名: ApplyCaptionPrefix
-'
+' ApplyCaptionPrefix: spec.Caption に UI_BTN_CAPTION_PREFIX を前置
+' 例: prefix='▶ ' で 'Btn_Search.caption="Btn_Search"' -> '▶ Btn_Search'
+' ================================================================
+Private Function ApplyCaptionPrefix(ByVal caption As String) As String
+    If Len(UI_BTN_CAPTION_PREFIX) > 0 Then
+        ApplyCaptionPrefix = UI_BTN_CAPTION_PREFIX & caption
+    Else
+        ApplyCaptionPrefix = caption
+    End If
+End Function
+
+' ================================================================
+' --- Safe ログヘルパー (BuildLogger 失敗時握りつぶし) ---
+' ================================================================
+Private Sub LogTraceSafe(ByVal funcName As String, ByVal msg As String)
+    On Error Resume Next
+    Dim lg As clsLogger
+    Set lg = BuildLogger()
+    If Not lg Is Nothing Then lg.LogTrace "clsSheetRenderer", funcName, msg
+End Sub
+
+Private Sub LogWarnSafe(ByVal funcName As String, ByVal msg As String)
+    On Error Resume Next
+    Dim lg As clsLogger
+    Set lg = BuildLogger()
+    If Not lg Is Nothing Then lg.LogWarn "clsSheetRenderer", funcName, msg
+End Sub
+
+Private Sub LogErrorWithErrSafe(ByVal funcName As String, ByVal stepName As String, ByVal errNum As Long, ByVal errDesc As String)
+    On Error Resume Next
+    Dim lg As clsLogger
+    Set lg = BuildLogger()
+    If Not lg Is Nothing Then lg.LogErrorWithErr "clsSheetRenderer", funcName, stepName, errNum, errDesc
+End Sub
 '@ },
     @{ Name='clsStorageResolver'; Type='cls'; Code=@'
 Option Explicit
