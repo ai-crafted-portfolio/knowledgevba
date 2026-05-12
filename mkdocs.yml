@@ -68,6 +68,7 @@ nav:
   - セットアップ: setup.md
   - 操作手順: operations.md
   - アーキテクチャ: architecture.md
+  - カスタマイズ: customize.md
   - ソースコード:
       - 一覧: source/index.md
       - エントリポイント:
@@ -106,6 +107,7 @@ nav:
           - modFileIO: source/utility/modfileio.md
           - modImageRender: source/utility/modimagerender.md
           - modStringUtil: source/utility/modstringutil.md
+          - modUIConfig: source/utility/moduiconfig.md
       - 画面層:
           - clsMainScreen (M-01): source/screen/clsmainscreen.md
           - clsFormatListScreen (M-02): source/screen/clsformatlistscreen.md

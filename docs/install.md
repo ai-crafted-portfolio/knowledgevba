@@ -121,7 +121,7 @@ exit /b !PS_EXIT!
 
 ## STEP 3: ps1 の保存
 
-下のコードを **同じフォルダ** に `Install-KnowledgevbaModules.ps1` というファイル名で保存します。VBA モジュール本体 (49 個) がすべて埋め込まれているため、ファイルサイズは約 332 KB あります。
+下のコードを **同じフォルダ** に `Install-KnowledgevbaModules.ps1` というファイル名で保存します。VBA モジュール本体 (50 個) がすべて埋め込まれているため、ファイルサイズは約 334 KB あります。
 
 !!! warning "保存時の注意"
     メモ帳の場合、**[名前を付けて保存]** で **文字コードを「UTF-8 (BOM 付き)」** にしてください。BOM 無し UTF-8 や ANSI で保存すると日本語コメントが文字化けし、コンパイルエラーになります。VS Code を使う場合は右下のエンコーディング表示を **`UTF-8 with BOM`** に切り替えてください。
@@ -248,8 +248,7 @@ Public Sub Init(ByVal ts As String, _
     m_functionName = func
     m_level = lvl
     m_message = msg
-End Sub
-'@ },
+End Sub'@ }
     @{ Name='modCommon'; Type='std'; Code=@'
 Option Explicit
 
@@ -379,8 +378,7 @@ Public Function SheetExists(ByVal sheetName As String) As Boolean
     SheetExists = (Err.Number = 0 And Not ws Is Nothing)
     Err.Clear
     On Error GoTo 0
-End Function
-'@ },
+End Function'@ }
     @{ Name='modDateUtil'; Type='std'; Code=@'
 Option Explicit
 
@@ -483,8 +481,7 @@ Public Function Pad2(ByVal n As Long) As String
     Else
         Pad2 = CStr(n)
     End If
-End Function
-'@ },
+End Function'@ }
     @{ Name='modFileIO'; Type='std'; Code=@'
 Option Explicit
 
@@ -870,8 +867,7 @@ Private Function ConvertLocalPathToURL(ByVal localPath As String) As String
             ConvertLocalPathToURL = "file:///" & result
         End If
     End If
-End Function
-'@ },
+End Function'@ }
     @{ Name='modImageRender'; Type='std'; Code=@'
 Option Explicit
 
@@ -1104,8 +1100,7 @@ Public Function HasShapeWithPrefix(ByVal ws As Worksheet, _
     Exit Function
 ErrHandler:
     HasShapeWithPrefix = False
-End Function
-'@ },
+End Function'@ }
     @{ Name='modStringUtil'; Type='std'; Code=@'
 Option Explicit
 
@@ -1344,8 +1339,125 @@ Public Function IsValidKnowledgeId(ByVal knwNo As String) As Boolean
 
 ErrHandler:
     IsValidKnowledgeId = False
-End Function
-'@ },
+End Function'@ }
+    @{ Name='modUIConfig'; Type='std'; Code=@'
+Option Explicit
+
+' ================================================================
+' モジュール: modUIConfig (ユーティリティ層 - UI 設定 SSOT)
+' ----------------------------------------------------------------
+' 概要:   全画面 (M-01〜M-14) の見た目に関わるパラメータを集約。
+'         clsSheetRenderer / modScreenRender / modScreenSpecRegistry は
+'         本モジュールの Public Const を参照することで、ハードコードを
+'         一掃する。
+'
+' カスタマイズしたい場合:
+'   本モジュールの値を書き換えて Excel を再起動するだけで、
+'   全画面が新しい設定で再描画される。シート毎に手作業する必要なし。
+'   各 Const のコメントに「何を制御するか」「目安値」を記載。
+'
+' 依存先: なし (純粋な定数モジュール)
+' ================================================================
+
+' ----------------------------------------------------------------
+' ボタンの大きさ・形
+' ----------------------------------------------------------------
+
+' UI_BTN_WIDTH_PT
+'   ボタンの最小幅 (ポイント)。
+'   セル幅 × UI_BTN_CELL_SPAN がこの値より小さい時は本値が採用される。
+'   キャプション "ナレッジ登録" (6 文字) を 10pt フォントで表示するには
+'   100pt 以上推奨。短いボタン ("検索") なら 70pt でも収まる。
+'   既定: 110
+Public Const UI_BTN_WIDTH_PT As Double = 110#
+
+' UI_BTN_HEIGHT_PT
+'   ボタンの最小高さ (ポイント)。フォント 10pt + 上下 padding で 26 程度必要。
+'   既定: 26
+Public Const UI_BTN_HEIGHT_PT As Double = 26#
+
+' UI_BTN_CELL_SPAN
+'   ボタンが横方向に占めるセル数。1 だと単独セル幅のみ参照。
+'   2 にすると spec の CellAddr とその右隣セルの幅を合算する。
+'   メイン画面は B/E/H/K の 3 列間隔配置なので span=2 でも干渉しない。
+'   既定: 2
+Public Const UI_BTN_CELL_SPAN As Long = 2
+
+' UI_BTN_FONT_SIZE
+'   フォームコントロールボタン本体のキャプションフォントサイズ (ポイント)。
+'   Excel フォームコントロールはボタン側 Font 制御が効きにくいため、
+'   参考値として保持。フォーム描画時に shp.TextFrame.Characters.Font.Size に
+'   反映を試みる。
+'   既定: 10
+Public Const UI_BTN_FONT_SIZE As Double = 10#
+
+' UI_BTN_CAPTION_PREFIX
+'   全ボタンキャプションの先頭に挟む文字列。
+'   例: "▶ " (ChrW(&H25B6) + " ") で 三角マーク付き。
+'        ""        でマーク無し。
+'   旧版は "▶" を inline hardcoded していたが、本モジュールで上書き可能。
+'   キャプションが長くなりすぎてはみ出す場合は "" にして UI_BTN_WIDTH_PT を
+'   そのまま使う運用が安全。
+'   既定: "" (マークなし。短い視認性より、はみ出し回避を優先)
+Public Const UI_BTN_CAPTION_PREFIX As String = ""
+
+' UI_BTN_ROW_HEIGHT_PT
+'   ボタンが配置される行の高さ。UI_BTN_HEIGHT_PT より大きくないと、
+'   ボタンが下の行 (ヒント文の行) に食い込んで重なる原因になる。
+'   既定: 28 (= UI_BTN_HEIGHT_PT 26 + padding 2)
+Public Const UI_BTN_ROW_HEIGHT_PT As Double = 28#
+
+' UI_HINT_ROW_HEIGHT_PT
+'   ボタン直下のヒント文を表示する行の高さ。
+'   2 行折り返し (例: "新規ナレッジを" & vbLf & "登録") が見えるには 30 以上推奨。
+'   既定: 32
+Public Const UI_HINT_ROW_HEIGHT_PT As Double = 32#
+
+' ----------------------------------------------------------------
+' 文字サイズ
+' ----------------------------------------------------------------
+
+' UI_TITLE_FONT_SIZE
+'   画面タイトル帯 (A1) のフォントサイズ。
+'   既定: 14
+Public Const UI_TITLE_FONT_SIZE As Double = 14#
+
+' UI_TITLE_ROW_HEIGHT
+'   画面タイトル帯の行高さ。
+'   既定: 28
+Public Const UI_TITLE_ROW_HEIGHT As Double = 28#
+
+' UI_SECTION_FONT_SIZE
+'   セクション帯 (■ ラベル) のフォントサイズ。
+'   既定: 11
+Public Const UI_SECTION_FONT_SIZE As Double = 11#
+
+' UI_SECTION_ROW_HEIGHT
+'   セクション帯の行高さ。
+'   既定: 20
+Public Const UI_SECTION_ROW_HEIGHT As Double = 20#
+
+' UI_LABEL_FONT_SIZE
+'   フィールドラベル (項目名) のフォントサイズ。
+'   既定: 10
+Public Const UI_LABEL_FONT_SIZE As Double = 10#
+
+' UI_HINT_FONT_SIZE
+'   ボタン下のヒント文 / フィールド型表示のフォントサイズ。
+'   既定: 9
+Public Const UI_HINT_FONT_SIZE As Double = 9#
+
+' UI_HINT_CELL_WRAP
+'   ヒント文セルで折り返しを有効にするか。
+'   False にすると 1 行表示 (はみ出し時は隣セルに見切れる)。
+'   既定: True
+Public Const UI_HINT_CELL_WRAP As Boolean = True
+
+' ----------------------------------------------------------------
+' タイトル列幅 (A:L) - 既存挙動と同じ
+' ----------------------------------------------------------------
+' タイトル帯の塗り範囲は A〜L 列固定。変更したい場合は
+' clsSheetRenderer.IScreenRenderer_RenderTitle 内の Range("A1:L1") を編集。'@ }
     @{ Name='IScreenRenderer'; Type='cls'; Code=@'
 Option Explicit
 
@@ -1395,8 +1507,7 @@ Public Sub RenderHeaderRow(ByVal startAddr As String, ByVal headerLabels As Vari
 End Sub
 
 Public Sub RenderEmptyState(ByVal cellAddr As String, ByVal message As String)
-End Sub
-'@ },
+End Sub'@ }
     @{ Name='clsButtonSpec'; Type='cls'; Code=@'
 Option Explicit
 
@@ -1484,8 +1595,7 @@ Public Sub Init(ByVal btnName As String, _
     m_groupName = groupName
     m_hintAddr = hintAddr
     m_hintText = hintText
-End Sub
-'@ },
+End Sub'@ }
     @{ Name='clsControlSpec'; Type='cls'; Code=@'
 Option Explicit
 
@@ -1594,8 +1704,7 @@ Public Sub Init(ByVal cType As String, ByVal nm As String, _
     m_height = h
     m_caption = cap
     m_onClick = onClk
-End Sub
-'@ },
+End Sub'@ }
     @{ Name='clsFieldMigrator'; Type='cls'; Code=@'
 Option Explicit
 
@@ -1895,8 +2004,7 @@ Private Function CombineFilePath(ByVal folder As String, _
     Else
         CombineFilePath = folder & "\" & fileName
     End If
-End Function
-'@ },
+End Function'@ }
     @{ Name='clsFieldSpec'; Type='cls'; Code=@'
 Option Explicit
 
@@ -2020,8 +2128,7 @@ Public Sub SetCellAddrs(ByVal orderAddr As String, _
     m_labelAddr = labelAddr
     m_typeAddr = typeAddr
     m_inputAddr = inputAddr
-End Sub
-'@ },
+End Sub'@ }
     @{ Name='clsFormSpec'; Type='cls'; Code=@'
 Option Explicit
 
@@ -2110,8 +2217,7 @@ End Function
 ' ================================================================
 Public Function ControlCount() As Long
     ControlCount = m_controls.Count
-End Function
-'@ },
+End Function'@ }
     @{ Name='clsFormatManager'; Type='cls'; Code=@'
 Option Explicit
 
@@ -2567,8 +2673,7 @@ Private Sub RenderFormatPreview(ByVal ws As Worksheet, _
             "(" & designWs.Cells(i, FD_FIELD_COL_TYPE).Value & " 入力エリア)"
         previewRow = previewRow + 1
     Next i
-End Sub
-'@ },
+End Sub'@ }
     @{ Name='clsKnowledgeManager'; Type='cls'; Code=@'
 Option Explicit
 
@@ -3109,8 +3214,7 @@ End Function
 ' ファイル内容からCreatedDateを抽出
 Private Function ExtractCreatedDate(ByVal content As String) As String
     ExtractCreatedDate = ExtractStanzaValue(content, "CreatedDate")
-End Function
-'@ },
+End Function'@ }
     @{ Name='clsLogger'; Type='cls'; Code=@'
 Option Explicit
 
@@ -3369,8 +3473,7 @@ Private Function GetLastLogRow() As Long
     r = m_logSheet.Cells(m_logSheet.Rows.Count, 1).End(-4162).Row  ' xlUp = -4162
     If r < LOG_DATA_START_ROW Then r = LOG_DATA_START_ROW - 1
     GetLastLogRow = r
-End Function
-'@ },
+End Function'@ }
     @{ Name='clsScreenSpec'; Type='cls'; Code=@'
 Option Explicit
 
@@ -3497,8 +3600,7 @@ End Sub
 ' ================================================================
 Public Sub AddField(ByVal fld As clsFieldSpec)
     m_fields.Add fld
-End Sub
-'@ },
+End Sub'@ }
     @{ Name='clsSearchEngine'; Type='cls'; Code=@'
 Option Explicit
 
@@ -4329,8 +4431,7 @@ Private Function CombineFilePath(ByVal folder As String, _
     Else
         CombineFilePath = folder & "" & fileName
     End If
-End Function
-'@ },
+End Function'@ }
     @{ Name='clsSectionSpec'; Type='cls'; Code=@'
 Option Explicit
 
@@ -4369,8 +4470,7 @@ Public Sub Init(ByVal address As String, ByVal label As String, ByVal colorHex A
     m_address = address
     m_label = label
     m_colorHex = colorHex
-End Sub
-'@ },
+End Sub'@ }
     @{ Name='clsSetupOrchestrator'; Type='cls'; Code=@'
 Option Explicit
 
@@ -4678,8 +4778,7 @@ End Sub
 
 Private Sub LogEnter(ByVal funcName As String, ByVal stepName As String)
     Call LogTraceSafe(funcName, "STEP " & stepName)
-End Sub
-'@ },
+End Sub'@ }
     @{ Name='clsSheetRenderer'; Type='cls'; Code=@'
 Option Explicit
 
@@ -4699,10 +4798,11 @@ Implements IScreenRenderer
 Private Const MOD_NAME As String = "clsSheetRenderer"
 
 Private Const XL_BUTTON_CONTROL As Long = 0  ' xlButtonControl と同値（headless 互換）
-Private Const BTN_MIN_W As Double = 100#
-Private Const BTN_MIN_H As Double = 26#
-Private Const TITLE_ROW_HEIGHT As Double = 28#
-Private Const SECTION_ROW_HEIGHT As Double = 20#
+' UI パラメータは modUIConfig へ移管 (2026-05-12 / Section 1 UI 修正)
+' BTN_MIN_W           -> UI_BTN_WIDTH_PT
+' BTN_MIN_H           -> UI_BTN_HEIGHT_PT
+' TITLE_ROW_HEIGHT    -> UI_TITLE_ROW_HEIGHT
+' SECTION_ROW_HEIGHT  -> UI_SECTION_ROW_HEIGHT
 
 Private m_ws As Worksheet
 
@@ -4748,13 +4848,14 @@ Private Sub IScreenRenderer_RenderTitle(ByVal screenId As String, _
     cell.Value = title
     cell.Font.Bold = True
     cell.Font.Color = RGB(255, 255, 255)
-    cell.Font.Size = 14
+    cell.Font.Size = UI_TITLE_FONT_SIZE
     cell.Interior.Color = HexToRgb(colorHex)
-    m_ws.Rows(1).RowHeight = TITLE_ROW_HEIGHT
+    m_ws.Rows(1).RowHeight = UI_TITLE_ROW_HEIGHT
     ' タイトル列 A:L を背景色塗り
     m_ws.Range("A1:L1").Interior.Color = HexToRgb(colorHex)
     m_ws.Range("A1:L1").Font.Color = RGB(255, 255, 255)
     m_ws.Range("A1:L1").Font.Bold = True
+    m_ws.Range("A1:L1").Font.Size = UI_TITLE_FONT_SIZE
 End Sub
 
 ' ================================================================
@@ -4781,7 +4882,8 @@ Private Sub IScreenRenderer_RenderSection(ByVal sectionAddr As String, _
     rowRange.Interior.Color = HexToRgb(colorHex)
     rowRange.Font.Color = RGB(255, 255, 255)
     rowRange.Font.Bold = True
-    m_ws.Rows(rowNum).RowHeight = SECTION_ROW_HEIGHT
+    rowRange.Font.Size = UI_SECTION_FONT_SIZE
+    m_ws.Rows(rowNum).RowHeight = UI_SECTION_ROW_HEIGHT
 End Sub
 
 ' ================================================================
@@ -4816,16 +4918,38 @@ Private Sub IScreenRenderer_RenderButton(ByVal btnSpec As Object)
     Dim rng As Range
     Set rng = m_ws.Range(spec.CellAddr)
 
+    ' ボタン行の行高を UI_BTN_ROW_HEIGHT_PT 以上にする
+    ' (デフォルト 15pt のままだとボタン (26pt) が次行ヒントに重なるため)
+    stepName = "set row height"
+    On Error Resume Next
+    If m_ws.Rows(rng.Row).RowHeight < UI_BTN_ROW_HEIGHT_PT Then
+        m_ws.Rows(rng.Row).RowHeight = UI_BTN_ROW_HEIGHT_PT
+    End If
+    Err.Clear
+    On Error GoTo 0
+
+    ' セル span (UI_BTN_CELL_SPAN) に応じて幅を計算
+    stepName = "compute span"
+    Dim spanCells As Long
+    spanCells = UI_BTN_CELL_SPAN
+    If spanCells < 1 Then spanCells = 1
+    Dim spanRng As Range
+    On Error Resume Next
+    Set spanRng = m_ws.Range(rng, rng.Offset(0, spanCells - 1))
+    If spanRng Is Nothing Then Set spanRng = rng
+    Err.Clear
+    On Error GoTo 0
+
     Dim leftPt As Double
     Dim topPt As Double
     Dim widthPt As Double
     Dim heightPt As Double
     leftPt = rng.Left
     topPt = rng.Top
-    widthPt = rng.Width
+    widthPt = spanRng.Width
     heightPt = rng.Height
-    If widthPt < BTN_MIN_W Then widthPt = BTN_MIN_W
-    If heightPt < BTN_MIN_H Then heightPt = BTN_MIN_H
+    If widthPt < UI_BTN_WIDTH_PT Then widthPt = UI_BTN_WIDTH_PT
+    If heightPt < UI_BTN_HEIGHT_PT Then heightPt = UI_BTN_HEIGHT_PT
 
     ' ボタン直下セルに色を塗る（グループ識別性 — フォームコントロール本体は色付け不可）
     stepName = "tint cell"
@@ -4866,14 +4990,24 @@ Private Sub IScreenRenderer_RenderButton(ByVal btnSpec As Object)
     shp.Name = spec.BtnName
 
     stepName = "SetButtonCaptionAndAction"
-    Call SetButtonCaptionAndAction(shp, spec.Caption, spec.BtnName)
+    Call SetButtonCaptionAndAction(shp, ApplyCaptionPrefix(spec.Caption), spec.BtnName)
 
     ' ヒントテキスト（ボタン下の説明セル）
     If Len(spec.HintAddr) > 0 And Len(spec.HintText) > 0 Then
         stepName = "hint " & spec.HintAddr
-        m_ws.Range(spec.HintAddr).Value = spec.HintText
-        m_ws.Range(spec.HintAddr).WrapText = True
-        m_ws.Range(spec.HintAddr).Font.Size = 9
+        Dim hintCell As Range
+        Set hintCell = m_ws.Range(spec.HintAddr)
+        hintCell.Value = spec.HintText
+        hintCell.WrapText = UI_HINT_CELL_WRAP
+        hintCell.Font.Size = UI_HINT_FONT_SIZE
+        hintCell.VerticalAlignment = xlTop
+        ' ヒント行の高さも (2 行折り返しが見える程度に) 拡張
+        On Error Resume Next
+        If m_ws.Rows(hintCell.Row).RowHeight < UI_HINT_ROW_HEIGHT_PT Then
+            m_ws.Rows(hintCell.Row).RowHeight = UI_HINT_ROW_HEIGHT_PT
+        End If
+        Err.Clear
+        On Error GoTo 0
     End If
 
     Call LogTraceSafe("RenderButton", "EXIT ok btnName=" & spec.BtnName)
@@ -4890,6 +5024,7 @@ Private Sub IScreenRenderer_RenderLabel(ByVal cellAddr As String, _
     Dim cell As Range
     Set cell = m_ws.Range(cellAddr)
     cell.Value = labelText
+    cell.Font.Size = UI_LABEL_FONT_SIZE
     If Len(colorHex) > 0 Then
         cell.Interior.Color = HexToRgb(colorHex)
     End If
@@ -4923,6 +5058,7 @@ Private Sub IScreenRenderer_RenderInputField(ByVal cellAddr As String, _
     If Len(spec.LabelAddr) > 0 Then
         m_ws.Range(spec.LabelAddr).Value = spec.Label
         m_ws.Range(spec.LabelAddr).HorizontalAlignment = xlRight
+        m_ws.Range(spec.LabelAddr).Font.Size = UI_LABEL_FONT_SIZE
     End If
 
     ' 型表示（イタリック、薄黄）
@@ -4930,7 +5066,7 @@ Private Sub IScreenRenderer_RenderInputField(ByVal cellAddr As String, _
         m_ws.Range(spec.TypeAddr).Value = spec.TypeText
         m_ws.Range(spec.TypeAddr).Font.Italic = True
         m_ws.Range(spec.TypeAddr).Interior.Color = HexToRgb(COLOR_HINT_YELLOW)
-        m_ws.Range(spec.TypeAddr).Font.Size = 9
+        m_ws.Range(spec.TypeAddr).Font.Size = UI_HINT_FONT_SIZE
     End If
 
     ' 入力欄ヒント（説明文）
@@ -5048,47 +5184,7 @@ Private Sub DeleteShapeByName(ByVal shapeName As String)
     If m_ws Is Nothing Then Exit Sub
     Dim shp As Shape
     On Error Resume Next
-    Set shp = m_ws.Shapes(shapeName)
-    If Not shp Is Nothing Then shp.Delete
-    Err.Clear
-    On Error GoTo 0
-End Sub
-
-' ================================================================
-' 関数名: SetButtonCaptionAndAction
-' 概要: フォームコントロールボタンのキャプションと OnAction を設定
-' ================================================================
-Private Sub SetButtonCaptionAndAction(ByVal shp As Shape, ByVal caption As String, ByVal onAction As String)
-    On Error Resume Next
-    shp.OLEFormat.Object.Caption = caption
-    shp.TextFrame.Characters.Text = caption
-    shp.OnAction = onAction
-End Sub
-
-' ================================================================
-' --- Safe ログヘルパー ---
-' ================================================================
-Private Sub LogTraceSafe(ByVal funcName As String, ByVal msg As String)
-    On Error Resume Next
-    Dim lg As clsLogger
-    Set lg = BuildLogger()
-    If Not lg Is Nothing Then lg.LogTrace "clsSheetRenderer", funcName, msg
-End Sub
-
-Private Sub LogWarnSafe(ByVal funcName As String, ByVal msg As String)
-    On Error Resume Next
-    Dim lg As clsLogger
-    Set lg = BuildLogger()
-    If Not lg Is Nothing Then lg.LogWarn "clsSheetRenderer", funcName, msg
-End Sub
-
-Private Sub LogErrorWithErrSafe(ByVal funcName As String, ByVal stepName As String, ByVal errNum As Long, ByVal errDesc As String)
-    On Error Resume Next
-    Dim lg As clsLogger
-    Set lg = BuildLogger()
-    If Not lg Is Nothing Then lg.LogErrorWithErr "clsSheetRenderer", funcName, stepName, errNum, errDesc
-End Sub
-'@ },
+    Set shp = m_ws.Shapes(shapeN'@ }
     @{ Name='clsStorageResolver'; Type='cls'; Code=@'
 Option Explicit
 
@@ -5251,8 +5347,7 @@ Private Function CombinePath(ByVal basePath As String, _
     Else
         CombinePath = basePath & sep & fileName
     End If
-End Function
-'@ },
+End Function'@ }
     @{ Name='clsTaskController'; Type='cls'; Code=@'
 Option Explicit
 
@@ -5439,8 +5534,7 @@ Private Function IsInArray(ByVal target As String, ByVal arr As Variant) As Bool
         End If
     Next i
     IsInArray = False
-End Function
-'@ },
+End Function'@ }
     @{ Name='clsUserFormRenderer'; Type='cls'; Code=@'
 Option Explicit
 
@@ -5513,8 +5607,7 @@ End Sub
 Private Sub IScreenRenderer_RenderEmptyState(ByVal cellAddr As String, _
                                               ByVal message As String)
     Err.Raise NOT_IMPL_NUM, NOT_IMPL_SRC, NOT_IMPL_MSG
-End Sub
-'@ },
+End Sub'@ }
     @{ Name='modFactory'; Type='std'; Code=@'
 Option Explicit
 
@@ -5623,8 +5716,7 @@ Public Function CreateScreen(ByVal screenId As String, _
             lg.Init renderer, spec
             Set CreateScreen = lg
     End Select
-End Function
-'@ },
+End Function'@ }
     @{ Name='modFormBuilder'; Type='std'; Code=@'
 Option Explicit
 
@@ -5822,8 +5914,7 @@ Public Function ProgIDFromType(ByVal t As String) As String
         Case Else
             ProgIDFromType = PROGID_LABEL
     End Select
-End Function
-'@ },
+End Function'@ }
     @{ Name='modScreenRender'; Type='std'; Code=@'
 Option Explicit
 
@@ -5945,8 +6036,7 @@ Public Sub LogScreenError(ByVal className As String, _
     If Not lg Is Nothing Then
         lg.LogErrorWithErr className, funcName, stepName, errNum, errDesc
     End If
-End Sub
-'@ },
+End Sub'@ }
     @{ Name='modScreenSpecRegistry'; Type='std'; Code=@'
 Option Explicit
 
@@ -6012,7 +6102,9 @@ Private Function BuildMainSpec() As clsScreenSpec
     Call AddSec(s, "A17", "[その他] 確認/初期セットアップ (緑/灰ボタン)", COLOR_SECTION_BLUE)
 
     ' 行 10/11: 主操作 4 ボタン + 説明
-    Dim ar As String: ar = ChrW(&H25B6)
+    ' ボタンキャプション prefix は modUIConfig.UI_BTN_CAPTION_PREFIX が制御。
+    ' ここでは inline prefix を空にする (renderer 側で ApplyCaptionPrefix が付与)。
+    Dim ar As String: ar = ""
     Call AddBtn(s, "Btn_TaskSearch",       ar & "検索",         "B10", COLOR_BTN_PRIMARY, "主操作", "B11", "キーワードで" & vbLf & "検索・確認")
     Call AddBtn(s, "Btn_TaskRegister",     ar & "ナレッジ登録", "E10", COLOR_BTN_PRIMARY, "主操作", "E11", "新規ナレッジを" & vbLf & "登録")
     Call AddBtn(s, "Btn_TaskModify",       ar & "ナレッジ修正", "H10", COLOR_BTN_PRIMARY, "主操作", "H11", "既存ナレッジを" & vbLf & "修正")
@@ -6048,7 +6140,9 @@ Private Function BuildFormatListSpec() As clsScreenSpec
     Call AddSec(s, "A4", "[アクション]", COLOR_SECTION_BLUE2)
     Call AddSec(s, "A9", "[フォーマット一覧]", COLOR_SECTION_BLUE2)
 
-    Dim ar As String: ar = ChrW(&H25B6)
+    ' ボタンキャプション prefix は modUIConfig.UI_BTN_CAPTION_PREFIX が制御。
+    ' ここでは inline prefix を空にする (renderer 側で ApplyCaptionPrefix が付与)。
+    Dim ar As String: ar = ""
     Call AddBtn(s, "Btn_CreateNewFormat",   ar & "新規作成",   "B7", COLOR_BTN_PRIMARY, "アクション", "", "")
     Call AddBtn(s, "Btn_EditFormat",        ar & "編集",       "E7", COLOR_BTN_PRIMARY, "アクション", "", "")
     Call AddBtn(s, "Btn_ShowFormatPreview", ar & "プレビュー", "G7", COLOR_BTN_SUB,     "アクション", "", "")
@@ -6086,7 +6180,9 @@ Private Function BuildFormatDesignSpec() As clsScreenSpec
     ' 標準雛形フィールドラベル（データ無しでも見える）
     Call AddStandardFieldRows(s, 7)
 
-    Dim ar As String: ar = ChrW(&H25B6)
+    ' ボタンキャプション prefix は modUIConfig.UI_BTN_CAPTION_PREFIX が制御。
+    ' ここでは inline prefix を空にする (renderer 側で ApplyCaptionPrefix が付与)。
+    Dim ar As String: ar = ""
     Call AddBtn(s, "Btn_LoadFormat",     ar & "読込",       "B20", COLOR_BTN_NAV,     "アクション", "", "")
     Call AddBtn(s, "Btn_SaveFormat",     ar & "保存",       "D20", COLOR_BTN_PRIMARY, "アクション", "", "")
     Call AddBtn(s, "Btn_PreviewFormat",  ar & "プレビュー", "F20", COLOR_BTN_SUB,     "アクション", "", "")
@@ -6113,7 +6209,9 @@ Private Function BuildFormatPreviewSpec() As clsScreenSpec
 
     Call AddStandardFieldRows(s, 6)
 
-    Dim ar As String: ar = ChrW(&H25B6)
+    ' ボタンキャプション prefix は modUIConfig.UI_BTN_CAPTION_PREFIX が制御。
+    ' ここでは inline prefix を空にする (renderer 側で ApplyCaptionPrefix が付与)。
+    Dim ar As String: ar = ""
     Dim al As String: al = ChrW(&H2190)
     Call AddBtn(s, "Btn_BackToFormatDesign", al & " M-03 設計に戻る", "D17", COLOR_HEADER_LIGHT, "ナビ", "", "")
 
@@ -6139,7 +6237,9 @@ Private Function BuildKnowledgeRegisterSpec() As clsScreenSpec
 
     Call AddStandardFieldRows(s, 8)
 
-    Dim ar As String: ar = ChrW(&H25B6)
+    ' ボタンキャプション prefix は modUIConfig.UI_BTN_CAPTION_PREFIX が制御。
+    ' ここでは inline prefix を空にする (renderer 側で ApplyCaptionPrefix が付与)。
+    Dim ar As String: ar = ""
     Call AddBtn(s, "Btn_SaveKnowledge", ar & "登録",     "B19", COLOR_BTN_PRIMARY, "アクション", "", "")
     Call AddBtn(s, "Btn_ClearForm",     ar & "クリア",   "D19", COLOR_BTN_SUB,     "アクション", "", "")
 
@@ -6165,7 +6265,9 @@ Private Function BuildKnowledgeEditSpec() As clsScreenSpec
 
     Call AddStandardFieldRows(s, 8)
 
-    Dim ar As String: ar = ChrW(&H25B6)
+    ' ボタンキャプション prefix は modUIConfig.UI_BTN_CAPTION_PREFIX が制御。
+    ' ここでは inline prefix を空にする (renderer 側で ApplyCaptionPrefix が付与)。
+    Dim ar As String: ar = ""
     Call AddBtn(s, "Btn_LoadKnowledge",   ar & "読込",     "B19", COLOR_BTN_NAV,     "アクション", "", "")
     Call AddBtn(s, "Btn_UpdateKnowledge", ar & "更新",     "D19", COLOR_BTN_PRIMARY, "アクション", "", "")
     Call AddBtn(s, "Btn_DeleteKnowledge", ar & "このナレッジを削除", "G19", COLOR_BTN_DANGER, "アクション", "", "")
@@ -6195,7 +6297,9 @@ Private Function BuildKnowledgeListSpec() As clsScreenSpec
     s.EmptyStateAddr = "A6"
     s.EmptyStateText = "(ナレッジ未登録 ― 0 件)"
 
-    Dim ar As String: ar = ChrW(&H25B6)
+    ' ボタンキャプション prefix は modUIConfig.UI_BTN_CAPTION_PREFIX が制御。
+    ' ここでは inline prefix を空にする (renderer 側で ApplyCaptionPrefix が付与)。
+    Dim ar As String: ar = ""
     Call AddBtn(s, "Btn_ReloadList",      ar & "絞込",     "I3", COLOR_BTN_PRIMARY, "絞込", "", "")
     Call AddBtn(s, "Btn_PageFirst",       "<<最初",        "B12", COLOR_BTN_SUB, "ページング", "", "")
     Call AddBtn(s, "Btn_PagePrev",        "<前",           "D12", COLOR_BTN_SUB, "ページング", "", "")
@@ -6226,7 +6330,9 @@ Private Function BuildSearchSpec() As clsScreenSpec
     s.EmptyStateAddr = "A8"
     s.EmptyStateText = "(検索結果なし ― キーワード入力後に検索ボタンを押下)"
 
-    Dim ar As String: ar = ChrW(&H25B6)
+    ' ボタンキャプション prefix は modUIConfig.UI_BTN_CAPTION_PREFIX が制御。
+    ' ここでは inline prefix を空にする (renderer 側で ApplyCaptionPrefix が付与)。
+    Dim ar As String: ar = ""
     Call AddBtn(s, "Btn_SearchKnowledge", ar & "検索",       "I3", COLOR_BTN_PRIMARY, "条件", "", "")
     Call AddBtn(s, "Btn_SearchClear",     ar & "条件クリア", "I4", COLOR_BTN_SUB, "条件", "", "")
 
@@ -6251,7 +6357,9 @@ Private Function BuildKnowledgeViewSpec() As clsScreenSpec
 
     Call AddStandardFieldRows(s, 8)
 
-    Dim ar As String: ar = ChrW(&H25B6)
+    ' ボタンキャプション prefix は modUIConfig.UI_BTN_CAPTION_PREFIX が制御。
+    ' ここでは inline prefix を空にする (renderer 側で ApplyCaptionPrefix が付与)。
+    Dim ar As String: ar = ""
     Dim al As String: al = ChrW(&H2190)
     Call AddBtn(s, "Btn_BackToSearch",  al & " 検索に戻る",  "B19", COLOR_HEADER_LIGHT, "ナビ", "", "")
     Call AddBtn(s, "Btn_GoToEdit",      ar & " 修正に遷移", "D19", COLOR_BTN_PRIMARY, "ナビ", "", "")
@@ -6281,7 +6389,9 @@ Private Function BuildStorageSpec() As clsScreenSpec
     s.EmptyStateAddr = "A4"
     s.EmptyStateText = "(格納先未設定 ― 0 件 / 「+ 新規格納先を追加」で行追加)"
 
-    Dim ar As String: ar = ChrW(&H25B6)
+    ' ボタンキャプション prefix は modUIConfig.UI_BTN_CAPTION_PREFIX が制御。
+    ' ここでは inline prefix を空にする (renderer 側で ApplyCaptionPrefix が付与)。
+    Dim ar As String: ar = ""
     Call AddBtn(s, "Btn_AddStorage",     "+ 新規格納先を追加", "B8", COLOR_BTN_NAV,     "追加", "", "")
     Call AddBtn(s, "Btn_TestAllStorage", ar & "全件テスト",     "B16", COLOR_BTN_NAV,     "アクション", "", "")
     Call AddBtn(s, "Btn_SaveStorage",    ar & "保存",           "D16", COLOR_BTN_PRIMARY, "アクション", "", "")
@@ -6321,7 +6431,9 @@ Private Function BuildSystemSettingsSpec() As clsScreenSpec
     Call AddLabelField(s, 14, "保存先", "[文字列]", False)
     Call AddLabelField(s, 15, "世代保持", "[数値]", False)
 
-    Dim ar As String: ar = ChrW(&H25B6)
+    ' ボタンキャプション prefix は modUIConfig.UI_BTN_CAPTION_PREFIX が制御。
+    ' ここでは inline prefix を空にする (renderer 側で ApplyCaptionPrefix が付与)。
+    Dim ar As String: ar = ""
     Call AddBtn(s, "Btn_SaveSettings",     ar & "保存",     "B17", COLOR_BTN_PRIMARY, "アクション", "", "")
     Call AddBtn(s, "Btn_CancelSettings",   ar & "取消",     "D17", COLOR_BTN_SUB,     "アクション", "", "")
     Call AddBtn(s, "Btn_ResetToDefault",   "初期値にリセット",   "B19", COLOR_BTN_DANGER, "破壊", "", "")
@@ -6355,7 +6467,9 @@ Private Function BuildMigrationSpec() As clsScreenSpec
     s.EmptyStateAddr = "A6"
     s.EmptyStateText = "(差分なし ― 「差分確認」ボタンで再計算)"
 
-    Dim ar As String: ar = ChrW(&H25B6)
+    ' ボタンキャプション prefix は modUIConfig.UI_BTN_CAPTION_PREFIX が制御。
+    ' ここでは inline prefix を空にする (renderer 側で ApplyCaptionPrefix が付与)。
+    Dim ar As String: ar = ""
     Call AddBtn(s, "Btn_ConfirmDiff",     ar & "差分確認",   "I3", COLOR_BTN_PRIMARY, "確認", "", "")
     Call AddBtn(s, "Btn_MigrateFields",   ar & "反映実行",   "B20", COLOR_BTN_PRIMARY, "実行", "", "")
     Call AddBtn(s, "Btn_CancelMigrate",   ar & "中断",       "D20", COLOR_BTN_DANGER,  "実行", "", "")
@@ -6395,7 +6509,9 @@ Private Function BuildFileFormatSpec() As clsScreenSpec
     Call AddLabelField(s, 16, "既定フォント", "[Yu Gothic UI]", False)
     Call AddLabelField(s, 17, "既定サイズ", "[10.5pt]", False)
 
-    Dim ar As String: ar = ChrW(&H25B6)
+    ' ボタンキャプション prefix は modUIConfig.UI_BTN_CAPTION_PREFIX が制御。
+    ' ここでは inline prefix を空にする (renderer 側で ApplyCaptionPrefix が付与)。
+    Dim ar As String: ar = ""
     Call AddBtn(s, "Btn_PreviewFileFormat", ar & "プレビュー", "B21", COLOR_BTN_NAV,     "アクション", "", "")
     Call AddBtn(s, "Btn_SaveFileFormat",    ar & "保存",       "D21", COLOR_BTN_PRIMARY, "アクション", "", "")
     Call AddBtn(s, "Btn_CancelFileFormat",  ar & "取消",       "F21", COLOR_BTN_SUB,     "アクション", "", "")
@@ -6426,7 +6542,9 @@ Private Function BuildLogSpec() As clsScreenSpec
     s.EmptyStateAddr = "A9"
     s.EmptyStateText = "(ログ未蓄積 ― 操作後に絞込ボタンを押下)"
 
-    Dim ar As String: ar = ChrW(&H25B6)
+    ' ボタンキャプション prefix は modUIConfig.UI_BTN_CAPTION_PREFIX が制御。
+    ' ここでは inline prefix を空にする (renderer 側で ApplyCaptionPrefix が付与)。
+    Dim ar As String: ar = ""
     Call AddBtn(s, "Btn_FilterLog",     ar & "絞込",       "G5", COLOR_BTN_PRIMARY, "フィルタ", "", "")
     Call AddBtn(s, "Btn_ClearLogFilter", ar & "クリア",     "I5", COLOR_BTN_SUB,     "フィルタ", "", "")
     Call AddBtn(s, "Btn_ExportLogCSV",  ar & "CSV出力",    "K5", COLOR_BTN_NAV,     "フィルタ", "", "")
@@ -6455,55 +6573,7 @@ Private Sub AddBtn(ByVal s As clsScreenSpec, _
     Dim btn As clsButtonSpec
     Set btn = New clsButtonSpec
     btn.Init btnName, caption, cellAddr, colorHex, groupName, hintAddr, hintText
-    s.AddButton btn
-End Sub
-
-' ================================================================
-' 関数名: AddStandardFieldRows
-' 概要:   標準ナレッジフィールド（件名/発生日時/担当者/カテゴリ/優先度/事象/原因/対処内容）
-'         を指定行から順に追加。データ無くてもラベルが見える「空状態 UI」を実現。
-' 引数:   s         - clsScreenSpec
-'         startRow  - フィールド開始行
-' ================================================================
-Private Sub AddStandardFieldRows(ByVal s As clsScreenSpec, ByVal startRow As Long)
-    Dim names As Variant
-    Dim types As Variant
-    Dim reqs As Variant
-    Dim rows As Variant
-    Dim hints As Variant
-    names = Array("件名", "発生日時", "担当者", "カテゴリ", "優先度", "事象", "原因", "対処内容")
-    types = Array("単一行 1行", "日時 1行", "単一行 1行", "選択 1行", "選択 1行", "複数行 5行", "複数行 3行", "複数行 5行")
-    reqs  = Array(True,    True,    True,    True,    True,    True,    True,    True)
-    rows  = Array(1,       1,       1,       1,       1,       5,       3,       5)
-    hints = Array("(単一行入力)", "(現在日時を既定で表示)", "(単一行入力)", "(選択してください)", "(選択 ― 高/中/低)", _
-                   "(複数行入力 / Alt+Enter で改行)", "(複数行入力 / Alt+Enter で改行)", "(複数行入力 / Alt+Enter で改行)")
-
-    Dim i As Long
-    For i = LBound(names) To UBound(names)
-        Dim r As Long
-        r = startRow + i
-        Dim fld As clsFieldSpec
-        Set fld = New clsFieldSpec
-        fld.Init i + 1, CStr(names(i)), CStr(types(i)), CBool(reqs(i)), CLng(rows(i)), CStr(hints(i))
-        fld.SetCellAddrs "A" & r, "B" & r, "C" & r, "D" & r, "E" & r
-        s.AddField fld
-    Next i
-End Sub
-
-' ================================================================
-' 関数名: AddLabelField
-' 概要:   1 行分の単純な「項目名 [型]」ラベルを spec に追加
-' ================================================================
-Private Sub AddLabelField(ByVal s As clsScreenSpec, ByVal row As Long, _
-                           ByVal label As String, ByVal typeText As String, _
-                           ByVal required As Boolean)
-    Dim fld As clsFieldSpec
-    Set fld = New clsFieldSpec
-    fld.Init 0, label, typeText, required, 1, ""
-    fld.SetCellAddrs "", "B" & row, "C" & row, "D" & row, "E" & row
-    s.AddField fld
-End Sub
-'@ },
+    s.AddBu'@ }
     @{ Name='clsFileFormatScreen'; Type='cls'; Code=@'
 Option Explicit
 
@@ -6540,8 +6610,7 @@ End Sub
 
 Public Sub Render()
     Setup
-End Sub
-'@ },
+End Sub'@ }
     @{ Name='clsFormatDesignScreen'; Type='cls'; Code=@'
 Option Explicit
 
@@ -6578,8 +6647,7 @@ End Sub
 
 Public Sub Render()
     Setup
-End Sub
-'@ },
+End Sub'@ }
     @{ Name='clsFormatListScreen'; Type='cls'; Code=@'
 Option Explicit
 
@@ -6616,8 +6684,7 @@ End Sub
 
 Public Sub Render()
     Setup
-End Sub
-'@ },
+End Sub'@ }
     @{ Name='clsFormatPreviewScreen'; Type='cls'; Code=@'
 Option Explicit
 
@@ -6654,8 +6721,7 @@ End Sub
 
 Public Sub Render()
     Setup
-End Sub
-'@ },
+End Sub'@ }
     @{ Name='clsKnowledgeEditScreen'; Type='cls'; Code=@'
 Option Explicit
 
@@ -6692,8 +6758,7 @@ End Sub
 
 Public Sub Render()
     Setup
-End Sub
-'@ },
+End Sub'@ }
     @{ Name='clsKnowledgeListScreen'; Type='cls'; Code=@'
 Option Explicit
 
@@ -6730,8 +6795,7 @@ End Sub
 
 Public Sub Render()
     Setup
-End Sub
-'@ },
+End Sub'@ }
     @{ Name='clsKnowledgeRegisterScreen'; Type='cls'; Code=@'
 Option Explicit
 
@@ -6768,8 +6832,7 @@ End Sub
 
 Public Sub Render()
     Setup
-End Sub
-'@ },
+End Sub'@ }
     @{ Name='clsKnowledgeViewScreen'; Type='cls'; Code=@'
 Option Explicit
 
@@ -6806,8 +6869,7 @@ End Sub
 
 Public Sub Render()
     Setup
-End Sub
-'@ },
+End Sub'@ }
     @{ Name='clsLogScreen'; Type='cls'; Code=@'
 Option Explicit
 
@@ -6844,8 +6906,7 @@ End Sub
 
 Public Sub Render()
     Setup
-End Sub
-'@ },
+End Sub'@ }
     @{ Name='clsMainScreen'; Type='cls'; Code=@'
 Option Explicit
 
@@ -6882,8 +6943,7 @@ End Sub
 
 Public Sub Render()
     Setup
-End Sub
-'@ },
+End Sub'@ }
     @{ Name='clsMigrationScreen'; Type='cls'; Code=@'
 Option Explicit
 
@@ -6920,8 +6980,7 @@ End Sub
 
 Public Sub Render()
     Setup
-End Sub
-'@ },
+End Sub'@ }
     @{ Name='clsSearchScreen'; Type='cls'; Code=@'
 Option Explicit
 
@@ -6958,8 +7017,7 @@ End Sub
 
 Public Sub Render()
     Setup
-End Sub
-'@ },
+End Sub'@ }
     @{ Name='clsStorageScreen'; Type='cls'; Code=@'
 Option Explicit
 
@@ -6996,8 +7054,7 @@ End Sub
 
 Public Sub Render()
     Setup
-End Sub
-'@ },
+End Sub'@ }
     @{ Name='clsSystemSettingsScreen'; Type='cls'; Code=@'
 Option Explicit
 
@@ -7034,8 +7091,7 @@ End Sub
 
 Public Sub Render()
     Setup
-End Sub
-'@ },
+End Sub'@ }
     @{ Name='modEntryFormat'; Type='std'; Code=@'
 Option Explicit
 
@@ -7258,8 +7314,7 @@ Public Sub Btn_BackToList()
 ErrHandler:
     Call ShowError("シート遷移", Err.Description, _
                     "再度ボタンを押してください")
-End Sub
-'@ },
+End Sub'@ }
     @{ Name='modEntryKnowledge'; Type='std'; Code=@'
 Option Explicit
 
@@ -7619,8 +7674,7 @@ Public Sub Btn_MigrateFields()
 ErrHandler:
     Call ShowError("フィールド反映", Err.Description, _
                     "フォーマットIDとデータフォルダを確認してから再度実行してください")
-End Sub
-'@ },
+End Sub'@ }
     @{ Name='modEntryMain'; Type='std'; Code=@'
 Option Explicit
 
@@ -7871,8 +7925,7 @@ Private Sub LogDialogSuppressed(ByVal dialogType As String, _
     If Not lg Is Nothing Then
         lg.LogInfo "modEntryMain", "LogDialogSuppressed", dialogType & " " & operation & " " & detail & " " & action
     End If
-End Sub
-'@ },
+End Sub'@ }
     @{ Name='modEntrySearch'; Type='std'; Code=@'
 Option Explicit
 
@@ -8116,8 +8169,7 @@ Public Sub Btn_GoToEdit()
 ErrHandler:
     Call ShowError("修正遷移", Err.Description, _
                     "再度ボタンを押してください")
-End Sub
-'@ },
+End Sub'@ }
     @{ Name='modEntrySettings'; Type='std'; Code=@'
 Option Explicit
 
@@ -8152,8 +8204,7 @@ Public Sub Btn_ResetLog()
 ErrHandler:
     Call ShowError("ログリセット", Err.Description, _
                     "再度ボタンを押してください")
-End Sub
-'@ },
+End Sub'@ }
     @{ Name='modSpecExamples'; Type='std'; Code=@'
 Option Explicit
 
@@ -8255,8 +8306,7 @@ End Sub
 Public Sub frmCallback_searchResult_close(ByVal frm As Object)
     On Error Resume Next
     Unload frm
-End Sub
-'@ },
+End Sub'@ }
     @{ Name='modSetup'; Type='std'; Code=@'
 Option Explicit
 
@@ -8351,8 +8401,7 @@ Private Sub LogErrorSafe(ByVal funcName As String, ByVal stepName As String, ByV
     Dim lg As clsLogger
     Set lg = BuildLogger()
     If Not lg Is Nothing Then lg.LogErrorWithErr "modSetup", funcName, stepName, errNum, errDesc
-End Sub
-'@ },
+End Sub'@ }
     @{ Name='ThisWorkbook'; Type='doc'; Code=@'
 Option Explicit
 
@@ -8457,8 +8506,7 @@ Private Sub SetInitialVisibility()
             w.Visible = 0
         End If
     Next w
-End Sub
-'@ }
+End Sub'@ }
 )
 
 Write-Host ('[info] 同梱モジュール数: {0}' -f $Modules.Count)
