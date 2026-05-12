@@ -121,7 +121,7 @@ exit /b !PS_EXIT!
 
 ## STEP 3: ps1 の保存
 
-下のコードを **同じフォルダ** に `Install-KnowledgevbaModules.ps1` というファイル名で保存します。VBA モジュール本体 (50 個) がすべて埋め込まれているため、ファイルサイズは約 339 KB あります。
+下のコードを **同じフォルダ** に `Install-KnowledgevbaModules.ps1` というファイル名で保存します。VBA モジュール本体 (50 個) がすべて埋め込まれているため、ファイルサイズは約 338 KB あります。
 
 !!! warning "保存時の注意"
     メモ帳の場合、**[名前を付けて保存]** で **文字コードを「UTF-8 (BOM 付き)」** にしてください。BOM 無し UTF-8 や ANSI で保存すると日本語コメントが文字化けし、コンパイルエラーになります。VS Code を使う場合は右下のエンコーディング表示を **`UTF-8 with BOM`** に切り替えてください。
@@ -248,8 +248,7 @@ Public Sub Init(ByVal ts As String, _
     m_functionName = func
     m_level = lvl
     m_message = msg
-End Sub
-'@ },
+End Sub'@ }
     @{ Name='modCommon'; Type='std'; Code=@'
 Option Explicit
 
@@ -379,8 +378,7 @@ Public Function SheetExists(ByVal sheetName As String) As Boolean
     SheetExists = (Err.Number = 0 And Not ws Is Nothing)
     Err.Clear
     On Error GoTo 0
-End Function
-'@ },
+End Function'@ }
     @{ Name='modDateUtil'; Type='std'; Code=@'
 Option Explicit
 
@@ -483,8 +481,7 @@ Public Function Pad2(ByVal n As Long) As String
     Else
         Pad2 = CStr(n)
     End If
-End Function
-'@ },
+End Function'@ }
     @{ Name='modFileIO'; Type='std'; Code=@'
 Option Explicit
 
@@ -870,8 +867,7 @@ Private Function ConvertLocalPathToURL(ByVal localPath As String) As String
             ConvertLocalPathToURL = "file:///" & result
         End If
     End If
-End Function
-'@ },
+End Function'@ }
     @{ Name='modImageRender'; Type='std'; Code=@'
 Option Explicit
 
@@ -1104,8 +1100,7 @@ Public Function HasShapeWithPrefix(ByVal ws As Worksheet, _
     Exit Function
 ErrHandler:
     HasShapeWithPrefix = False
-End Function
-'@ },
+End Function'@ }
     @{ Name='modStringUtil'; Type='std'; Code=@'
 Option Explicit
 
@@ -1344,8 +1339,7 @@ Public Function IsValidKnowledgeId(ByVal knwNo As String) As Boolean
 
 ErrHandler:
     IsValidKnowledgeId = False
-End Function
-'@ },
+End Function'@ }
     @{ Name='modUIConfig'; Type='std'; Code=@'
 Option Explicit
 
@@ -1463,8 +1457,7 @@ Public Const UI_HINT_CELL_WRAP As Boolean = True
 ' タイトル列幅 (A:L) - 既存挙動と同じ
 ' ----------------------------------------------------------------
 ' タイトル帯の塗り範囲は A〜L 列固定。変更したい場合は
-' clsSheetRenderer.IScreenRenderer_RenderTitle 内の Range("A1:L1") を編集。
-'@ },
+' clsSheetRenderer.IScreenRenderer_RenderTitle 内の Range("A1:L1") を編集。'@ }
     @{ Name='IScreenRenderer'; Type='cls'; Code=@'
 Option Explicit
 
@@ -1514,8 +1507,7 @@ Public Sub RenderHeaderRow(ByVal startAddr As String, ByVal headerLabels As Vari
 End Sub
 
 Public Sub RenderEmptyState(ByVal cellAddr As String, ByVal message As String)
-End Sub
-'@ },
+End Sub'@ }
     @{ Name='clsButtonSpec'; Type='cls'; Code=@'
 Option Explicit
 
@@ -1603,8 +1595,7 @@ Public Sub Init(ByVal btnName As String, _
     m_groupName = groupName
     m_hintAddr = hintAddr
     m_hintText = hintText
-End Sub
-'@ },
+End Sub'@ }
     @{ Name='clsControlSpec'; Type='cls'; Code=@'
 Option Explicit
 
@@ -1713,8 +1704,7 @@ Public Sub Init(ByVal cType As String, ByVal nm As String, _
     m_height = h
     m_caption = cap
     m_onClick = onClk
-End Sub
-'@ },
+End Sub'@ }
     @{ Name='clsFieldMigrator'; Type='cls'; Code=@'
 Option Explicit
 
@@ -2014,8 +2004,7 @@ Private Function CombineFilePath(ByVal folder As String, _
     Else
         CombineFilePath = folder & "\" & fileName
     End If
-End Function
-'@ },
+End Function'@ }
     @{ Name='clsFieldSpec'; Type='cls'; Code=@'
 Option Explicit
 
@@ -2139,8 +2128,7 @@ Public Sub SetCellAddrs(ByVal orderAddr As String, _
     m_labelAddr = labelAddr
     m_typeAddr = typeAddr
     m_inputAddr = inputAddr
-End Sub
-'@ },
+End Sub'@ }
     @{ Name='clsFormSpec'; Type='cls'; Code=@'
 Option Explicit
 
@@ -2229,8 +2217,7 @@ End Function
 ' ================================================================
 Public Function ControlCount() As Long
     ControlCount = m_controls.Count
-End Function
-'@ },
+End Function'@ }
     @{ Name='clsFormatManager'; Type='cls'; Code=@'
 Option Explicit
 
@@ -2686,8 +2673,7 @@ Private Sub RenderFormatPreview(ByVal ws As Worksheet, _
             "(" & designWs.Cells(i, FD_FIELD_COL_TYPE).Value & " 入力エリア)"
         previewRow = previewRow + 1
     Next i
-End Sub
-'@ },
+End Sub'@ }
     @{ Name='clsKnowledgeManager'; Type='cls'; Code=@'
 Option Explicit
 
@@ -3228,8 +3214,7 @@ End Function
 ' ファイル内容からCreatedDateを抽出
 Private Function ExtractCreatedDate(ByVal content As String) As String
     ExtractCreatedDate = ExtractStanzaValue(content, "CreatedDate")
-End Function
-'@ },
+End Function'@ }
     @{ Name='clsLogger'; Type='cls'; Code=@'
 Option Explicit
 
@@ -3488,8 +3473,7 @@ Private Function GetLastLogRow() As Long
     r = m_logSheet.Cells(m_logSheet.Rows.Count, 1).End(-4162).Row  ' xlUp = -4162
     If r < LOG_DATA_START_ROW Then r = LOG_DATA_START_ROW - 1
     GetLastLogRow = r
-End Function
-'@ },
+End Function'@ }
     @{ Name='clsScreenSpec'; Type='cls'; Code=@'
 Option Explicit
 
@@ -3616,8 +3600,7 @@ End Sub
 ' ================================================================
 Public Sub AddField(ByVal fld As clsFieldSpec)
     m_fields.Add fld
-End Sub
-'@ },
+End Sub'@ }
     @{ Name='clsSearchEngine'; Type='cls'; Code=@'
 Option Explicit
 
@@ -3641,15 +3624,23 @@ Option Explicit
 ' ====================================================================
 
 ' --- 検索シートのセル位置 ---
+' BUG-001 修正 (2026-05-12):
+'   モック spec の AddField 化に伴い、行 8/9 を「検索モード/対象フィールド」
+'   から「カテゴリ/担当者」絞込条件に振替。
+'   searchMode/targetField は内部固定 (AND / "(全フィールド)") として運用。
 Private Const SS_ROW_DIRECT_NO As Long = 3
 Private Const SS_COL_DIRECT_NO As Long = 3
 Private Const SS_ROW_FMT_ID As Long = 6
 Private Const SS_ROW_KEYWORDS As Long = 7
-Private Const SS_ROW_MODE As Long = 8
-Private Const SS_ROW_TARGET_FIELD As Long = 9
+Private Const SS_ROW_CATEGORY As Long = 8
+Private Const SS_ROW_ASSIGNEE As Long = 9
 Private Const SS_ROW_DATE_FROM As Long = 10
 Private Const SS_ROW_DATE_TO As Long = 11
 Private Const SS_COL_CONDITION_VALUE As Long = 3
+
+' --- 内部固定値 (UI 化されない searchMode/targetField の既定) ---
+Private Const DEFAULT_SEARCH_MODE As String = "AND"
+Private Const DEFAULT_TARGET_FIELD As String = ""  ' 空 = 全フィールド対象
 
 ' --- 検索結果一覧の位置 (rev22 + image_ext rev1) ---
 Private Const SS_RESULT_START_ROW As Long = 15
@@ -3738,22 +3729,31 @@ Public Function SearchByKeywords() As Long
 
     Dim formatId As String
     Dim keywords As String
-    Dim searchMode As String
-    Dim targetField As String
+    Dim category As String
+    Dim assignee As String
     Dim fromDateStr As String
     Dim toDateStr As String
 
     formatId = CStr(ws.Cells(SS_ROW_FMT_ID, SS_COL_CONDITION_VALUE).Value)
     keywords = CStr(ws.Cells(SS_ROW_KEYWORDS, SS_COL_CONDITION_VALUE).Value)
-    searchMode = CStr(ws.Cells(SS_ROW_MODE, SS_COL_CONDITION_VALUE).Value)
-    targetField = CStr(ws.Cells(SS_ROW_TARGET_FIELD, SS_COL_CONDITION_VALUE).Value)
+    category = CStr(ws.Cells(SS_ROW_CATEGORY, SS_COL_CONDITION_VALUE).Value)
+    assignee = CStr(ws.Cells(SS_ROW_ASSIGNEE, SS_COL_CONDITION_VALUE).Value)
     fromDateStr = CStr(ws.Cells(SS_ROW_DATE_FROM, SS_COL_CONDITION_VALUE).Value)
     toDateStr = CStr(ws.Cells(SS_ROW_DATE_TO, SS_COL_CONDITION_VALUE).Value)
+
+    ' BUG-001 修正: spec の placeholder 文字列が入力値として誤検出されないよう除去
+    keywords = StripPlaceholder(keywords)
+    category = StripPlaceholder(category)
+    assignee = StripPlaceholder(assignee)
+    fromDateStr = StripPlaceholder(fromDateStr)
+    toDateStr = StripPlaceholder(toDateStr)
 
     Dim matched() As String
     Dim scores() As Double
     Dim matchCount As Long
-    matchCount = ScanAndMatch(formatId, keywords, searchMode, targetField, _
+    matchCount = ScanAndMatch(formatId, keywords, _
+                                DEFAULT_SEARCH_MODE, DEFAULT_TARGET_FIELD, _
+                                category, assignee, _
                                 fromDateStr, toDateStr, matched, scores)
 
     Call ClearResults(ws)
@@ -3818,8 +3818,10 @@ End Sub
 
 ' ================================================================
 ' 関数名: ScoreMatchPublic
-' 概要:   ScoreMatch のテスト用 Public ラッパ。引数は ScoreMatch と同じ。
-' 戻り値: Long - 0=miss、1+=score
+' 概要:   ScoreMatch のテスト用 Public ラッパ。
+'         BUG-001 修正 (2026-05-12): category / assignee 引数を追加。
+'         既存テスト互換のため searchMode/targetField は引き続き受け取る。
+' 戻り値: Double - 0=miss、1+=score
 ' 備考:   テスト層 (T4-006/007) から直接呼び出し可能にするための公開関数。
 '         本番フローは ScanAndMatch 経由で内部呼び出しされるため通常は使わない。
 ' ================================================================
@@ -3829,7 +3831,9 @@ Public Function ScoreMatchPublic(ByVal content As String, _
                                    ByVal searchMode As String, _
                                    ByVal targetField As String, _
                                    ByVal fromDateStr As String, _
-                                   ByVal toDateStr As String) As Double
+                                   ByVal toDateStr As String, _
+                                   Optional ByVal category As String = "", _
+                                   Optional ByVal assignee As String = "") As Double
     Dim fromDate As Date
     Dim toDate As Date
     Dim hasFromDate As Boolean
@@ -3838,7 +3842,8 @@ Public Function ScoreMatchPublic(ByVal content As String, _
     hasToDate = TryParseDate(toDateStr, toDate)
 
     ScoreMatchPublic = ScoreMatch(content, formatId, keywords, searchMode, _
-                                    targetField, fromDate, hasFromDate, _
+                                    targetField, category, assignee, _
+                                    fromDate, hasFromDate, _
                                     toDate, hasToDate)
 End Function
 
@@ -3882,6 +3887,8 @@ Private Function ScanAndMatch(ByVal formatId As String, _
                                 ByVal keywords As String, _
                                 ByVal searchMode As String, _
                                 ByVal targetField As String, _
+                                ByVal category As String, _
+                                ByVal assignee As String, _
                                 ByVal fromDateStr As String, _
                                 ByVal toDateStr As String, _
                                 ByRef outMatched() As String, _
@@ -3914,7 +3921,8 @@ Private Function ScanAndMatch(ByVal formatId As String, _
         If content <> "" Then
             Dim sc As Double
             sc = ScoreMatch(content, formatId, keywords, searchMode, _
-                              targetField, fromDate, hasFromDate, _
+                              targetField, category, assignee, _
+                              fromDate, hasFromDate, _
                               toDate, hasToDate)
             If sc > 0# Then
                 If matchCount < RESULT_MAX_ROWS Then
@@ -3972,6 +3980,8 @@ Private Function ScoreMatch(ByVal content As String, _
                               ByVal keywords As String, _
                               ByVal searchMode As String, _
                               ByVal targetField As String, _
+                              ByVal category As String, _
+                              ByVal assignee As String, _
                               ByVal fromDate As Date, _
                               ByVal hasFromDate As Boolean, _
                               ByVal toDate As Date, _
@@ -3981,6 +3991,26 @@ Private Function ScoreMatch(ByVal content As String, _
         Dim actualFmt As String
         actualFmt = ExtractStanzaValue(content, "FormatID")
         If actualFmt <> formatId Then
+            ScoreMatch = 0#
+            Exit Function
+        End If
+    End If
+
+    ' --- BUG-001 修正: カテゴリ絞込 (部分一致、大文字小文字無視) ---
+    If Trim(category) <> "" Then
+        Dim categoryActual As String
+        categoryActual = ExtractKeyValueFromItems(content, "カテゴリ")
+        If InStr(1, LCase(categoryActual), LCase(Trim(category))) = 0 Then
+            ScoreMatch = 0#
+            Exit Function
+        End If
+    End If
+
+    ' --- BUG-001 修正: 担当者絞込 (部分一致、大文字小文字無視) ---
+    If Trim(assignee) <> "" Then
+        Dim assigneeActual As String
+        assigneeActual = ExtractKeyValueFromItems(content, "担当者")
+        If InStr(1, LCase(assigneeActual), LCase(Trim(assignee))) = 0 Then
             ScoreMatch = 0#
             Exit Function
         End If
@@ -4120,8 +4150,11 @@ Private Function IsMatch(ByVal content As String, _
                            ByVal hasFromDate As Boolean, _
                            ByVal toDate As Date, _
                            ByVal hasToDate As Boolean) As Boolean
+    ' BUG-001 修正: ScoreMatch のシグニチャに category/assignee が追加された
+    '              ため、IsMatch は空文字を渡して既存判定と等価動作させる。
     IsMatch = (ScoreMatch(content, formatId, keywords, searchMode, _
-                           targetField, fromDate, hasFromDate, _
+                           targetField, "", "", _
+                           fromDate, hasFromDate, _
                            toDate, hasToDate) > 0#)
 End Function
 
@@ -4387,69 +4420,7 @@ Private Sub RenderKnowledgeToDisplay(ByVal ws As Worksheet, _
                                        ByVal content As String)
     Dim formatId As String
     Dim formatName As String
-    formatId = ExtractStanzaValue(content, "FormatID")
-    formatName = ExtractStanzaValue(content, "FormatName")
-
-    ws.Cells(KD_ROW_KNW_NO, 1).Value = "ナレッジ番号:"
-    ws.Cells(KD_ROW_KNW_NO, KD_COL_KNW_NO_VAL).Value = knowledgeNo
-    ws.Cells(KD_ROW_KNW_NO, KD_COL_FMT_INFO).Value = _
-        formatName & " (" & formatId & ")"
-
-    Dim lines() As String
-    lines = Split(content, vbCrLf)
-
-    Dim targetRow As Long
-    targetRow = KD_FORM_START_ROW
-
-    Dim i As Long
-    For i = LBound(lines) To UBound(lines)
-        If InStr(lines(i), "FieldNo=") > 0 And _
-           InStr(lines(i), "FieldName=") > 0 Then
-            ws.Cells(targetRow, KD_COL_FIELD_NO).Value = _
-                ExtractKeyFromItem(lines(i), "FieldNo")
-            ws.Cells(targetRow, KD_COL_FIELD_NAME).Value = _
-                ExtractKeyFromItem(lines(i), "FieldName")
-            ws.Cells(targetRow, KD_COL_FIELD_VALUE).NumberFormat = "@"
-            ws.Cells(targetRow, KD_COL_FIELD_VALUE).Value = _
-                SafeCellText(ExtractKeyFromItem(lines(i), "Value"))
-            targetRow = targetRow + 1
-        End If
-    Next i
-End Sub
-
-' ================================================================
-' 関数名: RenderDetailImagePane
-' 概要:   ナレッジ表示シートの J4:N20 領域に詳細画像を貼付
-'         画像が無い場合は薄字で「[画像未配置: ...]」を表示
-' ================================================================
-Private Sub RenderDetailImagePane(ByVal ws As Worksheet, _
-                                    ByVal knowledgeNo As String, _
-                                    ByVal content As String)
-    On Error Resume Next
-    Dim imgRel As String
-    imgRel = ExtractImagePath(content, knowledgeNo)
-    Dim imgFull As String
-    imgFull = ResolveImageFullPath(imgRel, m_dataFolder)
-
-    Call RenderDetailImage(ws, _
-                            KD_DETAIL_IMG_TOP_ROW, KD_DETAIL_IMG_LEFT_COL, _
-                            KD_DETAIL_IMG_BOT_ROW, KD_DETAIL_IMG_RIGHT_COL, _
-                            imgFull, knowledgeNo)
-End Sub
-
-' ================================================================
-' 関数名: CombineFilePath
-' 概要:   フォルダパスとファイル名を結合
-' ================================================================
-Private Function CombineFilePath(ByVal folder As String, _
-                                   ByVal fileName As String) As String
-    If Right(folder, 1) = "" Or Right(folder, 1) = "/" Then
-        CombineFilePath = folder & fileName
-    Else
-        CombineFilePath = folder & "" & fileName
-    End If
-End Function
-'@ },
+    formatId = ExtractStanzaValue(content, "FormatID")'@ }
     @{ Name='clsSectionSpec'; Type='cls'; Code=@'
 Option Explicit
 
@@ -4488,8 +4459,7 @@ Public Sub Init(ByVal address As String, ByVal label As String, ByVal colorHex A
     m_address = address
     m_label = label
     m_colorHex = colorHex
-End Sub
-'@ },
+End Sub'@ }
     @{ Name='clsSetupOrchestrator'; Type='cls'; Code=@'
 Option Explicit
 
@@ -4797,8 +4767,7 @@ End Sub
 
 Private Sub LogEnter(ByVal funcName As String, ByVal stepName As String)
     Call LogTraceSafe(funcName, "STEP " & stepName)
-End Sub
-'@ },
+End Sub'@ }
     @{ Name='clsSheetRenderer'; Type='cls'; Code=@'
 Option Explicit
 
@@ -5258,8 +5227,7 @@ Private Sub LogErrorWithErrSafe(ByVal funcName As String, ByVal stepName As Stri
     Dim lg As clsLogger
     Set lg = BuildLogger()
     If Not lg Is Nothing Then lg.LogErrorWithErr "clsSheetRenderer", funcName, stepName, errNum, errDesc
-End Sub
-'@ },
+End Sub'@ }
     @{ Name='clsStorageResolver'; Type='cls'; Code=@'
 Option Explicit
 
@@ -5422,8 +5390,7 @@ Private Function CombinePath(ByVal basePath As String, _
     Else
         CombinePath = basePath & sep & fileName
     End If
-End Function
-'@ },
+End Function'@ }
     @{ Name='clsTaskController'; Type='cls'; Code=@'
 Option Explicit
 
@@ -5610,8 +5577,7 @@ Private Function IsInArray(ByVal target As String, ByVal arr As Variant) As Bool
         End If
     Next i
     IsInArray = False
-End Function
-'@ },
+End Function'@ }
     @{ Name='clsUserFormRenderer'; Type='cls'; Code=@'
 Option Explicit
 
@@ -5684,8 +5650,7 @@ End Sub
 Private Sub IScreenRenderer_RenderEmptyState(ByVal cellAddr As String, _
                                               ByVal message As String)
     Err.Raise NOT_IMPL_NUM, NOT_IMPL_SRC, NOT_IMPL_MSG
-End Sub
-'@ },
+End Sub'@ }
     @{ Name='modFactory'; Type='std'; Code=@'
 Option Explicit
 
@@ -5794,8 +5759,7 @@ Public Function CreateScreen(ByVal screenId As String, _
             lg.Init renderer, spec
             Set CreateScreen = lg
     End Select
-End Function
-'@ },
+End Function'@ }
     @{ Name='modFormBuilder'; Type='std'; Code=@'
 Option Explicit
 
@@ -5993,8 +5957,7 @@ Public Function ProgIDFromType(ByVal t As String) As String
         Case Else
             ProgIDFromType = PROGID_LABEL
     End Select
-End Function
-'@ },
+End Function'@ }
     @{ Name='modScreenRender'; Type='std'; Code=@'
 Option Explicit
 
@@ -6116,8 +6079,7 @@ Public Sub LogScreenError(ByVal className As String, _
     If Not lg Is Nothing Then
         lg.LogErrorWithErr className, funcName, stepName, errNum, errDesc
     End If
-End Sub
-'@ },
+End Sub'@ }
     @{ Name='modScreenSpecRegistry'; Type='std'; Code=@'
 Option Explicit
 
@@ -6392,6 +6354,24 @@ End Function
 
 ' ================================================================
 ' 関数名: BuildSearchSpec (M-08)
+' 概要:   検索画面の spec。BUG-001 修正 (2026-05-12):
+'         AddField 呼出が 1 件も無く、キーワード/フィルタ入力欄が
+'         描画されなかった不具合を是正。
+'         入力欄は clsSearchEngine が読む位置 (col C, 行 6-11) と
+'         一致させ、絞込条件をそのまま検索エンジンに渡せるようにした。
+'         レイアウト:
+'           Row 2  [検索条件] section
+'           Row 6  フォーマット種別  (Input C6  ⇔ SS_ROW_FMT_ID)
+'           Row 7  キーワード        (Input C7  ⇔ SS_ROW_KEYWORDS)
+'           Row 8  カテゴリ          (Input C8  ⇔ SS_ROW_CATEGORY)
+'           Row 9  担当者            (Input C9  ⇔ SS_ROW_ASSIGNEE)
+'           Row 10 期間 from         (Input C10 ⇔ SS_ROW_DATE_FROM)
+'           Row 11 期間 to           (Input C11 ⇔ SS_ROW_DATE_TO)
+'           Row 13 [検索結果] section
+'           Row 14 ヘッダ行
+'           Row 15 EmptyState/結果開始 (engine の SS_RESULT_START_ROW=15 と一致)
+'           Row 20 [ナビゲーション]
+'           K21    ← メインに戻る
 ' ================================================================
 Private Function BuildSearchSpec() As clsScreenSpec
     Dim s As clsScreenSpec
@@ -6400,15 +6380,31 @@ Private Function BuildSearchSpec() As clsScreenSpec
     s.SheetName = SHEET_SEARCH
     s.Title = "[v2] M-08 ナレッジ検索 (キーワード + フィルタ)"
     s.TitleColorHex = COLOR_TITLE_BLUE
-    s.BackToMainAddr = "K13"
+    s.BackToMainAddr = "K21"
 
     Call AddSec(s, "A2", "[検索条件]", COLOR_SECTION_BLUE2)
-    Call AddSec(s, "A6", "[検索結果 (0 件)]", COLOR_SECTION_BLUE2)
-    Call AddSec(s, "A12", "[ナビゲーション]", COLOR_SECTION_BLUE2)
+    Call AddSec(s, "A13", "[検索結果 (0 件)]", COLOR_SECTION_BLUE2)
+    Call AddSec(s, "A20", "[ナビゲーション]", COLOR_SECTION_BLUE2)
 
-    s.HeaderRowAddr = "A7"
+    ' --- 絞込フィールド (clsSearchEngine が col C を読込) ---
+    ' fieldOrder 1..6、行は engine の SS_ROW_* と完全一致。
+    ' いずれも required=False (絞込条件は任意入力)。
+    Call AddSearchField(s, 1,  6, "フォーマット種別", "選択 1行 (ドロップダウン)", _
+                         False, 0, "(全フォーマット ― 未選択時は絞込なし)")
+    Call AddSearchField(s, 2,  7, "キーワード",       "単一行 (最大200文字)", _
+                         False, 200, "(空白区切りで複数キーワード AND 検索)")
+    Call AddSearchField(s, 3,  8, "カテゴリ",         "単一行 / 選択", _
+                         False, 100, "(カテゴリ名で絞込 ― 部分一致)")
+    Call AddSearchField(s, 4,  9, "担当者",           "単一行", _
+                         False, 100, "(担当者名で絞込 ― 部分一致)")
+    Call AddSearchField(s, 5, 10, "期間 (from)",      "日付 YYYY/MM/DD", _
+                         False, 10, "(開始日 ― 空欄なら下限なし)")
+    Call AddSearchField(s, 6, 11, "期間 (to)",        "日付 YYYY/MM/DD", _
+                         False, 10, "(終了日 ― 空欄なら上限なし)")
+
+    s.HeaderRowAddr = "A14"
     s.HeaderLabels = Array("#", "ナレッジ番号", "フォーマット", "登録日", "更新日", "件名/事象", "カテゴリ", "担当者", "表示", "修正", "削除")
-    s.EmptyStateAddr = "A8"
+    s.EmptyStateAddr = "A15"
     s.EmptyStateText = "(検索結果なし ― キーワード入力後に検索ボタンを押下)"
 
     ' ボタンキャプション prefix は modUIConfig.UI_BTN_CAPTION_PREFIX が制御。
@@ -6652,50 +6648,7 @@ Private Sub AddBtn(ByVal s As clsScreenSpec, _
                     ByVal groupName As String, _
                     ByVal hintAddr As String, ByVal hintText As String)
     Dim btn As clsButtonSpec
-    Set btn = New clsButtonSpec
-    btn.Init btnName, caption, cellAddr, colorHex, groupName, hintAddr, hintText
-    s.AddButton btn
-End Sub
-
-' ================================================================
-' 関数名: AddStandardFieldRows
-' 概要:   標準ナレッジフィールド（件名/発生日時/担当者/カテゴリ/優先度/事象/原因/対処内容）
-'         を指定行から順に追加。データ無くてもラベルが見える「空状態 UI」を実現。
-' 引数:   s         - clsScreenSpec
-'         startRow  - フィールド開始行
-' ================================================================
-Private Sub AddStandardFieldRows(ByVal s As clsScreenSpec, ByVal startRow As Long)
-    Dim names As Variant
-    Dim types As Variant
-    Dim reqs As Variant
-    Dim rows As Variant
-    Dim hints As Variant
-    names = Array("件名", "発生日時", "担当者", "カテゴリ", "優先度", "事象", "原因", "対処内容")
-    types = Array("単一行 1行", "日時 1行", "単一行 1行", "選択 1行", "選択 1行", "複数行 5行", "複数行 3行", "複数行 5行")
-    reqs  = Array(True,    True,    True,    True,    True,    True,    True,    True)
-    rows  = Array(1,       1,       1,       1,       1,       5,       3,       5)
-    hints = Array("(単一行入力)", "(現在日時を既定で表示)", "(単一行入力)", "(選択してください)", "(選択 ― 高/中/低)", _
-                   "(複数行入力 / Alt+Enter で改行)", "(複数行入力 / Alt+Enter で改行)", "(複数行入力 / Alt+Enter で改行)")
-    Dim i As Long
-    For i = LBound(names) To UBound(names)
-        Call AddLabelField(s, i + 1, CStr(names(i)), CStr(types(i)), CBool(reqs(i)))
-    Next i
-End Sub
-
-' ================================================================
-' AddLabelField: clsFieldSpec を生成して s.Fields に追加
-' ================================================================
-Private Sub AddLabelField(ByVal s As clsScreenSpec, _
-                           ByVal fieldOrder As Long, _
-                           ByVal label As String, _
-                           ByVal typeText As String, _
-                           ByVal required As Boolean)
-    Dim fld As clsFieldSpec
-    Set fld = New clsFieldSpec
-    fld.Init fieldOrder, label, typeText, required, 1, ""
-    s.AddField fld
-End Sub
-'@ },
+    Set btn ='@ }
     @{ Name='clsFileFormatScreen'; Type='cls'; Code=@'
 Option Explicit
 
@@ -6732,8 +6685,7 @@ End Sub
 
 Public Sub Render()
     Setup
-End Sub
-'@ },
+End Sub'@ }
     @{ Name='clsFormatDesignScreen'; Type='cls'; Code=@'
 Option Explicit
 
@@ -6770,8 +6722,7 @@ End Sub
 
 Public Sub Render()
     Setup
-End Sub
-'@ },
+End Sub'@ }
     @{ Name='clsFormatListScreen'; Type='cls'; Code=@'
 Option Explicit
 
@@ -6808,8 +6759,7 @@ End Sub
 
 Public Sub Render()
     Setup
-End Sub
-'@ },
+End Sub'@ }
     @{ Name='clsFormatPreviewScreen'; Type='cls'; Code=@'
 Option Explicit
 
@@ -6846,8 +6796,7 @@ End Sub
 
 Public Sub Render()
     Setup
-End Sub
-'@ },
+End Sub'@ }
     @{ Name='clsKnowledgeEditScreen'; Type='cls'; Code=@'
 Option Explicit
 
@@ -6884,8 +6833,7 @@ End Sub
 
 Public Sub Render()
     Setup
-End Sub
-'@ },
+End Sub'@ }
     @{ Name='clsKnowledgeListScreen'; Type='cls'; Code=@'
 Option Explicit
 
@@ -6922,8 +6870,7 @@ End Sub
 
 Public Sub Render()
     Setup
-End Sub
-'@ },
+End Sub'@ }
     @{ Name='clsKnowledgeRegisterScreen'; Type='cls'; Code=@'
 Option Explicit
 
@@ -6960,8 +6907,7 @@ End Sub
 
 Public Sub Render()
     Setup
-End Sub
-'@ },
+End Sub'@ }
     @{ Name='clsKnowledgeViewScreen'; Type='cls'; Code=@'
 Option Explicit
 
@@ -6998,8 +6944,7 @@ End Sub
 
 Public Sub Render()
     Setup
-End Sub
-'@ },
+End Sub'@ }
     @{ Name='clsLogScreen'; Type='cls'; Code=@'
 Option Explicit
 
@@ -7036,8 +6981,7 @@ End Sub
 
 Public Sub Render()
     Setup
-End Sub
-'@ },
+End Sub'@ }
     @{ Name='clsMainScreen'; Type='cls'; Code=@'
 Option Explicit
 
@@ -7074,8 +7018,7 @@ End Sub
 
 Public Sub Render()
     Setup
-End Sub
-'@ },
+End Sub'@ }
     @{ Name='clsMigrationScreen'; Type='cls'; Code=@'
 Option Explicit
 
@@ -7112,8 +7055,7 @@ End Sub
 
 Public Sub Render()
     Setup
-End Sub
-'@ },
+End Sub'@ }
     @{ Name='clsSearchScreen'; Type='cls'; Code=@'
 Option Explicit
 
@@ -7150,8 +7092,7 @@ End Sub
 
 Public Sub Render()
     Setup
-End Sub
-'@ },
+End Sub'@ }
     @{ Name='clsStorageScreen'; Type='cls'; Code=@'
 Option Explicit
 
@@ -7188,8 +7129,7 @@ End Sub
 
 Public Sub Render()
     Setup
-End Sub
-'@ },
+End Sub'@ }
     @{ Name='clsSystemSettingsScreen'; Type='cls'; Code=@'
 Option Explicit
 
@@ -7226,8 +7166,7 @@ End Sub
 
 Public Sub Render()
     Setup
-End Sub
-'@ },
+End Sub'@ }
     @{ Name='modEntryFormat'; Type='std'; Code=@'
 Option Explicit
 
@@ -7450,8 +7389,7 @@ Public Sub Btn_BackToList()
 ErrHandler:
     Call ShowError("シート遷移", Err.Description, _
                     "再度ボタンを押してください")
-End Sub
-'@ },
+End Sub'@ }
     @{ Name='modEntryKnowledge'; Type='std'; Code=@'
 Option Explicit
 
@@ -7811,8 +7749,7 @@ Public Sub Btn_MigrateFields()
 ErrHandler:
     Call ShowError("フィールド反映", Err.Description, _
                     "フォーマットIDとデータフォルダを確認してから再度実行してください")
-End Sub
-'@ },
+End Sub'@ }
     @{ Name='modEntryMain'; Type='std'; Code=@'
 Option Explicit
 
@@ -8063,8 +8000,7 @@ Private Sub LogDialogSuppressed(ByVal dialogType As String, _
     If Not lg Is Nothing Then
         lg.LogInfo "modEntryMain", "LogDialogSuppressed", dialogType & " " & operation & " " & detail & " " & action
     End If
-End Sub
-'@ },
+End Sub'@ }
     @{ Name='modEntrySearch'; Type='std'; Code=@'
 Option Explicit
 
@@ -8076,12 +8012,15 @@ Option Explicit
 ' ================================================================
 
 ' --- 検索シート 位置定数 ---
+' BUG-001 修正 (2026-05-12):
+'   行 8/9 を MODE/TARGET_FIELD から CATEGORY/ASSIGNEE に振替。
+'   clsSearchEngine の SS_ROW_* と完全一致させる。
 Private Const SS_ROW_DIRECT_NO As Long = 3
 Private Const SS_COL_DIRECT_NO As Long = 3
 Private Const SS_ROW_FMT_ID As Long = 6
 Private Const SS_ROW_KEYWORDS As Long = 7
-Private Const SS_ROW_MODE As Long = 8
-Private Const SS_ROW_TARGET_FIELD As Long = 9
+Private Const SS_ROW_CATEGORY As Long = 8
+Private Const SS_ROW_ASSIGNEE As Long = 9
 Private Const SS_ROW_DATE_FROM As Long = 10
 Private Const SS_ROW_DATE_TO As Long = 11
 Private Const SS_COL_CONDITION As Long = 3
@@ -8186,8 +8125,8 @@ Public Sub Btn_SearchClear()
     ws.Cells(SS_ROW_DIRECT_NO, SS_COL_DIRECT_NO).Value = ""
     ws.Cells(SS_ROW_FMT_ID, SS_COL_CONDITION).Value = ""
     ws.Cells(SS_ROW_KEYWORDS, SS_COL_CONDITION).Value = ""
-    ws.Cells(SS_ROW_MODE, SS_COL_CONDITION).Value = ""
-    ws.Cells(SS_ROW_TARGET_FIELD, SS_COL_CONDITION).Value = ""
+    ws.Cells(SS_ROW_CATEGORY, SS_COL_CONDITION).Value = ""
+    ws.Cells(SS_ROW_ASSIGNEE, SS_COL_CONDITION).Value = ""
     ws.Cells(SS_ROW_DATE_FROM, SS_COL_CONDITION).Value = ""
     ws.Cells(SS_ROW_DATE_TO, SS_COL_CONDITION).Value = ""
     
@@ -8302,14 +8241,7 @@ Public Sub Btn_GoToEdit()
     controller.Init logger
     controller.SwitchToTask TASK_EDIT
     
-    editWs.Activate
-    Exit Sub
-
-ErrHandler:
-    Call ShowError("修正遷移", Err.Description, _
-                    "再度ボタンを押してください")
-End Sub
-'@ },
+    editWs.'@ }
     @{ Name='modEntrySettings'; Type='std'; Code=@'
 Option Explicit
 
@@ -8344,8 +8276,7 @@ Public Sub Btn_ResetLog()
 ErrHandler:
     Call ShowError("ログリセット", Err.Description, _
                     "再度ボタンを押してください")
-End Sub
-'@ },
+End Sub'@ }
     @{ Name='modSpecExamples'; Type='std'; Code=@'
 Option Explicit
 
@@ -8447,8 +8378,7 @@ End Sub
 Public Sub frmCallback_searchResult_close(ByVal frm As Object)
     On Error Resume Next
     Unload frm
-End Sub
-'@ },
+End Sub'@ }
     @{ Name='modSetup'; Type='std'; Code=@'
 Option Explicit
 
@@ -8543,8 +8473,7 @@ Private Sub LogErrorSafe(ByVal funcName As String, ByVal stepName As String, ByV
     Dim lg As clsLogger
     Set lg = BuildLogger()
     If Not lg Is Nothing Then lg.LogErrorWithErr "modSetup", funcName, stepName, errNum, errDesc
-End Sub
-'@ },
+End Sub'@ }
     @{ Name='ThisWorkbook'; Type='doc'; Code=@'
 Option Explicit
 
@@ -8649,8 +8578,7 @@ Private Sub SetInitialVisibility()
             w.Visible = 0
         End If
     Next w
-End Sub
-'@ }
+End Sub'@ }
 )
 
 Write-Host ('[info] 同梱モジュール数: {0}' -f $Modules.Count)
