@@ -121,7 +121,7 @@ exit /b !PS_EXIT!
 
 ## STEP 3: ps1 の保存
 
-下のコードを **同じフォルダ** に `Install-KnowledgevbaModules.ps1` というファイル名で保存します。VBA モジュール本体 (49 個) がすべて埋め込まれているため、ファイルサイズは約 327 KB あります。
+下のコードを **同じフォルダ** に `Install-KnowledgevbaModules.ps1` というファイル名で保存します。VBA モジュール本体 (49 個) がすべて埋め込まれているため、ファイルサイズは約 331 KB あります。
 
 !!! warning "保存時の注意"
     メモ帳の場合、**[名前を付けて保存]** で **文字コードを「UTF-8 (BOM 付き)」** にしてください。BOM 無し UTF-8 や ANSI で保存すると日本語コメントが文字化けし、コンパイルエラーになります。VS Code を使う場合は右下のエンコーディング表示を **`UTF-8 with BOM`** に切り替えてください。
@@ -3334,6 +3334,31 @@ Private Sub Class_Initialize()
     m_externalFailCount = 0
     m_debugLevel = "INFO"
 End Sub
+
+' ================================================================
+' 関数名: WriteToExternalFileSafe
+' 概要: シートに書かず外部ファイル(C:\kvba\runtime.log)だけ Append
+' ================================================================
+Private Sub WriteToExternalFileSafe(ByVal modName As String, _
+                                     ByVal funcName As String, _
+                                     ByVal level As String, _
+                                     ByVal message As String)
+    If m_externalDisabled Then Exit Sub
+    On Error Resume Next
+    Dim ts As String
+    ts = Format$(Now(), "yyyy-mm-dd hh:nn:ss")
+    Dim fno As Integer
+    fno = FreeFile
+    Open m_externalPath For Append As #fno
+    Print #fno, "[" & ts & "] [" & level & "] [" & modName & "." & funcName & "] " & message
+    Close #fno
+    If Err.Number <> 0 Then
+        m_externalFailCount = m_externalFailCount + 1
+        If m_externalFailCount > 3 Then m_externalDisabled = True
+        Err.Clear
+    End If
+    On Error GoTo 0
+End Sub
 '@ },
     @{ Name='clsScreenSpec'; Type='cls'; Code=@'
 Option Explicit
@@ -4611,6 +4636,38 @@ Private Sub DeleteEmptyDefaultSheets()
     Application.DisplayAlerts = True
     Call LogTraceSafe("DeleteEmptyDefaultSheets", "deleted=" & deleted)
 End Sub
+
+' ================================================================
+' --- Safe ログヘルパー (clsLogger 取得失敗時に握りつぶす) ---
+' ================================================================
+Private Sub LogTraceSafe(ByVal funcName As String, ByVal msg As String)
+    On Error Resume Next
+    Dim lg As clsLogger
+    Set lg = BuildLogger()
+    If Not lg Is Nothing Then lg.LogTrace "clsSetupOrchestrator", funcName, msg
+End Sub
+
+Private Sub LogWarnSafe(ByVal funcName As String, ByVal msg As String)
+    On Error Resume Next
+    Dim lg As clsLogger
+    Set lg = BuildLogger()
+    If Not lg Is Nothing Then lg.LogWarn "clsSetupOrchestrator", funcName, msg
+End Sub
+
+Private Sub LogErrorSafe(ByVal funcName As String, ByVal stepName As String, ByVal errNum As Long, ByVal errDesc As String)
+    On Error Resume Next
+    Dim lg As clsLogger
+    Set lg = BuildLogger()
+    If Not lg Is Nothing Then lg.LogErrorWithErr "clsSetupOrchestrator", funcName, stepName, errNum, errDesc
+End Sub
+
+Private Sub LogErrorWithErrSafe(ByVal funcName As String, ByVal stepName As String, ByVal errNum As Long, ByVal errDesc As String)
+    Call LogErrorSafe(funcName, stepName, errNum, errDesc)
+End Sub
+
+Private Sub LogEnter(ByVal funcName As String, ByVal stepName As String)
+    Call LogTraceSafe(funcName, "STEP " & stepName)
+End Sub
 '@ },
     @{ Name='clsSheetRenderer'; Type='cls'; Code=@'
 Option Explicit
@@ -4995,6 +5052,30 @@ Private Sub SetButtonCaptionAndAction(ByVal shp As Shape, ByVal caption As Strin
     shp.OLEFormat.Object.Caption = caption
     shp.TextFrame.Characters.Text = caption
     shp.OnAction = onAction
+End Sub
+
+' ================================================================
+' --- Safe ログヘルパー ---
+' ================================================================
+Private Sub LogTraceSafe(ByVal funcName As String, ByVal msg As String)
+    On Error Resume Next
+    Dim lg As clsLogger
+    Set lg = BuildLogger()
+    If Not lg Is Nothing Then lg.LogTrace "clsSheetRenderer", funcName, msg
+End Sub
+
+Private Sub LogWarnSafe(ByVal funcName As String, ByVal msg As String)
+    On Error Resume Next
+    Dim lg As clsLogger
+    Set lg = BuildLogger()
+    If Not lg Is Nothing Then lg.LogWarn "clsSheetRenderer", funcName, msg
+End Sub
+
+Private Sub LogErrorWithErrSafe(ByVal funcName As String, ByVal stepName As String, ByVal errNum As Long, ByVal errDesc As String)
+    On Error Resume Next
+    Dim lg As clsLogger
+    Set lg = BuildLogger()
+    If Not lg Is Nothing Then lg.LogErrorWithErr "clsSheetRenderer", funcName, stepName, errNum, errDesc
 End Sub
 '@ },
     @{ Name='clsStorageResolver'; Type='cls'; Code=@'
@@ -7763,6 +7844,23 @@ Public Function ConfirmAction(ByVal operation As String, ByVal detail As String)
                       vbQuestion + vbYesNo, "確認")
     ConfirmAction = (result = vbYes)
 End Function
+
+
+
+' ================================================================
+' LogDialogSuppressed: テストモード時ダイアログ抑止用ログ
+' ================================================================
+Private Sub LogDialogSuppressed(ByVal dialogType As String, _
+                                  ByVal operation As String, _
+                                  ByVal detail As String, _
+                                  ByVal action As String)
+    On Error Resume Next
+    Dim lg As clsLogger
+    Set lg = BuildLogger()
+    If Not lg Is Nothing Then
+        lg.LogInfo "modEntryMain", "LogDialogSuppressed", dialogType & " " & operation & " " & detail & " " & action
+    End If
+End Sub
 '@ },
     @{ Name='modEntrySearch'; Type='std'; Code=@'
 Option Explicit
