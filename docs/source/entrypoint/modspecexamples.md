@@ -4,20 +4,21 @@ title: modSpecExamples.bas
 
 # modSpecExamples.bas
 
-| 項目 | 値 |
+| 項目 | 内容 |
 |---|---|
 | 層 | エントリポイント層 |
 | 種別 | 標準モジュール (.bas) |
-| 役割 | clsFormSpec DSL 利用例 (詳細プレビュー UserForm 構築) |
-| 行数 | 102 行 |
+| 配置ブック | 3 ブック共通 |
+| 役割 | clsFormSpec を使った UserForm 組み立てのデモ用コード |
+| 行数 | 106 行 |
 
-## 配置先
+## 取り込み先
 
-VBE で `挿入 > 標準モジュール`、F4 でプロパティ → `(オブジェクト名)` を `modSpecExamples` に変更してから、コードペインに貼り付けます。
+標準モジュール（.bas）です。下記コードをコピーし、`modSpecExamples.bas` というファイル名で保存して、VBE の「ファイル → ファイルのインポート」で取り込みます。詳しい手順は[導入手順](../../setup.md)を参照してください。
 
-## ソースコード（コピペ可）
+## ソースコード
 
-下のコードブロック右上にカーソルを当てるとコピーボタンが表示されます。
+コードブロック右上のボタンで全文をコピーできます。
 
 ```vbnet linenums="1"
 Attribute VB_Name = "modSpecExamples"
@@ -29,7 +30,8 @@ Option Explicit
 '             検索結果プレビュー用 spec を組み立てる。
 '             UI から呼び出さなくても Application.Run "Macro_Show..."
 '             で手動起動できる。
-' 依存先:     clsFormSpec, modFormBuilder, clsSearchEngine, modEntryMain
+' 依存先:     clsFormSpec, modFormBuilder, clsSearchEngine
+' 備考:       2026-05-20 ShowError/ShowWarning 浮き解消 (helper 廃止に伴い MsgBox 直呼出化)
 ' ================================================================
 
 ' ================================================================
@@ -82,9 +84,10 @@ Public Sub Macro_ShowSearchResultPreview()
     Dim selRow As Long
     selRow = ws.Application.Selection.Row
     If selRow < 15 Then
-        Call ShowWarning("プレビュー", _
-                          "検索結果の行が選択されていません", _
-                          "結果一覧から行を選んで再実行してください")
+        ' 2026-05-20 xref clean: ShowWarning helper 廃止に伴い MsgBox 直呼出に変更
+        MsgBox "検索結果の行が選択されていません" & vbCrLf & _
+               "結果一覧から行を選んで再実行してください", _
+               vbExclamation, "プレビュー"
         Exit Sub
     End If
 
@@ -107,8 +110,10 @@ Public Sub Macro_ShowSearchResultPreview()
     Exit Sub
 
 ErrHandler:
-    Call ShowError("プレビュー", Err.Description, _
-                    "VBA プロジェクト オブジェクト モデル信頼が ON か確認")
+    ' 2026-05-20 xref clean: ShowError helper 廃止に伴い MsgBox 直呼出に変更
+    MsgBox Err.Description & vbCrLf & _
+           "VBA プロジェクト オブジェクト モデル信頼が ON か確認", _
+           vbCritical, "プレビュー"
 End Sub
 
 ' ================================================================

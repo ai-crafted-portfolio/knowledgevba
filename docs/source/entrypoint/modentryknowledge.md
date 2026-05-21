@@ -4,380 +4,229 @@ title: modEntryKnowledge.bas
 
 # modEntryKnowledge.bas
 
-| 項目 | 値 |
+| 項目 | 内容 |
 |---|---|
 | 層 | エントリポイント層 |
 | 種別 | 標準モジュール (.bas) |
-| 役割 | ナレッジ一覧シートのマクロボタン受け口 |
-| 行数 | 360 行 |
+| 配置ブック | 登録修正.xlsm |
+| 役割 | ナレッジ登録・修正画面のボタン処理。入力セルとナレッジデータの相互変換、保存・読込ワークフロー |
+| 行数 | 208 行 |
 
-## 配置先
+## 取り込み先
 
-VBE で `挿入 > 標準モジュール`、F4 でプロパティ → `(オブジェクト名)` を `modEntryKnowledge` に変更してから、コードペインに貼り付けます。
+標準モジュール（.bas）です。下記コードをコピーし、`modEntryKnowledge.bas` というファイル名で保存して、VBE の「ファイル → ファイルのインポート」で取り込みます。詳しい手順は[導入手順](../../setup.md)を参照してください。
 
-## ソースコード（コピペ可）
+## ソースコード
 
-下のコードブロック右上にカーソルを当てるとコピーボタンが表示されます。
+コードブロック右上のボタンで全文をコピーできます。
 
 ```vbnet linenums="1"
 Attribute VB_Name = "modEntryKnowledge"
+' ============================================================
+' modEntryKnowledge (Phase 3 / slim, Sprint2 SRP split, ASCII-only)
+' Bridge + Workflow + Btn_, helpers extracted to clsCellIO
+' ============================================================
 Option Explicit
 
-' ================================================================
-' モジュール: modEntryKnowledge（エントリポイント層）
-' 概要:       ナレッジ登録・修正・削除・一覧・フィールド反映関連
-'             のボタンに割り当てるマクロ群
-' 依存先:     clsLogger, clsKnowledgeManager, clsFormatManager,
-'             clsFieldMigrator, modEntryMain, modCommon
-' ================================================================
-
-' --- ナレッジ登録シート / ナレッジ修正シート 位置定数 ---
-Private Const KS_ROW_FMT_ID As Long = 1
-Private Const KS_COL_FMT_ID_VAL As Long = 3
-Private Const KE_ROW_FMT_ID As Long = 1
-Private Const KE_COL_KNW_NO As Long = 3
-
-' --- ナレッジ一覧シート 位置定数 ---
-Private Const KL_RESULT_START_ROW As Long = 4
-
-' --- 既存データ反映シート 位置定数 ---
-Private Const MG_ROW_FMT_ID As Long = 3
-Private Const MG_COL_FMT_ID_VAL As Long = 3
-
-' ================================================================
-' 関数名: Btn_SaveKnowledge
-' 概要:   ナレッジ登録「▶保存」ボタン
-' ================================================================
-Public Sub Btn_SaveKnowledge()
-    On Error GoTo ErrHandler
-    
-    Dim logger As clsLogger
-    Set logger = BuildLogger()
-    logger.LogInfo "modEntryKnowledge", "Btn_SaveKnowledge", _
-                    "保存ボタン押下"
-    
-    Dim formatMgr As clsFormatManager
-    Set formatMgr = New clsFormatManager
-    formatMgr.Init logger
-    
-    Dim knwMgr As clsKnowledgeManager
-    Set knwMgr = New clsKnowledgeManager
-    knwMgr.Init logger, formatMgr, GetDataFolder()
-    
-    Dim savedNo As String
-    savedNo = knwMgr.SaveNewKnowledge()
-    
-    If savedNo = "" Then
-        Call ShowError("ナレッジ保存", "保存に失敗しました", _
-                        "必須項目が入力されているか確認してください")
-    Else
-        Call ShowInfo("ナレッジ保存", _
-                       "ナレッジ " & savedNo & " を保存しました")
+Public Function BuildDictFromCells(ByVal target As Object, ByVal uiSections As Collection) As Object
+    Dim result As Object
+    Set result = CreateObject("Scripting.Dictionary")
+    If uiSections Is Nothing Then
+        Set BuildDictFromCells = result
+        Exit Function
     End If
-    Exit Sub
-
-ErrHandler:
-    Call ShowError("ナレッジ保存", Err.Description, _
-                    "入力内容を確認してから再度ボタンを押してください")
-End Sub
-
-' ================================================================
-' 関数名: Btn_ClearForm
-' 概要:   ナレッジ登録「▶クリア」ボタン
-' ================================================================
-Public Sub Btn_ClearForm()
-    On Error GoTo ErrHandler
-    
-    Dim ws As Worksheet
-    Set ws = ThisWorkbook.Worksheets(SHEET_KNW_SAVE)
-    
-    If Not ConfirmAction("入力クリア", _
-                           "入力中の値を全てクリアします") Then
-        Exit Sub
-    End If
-    
+    Dim mode As String
+    mode = GetUiFailMode()
+    Dim inputCount As Long
+    inputCount = 0
+    Dim sec As ClsStanzaSection
     Dim i As Long
-    For i = 4 To 1000
-        If ws.Cells(i, 2).Value = "" Then Exit For
-        ws.Cells(i, 3).Value = ""
+    For i = 1 To uiSections.Count
+        Set sec = uiSections.Item(i)
+        If sec.SectionName = "INPUT" Then
+            inputCount = inputCount + 1
+            Dim cellAddr As String, fieldName As String
+            cellAddr = sec.GetValue("Cell")
+            fieldName = sec.GetValue("Name")
+            If Len(fieldName) = 0 Then
+                If mode = "strict" Then
+                    Err.Raise vbObjectError + 9001, "modEntryKnowledge.BuildDictFromCells", _
+                              "INPUT stanza missing Name key"
+                End If
+            ElseIf Len(cellAddr) = 0 Then
+                If mode = "strict" Then
+                    Err.Raise vbObjectError + 9002, "modEntryKnowledge.BuildDictFromCells", _
+                              "INPUT stanza Cell key empty for Name=" & fieldName
+                End If
+            Else
+                On Error GoTo CellErrHandler
+                result(fieldName) = clsCellIO.ReadCellValue(target, cellAddr)
+                On Error GoTo 0
+            End If
+        End If
+NextStanza:
     Next i
-    Exit Sub
-
-ErrHandler:
-    Call ShowError("入力クリア", Err.Description, _
-                    "再度ボタンを押してください")
-End Sub
-
-' ================================================================
-' 関数名: Btn_LoadKnowledge
-' 概要:   ナレッジ修正「▶読込」ボタン
-' ================================================================
-Public Sub Btn_LoadKnowledge()
-    On Error GoTo ErrHandler
-    
-    Dim ws As Worksheet
-    Set ws = ThisWorkbook.Worksheets(SHEET_KNW_EDIT)
-    Dim knowledgeNo As String
-    knowledgeNo = CStr(ws.Cells(KE_ROW_FMT_ID, KE_COL_KNW_NO).Value)
-    
-    If knowledgeNo = "" Then
-        Call ShowWarning("ナレッジ読込", _
-                         "ナレッジ番号が入力されていません", _
-                         "上部の番号欄に入力してから読込ボタンを押してください")
-        Exit Sub
+    If inputCount = 0 Then
+        If mode = "strict" Then
+            Err.Raise vbObjectError + 9010, "modEntryKnowledge.BuildDictFromCells", _
+                      "No INPUT stanza found"
+        End If
     End If
-    
-    Dim logger As clsLogger
-    Set logger = BuildLogger()
-    
-    Dim formatMgr As clsFormatManager
-    Set formatMgr = New clsFormatManager
-    formatMgr.Init logger
-    
-    Dim knwMgr As clsKnowledgeManager
-    Set knwMgr = New clsKnowledgeManager
-    knwMgr.Init logger, formatMgr, GetDataFolder()
-    
-    If Not knwMgr.LoadForEdit(knowledgeNo) Then
-        Call ShowError("ナレッジ読込", _
-                        "指定されたナレッジが見つかりません", _
-                        "ナレッジ番号を確認してから再度ボタンを押してください")
-    End If
-    Exit Sub
-
-ErrHandler:
-    Call ShowError("ナレッジ読込", Err.Description, _
-                    "ナレッジ番号を確認してから再度ボタンを押してください")
-End Sub
-
-' ================================================================
-' 関数名: Btn_UpdateKnowledge
-' 概要:   ナレッジ修正「▶上書保存」ボタン
-' ================================================================
-Public Sub Btn_UpdateKnowledge()
-    On Error GoTo ErrHandler
-    
-    Dim ws As Worksheet
-    Set ws = ThisWorkbook.Worksheets(SHEET_KNW_EDIT)
-    Dim knowledgeNo As String
-    knowledgeNo = CStr(ws.Cells(KE_ROW_FMT_ID, KE_COL_KNW_NO).Value)
-    
-    If knowledgeNo = "" Then
-        Call ShowWarning("上書保存", _
-                         "ナレッジ番号が入力されていません", _
-                         "読込ボタンでナレッジを読み込んでから再度実行してください")
-        Exit Sub
-    End If
-    
-    Dim logger As clsLogger
-    Set logger = BuildLogger()
-    
-    Dim formatMgr As clsFormatManager
-    Set formatMgr = New clsFormatManager
-    formatMgr.Init logger
-    
-    Dim knwMgr As clsKnowledgeManager
-    Set knwMgr = New clsKnowledgeManager
-    knwMgr.Init logger, formatMgr, GetDataFolder()
-    
-    If knwMgr.UpdateKnowledge(knowledgeNo) Then
-        Call ShowInfo("上書保存", _
-                       "ナレッジ " & knowledgeNo & " を更新しました")
+    Set BuildDictFromCells = result
+    Exit Function
+CellErrHandler:
+    If mode = "strict" Then
+        Err.Raise vbObjectError + 9003, "modEntryKnowledge.BuildDictFromCells", _
+                  "Invalid cell address: " & cellAddr
     Else
-        Call ShowError("上書保存", "更新に失敗しました", _
-                        "入力内容を確認してから再度ボタンを押してください")
+        Resume NextStanza
     End If
-    Exit Sub
+End Function
 
-ErrHandler:
-    Call ShowError("上書保存", Err.Description, _
-                    "入力内容を確認してから再度ボタンを押してください")
-End Sub
-
-' ================================================================
-' 関数名: Btn_ReloadList
-' 概要:   ナレッジ一覧「▶リロード」ボタン
-'         データフォルダ内の全ナレッジファイルを一覧表示
-' ================================================================
-Public Sub Btn_ReloadList()
-    On Error GoTo ErrHandler
-    
-    Dim logger As clsLogger
-    Set logger = BuildLogger()
-    logger.LogInfo "modEntryKnowledge", "Btn_ReloadList", _
-                    "リロード開始"
-    
-    Call ReloadListCore(logger)
-    Exit Sub
-
-ErrHandler:
-    Call ShowError("ナレッジ一覧リロード", Err.Description, _
-                    "データフォルダパスを確認してから再度ボタンを押してください")
-End Sub
-
-' リロードの実装本体
-Private Sub ReloadListCore(ByVal logger As clsLogger)
-    Dim ws As Worksheet
-    Set ws = ThisWorkbook.Worksheets(SHEET_KNW_LIST)
-    
-    Dim dataFolder As String
-    dataFolder = GetDataFolder()
-    
-    ' 既存のリストをクリア
+Public Sub WriteDictToCells(ByVal target As Object, ByVal uiSections As Collection, ByVal dict As Object)
+    If uiSections Is Nothing Or dict Is Nothing Then Exit Sub
+    Dim nameCellMap As Object
+    Set nameCellMap = CreateObject("Scripting.Dictionary")
+    Dim sec As ClsStanzaSection
     Dim i As Long
-    For i = KL_RESULT_START_ROW To KL_RESULT_START_ROW + 1000
-        ws.Range(ws.Cells(i, 1), ws.Cells(i, 6)).ClearContents
+    For i = 1 To uiSections.Count
+        Set sec = uiSections.Item(i)
+        If sec.SectionName = "INPUT" Then
+            Dim nm As String, ca As String
+            nm = sec.GetValue("Name")
+            ca = sec.GetValue("Cell")
+            If Len(nm) > 0 And Len(ca) > 0 Then nameCellMap(nm) = ca
+        End If
     Next i
-    
-    Dim files As Variant
-    files = ListFilesInFolder(dataFolder, "txt")
-
-    ' M-4 guard: 空配列なら早期 return (UBound エラー防止)
-
-    If (Not Not files) = 0 Then Exit Sub
-    
-    Dim targetRow As Long
-    targetRow = KL_RESULT_START_ROW
-    
-    Dim idx As Long
-    For idx = LBound(files) To UBound(files)
-        Dim fileName As String
-        fileName = CStr(files(idx))
-        
-        Dim knwNo As String
-        knwNo = Left(fileName, Len(fileName) - 4)
-        
-        ws.Cells(targetRow, 1).Value = idx + 1
-        ws.Cells(targetRow, 2).Value = knwNo
-        ws.Cells(targetRow, 3).Value = ""
-        ws.Cells(targetRow, 4).Value = ""
-        ws.Cells(targetRow, 5).Value = ""
-        ws.Cells(targetRow, 6).Value = ""
-        
-        targetRow = targetRow + 1
-    Next idx
-    
-    Dim count As Long
-    count = UBound(files) - LBound(files) + 1
-    
-    logger.LogInfo "modEntryKnowledge", "Btn_ReloadList", _
-                    "リロード完了: " & CStr(count) & "件"
+    Dim keys As Variant
+    keys = dict.Keys
+    Dim k As Long
+    For k = 0 To dict.Count - 1
+        Dim keyName As String
+        keyName = CStr(keys(k))
+        If nameCellMap.Exists(keyName) Then
+            Dim cellAddr As String
+            cellAddr = CStr(nameCellMap(keyName))
+            If IsObject(dict(keyName)) Then
+                Err.Raise vbObjectError + 9021, "modEntryKnowledge.WriteDictToCells", _
+                          "Cannot write object to single cell, key=" & keyName
+            End If
+            Dim v As Variant
+            v = dict(keyName)
+            If IsArray(v) Then
+                Err.Raise vbObjectError + 9020, "modEntryKnowledge.WriteDictToCells", _
+                          "Cannot write array to single cell, key=" & keyName
+            End If
+            Dim valueStr As String
+            If IsNull(v) Then
+                valueStr = ""
+            ElseIf VarType(v) = vbDate Then
+                valueStr = Format(v, "yyyy-mm-dd")
+            Else
+                valueStr = CStr(v)
+            End If
+            clsCellIO.WriteCellValue target, cellAddr, valueStr
+        End If
+    Next k
 End Sub
 
-' ================================================================
-' 関数名: Btn_DeleteKnowledge
-' 概要:   ナレッジ一覧「▶選択行を削除」ボタン
-' ================================================================
-Public Sub Btn_DeleteKnowledge()
+Public Function SaveKnowledge_Workflow(ByVal target As Object, ByVal uiSections As Collection, ByVal knowledgeNo As String) As String
     On Error GoTo ErrHandler
-    
-    Dim ws As Worksheet
-    Set ws = ThisWorkbook.Worksheets(SHEET_KNW_LIST)
-    
-    Dim selRow As Long
-    selRow = ws.Application.Selection.Row
-    
-    If selRow < KL_RESULT_START_ROW Then
-        Call ShowWarning("ナレッジ削除", _
-                         "削除したい行が選択されていません", _
-                         "削除したい行を選択してから再度ボタンを押してください")
-        Exit Sub
+    Dim dict As Object
+    Set dict = BuildDictFromCells(target, uiSections)
+    If dict.Count = 0 Then
+        SaveKnowledge_Workflow = ""
+        Exit Function
     End If
-    
-    Dim knowledgeNo As String
-    knowledgeNo = CStr(ws.Cells(selRow, 2).Value)
-    
-    If knowledgeNo = "" Then
-        Call ShowWarning("ナレッジ削除", _
-                         "選択行にナレッジ番号がありません", _
-                         "リロードしてから削除したい行を選択してください")
-        Exit Sub
-    End If
-    
-    If Not ConfirmAction("ナレッジ削除", _
-                           "ナレッジ " & knowledgeNo & " を物理削除します") Then
-        Exit Sub
-    End If
-    
-    Dim logger As clsLogger
-    Set logger = BuildLogger()
-    
-    Dim formatMgr As clsFormatManager
-    Set formatMgr = New clsFormatManager
-    formatMgr.Init logger
-    
-    Dim knwMgr As clsKnowledgeManager
-    Set knwMgr = New clsKnowledgeManager
-    knwMgr.Init logger, formatMgr, GetDataFolder()
-    
-    If knwMgr.DeleteKnowledge(knowledgeNo) Then
-        Call ShowInfo("ナレッジ削除", _
-                       "ナレッジ " & knowledgeNo & " を削除しました")
-        Call ReloadListCore(logger)
+    Dim knwNo As String
+    If Len(knowledgeNo) > 0 Then
+        knwNo = knowledgeNo
+    ElseIf dict.Exists("KnowledgeNo") Then
+        knwNo = CStr(dict("KnowledgeNo"))
     Else
-        Call ShowError("ナレッジ削除", "削除に失敗しました", _
-                        "ファイルパスを確認してから再度ボタンを押してください")
+        knwNo = ""
     End If
-    Exit Sub
-
+    If Len(knwNo) = 0 Then
+        SaveKnowledge_Workflow = ""
+        Exit Function
+    End If
+    dict("KnowledgeNo") = knwNo
+    If Not dict.Exists("UpdatedAt") Then
+        dict("UpdatedAt") = Format(Now(), "yyyy-mm-dd hh:nn:ss")
+    End If
+    Dim ret As Long
+    ret = modKnowledgeFileIO.SaveKnowledge(knwNo, dict, 0)
+    If ret = 0 Then
+        SaveKnowledge_Workflow = knwNo
+        ' S5-LOG-02: SAVE-EXIT-OK-II-004 (Knowledge save success, before exit)
+        On Error Resume Next
+        Dim oLogger004 As clsLogger
+        Set oLogger004 = New clsLogger
+        oLogger004.Init ThisWorkbook.Worksheets("LOG")
+        oLogger004.LogInfo "modEntryKnowledge", "SaveKnowledge_Workflow", "Knowledge 保存完了: " & knwNo, knwNo, "SAVE-EXIT-OK-II-004"
+        On Error GoTo 0
+    Else
+        SaveKnowledge_Workflow = ""
+    End If
+    Exit Function
 ErrHandler:
-    Call ShowError("ナレッジ削除", Err.Description, _
-                    "選択行を確認してから再度ボタンを押してください")
-End Sub
+    SaveKnowledge_Workflow = ""
+End Function
 
-' ================================================================
-' 関数名: Btn_MigrateFields
-' 概要:   既存データ反映「▶反映実行」ボタン
-' ================================================================
-Public Sub Btn_MigrateFields()
+Public Function LoadKnowledge_Workflow(ByVal target As Object, ByVal uiSections As Collection, ByVal knowledgeNo As String) As Boolean
     On Error GoTo ErrHandler
-    
-    Dim ws As Worksheet
-    Set ws = ThisWorkbook.Worksheets(SHEET_MIGRATION)
-    
-    Dim formatId As String
-    formatId = CStr(ws.Cells(MG_ROW_FMT_ID, MG_COL_FMT_ID_VAL).Value)
-    
-    If formatId = "" Then
-        Call ShowWarning("フィールド反映", _
-                         "フォーマットIDが選択されていません", _
-                         "上部のプルダウンから対象フォーマットを選択してください")
-        Exit Sub
+    If Len(knowledgeNo) = 0 Then
+        LoadKnowledge_Workflow = False
+        Exit Function
     End If
-    
-    If Not ConfirmAction("フィールド反映", _
-                           "フォーマット " & formatId & " の全ナレッジにフィールド定義を反映します") Then
-        Exit Sub
+    Dim dict As Object
+    Set dict = modKnowledgeFileIO.LoadKnowledge(knowledgeNo)
+    If dict.Count = 0 Then
+        LoadKnowledge_Workflow = False
+        Exit Function
     End If
-    
-    Dim logger As clsLogger
-    Set logger = BuildLogger()
-    
-    Dim formatMgr As clsFormatManager
-    Set formatMgr = New clsFormatManager
-    formatMgr.Init logger
-    
-    Dim migrator As clsFieldMigrator
-    Set migrator = New clsFieldMigrator
-    migrator.Init logger, formatMgr, GetDataFolder()
-    
-    Dim processedCount As Long
-    processedCount = migrator.MigrateFields(formatId)
-
-    ' rev20: M8-002 対応。clsFieldMigrator.MigrateFields は内部で
-    ' "反映完了" を LogInfo するが、何らかの runtime エラーで
-    ' ErrHandler に分岐すると "反映完了" は記録されず M8-002 が
-    ' FAIL する。Btn 側でも改めて "反映完了" を残すことで
-    ' CheckLogExists("反映完了") が安定して True になるようにする。
-    logger.LogInfo "modEntryKnowledge", "Btn_MigrateFields", _
-                    "反映完了: " & CStr(processedCount) & "件"
-
-    Call ShowInfo("フィールド反映", _
-                   CStr(processedCount) & " 件のナレッジに反映しました")
-    Exit Sub
-
+    WriteDictToCells target, uiSections, dict
+    LoadKnowledge_Workflow = True
+    Exit Function
 ErrHandler:
-    Call ShowError("フィールド反映", Err.Description, _
-                    "フォーマットIDとデータフォルダを確認してから再度実行してください")
+    LoadKnowledge_Workflow = False
+End Function
+
+Public Sub Btn_SaveKnowledge_v21()
+    On Error GoTo ErrHandler
+    Dim ui As Collection: Set ui = modUILoader.LoadUiDefinition("Touroku", "M-05")
+    If ui.Count = 0 Then Exit Sub
+    Dim knwNo As String
+    knwNo = SaveKnowledge_Workflow(ActiveSheet, ui, "")
+    ' S5-LOG-02: SAVE-EXIT-OK-II-005 (Btn_SaveKnowledge_v21 button handler exit)
+    On Error Resume Next
+    Dim oLogger005 As clsLogger
+    Set oLogger005 = New clsLogger
+    oLogger005.Init ThisWorkbook.Worksheets("LOG")
+    oLogger005.LogInfo "modEntryKnowledge", "Btn_SaveKnowledge_v21", "Btn_SaveKnowledge_v21 完了 knwNo=" & knwNo, knwNo, "SAVE-EXIT-OK-II-005"
+    On Error GoTo 0
+    Exit Sub
+ErrHandler:
+    Debug.Print "[ERR] Btn_SaveKnowledge_v21: " & Err.Number & " " & Err.Description
 End Sub
+
+Public Sub Btn_LoadKnowledge_v21()
+    On Error GoTo ErrHandler
+    Dim ui As Collection: Set ui = modUILoader.LoadUiDefinition("Touroku", "M-09")
+    If ui.Count = 0 Then Exit Sub
+    Dim tempDict As Object: Set tempDict = BuildDictFromCells(ActiveSheet, ui)
+    Dim knwNo As String
+    If tempDict.Exists("KnowledgeNo") Then knwNo = CStr(tempDict("KnowledgeNo"))
+    If Len(knwNo) = 0 Then Exit Sub
+    LoadKnowledge_Workflow ActiveSheet, ui, knwNo
+    Exit Sub
+ErrHandler:
+    Debug.Print "[ERR] Btn_LoadKnowledge_v21: " & Err.Number & " " & Err.Description
+End Sub
+
+Private Function GetUiFailMode() As String
+    Dim s As String
+    s = LCase(modConfigHolder.GetValueOrDefault("uiSchemaFailMode", "warn"))
+    If s = "strict" Then GetUiFailMode = "strict" Else GetUiFailMode = "warn"
+End Function
 ```

@@ -4,146 +4,67 @@ title: modCommon.bas
 
 # modCommon.bas
 
-| 項目 | 値 |
+| 項目 | 内容 |
 |---|---|
 | 層 | ユーティリティ層 |
 | 種別 | 標準モジュール (.bas) |
-| 役割 | 全モジュール共通定数 (シート名 / 列番号 / 行番号 / ログレベル / 外部ログパス) |
-| 行数 | 126 行 |
+| 配置ブック | 3 ブック共通 |
+| 役割 | 全ブック共通の定数群 |
+| 行数 | 46 行 |
 
-## 配置先
+## 取り込み先
 
-VBE で `挿入 > 標準モジュール`、F4 でプロパティ → `(オブジェクト名)` を `modCommon` に変更してから、コードペインに貼り付けます。
+標準モジュール（.bas）です。下記コードをコピーし、`modCommon.bas` というファイル名で保存して、VBE の「ファイル → ファイルのインポート」で取り込みます。詳しい手順は[導入手順](../../setup.md)を参照してください。
 
-## ソースコード（コピペ可）
+## ソースコード
 
-下のコードブロック右上にカーソルを当てるとコピーボタンが表示されます。
+コードブロック右上のボタンで全文をコピーできます。
 
 ```vbnet linenums="1"
 Attribute VB_Name = "modCommon"
+' ================================================================
+' モジュール: modCommon（v2.1、共通定数）
+' 概要:       knowledgevba v2.1 で共有する定数群
+' Version:    v2.1（2026-05-17、最小実装、test ハーネス compile 用途）
+' ================================================================
 Option Explicit
 
-' ================================================================
-' モジュール: modCommon（ユーティリティ層）
-' 概要:       全モジュールで共有する定数を定義する
-' 依存先:     なし
-' ================================================================
+' バックアップ保持日数（Q34）
+Public Const BACKUP_RETENTION_DAYS As Long = 90
 
-' --- シート名定数 ---
-Public Const SHEET_MAIN As String = "メイン"
-Public Const SHEET_FORMAT_LIST As String = "フォーマット一覧"
-Public Const SHEET_FORMAT_DESIGN As String = "フォーマット設計"
-Public Const SHEET_FORMAT_PREVIEW As String = "フォーマットプレビュー"
-Public Const SHEET_KNW_SAVE As String = "ナレッジ登録"
-Public Const SHEET_KNW_EDIT As String = "ナレッジ修正"
-Public Const SHEET_KNW_LIST As String = "ナレッジ一覧"
-Public Const SHEET_SEARCH As String = "検索"
-Public Const SHEET_KNW_DISPLAY As String = "ナレッジ表示"
-Public Const SHEET_STORAGE As String = "格納先設定"
-Public Const SHEET_SETTINGS As String = "設定"
-Public Const SHEET_MIGRATION As String = "既存データへのフィールド反映"
-Public Const SHEET_FILE_FORMAT As String = "データファイル形式"
-Public Const SHEET_LOG As String = "ログ"
+' knowledge .txt 新スタンザ形式 区切り識別子（Q47）
+Public Const KNW_STANZA_PREFIX As String = "###"
+Public Const KNW_STANZA_SUFFIX As String = "###"
 
-' --- ファイル形式定数 ---
+' 検索結果最大表示件数（Q37）
+Public Const SEARCH_MAX_RESULTS As Long = 100
+
+' debugLevel 既定値（Q7）
+Public Const DEFAULT_DEBUG_LEVEL As String = "ERROR"
+
+' 起動時 ActiveSheet（ADR-0053 §2.1 表 / §9 M-2、R6-01 是正）
+' SSOT: ADR-0053 §2.1。登録修正=M-05、検索=M-08、管理=M-02
+Public Const STARTUP_SHEET_TOUROKU As String = "M-05"
+Public Const STARTUP_SHEET_KENSAKU As String = "M-08"
+Public Const STARTUP_SHEET_KANRI As String = "M-02"
+
+' ログシート行（v1 から維持）
+Public Const LOG_DATA_START_ROW As Long = 9
+
+' スタンザ書式（v1 から維持）
 Public Const CHARSET_SJIS As String = "Shift_JIS"
 Public Const STANZA_SEP As String = "==="
 
-' --- デバッグレベル定数 ---
-Public Const DEBUG_OFF As String = "OFF"
-Public Const DEBUG_ON As String = "ON"
+' xlsm 名（v2.1）
+Public Const XLSM_TOUROKU As String = "登録修正"
+Public Const XLSM_KENSAKU As String = "検索"
+Public Const XLSM_KANRI As String = "管理"
 
-' --- フィールド型定数（仕様書で確定した6種） ---
-Public Const FIELD_TYPE_STRING As String = "文字列"
-Public Const FIELD_TYPE_LONGTEXT As String = "長文テキスト"
-Public Const FIELD_TYPE_NUMBER As String = "数値"
-Public Const FIELD_TYPE_DATE As String = "日付"
-Public Const FIELD_TYPE_TIME As String = "時刻"
-Public Const FIELD_TYPE_FILEREF As String = "ファイル参照"
-
-' --- ログレベル定数 ---
-Public Const LOG_LEVEL_ERROR As String = "エラー"
-Public Const LOG_LEVEL_WARN As String = "警告"
-Public Const LOG_LEVEL_INFO As String = "情報"
-Public Const LOG_LEVEL_DEBUG As String = "デバッグ"
-Public Const LOG_LEVEL_TRACE As String = "トレース"
-
-' --- 外部ログファイルパス（C:\kvba\runtime.log に Append） ---
-'     診断目的: シートに書けない致命的場面でもファイルに痕跡を残す
-Public Const EXTERNAL_LOG_PATH As String = "C:\kvba\runtime.log"
-
-' --- ログシート列番号 ---
-Public Const LOG_COL_TIMESTAMP As Long = 1
-Public Const LOG_COL_MODULE As Long = 2
-Public Const LOG_COL_FUNCTION As Long = 3
-Public Const LOG_COL_LEVEL As Long = 4
-Public Const LOG_COL_MESSAGE As Long = 5
-
-' --- 設定シート行番号 ---
-Public Const SETTINGS_ROW_DATAFOLDER As Long = 3
-Public Const SETTINGS_ROW_CHARSET As Long = 4
-Public Const SETTINGS_ROW_DEBUGLEVEL As Long = 5
-
-' --- 設定シート列番号 ---
-Public Const SETTINGS_COL_NAME As Long = 2
-Public Const SETTINGS_COL_VALUE As Long = 3
-
-' --- タスク名定数（12タスク — polished mock M-01 v19 準拠） ---
-' v20 改修: 8 → 12 ボタン化。後方互換のため旧 8 タスク名も保持。
-Public Const TASK_SEARCH As String = "検索"
-Public Const TASK_REGISTER As String = "ナレッジ登録"
-Public Const TASK_MODIFY As String = "ナレッジ修正"
-Public Const TASK_LIST As String = "ナレッジ一覧"
-Public Const TASK_FORMAT As String = "フォーマット管理"
-Public Const TASK_FIELD_REFLECT As String = "フィールド反映"
-Public Const TASK_STORAGE As String = "格納先設定"
-Public Const TASK_SYS_SETTINGS As String = "システム設定"
-Public Const TASK_LOG As String = "ログ確認"
-Public Const TASK_FILE_FORMAT As String = "ファイル形式"
-Public Const TASK_INIT_SETUP As String = "初回セットアップ"
-Public Const TASK_HELP_VERSION As String = "ヘルプ"
-
-' --- 旧 8 タスク名（後方互換用、廃止予定） ---
-Public Const TASK_SETUP As String = "初回セットアップ"
-Public Const TASK_CONFIG As String = "システム設定"
-Public Const TASK_EDIT As String = "ナレッジ修正"
-Public Const TASK_DELETE As String = "ナレッジ修正"
-Public Const TASK_MIGRATE As String = "フィールド反映"
-
-' --- カラー定数（polished mock 準拠 — spec.md §2 の表に対応） ---
-Public Const COLOR_TITLE_DEEP_BLUE As String = "#1F3864"
-Public Const COLOR_TITLE_BLUE As String = "#1F4E78"
-Public Const COLOR_SECTION_BLUE As String = "#2F5496"
-Public Const COLOR_SECTION_BLUE2 As String = "#4472C4"
-Public Const COLOR_BTN_PRIMARY As String = "#5B9BD5"
-Public Const COLOR_BTN_NAV As String = "#70AD47"
-Public Const COLOR_BTN_SUB As String = "#BFBFBF"
-Public Const COLOR_BTN_DANGER As String = "#ED7D31"
-Public Const COLOR_DESTROY_BAR As String = "#C00000"
-Public Const COLOR_REQUIRED_RED As String = "#C00000"
-Public Const COLOR_HINT_YELLOW As String = "#FFF2CC"
-Public Const COLOR_HINT_BAR As String = "#DEEBF7"
-Public Const COLOR_HEADER_LIGHT As String = "#B4C7E7"
-Public Const COLOR_HINT_GREEN As String = "#E2EFDA"
-
-' --- テストモード関連定数 ---
-Public Const SETTINGS_ROW_TESTMODE As Long = 6
-Public Const TESTMODE_ON As String = "TRUE"
-Public Const TESTMODE_OFF As String = "FALSE"
-
-' --- テスト結果判定定数 ---
-Public Const TEST_RESULT_PASS As String = "PASS"
-Public Const TEST_RESULT_FAIL As String = "FAIL"
-Public Const TEST_RESULT_SKIP As String = "SKIP"
-
-
-' ================================================================
-' 関数名: SheetExists
-' 概要:   指定名のワークシートが ThisWorkbook 内に存在するか判定する共通ヘルパー。
-'         M-2: modSetup.IsSheetExists と modAutoInit.SheetExists の重複定義を
-'         本関数に集約し、新規モジュールはこちらを使うよう統一する。
-'         既存の Private 版は内部実装維持 (互換性のため)。
-' 引数:   sheetName - 確認対象のシート名
-' 戻り値: Boolean - 存在すれば True
-' =========================================
+' debugLevel enum 6 値（modConfigHolder にもあるが Public Const 整合のため本書で重複定義）
+Public Const DEBUG_LEVEL_OFF As Long = 0
+Public Const DEBUG_LEVEL_ERROR As Long = 1
+Public Const DEBUG_LEVEL_WARN As Long = 2
+Public Const DEBUG_LEVEL_INFO As Long = 3
+Public Const DEBUG_LEVEL_DEBUG As Long = 4
+Public Const DEBUG_LEVEL_TRACE As Long = 5
 ```

@@ -4,20 +4,21 @@ title: clsSearchEngine.cls
 
 # clsSearchEngine.cls
 
-| 項目 | 値 |
+| 項目 | 内容 |
 |---|---|
 | 層 | ビジネスロジック層 |
 | 種別 | クラスモジュール (.cls) |
-| 役割 | スコアリング検索 / 結果描画 / サムネ画像描画フック |
-| 行数 | 839 行 |
+| 配置ブック | 3 ブック共通 |
+| 役割 | ナレッジ検索の中核。番号直接・キーワード・日付範囲フィルタとスコアリング |
+| 行数 | 912 行 |
 
-## 配置先
+## 取り込み先
 
-VBE で `挿入 > クラスモジュール`、F4 でプロパティ → `(オブジェクト名)` を `clsSearchEngine` に変更してから、コードペインに貼り付けます。
+クラスモジュール（.cls）です。下記コードをコピーし、`clsSearchEngine.cls` というファイル名で保存して、VBE の「ファイル → ファイルのインポート」で取り込みます。先頭の `VERSION 1.0 CLASS` から始まる行はクラスモジュールのファイル形式の一部なので、削らずにそのまま保存してください。詳しい手順は[導入手順](../../setup.md)を参照してください。
 
-## ソースコード（コピペ可）
+## ソースコード
 
-下のコードブロック右上にカーソルを当てるとコピーボタンが表示されます。
+コードブロック右上のボタンで全文をコピーできます。
 
 ```vbnet linenums="1"
 VERSION 1.0 CLASS
@@ -51,15 +52,23 @@ Option Explicit
 ' ====================================================================
 
 ' --- 検索シートのセル位置 ---
+' BUG-001 修正 (2026-05-12):
+'   モック spec の AddField 化に伴い、行 8/9 を「検索モード/対象フィールド」
+'   から「カテゴリ/担当者」絞込条件に振替。
+'   searchMode/targetField は内部固定 (AND / "(全フィールド)") として運用。
 Private Const SS_ROW_DIRECT_NO As Long = 3
 Private Const SS_COL_DIRECT_NO As Long = 3
 Private Const SS_ROW_FMT_ID As Long = 6
 Private Const SS_ROW_KEYWORDS As Long = 7
-Private Const SS_ROW_MODE As Long = 8
-Private Const SS_ROW_TARGET_FIELD As Long = 9
+Private Const SS_ROW_CATEGORY As Long = 8
+Private Const SS_ROW_ASSIGNEE As Long = 9
 Private Const SS_ROW_DATE_FROM As Long = 10
 Private Const SS_ROW_DATE_TO As Long = 11
 Private Const SS_COL_CONDITION_VALUE As Long = 3
+
+' --- 内部固定値 (UI 化されない searchMode/targetField の既定) ---
+Private Const DEFAULT_SEARCH_MODE As String = "AND"
+Private Const DEFAULT_TARGET_FIELD As String = ""  ' 空 = 全フィールド対象
 
 ' --- 検索結果一覧の位置 (rev22 + image_ext rev1) ---
 Private Const SS_RESULT_START_ROW As Long = 15
@@ -148,22 +157,31 @@ Public Function SearchByKeywords() As Long
 
     Dim formatId As String
     Dim keywords As String
-    Dim searchMode As String
-    Dim targetField As String
+    Dim category As String
+    Dim assignee As String
     Dim fromDateStr As String
     Dim toDateStr As String
 
     formatId = CStr(ws.Cells(SS_ROW_FMT_ID, SS_COL_CONDITION_VALUE).Value)
     keywords = CStr(ws.Cells(SS_ROW_KEYWORDS, SS_COL_CONDITION_VALUE).Value)
-    searchMode = CStr(ws.Cells(SS_ROW_MODE, SS_COL_CONDITION_VALUE).Value)
-    targetField = CStr(ws.Cells(SS_ROW_TARGET_FIELD, SS_COL_CONDITION_VALUE).Value)
+    category = CStr(ws.Cells(SS_ROW_CATEGORY, SS_COL_CONDITION_VALUE).Value)
+    assignee = CStr(ws.Cells(SS_ROW_ASSIGNEE, SS_COL_CONDITION_VALUE).Value)
     fromDateStr = CStr(ws.Cells(SS_ROW_DATE_FROM, SS_COL_CONDITION_VALUE).Value)
     toDateStr = CStr(ws.Cells(SS_ROW_DATE_TO, SS_COL_CONDITION_VALUE).Value)
+
+    ' BUG-001 修正: spec の placeholder 文字列が入力値として誤検出されないよう除去
+    keywords = StripPlaceholder(keywords)
+    category = StripPlaceholder(category)
+    assignee = StripPlaceholder(assignee)
+    fromDateStr = StripPlaceholder(fromDateStr)
+    toDateStr = StripPlaceholder(toDateStr)
 
     Dim matched() As String
     Dim scores() As Double
     Dim matchCount As Long
-    matchCount = ScanAndMatch(formatId, keywords, searchMode, targetField, _
+    matchCount = ScanAndMatch(formatId, keywords, _
+                                DEFAULT_SEARCH_MODE, DEFAULT_TARGET_FIELD, _
+                                category, assignee, _
                                 fromDateStr, toDateStr, matched, scores)
 
     Call ClearResults(ws)
@@ -171,7 +189,7 @@ Public Function SearchByKeywords() As Long
     Call PopulateResults(ws, matched, scores, matchCount)
 
     If Not m_logger Is Nothing Then
-        m_logger.LogInfo "clsSearchEngine", "SearchByKeywords", _
+        m_logger.LogInfo "clsSearchEngine", "SearchByKeywords", logId:="LOG-M08-SEARCH-EXIT-OK", message:= _
                           "検索実行: " & CStr(matchCount) & "件ヒット"
     End If
 
@@ -180,7 +198,7 @@ Public Function SearchByKeywords() As Long
 
 ErrHandler:
     If Not m_logger Is Nothing Then
-        m_logger.LogError "clsSearchEngine", "SearchByKeywords", Err.Description
+        m_logger.LogError "clsSearchEngine", "SearchByKeywords", Err.Description, "", "LOG-M08-SEARCH-ERR"
     End If
     SearchByKeywords = 0
 End Function
@@ -215,21 +233,23 @@ Public Sub DisplayKnowledge(ByVal knowledgeNo As String)
     Call RenderDetailImagePane(ws, knowledgeNo, content)
 
     If Not m_logger Is Nothing Then
-        m_logger.LogInfo "clsSearchEngine", "DisplayKnowledge", _
+        m_logger.LogInfo "clsSearchEngine", "DisplayKnowledge", logId:="LOG-M09-GOTOEDIT-EXIT-OK", message:= _
                           "表示: " & knowledgeNo
     End If
     Exit Sub
 
 ErrHandler:
     If Not m_logger Is Nothing Then
-        m_logger.LogError "clsSearchEngine", "DisplayKnowledge", Err.Description
+        m_logger.LogError "clsSearchEngine", "DisplayKnowledge", Err.Description, "", "LOG-M09-GOTOEDIT-ENTRY"
     End If
 End Sub
 
 ' ================================================================
 ' 関数名: ScoreMatchPublic
-' 概要:   ScoreMatch のテスト用 Public ラッパ。引数は ScoreMatch と同じ。
-' 戻り値: Long - 0=miss、1+=score
+' 概要:   ScoreMatch のテスト用 Public ラッパ。
+'         BUG-001 修正 (2026-05-12): category / assignee 引数を追加。
+'         既存テスト互換のため searchMode/targetField は引き続き受け取る。
+' 戻り値: Double - 0=miss、1+=score
 ' 備考:   テスト層 (T4-006/007) から直接呼び出し可能にするための公開関数。
 '         本番フローは ScanAndMatch 経由で内部呼び出しされるため通常は使わない。
 ' ================================================================
@@ -239,7 +259,9 @@ Public Function ScoreMatchPublic(ByVal content As String, _
                                    ByVal searchMode As String, _
                                    ByVal targetField As String, _
                                    ByVal fromDateStr As String, _
-                                   ByVal toDateStr As String) As Double
+                                   ByVal toDateStr As String, _
+                                   Optional ByVal category As String = "", _
+                                   Optional ByVal assignee As String = "") As Double
     Dim fromDate As Date
     Dim toDate As Date
     Dim hasFromDate As Boolean
@@ -248,7 +270,8 @@ Public Function ScoreMatchPublic(ByVal content As String, _
     hasToDate = TryParseDate(toDateStr, toDate)
 
     ScoreMatchPublic = ScoreMatch(content, formatId, keywords, searchMode, _
-                                    targetField, fromDate, hasFromDate, _
+                                    targetField, category, assignee, _
+                                    fromDate, hasFromDate, _
                                     toDate, hasToDate)
 End Function
 
@@ -292,6 +315,8 @@ Private Function ScanAndMatch(ByVal formatId As String, _
                                 ByVal keywords As String, _
                                 ByVal searchMode As String, _
                                 ByVal targetField As String, _
+                                ByVal category As String, _
+                                ByVal assignee As String, _
                                 ByVal fromDateStr As String, _
                                 ByVal toDateStr As String, _
                                 ByRef outMatched() As String, _
@@ -324,7 +349,8 @@ Private Function ScanAndMatch(ByVal formatId As String, _
         If content <> "" Then
             Dim sc As Double
             sc = ScoreMatch(content, formatId, keywords, searchMode, _
-                              targetField, fromDate, hasFromDate, _
+                              targetField, category, assignee, _
+                              fromDate, hasFromDate, _
                               toDate, hasToDate)
             If sc > 0# Then
                 If matchCount < RESULT_MAX_ROWS Then
@@ -382,6 +408,8 @@ Private Function ScoreMatch(ByVal content As String, _
                               ByVal keywords As String, _
                               ByVal searchMode As String, _
                               ByVal targetField As String, _
+                              ByVal category As String, _
+                              ByVal assignee As String, _
                               ByVal fromDate As Date, _
                               ByVal hasFromDate As Boolean, _
                               ByVal toDate As Date, _
@@ -391,6 +419,26 @@ Private Function ScoreMatch(ByVal content As String, _
         Dim actualFmt As String
         actualFmt = ExtractStanzaValue(content, "FormatID")
         If actualFmt <> formatId Then
+            ScoreMatch = 0#
+            Exit Function
+        End If
+    End If
+
+    ' --- BUG-001 修正: カテゴリ絞込 (部分一致、大文字小文字無視) ---
+    If Trim(category) <> "" Then
+        Dim categoryActual As String
+        categoryActual = ExtractKeyValueFromItems(content, "カテゴリ")
+        If InStr(1, LCase(categoryActual), LCase(Trim(category))) = 0 Then
+            ScoreMatch = 0#
+            Exit Function
+        End If
+    End If
+
+    ' --- BUG-001 修正: 担当者絞込 (部分一致、大文字小文字無視) ---
+    If Trim(assignee) <> "" Then
+        Dim assigneeActual As String
+        assigneeActual = ExtractKeyValueFromItems(content, "担当者")
+        If InStr(1, LCase(assigneeActual), LCase(Trim(assignee))) = 0 Then
             ScoreMatch = 0#
             Exit Function
         End If
@@ -530,8 +578,11 @@ Private Function IsMatch(ByVal content As String, _
                            ByVal hasFromDate As Boolean, _
                            ByVal toDate As Date, _
                            ByVal hasToDate As Boolean) As Boolean
+    ' BUG-001 修正: ScoreMatch のシグニチャに category/assignee が追加された
+    '              ため、IsMatch は空文字を渡して既存判定と等価動作させる。
     IsMatch = (ScoreMatch(content, formatId, keywords, searchMode, _
-                           targetField, fromDate, hasFromDate, _
+                           targetField, "", "", _
+                           fromDate, hasFromDate, _
                            toDate, hasToDate) > 0#)
 End Function
 
@@ -570,25 +621,25 @@ End Function
 ' 関数名: ExtractKeyFromItem
 ' 概要:   ITEM 行から指定キーの値を抽出
 ' ================================================================
-Private Function ExtractKeyFromItem(ByVal line As String, _
+Private Function ExtractKeyFromItem(ByVal lineStr As String, _
                                       ByVal keyName As String) As String
     Dim searchKey As String
     Dim startPos As Long
     Dim endPos As Long
 
     searchKey = keyName & "="
-    startPos = InStr(line, searchKey)
+    startPos = InStr(lineStr, searchKey)
     If startPos = 0 Then
         ExtractKeyFromItem = ""
         Exit Function
     End If
 
     startPos = startPos + Len(searchKey)
-    endPos = InStr(startPos, line, " / ")
+    endPos = InStr(startPos, lineStr, " / ")
     If endPos = 0 Then
-        ExtractKeyFromItem = Mid(line, startPos)
+        ExtractKeyFromItem = Mid(lineStr, startPos)
     Else
-        ExtractKeyFromItem = Mid(line, startPos, endPos - startPos)
+        ExtractKeyFromItem = Mid(lineStr, startPos, endPos - startPos)
     End If
 End Function
 
@@ -743,7 +794,7 @@ Private Sub PopulateResults(ByVal ws As Worksheet, _
             ExtractStanzaValue(content, "CreatedDate")
         ws.Cells(targetRow, SS_RESULT_COL_UPDATED).Value = _
             ExtractStanzaValue(content, "UpdatedDate")
-        ' "▶ 詳細" は CP932 で ▶ が encode 失敗するため ChrW で動的構築する
+        ' "? 詳細" は CP932 で ? が encode 失敗するため ChrW で動的構築する
         ws.Cells(targetRow, SS_RESULT_COL_DETAIL).Value = ChrW(&H25B6) & " 詳細"
 
         ' --- サムネ Shape 配置 (列 H) ---
@@ -858,5 +909,28 @@ Private Function CombineFilePath(ByVal folder As String, _
     Else
         CombineFilePath = folder & "" & fileName
     End If
+End Function
+
+' ================================================================
+' 関数名: StripPlaceholder (BUG-001 修正で追加)
+' 概要:   検索画面で spec の HintText (例: "(キーワードを入力)") が
+'         入力欄セルに残ったままだと engine が誤って検索文字列として
+'         扱ってしまうため、placeholder 文字列を空文字に変換する。
+' 引数:   raw - セルから読み取った文字列
+' 戻り値: String - placeholder と判定した場合は ""、それ以外はそのまま
+' 備考:   placeholder 判定条件: 先頭が "(" かつ末尾が ")" (全角丸括弧不要)。
+'         ユーザが意図的に "(...)" を検索キーに使うケースは現状想定外。
+'         必要になれば spec 側で sentinel 文字を埋め込む等で識別する。
+' ================================================================
+Private Function StripPlaceholder(ByVal raw As String) As String
+    Dim t As String
+    t = Trim(raw)
+    If Len(t) >= 2 Then
+        If Left(t, 1) = "(" And Right(t, 1) = ")" Then
+            StripPlaceholder = ""
+            Exit Function
+        End If
+    End If
+    StripPlaceholder = raw
 End Function
 ```

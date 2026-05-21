@@ -1,25 +1,28 @@
 # knowledgevba
 
-ナレッジ管理ツール (VBA 製) のドキュメントサイト（mkdocs Material）。
+ナレッジ管理ツール (VBA 製) v2.1 の公開ドキュメントサイト（MkDocs Material 製）。
 
-- 想定公開 URL: `https://<github-user>.github.io/knowledgevba/`
-- 全ページ `noindex,nofollow` で検索エンジン indexing 抑止（職場利用ツールのため）
+- 想定公開 URL: `https://ai-crafted-portfolio.github.io/knowledgevba/`
+- 全ページに `noindex,nofollow` を付与
 
 ## ローカル確認
 
 ```bash
-pip install mkdocs-material
+pip install mkdocs mkdocs-material
 mkdocs serve   # http://localhost:8000
 mkdocs build   # ./site/ にビルド
 ```
 
+## 構成
+
+- `docs/` — ドキュメント原稿（Markdown）
+- `docs/source/` — VBA モジュールのソースページ（`tools/gen_source_pages.py` が生成）
+- `mkdocs.yml` — サイト設定とナビゲーション
+- `overrides/` — テーマの上書き
+- `tools/gen_source_pages.py` — ソースページ生成スクリプト
+
 ## ページ
 
 - `docs/index.md` — 概要
-- `docs/spec.md` — 仕様
-- `docs/operations.md` — 操作手順
-- `docs/architecture.md` — アーキテクチャ
-
-## デプロイ
-
-`main` への push で GitHub Actions（`.github/workflows/deploy.yml`）が `mkdocs gh-deploy --force` を走らせて `gh-pages` ブランチに反映。GitHub repo 側で Pages を `gh-pages` branch に設定済であること前提。
+- `docs/architecture.md` — 全体アーキテクチャ
+- `docs

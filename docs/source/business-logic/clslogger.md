@@ -4,202 +4,247 @@ title: clsLogger.cls
 
 # clsLogger.cls
 
-| 項目 | 値 |
+| 項目 | 内容 |
 |---|---|
 | 層 | ビジネスロジック層 |
 | 種別 | クラスモジュール (.cls) |
-| 役割 | ログエントリの蓄積 / シート出力 / 外部ファイル出力 (TRACE 含む) |
-| 行数 | 183 行 |
+| 配置ブック | 3 ブック共通 |
+| 役割 | 操作ログをログシートへ出力。詳細度フィルタと行数上限ローテーション |
+| 行数 | 226 行 |
 
-## 配置先
+## 取り込み先
 
-VBE で `挿入 > クラスモジュール`、F4 でプロパティ → `(オブジェクト名)` を `clsLogger` に変更してから、コードペインに貼り付けます。
+クラスモジュール（.cls）です。下記コードをコピーし、`clsLogger.cls` というファイル名で保存して、VBE の「ファイル → ファイルのインポート」で取り込みます。先頭の `VERSION 1.0 CLASS` から始まる行はクラスモジュールのファイル形式の一部なので、削らずにそのまま保存してください。詳しい手順は[導入手順](../../setup.md)を参照してください。
 
-## ソースコード（コピペ可）
+## ソースコード
 
-下のコードブロック右上にカーソルを当てるとコピーボタンが表示されます。
+コードブロック右上のボタンで全文をコピーできます。
 
 ```vbnet linenums="1"
 VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
-END
+End
 Attribute VB_Name = "clsLogger"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
+' ================================================================
+' クラス: clsLogger（v2.1、Phase 2 task 2.1～2.2、ログシート専用）
+' 概要:   debugLevel 6 値フィルタ + FIFO ローテーション + シート専用出力
+' Version: v2.1（2026-05-16 EOD、Q1-Q57 解消反映）
+' 関連:   ADR-0053 §2.4 / §5.2 / §7.3 N6
+'         Q7（debugLevel 既定 ERROR + VBA 規約 3 件追加）
+'         Q17（GetDebugLevel As Long、enum 値返却）
+'         Q2（LOG sheet xlSheetHidden 既定）
+' v2.1 変更点（v1 からの差分）:
+'   - 外部 file 出力 (C:\kvba\runtime.log) 完全削除
+'   - debugLevel 6 値（OFF=0 ～ TRACE=5、modConfigHolder の Public Const 参照）
+'   - debugLevel 読込元 = modConfigHolder.GetDebugLevel()（NM-2 解消）
+'   - FIFO ローテーション（既定 10000 行、modConfigHolder.GetValueOrDefault("logRotationRows", "10000")）
+'   - LOG sheet 既定 Visible = xlSheetHidden（VeryHidden ではない、Q2）
+' ================================================================
 Option Explicit
 
-' ================================================================
-' クラス: clsLogger（ビジネスロジック層）
-' 概要:   ログシート + 外部ファイル(C:\kvba\runtime.log) 二重出力。
-'         レベル: TRACE / DEBUG / INFO / WARN / ERROR
-'         step 識別子で「どこまで通って、どこで失敗したか」を残す。
-' 依存先: clsLogEntry, modDateUtil, modStringUtil, modCommon
-' 備考:   外部ファイル append は VBA の Open For Append で実装。
-'         (coding-standards R12 は通常 I/O 用; ログ append は実用上の例外)
-'         外部書込みが連続失敗した場合は m_externalDisabled で抑止。
-' ================================================================
+' v2.1 debugLevel enum 6 値（modConfigHolder にも同等の定数あり）
+Private Const DEBUG_OFF As Long = 0
+Private Const DEBUG_ERROR As Long = 1
+Private Const DEBUG_WARN As Long = 2
+Private Const DEBUG_INFO As Long = 3
+Private Const DEBUG_DEBUG As Long = 4
+Private Const DEBUG_TRACE As Long = 5
 
 Private m_logSheet As Worksheet
-Private m_debugLevel As String
-Private m_nextRow As Long  ' M-3: O(N^2) 防止のためキャッシュ (0=未初期化)
-Private m_externalPath As String
-Private m_externalDisabled As Boolean
+Private m_debugLevel As Long
+Private m_nextRow As Long
+Private m_rotationRows As Long  ' FIFO 上限行数（-1 = 無効）
 
-' m-12: マジックナンバー 100000 を Const 化
-Private Const MAX_LOG_SCAN_ROWS As Long = 100000
+' ----------------------------------------------------------------
+' 初期化
+' ----------------------------------------------------------------
 
-' v20: M-14 リデザインに伴うデータ書込開始行。A1 はタイトル帯、A8 は表ヘッダ、
-'      データ本体は A9 から。これにより画面描画 (タイトル/ヘッダ) と
-'      ログ書込が衝突しない。
-Private Const LOG_DATA_START_ROW As Long = 9
-
-' --- Property Get ---
-
-Public Property Get DebugLevel() As String
-    DebugLevel = m_debugLevel
-End Property
-
-Public Property Get ExternalPath() As String
-    ExternalPath = m_externalPath
-End Property
-
-' ================================================================
-' 関数名: Init
-' 概要:   初期化（ログシート参照とデバッグレベルを保持）
-' 引数:   logSheet    - ログ出力先のワークシート
-'         debugLevel  - "OFF" または "ON"
-' 戻り値: なし
-' 備考:   外部ログパスは EXTERNAL_LOG_PATH 定数を既定値とする。
-'         呼び出し側で SetExternalPath を使えば差し替え可能。
-' ================================================================
-Public Sub Init(ByVal logSheet As Worksheet, ByVal debugLevel As String)
+Public Sub Init(ByVal logSheet As Worksheet, Optional ByVal debugLevelOverride As Long = -99)
+    On Error GoTo ErrHandler
     Set m_logSheet = logSheet
-    m_debugLevel = debugLevel
-    m_externalPath = EXTERNAL_LOG_PATH
-    m_externalDisabled = False
-End Sub
-
-' ================================================================
-' 関数名: SetExternalPath
-' 概要:   外部ログファイルのパスを差し替える（テスト等で利用）
-' ================================================================
-Public Sub SetExternalPath(ByVal newPath As String)
-    m_externalPath = newPath
-    m_externalDisabled = False
-End Sub
-
-' ================================================================
-' 関数名: LogError
-' 概要:   エラーログを出力（debugLevel 関係なく出力）
-' ================================================================
-Public Sub LogError(ByVal modName As String, _
-                      ByVal funcName As String, _
-                      ByVal message As String)
-    Call WriteLogInternal(modName, funcName, LOG_LEVEL_ERROR, message)
-End Sub
-
-' ================================================================
-' 関数名: LogErrorWithErr
-' 概要:   ErrHandler から呼ぶ用。step 名と Err 情報を組み立てて 1 行で記録。
-' 引数:   stepName  - 失敗直前に通っていた step 名（呼び出し側で文字列管理）
-'         errNum    - Err.Number
-'         errDesc   - Err.Description
-' ================================================================
-Public Sub LogErrorWithErr(ByVal modName As String, _
-                             ByVal funcName As String, _
-                             ByVal stepName As String, _
-                             ByVal errNum As Long, _
-                             ByVal errDesc As String)
-    Dim msg As String
-    msg = "FAIL step=[" & stepName & "] errNum=" & errNum & " desc=" & errDesc
-    Call WriteLogInternal(modName, funcName, LOG_LEVEL_ERROR, msg)
-End Sub
-
-' ================================================================
-' 関数名: LogWarn
-' ================================================================
-Public Sub LogWarn(ByVal modName As String, _
-                     ByVal funcName As String, _
-                     ByVal message As String)
-    Call WriteLogInternal(modName, funcName, LOG_LEVEL_WARN, message)
-End Sub
-
-' ================================================================
-' 関数名: LogInfo
-' ================================================================
-Public Sub LogInfo(ByVal modName As String, _
-                     ByVal funcName As String, _
-                     ByVal message As String)
-    Call WriteLogInternal(modName, funcName, LOG_LEVEL_INFO, message)
-End Sub
-
-' ================================================================
-' 関数名: LogTrace
-' 概要:   ENTER/EXIT/step マーカー用のトレースログ。
-'         シート書き込みは debugLevel=ON 時のみ（シート過多防止）。
-'         外部ファイルには常に書き出して「ここまで通った」を残す。
-' ================================================================
-Public Sub LogTrace(ByVal modName As String, _
-                      ByVal funcName As String, _
-                      ByVal message As String)
-    If m_debugLevel = DEBUG_ON Then
-        Call WriteLogInternal(modName, funcName, LOG_LEVEL_TRACE, message)
+    If debugLevelOverride = -99 Then
+        m_debugLevel = modConfigHolder.GetDebugLevel()  ' Q7/Q17 既定 ERROR
     Else
-        Call WriteToExternalFileSafe(modName, funcName, LOG_LEVEL_TRACE, message)
+        m_debugLevel = debugLevelOverride
     End If
+    m_nextRow = 0
+    m_rotationRows = CLng(modConfigHolder.GetValueOrDefault("logRotationRows", "10000"))
+
+    ' Q2: LOG sheet 既定 Visible = xlSheetHidden（VeryHidden ではない、ユーザ右クリック再表示可）
+    If m_logSheet.Visible <> xlSheetHidden And m_logSheet.Visible <> xlSheetVisible Then
+        m_logSheet.Visible = xlSheetHidden
+    End If
+    Exit Sub
+ErrHandler:
+    Debug.Print "[clsLogger.Init ERROR] " & Err.Description
 End Sub
 
-' ================================================================
-' 関数名: LogDebug
-' 概要:   デバッグログを出力（debugLevel ON 時のみシートに出す）
-'         外部ファイルには常に出力する（後追い解析用）。
-' ================================================================
-Public Sub LogDebug(ByVal modName As String, _
-                      ByVal funcName As String, _
-                      ByVal message As String)
-    If m_debugLevel <> DEBUG_ON Then
-        Call WriteToExternalFileSafe(modName, funcName, LOG_LEVEL_DEBUG, message)
-        Exit Sub
-    End If
-    Call WriteLogInternal(modName, funcName, LOG_LEVEL_DEBUG, message)
+Private Sub Class_Initialize()
+    m_debugLevel = DEBUG_OFF  ' 既定 OFF（Init 前は何も出さない）
+    m_nextRow = 0
+    m_rotationRows = -1
 End Sub
 
-' ================================================================
-' 関数名: ClearLog
-' 概要:   ログシートの A9 以降を全削除（ヘッダ A8 と A1 タイトルは保持）
-' ================================================================
+' ----------------------------------------------------------------
+' Public API（v1 互換、内部実装のみ v2.1 化）
+' ----------------------------------------------------------------
+
+Public Sub LogError(ByVal moduleName As String, ByVal funcName As String, ByVal msg As String, _
+                    Optional ByVal target As String = "", Optional ByVal logId As String = "")
+    If m_debugLevel < DEBUG_ERROR Then Exit Sub
+    WriteLine "ERROR", moduleName, funcName, msg, target, logId
+End Sub
+
+Public Sub LogWarn(ByVal moduleName As String, ByVal funcName As String, ByVal msg As String, _
+                   Optional ByVal target As String = "", Optional ByVal logId As String = "")
+    If m_debugLevel < DEBUG_WARN Then Exit Sub
+    WriteLine "WARN", moduleName, funcName, msg, target, logId
+End Sub
+
+Public Sub LogInfo(ByVal moduleName As String, ByVal funcName As String, _
+                   Optional ByVal message As String = "", _
+                   Optional ByVal target As String = "", Optional ByVal logId As String = "")
+    If m_debugLevel < DEBUG_INFO Then Exit Sub
+    WriteLine "INFO", moduleName, funcName, message, target, logId
+End Sub
+
+Public Sub LogDebug(ByVal moduleName As String, ByVal funcName As String, ByVal msg As String, _
+                    Optional ByVal target As String = "", Optional ByVal logId As String = "")
+    If m_debugLevel < DEBUG_DEBUG Then Exit Sub
+    WriteLine "DEBUG", moduleName, funcName, msg, target, logId
+End Sub
+
+Public Sub LogTrace(ByVal moduleName As String, ByVal funcName As String, ByVal msg As String, _
+                    Optional ByVal target As String = "", Optional ByVal logId As String = "")
+    If m_debugLevel < DEBUG_TRACE Then Exit Sub
+    WriteLine "TRACE", moduleName, funcName, msg, target, logId
+End Sub
+
+Public Sub LogEntry(ByVal moduleName As String, ByVal funcName As String, Optional ByVal logId As String = "")
+    If m_debugLevel < DEBUG_TRACE Then Exit Sub
+    WriteLine "TRACE", moduleName, funcName, "[ENTRY]", "", logId
+End Sub
+
+Public Sub LogExit(ByVal moduleName As String, ByVal funcName As String, Optional ByVal logId As String = "")
+    If m_debugLevel < DEBUG_TRACE Then Exit Sub
+    WriteLine "TRACE", moduleName, funcName, "[EXIT]", "", logId
+End Sub
+
+Public Sub LogBranch(ByVal moduleName As String, ByVal funcName As String, ByVal branchInfo As String, Optional ByVal logId As String = "")
+    If m_debugLevel < DEBUG_TRACE Then Exit Sub
+    WriteLine "TRACE", moduleName, funcName, "[BRANCH] " & branchInfo, "", logId
+End Sub
+
+Public Sub LogLoopProgress(ByVal moduleName As String, ByVal funcName As String, ByVal current As Long, ByVal total As Long, Optional ByVal logId As String = "")
+    If m_debugLevel < DEBUG_TRACE Then Exit Sub
+    WriteLine "TRACE", moduleName, funcName, "[LOOP " & current & "/" & total & "]", "", logId
+End Sub
+
+Public Sub LogErr(ByVal moduleName As String, ByVal funcName As String, ByRef errObj As ErrObject, _
+                  Optional ByVal target As String = "", Optional ByVal logId As String = "")
+    WriteLine "ERROR", moduleName, funcName, _
+              "Err#" & errObj.Number & " " & errObj.Description, target, logId
+End Sub
+
+' Q17: GetDebugLevel As Long、enum 値返却（modConfigHolder 経由で 5 秒 polling 想定）
+Public Function GetDebugLevel() As Long
+    GetDebugLevel = m_debugLevel
+End Function
+
+Public Function IsTraceEnabled() As Boolean
+    IsTraceEnabled = (m_debugLevel >= DEBUG_TRACE)
+End Function
+
+' debugLevel 動的更新（5 秒 polling 用、Application.OnTime で起動）
+Public Sub RefreshDebugLevel()
+    On Error GoTo ErrHandler
+    Dim newLevel As Long
+    newLevel = modConfigHolder.GetDebugLevel()
+    If newLevel <> m_debugLevel Then
+        WriteLine "INFO", "clsLogger", "RefreshDebugLevel", _
+                  "debugLevel 変更: " & m_debugLevel & " -> " & newLevel, "", "LOG-LV-006"
+        m_debugLevel = newLevel
+    End If
+    Exit Sub
+ErrHandler:
+    Debug.Print "[clsLogger.RefreshDebugLevel ERROR] " & Err.Description
+End Sub
+
 Public Sub ClearLog()
     On Error GoTo ErrHandler
-
+    If m_logSheet Is Nothing Then Exit Sub
+    Dim dataStart As Long
+    dataStart = 9  ' LOG_DATA_START_ROW（modCommon 経由）
     Dim lastRow As Long
-    lastRow = GetLastLogRow()
+    lastRow = m_logSheet.Cells(m_logSheet.Rows.Count, 1).End(xlUp).Row
+    If lastRow >= dataStart Then
+        m_logSheet.Rows(dataStart & ":" & lastRow).Clear
+    End If
+    m_nextRow = 0
+    Exit Sub
+ErrHandler:
+    Debug.Print "[clsLogger.ClearLog ERROR] " & Err.Description
+End Sub
 
-    If lastRow < LOG_DATA_START_ROW Then
-        ' データなし。外部ログには起動マーカー
-        Call WriteToExternalFileSafe("clsLogger", "ClearLog", LOG_LEVEL_INFO, "ログクリア(空)")
-        Exit Sub
+' ----------------------------------------------------------------
+' Private: シート書き込み + FIFO ローテーション
+' ----------------------------------------------------------------
+
+Private Sub WriteLine(ByVal level As String, ByVal moduleName As String, ByVal funcName As String, _
+                       ByVal msg As String, ByVal target As String, ByVal logId As String)
+    On Error GoTo ErrHandler
+    If m_logSheet Is Nothing Then Exit Sub
+
+    Dim r As Long
+    r = NextLogRow()
+
+    ' FIFO ローテーション（rotation 上限超過時、先頭行を削除）
+    If m_rotationRows > 0 Then
+        Dim dataStart As Long
+        dataStart = 9  ' LOG_DATA_START_ROW
+        If r - dataStart >= m_rotationRows Then
+            m_logSheet.Rows(dataStart).Delete
+            r = r - 1
+        End If
     End If
 
-    m_logSheet.Range(m_logSheet.Cells(LOG_DATA_START_ROW, 1), _
-                      m_logSheet.Cells(lastRow, 5)).ClearContents
-    m_nextRow = LOG_DATA_START_ROW  ' v20: cache reset to data start row
-    Call WriteToExternalFileSafe("clsLogger", "ClearLog", LOG_LEVEL_INFO, _
-                                  "ログクリア完了 (rows=" & (lastRow - LOG_DATA_START_ROW + 1) & ")")
+    m_logSheet.Cells(r, 1).Value = Format$(Now(), "yyyy-mm-dd hh:nn:ss")
+    m_logSheet.Cells(r, 2).Value = moduleName
+    m_logSheet.Cells(r, 3).Value = funcName
+    m_logSheet.Cells(r, 4).Value = level
+    m_logSheet.Cells(r, 5).Value = msg
+    m_logSheet.Cells(r, 6).Value = Environ("USERNAME")  ' Q1 actor 自動記録
+    m_logSheet.Cells(r, 7).Value = target
+    If Len(logId) > 0 Then
+        m_logSheet.Cells(r, 8).Value = logId
+    End If
+
+    m_nextRow = r + 1
     Exit Sub
 
 ErrHandler:
-    ' クリア失敗時は外部ログだけでも残す
-    Call WriteToExternalFileSafe("clsLogger", "ClearLog", LOG_LEVEL_ERROR, _
-                                  "ClearLog 失敗 errNum=" & Err.Number & " desc=" & Err.Description)
+    ' Q7 規約 X：error handler 内で LogError 呼ぶ → 自己再帰で無限ループ防ぐため Debug.Print のみ
+    Debug.Print "[clsLogger.WriteLine ERROR] " & Err.Description
 End Sub
 
-' ================================================================
-' 関数名: WriteLogInternal
-' 概要:   シート + 外部ファイル両方への書き込みを統括する内部関数。
-'         シート書込みが失敗しても外部ファイルへの試行は実施。
-' ================================================================
-Private Sub WriteLogInternal(ByVal modName As String, _
+Private Function NextLogRow() As Long
+    If m_nextRow > 0 Then
+        NextLogRow = m_nextRow
+        Exit Function
+    End If
+    Dim dataStart As Long
+    dataStart = 9  ' LOG_DATA_START_ROW
+    Dim lastRow As Long
+    lastRow = m_logSheet.Cells(m_logSheet.Rows.Count, 1).End(xlUp).Row
+    If lastRow < dataStart Then
+        NextLogRow = dataStart
+    Else
+        NextLogRow = lastRow + 1
+    End If
+End Function
 ```

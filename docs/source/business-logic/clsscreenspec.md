@@ -4,20 +4,21 @@ title: clsScreenSpec.cls
 
 # clsScreenSpec.cls
 
-| 項目 | 値 |
+| 項目 | 内容 |
 |---|---|
 | 層 | ビジネスロジック層 |
 | 種別 | クラスモジュール (.cls) |
-| 役割 | 1 画面分の宣言情報 (タイトル / セクション / ボタン / フィールド) を保持するルート spec |
-| 行数 | 135 行 |
+| 配置ブック | 3 ブック共通 |
+| 役割 | 1 画面分の構成情報（タイトル・セクション・ボタン・フィールド）を保持する値オブジェクト |
+| 行数 | 173 行 |
 
-## 配置先
+## 取り込み先
 
-VBE で `挿入 > クラスモジュール`、F4 でプロパティ → `(オブジェクト名)` を `clsScreenSpec` に変更してから、コードペインに貼り付けます。
+クラスモジュール（.cls）です。下記コードをコピーし、`clsScreenSpec.cls` というファイル名で保存して、VBE の「ファイル → ファイルのインポート」で取り込みます。先頭の `VERSION 1.0 CLASS` から始まる行はクラスモジュールのファイル形式の一部なので、削らずにそのまま保存してください。詳しい手順は[導入手順](../../setup.md)を参照してください。
 
-## ソースコード（コピペ可）
+## ソースコード
 
-下のコードブロック右上にカーソルを当てるとコピーボタンが表示されます。
+コードブロック右上のボタンで全文をコピーできます。
 
 ```vbnet linenums="1"
 VERSION 1.0 CLASS
@@ -32,7 +33,7 @@ Attribute VB_Exposed = False
 Option Explicit
 
 ' ================================================================
-' クラス: clsScreenSpec（画面層 — データ）
+' クラス: clsScreenSpec（画面層 ? データ）
 ' 概要:   1 画面分の構成（タイトル/セクション/ボタン/フィールド）を保持。
 '         画面修正は本クラスのインスタンスを書き換えるだけで完結する設計。
 ' 依存先: clsSectionSpec, clsButtonSpec, clsFieldSpec
@@ -51,10 +52,23 @@ Private m_headerLabels As Variant     ' 一覧系: ヘッダラベル配列
 Private m_emptyStateAddr As String    ' "0 件" 表示位置
 Private m_emptyStateText As String
 
+' --- ADR-0045 FIX-RNDR-02: SubTitle (タイトル行直下の補助情報 行 2 への分離) ---
+Private m_subTitleText As String      ' "FMT001 (新規)" 等。空文字なら描画スキップ
+Private m_subTitleAddr As String      ' "A2" 等。既定値 "A2" (Property Get で対応)
+
+' --- ADR-0045 FIX-RNDR-03: ColumnWidths (列幅 SSOT)
+'     M-07/M-08/M-10/M-14 のテーブル右端列切れ問題 (C-5) 解消用 ---
+Private m_columnWidths As Variant     ' Array of Double。例: Array(4, 12, 12, 10, 10, 22, 10, 8, 6, 6, 8)
+                                      ' i 番目要素 = (i+1) 列目 (A=1, B=2, ...) の幅 (文字数単位)
+                                      ' 未設定 (Empty) の場合は ColumnWidths 設定スキップ (legacy 動作)
+
 Private Sub Class_Initialize()
     Set m_sections = New Collection
     Set m_buttons = New Collection
     Set m_fields = New Collection
+    m_subTitleText = ""
+    m_subTitleAddr = "A2"       ' 既定: タイトル行 (行 1) の直下
+    m_columnWidths = Empty
 End Sub
 
 Public Property Get ScreenId() As String
@@ -130,6 +144,31 @@ Public Property Get EmptyStateText() As String
 End Property
 Public Property Let EmptyStateText(ByVal value As String)
     m_emptyStateText = value
+End Property
+
+' --- ADR-0045 FIX-RNDR-02: SubTitle Property ---
+Public Property Get SubTitleText() As String
+    SubTitleText = m_subTitleText
+End Property
+Public Property Let SubTitleText(ByVal value As String)
+    m_subTitleText = value
+End Property
+
+Public Property Get SubTitleAddr() As String
+    SubTitleAddr = m_subTitleAddr
+End Property
+Public Property Let SubTitleAddr(ByVal value As String)
+    m_subTitleAddr = value
+End Property
+
+' --- ADR-0045 FIX-RNDR-03: ColumnWidths Property ---
+' 値は Array(width_a, width_b, width_c, ...) の Variant 配列。文字数単位 (Excel 既定の ColumnWidth と同単位)
+' 未設定 (Empty) なら ColumnWidths は触らず Excel デフォルトのまま
+Public Property Get ColumnWidths() As Variant
+    ColumnWidths = m_columnWidths
+End Property
+Public Property Let ColumnWidths(ByVal value As Variant)
+    m_columnWidths = value
 End Property
 
 ' ================================================================

@@ -4,46 +4,53 @@ title: modScreenRender.bas
 
 # modScreenRender.bas
 
-| 項目 | 値 |
+| 項目 | 内容 |
 |---|---|
 | 層 | ビジネスロジック層 |
 | 種別 | 標準モジュール (.bas) |
-| 役割 | 標準画面の描画委譲 (各 clsXxxScreen.Setup から呼ばれる共通処理) |
-| 行数 | 90 行 |
+| 配置ブック | 3 ブック共通 |
+| 役割 | 各画面クラス共通のシート描画入口とログ補助 |
+| 行数 | 96 行 |
 
-## 配置先
+## 取り込み先
 
-VBE で `挿入 > 標準モジュール`、F4 でプロパティ → `(オブジェクト名)` を `modScreenRender` に変更してから、コードペインに貼り付けます。
+標準モジュール（.bas）です。下記コードをコピーし、`modScreenRender.bas` というファイル名で保存して、VBE の「ファイル → ファイルのインポート」で取り込みます。詳しい手順は[導入手順](../../setup.md)を参照してください。
 
-## ソースコード（コピペ可）
+## ソースコード
 
-下のコードブロック右上にカーソルを当てるとコピーボタンが表示されます。
+コードブロック右上のボタンで全文をコピーできます。
 
 ```vbnet linenums="1"
 Attribute VB_Name = "modScreenRender"
 Option Explicit
 
 ' ================================================================
-' モジュール: modScreenRender（画面層 — ユーティリティ）
-' 概要:   各画面クラス（clsXxxScreen）が共通で使う「spec を Renderer に
-'         流し込む」標準描画ロジック。各画面クラスはこれを Call することで
-'         「タイトル / セクション帯 / ボタン / フィールドラベル / 一覧ヘッダ /
-'          ←メインに戻る ボタン / 空状態」を一括で描画できる。
-' 依存先: IScreenRenderer, clsScreenSpec, modCommon, clsLogger
-' 備考:   v21 (E2E rerun) で ENTER/EXIT/step ログを注入。
-'         各画面クラスから呼ぶ公開ヘルパー LogScreenTrace/LogScreenError も提供。
+' モジュール: modScreenRender (画面層 ユーティリティ)
+' 概要: 各画面クラスが共通で使うシート描画 entry + 画面層ログヘルパー
+' 依存先: IScreenRenderer (v2 8-method), clsScreenSpec, modCommon, clsLogger
+' 備考: 2026-05-20 v1→v2 migration。逐次 Render* パイプライン
+'       (RenderTitle / RenderSection / RenderButton 等) を ApplyFromStanza
+'       1 呼出に集約。ui_layout / coords 切替え部は削除 (architecture §807 #27)。
+'       色指定 (COLOR_BTN_*) は modUILoader / UI スタンザ側に委譲。
 ' ================================================================
 
 Private Const MOD_NAME As String = "modScreenRender"
 
 ' ================================================================
 ' 関数名: RenderStandardScreen
-' 概要:   標準的な画面構築の流れを実行
-' 引数:   renderer - IScreenRenderer 実装
-'         spec     - clsScreenSpec データ
+' 概要: 1 画面分の物理 UI をシートに再構築する。
+'       v2: BindSheet → ClearScreen → ApplyFromStanza の 3 手順。
+' 引数: renderer  - IScreenRenderer (v2 8-method)
+'       spec      - clsScreenSpec (ScreenId / SheetName 等を参照)
+'       xlsmName  - UI スタンザ配置先 xlsm 名 ("登録・修正" / "設定" / "管理")
+'                   未指定 ("") の場合は ApplyFromStanza にそのまま
+'                   渡し (modUILoader 内部で空ディレクトリ判定)。
+'                   clsScreenSpec に xlsmName が無いため Optional 引数とし、
+'                   呼出元 (画面層 cls) は無指定のまま無改修で通。
 ' ================================================================
 Public Sub RenderStandardScreen(ByVal renderer As IScreenRenderer, _
-                                 ByVal spec As clsScreenSpec)
+                                 ByVal spec As clsScreenSpec, _
+                                 Optional ByVal xlsmName As String = "")
     On Error GoTo ErrHandler
     Dim stepName As String : stepName = "begin"
     Dim sid As String : sid = ""
@@ -57,57 +64,57 @@ Public Sub RenderStandardScreen(ByVal renderer As IScreenRenderer, _
     stepName = "BindSheet " & spec.SheetName
     renderer.BindSheet spec.SheetName
 
-    ' 1) タイトル帯
-    If Len(spec.Title) > 0 Then
-        stepName = "RenderTitle"
-        renderer.RenderTitle spec.ScreenId, spec.Title, spec.TitleColorHex
+    ' --- 画面遷移時に既存描画を全消し (clsSheetRenderer.ClearScreen が cell + shape 削除) ---
+    stepName = "ClearScreen"
+    renderer.ClearScreen
+
+    ' --- v2: 物理 UI 構築は ApplyFromStanza 1 呼出に集約 (modUILoader 経由) ---
+    ' 逐次 Render* (Title / Section / Button / Field / HeaderRow 等) は UI スタンザ
+    ' .txt 定義側に委譲。色指定や coords 切替えも modUILoader 内で解決する。
+    stepName = "ApplyFromStanza " & sid
+    renderer.ApplyFromStanza xlsmName, sid
+
+    Call LogScreenTrace(MOD_NAME, "RenderStandardScreen", "EXIT sid=" & sid)
+    Exit Sub
+
+ErrHandler:
+    Call LogScreenError(MOD_NAME, "RenderStandardScreen", _
+                         "sid=" & sid & " step=" & stepName, Err.Number, Err.Description)
+End Sub
+
+' ================================================================
+' 関数名: LogScreenTrace
+' 概要: 画面層共通の Trace ログ出力ラッパ (v1/v2 非依存)
+' ================================================================
+Public Sub LogScreenTrace(ByVal className As String, _
+                            ByVal funcName As String, _
+                            ByVal message As String, _
+                            Optional ByVal logId As String = "")
+    On Error Resume Next
+    Dim lg As clsLogger
+    Set lg = New clsLogger
+    lg.Init ThisWorkbook.Worksheets("LOG")
+    If Not lg Is Nothing Then
+        lg.LogTrace className, funcName, message, "", logId
     End If
+End Sub
 
-    ' 2) セクション帯
-    stepName = "Sections"
-    Dim sec As clsSectionSpec
-    Dim secCount As Long : secCount = 0
-    For Each sec In spec.Sections
-        renderer.RenderSection sec.Address, sec.Label, sec.ColorHex
-        secCount = secCount + 1
-    Next sec
-
-    ' 3) ボタン群
-    stepName = "Buttons"
-    Dim btn As clsButtonSpec
-    Dim btnCount As Long : btnCount = 0
-    For Each btn In spec.Buttons
-        renderer.RenderButton btn
-        btnCount = btnCount + 1
-    Next btn
-
-    ' 4) フィールドラベル群（データが空でも常時表示）
-    stepName = "Fields"
-    Dim fld As clsFieldSpec
-    Dim fldCount As Long : fldCount = 0
-    For Each fld In spec.Fields
-        renderer.RenderInputField "", fld
-        fldCount = fldCount + 1
-    Next fld
-
-    ' 5) 一覧ヘッダ行（M-02/M-07/M-08 等の一覧系のみ）
-    If Len(spec.HeaderRowAddr) > 0 Then
-        stepName = "HeaderRow " & spec.HeaderRowAddr
-        renderer.RenderHeaderRow spec.HeaderRowAddr, spec.HeaderLabels, COLOR_BTN_PRIMARY
+' ================================================================
+' 関数名: LogScreenError
+' 概要: 画面層共通の Error ログ出力ラッパ (v1/v2 非依存)
+' ================================================================
+Public Sub LogScreenError(ByVal className As String, _
+                            ByVal funcName As String, _
+                            ByVal stepName As String, _
+                            ByVal errNum As Long, _
+                            ByVal errDesc As String, _
+                            Optional ByVal logId As String = "")
+    On Error Resume Next
+    Dim lg As clsLogger
+    Set lg = New clsLogger
+    lg.Init ThisWorkbook.Worksheets("LOG")
+    If Not lg Is Nothing Then
+        lg.LogError className, funcName, "step=" & stepName & " Err#" & errNum & " " & errDesc, "", logId
     End If
-
-    ' 6) 空状態メッセージ（一覧系のみ）
-    If Len(spec.EmptyStateAddr) > 0 Then
-        stepName = "EmptyState " & spec.EmptyStateAddr
-        renderer.RenderEmptyState spec.EmptyStateAddr, spec.EmptyStateText
-    End If
-
-    ' 7) ←メインに戻る ボタン（メイン以外の全画面に必置）
-    If Len(spec.BackToMainAddr) > 0 Then
-        stepName = "BackToMainButton " & spec.BackToMainAddr
-        Call PlaceBackToMainButton(renderer, spec.BackToMainAddr)
-    End If
-
-    Call LogScreenTrace(MOD_NAME, "RenderStandardScreen", _
-                         "EXIT sid=" & sid & " sec=" & secCount & " btn
+End Sub
 ```

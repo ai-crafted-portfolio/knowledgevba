@@ -4,207 +4,275 @@ title: clsSetupOrchestrator.cls
 
 # clsSetupOrchestrator.cls
 
-| 項目 | 値 |
+| 項目 | 内容 |
 |---|---|
 | 層 | ビジネスロジック層 |
 | 種別 | クラスモジュール (.cls) |
-| 役割 | セットアップ全工程 (シート生成 / spec 読込 / 描画依頼) を統括する制御クラス |
-| 行数 | 187 行 |
+| 配置ブック | 3 ブック共通 |
+| 役割 | ブック起動時のセットアップ一括処理（設定読込→ログ初期化→シート構築→保護→起動シート表示） |
+| 行数 | 254 行 |
 
-## 配置先
+## 取り込み先
 
-VBE で `挿入 > クラスモジュール`、F4 でプロパティ → `(オブジェクト名)` を `clsSetupOrchestrator` に変更してから、コードペインに貼り付けます。
+クラスモジュール（.cls）です。下記コードをコピーし、`clsSetupOrchestrator.cls` というファイル名で保存して、VBE の「ファイル → ファイルのインポート」で取り込みます。先頭の `VERSION 1.0 CLASS` から始まる行はクラスモジュールのファイル形式の一部なので、削らずにそのまま保存してください。詳しい手順は[導入手順](../../setup.md)を参照してください。
 
-## ソースコード（コピペ可）
+## ソースコード
 
-下のコードブロック右上にカーソルを当てるとコピーボタンが表示されます。
+コードブロック右上のボタンで全文をコピーできます。
 
 ```vbnet linenums="1"
 VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
-END
+End
 Attribute VB_Name = "clsSetupOrchestrator"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
+' ================================================================
+' クラス: clsSetupOrchestrator（v2.1、Phase 5-7、3 xlsm 共 setup）
+' 概要:   xlsm 起動時の setup orchestration（config 読込 → ログ初期化 → シート構築 → 保護 → ActiveSheet）
+' Version: v2.1（2026-05-16 EOD、Q1-Q57 回答反映）
+' 関連:   ADR-0053 §2.1 / §2.5 / §2.8 #4, Q44 / Q39-Q44 / Q34
+' SSOT:   本クラスは本番 runtime setup の SSOT（ADR-0053 §2 / SSOT-Q17）。
+'         3 xlsm のシート構成定数・起動シート定数は ADR-0053 §2.1 表が文書 SSOT。
+' v2.1 主要更新:
+'   - 画面構成（ADR-0053 §2.1.1 サブグループ順）: 登録修正=M-05/M-06、検索=M-07/M-08/M-09、管理=M-02/M-03/M-04/M-12/M-13/M-10/M-11/M-14（LOG 共通）
+'   - 起動時 ActiveSheet（ADR-0053 §2.1 / §9 M-2）: 登録修正=M-05、検索=M-08、管理=M-02
+'   - Q39: 管理.xlsm の SheetChange ハンドラ不要（M-11 は旧 ID 体系の『M-11 削除』記述を訂正、新 ID 体系では M-11=設定で現役。architecture §10-3 L37 注記と整合）
+'   - Q34: 管理.xlsm 起動時に CleanupOldBackups を呼出
+'   - 工数記述廃止（Q30）
+' ================================================================
 Option Explicit
 
-' ================================================================
-' クラス: clsSetupOrchestrator（インストーラ層）
-' 概要:   初期セットアップの司令塔。14 シート作成 → 各画面の Setup 呼出 →
-'         初期可視性設定 → 既定 Sheet 削除 を順次実行。
-'         旧 modSetup.SetupSheetsAndButtons の責務を OOP で再構成したもの。
-' 依存先: IScreenRenderer, modFactory, modScreenSpecRegistry, modCommon, clsLogger
-' 備考:   v21 (E2E rerun) で全 Sub に ENTER/EXIT/step ログを注入。
-'         SetupOneScreen の silent NextScreen → LogError で必ず痕跡を残す。
-' ================================================================
+Private m_logger As clsLogger
 
-Private Const MOD_NAME As String = "clsSetupOrchestrator"
+' xlsm 別 sheet 構成（ADR-0053 §2.1 / modSetup.bas SHEETS_* と同値、R6-01）
+' SSOT: ADR-0053 §2.1 表（§2.1.1 サブグループ順）。登録修正=M-05/M-06、検索=M-07/M-08/M-09、管理=M-02/M-03/M-04/M-12/M-13/M-10/M-11/M-14（LOG は全 xlsm 共通）
+Private Const SHEETS_TOUROKU As String = "M-05|M-06|LOG"
+Private Const SHEETS_KENSAKU As String = "M-07|M-08|M-09|LOG"
+Private Const SHEETS_KANRI As String = "M-02|M-03|M-04|M-12|M-13|M-10|M-11|M-14|LOG"
 
-Private m_renderer As IScreenRenderer
+' タブ色（ADR-0053 §2.1.1）
+Private Const TAB_COLOR_TOUROKU As Long = 16711892  ' #FFB6C1 pink (BGR: B6C1FF -> FFC1B6 reversed)
+Private Const TAB_COLOR_KENSAKU As Long = 15128749  ' #ADD8E6 lightblue
+Private Const TAB_COLOR_KANRI As Long = 9498256     ' #90EE90 lightgreen
 
-Private Const REQUIRED_SHEETS_CSV As String = _
-    "メイン,フォーマット一覧,フォーマット設計,フォーマットプレビュー," & _
-    "ナレッジ登録,ナレッジ修正,ナレッジ一覧,検索,ナレッジ表示," & _
-    "格納先設定,設定,既存データへのフィールド反映,データファイル形式,ログ"
-Private Const DEFAULT_SHEETS_CSV As String = "Sheet1,Sheet2,Sheet3,Sheet4"
+' 起動時 ActiveSheet（ADR-0053 §2.1 表 / §9 M-2、R6-01）
+' SSOT: 登録修正=M-05、検索=M-08、管理=M-02
+Private Const STARTUP_SHEET_TOUROKU As String = "M-05"
+Private Const STARTUP_SHEET_KENSAKU As String = "M-08"
+Private Const STARTUP_SHEET_KANRI As String = "M-02"
 
-' ================================================================
-' 関数名: Init
-' 概要:   Renderer を依存注入
-' ================================================================
-Public Sub Init(ByVal renderer As IScreenRenderer)
-    Set m_renderer = renderer
+' ----------------------------------------------------------------
+' Public API: spec §6.1 convenience wrappers
+' ----------------------------------------------------------------
+
+Public Sub RunForRegister()
+    RunFullSetup "登録修正"
 End Sub
 
-' ================================================================
-' 関数名: RunFullSetup
-' 概要:   フルセットアップを実行
-' ================================================================
-Public Sub RunFullSetup()
+Public Sub RunForSearch()
+    RunFullSetup "検索"
+End Sub
+
+Public Sub RunForAdmin()
+    RunFullSetup "管理"
+End Sub
+
+' ----------------------------------------------------------------
+' Public API
+' ----------------------------------------------------------------
+
+' 概要: xlsm 起動時の全 setup を実行
+' 引数: xlsmName = "登録修正" / "検索" / "管理"
+Public Sub RunFullSetup(ByVal xlsmName As String)
     On Error GoTo ErrHandler
-    Dim stepName As String : stepName = "begin"
 
-    Application.ScreenUpdating = False
-    Application.DisplayAlerts = False
+    ' (1) modConfigLoader で xlsm 別 config.txt を read し modConfigHolder にセット（Q8）
+    Call modConfigLoader.LoadConfig(xlsmName)
 
-    stepName = "CreateRequiredSheets"
-    Call LogEnter("RunFullSetup", stepName)
-    Call CreateRequiredSheets
+    ' (2) clsLogger 初期化（Q7 既定 ERROR）
+    EnsureLogSheet xlsmName
+    Set m_logger = New clsLogger
+    Call m_logger.Init(ThisWorkbook.Worksheets("LOG"))
+    m_logger.LogInfo "clsSetupOrchestrator", "RunFullSetup", "起動: " & xlsmName, "", "LOG-SETUP-START"
 
-    ' この時点で SHEET_LOG が存在するため、これ以降は logger を使える
-    Call LogTraceSafe("RunFullSetup", "after CreateRequiredSheets - sheets created")
+    ' (3) 管理.xlsm のみ: 起動時に 90 日超バックアップ自動削除（Q34）
+    If xlsmName = "管理" Then
+        Dim deleted As Long
+        deleted = modKnowledgeFileIO.CleanupOldBackups()
+        If deleted > 0 Then
+            m_logger.LogInfo "clsSetupOrchestrator", "RunFullSetup", _
+                "90 日超バックアップ削除: " & deleted & " 件", "", "LOG-BCK-CLEAN"
+        End If
+    End If
 
-    stepName = "SetupAllScreens"
-    Call LogTraceSafe("RunFullSetup", "STEP " & stepName)
-    Call SetupAllScreens
+    ' (4) シート確保（v2.1 構成、画面廃止は M-01 のみ）
+    EnsureSheets xlsmName
 
-    stepName = "InitializeSettingsSheet"
-    Call LogTraceSafe("RunFullSetup", "STEP " & stepName)
-    Call InitializeSettingsSheet
+    ' (5) タブ色設定（ADR-0053 §2.1.1）
+    ApplyTabColors xlsmName
 
-    stepName = "SetInitialVisibility"
-    Call LogTraceSafe("RunFullSetup", "STEP " & stepName)
-    Call SetInitialVisibility
+    ' (6) UI スタンザ適用（Q20 modUILoader.ApplyUiToSheet）
+    ApplyUiStanzas xlsmName
 
-    stepName = "DeleteEmptyDefaultSheets"
-    Call LogTraceSafe("RunFullSetup", "STEP " & stepName)
-    Call DeleteEmptyDefaultSheets
+    ' (7) Workbook.Protect Structure + シート保護
+    ApplyProtection
 
-    Application.ScreenUpdating = True
-    Application.DisplayAlerts = True
-    Call LogTraceSafe("RunFullSetup", "EXIT ok")
+    ' (8) ActiveSheet = 起動時画面（Q44）
+    ActivateStartupSheet xlsmName
+
+    m_logger.LogInfo "clsSetupOrchestrator", "RunFullSetup", "完了: " & xlsmName, "", "LOG-SETUP-OK"
     Exit Sub
 
 ErrHandler:
-    Application.ScreenUpdating = True
-    Application.DisplayAlerts = True
-    Call LogErrorSafe("RunFullSetup", stepName, Err.Number, Err.Description)
-    Err.Raise Err.Number, "clsSetupOrchestrator.RunFullSetup", Err.Description
+    ' Q7 規約 X: error handler 内で必ず LogError
+    If Not m_logger Is Nothing Then
+        m_logger.LogError "clsSetupOrchestrator", "RunFullSetup", Err.Description, "", "LOG-SETUP-ERR"
+    Else
+        Debug.Print "[clsSetupOrchestrator.RunFullSetup ERROR] " & Err.Description
+    End If
 End Sub
 
-' ================================================================
-' 関数名: CreateRequiredSheets
-' 概要:   14 シートを順次作成（既存はスキップ）
-' ================================================================
-Private Sub CreateRequiredSheets()
-    On Error GoTo ErrHandler
-    Dim stepName As String : stepName = "split CSV"
+' ----------------------------------------------------------------
+' Private: setup ステップ
+' ----------------------------------------------------------------
+
+Private Sub EnsureLogSheet(ByVal xlsmName As String)
+    On Error Resume Next
+    Dim ws As Worksheet
+    Set ws = ThisWorkbook.Worksheets("LOG")
+    If ws Is Nothing Then
+        Set ws = ThisWorkbook.Worksheets.Add(After:=ThisWorkbook.Worksheets(ThisWorkbook.Worksheets.Count))
+        ws.Name = "LOG"
+    End If
+    ' Q7 規約 Y
+    If Err.Number <> 0 Then Err.Clear
+    On Error GoTo 0
+End Sub
+
+Private Sub EnsureSheets(ByVal xlsmName As String)
+    Dim sheetList As String
+    sheetList = GetSheetsCsv(xlsmName)
+    If Len(sheetList) = 0 Then Exit Sub
 
     Dim names() As String
-    names = Split(REQUIRED_SHEETS_CSV, ",")
-
-    Dim createdCount As Long : createdCount = 0
-    Dim skippedCount As Long : skippedCount = 0
+    names = Split(sheetList, "|")
 
     Dim i As Long
     For i = LBound(names) To UBound(names)
-        Dim sheetName As String
-        sheetName = Trim$(names(i))
-        stepName = "check " & sheetName
-        If Len(sheetName) > 0 Then
-            If Not modCommon.SheetExists(sheetName) Then
-                stepName = "append " & sheetName
-                Call AppendNewSheet(sheetName)
-                createdCount = createdCount + 1
-            Else
-                skippedCount = skippedCount + 1
-            End If
-        End If
+        EnsureSheetExists names(i)
     Next i
-
-    Call LogTraceSafe("CreateRequiredSheets", _
-                       "created=" & createdCount & " skipped=" & skippedCount)
-    Exit Sub
-
-ErrHandler:
-    Call LogErrorSafe("CreateRequiredSheets", stepName, Err.Number, Err.Description)
-    Err.Raise Err.Number, MOD_NAME & ".CreateRequiredSheets", Err.Description
 End Sub
 
-Private Sub AppendNewSheet(ByVal sheetName As String)
-    On Error GoTo ErrHandler
+Private Sub EnsureSheetExists(ByVal sheetName As String)
+    On Error Resume Next
     Dim ws As Worksheet
-    Set ws = ThisWorkbook.Worksheets.Add( _
-                After:=ThisWorkbook.Worksheets(ThisWorkbook.Worksheets.Count))
-    ws.Name = sheetName
-    Exit Sub
-ErrHandler:
-    Call LogErrorSafe("AppendNewSheet", "Add+Name " & sheetName, Err.Number, Err.Description)
-    Err.Raise Err.Number, MOD_NAME & ".AppendNewSheet", Err.Description
+    Set ws = ThisWorkbook.Worksheets(sheetName)
+    If ws Is Nothing Then
+        Set ws = ThisWorkbook.Worksheets.Add(After:=ThisWorkbook.Worksheets(ThisWorkbook.Worksheets.Count))
+        ws.Name = sheetName
+    End If
+    If Err.Number <> 0 Then Err.Clear
+    On Error GoTo 0
 End Sub
 
-' ================================================================
-' 関数名: SetupAllScreens
-' 概要:   14 画面の Setup を順次実行（spec → screen → renderer）
-' ================================================================
-Private Sub SetupAllScreens()
-    On Error GoTo ErrHandler
-    Dim stepName As String : stepName = "GetAllScreenIds"
+Private Sub ApplyTabColors(ByVal xlsmName As String)
+    Dim sheetList As String
+    sheetList = GetSheetsCsv(xlsmName)
+    If Len(sheetList) = 0 Then Exit Sub
 
-    Dim screenIds As Variant
-    screenIds = modScreenSpecRegistry.GetAllScreenIds()
+    Dim tabColor As Long
+    tabColor = GetTabColor(xlsmName)
 
-    Dim okCount As Long : okCount = 0
-    Dim ngCount As Long : ngCount = 0
+    Dim names() As String
+    names = Split(sheetList, "|")
 
     Dim i As Long
-    For i = LBound(screenIds) To UBound(screenIds)
-        Dim screenId As String
-        screenId = CStr(screenIds(i))
-        stepName = "Setup " & screenId
-        Call LogTraceSafe("SetupAllScreens", "BEGIN " & screenId)
-        If SetupOneScreenLogged(screenId) Then
-            okCount = okCount + 1
-        Else
-            ngCount = ngCount + 1
+    On Error Resume Next
+    For i = LBound(names) To UBound(names)
+        If names(i) <> "LOG" Then
+            ThisWorkbook.Worksheets(names(i)).Tab.Color = tabColor
         End If
     Next i
-
-    Call LogTraceSafe("SetupAllScreens", _
-                       "EXIT ok=" & okCount & " ng=" & ngCount)
-    Exit Sub
-
-ErrHandler:
-    Call LogErrorSafe("SetupAllScreens", stepName, Err.Number, Err.Description)
-    Err.Raise Err.Number, MOD_NAME & ".SetupAllScreens", Err.Description
+    If Err.Number <> 0 Then Err.Clear
+    On Error GoTo 0
 End Sub
 
-' ================================================================
-' 関数名: SetupOneScreenLogged
-' 概要:   1 画面の Setup を実行。失敗しても他画面の続行のため True/False で返す。
-'         失敗時は LogError で痕跡を残す（旧 SetupOneScreen の silent NextScreen
-'         を廃止し、必ず Err.Number/Description を記録）。
-' 戻り値: Boolean - Setup 成功なら True
-' ================================================================
-Private Function SetupOneScreenLogged(ByVal screenId As String) As Boolean
-    On Error GoTo ErrHandler
-    Dim stepName As String : stepName = "CreateScreen " & screenId
+Private Sub ApplyUiStanzas(ByVal xlsmName As String)
+    Dim sheetList As String
+    sheetList = GetSheetsCsv(xlsmName)
+    If Len(sheetList) = 0 Then Exit Sub
 
-    Dim screen As Object
-    Set screen = modFactory.CreateScreen(screenId, m_renderer)
-    If screen Is Nothing Then
-        Call LogWarnSafe("SetupOneScreenLogged", screenId & " screen=Nothing (spec missing or unknown id)"
+    Dim names() As String
+    names = Split(sheetList, "|")
+
+    Dim renderer As IScreenRenderer
+    Set renderer = New clsSheetRenderer
+
+    Dim i As Long
+    For i = LBound(names) To UBound(names)
+        If names(i) <> "LOG" Then
+            On Error Resume Next
+            renderer.BindSheet names(i)
+            renderer.ClearScreen
+            renderer.ApplyFromStanza xlsmName, names(i)
+            renderer.ProtectSheet "light"
+            If Err.Number <> 0 Then
+                If Not m_logger Is Nothing Then
+                    m_logger.LogWarn "clsSetupOrchestrator", "ApplyUiStanzas", _
+                        "UI 適用エラー " & names(i) & ": " & Err.Description, "", "LOG-SETUP-UI-WARN"
+                End If
+                Err.Clear
+            End If
+            On Error GoTo 0
+        End If
+    Next i
+End Sub
+
+Private Sub ApplyProtection()
+    On Error Resume Next
+    ThisWorkbook.Protect Structure:=True, Windows:=False
+    If Err.Number <> 0 Then Err.Clear
+    On Error GoTo 0
+End Sub
+
+Private Sub ActivateStartupSheet(ByVal xlsmName As String)
+    Dim startupSheet As String
+    Select Case xlsmName
+        Case "登録修正": startupSheet = STARTUP_SHEET_TOUROKU
+        Case "検索":     startupSheet = STARTUP_SHEET_KENSAKU
+        Case "管理":     startupSheet = STARTUP_SHEET_KANRI
+        Case Else: Exit Sub
+    End Select
+
+    On Error Resume Next
+    ThisWorkbook.Worksheets(startupSheet).Activate
+    If Err.Number <> 0 Then Err.Clear
+    On Error GoTo 0
+End Sub
+
+' ----------------------------------------------------------------
+' Private: 設定取得
+' ----------------------------------------------------------------
+
+Private Function GetSheetsCsv(ByVal xlsmName As String) As String
+    Select Case xlsmName
+        Case "登録修正": GetSheetsCsv = SHEETS_TOUROKU
+        Case "検索":     GetSheetsCsv = SHEETS_KENSAKU
+        Case "管理":     GetSheetsCsv = SHEETS_KANRI
+        Case Else:       GetSheetsCsv = ""
+    End Select
+End Function
+
+Private Function GetTabColor(ByVal xlsmName As String) As Long
+    Select Case xlsmName
+        Case "登録修正": GetTabColor = TAB_COLOR_TOUROKU
+        Case "検索":     GetTabColor = TAB_COLOR_KENSAKU
+        Case "管理":     GetTabColor = TAB_COLOR_KANRI
+        Case Else:       GetTabColor = 0
+    End Select
+End Function
 ```

@@ -1,286 +1,172 @@
 ---
-title: セットアップ
-description: VBA モジュール手動 import、初回セットアップマクロ実行、マクロ有効化など、利用開始までの手順
-tags:
-  - excel
-  - vba
-  - setup
+title: 導入手順
+description: 3 つの .xlsm の作成、VBA モジュールの取り込み、セットアップマクロの実行
 ---
 
-# セットアップ
+# 導入手順
 
-このページでは、ナレッジ管理ツールを **新規利用開始するための準備手順** を集約しています。日常操作（検索・登録・編集など）は [操作手順](operations.md) を参照してください。
+ナレッジ管理ツール v2.1 を新しい PC で使えるようにするまでの手順です。**登録修正.xlsm / 検索.xlsm / 管理.xlsm の 3 つのブックそれぞれに対して**作業します。利用者が手で行う作業をすべて記載しています。
 
-!!! tip "全体の流れ"
-    新規 `.xlsm` 作成 → トラストセンターで信頼設定 → VBE で **48 モジュール** を Import + `ThisWorkbook` 中身コピペ → コンパイル確認 → `SetupSheetsAndButtons` を 1 回実行 → 保存・再オープン、の順で進みます。所要時間は初回 15 〜 25 分程度です。
+!!! warning "作業の前に"
+    本ツールは Windows 版のデスクトップ Excel が前提です。Excel for Mac やブラウザ版の Excel では動作しません。作業中はマクロ（VBA）を有効にできる環境で進めてください。
 
-!!! warning "旧手順との違い（重要）"
-    旧版手順は **23 モジュール / 29 ボタン** でしたが、現バージョンは **48 モジュール / 68 ボタン** に拡張されています。
-    **画面層 14 クラス（`clsMainScreen` 〜 `clsLogScreen`）が新しく必要** になりました。
-    画面層を 1 つでも import 漏れすると、対応する画面のボタンが配置されません。Step 1.3 のリストを **全件** import してください。
+## 1. 全体の流れ
 
-## 0. 前提環境
+導入は次の順序で進めます。手順 2〜3 は 1 回だけ、手順 4〜8 は 3 つのブックそれぞれについて行います。
 
-- Microsoft Excel 2019 / 2021 / 365（Windows 版推奨）
-- 書込権限のあるローカルフォルダ（ネットワークドライブ直下は避ける）
-- マクロ有効化が許可されているプロファイル
+1. データフォルダを作る
+2. 動作設定ファイルを置く
+3. 3 つの空ブックを作る
+4. VBA モジュールを取り込む
+5. セットアップマクロを実行する
+6. フォームコントロールボタンを配置する
+7. 画面レイアウト定義ファイルを配置する
+8. 動作確認する
 
-!!! warning "Excel for Mac の制約"
-    `Forms.*` ProgID が無いため `Macro_ShowSearchResultPreview`（spec 駆動 UserForm）は動作しません。検索のみなら可。
+## 2. データフォルダを作る
 
----
+ナレッジ本体・フォーマット定義・画面定義などを置くフォルダを作ります。ここでは既定の `C:\KnowledgeMgr\` を使う前提で説明します（別の場所でも構いませんが、その場合は手順 3 の設定ファイルでパスを合わせます）。
 
-## 1. 配布パッケージを使う場合（モジュール手動 import）
+エクスプローラで次のフォルダを作成します。
 
-配布物は VBA モジュール **48 個 + `ThisWorkbook`** のみで、`.xlsm` 本体は含みません。各モジュールの中身は本サイトの [ソースコード](source/index.md) ページから直接コピペできます（コピーボタン付き）。
+```
+C:\KnowledgeMgr\
+  ├ data\
+  ├ data\backup\
+  ├ formats\
+  └ ui\
+      ├ ui\登録修正\
+      ├ ui\検索\
+      └ ui\管理\
+```
 
-### Step 1.1 マクロ有効化と新規 .xlsm 作成
+## 3. 動作設定ファイルを置く
 
-1. Excel を起動
-2. `[ファイル] → [新規] → [空白のブック]`
-3. `[ファイル] → [名前を付けて保存]` で **必ず `.xlsm`（Excel マクロ有効ブック）** として保存
-    - ファイルの種類で「**Excel マクロ有効ブック (`*.xlsm`)**」を選択
-    - 任意のファイル名（例: `ナレッジ管理.xlsm`）
+ブックごとに 1 つ、動作設定ファイルを `C:\KnowledgeMgr\` の直下に作ります。ファイル名は次の 3 つです。
 
-### Step 1.2 マクロ設定の確認
+- `登録修正_config.txt`
+- `検索_config.txt`
+- `管理_config.txt`
 
-`[ファイル] → [オプション] → [トラスト センター] → [トラスト センターの設定] → [マクロの設定]` で次を確認・設定します。
+3 ファイルとも、テキストエディタ（メモ帳など）で次の内容を入力し、**文字コードは Shift_JIS（ANSI）、改行は CRLF** で保存します。
 
-- **マクロの設定**: 「警告して、すべてのマクロを無効にする」または「電子署名されたマクロを除き、すべてのマクロを無効にする」
-- **VBA プロジェクト オブジェクト モデルへのアクセスを信頼する**: **ON**（詳細プレビュー UserForm 機能を使う場合に必須）
+```
+[CONFIG]
+debugLevel=INFO
+logRotationRows=10000
+data_dir=C:\KnowledgeMgr\data\
+format_dir=C:\KnowledgeMgr\formats\
+ui_dir=C:\KnowledgeMgr\ui\
+backup_dir=C:\KnowledgeMgr\data\backup\
+uiSchemaFailMode=safeDefault
+systemSheetVisibility=Hidden
+autoReloadOnStartup=TRUE
+migrateBackupEnabled=TRUE
+```
 
-### Step 1.3 VBE を開いて全モジュールをインポート
+手順 2 でフォルダの場所を変えた場合は、`data_dir` などのパスを実際の場所に合わせて書き換えます。各設定値の意味は[設定値の変更](settings.md)を参照してください。
 
-1. `Alt + F11` で VBE（Visual Basic Editor）を開く
-2. 左の「プロジェクト」ツリーから対象ブックを右クリック → `[ファイルのインポート...]`
-3. 以下のフォルダ別ファイル群を **全 48 件** 順次インポート
+## 4. 3 つの空ブックを作る
 
-=== "エントリポイント層 (6)"
+Excel で新規ブックを 3 つ作り、それぞれを **マクロ有効ブック（`.xlsm`）** として、`C:\KnowledgeMgr\` の直下に次の名前で保存します。
 
-    | ファイル | 役割 |
-    |---|---|
-    | [`modEntryMain.bas`](source/entrypoint/modentrymain.md) | 本番モード起点 / 共通ログヘルパ |
-    | [`modEntrySearch.bas`](source/entrypoint/modentrysearch.md) | 検索シート上のマクロボタン受け口 |
-    | [`modEntryKnowledge.bas`](source/entrypoint/modentryknowledge.md) | ナレッジ一覧シートのマクロボタン受け口 |
-    | [`modEntryFormat.bas`](source/entrypoint/modentryformat.md) | フォーマット一覧シートのマクロボタン受け口 |
-    | [`modEntrySettings.bas`](source/entrypoint/modentrysettings.md) | 設定シートのマクロボタン受け口 (dataFolder 切替) |
-    | [`modSpecExamples.bas`](source/entrypoint/modspecexamples.md) | clsFormSpec DSL 利用例（詳細プレビュー UserForm 構築） |
+- `登録修正.xlsm`
+- `検索.xlsm`
+- `管理.xlsm`
 
-=== "ビジネスロジック層 (21)"
+保存時のファイルの種類で「Excel マクロ有効ブック (\*.xlsm)」を選びます。`.xlsx` のままだとマクロを保存できません。
 
-    | ファイル | 役割 |
-    |---|---|
-    | [`clsButtonSpec.cls`](source/business-logic/clsbuttonspec.md) | シート上ボタン 1 個分の宣言情報を保持する値オブジェクト |
-    | [`clsControlSpec.cls`](source/business-logic/clscontrolspec.md) | コントロール仕様 DSL (Label / TextBox / Image / Button) |
-    | [`clsFieldMigrator.cls`](source/business-logic/clsfieldmigrator.md) | フォーマット定義変更時のスキーマ移行 |
-    | [`clsFieldSpec.cls`](source/business-logic/clsfieldspec.md) | シート上フィールド 1 件分の宣言情報を保持する値オブジェクト |
-    | [`clsFormSpec.cls`](source/business-logic/clsformspec.md) | 詳細プレビュー UserForm 仕様 DSL（ルート） |
-    | [`clsFormatManager.cls`](source/business-logic/clsformatmanager.md) | フォーマット一覧シート管理 / フィールド DSL 解決 |
-    | [`clsKnowledgeManager.cls`](source/business-logic/clsknowledgemanager.md) | ナレッジ一覧シートの行管理 |
-    | [`clsLogger.cls`](source/business-logic/clslogger.md) | ログエントリの蓄積 / シート出力 / 外部ファイル出力 (TRACE 含む) |
-    | [`clsScreenSpec.cls`](source/business-logic/clsscreenspec.md) | 1 画面分の宣言情報（タイトル / セクション / ボタン / フィールド） |
-    | [`clsSearchEngine.cls`](source/business-logic/clssearchengine.md) | スコアリング検索 / 結果描画 / サムネ画像描画フック |
-    | [`clsSectionSpec.cls`](source/business-logic/clssectionspec.md) | 1 画面内の 1 セクション（帯）の宣言情報 |
-    | [`clsSetupOrchestrator.cls`](source/business-logic/clssetuporchestrator.md) | セットアップ全工程を統括する制御クラス |
-    | [`clsSheetRenderer.cls`](source/business-logic/clssheetrenderer.md) | シート上にボタン / ラベル / 帯を物理配置する描画クラス |
-    | [`clsStorageResolver.cls`](source/business-logic/clsstorageresolver.md) | dataFolder / kb_images の解決 |
-    | [`clsTaskController.cls`](source/business-logic/clstaskcontroller.md) | ナレッジ操作のトランザクション制御 |
-    | [`clsUserFormRenderer.cls`](source/business-logic/clsuserformrenderer.md) | UserForm 描画用の将来用スタブ |
-    | [`IScreenRenderer.cls`](source/business-logic/iscreenrenderer.md) | 画面描画の抽象インターフェイス |
-    | [`modFactory.bas`](source/business-logic/modfactory.md) | 画面層クラスと Renderer のファクトリ |
-    | [`modFormBuilder.bas`](source/business-logic/modformbuilder.md) | clsFormSpec を実行時 UserForm に展開するビルダ |
-    | [`modScreenRender.bas`](source/business-logic/modscreenrender.md) | 標準画面の描画委譲（共通処理） |
-    | [`modScreenSpecRegistry.bas`](source/business-logic/modscreenspecregistry.md) | M-01〜M-14 の各画面 spec 定義 |
+## 5. VBA モジュールを取り込む
 
-=== "ユーティリティ層 (6)"
+ここからは 3 つのブックそれぞれに対して行います。1 つのブックを Excel で開いた状態で進めます。
 
-    | ファイル | 役割 |
-    |---|---|
-    | [`clsLogEntry.cls`](source/utility/clslogentry.md) | 1 行分のログレコード（値オブジェクト） |
-    | [`modCommon.bas`](source/utility/modcommon.md) | 全モジュール共通定数（シート名 / 列番号 / 行番号 / ログレベル / 外部ログパス） |
-    | [`modDateUtil.bas`](source/utility/moddateutil.md) | 日付・時刻処理の純粋関数群 |
-    | [`modFileIO.bas`](source/utility/modfileio.md) | Shift_JIS + CRLF ファイル I/O / フォルダ操作 |
-    | [`modImageRender.bas`](source/utility/modimagerender.md) | Shapes.AddPicture によるサムネ画像配置 |
-    | [`modStringUtil.bas`](source/utility/modstringutil.md) | 文字列処理の純粋関数群 |
+### 5.1 参照設定を有効にする
 
-=== "画面層 (14) ★必須★"
+`Alt + F11` で VBE（Visual Basic Editor）を開き、メニューの「ツール → 参照設定」で次の 2 つにチェックを入れて「OK」を押します。
 
-    | ファイル | 担当画面 |
-    |---|---|
-    | [`clsMainScreen.cls`](source/screen/clsmainscreen.md) | M-01 メイン画面（タスクボタン 12 個） |
-    | [`clsFormatListScreen.cls`](source/screen/clsformatlistscreen.md) | M-02 フォーマット一覧 |
-    | [`clsFormatDesignScreen.cls`](source/screen/clsformatdesignscreen.md) | M-03 フォーマットデザイン |
-    | [`clsFormatPreviewScreen.cls`](source/screen/clsformatpreviewscreen.md) | M-04 フォーマットプレビュー |
-    | [`clsKnowledgeRegisterScreen.cls`](source/screen/clsknowledgeregisterscreen.md) | M-05 ナレッジ登録 |
-    | [`clsKnowledgeEditScreen.cls`](source/screen/clsknowledgeeditscreen.md) | M-06 ナレッジ編集 |
-    | [`clsKnowledgeListScreen.cls`](source/screen/clsknowledgelistscreen.md) | M-07 ナレッジ一覧 |
-    | [`clsSearchScreen.cls`](source/screen/clssearchscreen.md) | M-08 検索 |
-    | [`clsKnowledgeViewScreen.cls`](source/screen/clsknowledgeviewscreen.md) | M-09 ナレッジ表示 |
-    | [`clsStorageScreen.cls`](source/screen/clsstoragescreen.md) | M-10 格納先設定 |
-    | [`clsSystemSettingsScreen.cls`](source/screen/clssystemsettingsscreen.md) | M-11 システム設定 |
-    | [`clsMigrationScreen.cls`](source/screen/clsmigrationscreen.md) | M-12 フィールド反映 |
-    | [`clsFileFormatScreen.cls`](source/screen/clsfileformatscreen.md) | M-13 ファイル形式 |
-    | [`clsLogScreen.cls`](source/screen/clslogscreen.md) | M-14 操作ログ |
+- Microsoft Scripting Runtime
+- Microsoft VBScript Regular Expressions 5.5
 
-    !!! danger "画面層 14 クラスは 1 つでも欠落させない"
-        画面層フォルダの 14 クラスを 1 つでも import 漏れすると、`clsSetupOrchestrator` が `modFactory.CreateScreen` 経由で生成に失敗し、対応する画面のボタンが配置されません。
-        VBE 左ペインのモジュール一覧に **`clsMainScreen` から `clsLogScreen` まで 14 個揃っているか必ず確認** してください。
+### 5.2 取り込むモジュールを確認する
 
-=== "インストーラ層 (1)"
+[ソースコード一覧](source/index.md)の各ページに「配置ブック」欄があります。**3 ブック共通**のモジュールはすべてのブックに、**特定のブック名**が書かれたモジュールはそのブックにだけ取り込みます。1 ブックあたりの取り込み数の目安は次のとおりです。
 
-    | ファイル | 役割 |
-    |---|---|
-    | [`modSetup.bas`](source/infrastructure/modsetup.md) | `SetupSheetsAndButtons` のエントリポイント。中身は `clsSetupOrchestrator` に委譲 |
-
-各モジュールの中身は対応するソースページからコピペできます。新規モジュールを VBE で挿入してから貼り付けるか、`.bas`/`.cls` ファイルに保存して `[ファイルのインポート...]` で取り込んでください。
-
-### Step 1.4 ThisWorkbook の中身を貼り付け（インポートではない）
-
-`ThisWorkbook.cls` だけは「インポート」ではなく **中身のコピペ** が必要です。VBE は新しい `ThisWorkbook` を作れず、既存の `ThisWorkbook` に上書きする必要があるためです。
-
-1. VBE 左ペインで **`Microsoft Excel Objects` → `ThisWorkbook`** をダブルクリック
-2. 右側のコードペインを開く（現状は空のはず）
-3. [ThisWorkbook.cls](source/special/thisworkbook.md) をブラウザで開いてコピーボタンを押す
-4. 先頭から下記の **9 行のヘッダーを除いた**残り全部を選択してコピー
-
-    ```text
-    VERSION 1.0 CLASS
-    BEGIN
-      MultiUse = -1  'True
-    END
-    Attribute VB_Name = "ThisWorkbook"
-    Attribute VB_GlobalNameSpace = False
-    Attribute VB_Creatable = False
-    Attribute VB_PredeclaredId = True
-    Attribute VB_Exposed = True
-    ```
-
-5. VBE の `ThisWorkbook` コードペインに貼り付け
-6. 確認: 先頭が `Option Explicit` で始まっていれば OK
-
-### Step 1.5 コンパイル確認
-
-VBE の `[デバッグ] → [VBAProject のコンパイル]` を実行。エラーが出なければ次へ。
-
-!!! tip "「メソッドまたはデータ メンバーが見つかりません」が出たら"
-    画面層 14 クラス、特に `clsSheetRenderer` / `clsSetupOrchestrator` / `clsMainScreen` の Import 漏れが最も多い原因です。
-    VBE 左ペインのモジュール一覧の合計が **48 + ThisWorkbook = 49** になっているかを必ず確認してください。
-
-### Step 1.6 セットアップマクロを実行
-
-1. Excel に戻る（`Alt + F11` で再度切り替え）
-2. `[開発] → [マクロ]` または **`Alt + F8`** でマクロダイアログを開く
-3. リストから **`SetupSheetsAndButtons`** を選択
-4. **`[実行]`** をクリック
-5. 完了ダイアログ「セットアップ完了。」が出たら成功
-
-このマクロは以下を実行します。
-
-- 必要シート 14 個（`メイン`, `検索`, `ログ` 等）を自動生成
-- ログシートのヘッダー行（日時 / モジュール名 / 関数名 / メッセージ種別 / メッセージ内容）を書込
-- 設定シート C6 にテストモードフラグ（`"FALSE"` = 本番モード）を設定
-- メインシート B10:K18 にタスクボタン用ラベルを書込
-- **フォームコントロールボタン 68 個** を全 14 シートに配置 + マクロ割り当て
-    - メイン: **12 個**（▶検索 / ▶ナレッジ登録 / ▶ナレッジ修正 / ▶ナレッジ一覧 / ▶フォーマット管理 / ▶フィールド反映 / ▶格納先設定 / ▶システム設定 / ▶ログ確認 / ▶ファイル形式 / ▶初回セットアップ / ▶ヘルプ）
-    - 業務 13 シート: 計 **56 個**（各シート 2〜7 ボタン + `Btn_BackToMain`）
-- メインシート以外を非表示（起動時はメインのみ表示）
-- 既定の空 Sheet1 を削除
-
-実行中の各工程は **ログシート + 外部ログファイル** にトレース記録されます。失敗時は `step=[XYZ] errNum=N desc=...` の形式で 1 行に集約されます。
-
-### Step 1.7 保存して再オープン
-
-1. **`Ctrl + S`** で保存
-2. Excel を一度閉じる
-3. 再度同じ `.xlsm` を開く → `Workbook_Open` が走り、メインシートが表示される
-
-メインシート行 10〜18 列 B〜K に 12 個のボタンが並んでいれば成功です。これでセットアップは完了です。日常操作は [操作手順](operations.md) へ。
-
----
-
-## 2. セットアップ時のトラブルシューティング
-
-### Q1. `SetupSheetsAndButtons` マクロが見つからない
-
-`modSetup.bas` のインポート漏れの可能性。`Alt + F11` の VBE 左ペインで `インストーラ層 → modSetup`（または標準モジュールに `modSetup`）があるか確認してください。
-
-### Q2. 「コンパイルエラー: メソッドまたはデータ メンバーが見つかりません」
-
-どこかのモジュールがインポート漏れの可能性が高いです。VBE 左ペインで以下が全て揃っているか確認してください。
-
-- **標準モジュール**（`mod*` プレフィックス、`.bas`）: **16 個**
-    - エントリポイント層 6 個（`modEntryMain` / `modEntrySearch` / `modEntryKnowledge` / `modEntryFormat` / `modEntrySettings` / `modSpecExamples`）
-    - ビジネスロジック層 4 個（`modFactory` / `modFormBuilder` / `modScreenRender` / `modScreenSpecRegistry`）
-    - ユーティリティ層 5 個（`modCommon` / `modDateUtil` / `modFileIO` / `modImageRender` / `modStringUtil`）
-    - インストーラ層 1 個（`modSetup`）
-- **クラスモジュール**（`cls*` または `I*` プレフィックス、`.cls`）: **32 個**
-    - ビジネスロジック層 17 個（`clsButtonSpec` / `clsControlSpec` / `clsFieldMigrator` / `clsFieldSpec` / `clsFormSpec` / `clsFormatManager` / `clsKnowledgeManager` / `clsLogger` / `clsScreenSpec` / `clsSearchEngine` / `clsSectionSpec` / `clsSetupOrchestrator` / `clsSheetRenderer` / `clsStorageResolver` / `clsTaskController` / `clsUserFormRenderer` / `IScreenRenderer`）
-    - ユーティリティ層 1 個（`clsLogEntry`）
-    - **画面層 14 個**（`clsMainScreen` / `clsFormatListScreen` / `clsFormatDesignScreen` / `clsFormatPreviewScreen` / `clsKnowledgeRegisterScreen` / `clsKnowledgeEditScreen` / `clsKnowledgeListScreen` / `clsSearchScreen` / `clsKnowledgeViewScreen` / `clsStorageScreen` / `clsSystemSettingsScreen` / `clsMigrationScreen` / `clsFileFormatScreen` / `clsLogScreen`）
-- **Microsoft Excel Objects**: `ThisWorkbook`（中身が貼られている）
-
-合計 **48 + ThisWorkbook = 49**。
-
-!!! danger "頻発: 画面層 14 個の Import 漏れ"
-    旧手順から移行した利用者が、画面層フォルダの 14 クラスを丸ごと忘れているケースが多発します。`clsMainScreen` / `clsLogScreen` などがモジュール一覧に無ければ、画面層フォルダから追加 import を実施してください。
-
-### Q3. `SetupSheetsAndButtons` 実行中にエラーで止まる
-
-セットアップマクロは各工程をログシート + 外部ログファイルにトレースします。エラー発生時は最後の `step=[XYZ] errNum=N desc=...` を確認してください。
-
-代表的なステップ名と対処:
-
-| step= | 内容 | 主な原因 |
+| ブック | 取り込むモジュール数 | ThisWorkbook |
 |---|---|---|
-| `EnsureSheets` | 14 シートの存在確認・作成 | シート保護 / Workbook 状態異常 |
-| `BuildSpecs` | 各画面 spec の構築 | `modScreenSpecRegistry` の import 漏れ |
-| `RenderSheet` | ボタン物理配置 | `clsSheetRenderer` / 画面層クラスの import 漏れ |
-| `WireOnAction` | ボタンへのマクロ割当 | エントリポイント層 import 漏れ |
+| 登録修正.xlsm | 48 本（共通 45 ＋ 専用 3） | ThisWorkbook（登録修正.xlsm） |
+| 検索.xlsm | 49 本（共通 45 ＋ 専用 4） | ThisWorkbook（検索.xlsm） |
+| 管理.xlsm | 57 本（共通 45 ＋ 専用 12） | ThisWorkbook（管理.xlsm） |
 
-### Q4. 起動時に「インデックスが有効範囲にありません」
+### 5.3 標準モジュール・クラスモジュールを取り込む
 
-`SetupSheetsAndButtons` の実行を忘れていないか確認してください。シートが無いと `Workbook_Open` がメインシートを参照できず本エラーになります。
+`mod` で始まる標準モジュール（`.bas`）と `cls`／`I` で始まるクラスモジュール（`.cls`）は、次の手順で取り込みます。
 
-### Q5. ボタンが既存の表示と重なって見えにくい
+1. [ソースコード一覧](source/index.md)で対象モジュールのページを開く。
+2. ソースコードのコードブロック右上のボタンでコード全文をコピーする。
+3. テキストエディタに貼り付け、**モジュール名と同じファイル名**（例：`modCommon.bas`、`clsLogger.cls`）で保存する。
+4. VBE のメニュー「ファイル → ファイルのインポート」で、保存したファイルを取り込む。
 
-新規 `.xlsm` の既定の列幅・行高さのため、ボタンが小さく見える場合があります。各シートの該当行（例: メイン 10〜18 行目）の高さを増やすか、列幅を広げると見栄えが改善します。本マクロは機能配置のみで装飾は最小化しています。
+クラスモジュール（`.cls`）の先頭にある `VERSION 1.0 CLASS` から始まる数行は、クラスモジュールのファイル形式の一部です。削らずにそのまま保存してください（ファイルとして取り込めば正しく反映されます）。
 
-### Q6. ボタンが「`Btn_xxxx` を実行できません」とエラー
+### 5.4 ThisWorkbook を貼り付ける
 
-ブックを「名前を付けて保存」でリネームした後にボタンを押すと発生することがあります。`SetupSheetsAndButtons` を再実行すれば、新しいブック名に対する OnAction が再設定されます。
+`ThisWorkbook` は Excel がブックごとに最初から持っている特殊なモジュールで、新規モジュールとしては取り込めません。次の手順で貼り付けます。
 
-### Q7. セットアップを最初からやり直したい
+1. ソースコード一覧の特殊モジュールから、そのブックに対応する `ThisWorkbook`（管理／検索／登録修正）のページを開く。
+2. コードをコピーする。
+3. VBE のプロジェクトツリーで `ThisWorkbook` をダブルクリックして開く。
+4. コードの先頭にある `VERSION 1.0 CLASS` から `Attribute` 行までのファイル先頭ブロックは貼り付けず、その下の本体だけをコードペインに貼り付けて、既存の内容を置き換える。
 
-`SetupSheetsAndButtons` は **何度実行しても安全**（既存ボタンは削除→再配置、シートは存在チェック後スキップ）です。再度マクロを実行してください。シート自体を消したい場合は、対象シートを手動削除してから `SetupSheetsAndButtons` を再実行すれば再生成されます。
+### 5.5 コンパイルを確認する
 
-### Q8. ログを詳しく見たい
+VBE のメニュー「デバッグ → VBAProject のコンパイル」を実行し、エラーが出ないことを確認します。エラーが出た場合は、取り込み漏れのモジュールや参照設定の確認漏れがないかを点検してください。
 
-セッション単位のログはブック内の **「ログ」シート** に残ります（`Workbook_Open` 時に自動クリア）。
-動作中の Trace / Error は外部ログファイル（既定 `C:\<書込み可能なフォルダ>\runtime.log`）に随時 Append されます。出力先パスは `modCommon` の `EXTERNAL_LOG_PATH` 定数で変更できます。
+## 6. セットアップマクロを実行する
 
----
+モジュールの取り込みが終わったら、シートを自動生成するセットアップマクロを 1 回実行します。Excel に戻り、`Alt + F8` でマクロ一覧を開き、そのブックに対応するマクロを選んで「実行」します。
 
-## 3. セットアップが触る範囲・触らない範囲
-
-| 項目 | セットアップマクロが触るか |
+| ブック | 実行するマクロ |
 |---|---|
-| 必要シート 14 個の作成 | あり（既存スキップ、不在分のみ作成） |
-| ログシート 1 行目ヘッダー | あり（上書き） |
-| 設定シート C6（テストモード） | あり（`"FALSE"` 設定） |
-| メインシート B10:K18 | あり（案内テキスト + ボタン用ラベル書込） |
-| 各シートのフォームコントロールボタン | あり（同名は削除→再配置、計 68 個） |
-| 各シートの初期可視性 | あり（メインのみ表示、他は非表示） |
-| 空の既定 Sheet1 | あり（削除、データ・シェイプがあれば残す） |
-| 外部ログファイル | あり（Append） |
-| その他のセル内容 | なし |
-| ユーザフォーム | なし |
-| Excel シートの書式・色 | なし（ボタン配置セルの色塗りは行う） |
+| 登録修正.xlsm | `Setup_登録修正` |
+| 検索.xlsm | `Setup_検索` |
+| 管理.xlsm | `Setup_管理` |
 
----
+実行すると、そのブックが担当する画面シートと LOG シートが作成されます。終わったらブックを上書き保存します。
 
-## 4. 旧手順からの移行メモ
+## 7. フォームコントロールボタンを配置する
 
-- **旧手順は 23 モジュール / 29 ボタン**、**現手順は 48 モジュール / 68 ボタン** です。
-- 旧 `.xlsm` がある場合は、**新規 `.xlsm` を作り直して 48 モジュールを再 import** することを推奨します（増分 import は競合の元）。
-- メイン画面のボタンは **8 個 → 12 個** に増えました（`▶ファイル形式` / `▶初回セットアップ` / `▶ヘルプ` 等が追加）。
-- ログ機能が強化されており、セッションログ（シート）+ 外部ログファイルの 2 系統に同時記録されます。
+各画面のボタンのうち、画面に常時 1 つだけ置く固定ボタン（保存・検索・クリアなど）は、利用者が手作業で配置します。行ごとに増減するボタン（一覧の各行の「編集」「削除」など）は、ツールが自動で生成するため手作業は不要です。
+
+固定ボタンを 1 個配置する手順は次のとおりです。
+
+1. Excel のリボンに「開発」タブが無い場合は、「ファイル → オプション → リボンのユーザー設定」で「開発」にチェックを入れて表示する。
+2. 配置する画面シートを開き、「開発 → 挿入 → フォームコントロール」の左上のボタンを選ぶ。
+3. シート上でドラッグしてボタンを描く。**「フォームコントロール」を使い、ActiveX コントロールは使いません**（ActiveX は環境によって動作が不安定なため）。
+4. ボタンを描き終えると「マクロの登録」ダイアログが開くので、そのボタンに対応するマクロ名を選んで「OK」を押す。
+5. ボタンを右クリックして「テキストの編集」でキャプション（表示名）を整える。
+
+配置するボタンの位置・キャプション・割り当てるマクロ名は、画面レイアウト定義ファイル（`ui\<ブック>\<画面>.txt`）の `[BUTTON]` セクションに記載されています。各画面の `[BUTTON]` セクションを見ながら配置してください。
+
+## 8. 画面レイアウト定義ファイルを配置する
+
+各画面の見た目（セル幅・ラベル・入力枠・ボタン位置など）は、`ui\<ブック>\` フォルダ内のテキストファイルで定義します。配布物に含まれる画面レイアウト定義ファイルを、対応するフォルダ（`ui\登録修正\`、`ui\検索\`、`ui\管理\`）に配置してください。配置後にブックを開き直すと、定義に従って画面が組み立てられます。
+
+画面レイアウト定義の編集方法は[画面のカスタマイズ](screen_customization_guide_v2.md)で説明しています。
+
+## 9. 動作確認する
+
+1. 3 つのブックをいったん閉じ、もう一度開きます。開いたときに起動画面（登録修正は M-05、検索は M-08、管理は M-02）が表示されることを確認します。
+2. シートタブをクリックして、各画面が切り替わることを確認します。
+3. 配置したボタンを押し、想定どおりの動作になることを確認します。
+4. LOG シートに起動時の記録が残っていることを確認します（`debugLevel` が `INFO` 以上の場合）。
+
+うまく動かない場合は、次の点を順に確認してください。
+
+- LOG シートにエラーの記録が無いか
+- 動作設定ファイルのパス指定が実際のフォルダと一致しているか
+- 画面レイアウト定義ファイルが `ui\<ブック>\` に置かれているか
+- モジュールの取り込み漏れや、参照設定（手順 5.1）の漏れが無いか
+
+## 10. データの引き継ぎ
+
+以前のバージョンや別の PC からナレッジを引き継ぐ場合は、`data\` フォルダのナレッジファイルと `formats\` フォルダのフォーマット定義ファイルを、新しい環境の同じフォルダにコピーします。コピー前には元のフォルダのバックアップを取ってください。

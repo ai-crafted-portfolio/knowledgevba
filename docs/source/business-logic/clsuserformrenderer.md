@@ -4,49 +4,51 @@ title: clsUserFormRenderer.cls
 
 # clsUserFormRenderer.cls
 
-| 項目 | 値 |
+| 項目 | 内容 |
 |---|---|
 | 層 | ビジネスロジック層 |
 | 種別 | クラスモジュール (.cls) |
-| 役割 | IScreenRenderer 実装の将来用スタブ (UserForm 描画を予定) |
-| 行数 | 81 行 |
+| 配置ブック | 3 ブック共通 |
+| 役割 | 画面描画インターフェースの UserForm 実装（将来用の入口） |
+| 行数 | 60 行 |
 
-## 配置先
+## 取り込み先
 
-VBE で `挿入 > クラスモジュール`、F4 でプロパティ → `(オブジェクト名)` を `clsUserFormRenderer` に変更してから、コードペインに貼り付けます。
+クラスモジュール（.cls）です。下記コードをコピーし、`clsUserFormRenderer.cls` というファイル名で保存して、VBE の「ファイル → ファイルのインポート」で取り込みます。先頭の `VERSION 1.0 CLASS` から始まる行はクラスモジュールのファイル形式の一部なので、削らずにそのまま保存してください。詳しい手順は[導入手順](../../setup.md)を参照してください。
 
-## ソースコード（コピペ可）
+## ソースコード
 
-下のコードブロック右上にカーソルを当てるとコピーボタンが表示されます。
+コードブロック右上のボタンで全文をコピーできます。
 
 ```vbnet linenums="1"
 VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
-END
+End
 Attribute VB_Name = "clsUserFormRenderer"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
-Option Explicit
-
+' ================================================================
+' クラス: clsUserFormRenderer（v2.1、Phase 3 着手時の小物、Stub）
+' 概要:   IScreenRenderer の UserForm 型実装、v2.1 でも未実装 Stub
+'         将来 UserForm 化する場合の入口を確保（Strategy pattern）
+' Version: v2.1（2026-05-16 EOD、Q5/Q20 整合）
+' 関連:   clsSheetRenderer（thin shim 化）, IScreenRenderer.cls
+' v2.1 主要更新:
+'   - 8 method NotImplemented Stub に縮退（v1 14 method → v2.1 8 method）
+'   - Q5: UI 定義 .txt は read-only、Save API なし（将来 UserForm 化時も同様）
+' ================================================================
 Implements IScreenRenderer
-
-' ================================================================
-' クラス: clsUserFormRenderer（画面層 — 実装2 / スタブ）
-' 概要:   IScreenRenderer の UserForm 型実装。今回は未実装のスタブ。
-'         将来「フォーム入出力型」に画面方式を切り替える時の入口を確保する。
-'         切替時はこのクラスのメソッドを実装すれば、画面クラス本体（clsXxxScreen）
-'         は無修正で動作する（Strategy パターンの恩恵）。
-' 依存先: なし（スタブ）
-' 備考:   全メソッドが NotImplemented エラーを Raise する。
-' ================================================================
+Option Explicit
 
 Private Const NOT_IMPL_NUM As Long = vbObjectError + 1
 Private Const NOT_IMPL_SRC As String = "clsUserFormRenderer"
 Private Const NOT_IMPL_MSG As String = _
-    "NotImplemented: 将来 UserForm 切替時に実装してください（design.md §9 参照）"
+    "NotImplemented: UserForm 切替を実装する場合に本 cls を完成させてください"
+
+' --- IScreenRenderer v2 実装（8 メソッド、全 NotImplemented Stub） ---
 
 Private Sub IScreenRenderer_BindSheet(ByVal sheetName As String)
     Err.Raise NOT_IMPL_NUM, NOT_IMPL_SRC, NOT_IMPL_MSG
@@ -56,49 +58,27 @@ Private Sub IScreenRenderer_ClearScreen()
     Err.Raise NOT_IMPL_NUM, NOT_IMPL_SRC, NOT_IMPL_MSG
 End Sub
 
-Private Sub IScreenRenderer_RenderTitle(ByVal screenId As String, _
-                                         ByVal title As String, _
-                                         ByVal colorHex As String)
+Private Sub IScreenRenderer_ApplyFromStanza(ByVal xlsmName As String, ByVal screenId As String)
     Err.Raise NOT_IMPL_NUM, NOT_IMPL_SRC, NOT_IMPL_MSG
 End Sub
 
-Private Sub IScreenRenderer_RenderSection(ByVal sectionAddr As String, _
-                                           ByVal sectionLabel As String, _
-                                           ByVal colorHex As String)
+Private Sub IScreenRenderer_ShowSheet()
     Err.Raise NOT_IMPL_NUM, NOT_IMPL_SRC, NOT_IMPL_MSG
 End Sub
 
-Private Sub IScreenRenderer_RenderButton(ByVal btnSpec As Object)
+Private Sub IScreenRenderer_HideSheet()
     Err.Raise NOT_IMPL_NUM, NOT_IMPL_SRC, NOT_IMPL_MSG
 End Sub
 
-Private Sub IScreenRenderer_RenderLabel(ByVal cellAddr As String, _
-                                         ByVal labelText As String, _
-                                         ByVal colorHex As String)
+Private Sub IScreenRenderer_ActivateSheet()
     Err.Raise NOT_IMPL_NUM, NOT_IMPL_SRC, NOT_IMPL_MSG
 End Sub
 
-Private Sub IScreenRenderer_RenderInputField(ByVal cellAddr As String, _
-                                              ByVal fieldSpec As Object)
+Private Sub IScreenRenderer_ProtectSheet(ByVal level As String)
     Err.Raise NOT_IMPL_NUM, NOT_IMPL_SRC, NOT_IMPL_MSG
 End Sub
 
-Private Sub IScreenRenderer_RenderRequiredMark(ByVal cellAddr As String)
-    Err.Raise NOT_IMPL_NUM, NOT_IMPL_SRC, NOT_IMPL_MSG
-End Sub
-
-Private Sub IScreenRenderer_RenderHint(ByVal cellAddr As String, ByVal hintText As String)
-    Err.Raise NOT_IMPL_NUM, NOT_IMPL_SRC, NOT_IMPL_MSG
-End Sub
-
-Private Sub IScreenRenderer_RenderHeaderRow(ByVal startAddr As String, _
-                                             ByVal headerLabels As Variant, _
-                                             ByVal colorHex As String)
-    Err.Raise NOT_IMPL_NUM, NOT_IMPL_SRC, NOT_IMPL_MSG
-End Sub
-
-Private Sub IScreenRenderer_RenderEmptyState(ByVal cellAddr As String, _
-                                              ByVal message As String)
+Private Sub IScreenRenderer_UnprotectSheet()
     Err.Raise NOT_IMPL_NUM, NOT_IMPL_SRC, NOT_IMPL_MSG
 End Sub
 ```

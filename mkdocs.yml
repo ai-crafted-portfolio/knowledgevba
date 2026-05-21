@@ -1,5 +1,5 @@
 site_name: ナレッジ管理ツール (VBA 製)
-site_description: Excel VBA ベースのナレッジ管理ツール - 仕様書・操作手順・アーキテクチャ
+site_description: Excel VBA ベースのナレッジ管理ツール - 構成・導入・操作・設計
 site_url: https://ai-crafted-portfolio.github.io/knowledgevba/
 site_author: ai-crafted-portfolio
 
@@ -64,66 +64,87 @@ extra_css:
 
 nav:
   - 概要: index.md
-  - 仕様: spec.md
-  - セットアップ: setup.md
-  - 操作手順: operations.md
-  - アーキテクチャ: architecture.md
-  - カスタマイズ: customize.md
+  - 設計:
+      - 全体アーキテクチャ: architecture.md
+      - 仕様: spec.md
+  - 使い方:
+      - 導入手順: setup.md
+      - 操作手順: operations.md
+  - 設定とカスタマイズ:
+      - 設定値の変更: settings.md
+      - 画面のカスタマイズ: screen_customization_guide_v2.md
   - ソースコード:
       - 一覧: source/index.md
-      - エントリポイント:
-          - modEntryMain: source/entrypoint/modentrymain.md
-          - modEntrySearch: source/entrypoint/modentrysearch.md
-          - modEntryKnowledge: source/entrypoint/modentryknowledge.md
-          - modEntryFormat: source/entrypoint/modentryformat.md
-          - modEntrySettings: source/entrypoint/modentrysettings.md
-          - modSpecExamples: source/entrypoint/modspecexamples.md
-      - ビジネスロジック:
-          - clsButtonSpec: source/business-logic/clsbuttonspec.md
-          - clsControlSpec: source/business-logic/clscontrolspec.md
-          - clsFieldMigrator: source/business-logic/clsfieldmigrator.md
-          - clsFieldSpec: source/business-logic/clsfieldspec.md
-          - clsFormSpec: source/business-logic/clsformspec.md
-          - clsFormatManager: source/business-logic/clsformatmanager.md
-          - clsKnowledgeManager: source/business-logic/clsknowledgemanager.md
-          - clsLogger: source/business-logic/clslogger.md
-          - clsScreenSpec: source/business-logic/clsscreenspec.md
-          - clsSearchEngine: source/business-logic/clssearchengine.md
-          - clsSectionSpec: source/business-logic/clssectionspec.md
-          - clsSetupOrchestrator: source/business-logic/clssetuporchestrator.md
-          - clsSheetRenderer: source/business-logic/clssheetrenderer.md
-          - clsStorageResolver: source/business-logic/clsstorageresolver.md
-          - clsTaskController: source/business-logic/clstaskcontroller.md
-          - clsUserFormRenderer: source/business-logic/clsuserformrenderer.md
-          - IScreenRenderer: source/business-logic/iscreenrenderer.md
-          - modFactory: source/business-logic/modfactory.md
-          - modFormBuilder: source/business-logic/modformbuilder.md
-          - modScreenRender: source/business-logic/modscreenrender.md
-          - modScreenSpecRegistry: source/business-logic/modscreenspecregistry.md
-      - ユーティリティ:
-          - clsLogEntry: source/utility/clslogentry.md
-          - modCommon: source/utility/modcommon.md
-          - modDateUtil: source/utility/moddateutil.md
-          - modFileIO: source/utility/modfileio.md
-          - modImageRender: source/utility/modimagerender.md
-          - modStringUtil: source/utility/modstringutil.md
-          - modUIConfig: source/utility/moduiconfig.md
+      - インストーラ層:
+          - modSetup.bas: source/infrastructure/modsetup.md
+      - エントリポイント層:
+          - modEntryFormat.bas: source/entrypoint/modentryformat.md
+          - modEntryKnowledge.bas: source/entrypoint/modentryknowledge.md
+          - modEntrySearch.bas: source/entrypoint/modentrysearch.md
+          - modEntrySettings.bas: source/entrypoint/modentrysettings.md
+          - modSpecExamples.bas: source/entrypoint/modspecexamples.md
       - 画面層:
-          - clsMainScreen (M-01): source/screen/clsmainscreen.md
-          - clsFormatListScreen (M-02): source/screen/clsformatlistscreen.md
-          - clsFormatDesignScreen (M-03): source/screen/clsformatdesignscreen.md
-          - clsFormatPreviewScreen (M-04): source/screen/clsformatpreviewscreen.md
-          - clsKnowledgeRegisterScreen (M-05): source/screen/clsknowledgeregisterscreen.md
-          - clsKnowledgeEditScreen (M-06): source/screen/clsknowledgeeditscreen.md
-          - clsKnowledgeListScreen (M-07): source/screen/clsknowledgelistscreen.md
-          - clsSearchScreen (M-08): source/screen/clssearchscreen.md
-          - clsKnowledgeViewScreen (M-09): source/screen/clsknowledgeviewscreen.md
-          - clsStorageScreen (M-10): source/screen/clsstoragescreen.md
-          - clsSystemSettingsScreen (M-11): source/screen/clssystemsettingsscreen.md
-          - clsMigrationScreen (M-12): source/screen/clsmigrationscreen.md
-          - clsFileFormatScreen (M-13): source/screen/clsfileformatscreen.md
-          - clsLogScreen (M-14): source/screen/clslogscreen.md
-      - インストーラ:
-          - modSetup: source/infrastructure/modsetup.md
+          - clsBackupMgmtScreen.cls: source/screen/clsbackupmgmtscreen.md
+          - clsErrorBandScreen.cls: source/screen/clserrorbandscreen.md
+          - clsFileFormatScreen.cls: source/screen/clsfileformatscreen.md
+          - clsFormatDesignScreen.cls: source/screen/clsformatdesignscreen.md
+          - clsFormatListScreen.cls: source/screen/clsformatlistscreen.md
+          - clsFormatPreviewScreen.cls: source/screen/clsformatpreviewscreen.md
+          - clsKnowledgeEditScreen.cls: source/screen/clsknowledgeeditscreen.md
+          - clsKnowledgeListScreen.cls: source/screen/clsknowledgelistscreen.md
+          - clsKnowledgeRegisterScreen.cls: source/screen/clsknowledgeregisterscreen.md
+          - clsKnowledgeViewScreen.cls: source/screen/clsknowledgeviewscreen.md
+          - clsLogScreen.cls: source/screen/clslogscreen.md
+          - clsMigrationScreen.cls: source/screen/clsmigrationscreen.md
+          - clsSearchScreen.cls: source/screen/clssearchscreen.md
+          - clsStorageScreen.cls: source/screen/clsstoragescreen.md
+          - clsSystemSettingsScreen.cls: source/screen/clssystemsettingsscreen.md
+      - ビジネスロジック層:
+          - clsButtonSpec.cls: source/business-logic/clsbuttonspec.md
+          - clsControlSpec.cls: source/business-logic/clscontrolspec.md
+          - clsFieldMigrator.cls: source/business-logic/clsfieldmigrator.md
+          - clsFieldSpec.cls: source/business-logic/clsfieldspec.md
+          - clsFormatManager.cls: source/business-logic/clsformatmanager.md
+          - clsFormSpec.cls: source/business-logic/clsformspec.md
+          - clsKnowledgeManager.cls: source/business-logic/clsknowledgemanager.md
+          - clsLogger.cls: source/business-logic/clslogger.md
+          - clsScreenSpec.cls: source/business-logic/clsscreenspec.md
+          - clsSearchEngine.cls: source/business-logic/clssearchengine.md
+          - clsSectionSpec.cls: source/business-logic/clssectionspec.md
+          - clsSetupOrchestrator.cls: source/business-logic/clssetuporchestrator.md
+          - clsSheetRenderer.cls: source/business-logic/clssheetrenderer.md
+          - clsStorageResolver.cls: source/business-logic/clsstorageresolver.md
+          - clsUserFormRenderer.cls: source/business-logic/clsuserformrenderer.md
+          - IScreenRenderer.cls: source/business-logic/iscreenrenderer.md
+          - modFactory.bas: source/business-logic/modfactory.md
+          - modFormBuilder.bas: source/business-logic/modformbuilder.md
+          - modScreenRender.bas: source/business-logic/modscreenrender.md
+      - ユーティリティ層:
+          - clsCellAddrHelper.cls: source/utility/clscelladdrhelper.md
+          - clsCellBinding.cls: source/utility/clscellbinding.md
+          - clsCellIO.cls: source/utility/clscellio.md
+          - clsGridIO.cls: source/utility/clsgridio.md
+          - clsLogEntry.cls: source/utility/clslogentry.md
+          - ClsStanzaSection.cls: source/utility/clsstanzasection.md
+          - ClsStanzaValidationIssue.cls: source/utility/clsstanzavalidationissue.md
+          - ClsStanzaValidationResult.cls: source/utility/clsstanzavalidationresult.md
+          - modCommon.bas: source/utility/modcommon.md
+          - modConfigHolder.bas: source/utility/modconfigholder.md
+          - modConfigLoader.bas: source/utility/modconfigloader.md
+          - modDateUtil.bas: source/utility/moddateutil.md
+          - modFileIO.bas: source/utility/modfileio.md
+          - modFormatColumns.bas: source/utility/modformatcolumns.md
+          - modFormatLoader.bas: source/utility/modformatloader.md
+          - modImageRender.bas: source/utility/modimagerender.md
+          - modKnowledgeFileIO.bas: source/utility/modknowledgefileio.md
+          - modLogIds.bas: source/utility/modlogids.md
+          - modSheetMap.bas: source/utility/modsheetmap.md
+          - modStanzaIO.bas: source/utility/modstanzaio.md
+          - modStringUtil.bas: source/utility/modstringutil.md
+          - modUIConfig.bas: source/utility/moduiconfig.md
+          - modUILayoutExtractor.bas: source/utility/moduilayoutextractor.md
+          - modUILoader.bas: source/utility/moduiloader.md
       - 特殊モジュール:
-          - ThisWorkbook: source/special/thisworkbook.md
+          - ThisWorkbook（検索.xlsm）: source/special/thisworkbook-search.md
+          - ThisWorkbook（登録修正.xlsm）: source/special/thisworkbook-register.md
+          - ThisWorkbook（管理.xlsm）: source/special/thisworkbook-admin.md

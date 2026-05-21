@@ -1,167 +1,130 @@
 ---
 title: 仕様
-description: モジュール構成、検索スコアリング、画像解決規則、spec 駆動 UserForm DSL、テスト構成
-tags:
-  - excel
-  - vba
-  - spec
+description: 13 画面の一覧、ナレッジ・フォーマット・設定の書式、検索とログの仕様
 ---
 
 # 仕様
 
-現バージョンの仕様を定義します。
+現行 v2.1 の仕様をまとめたリファレンスです。構成やしくみの説明は[全体アーキテクチャ](architecture.md)を参照してください。
 
-!!! info "このページの読み方"
-    本ページは「現状の本ツールが何をどう実現しているか」を網羅的に記載するリファレンスです。手順を知りたい場合は [セットアップ](setup.md) / [操作手順](operations.md) へ、層構造や配布パターンを知りたい場合は [アーキテクチャ](architecture.md) へジャンプしてください。
+## 1. 画面構成（13 画面）
 
-## 1. モジュール構成（48 個 + ThisWorkbook）
+画面は M-02 から M-14 までの 13 画面です。各画面は Excel のシートタブで切り替えます。
 
-VBA モジュールは「層」ごとにフォルダ分割した形で配布されます。インポート対象は 48 個、`ThisWorkbook.cls` は中身コピペで合計 49 ファイルです。
-
-| 層 | 個数 | 代表モジュール |
-|---|---|---|
-| インストーラ層 | 1 | `modSetup.bas` |
-| エントリポイント層 | 6 | `modEntryMain.bas` / `modEntrySearch.bas` / `modEntryKnowledge.bas` / `modEntryFormat.bas` / `modEntrySettings.bas` / `modSpecExamples.bas` |
-| ビジネスロジック層 | 21 | `clsSearchEngine.cls` / `clsKnowledgeManager.cls` / `clsFormatManager.cls` / `clsTaskController.cls` / `clsStorageResolver.cls` / `clsFieldMigrator.cls` / `clsLogger.cls` / `clsButtonSpec.cls` / `clsControlSpec.cls` / `clsFieldSpec.cls` / `clsFormSpec.cls` / `clsScreenSpec.cls` / `clsSectionSpec.cls` / `clsSetupOrchestrator.cls` / `clsSheetRenderer.cls` / `clsUserFormRenderer.cls` / `IScreenRenderer.cls` / `modFactory.bas` / `modFormBuilder.bas` / `modScreenRender.bas` / `modScreenSpecRegistry.bas` |
-| ユーティリティ層 | 6 | `modCommon.bas` / `modStringUtil.bas` / `modDateUtil.bas` / `modFileIO.bas` / `modImageRender.bas` / `clsLogEntry.cls` |
-| 画面層 | 14 | `clsMainScreen.cls`〜`clsLogScreen.cls`（M-01〜M-14 の各画面構築クラス） |
-| 特殊モジュール | 1 | `ThisWorkbook.cls` |
-
-全モジュールの詳細とソースコードは [ソースコード一覧](source/index.md) を参照してください。
-
-!!! info "層分離の方針"
-    エントリポイント層は「ボタン配下から呼ばれる Public Sub」のみを置き、ビジネスロジック層のクラス群（`cls*`）に処理を委譲します。ユーティリティ層はビジネスロジック層から下方向にのみ依存し、上方向には依存しません。詳細は [アーキテクチャ](architecture.md) を参照。
-
-## 2. シート構成（14 個）
-
-`SetupSheetsAndButtons` マクロ（`modSetup.bas`）が以下 14 シートを存在チェック後に不在分のみ生成します。
-
-| ID | シート名 | 役割 |
-|---|---|---|
-| M-01 | メイン | エントリポイント、各機能ボタン配置 |
-| M-04 | 検索 | キーワード入力 + 結果一覧（H 列サムネ / I 列 Score） |
-| M-08 | ナレッジ一覧 | メタデータ管理（KnwNo / FormatID / タイトル / 作成日 / 更新日 ほか） |
-| M-09 | ナレッジ表示 | 単票表示、J4:N20 領域に詳細画像（最大 400×300px） |
-| M-11 | 設定 | `dataFolder` パス、テストモードフラグ |
-| ログ | ログ | 5 列構成（日時 / モジュール名 / 関数名 / メッセージ種別 / メッセージ内容） |
-| その他 8 シート | フォーマット定義・タスク関連・各種台帳 | — |
-
-セットアップマクロは同時に **フォームコントロールボタン 68 個** を全 14 シートに配置・マクロ割り当てまで実施します（メイン 12 個 + 業務 13 シート計 56 個）。
-
-## 3. 検索スコアリング
-
-`clsSearchEngine.ScanAndMatch` が `<dataFolder>/*.txt` を走査して以下の式で Score を算出し、降順で結果行に書き込みます。
-
-$$
-\textit{Score} = 3 \times \textit{TitleHits} + 2 \times \textit{TargetFieldHits} + \textit{TotalOccurrences}
-$$
-
-具体例として、デモデータ `Macro_SeedDemoData` でキーワード `メモ` を AND モードで検索した場合の期待順位は次のとおり。
-
-| 順位 | KnwNo | タイトル | 備考 |
+| 画面 | 画面名 | 配置ブック | 主な機能 |
 |---|---|---|---|
-| 1 | KN-2026-0420 | メモリ枯渇エラー対処メモ | タイトル「メモ」2 回 ×3 ブースト + 本文出現 |
-| 2 | KN-2026-0421 | ChromaDB HNSW 再構築手順メモ | — |
-| 3 | KN-2026-0424 | サムネ画像の自動配置メモ | — |
-| 4 | KN-2026-0422 | VBA ADODB.Stream の代替メモ | — |
-| 5 | KN-2026-0423 | RAG 検索のスコアリング設計 | タイトル「メモ」なし、本文ヒットのみ |
+| M-02 | フォーマット一覧 | 管理.xlsm | 登録済みフォーマット定義の一覧表示 |
+| M-03 | フォーマット設計 | 管理.xlsm | フォーマット定義の作成・編集 |
+| M-04 | フォーマットプレビュー | 管理.xlsm | フォーマット定義の表示確認 |
+| M-05 | ナレッジ登録 | 登録修正.xlsm | ナレッジの新規登録 |
+| M-06 | ナレッジ修正 | 登録修正.xlsm | 既存ナレッジの修正 |
+| M-07 | ナレッジ一覧 | 検索.xlsm | ナレッジの一覧表示 |
+| M-08 | ナレッジ検索 | 検索.xlsm | 条件を組み合わせた検索（8 入力項目） |
+| M-09 | ナレッジ表示 | 検索.xlsm | ナレッジ詳細の閲覧（編集不可） |
+| M-10 | 格納先設定 | 管理.xlsm | データ・フォーマット・画面定義などのフォルダ設定 |
+| M-11 | 設定 | 管理.xlsm | ログの詳細度などの動作設定 |
+| M-12 | フィールド反映 | 管理.xlsm | フォーマット変更を既存ナレッジへ反映 |
+| M-13 | ファイル形式設定 | 管理.xlsm | 出力ファイル形式の設定（15 項目） |
+| M-14 | 操作ログ | 管理.xlsm | 操作ログの表示・書き出し |
 
-検索モードは `AND` / `OR` を切替可能。`TargetField` で「全フィールド」「タイトルのみ」「本文のみ」等のスコープを絞れます。
+## 2. ブック別の画面割当と起動画面
 
-## 4. 画像表示機能（image_ext rev1）
+各ブックは、開いたときに最初に表示する画面（起動画面）が決まっています。
 
-検索結果一覧の H 列にサムネ（60×40px）、I 列に Score を表示し、ナレッジ表示画面の J4:N20 領域に最大 400×300px の詳細画像を `Shapes.AddPicture` で貼付します。
+| ブック | 含まれる画面 | 起動画面 |
+|---|---|---|
+| 登録修正.xlsm | M-05 / M-06 | M-05 ナレッジ登録 |
+| 検索.xlsm | M-07 / M-08 / M-09 | M-08 ナレッジ検索 |
+| 管理.xlsm | M-02・M-03・M-04・M-10・M-11・M-12・M-13・M-14 | M-02 フォーマット一覧 |
 
-### 4.1 既定の画像パス解決規則
+各ブックには、画面シートに加えて操作ログを記録する LOG シートがあります。
 
-```
-<dataFolder>/                       ← 設定画面で指定するナレッジファイル置き場
-  ├─ KN-2026-0420.txt
-  ├─ KN-2026-0421.txt
-  └─ ...
-<dataFolder の親>/
-  └─ kb_images/                     ← 画像はここに置く（規約）
-       ├─ KN-2026-0420.png
-       ├─ KN-2026-0421.png
-       └─ ...
-```
+## 3. ナレッジデータの書式
 
-例: `dataFolder = C:\knowledge\data\` なら画像は `C:\knowledge\kb_images\` から解決。
+ナレッジは 1 件につき 1 つのテキストファイル（`<ナレッジ番号>.txt`）として `data\` フォルダに保存されます。
 
-### 4.2 ImagePath スタンザ仕様
+- **ファイル形式** — `###...###` で区切る専用のスタンザ形式です。区切りに専用の記号を使うため、本文の中に改行・`=`・`[` などを自由に含められます。
+- **ナレッジ番号** — `<フォーマット ID>-<4 桁連番>`（例：`TICKET-0001`）の形で採番します。1 フォーマットあたり 9999 件までです。
+- **文字コード** — Shift_JIS、改行は CRLF です。
+- **機種依存文字** — ①②③ や髙 などはそのまま保存できます。
+- **絵文字・サロゲートペア** — 保存前に弾かれ、エラーが表示されます。
+- **改行コードの混在** — LF 単独や CR 単独、混在のファイルは弾かれます（自動補正はしません）。
 
-ナレッジ `.txt` 末尾（任意の位置）に以下を書くと既定パスを上書きできます。
+## 4. フォーマット定義
 
-```
-ImagePath=KN-2026-0420.png
-```
+フォーマットは、ナレッジの入力項目のひな型です。`formats\` フォルダに `<フォーマット ID>.txt` として保存され、`[FORMAT]` セクション（フォーマット全体の属性）と `[FIELD]` セクション（各入力項目）で構成されます。バージョンを上げる際の移行ルールを `[MIGRATE_RULE]` セクションに書くこともできます。
 
-または絶対パス:
+入力項目の型（FieldType）は 5 種類です。
 
-```
-ImagePath=\\fileshare\kb_images\custom_image.png
-```
+| 型 | 説明 |
+|---|---|
+| text | 1 行のテキスト |
+| multiline | 複数行のテキスト |
+| number | 数値 |
+| date | 日付 |
+| dropdown | 選択肢からの選択 |
 
-スタンザが無い場合は **`<KnwNo>.png` を既定** として動作するため、既存ファイルとの互換性は保たれます。
+フォーマットを保存すると、そのフォーマットを使う既存ナレッジへ変更内容が自動で反映されます（反映前にバックアップを取得し、確認のメッセージを表示します）。フォーマットを削除しようとしたとき、そのフォーマットに紐づくナレッジが 1 件でも残っていれば削除は中止され、件数が表示されます。
 
-## 5. spec 駆動 UserForm DSL（image_ext rev1）
+フォーマット定義の書き方は[画面のカスタマイズ](screen_customization_guide_v2.md)でも扱います。
 
-`clsFormSpec` で宣言したコントロール仕様を、`modFormBuilder.BuildAndShow` が実行時に `VBProject.VBComponents.Add(3)` で UserForm を一時生成 → `designer.Controls.Add` でコントロール配置 → `CodeModule.AddFromString` でクリックハンドラ注入してから `.Show` する仕組みです。
+## 5. 動作設定
 
-### 5.1 サンプルコード
+動作設定は、ブックごとに 1 つの設定ファイル（`登録修正_config.txt` / `検索_config.txt` / `管理_config.txt`）にまとめられています。設定ファイルはブックと同じフォルダに置き、テキストエディタで編集します。主な設定項目は次のとおりです。
 
-```vba
-Sub MyForm()
-    Dim spec As clsFormSpec
-    Set spec = New clsFormSpec
-    spec.FormTitle = "サンプル"
-    spec.Width = 500 : spec.Height = 350
+| 設定 | 内容 |
+|---|---|
+| data_dir / format_dir / ui_dir / backup_dir | ナレッジ・フォーマット・画面定義・バックアップの格納先フォルダ |
+| debugLevel | 操作ログの詳細度（OFF / ERROR / WARN / INFO / DEBUG / TRACE の 6 段階） |
+| logRotationRows | LOG シートに保持するログ行数の上限 |
+| uiSchemaFailMode | 画面定義に不備があったときの起動の挙動 |
 
-    Call spec.AddControl("Label", "lblTitle", 10, 10, 480, 20, "見出し")
-    Call spec.AddControl("Image", "imgMain", 10, 40, 300, 200)
-    Call spec.AddControl("TextBox", "txtNote", 320, 40, 170, 200, "メモ")
-    Call spec.AddControl("Button", "btnClose", 200, 280, 80, 30, _
-                          "閉じる", "frmCallback_searchResult_close")
+設定値の意味と変更方法は[設定値の変更](settings.md)で詳しく説明します。
 
-    Call BuildAndShow(spec, True)  ' True = Modal
-End Sub
-```
+## 6. 検索（M-08 ナレッジ検索）
 
-### 5.2 サポートしているコントロール種別
+M-08 は、複数の条件を組み合わせて検索する画面です。入力項目は次の 8 つです。
 
-`Label` / `TextBox` / `Image` / `Button` の 4 種別。`clsControlSpec` が name / left / top / width / height / caption / callbackName を保持し、`clsFormSpec` がコレクションでまとめて持ちます。
+1. キーワード
+2. 対象フィールドの絞り込み
+3. フォーマット種別
+4. 期間（開始）
+5. 期間（終了）
+6. カテゴリ
+7. 担当者
+8. ナレッジ番号の直接指定
 
-!!! warning "前提条件"
-    `[ファイル] → [オプション] → [トラスト センター] → [トラスト センターの設定] → [マクロの設定] → [VBA プロジェクト オブジェクト モデルへのアクセスを信頼する]` を **ON** にする必要があります。OFF の場合 `BuildAndShow` で「アクセスが拒否されました」エラーが出ます。検索のみの利用なら OFF のままで構いません。
+- **キーワード** — 半角スペースで区切ると、すべての語を含むナレッジ（AND 検索）が対象になります。
+- **一致のしかた** — 部分一致のみです。大文字小文字は区別しませんが、半角全角は区別します。
+- **検索結果** — 1 行 1 件で、ナレッジ番号・フォーマット ID・件名・更新日時・一致したフィールド名を表示します。
+- **最大表示件数** — 100 件です。超えた場合は警告が表示されます。
+- **並べ替え** — 専用の並べ替え機能はなく、Excel 標準の機能を利用します。
 
-## 6. フォーマット定義機構
+## 7. 操作ログ
 
-`clsFormatManager` がフォーマット ID（例: `DEMO-MEMO`）ごとにフィールド定義を保持します。各ナレッジ `.txt` の先頭で `FormatID=` を宣言すると、検索画面側の TargetField ドロップダウンに該当フォーマットの宣言フィールドが選択肢として並びます。
+各ブックは、自分の操作ログを LOG シートに記録します。
 
-`clsFieldMigrator` は旧フォーマットから新フォーマットへフィールド名を写像する役割で、フォーマット定義を変更しても既存ナレッジを壊さずに済むようになっています。
+- LOG シートは既定で非表示です（必要に応じて Excel の操作で再表示できます）。
+- ログの詳細度は `debugLevel` で制御します。`OFF` は記録なし、`ERROR` はエラーのみ、`INFO` は通常の操作も記録、`TRACE` は最も詳細です。記載が無い場合の既定は `ERROR` です。
+- LOG シートの行数が `logRotationRows` の上限に達すると、古い行から自動で削除されます。
+- M-14 操作ログ画面は、管理.xlsm 自身のログを表示・書き出すための画面です。専用の絞り込み・並べ替え機能は持ちません。
 
-## 7. 検索バックエンド差替境界
+## 8. バックアップと競合制御
 
-本実装は `<dataFolder>/*.txt` を ADODB で SJIS 読込する方式です。`clsSearchEngine.cls` 冒頭のコメントブロックに、別のデータソース（事前 ETL で `Sheet "Data"` に export しておくなど）に差し替える場合の指針が記載されています。具体的には:
+- **バックアップ保持期間** — 既定で 90 日です。期間を過ぎたバックアップは起動時に自動で削除されます。M-14 から手動で削除することもできます。
+- **修正時の競合制御** — ナレッジを修正して保存するとき、読み込み後にファイルが別の操作で更新されていないかを確認します。更新されていた場合は「上書き / 再読込 / 取消」を選ぶメッセージが表示されます。
 
-1. 事前 ETL で chunks を任意のシート（例: `Data`）に export しておく
-2. `ScanAndMatch` の txt ループ箇所を Range 走査に置換する
+## 9. モジュール構成
 
-この変更点は `clsSearchEngine` 1 ファイルに局所化されており、上位エントリポイントには影響しません。
+各ブックには、役割の異なる VBA モジュールを取り込みます。配布対象（テスト用を除く）のモジュールは **67 本**で、層ごとに分かれています。
 
-!!! danger "VBA からの子プロセス起動は使わない"
-    `Shell` / `VBA.Shell` / `WScript.Shell.Run` / `WScript.Shell.Exec` 等の子プロセス起動は使いません。外部データ連携が必要な場合も、外部プロセス起動ではなく事前 ETL → Excel 内 Range 走査の方式を採ります。
+| 層 | 役割 |
+|---|---|
+| インストーラ層 | 必要なシートを用意するセットアップ |
+| エントリポイント層 | ボタン操作・起動イベントの受け口 |
+| 画面層 | 各画面の組み立て・再描画 |
+| ビジネスロジック層 | ナレッジ・フォーマット・検索・ログの業務処理 |
+| ユーティリティ層 | 外部ファイル入出力・スタンザ解析・文字列処理など |
+| 特殊モジュール | ブックごとの ThisWorkbook（起動・終了イベント） |
 
-## 8. 既知の制約・トレードオフ
-
-### 制約
-
-- **検索アルゴリズムは単純スコアリング** — タイトル ×3 + 対象フィールド ×2 + 出現回数の加算式で、意味検索（ベクトル類似度）や同義語展開は対象外です
-- **`clsFormSpec` DSL のコントロール種別は 4 種** — `Label` / `TextBox` / `Image` / `Button` のみ。`ListBox` / `ComboBox` 等の追加は将来検討（[§5.2](#52-サポートしているコントロール種別)）
-- **クラスモジュール内 `Public Const` 禁止** — VBA 仕様の制約。列番号などの共通定数は `modCommon.bas` に集約しています
-- **モバイル / Excel for Mac 不可** — `Forms.*` ProgID が無いため `Macro_ShowSearchResultPreview` は Windows 版 Excel でのみ動作します
-
-### 設計上のトレードオフ
-
-- **txt フラットファイル方式 vs DB 方式** — DB（SQLite 等）採用ならばインデックス検索ができる代わりに、ファイル単位の閲覧性・テキストエディタでの直接編集容易性が落ちます。閲覧性を取って `.txt` を採用しています
-- **動的 UserForm 生成 vs 固定 UserForm** — 動的生成は Excel のオブジェクトモデルへの信頼設定が必要ですが、コントロール定義をコードで管理できる利点があります
+すべてのモジュールの一覧・役割・ソースコードは[ソースコード](source/index.md)に掲載しています。

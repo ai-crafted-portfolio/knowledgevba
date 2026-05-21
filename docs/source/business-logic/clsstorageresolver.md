@@ -4,20 +4,21 @@ title: clsStorageResolver.cls
 
 # clsStorageResolver.cls
 
-| 項目 | 値 |
+| 項目 | 内容 |
 |---|---|
 | 層 | ビジネスロジック層 |
 | 種別 | クラスモジュール (.cls) |
-| 役割 | dataFolder / kb_images の解決 |
+| 配置ブック | 3 ブック共通 |
+| 役割 | 格納先設定に基づきファイル参照リンクを解決する |
 | 行数 | 171 行 |
 
-## 配置先
+## 取り込み先
 
-VBE で `挿入 > クラスモジュール`、F4 でプロパティ → `(オブジェクト名)` を `clsStorageResolver` に変更してから、コードペインに貼り付けます。
+クラスモジュール（.cls）です。下記コードをコピーし、`clsStorageResolver.cls` というファイル名で保存して、VBE の「ファイル → ファイルのインポート」で取り込みます。先頭の `VERSION 1.0 CLASS` から始まる行はクラスモジュールのファイル形式の一部なので、削らずにそのまま保存してください。詳しい手順は[導入手順](../../setup.md)を参照してください。
 
-## ソースコード（コピペ可）
+## ソースコード
 
-下のコードブロック右上にカーソルを当てるとコピーボタンが表示されます。
+コードブロック右上のボタンで全文をコピーできます。
 
 ```vbnet linenums="1"
 VERSION 1.0 CLASS
@@ -31,7 +32,7 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
-' Phase 6 レビュー: GetStorageConfig は O(N) だが N ≤ MAX_STORAGE_SCAN_ROWS=1000。
+' Phase 6 レビュー: GetStorageConfig は O(N) だが N ? MAX_STORAGE_SCAN_ROWS=1000。
 ' 現状想定 (docType 数十件) では十分。指摘なし。
 
 ' ================================================================
@@ -95,7 +96,7 @@ Public Function ResolveLink(ByVal docType As String, _
     If Not GetStorageConfig(docType, storageType, pathType, basePath) Then
         If Not m_logger Is Nothing Then
             m_logger.LogWarn "clsStorageResolver", "ResolveLink", _
-                              "格納先設定なし: docType=" & docType
+                              "格納先設定なし: docType=" & docType, , LOG_STORAGE_OPEN_ENTRY
         End If
         ResolveLink = ""
         Exit Function
@@ -120,7 +121,7 @@ Public Function ResolveLink(ByVal docType As String, _
 ErrHandler:
     If Not m_logger Is Nothing Then
         m_logger.LogError "clsStorageResolver", "ResolveLink", _
-                           "リンク生成失敗: " & Err.Description
+                           "リンク生成失敗: " & Err.Description, , LOG_STORAGE_OPEN_EXIT_OK
     End If
     ResolveLink = ""
 End Function

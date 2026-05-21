@@ -4,20 +4,21 @@ title: modStringUtil.bas
 
 # modStringUtil.bas
 
-| 項目 | 値 |
+| 項目 | 内容 |
 |---|---|
 | 層 | ユーティリティ層 |
 | 種別 | 標準モジュール (.bas) |
+| 配置ブック | 3 ブック共通 |
 | 役割 | 文字列処理の純粋関数群 |
 | 行数 | 239 行 |
 
-## 配置先
+## 取り込み先
 
-VBE で `挿入 > 標準モジュール`、F4 でプロパティ → `(オブジェクト名)` を `modStringUtil` に変更してから、コードペインに貼り付けます。
+標準モジュール（.bas）です。下記コードをコピーし、`modStringUtil.bas` というファイル名で保存して、VBE の「ファイル → ファイルのインポート」で取り込みます。詳しい手順は[導入手順](../../setup.md)を参照してください。
 
-## ソースコード（コピペ可）
+## ソースコード
 
-下のコードブロック右上にカーソルを当てるとコピーボタンが表示されます。
+コードブロック右上のボタンで全文をコピーできます。
 
 ```vbnet linenums="1"
 Attribute VB_Name = "modStringUtil"
@@ -153,7 +154,7 @@ End Function
 ' 備考:   "=" が含まれない行は False を返す
 '         値に "=" が含まれる場合、最初の "=" で分割する
 ' ================================================================
-Public Function ParseStanzaLine(ByVal line As String, _
+Public Function ParseStanzaLine(ByVal lineStr As String, _
                                   ByRef outKey As String, _
                                   ByRef outValue As String) As Boolean
     Dim pos As Long
@@ -161,14 +162,14 @@ Public Function ParseStanzaLine(ByVal line As String, _
     outKey = ""
     outValue = ""
     
-    pos = InStr(line, "=")
+    pos = InStr(lineStr, "=")
     If pos = 0 Then
         ParseStanzaLine = False
         Exit Function
     End If
     
-    outKey = Trim(Left(line, pos - 1))
-    outValue = Mid(line, pos + 1)
+    outKey = Trim(Left(lineStr, pos - 1))
+    outValue = Mid(lineStr, pos + 1)
     ParseStanzaLine = True
 End Function
 
