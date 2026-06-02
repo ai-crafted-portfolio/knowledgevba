@@ -48,7 +48,7 @@ Attribute VB_Exposed = False
 '          Sprint; this shim ensures the project compiles and that
 '          Btn_MigrateFields runs without raising a compile / runtime
 '          error. It logs a "reflect done" line so M-12 button UX
-'          remains consistent with screen_design_v2 Â§2.10 behaviour.
+'          remains consistent with screen_design_v2 ˜2.10 behaviour.
 ' Version: v2.3 (2026-05-30 BUG-4 related compile fix)
 ' Deps:    modKnowledgeFileIO.ListKnowledgesByFormat,
 '          clsLogger (optional)
@@ -78,7 +78,7 @@ End Sub
 ' Summary: count the knowledges belonging to the given formatId.
 '          Returns the target count (>= 0). On error returns 0.
 '          The actual rewrite-each-knowledge logic is deferred to a
-'          later Sprint per screen_design_v2 Â§2.10; this shim keeps
+'          later Sprint per screen_design_v2 ˜2.10; this shim keeps
 '          the caller signature stable so the workbook compiles and
 '          Btn_MigrateFields raises no runtime trap.
 ' Caller:  modEntryKnowledge.Btn_MigrateFields
