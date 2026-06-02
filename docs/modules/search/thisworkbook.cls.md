@@ -1,79 +1,68 @@
 ---
 title: ThisWorkbook.cls
-description: ThisWorkbook.cls �̃\�[�X�R�[�h�i�R�s�y�p�j
+description: ThisWorkbook.cls のソースコード（コピペ用）
 ---
 
 # ThisWorkbook.cls
 
-**�z�u��**: `����.xlsm` �p�� VBA ���W���[��  
-**���**: �N���X���W���[��
+**配置先**: `検索.xlsm` 用の VBA モジュール
+**種類**: クラスモジュール
 
 ---
 
-## �ۑ����@
+## 取り込み方法（ThisWorkbook は特別）
 
-���̃R�[�h���������ɓ\��t���A**[���O��t���ĕۑ�]** �Ŏ��̂悤�ɕۑ����Ă��������B
+**【重要】`ThisWorkbook` は Excel のブック（.xlsm）に最初から存在する document module です。ファイルとして Import できません。**
 
-- �ꏊ: `C:\KnowledgeMgr\installer\vba_modules\search\`
-- �t�@�C����: `ThisWorkbook.cls`
-- �t�@�C���̎��: **���ׂẴt�@�C��**
-- �����R�[�h: **ANSI**�iShift-JIS�j
+1. VBE（`Alt + F11`）を開き、プロジェクトツリーの `ThisWorkbook` を **ダブルクリック**してコードペインを開きます。
+2. コードペインの**既存コードをすべて削除**します。
+3. 下のコード全文をコピーして**貼り付け**ます。
 
-> �������̕����R�[�h�� **ANSI** �ɂ��Ȃ��ƁAVBA �̓��{�ꂪ�����������ē����Ȃ��Ȃ�܂��B
-> UTF-8 �ŕۑ������ VBA Import ���ɓ��{�ꂪ�����������ē����Ȃ��Ȃ�܂��B
-> ���s�R�[�h�� CRLF�iWindows �W���j�̂܂܂� OK �ł��B
+> VB クラスモジュールヘッダ（`VERSION 1.0 CLASS` / `BEGIN` / `END` / `Attribute` 行）は不要です。本体は `Option Explicit` から始まります。
+> 文字コード・改行はコードペインに直接貼り付けるため、ファイル保存時の ANSI/CRLF 指定は不要です。
 
 ---
 
-## �\�[�X�R�[�h
+## ソースコード
 
 ```vb
-VERSION 1.0 CLASS
-BEGIN
-  MultiUse = -1  'True
-End
-Attribute VB_Name = "ThisWorkbook"
-Attribute VB_GlobalNameSpace = False
-Attribute VB_Creatable = False
-Attribute VB_PredeclaredId = True
-Attribute VB_Exposed = True
 ' ================================================================
-' ThisWorkbook ?????W???[?? (???.xlsm ??p)
-' ?z?u:   ThisWorkbook.cls ???????.xlsm ?? VBE ????? Import (VBE ?d?l?? Import ?s??A?R?s?y???)
-' ??A:   clsSetupOrchestrator.bas v2, modConfigLoader.bas, modConfigHolder.bas
-' Version: v2.1 (2026-05-16 EOD?AQ1-Q57 ???f)
-' Phase: 7
-' ADR:   ADR-0053 ??2.1
-' v2.1:  ???.xlsm ???\?? = M-08 (1 ???) + LOG  (v2.3 retired M-07/M-09)
-'        Q44: ?N???? ActiveSheet = M-08 (?????????, STARTUP_SHEET)
-'        Q19: format_dir ??? write/delete ????.xlsm ???? (modFormatLoader ???? ThisWorkbook.Name enforce)
-'        Q39: config.txt ??e?L?X?g?G?f?B?^?????W?AWorkbook_SheetChange ?n???h???s?v?iM-11 ??????????EdebugLevel ??W GUI?ASSOT-Q22?j
+' ThisWorkbook 専用モジュール (検索.xlsm 専用)
+' 配置:   ThisWorkbook.cls として検索.xlsm の VBE に直接 Import (VBE 仕様で Import 不可、コピペのみ)
+' 関連:   clsSetupOrchestrator.bas v2, modConfigLoader.bas, modConfigHolder.bas
+' Version: v2.3 (2026-06-02 mojibake 修復後再生成)
+' Phase: 7 / R3-Omega
+' ADR:   ADR-0053 §2.1
+' 画面構成: M-08 (1 画面) + LOG  (v2.3 M-07/M-09 廃止)
+'        Q44: 起動時 ActiveSheet = ナレッジ検索 (M-08)
+'        Q19: format_dir への write/delete は管理.xlsm 専用 (検索.xlsm からは read のみ)
+'        Q39: config.txt はテキストエディタ直接編集、Workbook_SheetChange ハンドラ不要
 ' ================================================================
 Option Explicit
 
-Private Const XLSM_NAME As String = "����"
-Private Const STARTUP_SHEET As String = "�i���b�W����"  ' v2.1 Q44 ?m?? (M-01 ???j???[???A?N???? = ????????s)
+Private Const XLSM_NAME As String = "検索"
+Private Const STARTUP_SHEET As String = "ナレッジ検索"  ' v2.1 Q44 確定 (M-01 メニュー削除、起動時 = 業務画面直行)
 
 ' ================================================================
 ' Workbook_Open
-' ?T?v:   xlsm ?N?????? setup ?????s (???.xlsm ?p)
-' ??y:   1. modConfigLoader ?? xlsm ??????? config.txt ?? read ?? modConfigHolder ??Z?b?g (Q8)
-'         2. clsLogger.Init (???O?V?[?g + debugLevel ERROR ????AQ7)
-'         3. modKnowledgeFileIO.CleanupOldBackups ?? 90 ???? backup ?????? (Q34)
-'         4. clsSetupOrchestrator.RunFullSetup("???")
-'            - ?V?[?g?m?? (M-08/LOG)
-'            - UI ?X?^???U?K?p (modUILoader.ApplyUiToSheet?AQ20)
-'            - ?^?u?F (ADR-0053 ??2.1.1)
-'            - format_dir ?????? (???? .txt ??????????t?H???_ seed)
-'            - Workbook.Protect Structure + ?V?[?g???
-'            - ActiveSheet = M-08 (?????????, STARTUP_SHEET) (Q44)
+' 概要:   xlsm 起動時に setup を実行 (検索.xlsm 用)
+' 手順:   1. modConfigLoader が xlsm 名対応の config.txt を read → modConfigHolder にセット (Q8)
+'         2. clsLogger.Init (ログシート + debugLevel ERROR 既定、Q7)
+'         3. modKnowledgeFileIO.CleanupOldBackups で 90 日超 backup 自動削除 (Q34)
+'         4. clsSetupOrchestrator.RunFullSetup("検索")
+'            - シート確認 (M-08/LOG)
+'            - UI スタンザ適用 (modUILoader.ApplyUiToSheet、Q20)
+'            - タブ色 (ADR-0053 §2.1.1)
+'            - format_dir 検査 (もし .txt 無ければ空フォルダ seed)
+'            - Workbook.Protect Structure + シート保護
+'            - ActiveSheet = ナレッジ検索 (M-08) (Q44)
 ' ================================================================
 Private Sub Workbook_Open()
     On Error GoTo ErrHandler
     Application.EnableEvents = False
     Application.ScreenUpdating = False
 
-    ' v2.1 Q34: ?N?????? 90 ?????o?b?N?A?b?v???????? (???.xlsm ?????{)
+    ' v2.1 Q34: 起動時に 90 日超バックアップ自動削除 (管理.xlsm のみ実施)
     On Error Resume Next
     Call modKnowledgeFileIO.CleanupOldBackups
     On Error GoTo ErrHandler
@@ -82,12 +71,12 @@ Private Sub Workbook_Open()
     Set orch = New clsSetupOrchestrator
     Call orch.RunFullSetup(XLSM_NAME)
 
-    ' S5-LOG-02: SAVE-EXIT-OK-II-003 (Workbook_Open success exit, screen ???)
+    ' S5-LOG-02: SAVE-EXIT-OK-II-003 (Workbook_Open success exit, screen 検索)
     On Error Resume Next
     Dim oLogger003 As clsLogger
     Set oLogger003 = New clsLogger
     oLogger003.Init ThisWorkbook.Worksheets("LOG")
-    oLogger003.LogInfo "ThisWorkbook_kensaku", "Workbook_Open", "Workbook_Open ??????: " & XLSM_NAME, "", "SAVE-EXIT-OK-II-003"
+    oLogger003.LogInfo "ThisWorkbook_kensaku", "Workbook_Open", "Workbook_Open 正常完了: " & XLSM_NAME, "", "SAVE-EXIT-OK-II-003"
     On Error GoTo 0
 
     ' Q44: startup ActiveSheet = STARTUP_SHEET (production spec mirror)
@@ -103,38 +92,36 @@ ErrHandler:
     Application.ScreenUpdating = True
     Application.EnableEvents = True
     Dim msg As String
-    msg = "????.xlsm ?N???G???[: " & Err.Description & vbCrLf & _
-          "config.txt ????? / debugLevel ?l / ?V?[?g?\?? / format_dir ???????? ???m?F???????????"
+    msg = "検索.xlsm 起動エラー: " & Err.Description & vbCrLf & _
+          "config.txt の存在 / debugLevel 値 / シート構造 / format_dir 書き込み権限 を確認してください"
     Debug.Print msg
-    ' S5-LOG: BACKTOMAIN-ERR-EE-031 (Workbook_Open failure, ????????B?s?? = back-to-main ?????J??G???[)
+    ' S5-LOG: BACKTOMAIN-ERR-EE-031 (Workbook_Open failure)
     On Error Resume Next
     Dim oLogger031 As clsLogger
     Set oLogger031 = New clsLogger
     oLogger031.Init ThisWorkbook.Worksheets("LOG")
-    oLogger031.LogError "ThisWorkbook_kensaku", "Workbook_Open", "Workbook_Open ???s: " & Err.Description, "", "BACKTOMAIN-ERR-EE-031"
+    oLogger031.LogError "ThisWorkbook_kensaku", "Workbook_Open", "Workbook_Open 失敗: " & Err.Description, "", "BACKTOMAIN-ERR-EE-031"
     On Error GoTo 0
-    ' v2.3 install_admin.bat ?? headless ???@?e?X?g?? Setup_admin ??
-    ' ???? MsgBox ???o????n???O????????P?v???B
-    ' modCommon.IsHeadless() ?? COM ???????s?????o???A???????
-    ' MsgBox ???o???? clsLogger / Debug.Print ?????m????B
-    ' Application.Run "Setup_admin" ?o?H??? Workbook_Open ??N??
-    ' ?????????????A???????L?????o?H??N????????????S??B
+    ' v2.3 install_search.bat / headless 自動テストで Setup_search を
+    ' 直接 MsgBox 出してハングさせる事への警戒対策。
+    ' modCommon.IsHeadless() が COM 自動実行を検出し、その場合は
+    ' MsgBox を出さず clsLogger / Debug.Print のみで通知する。
     If Not modCommon.IsHeadless() Then
         MsgBox msg, vbCritical, "Workbook_Open"
     Else
         Debug.Print "[HEADLESS] suppressed MsgBox: " & msg
-        modCommon.AppendProgressLog modCommon.ProgressTs() & "ThisWorkbook(???).Workbook_Open ErrHandler suppressed MsgBox: " & Err.Description
+        modCommon.AppendProgressLog modCommon.ProgressTs() & "ThisWorkbook(検索).Workbook_Open ErrHandler suppressed MsgBox: " & Err.Description
     End If
 End Sub
 
 ' ================================================================
 ' Workbook_SheetBeforeDoubleClick (v2.3 Phase O-1, 2026-05-27)
-' M-08 ????????O???b?h??i???b?W????Z?? (column 1 = A) ???_?u???N???b?N
-' ????? modEntryUserForm.OpenViewWithId ?????? M-09 ?i???b?W?\??
-' ?t?H?[?????J???B
-' ?d?l: ??v?? v2.3 Accepted "M-08 ?i???b?W????_???l" B53 (dblClickKnowledgeNo)?B
-' ??? sheet: ?\???? "?i???b?W????" ????? ID "M-08"?B
-' ?????: ?? A?A?f?[?^?s (14 ?s???~?B13 ?s???? header)?B
+' M-08 ナレッジ検索一覧の knowledgeNo セル (column B) をダブルクリック
+' すると modEntryUserForm.OpenViewWithId で M-09 ナレッジ表示
+' フォームを開く。
+' 仕様: 設計書 v2.3 Accepted "M-08 ナレッジ検索_数値" B53 (dblClickKnowledgeNo)。
+' 対象 sheet: 表示名 "ナレッジ検索" もしくは ID "M-08"。
+' 対象列: 列 A～G、データ行 (14 行以降。13 行以下は header)。
 ' ================================================================
 Private Sub Workbook_SheetBeforeDoubleClick(ByVal Sh As Object, ByVal Target As Range, Cancel As Boolean)
     On Error GoTo ErrHandler
@@ -155,7 +142,7 @@ Private Sub Workbook_SheetBeforeDoubleClick(ByVal Sh As Object, ByVal Target As 
     kid = Trim$(CStr(Sh.Cells(Target.Row, 2).Value))
     If Len(kid) = 0 Then Exit Sub
 
-    Cancel = True   ' ?Z????W???[?h??}?~
+    Cancel = True   ' セル編集モード抑止
     modEntryUserForm.OpenViewWithId kid
     Exit Sub
 ErrHandler:
@@ -177,7 +164,7 @@ Private Sub Workbook_BeforeClose(Cancel As Boolean)
         ws.Cells(r, 2).Value = "ThisWorkbook"
         ws.Cells(r, 3).Value = "BeforeClose"
         ws.Cells(r, 4).Value = "INFO"
-        ws.Cells(r, 5).Value = "xlsm ?I??: " & XLSM_NAME
+        ws.Cells(r, 5).Value = "xlsm 終了: " & XLSM_NAME
     End If
     On Error GoTo 0
 End Sub

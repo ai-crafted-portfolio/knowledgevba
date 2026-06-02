@@ -62,17 +62,36 @@ def render_md(role, src_name, src_text):
         save_dir = "C:\\KnowledgeMgr\\installer\\vba_modules\\" + role + "\\"
         target_book = "`" + book + "` 用の VBA モジュール"
 
-    notice = (
-        "## 保存方法\n\n"
-        "下のコードをメモ帳に貼り付け、**[名前を付けて保存]** で次のように保存してください。\n\n"
-        "- 場所: `" + save_dir + "`\n"
-        "- ファイル名: `" + src_name + "`\n"
-        "- ファイルの種類: **すべてのファイル**\n"
-        "- 文字コード: **ANSI**（Shift-JIS）\n\n"
-        "> メモ帳の文字コードを **ANSI** にしないと、VBA の日本語が文字化けして動かなくなります。\n"
-        "> UTF-8 で保存すると VBA Import 時に日本語が文字化けして動かなくなります。\n"
-        "> 改行コードは CRLF（Windows 標準）のままで OK です。\n"
-    )
+    if src_name == "ThisWorkbook.cls":
+        # ThisWorkbook はブックに最初から存在する document module。
+        # ファイル Import 不可。VBE で既存 ThisWorkbook に本体をコピペする。
+        # クラスモジュールヘッダ（VERSION 1.0 CLASS〜Attribute）は不要で、
+        # 本体は Option Explicit から始まる。
+        notice = (
+            "## 取り込み方法（ThisWorkbook は特別）\n\n"
+            "**【重要】`ThisWorkbook` は Excel のブック（.xlsm）に最初から存在する "
+            "document module です。ファイルとして Import できません。**\n\n"
+            "1. VBE（`Alt + F11`）を開き、プロジェクトツリーの `ThisWorkbook` を "
+            "**ダブルクリック**してコードペインを開きます。\n"
+            "2. コードペインの**既存コードをすべて削除**します。\n"
+            "3. 下のコード全文をコピーして**貼り付け**ます。\n\n"
+            "> VB クラスモジュールヘッダ（`VERSION 1.0 CLASS` / `BEGIN` / `END` / "
+            "`Attribute` 行）は不要です。本体は `Option Explicit` から始まります。\n"
+            "> 文字コード・改行はコードペインに直接貼り付けるため、ファイル保存時の "
+            "ANSI/CRLF 指定は不要です。\n"
+        )
+    else:
+        notice = (
+            "## 保存方法\n\n"
+            "下のコードをメモ帳に貼り付け、**[名前を付けて保存]** で次のように保存してください。\n\n"
+            "- 場所: `" + save_dir + "`\n"
+            "- ファイル名: `" + src_name + "`\n"
+            "- ファイルの種類: **すべてのファイル**\n"
+            "- 文字コード: **ANSI**（Shift-JIS）\n\n"
+            "> メモ帳の文字コードを **ANSI** にしないと、VBA の日本語が文字化けして動かなくなります。\n"
+            "> UTF-8 で保存すると VBA Import 時に日本語が文字化けして動かなくなります。\n"
+            "> 改行コードは CRLF（Windows 標準）のままで OK です。\n"
+        )
     body = (
         "---\n"
         "title: " + src_name + "\n"
