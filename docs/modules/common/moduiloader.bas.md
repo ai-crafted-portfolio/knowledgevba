@@ -5,7 +5,7 @@ description: modUILoader.bas のソースコード（コピペ用）
 
 # modUILoader.bas
 
-**配置先**: `共通モジュール (3 ブック全て)` 用の VBA モジュール  
+**配置先**: 共通モジュール（3 ブック共通）  
 **種類**: 標準モジュール
 
 ---
@@ -14,12 +14,14 @@ description: modUILoader.bas のソースコード（コピペ用）
 
 下のコードをメモ帳に貼り付け、**[名前を付けて保存]** で次のように保存してください。
 
-- 場所: `C:\KnowledgeMgr\installer\vba_modules\common\`
+- 場所: `C:\KnowledgeMgr\installer\vba_modules\common\\`
 - ファイル名: `modUILoader.bas`
 - ファイルの種類: **すべてのファイル**
 - 文字コード: **ANSI**（Shift-JIS）
 
 > メモ帳の文字コードを **ANSI** にしないと、VBA の日本語が文字化けして動かなくなります。
+> UTF-8 で保存すると VBA Import 時に日本語が文字化けして動かなくなります。
+> 改行コードは CRLF（Windows 標準）のままで OK です。
 
 ---
 
@@ -98,6 +100,56 @@ Public Function LoadUiDefinition(ByVal xlsmName As String, ByVal screenId As Str
 
 ErrHandler:
     Set LoadUiDefinition = New Collection
+End Function
+
+' ================================================================
+' Public Function: ResolveCellByInputDataKey (iter19, ADR-0090 SSOT helper)
+' Role:    Look up the cell address bound to a given inputDataKey within
+'          the ui_seed definition for (xlsmName, screenId). Generic SSOT
+'          cell resolver that replaces hard-coded addresses throughout
+'          both production and test code.
+' Args:    xlsmName     - role-binding xlsm name (admin / register / search JP literal)
+'          screenId     - screen identifier (e.g. "M-02", "M-03", "M-12")
+'          inputDataKey - the [INPUT] inputDataKey value to match
+' Return:  Cell address (e.g. "C3") if a match exists, "" otherwise.
+'          When a range is bound (e.g. "C3:D3") the first cell is returned.
+' ADR:     ADR-0090 (hard-code prohibition).
+' ================================================================
+Public Function ResolveCellByInputDataKey( _
+    ByVal xlsmName As String, _
+    ByVal screenId As String, _
+    ByVal inputDataKey As String _
+) As String
+    On Error GoTo Fallback
+    Dim ui As Collection
+    Set ui = LoadUiDefinition(xlsmName, screenId)
+    If ui Is Nothing Then GoTo Fallback
+    If ui.Count = 0 Then GoTo Fallback
+    Dim i As Long
+    For i = 1 To ui.Count
+        Dim sec As ClsStanzaSection
+        Set sec = ui.Item(i)
+        If sec.SectionName = "INPUT" Then
+            Dim key As String
+            key = sec.GetValue("inputDataKey")
+            If key = inputDataKey Then
+                Dim cellExpr As String
+                cellExpr = sec.GetValue("Cell")
+                If Len(cellExpr) > 0 Then
+                    Dim colonPos As Long
+                    colonPos = InStr(cellExpr, ":")
+                    If colonPos > 0 Then
+                        ResolveCellByInputDataKey = Left$(cellExpr, colonPos - 1)
+                    Else
+                        ResolveCellByInputDataKey = cellExpr
+                    End If
+                    Exit Function
+                End If
+            End If
+        End If
+    Next i
+Fallback:
+    ResolveCellByInputDataKey = ""
 End Function
 
 ' ================================================================
@@ -194,8 +246,8 @@ Public Function ApplyUiToSheet( _
     ApplySectionsByName ws, sections, "ROW"
     ApplySectionsByName ws, sections, "FONT"
     ApplySectionsByName ws, sections, "STYLE"
-    ' Phase R-3-ﾏ�-M03-style: SCREEN(繧ｿ繧､繝医Ν蟶ｯ) 縺ｯ STYLE(SheetBackColor) 縺ｮ蠕後↓驕ｩ逕ｨ縺励�
-    ' A1 蟶ｯ縺ｮ蝪励ｊ縺檎區縺ｧ荳頑嶌縺阪＆繧後↑縺�繧医≧縺ｫ縺吶ｋ(谿句ｷｮ1 菫ｮ豁｣)縲４UBHEADER 繧� STYLE 蠕後〒蟶ｯ邯ｭ謖√�
+    ' Phase R-3-ψ-M03-style: SCREEN(タイトル帯) は STYLE(SheetBackColor) の後に適用し、
+    ' A1 帯の塗りが白で上書きされないようにする(残差1 修正)。SUBHEADER も STYLE 後で帯維持。
     ApplySectionsByName ws, sections, "HEADER"
     ApplySectionsByName ws, sections, "SUBHEADER"
     ApplySectionsByName ws, sections, "SCREEN"
@@ -267,12 +319,12 @@ Private Sub ApplySectionsByName( _
                     ApplyStyle ws, sec
                 ' Phase R-2-Fix (2026-05-28): SCREEN/SUBHEADER/FREEZE handlers added.
                 ' Previously the dispatcher had no Case for these section names so the
-                ' auto-appended Phase A2 stanza was silent-skipped, leaving 邂｡逅・xlsm
+                ' auto-appended Phase A2 stanza was silent-skipped, leaving 管?Exlsm
                 ' sheets fully blank. See ADR-0074 and R2_root_cause_report.md.
                 Case "SCREEN": ApplyScreen ws, sec
                 Case "SUBHEADER": ApplySubheader ws, sec
                 Case "FREEZE": ApplyFreeze ws, sec
-                ' Phase R-3-ﾎｩ-CHECK (2026-05-29): CHECK section for Form Control checkbox.
+                ' Phase R-3-Ω-CHECK (2026-05-29): CHECK section for Form Control checkbox.
                 ' M-10 ui_seed has [CHECK] stanza but dispatcher had no Case, so silent skip.
                 Case "CHECK": ApplyCheck ws, sec
             End Select
@@ -305,8 +357,8 @@ Private Sub ApplySheet(ByVal ws As Worksheet, ByVal sec As ClsStanzaSection)
             On Error GoTo 0
         End If
     End If
-    ' Phase R-3-ﾏ�-M03-style (蜿ｳ蛛ｴ菴咏區髯､蜴ｻ): HideColumnsFrom=<蛻�> 謖�螳壽凾縲√◎縺ｮ蛻励懈忰蟆ｾ(XFD)繧帝撼陦ｨ遉ｺ縲�
-    ' mock 縺ｯ A縲廱 縺ｧ螳檎ｵ舌Ｈrid(A:G)+陬懷勧譁�繧ｪ繝ｼ繝舌�ｼ繝輔Ο繝ｼ(縲廱)縺ｮ蜿ｳ縺ｮ遨ｺ逋ｽ蛻励ｒ蜈ｨ縺ｦ豸医☆縲�
+    ' Phase R-3-ψ-M03-style (右側余白除去): HideColumnsFrom=<列> 指定時、その列～末尾(XFD)を非表示。
+    ' mock は A～J で完結。grid(A:G)+補助文オーバーフロー(～J)の右の空白列を全て消す。
     Dim hideFrom As String
     hideFrom = Trim$(sec.GetValue("HideColumnsFrom"))
     If Len(hideFrom) > 0 Then
@@ -323,8 +375,8 @@ Private Sub ApplyScreen(ByVal ws As Worksheet, ByVal sec As ClsStanzaSection)
     Dim t As String
     t = Trim$(sec.GetValue("Title"))
     If Len(t) > 0 Then
-        ' Phase R-3-ﾏ�-M03-style: 繧ｿ繧､繝医Ν繧ょ�ｨ蟷�濶ｲ蟶ｯ蟇ｾ蠢�(mock #1F3864/逋ｽ/h30)縲�
-        ' BackColor 謖�螳壽凾縺ｯ A1..EndCol 繧貞ｸｯ蛹悶∵悴謖�螳壽凾縺ｯ蠕捺擂縺ｮ邏繝�繧ｭ繧ｹ繝医�
+        ' Phase R-3-ψ-M03-style: タイトルも全幅色帯対応(mock #1F3864/白/h30)。
+        ' BackColor 指定時は A1..EndCol を帯化、未指定時は従来の素テキスト。
         Dim lc As Long
         Dim ec As String
         ec = Trim$(sec.GetValue("EndCol"))
@@ -355,8 +407,8 @@ Private Sub ApplySubheader(ByVal ws As Worksheet, ByVal sec As ClsStanzaSection)
     t = Trim$(sec.GetValue("Title"))
     If Len(t) = 0 Then Exit Sub
     Dim tgt As Range
-    ' Phase R-3-ﾏ�-M03: explicit placement (Cell) 縺ｧ驟咲ｽｮ 窶� 繧ｵ繝悶�倥ャ繝繝ｼ髢薙↓驛ｨ蜩√�ｮ
-    ' 陦後ｒ遒ｺ菫昴☆繧九◆繧√�Cell 譛ｪ謖�螳壽凾縺ｯ蠕捺擂縺ｮ auto-flow(陦�3縺九ｉ+2)縲�
+    ' Phase R-3-ψ-M03: explicit placement (Cell) で配置 ? サブヘッダー間に部品の
+    ' 行を確保するため。Cell 未指定時は従来の auto-flow(行3から+2)。
     Dim cellK As String
     cellK = Trim$(sec.GetValue("Cell"))
     If Len(cellK) > 0 Then
@@ -370,8 +422,8 @@ Private Sub ApplySubheader(ByVal ws As Worksheet, ByVal sec As ClsStanzaSection)
         If r > 50 Then Exit Sub
         Set tgt = ws.Cells(r, 1)
     End If
-    ' Phase R-3-ﾏ�-M03-style (蟾ｮ1): 蜈ｨ蟷�濶ｲ莉倥″蟶ｯ縲�BackColor + EndCol 縺ｧ蟶ｯ蛹悶：ontColor + Height縲�
-    ' mock 螳滓ｸｬ: BackColor=#2F5597 / 逋ｽ譁�蟄� / 鬮倥＆24pt / 蜈ｨ蟷�(A..EndCol)縲�
+    ' Phase R-3-ψ-M03-style (差1): 全幅色付き帯。BackColor + EndCol で帯化、FontColor + Height。
+    ' mock 実測: BackColor=#2F5597 / 白文字 / 高さ24pt / 全幅(A..EndCol)。
     Dim lastC As Long
     Dim endCol As String
     endCol = Trim$(sec.GetValue("EndCol"))
@@ -501,7 +553,7 @@ Private Sub ApplyLabel(ByVal ws As Worksheet, ByVal sec As ClsStanzaSection)
     Dim r As Range
     Set r = ws.Range(cellAddr)
     r.Value = modStanzaIO.UnescapeStanzaValue(sec.GetValue("Text"))
-    ' Phase R-3-ﾏ�-M03-style: 陬懷勧譁�繝ｩ繝吶Ν遲峨�ｮ濶ｲ/繧ｵ繧､繧ｺ蟇ｾ蠢�(mock 縺ｮ轣ｰ濶ｲ隱ｬ譏取枚)縲�
+    ' Phase R-3-ψ-M03-style: 補助文ラベル等の色/サイズ対応(mock の灰色説明文)。
     On Error Resume Next
     If sec.HasKey("ForeColor") Then r.Font.Color = HexToRgbLong(sec.GetValue("ForeColor"))
     If sec.HasKey("FontSize") Then r.Font.Size = CDbl(sec.GetValue("FontSize"))
@@ -540,8 +592,8 @@ Private Sub ApplyInput(ByVal ws As Worksheet, ByVal sec As ClsStanzaSection)
     If Len(cellAddr) = 0 Then Exit Sub
     Dim r As Range
     Set r = ws.Range(cellAddr)
-    ' Phase R-3-ﾏ�-M03-style: range 謖�螳�(C4:E4 遲�)縺ｯ merge 縺励※ 1 遏ｩ蠖｢縺ｫ
-    ' (mock 貅匁侠縲よ悴 merge 縺縺ｨ蜷�繧ｻ繝ｫ蛟句挨 border 縺ｧ 3 縺､縺ｮ遏ｩ蠖｢縺ｫ隕九∴繧倶ｸ榊�ｷ蜷医�ｮ菫ｮ豁｣)縲�
+    ' Phase R-3-ψ-M03-style: range 指定(C4:E4 等)は merge して 1 矩形に
+    ' (mock 準拠。未 merge だと各セル個別 border で 3 つの矩形に見える不具合の修正)。
     If InStr(cellAddr, ":") > 0 Then
         On Error Resume Next
         r.Merge
@@ -666,7 +718,7 @@ Private Sub ApplyNote(ByVal ws As Worksheet, ByVal sec As ClsStanzaSection)
     End If
     r.Cells(1, 1).Value = modStanzaIO.UnescapeStanzaValue(sec.GetValue("Text"))
     r.WrapText = True
-    ' Phase R-3-ﾏ�-M03-style (蟾ｮ5): 閭梧勹濶ｲ + 譫縲Ｎock 螳滓ｸｬ BackColor=#DEEBF7 / 譫#BFBFBF縲�
+    ' Phase R-3-ψ-M03-style (差5): 背景色 + 枠。mock 実測 BackColor=#DEEBF7 / 枠#BFBFBF。
     On Error Resume Next
     If sec.HasKey("BackColor") Then r.Interior.Color = HexToRgbLong(sec.GetValue("BackColor"))
     Dim nb As String
@@ -718,8 +770,8 @@ Private Sub ApplyGrid(ByVal ws As Worksheet, ByVal sec As ClsStanzaSection)
         End If
     End If
 
-    ' Phase R-3-ﾏ�-M03-style (蟾ｮ4): 隕句�ｺ縺苓｡� + 遨ｺ繝�繝ｼ繧ｿ陦�(InitialRows)縺ｫ鄂ｫ邱�(#BFBFBF)縲�
-    ' 隕ｪ遒ｺ螳�=譯�B(遨ｺ逋ｽ鄂ｫ邱壹�ｮ縺ｿ縲∝ｮ溘ョ繝ｼ繧ｿ陦ｨ遉ｺ譎ゅ↓荳頑嶌縺�)縲りｦ句�ｺ縺励�ｯ螟ｪ蟄� + 莉ｻ諢� HeaderBackColor縲�
+    ' Phase R-3-ψ-M03-style (差4): 見出し行 + 空データ行(InitialRows)に罫線(#BFBFBF)。
+    ' 親確定=案B(空白罫線のみ、実データ表示時に上書き)。見出しは太字 + 任意 HeaderBackColor。
     On Error Resume Next
     Dim nCols As Long
     If Len(colsCsv) > 0 Then
@@ -1450,7 +1502,7 @@ Private Sub ApplyButton(ByVal ws As Worksheet, ByVal sec As ClsStanzaSection)
     widthPx = ParseDoubleOr(sec.GetValue("Width"), 120#)
     heightPx = ParseDoubleOr(sec.GetValue("Height"), 24#)
 
-    ' Phase R-3-ﾏ�-M03-style (蟾ｮ3): BackColor 謖�螳壽凾縺ｯ濶ｲ莉倥″ Shape 繝懊ち繝ｳ蛹悶�
+    ' Phase R-3-ψ-M03-style (差3): BackColor 指定時は色付き Shape ボタン化。
     Dim bcl As Long
     bcl = -1
     If sec.HasKey("BackColor") Then bcl = HexToRgbLong(sec.GetValue("BackColor"))

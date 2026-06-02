@@ -5,7 +5,7 @@ description: modUserFormCallback.bas のソースコード（コピペ用）
 
 # modUserFormCallback.bas
 
-**配置先**: `共通モジュール (3 ブック全て)` 用の VBA モジュール  
+**配置先**: 共通モジュール（3 ブック共通）  
 **種類**: 標準モジュール
 
 ---
@@ -14,12 +14,14 @@ description: modUserFormCallback.bas のソースコード（コピペ用）
 
 下のコードをメモ帳に貼り付け、**[名前を付けて保存]** で次のように保存してください。
 
-- 場所: `C:\KnowledgeMgr\installer\vba_modules\common\`
+- 場所: `C:\KnowledgeMgr\installer\vba_modules\common\\`
 - ファイル名: `modUserFormCallback.bas`
 - ファイルの種類: **すべてのファイル**
 - 文字コード: **ANSI**（Shift-JIS）
 
 > メモ帳の文字コードを **ANSI** にしないと、VBA の日本語が文字化けして動かなくなります。
+> UTF-8 で保存すると VBA Import 時に日本語が文字化けして動かなくなります。
+> 改行コードは CRLF（Windows 標準）のままで OK です。
 
 ---
 
@@ -154,7 +156,7 @@ Public Sub OnLoad()
     If frm Is Nothing Then Exit Sub
     Dim no As String
     On Error Resume Next
-    no = CStr(FindCtl(frm, "txtKnowledgeNo").Text)   ' R-3-ﾏ�-4: frScroll 蜀�
+    no = CStr(FindCtl(frm, "txtKnowledgeNo").Text)   ' R-3-χ-4: frScroll 内
     On Error GoTo ErrHandler
     If Len(Trim$(no)) = 0 Then Exit Sub
     m_renderer.RequestLoad no
@@ -164,8 +166,8 @@ ErrHandler:
     Debug.Print "[ERR] OnLoad: " & Err.Number & " " & Err.Description
 End Sub
 
-' Phase R-3-ﾏ�-4: field 邉ｻ controls 縺ｯ frScroll Frame 蜀�縺ｫ縺ゅｋ縲Ｇrm.Controls 縺ｯ逶ｴ荳九�ｮ縺ｿ
-' 縺ｪ縺ｮ縺ｧ縲’rame 蟄舌ｂ蜷ｫ繧√※謗｢邏｢/蛻玲嫌縺吶ｋ繝倥Ν繝代ｒ菴ｿ縺�(1 谿ｵ繝阪せ繝� = frScroll)縲�
+' Phase R-3-χ-4: field 系 controls は frScroll Frame 内にある。frm.Controls は直下のみ
+' なので、frame 子も含めて探索/列挙するヘルパを使う(1 段ネスト = frScroll)。
 Private Function FindCtl(ByVal frm As Object, ByVal nm As String) As Object
     On Error Resume Next
     Dim c As Object
@@ -189,8 +191,8 @@ Private Function FindCtl(ByVal frm As Object, ByVal nm As String) As Object
 End Function
 
 Private Function AllFormControls(ByVal frm As Object) As Collection
-    ' R-3-ﾏ�-4/ﾎｳ-2: frm.Controls 縺ｮ謖吝虚(逶ｴ荳九�ｮ縺ｿ / frame蟄舌ｂ flatten 霎ｼ縺ｿ)縺ｯ迺ｰ蠅�蟾ｮ縺後≠繧九◆繧√�
-    ' frm.Controls 縺ｨ frame 縺ｮ蟄舌ｒ荳｡譁ｹ襍ｰ譟ｻ縺励▽縺､ name 縺ｧ驥崎､�謗帝勁縺吶ｋ(莠碁㍾蛻玲嫌=莠碁㍾菫晏ｭ倥ｒ髦ｲ縺�)縲�
+    ' R-3-χ-4/γ-2: frm.Controls の挙動(直下のみ / frame子も flatten 込み)は環境差があるため、
+    ' frm.Controls と frame の子を両方走査しつつ name で重複排除する(二重列挙=二重保存を防ぐ)。
     Dim col As Collection
     Set col = New Collection
     Dim seen As Object
@@ -254,10 +256,10 @@ Private Function PersistFromActiveForm(ByVal mode As String) As String
     sb = sb & "###FormatID###" & vbCrLf & fmtId & vbCrLf
 
     ' Phase O-2: look up fieldName via renderer's ctlName -> fieldName map
-    ' so multi-byte JP field names (�ｿｽ�ｿｽ�ｿｽ�ｿｽ / �ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ / etc) persist correctly.
+    ' so multi-byte JP field names (???? / ???????? / etc) persist correctly.
     ' txtFormatId is the format selector and is NOT a knowledge field, skip.
     Dim ctl As Object
-    For Each ctl In AllFormControls(frm)   ' R-3-ﾏ�-4: frScroll frame 蜀�縺ｮ field 繧ょ�玲嫌
+    For Each ctl In AllFormControls(frm)   ' R-3-χ-4: frScroll frame 内の field も列挙
         Dim nm As String
         nm = ctl.Name
         If Left$(nm, 4) = "ctl_" And nm <> "txtFormatId" Then

@@ -5,8 +5,8 @@ description: clsSetupOrchestrator.cls のソースコード（コピペ用）
 
 # clsSetupOrchestrator.cls
 
-**配置先**: `共通モジュール (3 ブック全て)` 用の VBA モジュール  
-**種類**: クラス モジュール
+**配置先**: 共通モジュール（3 ブック共通）  
+**種類**: クラスモジュール
 
 ---
 
@@ -14,12 +14,14 @@ description: clsSetupOrchestrator.cls のソースコード（コピペ用）
 
 下のコードをメモ帳に貼り付け、**[名前を付けて保存]** で次のように保存してください。
 
-- 場所: `C:\KnowledgeMgr\installer\vba_modules\common\`
+- 場所: `C:\KnowledgeMgr\installer\vba_modules\common\\`
 - ファイル名: `clsSetupOrchestrator.cls`
 - ファイルの種類: **すべてのファイル**
 - 文字コード: **ANSI**（Shift-JIS）
 
 > メモ帳の文字コードを **ANSI** にしないと、VBA の日本語が文字化けして動かなくなります。
+> UTF-8 で保存すると VBA Import 時に日本語が文字化けして動かなくなります。
+> 改行コードは CRLF（Windows 標準）のままで OK です。
 
 ---
 
@@ -71,9 +73,9 @@ Private Const TAB_COLOR_KANRI As Long = 9498256     ' #90EE90 lightgreen
 
 ' ?N???? ActiveSheet?iADR-0053 ??2.1 ?\ / ??9 M-2?AR6-01?j
 ' SSOT: ?o?^?C??=M-05?A????=M-08?A???=M-02
-Private Const STARTUP_SHEET_TOUROKU As String = "繝翫Ξ繝?繧ｸ逋ｻ骭ｲ"  ' R-2-Fix2b: JP label SSOT
-Private Const STARTUP_SHEET_KENSAKU As String = "繝翫Ξ繝?繧ｸ讀懃ｴ｢"  ' R-2-Fix2b: JP label SSOT
-Private Const STARTUP_SHEET_KANRI As String = "繝輔か繝ｼ繝槭ャ繝井ｸ隕ｧ"  ' R-2-Fix2b: JP label SSOT
+Private Const STARTUP_SHEET_TOUROKU As String = "ナレッジ登録"  ' R-2-Fix2b: JP label SSOT
+Private Const STARTUP_SHEET_KENSAKU As String = "ナレッジ検索"  ' R-2-Fix2b: JP label SSOT
+Private Const STARTUP_SHEET_KANRI As String = "フォーマット一覧"  ' R-2-Fix2b: JP label SSOT
 
 ' ----------------------------------------------------------------
 ' Public API: spec ??6.1 convenience wrappers
@@ -105,13 +107,13 @@ End Sub
 
 ' ----------------------------------------------------------------
 ' Public API: Refresh Screen (Phase R-3-psi-Refresh, 2026-05-29)
-'   ui_seed/<role>/M-NN.txt 繧堤ｷｨ髮?縺励◆縺ゅ→縲∝?? install 縺帙★縺ｫ sheet 繧?
-'   蜀肴緒逕ｻ縺吶ｋ縲３unFullSetup step 6 (ApplyUiStanzas) 縺ｨ蜷後§ pipeline 繧?
-'   縺昴?ｮ縺ｾ縺ｾ蜀榊茜逕ｨ縺吶ｋ (BindSheet -> ClearScreen -> ApplyFromStanza ->
-'   ProtectSheet)縲Ｓole 縺ｯ ThisWorkbook 蜷阪°繧牙愛螳壹☆繧九?ｮ縺ｧ 3 book 蜈ｱ騾壹?
+'   ui_seed/<role>/M-NN.txt を編??したあと、??? install せずに sheet ??
+'   再描画する。RunFullSetup step 6 (ApplyUiStanzas) と同じ pipeline ??
+'   そ???まま再利用する (BindSheet -> ClearScreen -> ApplyFromStanza ->
+'   ProtectSheet)。role は ThisWorkbook 名から判定する???で 3 book 共通??
 ' ----------------------------------------------------------------
 
-' 迴ｾ role 縺ｮ蜈ｨ sheet (LOG 莉･螟?) 繧? ui_seed 縺九ｉ蜀埼←逕ｨ縺吶ｋ縲?
+' 現 role の全 sheet (LOG 以??) ?? ui_seed から再適用する??
 Public Sub ReapplyAllSheets()
     On Error GoTo EH
     Dim xlsmName As String
@@ -141,7 +143,7 @@ Public Sub ReapplyAllSheets()
     Next i
 
     ' BUG-NEW1 fix (2026-05-31): ClearScreen wipes ALL shapes including the v23
-    ' form-control buttons (譁ｰ隕冗匳骭ｲ / 菫ｮ豁｣繝輔か繝ｼ繝繧帝幕縺? / 陦ｨ遉ｺ繝輔か繝ｼ繝繧帝幕縺?)
+    ' form-control buttons (新規登録 / 修正フォームを開?? / 表示フォームを開??)
     ' that are placed by modSheetButtons.PlaceV23SheetButtons during install.
     ' Re-place them here so ReapplyAllSheets keeps the UI workable.
     On Error Resume Next
@@ -152,7 +154,7 @@ EH:
     Debug.Print "[clsSetupOrchestrator.ReapplyAllSheets ERROR] " & Err.Description
 End Sub
 
-' 謖?螳? screenId (M-NN) 縺ｮ sheet 1 譫壹□縺大?埼←逕ｨ縺吶ｋ縲?
+' ???? screenId (M-NN) の sheet 1 枚だけ???適用する??
 Public Sub ReapplySheet(ByVal screenId As String)
     On Error GoTo EH
     Dim xlsmName As String
@@ -181,7 +183,7 @@ EH:
     Debug.Print "[clsSetupOrchestrator.ReapplySheet ERROR] " & Err.Description
 End Sub
 
-' ActiveSheet (JP 陦ｨ遉ｺ蜷?) 繧? screenId 縺ｫ騾?蠑輔″縺励※ 1 譫壼?埼←逕ｨ縺吶ｋ縲?
+' ActiveSheet (JP 表示??) ?? screenId に??引きして 1 枚???適用する??
 Public Sub ReapplyActiveSheet()
     On Error GoTo EH
     Dim xlsmName As String
@@ -412,7 +414,7 @@ Private Sub EnsureSheets(ByVal xlsmName As String)
         ' v2.3 fix (2026-05-30): pass xlsmName so EnsureSheetExists can resolve
         ' ui_seed [SHEET].SheetName (display name) and avoid recreating literal
         ' "M-NN" sheets that the sheet audit / rename step already migrated to
-        ' the JP display name (e.g. "譬ｼ邏榊?郁ｨｭ螳?"). See split-state bug fix.
+        ' the JP display name (e.g. "格納???設??"). See split-state bug fix.
         EnsureSheetExists xlsmName, names(i)
     Next i
 
@@ -428,8 +430,8 @@ Private Sub EnsureSheets(ByVal xlsmName As String)
     DropOrphanLiteralScreenIdSheets xlsmName, sheetList
 
     ' SPEC_DRIFT-NEW1/NEW2 fix (2026-05-31): drop sheets for screens that this
-    ' role explicitly retired (M-07 繝翫Ξ繝?繧ｸ荳隕ｧ in search, M-13 繝輔ぃ繧､繝ｫ蠖｢蠑?
-    ' 險ｭ螳? in admin). Older installs left these sheets behind because they
+    ' role explicitly retired (M-07 ナレ??ジ一覧 in search, M-13 ファイル形??
+    ' 設?? in admin). Older installs left these sheets behind because they
     ' were never in the SHEETS_* SSOT, but also never explicitly listed as
     ' "delete-me". Now they are.
     DropRetiredScreens xlsmName
@@ -444,12 +446,12 @@ Private Sub DropRetiredScreens(ByVal xlsmName As String)
     Dim retired As String
     Select Case xlsmName
         Case NAME_KENSAKU
-            ' M-07 = 繝翫Ξ繝?繧ｸ荳隕ｧ (search-role, retired by ADR-0072 ﾂｧ2.1)
-            ' M-09 = 繝翫Ξ繝?繧ｸ陦ｨ遉ｺ (search-role, retired 2026-05-31; view UserForm
+            ' M-07 = ナレ??ジ一覧 (search-role, retired by ADR-0072 §2.1)
+            ' M-09 = ナレ??ジ表示 (search-role, retired 2026-05-31; view UserForm
             '        is launched only via M-08 grid DoubleClick -> OpenViewWithId)
             retired = "M-07|M-09"
         Case NAME_KANRI
-            ' M-13 = 繝輔ぃ繧､繝ｫ蠖｢蠑剰ｨｭ螳? (admin-role, retired by ADR-0072 ﾂｧ2.1)
+            ' M-13 = ファイル形式設?? (admin-role, retired by ADR-0072 §2.1)
             retired = "M-13"
         Case Else
             Exit Sub
@@ -501,13 +503,13 @@ End Sub
 Private Function RetiredDisplayNameFallback(ByVal screenId As String) As String
     Select Case screenId
         Case "M-07"
-            ' 繝翫Ξ繝?繧ｸ荳隕ｧ = U+30CA U+30EC U+30C3 U+30B8 U+4E00 U+89A7
+            ' ナレ??ジ一覧 = U+30CA U+30EC U+30C3 U+30B8 U+4E00 U+89A7
             RetiredDisplayNameFallback = ChrW(&H30CA) & ChrW(&H30EC) & ChrW(&H30C3) & ChrW(&H30B8) & ChrW(&H4E00) & ChrW(&H89A7)
         Case "M-09"
-            ' 繝翫Ξ繝?繧ｸ陦ｨ遉ｺ = U+30CA U+30EC U+30C3 U+30B8 U+8868 U+793A
+            ' ナレ??ジ表示 = U+30CA U+30EC U+30C3 U+30B8 U+8868 U+793A
             RetiredDisplayNameFallback = ChrW(&H30CA) & ChrW(&H30EC) & ChrW(&H30C3) & ChrW(&H30B8) & ChrW(&H8868) & ChrW(&H793A)
         Case "M-13"
-            ' 繝輔ぃ繧､繝ｫ蠖｢蠑剰ｨｭ螳? = U+30D5 U+30A1 U+30A4 U+30EB U+5F62 U+5F0F U+8A2D U+5B9A
+            ' ファイル形式設?? = U+30D5 U+30A1 U+30A4 U+30EB U+5F62 U+5F0F U+8A2D U+5B9A
             RetiredDisplayNameFallback = ChrW(&H30D5) & ChrW(&H30A1) & ChrW(&H30A4) & ChrW(&H30EB) & ChrW(&H5F62) & ChrW(&H5F0F) & ChrW(&H8A2D) & ChrW(&H5B9A)
         Case Else
             RetiredDisplayNameFallback = ""
@@ -515,7 +517,7 @@ Private Function RetiredDisplayNameFallback(ByVal screenId As String) As String
 End Function
 
 ' v2.3 fix (2026-05-30): if both the literal screenId (e.g. "M-10") and its
-' display-name twin (e.g. "譬ｼ邏榊?郁ｨｭ螳?") exist after EnsureSheets, the literal
+' display-name twin (e.g. "格納???設??") exist after EnsureSheets, the literal
 ' one is the leftover (created accidentally by an older EnsureSheetExists run
 ' or by a partially-completed install). Remove the literal so the next open
 ' starts clean. We only delete when the display-name sheet is confirmed
@@ -590,7 +592,7 @@ End Sub
 
 ' v2.3 fix (2026-05-30): rewrite to consult ui_seed [SHEET].SheetName first
 ' so we never recreate the literal "M-NN" tab when the display-name twin
-' (e.g. "譬ｼ邏榊?郁ｨｭ螳?") already exists. Old behaviour resurrected literal
+' (e.g. "格納???設??") already exists. Old behaviour resurrected literal
 ' tabs on every Workbook_Open and reproduced the split-state bug after
 ' the sheet audit had deleted them. Resolution order:
 '   1. resolve display name from ui_seed/<role>/<screenId>.txt
@@ -647,7 +649,7 @@ End Sub
 ' v2.3 fix (2026-05-30): read [SHEET].SheetName from
 ' <ui_dir>\<xlsmName>\<screenId>.txt. Returns "" when the file is missing,
 ' unparseable, or has no SheetName key. xlsmName uses the JP folder names
-' (邂｡逅? / 逋ｻ骭ｲ菫ｮ豁｣ / 讀懃ｴ｢) populated by _auto_install.ps1 Step 1.5.
+' (管?? / 登録修正 / 検索) populated by _auto_install.ps1 Step 1.5.
 Private Function ReadDisplayNameFromUiSeed(ByVal xlsmName As String, ByVal screenId As String) As String
     On Error GoTo EH
     ReadDisplayNameFromUiSeed = ""
@@ -787,7 +789,7 @@ Private Function GetSheetsCsv(ByVal xlsmName As String) As String
     End Select
 End Function
 
-' Phase R-3-psi-Refresh: ThisWorkbook 蜷? (kanri.xlsm 遲?) 縺九ｉ role 蜷阪ｒ蠕励ｋ縲?
+' Phase R-3-psi-Refresh: ThisWorkbook ?? (kanri.xlsm ??) から role 名を得る??
 Private Function CurrentXlsmName() As String
     Dim n As String
     n = ThisWorkbook.Name
@@ -797,7 +799,7 @@ Private Function CurrentXlsmName() As String
     CurrentXlsmName = n
 End Function
 
-' Refresh 縺? install 蠕後↓蜊倡峡縺ｧ蜻ｼ縺ｰ繧後◆蝣ｴ蜷医…onfig 縺梧悴繝ｭ繝ｼ繝峨↑繧芽ｪｭ縺ｿ霎ｼ繧縲?
+' Refresh ?? install 後に単独で呼ばれた場合、config が未ロードなら読み込む??
 Private Sub EnsureConfigLoaded(ByVal xlsmName As String)
     On Error Resume Next
     If Len(modConfigHolder.GetUiDir()) = 0 Then
@@ -806,9 +808,14 @@ Private Sub EnsureConfigLoaded(ByVal xlsmName As String)
     On Error GoTo 0
 End Sub
 
-' JP 陦ｨ遉ｺ蜷? -> screenId (M-NN)縲Ｓole 縺ｮ sheet 荳隕ｧ縺ｮ蜷? seed 縺ｮ [SHEET].SheetName 縺ｨ遯∝粋縲?
+' JP 表示?? -> screenId (M-NN)。role の sheet 一覧の?? seed の [SHEET].SheetName と突合??
+' ADR-0090 fix (2026-06-01): function body was a half-finished copy of
+' ReadDisplayNameFromUiSeed - it referenced an undeclared filePath
+' variable and never iterated through the screen list. Rewritten to
+' scan each candidate screenId .txt for [SHEET].SheetName == sheetName.
 Private Function ScreenIdForSheetName(ByVal sheetName As String, ByVal xlsmName As String) As String
-    On Error Resume Next
+    On Error GoTo EH
+    ScreenIdForSheetName = ""
     Dim sheetList As String
     sheetList = GetSheetsCsv(xlsmName)
     If Len(sheetList) = 0 Then Exit Function
@@ -819,24 +826,35 @@ Private Function ScreenIdForSheetName(ByVal sheetName As String, ByVal xlsmName 
     If Len(uiDir) = 0 Then Exit Function
     Dim fso As Object
     Set fso = CreateObject("Scripting.FileSystemObject")
-    If Not fso.FileExists(filePath) Then Exit Function
-
-    Dim secs As Collection
-    Set secs = modStanzaIO.ParseStanzaFile(filePath)
-    If secs Is Nothing Then Exit Function
-
-    Dim j As Long
-    Dim sec As ClsStanzaSection
-    For j = 1 To secs.Count
-        Set sec = secs.Item(j)
-        If sec.SectionName = "SHEET" Then
-            ReadDisplayNameFromUiSeed = Trim$(sec.GetValue("SheetName"))
-            Exit Function
+    Dim i As Long
+    For i = LBound(names) To UBound(names)
+        Dim screenId As String
+        screenId = Trim$(names(i))
+        If Len(screenId) > 0 Then
+            Dim filePath As String
+            filePath = uiDir & xlsmName & "\" & screenId & ".txt"
+            If fso.FileExists(filePath) Then
+                Dim secs As Collection
+                Set secs = modStanzaIO.ParseStanzaFile(filePath)
+                If Not secs Is Nothing Then
+                    Dim j As Long
+                    Dim sec As ClsStanzaSection
+                    For j = 1 To secs.Count
+                        Set sec = secs.Item(j)
+                        If sec.SectionName = "SHEET" Then
+                            If Trim$(sec.GetValue("SheetName")) = sheetName Then
+                                ScreenIdForSheetName = screenId
+                                Exit Function
+                            End If
+                        End If
+                    Next j
+                End If
+            End If
         End If
-    Next j
+    Next i
     Exit Function
 EH:
-    ReadDisplayNameFromUiSeed = ""
+    ScreenIdForSheetName = ""
 End Function
 Private Function GetTabColor(ByVal xlsmName As String) As Long
     Select Case xlsmName

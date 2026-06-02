@@ -5,8 +5,8 @@ description: clsUserFormRenderer.cls のソースコード（コピペ用）
 
 # clsUserFormRenderer.cls
 
-**配置先**: `共通モジュール (3 ブック全て)` 用の VBA モジュール  
-**種類**: クラス モジュール
+**配置先**: 共通モジュール（3 ブック共通）  
+**種類**: クラスモジュール
 
 ---
 
@@ -14,12 +14,14 @@ description: clsUserFormRenderer.cls のソースコード（コピペ用）
 
 下のコードをメモ帳に貼り付け、**[名前を付けて保存]** で次のように保存してください。
 
-- 場所: `C:\KnowledgeMgr\installer\vba_modules\common\`
+- 場所: `C:\KnowledgeMgr\installer\vba_modules\common\\`
 - ファイル名: `clsUserFormRenderer.cls`
 - ファイルの種類: **すべてのファイル**
 - 文字コード: **ANSI**（Shift-JIS）
 
 > メモ帳の文字コードを **ANSI** にしないと、VBA の日本語が文字化けして動かなくなります。
+> UTF-8 で保存すると VBA Import 時に日本語が文字化けして動かなくなります。
+> 改行コードは CRLF（Windows 標準）のままで OK です。
 
 ---
 
@@ -54,16 +56,16 @@ Attribute VB_Exposed = False
 '   ????   -> Forms.TextBox.1 (single line + date validation in change event)
 '   ?I??   -> Forms.ComboBox.1 (Style=fmStyleDropDownList)
 ' Layout (design book A4):
-'   formWidth = 540 (譯�A險よｭ｣ mock 720px=540pt), label width = 120, control width = formWidth - 140
+'   formWidth = 540 (案A訂正 mock 720px=540pt), label width = 120, control width = formWidth - 140
 '   headerHeight = 48, rowHeight ?P??s/????/?I?? = 24, rowHeight ?????s = 60
 '   buttonBarHeight = 40, bottomMargin = 16
 ' ================================================================
 Implements IScreenRenderer
 Option Explicit
 
-' --- Layout DEFAULTS (ﾂｧA4 譯�A險よｭ｣蠕後�ｻmock 貅匁侠 540pt/720px; overridable via [USERFORM] stanza) ---
-' ﾂｧA4 螳溯｣� SSOT: formWidth=540(pt; mock 720px 貅匁侠 譯�A 2026-05-28), labelWidth=120, headerHeight=48, rowHeight(蜊倅ｸ陦�/譌･譎�/驕ｸ謚�)=24,
-' rowHeight(隍�謨ｰ陦�)=60, margin=10, buttonBarHeight=40, button 鬮倥＆=24/髢馴囈=8, bottomMargin=16.
+' --- Layout DEFAULTS (§A4 案A訂正後・mock 準拠 540pt/720px; overridable via [USERFORM] stanza) ---
+' §A4 実装 SSOT: formWidth=540(pt; mock 720px 準拠 案A 2026-05-28), labelWidth=120, headerHeight=48, rowHeight(単一行/日時/選択)=24,
+' rowHeight(複数行)=60, margin=10, buttonBarHeight=40, button 高さ=24/間隔=8, bottomMargin=16.
 ' All values can be overridden per-screen via ui_seed/<role>/M-XX.txt [USERFORM] section.
 Private Const DEFAULT_FORM_WIDTH As Long = 486
 Private Const DEFAULT_FORM_HEIGHT As Long = 0                 ' 0 = auto-compute from rows
@@ -73,14 +75,14 @@ Private Const DEFAULT_MARGIN As Long = 18
 Private Const DEFAULT_BADGE_WIDTH As Long = 29
 Private Const DEFAULT_BADGE_HEIGHT As Long = 16
 Private Const DEFAULT_BADGE_GAP As Long = 3
-' Phase R-3-ﾏ�-3 (2026-05-28): 邵ｦ荳ｦ縺ｳ layout (label 陦御ｸ� + data 陦悟�ｨ蟷�荳�)縲�
-' row pitch(total) = labelZone(18) + dataHeight + rowSpacing(6)縲�
+' Phase R-3-χ-3 (2026-05-28): 縦並び layout (label 行上 + data 行全幅下)。
+' row pitch(total) = labelZone(18) + dataHeight + rowSpacing(6)。
 '   single 48 = 18 + 24 + 6 / multi 114 = 18 + 90 + 6 / multiLong 129 = 18 + 105 + 6
 Private Const DEFAULT_ROW_HEIGHT_SINGLE As Long = 48
 Private Const DEFAULT_ROW_HEIGHT_MULTI As Long = 114
 Private Const DEFAULT_ROW_HEIGHT_MULTI_LONG As Long = 129
-' 邵ｦ荳ｦ縺ｳ layout 螳壽焚 (label control 鬮� / label-data 髢� gap / data 荳� spacing)縲�
-' label zone = VLABEL_H + VLABEL_GAP = 18縲ＥataHeight = rowPitch - 18 - VROW_SPACING縲�
+' 縦並び layout 定数 (label control 高 / label-data 間 gap / data 下 spacing)。
+' label zone = VLABEL_H + VLABEL_GAP = 18。dataHeight = rowPitch - 18 - VROW_SPACING。
 Private Const VLABEL_H As Long = 16
 Private Const VLABEL_GAP As Long = 2
 Private Const VROW_SPACING As Long = 6
@@ -90,7 +92,7 @@ Private Const DEFAULT_BUTTON_WIDTH As Long = 113
 Private Const DEFAULT_BUTTON_HEIGHT As Long = 26
 Private Const DEFAULT_BUTTON_GAP As Long = 11
 Private Const DEFAULT_BOTTOM_MARGIN As Long = 16
-Private Const DEFAULT_FONT_NAME As String = "繝｡繧､繝ｪ繧ｪ"
+Private Const DEFAULT_FONT_NAME As String = "メイリオ"
 Private Const DEFAULT_FONT_SIZE As Long = 10
 Private Const DEFAULT_SUBHEADER_FONT_SIZE As Long = 12
 Private Const DEFAULT_MULTILINE_SCROLLBARS As String = "vertical"
@@ -147,7 +149,7 @@ Private m_captionOverride As String       ' empty = use mode-derived title
 Private m_backColor As String             ' RRGGBB hex; empty = OS default
 Private m_headerFields As String          ' Phase R-2 F-1: comma-separated ids
 Private m_formatSelectorType As String    ' Phase R-2 F-3: "textbox" | "dropdown"
-Private m_formatRowEnabled As Boolean      ' Phase R-3-ﾏ�-5: format 陦瑚｡ｨ遉ｺ(default mode=register 縺ｮ縺ｿ縲「i_seed formatRowEnabled 縺ｧ荳頑嶌縺榊庄)
+Private m_formatRowEnabled As Boolean      ' Phase R-3-χ-5: format 行表示(default mode=register のみ、ui_seed formatRowEnabled で上書き可)
 Private m_knowledgeData As Object         ' Phase R-2: header field value source
 Private m_formatHelp As String            ' Phase R-2 F-2: help line under format selector
 Private m_headerHelp As Object            ' Phase R-2 F-2: Dict id->help line text
@@ -168,14 +170,14 @@ Private Const PROGID_TEXTBOX As String = "Forms.TextBox.1"
 Private Const PROGID_COMBOBOX As String = "Forms.ComboBox.1"
 Private Const PROGID_LABEL As String = "Forms.Label.1"
 Private Const PROGID_BUTTON As String = "Forms.CommandButton.1"
-' Phase R-3-ﾏ�-4 (2026-05-28): 譯�C/譯�A scroll 蛹� 窶� 蝗ｺ螳� header + frScroll Frame縲�
+' Phase R-3-χ-4 (2026-05-28): 案C/案A scroll 化 ? 固定 header + frScroll Frame。
 Private Const PROGID_FRAME As String = "Forms.Frame.1"
-' V5 fix (2026-05-30) BUG-1: 1080px 逕ｻ髱｢縺ｧ button bar 縺檎判髱｢螟悶↓蜃ｺ繧� regression 繧帝亟縺舌◆繧�
-' SCROLL_FORM_CAP 繧� 900竊�720 縺ｫ荳九￡ (72pt/inch ﾃ� 10in = 720pt = ~960px縲・xcel chrome + taskbar 謗ｧ髯､蠕後�ｮ
-' 螳牙�ｨ蝨�)縲りｶ�驕主��縺ｯ frScroll 蜀�繧ｹ繧ｯ繝ｭ繝ｼ繝ｫ縺ｧ蜷ｸ蜿弱☆繧九�
-' V4 fix (2026-05-29) #3 螻･豁ｴ: M-09縲悟次蝗縲埼國繧悟屓驕ｿ縺ｧ 900pt 縺ｫ諡｡蠑ｵ縺励◆縺後�1080px screen 縺ｧ
-' button bar 逕ｻ髱｢螟紋ｺ区腐縺悟�ｺ縺溘◆繧∝�咲ｸｮ蟆上る聞 field 縺ｯ frame scroll 縺ｧ隕九○繧九�
-Private Const SCROLL_FORM_CAP As Long = 720   ' form inside 鬮倥�ｮ荳企剞(pt)縲りｶ�驕主��縺ｯ frame 蜀�繧ｹ繧ｯ繝ｭ繝ｼ繝ｫ縲�
+' V5 fix (2026-05-30) BUG-1: 1080px 画面で button bar が画面外に出る regression を防ぐため
+' SCROLL_FORM_CAP を 900→720 に下げ (72pt/inch × 10in = 720pt = ~960px、Excel chrome + taskbar 控除後の
+' 安全圏)。超過分は frScroll 内スクロールで吸収する。
+' V4 fix (2026-05-29) #3 履歴: M-09「原因」隠れ回避で 900pt に拡張したが、1080px screen で
+' button bar 画面外事故が出たため再縮小。長 field は frame scroll で見せる。
+Private Const SCROLL_FORM_CAP As Long = 720   ' form inside 高の上限(pt)。超過分は frame 内スクロール。
 
 ' --- Module-level state (single-instance UserForm session) ---
 Private m_returnId As String          ' return value from form: knowledgeId / "DELETED" / ""
@@ -187,10 +189,10 @@ Private m_readOnlyFormat As Boolean   ' format selection locked (edit/view)
 Private m_fieldCount As Long
 Private m_dynFormName As String
 
-' Phase R-3-ﾏ�-4: scroll 蛹� 窶� 蝗ｺ螳� header 縺ｮ荳九↓鄂ｮ縺� frScroll Frame 縺ｨ蟇ｸ豕輔�
-Private m_scrollFrame As Object       ' frScroll Frame (field 鄒､縺ｮ container)
-Private m_headerHeightPx As Long      ' 蝗ｺ螳� header 鬮�(format selector + button bar)
-Private m_scrollHeightPx As Long      ' frame 蜀� content total 鬮� (= Frame.ScrollHeight)
+' Phase R-3-χ-4: scroll 化 ? 固定 header の下に置く frScroll Frame と寸法。
+Private m_scrollFrame As Object       ' frScroll Frame (field 群の container)
+Private m_headerHeightPx As Long      ' 固定 header 高(format selector + button bar)
+Private m_scrollHeightPx As Long      ' frame 内 content total 高 (= Frame.ScrollHeight)
 
 ' Phase R-1-j (2026-05-28): path-verify dump output path. When non-empty,
 ' BuildAndShow performs the build phase, dumps designer.Controls to this
@@ -224,7 +226,7 @@ Private m_placeholderByCtl As Object      ' Phase R-2 F-4: ctlName -> placeholde
 ' mode    : "register" | "edit" | "view" | "preview"
 ' knowledgeId: edit/view only (register/preview pass "")
 ' readOnlyFormat: TRUE pins format selection (edit/view/preview). FALSE allows change (register).
-' formatId: preview (M-04) only 窶� fixed format to preview; data is not loaded.
+' formatId: preview (M-04) only ? fixed format to preview; data is not loaded.
 Public Function ShowForm( _
         ByVal xlsmName As String, _
         ByVal mode As String, _
@@ -267,8 +269,8 @@ Public Function ShowForm( _
         Set knowledgeData = Nothing
     End If
 
-    ' Phase R-3-ﾏ�-2: preview mode (M-04) 窶� fixed format from caller, no data load.
-    ' M-09 縺ｨ蜷� interface (陦ｨ遉ｺ蟆ら畑 popup) 縺ｧ縲∝ｷｮ縺ｯ縲悟ｮ溘ョ繝ｼ繧ｿ繧� load 縺励↑縺�縲咲せ縺ｮ縺ｿ縲�
+    ' Phase R-3-χ-2: preview mode (M-04) ? fixed format from caller, no data load.
+    ' M-09 と同 interface (表示専用 popup) で、差は「実データを load しない」点のみ。
     If m_mode = "preview" And Len(formatId) > 0 Then m_formatId = formatId
 
     ' Build dynamic form, generate controls, show, dispose. Result in m_returnId.
@@ -331,7 +333,7 @@ Private Sub InitFormConfig()
     m_backColor = DEFAULT_BACK_COLOR
     m_headerFields = DEFAULT_HEADER_FIELDS
     m_formatSelectorType = "textbox"
-    ' Phase R-3-ﾏ�-5: format 陦後�ｯ譌｢螳壹〒 register 縺ｮ縺ｿ陦ｨ遉ｺ(M-04/M-06/M-09 縺ｯ譛ｬ菴薙°繧蛾勁螟�)縲�
+    ' Phase R-3-χ-5: format 行は既定で register のみ表示(M-04/M-06/M-09 は本体から除外)。
     m_formatRowEnabled = (m_mode = "register")
     m_formatHelp = ""
     Set m_headerHelp = CreateObject("Scripting.Dictionary")
@@ -464,7 +466,7 @@ Private Sub ApplyConfigFromStanza(ByVal sec As ClsStanzaSection)
     If Len(v) > 0 Then m_headerFields = v
     v = Trim$(sec.GetValue("formatSelectorType"))
     If Len(v) > 0 Then m_formatSelectorType = LCase$(v)
-    ' Phase R-3-ﾏ�-5: format 陦後�ｮ陦ｨ遉ｺ蜿ｯ蜷ｦ繧� ui_seed 縺ｧ譏守､ｺ荳頑嶌縺�(M-04/06/09=false)縲�
+    ' Phase R-3-χ-5: format 行の表示可否を ui_seed で明示上書き(M-04/06/09=false)。
     v = LCase$(Trim$(sec.GetValue("formatRowEnabled")))
     If Len(v) > 0 Then m_formatRowEnabled = (v = "true" Or v = "1" Or v = "yes")
     v = Trim$(sec.GetValue("formatHelp"))
@@ -500,7 +502,7 @@ End Sub
 Private Sub BuildAndShow(ByVal knowledgeData As Object)
     On Error GoTo ErrHandler
 
-    ' Phase R-1-f/h: 3-stage fallback config load. default 竊・sheet 竊・format.
+    ' Phase R-1-f/h: 3-stage fallback config load. default ?Esheet ?Eformat.
     InitFormConfig
     ApplyUserformStanza             ' sheet-level override
     ApplyUserformStanzaFromFormat   ' format-level override (highest priority)
@@ -569,7 +571,7 @@ Private Sub BuildAndShow(ByVal knowledgeData As Object)
     m_headerHeightPx = hdrFmtBottom
     LogToSheet "BuildAndShow", "step 7 fixed header(title+format) headerH=" & m_headerHeightPx, "LOG-UF-STEP-07"
 
-    ' chrome 螳滓ｸｬ縺ｮ縺溘ａ Width/Height 繧呈圻螳夊ｨｭ螳�
+    ' chrome 実測のため Width/Height を暫定設定
     Dim chromeW As Long, chromeH As Long
     chromeW = 0: chromeH = 0
     vbc.Properties("Width") = m_formWidth
@@ -581,32 +583,32 @@ Private Sub BuildAndShow(ByVal knowledgeData As Object)
     If chromeW < 1 Then chromeW = 12
     If chromeH < 1 Then chromeH = 29
 
-    ' scroll area Frame (header 縺ｮ荳�)
+    ' scroll area Frame (header の下)
     Dim fr As Object
     Set fr = designer.Controls.Add(PROGID_FRAME, "frScroll", True)
     fr.caption = ""
     fr.top = m_headerHeightPx
     fr.left = 0
     fr.Width = m_formWidth
-    ' V4 fix (2026-05-29) #1/#5 (revised): Frame 縺ｮ sunken/etched 譫 + 轣ｰ濶ｲ閭梧勹繧呈ｶ医☆縲�
-    ' V4-iter1 縺ｧ BorderStyle=fmBorderStyleNone 繧定ｿｽ蜉縺励◆繧� M-05 register 縺�
-    ' 1 field 縺励°謠冗判縺輔ｌ縺ｪ縺� regression 縺悟�ｺ縺溘◆繧� (frame 縺ｮ inset+clipping 莉墓ｧ伜､牙喧)縲�
-    ' BorderStyle 縺ｯ default (0=fmBorderStyleNone 縺ｯ螟峨∴縺�) + SpecialEffect=0(flat)
-    ' + BackColor=逋ｽ 縺ｧ縲梧棧隕九◆逶ｮ縺縺代肴椛縺医ｋ譁ｹ蜷代↓謖ｯ繧九�
+    ' V4 fix (2026-05-29) #1/#5 (revised): Frame の sunken/etched 枠 + 灰色背景を消す。
+    ' V4-iter1 で BorderStyle=fmBorderStyleNone を追加したら M-05 register が
+    ' 1 field しか描画されない regression が出たため (frame の inset+clipping 仕様変化)、
+    ' BorderStyle は default (0=fmBorderStyleNone は変えず) + SpecialEffect=0(flat)
+    ' + BackColor=白 で「枠見た目だけ」抑える方向に振る。
     On Error Resume Next
-    fr.SpecialEffect = 0       ' fmSpecialEffectFlat (etched 譫繧呈ｶ医☆)
+    fr.SpecialEffect = 0       ' fmSpecialEffectFlat (etched 枠を消す)
     Dim bcFrame As Long
     bcFrame = ParseHexColor(m_backColor)
     If bcFrame >= 0 Then fr.BackColor = bcFrame
     On Error GoTo ErrHandler
     Set m_scrollFrame = fr
 
-    ' scroll content (frame-relative 蠎ｧ讓吶〒 frScroll 蜀�縺ｫ逕滓��)
+    ' scroll content (frame-relative 座標で frScroll 内に生成)
     Dim y As Long
     Dim kOff As Long
-    kOff = AddKnowledgeNoRow(fr)                        ' 繝翫Ξ繝�繧ｸ逡ｪ蜿ｷ陦�(edit/view); M-05=0
+    kOff = AddKnowledgeNoRow(fr)                        ' ナレッジ番号行(edit/view); M-05=0
     y = m_margin + kOff
-    y = AddHeaderFields(fr, y)                          ' 莠亥ｮ夂分蜿ｷ 遲� header fields
+    y = AddHeaderFields(fr, y)                          ' 予定番号 等 header fields
     AddSubheaderRow fr, y
     y = y + m_subheaderHeight
     Dim i As Long
@@ -620,7 +622,7 @@ Private Sub BuildAndShow(ByVal knowledgeData As Object)
     m_scrollHeightPx = contentBottom
     LogToSheet "BuildAndShow", "step 8 scroll content bottom=" & contentBottom, "LOG-UF-STEP-08"
 
-    ' 蝗ｺ螳� form inside 鬮�: 蜀�螳ｹ縺悟庶縺ｾ繧後�ｰ縺昴�ｮ縺ｾ縺ｾ縲∬ｶ�縺医◆繧� cap 縺ｧ frame 蜀�繧ｹ繧ｯ繝ｭ繝ｼ繝ｫ
+    ' 固定 form inside 高: 内容が収まればそのまま、超えたら cap で frame 内スクロール
     Dim formInsideH As Long
     Dim fullNeeded As Long
     fullNeeded = m_headerHeightPx + contentBottom + m_buttonBarHeight + 8
@@ -671,9 +673,9 @@ Private Sub BuildAndShow(ByVal knowledgeData As Object)
     Set ufInstance = VBA.UserForms.Add(m_dynFormName)
     PopulateComboBoxesOnInstance ufInstance
 
-    ' V4 fix (2026-05-29) #M-05: register 繝｢繝ｼ繝峨〒 frScroll 蜀�縺ｮ field 鄒､縺�
-    ' 1 莉ｶ縺励° paint 縺輔ｌ縺ｪ縺� regression 縺檎匱逕� (蟄� agent dump 縺ｧ 11 莉ｶ蜈ｨ讒狗ｯ画ｸ�
-    ' 遒ｺ隱�)縲Ｇrame 縺ｮ ScrollTop 繧� 0 縺ｫ reset + Repaint nudge 縺ｧ蛻晄悄謠冗判繧貞ｼｷ蛻ｶ縲�
+    ' V4 fix (2026-05-29) #M-05: register モードで frScroll 内の field 群が
+    ' 1 件しか paint されない regression が発生 (子 agent dump で 11 件全構築済
+    ' 確認)。frame の ScrollTop を 0 に reset + Repaint nudge で初期描画を強制。
     On Error Resume Next
     Dim frLive As Object
     Set frLive = ufInstance.Controls("frScroll")
@@ -709,8 +711,8 @@ ErrHandler:
     On Error GoTo 0
 End Sub
 
-' Phase R-3-ﾏ�-4: find a control by name on the live form, searching direct
-' controls then the frScroll frame's children (one level). field 邉ｻ縺ｯ frScroll 蜀�縲�
+' Phase R-3-χ-4: find a control by name on the live form, searching direct
+' controls then the frScroll frame's children (one level). field 系は frScroll 内。
 Private Function FindCtlOnForm(ByVal uf As Object, ByVal ctlName As String) As Object
     On Error Resume Next
     Dim c As Object
@@ -743,7 +745,7 @@ Private Sub PopulateComboBoxesOnInstance(ByVal uf As Object)
         Dim items As Variant
         items = m_comboItemsByCtl(CStr(ctlName))
         Dim cb As Object
-        Set cb = FindCtlOnForm(uf, CStr(ctlName))   ' R-3-ﾏ�-4: frScroll frame 蜀�繧よ爾邏｢
+        Set cb = FindCtlOnForm(uf, CStr(ctlName))   ' R-3-χ-4: frScroll frame 内も探索
         If Not cb Is Nothing Then
             Dim i As Long
             For i = LBound(items) To UBound(items)
@@ -780,7 +782,7 @@ Private Function ResolveFormTitle() As String
         Case "edit":     ResolveFormTitle = ChrW(&H30CA) & ChrW(&H30EC) & ChrW(&H30C3) & ChrW(&H30B8) & ChrW(&H4FEE) & ChrW(&H6B63)
         Case "view":     ResolveFormTitle = ChrW(&H30CA) & ChrW(&H30EC) & ChrW(&H30C3) & ChrW(&H30B8) & ChrW(&H8868) & ChrW(&H793A)
         Case "preview"
-            ' 繝励Ξ繝薙Η繝ｼ (V4 fix 2026-05-29: drop ": <formatId>" suffix per隕ｪ謖�遉ｺ#4)
+            ' プレビュー (V4 fix 2026-05-29: drop ": <formatId>" suffix per親指示#4)
             ResolveFormTitle = ChrW(&H30D7) & ChrW(&H30EC) & ChrW(&H30D3) & ChrW(&H30E5) & ChrW(&H30FC)
         Case Else:       ResolveFormTitle = "UserForm"
     End Select
@@ -815,7 +817,7 @@ ErrHandler:
 End Function
 
 Private Function ComputeRowsHeight(ByVal flds As Collection) As Long
-    ' Includes subheader row "�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽi�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽ�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽ�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽb�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽW�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽﾌ難ｿｽ�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽe" + per-field row heights.
+    ' Includes subheader row "?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E?i?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E?b?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E?W?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E????E?E?E?E?E?E?E?E?E?E?E?E?E?E?E?e" + per-field row heights.
     Dim h As Long
     h = m_subheaderHeight
     If flds Is Nothing Then
@@ -826,8 +828,8 @@ Private Function ComputeRowsHeight(ByVal flds As Collection) As Long
     Dim i As Long
     For i = 1 To flds.count
         Set sec = flds.Item(i)
-        If sec.GetValue("FieldType") = ChrW(&H8907) & ChrW(&H6570) & ChrW(&H884C) Then  ' �ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽ�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽ�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽ�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽ�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽs
-            ' Long multi-line for known "long" fields (�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽ�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽﾆ手順, �ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽ�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽ�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽ�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽ, �ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽ�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽ�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽ�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽ �ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽ�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽ); others use short
+        If sec.GetValue("FieldType") = ChrW(&H8907) & ChrW(&H6570) & ChrW(&H884C) Then  ' ?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E?s
+            ' Long multi-line for known "long" fields (?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??菇, ?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E?, ?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E? ?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E?); others use short
             If IsLongMultilineField(sec.GetValue("FieldName")) Then
                 h = h + m_rowHeightMultiLong
             Else
@@ -845,7 +847,7 @@ End Function
 Private Function IsLongMultilineField(ByVal fieldName As String) As Boolean
     Dim s As String
     s = fieldName
-    ' �ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽ�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽﾆ手順 / �ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽ�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽ�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽ�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽ / �ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽ�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽ�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽ�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽ / �ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽ�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽ�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽﾛ詳搾ｿｽ / �ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽﾚ搾ｿｽ / �ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽ�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽ�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽe �ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽc
+    ' ?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??菇 / ?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E? / ?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E? / ?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E???? / ?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??? / ?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E?e ?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E?c
     If InStr(s, ChrW(&H4F5C) & ChrW(&H696D) & ChrW(&H624B) & ChrW(&H9806)) > 0 Then IsLongMultilineField = True: Exit Function
     If InStr(s, ChrW(&H4E8B) & ChrW(&H8C61)) > 0 Then IsLongMultilineField = True: Exit Function
     If InStr(s, ChrW(&H539F) & ChrW(&H56E0)) > 0 Then IsLongMultilineField = True: Exit Function
@@ -887,7 +889,7 @@ Private Function AddKnowledgeNoRow(ByVal designer As Object) As Long
         AddKnowledgeNoRow = 0
         Exit Function
     End If
-    ' Phase R-3-ﾏ�-3 邵ｦ荳ｦ縺ｳ: label 陦御ｸ翫�ｻdata 陦�(蜈ｨ蟷�)荳九�
+    ' Phase R-3-χ-3 縦並び: label 行上・data 行(全幅)下。
     Dim y As Long
     y = m_margin
     Dim fullWK As Long, dataTopK As Long, dataHK As Long
@@ -954,7 +956,7 @@ Private Function AddHeaderRow(ByVal designer As Object) As Long
     lbl.Height = VLABEL_H
     ApplyBaseFont lbl
 
-    ' Phase R-3-ﾏ�-3 邵ｦ荳ｦ縺ｳ: format selector 繧� label 荳翫�ｻdata 蜈ｨ蟷�荳九�
+    ' Phase R-3-χ-3 縦並び: format selector も label 上・data 全幅下。
     Dim ctlW As Long
     ctlW = m_formWidth - m_margin * 2
     Dim dataTopH As Long, dataHH As Long
@@ -987,7 +989,7 @@ Private Function AddHeaderRow(ByVal designer As Object) As Long
     ctl.Height = dataHH
     ApplyBaseFont ctl
 
-    ' Phase R-2 F-2 / R-3-ﾏ�-3: help line under the format selector (data 陦檎峩荳�)縲�
+    ' Phase R-2 F-2 / R-3-χ-3: help line under the format selector (data 行直下)。
     Dim helpH As Long
     helpH = RenderHelpLine(designer, "lblFormatHelp", dataTopH + dataHH + 2, m_margin, ctlW, m_formatHelp)
     ' R-3-g1A: return the actual format-block bottom (control + formatHelp + gap)
@@ -1035,9 +1037,9 @@ End Function
 ' Phase R-2 F-1: map a logical header-field id to its JP label.
 Private Function ResolveHeaderFieldLabel(ByVal id As String) As String
     Select Case LCase$(Trim$(id))
-        Case "knowledgeid": ResolveHeaderFieldLabel = ChrW(&H4E88) & ChrW(&H5B9A) & ChrW(&H756A) & ChrW(&H53F7)        ' 莠亥ｮ夂分蜿ｷ
-        Case "createdat":   ResolveHeaderFieldLabel = ChrW(&H767B) & ChrW(&H9332) & ChrW(&H65E5) & ChrW(&H6642)        ' 逋ｻ骭ｲ譌･譎�
-        Case "updatedat":   ResolveHeaderFieldLabel = ChrW(&H66F4) & ChrW(&H65B0) & ChrW(&H65E5) & ChrW(&H6642)        ' 譖ｴ譁ｰ譌･譎�
+        Case "knowledgeid": ResolveHeaderFieldLabel = ChrW(&H4E88) & ChrW(&H5B9A) & ChrW(&H756A) & ChrW(&H53F7)        ' 予定番号
+        Case "createdat":   ResolveHeaderFieldLabel = ChrW(&H767B) & ChrW(&H9332) & ChrW(&H65E5) & ChrW(&H6642)        ' 登録日時
+        Case "updatedat":   ResolveHeaderFieldLabel = ChrW(&H66F4) & ChrW(&H65B0) & ChrW(&H65E5) & ChrW(&H6642)        ' 更新日時
         Case Else:          ResolveHeaderFieldLabel = id
     End Select
 End Function
@@ -1081,7 +1083,7 @@ Private Function AddHeaderFields(ByVal designer As Object, ByVal yStart As Long)
             idxStr = Format$(k + 1, "000")
             Dim lbl As Object
             Set lbl = designer.Controls.Add(PROGID_LABEL, "hdrlbl_" & idxStr, True)
-            ' Phase R-3-ﾏ�-3 邵ｦ荳ｦ縺ｳ: header field 繧� label 荳翫�ｻdata 蜈ｨ蟷�荳九�
+            ' Phase R-3-χ-3 縦並び: header field も label 上・data 全幅下。
             lbl.caption = ResolveHeaderFieldLabel(id)
             lbl.top = y
             lbl.left = m_margin
@@ -1105,7 +1107,7 @@ Private Function AddHeaderFields(ByVal designer As Object, ByVal yStart As Long)
 
             Dim hfExtra As Long
             hfExtra = 0
-            ' Phase R-2 F-2: per-header-field help line (data 陦檎峩荳�)縲�
+            ' Phase R-2 F-2: per-header-field help line (data 行直下)。
             If Not m_headerHelp Is Nothing Then
                 If m_headerHelp.Exists(id) Then
                     hfExtra = RenderHelpLine(designer, "hdrhelp_" & idxStr, dataTopHF + dataHHF + 2, _
@@ -1118,7 +1120,7 @@ Private Function AddHeaderFields(ByVal designer As Object, ByVal yStart As Long)
     AddHeaderFields = y
 End Function
 
-' Apply 繝｡繧､繝ｪ繧ｪ base font (Phase R-1-c, spec �ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽ�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽ1)
+' Apply メイリオ base font (Phase R-1-c, spec ?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E?1)
 Private Sub ApplyBaseFont(ByVal ctl As Object)
     On Error Resume Next
     ctl.Font.Name = m_fontName
@@ -1126,7 +1128,7 @@ Private Sub ApplyBaseFont(ByVal ctl As Object)
     On Error GoTo 0
 End Sub
 
-' Subheader "�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽi�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽ�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽ�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽb�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽW�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽﾌ難ｿｽ�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽe" row (between header and dynamic fields, per mock)
+' Subheader "?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E?i?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E?b?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E?W?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E????E?E?E?E?E?E?E?E?E?E?E?E?E?E?E?e" row (between header and dynamic fields, per mock)
 ' V3 fix (2026-05-29): mock navy title bar at form top.
 ' OS title bar (VBA-uncontrollable) stays; this paints a navy band
 ' just below it inside client area with the form's JP title.
@@ -1152,7 +1154,7 @@ Private Sub AddSubheaderRow(ByVal designer As Object, ByVal y As Long)
     On Error Resume Next
     Dim lbl As Object
     Set lbl = designer.Controls.Add(PROGID_LABEL, "lblSubheader", True)
-    ' �ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽi�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽ�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽ�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽb�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽW�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽﾌ難ｿｽ�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽe
+    ' ?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E?i?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E?b?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E?W?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E????E?E?E?E?E?E?E?E?E?E?E?E?E?E?E?e
     lbl.caption = ChrW(&H30CA) & ChrW(&H30EC) & ChrW(&H30C3) & ChrW(&H30B8) & ChrW(&H306E) & ChrW(&H5185) & ChrW(&H5BB9)
     lbl.top = y + 4
     lbl.left = m_margin
@@ -1191,7 +1193,7 @@ Private Function AddFieldRow(ByVal designer As Object, _
     ' Label
     Dim lbl As Object
     Set lbl = designer.Controls.Add(PROGID_LABEL, "lbl_" & idxStr, True)
-    ' Phase R-3-ﾏ�-3 邵ｦ荳ｦ縺ｳ: label 縺ｯ荳翫�ｮ陦後�ｻ蜈ｨ蟷�(badge 蛻�繧呈而髯､)縲�
+    ' Phase R-3-χ-3 縦並び: label は上の行・全幅(badge 分を控除)。
     lbl.caption = fieldName
     lbl.top = y
     lbl.left = m_margin
@@ -1199,7 +1201,7 @@ Private Function AddFieldRow(ByVal designer As Object, _
     lbl.Height = VLABEL_H
     ApplyBaseFont lbl
 
-    ' Phase R-1-c: �ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽK�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽ{ badge for required fields (FieldRequired = TRUE / true)
+    ' Phase R-1-c: ?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E?K?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E?{ badge for required fields (FieldRequired = TRUE / true)
     Dim isReq As Boolean
     Dim reqStr As String
     ' Phase R-1-j: format files use "Required"; fall back to legacy "FieldRequired".
@@ -1209,8 +1211,8 @@ Private Function AddFieldRow(ByVal designer As Object, _
     If isReq Then
         Dim badge As Object
         Set badge = designer.Controls.Add(PROGID_LABEL, "bdg_" & idxStr, True)
-        badge.caption = ChrW(&H5FC5) & ChrW(&H9808)   ' �ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽK�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽ{
-        ' 邵ｦ荳ｦ縺ｳ: badge 縺ｯ label 陦後�ｮ蜿ｳ遶ｯ縺ｫ驟咲ｽｮ
+        badge.caption = ChrW(&H5FC5) & ChrW(&H9808)   ' ?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E?K?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E?{
+        ' 縦並び: badge は label 行の右端に配置
         badge.top = y + (VLABEL_H - m_badgeHeight) \ 2
         badge.left = m_formWidth - m_margin - m_badgeWidth
         badge.Width = m_badgeWidth
@@ -1231,11 +1233,11 @@ Private Function AddFieldRow(ByVal designer As Object, _
     m_fieldNamesByIdx(ctlName) = fieldName
 
     Select Case fieldType
-        Case ChrW(&H5358) & ChrW(&H4E00) & ChrW(&H884C)  ' �ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽP�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽ�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽs
+        Case ChrW(&H5358) & ChrW(&H4E00) & ChrW(&H884C)  ' ?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E?P?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E?s
             Set ctl = designer.Controls.Add(PROGID_TEXTBOX, ctlName, True)
             ctl.MultiLine = False
             ctl.Text = curVal
-        Case ChrW(&H8907) & ChrW(&H6570) & ChrW(&H884C)  ' �ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽ�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽ�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽ�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽ�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽs
+        Case ChrW(&H8907) & ChrW(&H6570) & ChrW(&H884C)  ' ?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E?s
             Set ctl = designer.Controls.Add(PROGID_TEXTBOX, ctlName, True)
             ctl.MultiLine = True
             ctl.WordWrap = True
@@ -1249,18 +1251,18 @@ Private Function AddFieldRow(ByVal designer As Object, _
                 Case Else: ctl.ScrollBars = 2
             End Select
             ctl.Text = curVal
-            ' Long multi-line for �ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽ�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽﾆ手順/�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽ�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽ�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽ�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽ/�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽ�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽ�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽ�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽ/�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽﾚ搾ｿｽ/�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽ�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽ�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽe; others short
+            ' Long multi-line for ?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??菇/?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E?/?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E?/?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E???/?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E?e; others short
             If IsLongMultilineField(fieldName) Then
                 rowH = m_rowHeightMultiLong
             Else
                 rowH = m_rowHeightMulti
             End If
-        Case ChrW(&H65E5) & ChrW(&H6642)  ' �ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽ�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽ�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽ�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽ - mark for Change-event validation
+        Case ChrW(&H65E5) & ChrW(&H6642)  ' ?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E? - mark for Change-event validation
             Set ctl = designer.Controls.Add(PROGID_TEXTBOX, ctlName, True)
             ctl.MultiLine = False
             ctl.Text = curVal
             m_dateFieldIndices(idxStr) = True
-        Case ChrW(&H9078) & ChrW(&H629E)  ' �ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽI�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽ�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽE�ｿｽ
+        Case ChrW(&H9078) & ChrW(&H629E)  ' ?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E?I?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E?
             Set ctl = designer.Controls.Add(PROGID_COMBOBOX, ctlName, True)
             ctl.Style = 2   ' fmStyleDropDownList
             Dim opts As String
@@ -1281,8 +1283,8 @@ Private Function AddFieldRow(ByVal designer As Object, _
             ctl.Text = curVal
     End Select
 
-    ' Phase R-3-ﾏ�-3 邵ｦ荳ｦ縺ｳ: data 縺ｯ label 陦後�ｮ荳九�ｻ蜈ｨ蟷�縲�
-    ' dataHeight = 陦後ヴ繝�繝�(rowH) - labelZone(VLABEL_H+VLABEL_GAP) - VROW_SPACING縲�
+    ' Phase R-3-χ-3 縦並び: data は label 行の下・全幅。
+    ' dataHeight = 行ピッチ(rowH) - labelZone(VLABEL_H+VLABEL_GAP) - VROW_SPACING。
     Dim dataTop As Long, dataH As Long
     dataTop = y + VLABEL_H + VLABEL_GAP
     dataH = rowH - VLABEL_H - VLABEL_GAP - VROW_SPACING
@@ -1292,7 +1294,7 @@ Private Function AddFieldRow(ByVal designer As Object, _
     ctl.Height = dataH
     ApplyBaseFont ctl
 
-    ' Apply mode-based locking (view 縺ｨ preview 縺ｯ陦ｨ遉ｺ蟆ら畑 = readonly)
+    ' Apply mode-based locking (view と preview は表示専用 = readonly)
     If m_mode = "view" Or m_mode = "preview" Then
         On Error Resume Next
         ctl.Locked = True
@@ -1303,8 +1305,8 @@ Private Function AddFieldRow(ByVal designer As Object, _
     ' Phase R-2 F-4: placeholder grey text in empty TextBoxes (not view mode,
     ' not ComboBox). Stored so InjectFormCode can emit Enter/Exit handlers and
     ' the persistence layer can treat a still-placeholder field as empty.
-    ' Phase R-3-ﾏ�-2: preview (M-04) 縺ｯ螳溘ョ繝ｼ繧ｿ繧呈戟縺溘★ placeholder(險伜�･萓�)縺ｮ縺ｿ陦ｨ遉ｺ縲�
-    ' readonly 縺ｮ縺溘ａ focus-clear 繝上Φ繝峨Λ縺ｯ逕滓�舌○縺� static 縺ｫ蜃ｺ縺吶�
+    ' Phase R-3-χ-2: preview (M-04) は実データを持たず placeholder(記入例)のみ表示。
+    ' readonly のため focus-clear ハンドラは生成せず static に出す。
     If TypeName(ctl) = "TextBox" And m_mode <> "view" And Len(curVal) = 0 Then
         Dim ph As String
         ph = Trim$(sec.GetValue("fieldPlaceholder"))
@@ -1375,7 +1377,7 @@ Private Sub AddButtonBar(ByVal designer As Object, ByVal y As Long)
             labels = Split(ChrW(&H7DE8) & ChrW(&H96C6) & "|" & ChrW(&H524A) & ChrW(&H9664) & "|" & ChrW(&H9589) & ChrW(&H3058) & ChrW(&H308B), "|")
             kinds = Split("s|d|p", "|")
         Case "preview"
-            ' Phase R-3-ﾏ�-2: M-04 繝励Ξ繝薙Η繝ｼ縺ｯ縲碁哩縺倥ｋ縲榊腰迢ｬ (M-09 縺ｨ蜷� btnClose)
+            ' Phase R-3-χ-2: M-04 プレビューは「閉じる」単独 (M-09 と同 btnClose)
             names = Split("btnClose", "|")
             labels = Split(ChrW(&H9589) & ChrW(&H3058) & ChrW(&H308B), "|")
             kinds = Split("p", "|")
@@ -1387,16 +1389,16 @@ Private Sub AddButtonBar(ByVal designer As Object, ByVal y As Long)
     Dim helpTexts() As String
     Select Case m_mode
         Case "register"
-            ' 繧ｯ繝ｪ繧｢ / 逋ｻ骭ｲ
+            ' クリア / 登録
             helpTexts = Split(ChrW(&H5165) & ChrW(&H529B) & ChrW(&H6B04) & ChrW(&H3092) & ChrW(&H7A7A) & ChrW(&H306B) & ChrW(&H623B) & ChrW(&H3057) & ChrW(&H307E) & ChrW(&H3059) & "|" & ChrW(&H5185) & ChrW(&H5BB9) & ChrW(&H3092) & ChrW(&H4FDD) & ChrW(&H5B58) & ChrW(&H3057) & ChrW(&H3066) & ChrW(&H767B) & ChrW(&H9332) & ChrW(&H3057) & ChrW(&H307E) & ChrW(&H3059), "|")
         Case "edit"
-            ' 蜑企勁 / 譖ｴ譁ｰ
+            ' 削除 / 更新
             helpTexts = Split(ChrW(&H78BA) & ChrW(&H8A8D) & ChrW(&H306E) & ChrW(&H3046) & ChrW(&H3048) & ChrW(&H524A) & ChrW(&H9664) & ChrW(&H3057) & ChrW(&H307E) & ChrW(&H3059) & "|" & ChrW(&H5185) & ChrW(&H5BB9) & ChrW(&H3092) & ChrW(&H4E0A) & ChrW(&H66F8) & ChrW(&H304D) & ChrW(&H4FDD) & ChrW(&H5B58) & ChrW(&H3057) & ChrW(&H307E) & ChrW(&H3059), "|")
         Case "view"
-            ' 邱ｨ髮・/ 蜑企勁 / 髢峨§繧・
+            ' 編雁E/ 削除 / 閉じめE
             helpTexts = Split("|" & "|" & ChrW(&H691C) & ChrW(&H7D22) & ChrW(&H753B) & ChrW(&H9762) & ChrW(&H306B) & ChrW(&H623B) & ChrW(&H308A) & ChrW(&H307E) & ChrW(&H3059), "|")
         Case "preview"
-            ' 繝励Ξ繝薙Η繝ｼ繧帝哩縺倥∪縺�
+            ' プレビューを閉じます
             helpTexts = Split(ChrW(&H30D7) & ChrW(&H30EC) & ChrW(&H30D3) & ChrW(&H30E5) & ChrW(&H30FC) & ChrW(&H3092) & ChrW(&H9589) & ChrW(&H3058) & ChrW(&H307E) & ChrW(&H3059), "|")
         Case Else
             helpTexts = Split("|", "|")
@@ -1468,9 +1470,9 @@ Private Sub AddButtonBar(ByVal designer As Object, ByVal y As Long)
                 btn.BackColor = RGB(240, 240, 240)
                 btn.ForeColor = RGB(60, 60, 60)
         End Select
-        ' V5 fix (2026-05-30) BUG-2: Default/Cancel 譏守､ｺ set縲Ｑrimary(p) 繧� Enter 縺ｧ逋ｺ轣ｫ縺吶ｋ
-        ' Default 縺ｫ縲，lear/Close 繧� Esc 縺ｧ逋ｺ轣ｫ縺吶ｋ Cancel 縺ｫ縲ゅ％繧後〒 Tab 縺ｧ field 遘ｻ蜍穂ｸｭ縺ｮ
-        ' 隱､ Enter 縺後後け繝ｪ繧｢縲阪ｒ逋ｺ轣ｫ縺励※ field 蜈ｨ豸亥､ｱ縺吶ｋ UX 莠区腐繧帝亟縺舌�
+        ' V5 fix (2026-05-30) BUG-2: Default/Cancel 明示 set。primary(p) を Enter で発火する
+        ' Default に、Clear/Close を Esc で発火する Cancel に。これで Tab で field 移動中の
+        ' 誤 Enter が「クリア」を発火して field 全消失する UX 事故を防ぐ。
         On Error Resume Next
         Select Case kinds(i)
             Case "p"
@@ -1478,7 +1480,7 @@ Private Sub AddButtonBar(ByVal designer As Object, ByVal y As Long)
                 btn.Cancel = False
             Case Else
                 btn.Default = False
-                ' btnClear / btnClose 繧� Esc 繧ｭ繝ｼ縺ｧ逋ｺ轣ｫ縺輔○繧�
+                ' btnClear / btnClose を Esc キーで発火させる
                 If names(i) = "btnClear" Or names(i) = "btnClose" Then
                     btn.Cancel = True
                 Else
@@ -1487,8 +1489,8 @@ Private Sub AddButtonBar(ByVal designer As Object, ByVal y As Long)
         End Select
         On Error GoTo 0
 
-        ' R-3-g1A (2026-05-28): per-button help (mock 貅匁侠縲∵｡�c 邨ｱ蜷郁｣懷勧譁�繧呈彫蝗�)縲�
-        ' buttonWidth(113) 蟷�蜀�縺ｫ蜿弱ａ蜿ｳ縺ｿ縺阪ｌ/驥阪↑繧翫ｒ蝗樣∩縲�
+        ' R-3-g1A (2026-05-28): per-button help (mock 準拠、案c 統合補助文を撤回)。
+        ' buttonWidth(113) 幅内に収め右みきれ/重なりを回避。
         If i <= UBound(helpTexts) Then
             If Len(helpTexts(i)) > 0 Then
                 Dim bhelp As Object
@@ -1567,7 +1569,7 @@ Private Sub InjectFormCode(ByVal vbc As Object)
     s = s & "End Sub" & vbCrLf
     ' Phase R-2 F-3: format dropdown change -> re-render with new format's fields.
     ' Only injected in dropdown mode (the cboFormatId control exists).
-    ' Phase R-3-ﾏ�-5: format 陦後′辟｡縺� mode 縺ｧ縺ｯ cboFormatId 縺悟ｭ伜惠縺励↑縺�縺溘ａ inject 縺励↑縺�縲�
+    ' Phase R-3-χ-5: format 行が無い mode では cboFormatId が存在しないため inject しない。
     If m_formatSelectorType = "dropdown" And m_formatRowEnabled Then
         s = s & vbCrLf
         s = s & "Private Sub cboFormatId_Change()" & vbCrLf
@@ -1798,8 +1800,8 @@ Private Sub DumpFormToFile(ByVal vbc As Object, ByVal designer As Object, _
         s = s & i & "|" & fn & "|" & ft & "|" & fr & vbCrLf
     Next i
 
-    ' R-3-ﾏ�-4: designer.Controls 縺ｯ frame 蟄舌ｂ flatten 縺励※蜷ｫ繧(frame-relative 蠎ｧ讓�)縺溘ａ縲�
-    ' frame 蟄舌�ｯ [CONTROLS] 縺九ｉ髯､螟悶＠ [FRAMECONTROLS] 縺ｫ縺ｮ縺ｿ蜃ｺ縺吶�
+    ' R-3-χ-4: designer.Controls は frame 子も flatten して含む(frame-relative 座標)ため、
+    ' frame 子は [CONTROLS] から除外し [FRAMECONTROLS] にのみ出す。
     Dim frChildren As Object
     Set frChildren = CreateObject("Scripting.Dictionary")
     If Not m_scrollFrame Is Nothing Then
@@ -1843,7 +1845,7 @@ Private Sub DumpFormToFile(ByVal vbc As Object, ByVal designer As Object, _
     Next j
     s = s & "count=" & emitted & vbCrLf & hdrLines
 
-    ' Phase R-3-ﾏ�-4: frScroll frame geometry + 縺昴�ｮ蟄� controls (frame-relative 蠎ｧ讓�)
+    ' Phase R-3-χ-4: frScroll frame geometry + その子 controls (frame-relative 座標)
     s = s & "[FRAME]" & vbCrLf
     If m_scrollFrame Is Nothing Then
         s = s & "present=0" & vbCrLf

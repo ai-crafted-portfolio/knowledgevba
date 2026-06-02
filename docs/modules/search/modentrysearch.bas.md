@@ -20,6 +20,8 @@ description: modEntrySearch.bas のソースコード（コピペ用）
 - 文字コード: **ANSI**（Shift-JIS）
 
 > メモ帳の文字コードを **ANSI** にしないと、VBA の日本語が文字化けして動かなくなります。
+> UTF-8 で保存すると VBA Import 時に日本語が文字化けして動かなくなります。
+> 改行コードは CRLF（Windows 標準）のままで OK です。
 
 ---
 
@@ -96,8 +98,8 @@ Public Sub Btn_SearchV23()
             If Not data Is Nothing Then
                 If MatchesSearchV23(data, keyword, fmtFilter) Then
                     ' SPEC_DRIFT-NEW3 fix (2026-05-31): format-aware subject/excerpt
-                    ' resolution. Old NthFieldValue(data,1/2) placed 謇矩�譖ｸ逡ｪ蜿ｷ in
-                    ' 莉ｶ蜷� col and 菴懈･ｭ蜷� in 莠玖ｱ｡謚懃ｲ� col for SAGYO - wrong order.
+                    ' resolution. Old NthFieldValue(data,1/2) placed FldA into 件名 col
+                    ' and FldB into 事象抜粋 col for SAGYO - wrong order.
                     Dim subjKey As String, excKey As String
                     SubjectAndExcerptKeys data, SafeStr(data, "FormatID"), subjKey, excKey
 
@@ -257,11 +259,6 @@ Private Function TrimExcerpt(ByVal v As String) As String
 End Function
 
 ' SPEC_DRIFT-NEW3 (2026-05-31): resolve subject/excerpt keys for a record.
-' Rules: 1) format meta lookup via modFormatLoader.LoadFormat; subject =
-' FieldName containing 莉ｶ蜷�, else first 蜊倅ｸ陦�; excerpt = FieldName containing
-' 莠玖ｱ｡, else first 隍�謨ｰ陦�, else first 謇矩�. 2) fallback to declaration-order
-' 1st / 2nd non-meta key for FAULT-shaped records.
-' JP literals are ChrW so source stays ASCII (ADR-0006 / ADR-0070).
 Private Sub SubjectAndExcerptKeys(ByVal data As Object, _
                                   ByVal formatId As String, _
                                   ByRef subjKey As String, _
@@ -351,51 +348,88 @@ End Sub
 
 ' ================================================================
 ' Public Sub: Btn_OpenViewFromSheet
-' M-09 繝翫Ξ繝�繧ｸ陦ｨ遉ｺ sheet 荳翫�ｮ縲瑚｡ｨ遉ｺ縲甲utton 縺九ｉ蜻ｼ縺ｰ繧後ｋ縲�
-' C5:E5 cell 縺ｫ蜈･蜉帙＆繧後◆ 繝翫Ξ繝�繧ｸ逡ｪ蜿ｷ縺ｧ UserForm 繧帝幕縺上�
-' JP literals are ChrW so source stays ASCII (ADR-0006 / ADR-0070).
+' Invoked from the "View" button on M-09 (display sheet, legacy).
+' ADR-0090 (2026-06-01): cell address is SSOT-driven via ui_seed.
+' M-09 sheet itself is retired per ADR-0085 (SPEC_DRIFT-NEW1); this
+' handler is kept for legacy installs that still have the sheet.
+' IsTestMode guard skips modal MsgBox during E2E runs.
 ' ================================================================
 Public Sub Btn_OpenViewFromSheet()
     On Error GoTo ErrHandler
     Dim jpName As String
-    jpName = ChrW(&H30CA) & ChrW(&H30EC) & ChrW(&H30C3) & ChrW(&H30B8) & ChrW(&H8868) & ChrW(&H793A)  ' "繝翫Ξ繝�繧ｸ陦ｨ遉ｺ"
+    jpName = ChrW(&H30CA) & ChrW(&H30EC) & ChrW(&H30C3) & ChrW(&H30B8) & ChrW(&H8868) & ChrW(&H793A)
     Dim ws As Worksheet
     On Error Resume Next
     Set ws = ThisWorkbook.Worksheets(jpName)
     If ws Is Nothing Then Set ws = ThisWorkbook.Worksheets("M-09")
     On Error GoTo ErrHandler
     If ws Is Nothing Then
-        Debug.Print "[ERR] Btn_OpenViewFromSheet: M-09 sheet not found"
+        Debug.Print "[INFO] Btn_OpenViewFromSheet: M-09 sheet retired (ADR-0085)"
         Exit Sub
     End If
 
+    Dim kidCell As String
+    kidCell = ResolveM09KidCell()
     Dim kid As String
-    kid = Trim$(CStr(ws.Range("C5").Value))
+    kid = Trim$(CStr(ws.Range(kidCell).Value))
+
     If Len(kid) = 0 Then
-        ' WARN dialog with body composed via ChrW so source stays ASCII.
-        ' (modKnowledgeEntryHelpers.ShowWarning lives in register/ and is NOT
-        ' imported into 讀懃ｴ｢.xlsm; we inline a MsgBox here instead.)
-        ' detail "繝翫Ξ繝�繧ｸ逡ｪ蜿ｷ縺悟�･蜉帙＆繧後※縺�縺ｾ縺帙ｓ縲�"
-        Dim detailMsg As String
-        detailMsg = ChrW(&H30CA) & ChrW(&H30EC) & ChrW(&H30C3) & ChrW(&H30B8) & ChrW(&H756A) & ChrW(&H53F7) & _
-                    ChrW(&H304C) & ChrW(&H5165) & ChrW(&H529B) & ChrW(&H3055) & ChrW(&H308C) & _
-                    ChrW(&H3066) & ChrW(&H3044) & ChrW(&H307E) & ChrW(&H305B) & ChrW(&H3093) & ChrW(&H3002)
-        ' action "C5 繧ｻ繝ｫ縺ｫ繝翫Ξ繝�繧ｸ逡ｪ蜿ｷ繧貞�･蜉帙＠縺ｦ縺上□縺輔＞縲�"
-        Dim actionMsg As String
-        actionMsg = "C5 " & ChrW(&H30BB) & ChrW(&H30EB) & ChrW(&H306B) & _
-                    ChrW(&H30CA) & ChrW(&H30EC) & ChrW(&H30C3) & ChrW(&H30B8) & ChrW(&H756A) & ChrW(&H53F7) & _
-                    ChrW(&H3092) & ChrW(&H5165) & ChrW(&H529B) & ChrW(&H3057) & ChrW(&H3066) & _
-                    ChrW(&H304F) & ChrW(&H3060) & ChrW(&H3055) & ChrW(&H3044) & ChrW(&H3002)
-        ' title "繝翫Ξ繝�繧ｸ陦ｨ遉ｺ"
-        Dim titleMsg As String
-        titleMsg = ChrW(&H30CA) & ChrW(&H30EC) & ChrW(&H30C3) & ChrW(&H30B8) & ChrW(&H8868) & ChrW(&H793A)
-        MsgBox detailMsg & vbCrLf & actionMsg, vbExclamation, titleMsg
+        If Not IsTestMode() Then
+            Dim msgEmpty As String
+            msgEmpty = kidCell & ChrW(&H306B) & ChrW(&H30CA) & ChrW(&H30EC) & ChrW(&H30C3) & ChrW(&H30B8) & ChrW(&H756A) & ChrW(&H53F7) & ChrW(&H3092) & ChrW(&H5165) & ChrW(&H529B) & ChrW(&H3057) & ChrW(&H3066) & ChrW(&H304F) & ChrW(&H3060) & ChrW(&H3055) & ChrW(&H3044)
+            MsgBox msgEmpty, vbExclamation, "Btn_OpenViewFromSheet"
+        End If
+        Debug.Print "[WARN] Btn_OpenViewFromSheet: kid empty cell=" & kidCell
         Exit Sub
     End If
 
-    modEntryUserForm.OpenViewWithId kid
+    On Error Resume Next
+    Dim engine As clsSearchEngine
+    Set engine = NewSearchEngine()
+    If Not engine Is Nothing Then engine.DisplayKnowledge kid
+    On Error GoTo ErrHandler
     Exit Sub
+
 ErrHandler:
     Debug.Print "[ERR] Btn_OpenViewFromSheet: " & Err.Number & " " & Err.Description
 End Sub
+
+Private Function ResolveM09KidCell() As String
+    On Error Resume Next
+    Dim uiCol As Collection
+    Set uiCol = modUILoader.LoadUiDefinition("search", "M-09")
+    If Err.Number = 0 And Not uiCol Is Nothing Then
+        Dim sec As ClsStanzaSection
+        Dim i As Long
+        For i = 1 To uiCol.Count
+            Set sec = uiCol.Item(i)
+            If sec.SectionName = "INPUT" Then
+                Dim nm As String
+                nm = sec.GetValue("Name")
+                If InStr(nm, ChrW(&H756A) & ChrW(&H53F7)) > 0 Then
+                    ResolveM09KidCell = sec.GetValue("Cell")
+                    If Len(ResolveM09KidCell) > 0 Then Exit Function
+                End If
+            End If
+        Next i
+    End If
+    Err.Clear
+    On Error GoTo 0
+    ResolveM09KidCell = "C5"
+End Function
+
+Private Function IsTestMode() As Boolean
+    On Error Resume Next
+    IsTestMode = False
+    Dim v As String
+    v = Environ$("KNW_TEST_MODE")
+    If LCase$(v) = "1" Or LCase$(v) = "true" Then IsTestMode = True
+    On Error GoTo 0
+End Function
+
+Private Function NewSearchEngine() As clsSearchEngine
+    On Error Resume Next
+    Set NewSearchEngine = New clsSearchEngine
+    On Error GoTo 0
+End Function
 ```

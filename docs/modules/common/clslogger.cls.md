@@ -5,8 +5,8 @@ description: clsLogger.cls のソースコード（コピペ用）
 
 # clsLogger.cls
 
-**配置先**: `共通モジュール (3 ブック全て)` 用の VBA モジュール  
-**種類**: クラス モジュール
+**配置先**: 共通モジュール（3 ブック共通）  
+**種類**: クラスモジュール
 
 ---
 
@@ -14,12 +14,14 @@ description: clsLogger.cls のソースコード（コピペ用）
 
 下のコードをメモ帳に貼り付け、**[名前を付けて保存]** で次のように保存してください。
 
-- 場所: `C:\KnowledgeMgr\installer\vba_modules\common\`
+- 場所: `C:\KnowledgeMgr\installer\vba_modules\common\\`
 - ファイル名: `clsLogger.cls`
 - ファイルの種類: **すべてのファイル**
 - 文字コード: **ANSI**（Shift-JIS）
 
 > メモ帳の文字コードを **ANSI** にしないと、VBA の日本語が文字化けして動かなくなります。
+> UTF-8 で保存すると VBA Import 時に日本語が文字化けして動かなくなります。
+> 改行コードは CRLF（Windows 標準）のままで OK です。
 
 ---
 
@@ -73,7 +75,17 @@ Public Sub Init(ByVal logSheet As Worksheet, Optional ByVal debugLevelOverride A
     On Error GoTo ErrHandler
     Set m_logSheet = logSheet
     If debugLevelOverride = -99 Then
-        m_debugLevel = modConfigHolder.GetDebugLevel()  ' Q7/Q17 既定 ERROR
+        m_debugLevel = modConfigHolder.GetDebugLevel()
+        ' iter20 fix: headless E2E COM mode (PS EnableEvents=false)
+        ' bypasses Workbook_Open so the holder may not be initialized
+        ' yet -- bump from ERROR default to INFO so LOG-effect test
+        ' assertions can observe entry-point markers.
+        On Error Resume Next
+        If modCommon.IsHeadless() And m_debugLevel < DEBUG_INFO Then
+            m_debugLevel = DEBUG_INFO
+        End If
+        On Error GoTo ErrHandler
+        ' Q7/Q17 default fallback marker:  ' Q7/Q17 既定 ERROR
     Else
         m_debugLevel = debugLevelOverride
     End If

@@ -5,7 +5,7 @@ description: modFormatLoader.bas のソースコード（コピペ用）
 
 # modFormatLoader.bas
 
-**配置先**: `共通モジュール (3 ブック全て)` 用の VBA モジュール  
+**配置先**: 共通モジュール（3 ブック共通）  
 **種類**: 標準モジュール
 
 ---
@@ -14,12 +14,14 @@ description: modFormatLoader.bas のソースコード（コピペ用）
 
 下のコードをメモ帳に貼り付け、**[名前を付けて保存]** で次のように保存してください。
 
-- 場所: `C:\KnowledgeMgr\installer\vba_modules\common\`
+- 場所: `C:\KnowledgeMgr\installer\vba_modules\common\\`
 - ファイル名: `modFormatLoader.bas`
 - ファイルの種類: **すべてのファイル**
 - 文字コード: **ANSI**（Shift-JIS）
 
 > メモ帳の文字コードを **ANSI** にしないと、VBA の日本語が文字化けして動かなくなります。
+> UTF-8 で保存すると VBA Import 時に日本語が文字化けして動かなくなります。
+> 改行コードは CRLF（Windows 標準）のままで OK です。
 
 ---
 
@@ -44,7 +46,12 @@ Attribute VB_Name = "modFormatLoader"
 Option Explicit
 
 ' xlsm ・ｽ・ｽ enforce ・ｽp・ｽi・ｽﾇ暦ｿｽ.xlsm ・ｽ・ｽ・ｽ・ｽ・ｽ write/delete・ｽj
-Private Const KANRI_XLSM_NAME As String = "・ｽﾇ暦ｿｽ.xlsm"
+' iter18b: KANRI_XLSM_NAME via ChrW (the CP932 literal was mojibake-corrupted
+' through an Edit/Write round-trip, leading SaveFormat to reject every write
+' against the in-process workbook because the comparison always failed).
+Private Function KANRI_XLSM_NAME() As String
+    KANRI_XLSM_NAME = ChrW(&H7BA1) & ChrW(&H7406) & ".xlsm"
+End Function
 
 ' ----------------------------------------------------------------
 ' Public I/F・ｽiQ19 ・ｽm・ｽ・ｽA5 ・ｽﾖ撰ｿｽ・ｽj

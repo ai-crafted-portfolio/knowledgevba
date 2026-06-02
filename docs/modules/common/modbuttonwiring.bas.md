@@ -5,7 +5,7 @@ description: modButtonWiring.bas のソースコード（コピペ用）
 
 # modButtonWiring.bas
 
-**配置先**: `共通モジュール (3 ブック全て)` 用の VBA モジュール  
+**配置先**: 共通モジュール（3 ブック共通）  
 **種類**: 標準モジュール
 
 ---
@@ -14,12 +14,14 @@ description: modButtonWiring.bas のソースコード（コピペ用）
 
 下のコードをメモ帳に貼り付け、**[名前を付けて保存]** で次のように保存してください。
 
-- 場所: `C:\KnowledgeMgr\installer\vba_modules\common\`
+- 場所: `C:\KnowledgeMgr\installer\vba_modules\common\\`
 - ファイル名: `modButtonWiring.bas`
 - ファイルの種類: **すべてのファイル**
 - 文字コード: **ANSI**（Shift-JIS）
 
 > メモ帳の文字コードを **ANSI** にしないと、VBA の日本語が文字化けして動かなくなります。
+> UTF-8 で保存すると VBA Import 時に日本語が文字化けして動かなくなります。
+> 改行コードは CRLF（Windows 標準）のままで OK です。
 
 ---
 
@@ -28,28 +30,28 @@ description: modButtonWiring.bas のソースコード（コピペ用）
 ```vb
 Attribute VB_Name = "modButtonWiring"
 ' ============================================================
-' modButtonWiring (�ｿｽ�ｿｽ�ｿｽ[�ｿｽe�ｿｽB�ｿｽ�ｿｽ�ｿｽe�ｿｽB�ｿｽw, v2.1)
-' �ｿｽ�ｿｽ�ｿｽ�ｿｽ:
-'   UI �ｿｽ�ｿｽ`�ｿｽX�ｿｽ^�ｿｽ�ｿｽ�ｿｽU�ｿｽ�ｿｽ [BUTTON] / [BUTTON_TEMPLATE] �ｿｽZ�ｿｽN�ｿｽV�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ
-'   �ｿｽt�ｿｽH�ｿｽ[�ｿｽ�ｿｽ�ｿｽR�ｿｽ�ｿｽ�ｿｽg�ｿｽ�ｿｽ�ｿｽ[�ｿｽ�ｿｽ�ｿｽ{�ｿｽ^�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽs�ｿｽ�ｿｽ�ｿｽﾉ趣ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ OnAction �ｿｽ�ｿｽ
-'   �ｿｽ�ｿｽ�ｿｽ闢厄ｿｽﾄゑｿｽB�ｿｽe�ｿｽX�ｿｽg�ｿｽ�ｿｽp�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ E2E_AutoWiring �ｿｽ�ｿｽ
-'   Shapes.AddFormControl �ｿｽz�ｿｽu�ｿｽ�ｿｽ�ｿｽW�ｿｽb�ｿｽN�ｿｽｻ品�ｿｽ�ｿｽ�ｿｽW�ｿｽ�ｿｽ�ｿｽ[�ｿｽ�ｿｽ�ｿｽﾖ擾ｿｽ�ｿｽi�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽB
-' �ｿｽﾄ出�ｿｽ�ｿｽ:
+' modButtonWiring (???[?e?B???e?B?w, v2.1)
+' ????:
+'   UI ??`?X?^???U?? [BUTTON] / [BUTTON_TEMPLATE] ?Z?N?V????????
+'   ?t?H?[???R???g???[???{?^???????s????????????? OnAction ??
+'   ???蓖???B?e?X?g??p?????? E2E_AutoWiring ??
+'   Shapes.AddFormControl ?z?u???W?b?N??i???W???[??????i?????B
+' ??o??:
 '   modUILoader.ApplyButton / modUILoader.ApplyButtonTemplate
-' �ｿｽﾋ托ｿｽ�ｿｽ�ｿｽ:
-'   ClsStanzaSection (UI �ｿｽ�ｿｽ`�ｿｽZ�ｿｽN�ｿｽV�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽﾌ値�ｿｽI�ｿｽu�ｿｽW�ｿｽF�ｿｽN�ｿｽg)
-' �ｿｽﾝ計�ｿｽ�ｿｽ�ｿｽ�ｿｽ:
-'   - �ｿｽ{�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽﾍ厄ｿｽ�ｿｽu�ｿｽb�ｿｽN�ｿｽI�ｿｽ[�ｿｽv�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽAclsSetupOrchestrator.RunFullSetup
-'     -> ApplyUiToSheet �ｿｽo�ｿｽR�ｿｽﾅ再趣ｿｽ�ｿｽs�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽB�ｿｽ�ｿｽ�ｿｽO�ｿｽ�ｿｽ
-'     clsSheetRenderer.ClearScreen �ｿｽ�ｿｽ�ｿｽS Shape �ｿｽ�ｿｽ�ｿｽ尞懶ｿｽ�ｿｽ�ｿｽ驍ｽ�ｿｽﾟ、
-'     �ｿｽﾄ撰ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽﾄゑｿｽ�ｿｽd�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽﾈゑｿｽ (idempotent)�ｿｽB
-'   - ClearScreen �ｿｽｺゑｿｽﾈゑｿｽ�ｿｽﾄ適�ｿｽp�ｿｽﾅゑｿｽ�ｿｽc�ｿｽ[�ｿｽ�ｿｽ�ｿｽo�ｿｽﾈゑｿｽ�ｿｽ謔､�ｿｽA�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽO�ｿｽ�ｿｽ
-'     �ｿｽ�ｿｽ�ｿｽ�ｿｽ Shape �ｿｽ�ｿｽ�ｿｽ尞懶ｿｽ�ｿｽ�ｿｽ�ｿｽB
-'   - OnAction �ｿｽﾍ厄ｿｽ�ｿｽC�ｿｽ�ｿｽ�ｿｽ}�ｿｽN�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽﾅ設定す�ｿｽ�ｿｽBExcel �ｿｽﾍ設抵ｿｽ�ｿｽﾌ読み戻ゑｿｽ
-'     �ｿｽ�ｿｽ�ｿｽﾉブ�ｿｽb�ｿｽN�ｿｽ�ｿｽ�ｿｽ�ｿｽO�ｿｽu (Book.xlsm!Macro �ｿｽ`�ｿｽ�ｿｽ) �ｿｽ�ｿｽ�ｿｽ驍ｪ�ｿｽA�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ
-'     Excel �ｿｽﾌ仕�ｿｽl�ｿｽﾅゑｿｽ�ｿｽ�ｿｽs�ｿｽ�合�ｿｽﾅはなゑｿｽ�ｿｽB
-'   - [BUTTON].Width / Height �ｿｽﾍピ�ｿｽN�ｿｽZ�ｿｽ�ｿｽ�ｿｽ�ｿｽ (schema 3.7)�ｿｽB
-'     AddFormControl �ｿｽﾍポ�ｿｽC�ｿｽ�ｿｽ�ｿｽg�ｿｽP�ｿｽﾊのゑｿｽ�ｿｽ�ｿｽ px -> pt �ｿｽ�ｿｽ�ｿｽZ�ｿｽ�ｿｽ�ｿｽ�ｿｽB
+' ?????:
+'   ClsStanzaSection (UI ??`?Z?N?V??????l?I?u?W?F?N?g)
+' ??v????:
+'   - ?{????????u?b?N?I?[?v?????AclsSetupOrchestrator.RunFullSetup
+'     -> ApplyUiToSheet ?o?R?????s?????B???O??
+'     clsSheetRenderer.ClearScreen ???S Shape ??????????A
+'     ???????????d??????? (idempotent)?B
+'   - ClearScreen ???????K?p????c?[???o??????A?????O??
+'     ???? Shape ????????B
+'   - OnAction ????C???}?N??????????BExcel ??????????
+'     ????u?b?N????O?u (Book.xlsm!Macro ?`??) ???邪?A?????
+'     Excel ??d?l?????s????????B
+'   - [BUTTON].Width / Height ??s?N?Z???? (schema 3.7)?B
+'     AddFormControl ??|?C???g?P?????? px -> pt ???Z????B
 ' ASCII-only inside VBA string literals (CP932 mojibake avoidance).
 ' ============================================================
 Option Explicit
@@ -58,22 +60,22 @@ Private Const MOD_NAME As String = "modButtonWiring"
 Private Const FC_BUTTON As Long = 0           ' xlButtonControl
 Private Const HA_CENTER As Long = -4108       ' xlHAlignCenter
 Private Const PX_PER_PT As Double = 0.75      ' 96dpi: 1px = 0.75pt
-Private Const BTN_MIN_W As Double = 24#       ' �ｿｽ{�ｿｽ^�ｿｽ�ｿｽ�ｿｽﾅ擾ｿｽ�ｿｽ�ｿｽ (pt)
-Private Const BTN_MIN_H As Double = 12#       ' �ｿｽ{�ｿｽ^�ｿｽ�ｿｽ�ｿｽﾅ擾ｿｽ�ｿｽ�ｿｽ (pt)
-Private Const DEFAULT_ROW_COUNT As Long = 20  ' DataRowTo=auto �ｿｽ�ｿｽ�ｿｽﾌ暫�ｿｽ�ｿｽs�ｿｽ�ｿｽ
+Private Const BTN_MIN_W As Double = 24#       ' ?{?^??????? (pt)
+Private Const BTN_MIN_H As Double = 12#       ' ?{?^??????? (pt)
+Private Const DEFAULT_ROW_COUNT As Long = 20  ' DataRowTo=auto ????b??s??
 Private Const NAME_PREFIX As String = "btnwire_"
 
 ' ============================================================
-' �ｿｽﾖ撰ｿｽ�ｿｽ�ｿｽ: PlaceButton
-' �ｿｽT�ｿｽv:   [BUTTON] �ｿｽX�ｿｽ^�ｿｽ�ｿｽ�ｿｽU 1 �ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽﾃ的�ｿｽ{�ｿｽ^�ｿｽ�ｿｽ�ｿｽｶ撰ｿｽ�ｿｽ�ｿｽ OnAction
-'         �ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ闢厄ｿｽﾄゑｿｽB
-' �ｿｽ�ｿｽ�ｿｽ�ｿｽ:   ws           - �ｿｽz�ｿｽu�ｿｽ�ｿｽV�ｿｽ[�ｿｽg
-'         cellAddr     - �ｿｽA�ｿｽ�ｿｽ�ｿｽJ�ｿｽ[�ｿｽZ�ｿｽ�ｿｽ (A1 �ｿｽ\�ｿｽL�ｿｽA�ｿｽﾍ囲なら左�ｿｽ�ｿｽ)
-'         caption      - �ｿｽ{�ｿｽ^�ｿｽ�ｿｽ�ｿｽL�ｿｽ�ｿｽ�ｿｽv�ｿｽV�ｿｽ�ｿｽ�ｿｽ�ｿｽ
-'         onClick      - �ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ}�ｿｽN�ｿｽ�ｿｽ�ｿｽ�ｿｽ (�ｿｽ�ｿｽ�ｿｽC�ｿｽ�ｿｽ)
-'         widthPx      - �ｿｽ�ｿｽ (�ｿｽs�ｿｽN�ｿｽZ�ｿｽ�ｿｽ)
-'         heightPx     - �ｿｽ�ｿｽ�ｿｽ�ｿｽ (�ｿｽs�ｿｽN�ｿｽZ�ｿｽ�ｿｽ)
-'         foreColorHex - �ｿｽL�ｿｽ�ｿｽ�ｿｽv�ｿｽV�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽF (#RRGGBB�ｿｽA�ｿｽ�ｿｽ�ｿｽ)
+' ?????: PlaceButton
+' ?T?v:   [BUTTON] ?X?^???U 1 ???????I?{?^??????? OnAction
+'         ?????蓖???B
+' ????:   ws           - ?z?u??V?[?g
+'         cellAddr     - ?A???J?[?Z?? (A1 ?\?L?A???????)
+'         caption      - ?{?^???L???v?V????
+'         onClick      - ?????}?N???? (???C??)
+'         widthPx      - ?? (?s?N?Z??)
+'         heightPx     - ???? (?s?N?Z??)
+'         foreColorHex - ?L???v?V?????????F (#RRGGBB?A???)
 ' ============================================================
 Public Sub PlaceButton(ByVal ws As Worksheet, ByVal cellAddr As String, _
                        ByVal caption As String, ByVal onClick As String, _
@@ -97,8 +99,8 @@ Public Sub PlaceButton(ByVal ws As Worksheet, ByVal cellAddr As String, _
 
     Dim shp As Shape
     If backColorLong >= 0 Then
-        ' Phase R-3-ﾏ�-M03-style (蟾ｮ3): 濶ｲ莉倥″繝懊ち繝ｳ縺ｯ Shape(隗剃ｸｸ遏ｩ蠖｢)縺ｧ謠冗判縲�
-        ' Form Control 繝懊ち繝ｳ縺ｯ蝪励ｊ縺､縺ｶ縺嶺ｸ榊庄縺ｮ縺溘ａ縲。ackColor 謖�螳壽凾縺ｮ縺ｿ Shape 蛹悶�
+        ' Phase R-3-ψ-M03-style (差3): 色付きボタンは Shape(角丸矩形)で描画。
+        ' Form Control ボタンは塗りつぶし不可のため、BackColor 指定時のみ Shape 化。
         Set shp = ws.Shapes.AddShape(msoShapeRoundedRectangle, anchor.Left, anchor.Top, wPt, hPt)
         shp.Name = btnName
         shp.Fill.ForeColor.RGB = backColorLong
@@ -134,14 +136,14 @@ ErrHandler:
 End Sub
 
 ' ============================================================
-' �ｿｽﾖ撰ｿｽ�ｿｽ�ｿｽ: PlaceTemplateButtons
-' �ｿｽT�ｿｽv:   [BUTTON_TEMPLATE] �ｿｽX�ｿｽ^�ｿｽ�ｿｽ�ｿｽU 1 �ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽA�ｿｽﾎ会ｿｽ [GRID] �ｿｽ�ｿｽ
-'         �ｿｽf�ｿｽ[�ｿｽ^�ｿｽs�ｿｽﾍ囲ぶゑｿｽ per-row �ｿｽ{�ｿｽ^�ｿｽ�ｿｽ�ｿｽQ�ｿｽｶ撰ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽB
-' �ｿｽ�ｿｽ�ｿｽ�ｿｽ:   ws      - �ｿｽz�ｿｽu�ｿｽ�ｿｽV�ｿｽ[�ｿｽg
-'         sec     - [BUTTON_TEMPLATE] �ｿｽZ�ｿｽN�ｿｽV�ｿｽ�ｿｽ�ｿｽ�ｿｽ
-'         gridSec - GridRef �ｿｽ�ｿｽ�ｿｽw�ｿｽ�ｿｽ [GRID] �ｿｽZ�ｿｽN�ｿｽV�ｿｽ�ｿｽ�ｿｽ�ｿｽ (Nothing �ｿｽ�ｿｽ)
-' �ｿｽ�ｿｽ�ｿｽl:   gridSec �ｿｽ�ｿｽ Nothing �ｿｽﾜゑｿｽ�ｿｽ�ｿｽ DataRowTo=auto �ｿｽﾌ場合�ｿｽ�ｿｽ
-'         RowRangeFrom �ｿｽ�ｿｽ�ｿｽ�ｿｽ DEFAULT_ROW_COUNT �ｿｽs�ｿｽﾔん生撰ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽB
+' ?????: PlaceTemplateButtons
+' ?T?v:   [BUTTON_TEMPLATE] ?X?^???U 1 ??????A??? [GRID] ??
+'         ?f?[?^?s????? per-row ?{?^???Q???????B
+' ????:   ws      - ?z?u??V?[?g
+'         sec     - [BUTTON_TEMPLATE] ?Z?N?V????
+'         gridSec - GridRef ???w?? [GRID] ?Z?N?V???? (Nothing ??)
+' ???l:   gridSec ?? Nothing ????? DataRowTo=auto ?????
+'         RowRangeFrom ???? DEFAULT_ROW_COUNT ?s????????B
 ' ============================================================
 Public Sub PlaceTemplateButtons(ByVal ws As Worksheet, _
                                 ByVal sec As ClsStanzaSection, _
@@ -188,12 +190,12 @@ ErrHandler:
 End Sub
 
 ' ============================================================
-' �ｿｽﾖ撰ｿｽ�ｿｽ�ｿｽ: PlaceOneTemplateButton
-' �ｿｽT�ｿｽv:   per-row �ｿｽ{�ｿｽ^�ｿｽ�ｿｽ 1 �ｿｽﾂを生撰ｿｽ�ｿｽB�ｿｽﾟゑｿｽl�ｿｽﾍ配�ｿｽu�ｿｽ�ｿｽ (pt) �ｿｽﾅ、
-'         �ｿｽﾄ出�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽs�ｿｽﾌ趣ｿｽ�ｿｽ{�ｿｽ^�ｿｽ�ｿｽ�ｿｽﾌ搾ｿｽ�ｿｽI�ｿｽt�ｿｽZ�ｿｽb�ｿｽg�ｿｽﾝ積に使�ｿｽ�ｿｽ�ｿｽB
-' �ｿｽ�ｿｽ�ｿｽ�ｿｽ:   ws, sec, templateId, n(�ｿｽ{�ｿｽ^�ｿｽ�ｿｽ�ｿｽﾔ搾ｿｽ), rowNum(�ｿｽs�ｿｽﾔ搾ｿｽ),
-'         anchor(�ｿｽs�ｿｽA�ｿｽ�ｿｽ�ｿｽJ�ｿｽ[), leftOffsetPt(�ｿｽ�ｿｽ�ｿｽﾝ撰ｿｽ), argConv
-' �ｿｽﾟゑｿｽl: Double - �ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ{�ｿｽ^�ｿｽ�ｿｽ�ｿｽﾌ包ｿｽ (pt)
+' ?????: PlaceOneTemplateButton
+' ?T?v:   per-row ?{?^?? 1 ?????B???l??z?u?? (pt) ??A
+'         ??o????????s????{?^??????I?t?Z?b?g????g???B
+' ????:   ws, sec, templateId, n(?{?^?????), rowNum(?s???),
+'         anchor(?s?A???J?[), leftOffsetPt(?????), argConv
+' ???l: Double - ?????????{?^????? (pt)
 ' ============================================================
 Private Function PlaceOneTemplateButton( _
     ByVal ws As Worksheet, ByVal sec As ClsStanzaSection, _
@@ -223,17 +225,17 @@ Private Function PlaceOneTemplateButton( _
         anchor.Left + leftOffsetPt, anchor.Top, wPt, hPt)
     shp.Name = btnName
 
-    ' �ｿｽL�ｿｽ�ｿｽ�ｿｽv�ｿｽV�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ OnAction �ｿｽﾝ抵ｿｽ�ｿｽ�ｿｽ�ｿｽﾉ行�ｿｽ�ｿｽ�ｿｽBOnAction �ｿｽﾌ托ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽﾂ具ｿｽ�ｿｽ�ｿｽ
-    ' �ｿｽ�ｿｽ�ｿｽ�ｿｽﾄ趣ｿｽ�ｿｽs�ｿｽ�ｿｽ�ｿｽG�ｿｽ�ｿｽ�ｿｽ[�ｿｽﾉなゑｿｽ�ｿｽﾄゑｿｽ Button{n}_Text �ｿｽﾌキ�ｿｽ�ｿｽ�ｿｽv�ｿｽV�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽm�ｿｽ�ｿｽ�ｿｽ�ｿｽ
-    ' �ｿｽ�ｿｽ�ｿｽf�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ謔､�ｿｽﾉゑｿｽ�ｿｽ�ｿｽ (�ｿｽ�ｿｽ�ｿｽ@�ｿｽ�ｿｽ�ｿｽﾘで費ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ "�ｿｽ{�ｿｽ^" �ｿｽs�ｿｽ�合�ｿｽﾌ搾ｿｽ�ｿｽ�ｿｽ:
-    ' �ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽﾍ茨ｿｽ�ｿｽ�ｿｽ�ｿｽt�ｿｽ�ｿｽ OnAction �ｿｽ�ｿｽ�ｿｽ�ｿｽﾌ趣ｿｽ�ｿｽs�ｿｽ�ｿｽ ErrHandler �ｿｽo�ｿｽR�ｿｽ�ｿｽ
-    ' ApplyCaption �ｿｽ�ｿｽ�ｿｽX�ｿｽL�ｿｽb�ｿｽv�ｿｽ�ｿｽ�ｿｽA�ｿｽ�ｿｽ�ｿｽ阮ｼ "�ｿｽ{�ｿｽ^�ｿｽ�ｿｽ N" �ｿｽ�ｿｽ�ｿｽc�ｿｽ�ｿｽ�ｿｽﾄゑｿｽ�ｿｽ�ｿｽ)�ｿｽB
+    ' ?L???v?V?????? OnAction ???????s???BOnAction ???????????
+    ' ???????s???G???[??????? Button{n}_Text ??L???v?V???????m????
+    ' ???f??????????? (???@???????????? "?{?^" ?s???????:
+    ' ????????????t?? OnAction ???????s?? ErrHandler ?o?R??
+    ' ApplyCaption ???X?L?b?v???A???? "?{?^?? N" ???c???????)?B
     ApplyCaption ws, shp, sec.GetValue("Button" & CStr(n) & "_Text"), _
                  sec.GetValue("Button" & CStr(n) & "_ForeColor")
 
-    ' OnAction �ｿｽﾝ抵ｿｽBrow_index �ｿｽK�ｿｽ�ｿｽﾍ茨ｿｽ�ｿｽ�ｿｽ�ｿｽt�ｿｽ�ｿｽ�ｿｽﾄ出�ｿｽﾌゑｿｽ�ｿｽﾟ単�ｿｽ�ｿｽ�ｿｽ�ｿｽp�ｿｽ�ｿｽ�ｿｽﾅ奇ｿｽ�ｿｽ�ｿｽ
-    ' ("'Macro �ｿｽs�ｿｽﾔ搾ｿｽ'")�ｿｽB�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽs�ｿｽﾍ局擾ｿｽ�ｿｽI�ｿｽﾉ茨ｿｽ�ｿｽ�ｿｽﾂぶゑｿｽ�ｿｽA�ｿｽz�ｿｽu�ｿｽ�ｿｽ
-    ' �ｿｽL�ｿｽ�ｿｽ�ｿｽv�ｿｽV�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽﾍ撰ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽﾆゑｿｽ�ｿｽ�ｿｽB
+    ' OnAction ???Brow_index ?K???????t????o?????P????p???????
+    ' ("'Macro ?s???'")?B??????s?????I?????????A?z?u??
+    ' ?L???v?V??????????????????B
     Dim onClick As String
     onClick = sec.GetValue("Button" & CStr(n) & "_OnClick")
     If Len(onClick) > 0 Then
@@ -253,26 +255,26 @@ ErrHandler:
 End Function
 
 ' ============================================================
-' �ｿｽﾖ撰ｿｽ�ｿｽ�ｿｽ: ApplyCaption
-' �ｿｽT�ｿｽv:   �ｿｽ{�ｿｽ^�ｿｽ�ｿｽ�ｿｽﾉキ�ｿｽ�ｿｽ�ｿｽv�ｿｽV�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽﾝ抵ｿｽ (�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ + �ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽF)�ｿｽB
-'         FormControl �ｿｽ{�ｿｽ^�ｿｽ�ｿｽ�ｿｽﾌキ�ｿｽ�ｿｽ�ｿｽv�ｿｽV�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ ws.Buttons(name).Caption
-'         �ｿｽo�ｿｽR�ｿｽ�ｿｽ�ｿｽm�ｿｽ�ｿｽ�ｿｽBTextFrame.Characters.Text �ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽﾆ奇ｿｽ�ｿｽ阨ｶ�ｿｽ�ｿｽ
-'         "�ｿｽ{�ｿｽ^�ｿｽ�ｿｽ N" �ｿｽ�ｿｽ�ｿｽc�ｿｽ�ｿｽA�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽs�ｿｽ{�ｿｽ^�ｿｽ�ｿｽ�ｿｽ�ｿｽ "�ｿｽ{�ｿｽ^" �ｿｽﾆ鯉ｿｽ�ｿｽﾘゑｿｽ�ｿｽﾂ具ｿｽ�ｿｽ�ｿｽ
-'         �ｿｽ�ｿｽ�ｿｽ�ｿｽ (�ｿｽ�ｿｽ�ｿｽ@�ｿｽ�ｿｽ�ｿｽﾘで確�ｿｽF�ｿｽA2026-05-22)�ｿｽB�ｿｽﾝ定失�ｿｽs�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽz�ｿｽu�ｿｽﾍ撰ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽB
+' ?????: ApplyCaption
+' ?T?v:   ?{?^????L???v?V???????? (?????? + ?????F)?B
+'         FormControl ?{?^????L???v?V?????? ws.Buttons(name).Caption
+'         ?o?R???m???BTextFrame.Characters.Text ?????????????
+'         "?{?^?? N" ???c??A?????s?{?^???? "?{?^" ???????????
+'         ???? (???@?????m?F?A2026-05-22)?B????s?????z?u???????????B
 ' ============================================================
 Private Sub ApplyCaption(ByVal ws As Worksheet, ByVal shp As Shape, _
                          ByVal caption As String, ByVal foreColorHex As String)
     If Len(caption) = 0 Then Exit Sub
     On Error Resume Next
-    ' FormControl �ｿｽ{�ｿｽ^�ｿｽ�ｿｽ�ｿｽﾌ表�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ Buttons �ｿｽR�ｿｽ�ｿｽ�ｿｽN�ｿｽV�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽo�ｿｽR�ｿｽﾅ設定す�ｿｽ�ｿｽB
+    ' FormControl ?{?^????\?????? Buttons ?R???N?V?????o?R??????B
     shp.TextFrame.Characters.Text = caption
     shp.TextFrame.HorizontalAlignment = HA_CENTER
     Dim btn As Object
     Set btn = ws.Buttons(shp.Name)
     If Not (btn Is Nothing) Then btn.Text = caption
-    ' v2.3 (2026-05-26): Form Control �ｿｽﾍ背�ｿｽi�ｿｽD�ｿｽﾅ抵ｿｽﾌゑｿｽ�ｿｽﾟ費ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ (#FFFFFF) �ｿｽﾍ読めなゑｿｽ�ｿｽB
-    ' ui_seed �ｿｽ�ｿｽ�ｿｽﾅ搾ｿｽ�ｿｽﾉ難ｿｽ�ｿｽ�ｿｽﾏゑｿｽ�ｿｽ�ｿｽ�ｿｽA�ｿｽﾅ終 fallback �ｿｽﾆゑｿｽ�ｿｽﾄ搾ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽﾂ読撰ｿｽ�ｿｽ�ｿｽﾛ証ゑｿｽ�ｿｽ�ｿｽB
-    ' �ｿｽ�ｿｽ�ｿｽF�ｿｽw�ｿｽ�ｿｽ (#FFFFFF) �ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ鼾��ｿｽﾍ搾ｿｽ�ｿｽﾉ擾ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽB
+    ' v2.3 (2026-05-26): Form Control ??w?i?D???????????? (#FFFFFF) ???????B
+    ' ui_seed ???????????????A??I fallback ?????????????????????????B
+    ' ???F?w?? (#FFFFFF) ??????????????????????B
     Dim effectiveHex As String
     effectiveHex = foreColorHex
     If Len(effectiveHex) = 0 Then effectiveHex = "#000000"
@@ -282,8 +284,8 @@ Private Sub ApplyCaption(ByVal ws As Worksheet, ByVal shp As Shape, _
 End Sub
 
 ' ============================================================
-' �ｿｽﾖ撰ｿｽ�ｿｽ�ｿｽ: DeleteShapeByName
-' �ｿｽT�ｿｽv:   �ｿｽw�ｿｽ阮ｼ�ｿｽ�ｿｽ Shape �ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽﾝゑｿｽ�ｿｽ�ｿｽﾎ削除 (idempotent �ｿｽp)�ｿｽB
+' ?????: DeleteShapeByName
+' ?T?v:   ?w???? Shape ??????????? (idempotent ?p)?B
 ' ============================================================
 Private Sub DeleteShapeByName(ByVal ws As Worksheet, ByVal shapeName As String)
     On Error Resume Next
@@ -294,10 +296,10 @@ Private Sub DeleteShapeByName(ByVal ws As Worksheet, ByVal shapeName As String)
 End Sub
 
 ' ============================================================
-' �ｿｽﾖ撰ｿｽ�ｿｽ�ｿｽ: ResolveRowTo
-' �ｿｽT�ｿｽv:   per-row �ｿｽ{�ｿｽ^�ｿｽ�ｿｽ�ｿｽﾌ最終�ｿｽs�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽﾟゑｿｽBgridSec �ｿｽ�ｿｽ DataRowTo �ｿｽ�ｿｽ
-'         �ｿｽ�ｿｽ�ｿｽﾆゑｿｽ�ｿｽAauto / �ｿｽ�ｿｽ�ｿｽw�ｿｽ�ｿｽ / �ｿｽs�ｿｽ�ｿｽ�ｿｽﾈゑｿｽb�ｿｽ�ｿｽs�ｿｽ�ｿｽ�ｿｽﾅ補う�ｿｽB
-' �ｿｽﾟゑｿｽl: Long - �ｿｽﾅ終�ｿｽs�ｿｽﾔ搾ｿｽ
+' ?????: ResolveRowTo
+' ?T?v:   per-row ?{?^?????I?s???????BgridSec ?? DataRowTo ??
+'         ??????Aauto / ???w?? / ?s?????b??s??????B
+' ???l: Long - ??I?s???
 ' ============================================================
 Private Function ResolveRowTo(ByVal gridSec As ClsStanzaSection, _
                               ByVal rowFrom As Long) As Long
@@ -323,9 +325,9 @@ Private Function ResolveRowTo(ByVal gridSec As ClsStanzaSection, _
 End Function
 
 ' ============================================================
-' �ｿｽﾖ撰ｿｽ�ｿｽ�ｿｽ: PxToPt
-' �ｿｽT�ｿｽv:   �ｿｽs�ｿｽN�ｿｽZ�ｿｽ�ｿｽ�ｿｽl�ｿｽ�ｿｽ�ｿｽ|�ｿｽC�ｿｽ�ｿｽ�ｿｽg�ｿｽﾉ奇ｿｽ�ｿｽZ�ｿｽB0 �ｿｽﾈ会ｿｽ�ｿｽﾈゑｿｽ�ｿｽ�ｿｽ�ｿｽ px �ｿｽ�ｿｽ�ｿｽg�ｿｽ�ｿｽ�ｿｽA
-'         �ｿｽ�ｿｽ�ｿｽZ�ｿｽ�ｿｽﾉ最擾ｿｽ�ｿｽ�ｿｽ�ｿｽ@�ｿｽK�ｿｽ[�ｿｽh (minPt) �ｿｽ�ｿｽK�ｿｽp�ｿｽ�ｿｽ�ｿｽ�ｿｽB
+' ?????: PxToPt
+' ?T?v:   ?s?N?Z???l???|?C???g????Z?B0 ????????? px ???g???A
+'         ???Z????????@?K?[?h (minPt) ??K?p????B
 ' ============================================================
 Private Function PxToPt(ByVal px As Double, ByVal minPt As Double, _
                         ByVal defaultPx As Double) As Double
@@ -339,9 +341,9 @@ Private Function PxToPt(ByVal px As Double, ByVal minPt As Double, _
 End Function
 
 ' ============================================================
-' �ｿｽﾖ撰ｿｽ�ｿｽ�ｿｽ: HexToLong
-' �ｿｽT�ｿｽv:   "#RRGGBB" �ｿｽ`�ｿｽ�ｿｽ�ｿｽﾌ色�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ VBA �ｿｽﾌ色 Long �ｿｽﾉ変奇ｿｽ�ｿｽB
-'         �ｿｽs�ｿｽ�ｿｽ�ｿｽﾈ値�ｿｽ�ｿｽ 0 (�ｿｽ�ｿｽ) �ｿｽ�ｿｽﾔゑｿｽ�ｿｽB
+' ?????: HexToLong
+' ?T?v:   "#RRGGBB" ?`????F??????? VBA ??F Long ?????B
+'         ?s????l?? 0 (??) ?????B
 ' ============================================================
 Private Function HexToLong(ByVal hexStr As String) As Long
     On Error GoTo ErrHandler
@@ -363,8 +365,8 @@ ErrHandler:
 End Function
 
 ' ============================================================
-' �ｿｽﾖ撰ｿｽ�ｿｽ�ｿｽ: SafeToken
-' �ｿｽT�ｿｽv:   Shape �ｿｽ�ｿｽ�ｿｽﾉ使�ｿｽ�ｿｽ�ｿｽ�ｿｽ謔､�ｿｽL�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽE�ｿｽu�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽB
+' ?????: SafeToken
+' ?T?v:   Shape ????g??????L?????????E?u??????B
 ' ============================================================
 Private Function SafeToken(ByVal s As String) As String
     Dim t As String
@@ -375,8 +377,8 @@ Private Function SafeToken(ByVal s As String) As String
 End Function
 
 ' ============================================================
-' �ｿｽﾖ撰ｿｽ�ｿｽ�ｿｽ: ToLong
-' �ｿｽT�ｿｽv:   �ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ Long �ｿｽﾉ変奇ｿｽ�ｿｽB�ｿｽ�ｿｽ / �ｿｽﾏ奇ｿｽ�ｿｽ�ｿｽ�ｿｽs�ｿｽ�ｿｽ�ｿｽﾍ奇ｿｽ�ｿｽ�ｿｽl�ｿｽ�ｿｽﾔゑｿｽ�ｿｽB
+' ?????: ToLong
+' ?T?v:   ??????? Long ?????B?? / ??????s???????l?????B
 ' ============================================================
 Private Function ToLong(ByVal s As String, ByVal dflt As Long) As Long
     On Error GoTo ErrHandler
@@ -391,8 +393,8 @@ ErrHandler:
 End Function
 
 ' ============================================================
-' �ｿｽﾖ撰ｿｽ�ｿｽ�ｿｽ: ToDouble
-' �ｿｽT�ｿｽv:   �ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ Double �ｿｽﾉ変奇ｿｽ�ｿｽB�ｿｽ�ｿｽ / �ｿｽﾏ奇ｿｽ�ｿｽ�ｿｽ�ｿｽs�ｿｽ�ｿｽ�ｿｽﾍ奇ｿｽ�ｿｽ�ｿｽl�ｿｽ�ｿｽﾔゑｿｽ�ｿｽB
+' ?????: ToDouble
+' ?T?v:   ??????? Double ?????B?? / ??????s???????l?????B
 ' ============================================================
 Private Function ToDouble(ByVal s As String, ByVal dflt As Double) As Double
     On Error GoTo ErrHandler

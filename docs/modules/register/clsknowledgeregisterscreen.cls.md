@@ -6,7 +6,7 @@ description: clsKnowledgeRegisterScreen.cls のソースコード（コピペ用
 # clsKnowledgeRegisterScreen.cls
 
 **配置先**: `登録修正.xlsm` 用の VBA モジュール  
-**種類**: クラス モジュール
+**種類**: クラスモジュール
 
 ---
 
@@ -20,6 +20,8 @@ description: clsKnowledgeRegisterScreen.cls のソースコード（コピペ用
 - 文字コード: **ANSI**（Shift-JIS）
 
 > メモ帳の文字コードを **ANSI** にしないと、VBA の日本語が文字化けして動かなくなります。
+> UTF-8 で保存すると VBA Import 時に日本語が文字化けして動かなくなります。
+> 改行コードは CRLF（Windows 標準）のままで OK です。
 
 ---
 
@@ -38,11 +40,11 @@ Attribute VB_Exposed = False
 Option Explicit
 
 ' ================================================================
-' 繧ｯ繝ｩ繧ｹ: clsKnowledgeRegisterScreen (逕ｻ髱｢螻､ - M-05)
-' 讎りｦ�:   M-05 逕ｻ髱｢縺ｮ讒狗ｯ峨�ｻ蜀肴緒逕ｻ縲Ｔpec 繧� modScreenRender 縺ｫ蟋碑ｭｲ縲�
-' 萓晏ｭ伜��: IScreenRenderer, clsScreenSpec, modScreenRender
-' 蛯呵�:   E2E rerun (2026-05-12) 縺ｧ truncated 迥ｶ諷九ｒ蜈ｨ繧ｯ繝ｩ繧ｹ蜷御ｸ繝�繝ｳ繝励Ξ縺ｧ蠕ｩ譌ｧ縲�
-'         ENTER/EXIT 繝医Ξ繝ｼ繧ｹ + ErrHandler 縺ｧ縲後←縺薙〒螟ｱ謨励阪′蛻�縺九ｋ讒矩縺ｫ邨ｱ荳縲�
+' クラス: clsKnowledgeRegisterScreen (画面層 - M-05)
+' 概要:   M-05 画面の構築・再描画。spec を modScreenRender に委譲。
+' 依存先: IScreenRenderer, clsScreenSpec, modScreenRender
+' 備考:   E2E rerun (2026-05-12) で truncated 状態を全クラス同一テンプレで復旧。
+'         ENTER/EXIT トレース + ErrHandler で「どこで失敗」が分かる構造に統一。
 ' ================================================================
 
 Private m_renderer As IScreenRenderer

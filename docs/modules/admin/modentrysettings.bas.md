@@ -20,6 +20,8 @@ description: modEntrySettings.bas のソースコード（コピペ用）
 - 文字コード: **ANSI**（Shift-JIS）
 
 > メモ帳の文字コードを **ANSI** にしないと、VBA の日本語が文字化けして動かなくなります。
+> UTF-8 で保存すると VBA Import 時に日本語が文字化けして動かなくなります。
+> 改行コードは CRLF（Windows 標準）のままで OK です。
 
 ---
 
@@ -231,6 +233,16 @@ Public Sub Btn_OpenStorage_v21()
         End If
         LogWarnSafe "Btn_OpenStorage_v21", _
             "no checkbox row marked", "SAVE-EXIT-OK-II-013"
+        Exit Sub
+    End If
+
+    ' Headless guard (2026-06-01): COM-automated runs never show the
+    ' FolderPicker - they would block waiting for a non-existent user.
+    ' In that case log and exit; the M-10 row is left untouched.
+    If modEntryFormat.IsHeadless() Then
+        LogInfoSafe "Btn_OpenStorage_v21", _
+            "headless-skip FolderPicker row=" & targetRow, _
+            "SAVE-EXIT-OK-II-013"
         Exit Sub
     End If
 

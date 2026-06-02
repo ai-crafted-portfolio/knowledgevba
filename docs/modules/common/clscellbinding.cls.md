@@ -5,8 +5,8 @@ description: clsCellBinding.cls のソースコード（コピペ用）
 
 # clsCellBinding.cls
 
-**配置先**: `共通モジュール (3 ブック全て)` 用の VBA モジュール  
-**種類**: クラス モジュール
+**配置先**: 共通モジュール（3 ブック共通）  
+**種類**: クラスモジュール
 
 ---
 
@@ -14,12 +14,14 @@ description: clsCellBinding.cls のソースコード（コピペ用）
 
 下のコードをメモ帳に貼り付け、**[名前を付けて保存]** で次のように保存してください。
 
-- 場所: `C:\KnowledgeMgr\installer\vba_modules\common\`
+- 場所: `C:\KnowledgeMgr\installer\vba_modules\common\\`
 - ファイル名: `clsCellBinding.cls`
 - ファイルの種類: **すべてのファイル**
 - 文字コード: **ANSI**（Shift-JIS）
 
 > メモ帳の文字コードを **ANSI** にしないと、VBA の日本語が文字化けして動かなくなります。
+> UTF-8 で保存すると VBA Import 時に日本語が文字化けして動かなくなります。
+> 改行コードは CRLF（Windows 標準）のままで OK です。
 
 ---
 

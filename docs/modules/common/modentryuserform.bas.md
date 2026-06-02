@@ -5,7 +5,7 @@ description: modEntryUserForm.bas のソースコード（コピペ用）
 
 # modEntryUserForm.bas
 
-**配置先**: `共通モジュール (3 ブック全て)` 用の VBA モジュール  
+**配置先**: 共通モジュール（3 ブック共通）  
 **種類**: 標準モジュール
 
 ---
@@ -14,12 +14,14 @@ description: modEntryUserForm.bas のソースコード（コピペ用）
 
 下のコードをメモ帳に貼り付け、**[名前を付けて保存]** で次のように保存してください。
 
-- 場所: `C:\KnowledgeMgr\installer\vba_modules\common\`
+- 場所: `C:\KnowledgeMgr\installer\vba_modules\common\\`
 - ファイル名: `modEntryUserForm.bas`
 - ファイルの種類: **すべてのファイル**
 - 文字コード: **ANSI**（Shift-JIS）
 
 > メモ帳の文字コードを **ANSI** にしないと、VBA の日本語が文字化けして動かなくなります。
+> UTF-8 で保存すると VBA Import 時に日本語が文字化けして動かなくなります。
+> 改行コードは CRLF（Windows 標準）のままで OK です。
 
 ---
 
@@ -46,7 +48,7 @@ Attribute VB_Name = "modEntryUserForm"
 ' ================================================================
 Option Explicit
 
-' Phase R-1-j: screenshot harness 窶� module-level renderer instance survives
+' Phase R-1-j: screenshot harness ? module-level renderer instance survives
 ' the ShowFormModeless call so the form stays visible until HideForm.
 Private g_modelessRenderer As clsUserFormRenderer
 
@@ -299,7 +301,7 @@ ErrHandler:
     TestR1j_HideForm = "ERR:" & Err.Number & ":" & Err.Description
 End Function
 
-' Phase R-1-j: modal show with explicit formatId 窶� blocks until the form is
+' Phase R-1-j: modal show with explicit formatId ? blocks until the form is
 ' closed (so the screenshot harness can launch this in a child process and
 ' capture the live window). Lets us screenshot any format, not just PFMT.
 Public Sub TestR1j_ShowModalWithFmt(ByVal xlsmName As String, ByVal mode As String, _
@@ -315,12 +317,12 @@ ErrHandler:
 End Sub
 
 ' ================================================================
-' Phase R-3-gamma-2 E2E (case a): 螳� persistence path 繧� Unicode 螳牙�ｨ縺ｫ鬧�蜍輔☆繧�
-' COM 蜻ｼ縺ｳ蜃ｺ縺� helper縲Ｄomputer-use 縺ｮ譌･譛ｬ隱� type 譁�蟄怜喧縺代ｒ蝗樣∩縺吶ｋ縺溘ａ縲�
-' field 蛟､縺ｯ UTF-8 繝輔ぃ繧､繝ｫ(ctlname=value 陦後∵隼陦後�ｯ \n 繧ｨ繧ｹ繧ｱ繝ｼ繝�)縺九ｉ險ｭ螳壹☆繧九�
-' 螳� modeless form 繧� build/show -> 蛟､險ｭ螳� -> 螳� OnRegister/OnUpdate/OnDelete -> dispose縲�
-'   xlsmName: 蠖ｹ蜑ｲ蜷� / mode: register|edit / knowledgeId / formatId
-'   action  : register|update|delete / valuesFile: UTF-8 蛟､繝輔ぃ繧､繝ｫ(遨ｺ蜿ｯ)
+' Phase R-3-gamma-2 E2E (case a): 実 persistence path を Unicode 安全に駆動する
+' COM 呼び出し helper。computer-use の日本語 type 文字化けを回避するため、
+' field 値は UTF-8 ファイル(ctlname=value 行、改行は \n エスケープ)から設定する。
+' 実 modeless form を build/show -> 値設定 -> 実 OnRegister/OnUpdate/OnDelete -> dispose。
+'   xlsmName: 役割名 / mode: register|edit / knowledgeId / formatId
+'   action  : register|update|delete / valuesFile: UTF-8 値ファイル(空可)
 ' ================================================================
 Public Function TestE2E_DriveForm(ByVal xlsmName As String, ByVal mode As String, _
         ByVal knowledgeId As String, ByVal formatId As String, _
@@ -345,7 +347,7 @@ Public Function TestE2E_DriveForm(ByVal xlsmName As String, ByVal mode As String
         Case "register": modUserFormCallback.OnRegister
         Case "update":   modUserFormCallback.OnUpdate
         Case "delete":   modUserFormCallback.OnDelete
-        Case Else        ' "none" = 蛟､險ｭ螳�/菫晏ｭ倥○縺�(陦ｨ遉ｺ遒ｺ隱阪�ｮ縺ｿ)
+        Case Else        ' "none" = 値設定/保存せず(表示確認のみ)
     End Select
     r.CloseModelessForm
     TestE2E_DriveForm = "OK:" & res
@@ -432,6 +434,7 @@ Public Function TestR2_DiagApply(ByVal xlsmName As String, ByVal screenId As Str
     Dim ok As Boolean
     ok = modUILoader.ApplyUiToSheet(xlsmName, screenId, ws)
     sb = sb & "ApplyUiToSheet=" & ok & vbCrLf
+    ' diagnostic only - raw cell probes, not SSOT-driven (ADR-0090 exception #1)
     sb = sb & "A1=[" & CStr(ws.Range("A1").Value) & "]" & vbCrLf
     sb = sb & "Z1=[" & CStr(ws.Range("Z1").Value) & "]" & vbCrLf
     sb = sb & "Z2=[" & CStr(ws.Range("Z2").Value) & "]" & vbCrLf
@@ -463,12 +466,92 @@ End Function
 
 ' --- Helpers ---
 
+' ADR-0090 (2026-06-01): Resolve "knowledge id" cell via SSOT lookup.
+' Active sheet name -> screen ID (modSheetMap.SheetToScreenId) -> for each
+' role dir (admin/search/register, CJK names per ADR-0089) try
+' LoadUiDefinition; inspect [INPUT] sections for inputDataKey in
+' {"kid","knowledgeId","knwId","knowledge_id"} and use that Cell.
+' Falls back to legacy B3 hard-code so legacy installs that lack the
+' new inputDataKey still work.
 Private Function ReadKnowledgeIdFromActiveSheet() As String
-    On Error Resume Next
+    On Error GoTo Fallback
+    Dim ws As Object
+    Set ws = ActiveSheet
+    If ws Is Nothing Then GoTo Fallback
+    Dim cellAddr As String
+    cellAddr = ResolveKidCellFromActiveSheet(ws)
+    If Len(cellAddr) = 0 Then cellAddr = "B3"
     Dim v As Variant
-    v = ActiveSheet.Range("B3").Value
+    v = ws.Range(cellAddr).Value
     If Not IsEmpty(v) Then ReadKnowledgeIdFromActiveSheet = CStr(v)
+    Exit Function
+Fallback:
+    On Error Resume Next
+    Dim v2 As Variant
+    v2 = ActiveSheet.Range("B3").Value
+    If Not IsEmpty(v2) Then ReadKnowledgeIdFromActiveSheet = CStr(v2)
     On Error GoTo 0
+End Function
+
+' ADR-0090 helper: SSOT-driven kid cell address resolution
+' across 3 candidate role dirs (admin/search/register).
+Private Function ResolveKidCellFromActiveSheet(ByVal ws As Object) As String
+    On Error GoTo Fallback
+    Dim screenId As String
+    screenId = modSheetMap.SheetToScreenId(ws.Name)
+    If Len(screenId) = 0 Then GoTo Fallback
+    Dim roles(0 To 2) As String
+    roles(0) = RoleAdminLocal()
+    roles(1) = RoleSearchLocal()
+    roles(2) = RoleRegisterLocal()
+    Dim r As Long
+    For r = 0 To 2
+        Dim sections As Collection
+        Set sections = modUILoader.LoadUiDefinition(roles(r), screenId)
+        If Not sections Is Nothing Then
+            If sections.Count > 0 Then
+                Dim i As Long
+                For i = 1 To sections.Count
+                    Dim sec As ClsStanzaSection
+                    Set sec = sections.Item(i)
+                    If sec.SectionName = "INPUT" Then
+                        Dim key As String
+                        key = sec.GetValue("inputDataKey")
+                        If key = "kid" Or key = "knowledgeId" Or _
+                           key = "knwId" Or key = "knowledge_id" Then
+                            Dim cellExpr As String
+                            cellExpr = sec.GetValue("Cell")
+                            If Len(cellExpr) > 0 Then
+                                Dim p As Long
+                                p = InStr(1, cellExpr, ":")
+                                If p > 0 Then
+                                    ResolveKidCellFromActiveSheet = Left$(cellExpr, p - 1)
+                                Else
+                                    ResolveKidCellFromActiveSheet = cellExpr
+                                End If
+                                Exit Function
+                            End If
+                        End If
+                    End If
+                Next i
+            End If
+        End If
+    Next r
+Fallback:
+    ResolveKidCellFromActiveSheet = ""
+End Function
+
+' ADR-0089/0090 helper Functions (local CJK role dir names)
+Private Function RoleAdminLocal() As String
+    RoleAdminLocal = ChrW(&H7BA1) & ChrW(&H7406)
+End Function
+
+Private Function RoleSearchLocal() As String
+    RoleSearchLocal = ChrW(&H691C) & ChrW(&H7D22)
+End Function
+
+Private Function RoleRegisterLocal() As String
+    RoleRegisterLocal = ChrW(&H767B) & ChrW(&H9332) & ChrW(&H4FEE) & ChrW(&H6B63)
 End Function
 
 Private Sub LogShowFormResult(ByVal funcName As String, ByVal ret As String)

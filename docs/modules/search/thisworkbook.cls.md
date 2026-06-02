@@ -6,7 +6,7 @@ description: ThisWorkbook.cls のソースコード（コピペ用）
 # ThisWorkbook.cls
 
 **配置先**: `検索.xlsm` 用の VBA モジュール  
-**種類**: クラス モジュール
+**種類**: クラスモジュール
 
 ---
 
@@ -20,6 +20,8 @@ description: ThisWorkbook.cls のソースコード（コピペ用）
 - 文字コード: **ANSI**（Shift-JIS）
 
 > メモ帳の文字コードを **ANSI** にしないと、VBA の日本語が文字化けして動かなくなります。
+> UTF-8 で保存すると VBA Import 時に日本語が文字化けして動かなくなります。
+> 改行コードは CRLF（Windows 標準）のままで OK です。
 
 ---
 
@@ -49,13 +51,13 @@ Attribute VB_Exposed = True
 ' ================================================================
 Option Explicit
 
-Private Const XLSM_NAME As String = "????"
-Private Const STARTUP_SHEET As String = "�ｿｽi�ｿｽ�ｿｽ�ｿｽb�ｿｽW�ｿｽ�ｿｽ�ｿｽ�ｿｽ"  ' v2.1 Q44 ?m?? (M-01 ???j???[???A?N???? = ????????s)
+Private Const XLSM_NAME As String = "検索"
+Private Const STARTUP_SHEET As String = "ナレッジ検索"  ' v2.1 Q44 ?m?? (M-01 ???j???[???A?N???? = ????????s)
 
 ' ================================================================
 ' Workbook_Open
 ' ?T?v:   xlsm ?N?????? setup ?????s (???.xlsm ?p)
-' ?�ｿｽy:   1. modConfigLoader ?? xlsm ??????? config.txt ?? read ?? modConfigHolder ??Z?b?g (Q8)
+' ??y:   1. modConfigLoader ?? xlsm ??????? config.txt ?? read ?? modConfigHolder ??Z?b?g (Q8)
 '         2. clsLogger.Init (???O?V?[?g + debugLevel ERROR ????AQ7)
 '         3. modKnowledgeFileIO.CleanupOldBackups ?? 90 ???? backup ?????? (Q34)
 '         4. clsSetupOrchestrator.RunFullSetup("???")
@@ -127,12 +129,12 @@ End Sub
 
 ' ================================================================
 ' Workbook_SheetBeforeDoubleClick (v2.3 Phase O-1, 2026-05-27)
-' M-08 �ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽﾊグ�ｿｽ�ｿｽ�ｿｽb�ｿｽh�ｿｽﾌナ�ｿｽ�ｿｽ�ｿｽb�ｿｽW�ｿｽﾔ搾ｿｽ�ｿｽZ�ｿｽ�ｿｽ (column 1 = A) �ｿｽ�ｿｽ�ｿｽ_�ｿｽu�ｿｽ�ｿｽ�ｿｽN�ｿｽ�ｿｽ�ｿｽb�ｿｽN
-' �ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽ modEntryUserForm.OpenViewWithId �ｿｽ�ｿｽ�ｿｽﾄゑｿｽ�ｿｽ M-09 �ｿｽi�ｿｽ�ｿｽ�ｿｽb�ｿｽW�ｿｽ\�ｿｽ�ｿｽ
-' �ｿｽt�ｿｽH�ｿｽ[�ｿｽ�ｿｽ�ｿｽ�ｿｽ�ｿｽJ�ｿｽ�ｿｽ�ｿｽB
-' �ｿｽd�ｿｽl: �ｿｽﾝ計�ｿｽ�ｿｽ v2.3 Accepted "M-08 �ｿｽi�ｿｽ�ｿｽ�ｿｽb�ｿｽW�ｿｽ�ｿｽ�ｿｽ�ｿｽ_�ｿｽﾝ抵ｿｽl" B53 (dblClickKnowledgeNo)�ｿｽB
-' �ｿｽﾎ擾ｿｽ sheet: �ｿｽ\�ｿｽ�ｿｽ�ｿｽ�ｿｽ "�ｿｽi�ｿｽ�ｿｽ�ｿｽb�ｿｽW�ｿｽ�ｿｽ�ｿｽ�ｿｽ" �ｿｽﾜゑｿｽ�ｿｽ�ｿｽ ID "M-08"�ｿｽB
-' �ｿｽﾎ象範茨ｿｽ: �ｿｽ�ｿｽ A�ｿｽA�ｿｽf�ｿｽ[�ｿｽ^�ｿｽs (14 �ｿｽs�ｿｽﾚ以降�ｿｽB13 �ｿｽs�ｿｽﾜでゑｿｽ header)�ｿｽB
+' M-08 ????????O???b?h??i???b?W????Z?? (column 1 = A) ???_?u???N???b?N
+' ????? modEntryUserForm.OpenViewWithId ?????? M-09 ?i???b?W?\??
+' ?t?H?[?????J???B
+' ?d?l: ??v?? v2.3 Accepted "M-08 ?i???b?W????_???l" B53 (dblClickKnowledgeNo)?B
+' ??? sheet: ?\???? "?i???b?W????" ????? ID "M-08"?B
+' ?????: ?? A?A?f?[?^?s (14 ?s???~?B13 ?s???? header)?B
 ' ================================================================
 Private Sub Workbook_SheetBeforeDoubleClick(ByVal Sh As Object, ByVal Target As Range, Cancel As Boolean)
     On Error GoTo ErrHandler
@@ -153,7 +155,7 @@ Private Sub Workbook_SheetBeforeDoubleClick(ByVal Sh As Object, ByVal Target As 
     kid = Trim$(CStr(Sh.Cells(Target.Row, 2).Value))
     If Len(kid) = 0 Then Exit Sub
 
-    Cancel = True   ' �ｿｽZ�ｿｽ�ｿｽ�ｿｽﾒ集�ｿｽ�ｿｽ�ｿｽ[�ｿｽh�ｿｽ�ｿｽ}�ｿｽ~
+    Cancel = True   ' ?Z????W???[?h??}?~
     modEntryUserForm.OpenViewWithId kid
     Exit Sub
 ErrHandler:

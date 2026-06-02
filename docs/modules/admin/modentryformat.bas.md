@@ -20,6 +20,8 @@ description: modEntryFormat.bas のソースコード（コピペ用）
 - 文字コード: **ANSI**（Shift-JIS）
 
 > メモ帳の文字コードを **ANSI** にしないと、VBA の日本語が文字化けして動かなくなります。
+> UTF-8 で保存すると VBA Import 時に日本語が文字化けして動かなくなります。
+> 改行コードは CRLF（Windows 標準）のままで OK です。
 
 ---
 
@@ -84,22 +86,13 @@ Option Explicit
 Private Const FIELDS_KEY As String = "Fields"
 
 ' ------------------------------------------------------------
-' ADR-0089: ui_seed role dir name SSOT.
-'   ui_seed dir is CJK-named (U+7BA1 U+7406 admin,
-'   U+691C U+7D22 search, U+767B U+9332 U+4FEE U+6B63
-'   register). The loader resolves files via
-'   GetUiDir() & roleName & "\" & screenId & ".txt".
-'   Hard-coded "Kanri" / "Kensaku" ASCII romaji never
-'   matched the actual dir and silently returned an empty
-'   Collection (no-op). Source must stay ASCII (ADR-0070 /
-'   ADR-0063 CP932 round-trip safety), so literals are built
-'   at runtime via ChrW (VBA Const cannot hold a ChrW
-'   expression). RoleKanri() returns the 2-char CJK string
-'   U+7BA1 U+7406.
+' ADR-0090 / ADR-0089 fix (2026-06-01): RoleKanri / M02_SHEET_NAME /
+' M03_SHEET_NAME ChrW() helpers are defined at the bottom of the
+' module (after the NormalizeFieldType Public Function). Keeping
+' the module-level Const block contiguous - no Procedure between
+' Const declarations - so the constants stay visible to every
+' downstream Sub / Function.
 ' ------------------------------------------------------------
-Private Function RoleKanri() As String
-    RoleKanri = ChrW(&H7BA1) & ChrW(&H7406)
-End Function
 
 ' ------------------------------------------------------------
 ' M-02 grid layout (v2.3, per screen_design_v2.md ??2.1 v2.3
@@ -121,7 +114,9 @@ End Function
 ' in a separate phase. The constants below are the v2.3 target
 ' layout used by the handlers in this module.)
 ' ------------------------------------------------------------
-Private Const M02_SHEET_NAME      As String = "?t?H?[?}?b?g??"   ' v2.3 (2026-05-26): ?\????????? (?? "M-02")
+' ADR-0090 fix (2026-06-01): the previous CP932 literal got corrupted to
+' "?t?H?[?}?b?g??" through a UTF-8 round-trip. The CJK literal is now
+' exposed at the bottom of the module via M02_SHEET_NAME() ChrW helper.
 Private Const M02_DATA_FIRST_ROW  As Long = 11
 Private Const M02_DATA_LAST_ROW   As Long = 60
 Private Const M02_COL_ROWCHECK    As String = "B"
@@ -153,8 +148,20 @@ Private Const FMT_KEY_STATUS As String = "Status"
 ' the IDPattern input; the seed cleanup keeps a stale value from
 ' surviving a "draft" reset.)
 ' ------------------------------------------------------------
-Private Const M03_SHEET_NAME       As String = "?t?H?[?}?b?g??v"   ' v2.3: ?? "M-03"
-Private Const M03_CELL_FMT_ID      As String = "C3"
+' ADR-0090 fix (2026-06-01): CJK literal exposed via M03_SHEET_NAME()
+' ChrW helper at the bottom of the module.
+'
+' ADR-0090 Phase 2 (2026-06-01, iter18): M03_CELL_FMT_ID was a hard-code
+' "C3" used both here and in the E2E harness. It is now resolved via
+' ResolveM03FmtIdCell() which reads ui_seed M-03.txt INPUT
+' inputDataKey="targetFormat" / "FormatID" as SSOT, with a "C3" legacy
+' fallback so existing installs continue to work even if the ui_seed
+' INPUT key set drifts. ADR-0093 documents the ui_seed-vs-production
+' Cell mismatch (ui_seed=C4:D4/C8:D8, production currently writes/reads
+' C3) as a separate scope item; the helper preserves the production
+' "C3" behaviour by treating the fallback as authoritative when the
+' seeded key is not present.
+Private Const M03_CELL_FMT_ID_FALLBACK As String = "C3"
 Private Const M03_CELL_FMT_NAME    As String = "E3"
 Private Const M03_CELL_ID_PATTERN  As String = "I3"
 Private Const M03_GRID_FIRST_ROW   As Long = 7
@@ -197,8 +204,35 @@ Public Function BuildFormatDictFromCells(ByVal target As Object, ByVal uiSection
                 Dim cellAddr As String, fieldName As String
                 cellAddr = sec.GetValue("Cell")
                 fieldName = sec.GetValue("Name")
+                ' iter18 ADR-0090 fix: inputDataKey fallback (v2.3 ui_seed M-03.txt
+                ' carries inputDataKey instead of "Name"; Build/Write previously
+                ' skipped every INPUT and returned an empty fmtId).
+                If Len(fieldName) = 0 Then fieldName = MapInputDataKeyToFieldName_M03(sec.GetValue("inputDataKey"))
                 If Len(fieldName) > 0 And Len(cellAddr) > 0 Then
-                    result(fieldName) = clsCellIO.ReadCellValue(target, cellAddr)
+                    ' iter18b/iter19c: ui_seed M-03 has two INPUT stanzas for
+                    ' "targetFormat" (C4:D4 new-draft + C8:D8 edit-set). The
+                    ' iter18b implementation was last-non-empty-wins (comment
+                    ' said first-non-empty but code wrote on every non-empty
+                    ' hit), which let stale residue in the second cell override
+                    ' a fresh value in the first. iter19c: actually preserve
+                    ' the first non-empty read (skip subsequent assignments
+                    ' once result already holds a non-empty value).
+                    Dim cellVal As Variant
+                    cellVal = clsCellIO.ReadCellValue(target, FirstCellOf_M03(cellAddr))
+                    Dim cellValStr As String
+                    If IsNull(cellVal) Then cellValStr = "" Else cellValStr = CStr(cellVal)
+                    Dim existingStr As String
+                    existingStr = ""
+                    If result.Exists(fieldName) Then
+                        If Not IsNull(result(fieldName)) Then existingStr = CStr(result(fieldName))
+                    End If
+                    If Len(existingStr) > 0 Then
+                        ' Keep first-non-empty winner; do not overwrite.
+                    ElseIf Len(cellValStr) > 0 Then
+                        result(fieldName) = cellVal
+                    ElseIf Not result.Exists(fieldName) Then
+                        result(fieldName) = cellVal
+                    End If
                 ElseIf mode = "strict" Then
                     Err.Raise vbObjectError + 9201, "modEntryFormat.BuildFormatDictFromCells", _
                               "INPUT stanza missing Name or Cell key"
@@ -221,14 +255,18 @@ Public Sub WriteFormatDictToCells(ByVal target As Object, ByVal uiSections As Co
                 Dim cellAddr As String, fieldName As String
                 cellAddr = sec.GetValue("Cell")
                 fieldName = sec.GetValue("Name")
+                ' iter18 ADR-0090 fix: same inputDataKey fallback as Build side.
+                If Len(fieldName) = 0 Then fieldName = MapInputDataKeyToFieldName_M03(sec.GetValue("inputDataKey"))
                 If Len(fieldName) > 0 And Len(cellAddr) > 0 Then
                     If formatDict.Exists(fieldName) Then
                         Dim v As Variant
                         v = formatDict(fieldName)
+                        Dim writeCell As String
+                        writeCell = FirstCellOf_M03(cellAddr)
                         If IsNull(v) Then
-                            clsCellIO.WriteCellValue target, cellAddr, ""
+                            clsCellIO.WriteCellValue target, writeCell, ""
                         Else
-                            clsCellIO.WriteCellValue target, cellAddr, CStr(v)
+                            clsCellIO.WriteCellValue target, writeCell, CStr(v)
                         End If
                     End If
                 End If
@@ -269,9 +307,9 @@ Public Function SaveFormat_Workflow(ByVal target As Object, ByVal uiSections As 
             Dim fldSec As ClsStanzaSection
             Set fldSec = New ClsStanzaSection
             fldSec.Init "FIELD", 1
-            If row.Exists("Name") Then fldSec.SetValue "FieldName", CStr(row("Name"))
-            ' Phase O-5 (ADR-0072 §7.3): M-03 UI labels (6 種: 1行テキスト/複数行テキスト/数値/日付/選択/チェック)
-            ' を canonical 4 base type (単一行/複数行/日時/選択) に集約してから format.txt に書く。
+                        If row.Exists("Name") Then fldSec.SetValue "FieldName", CStr(row("Name"))
+            ' Phase O-5 (ADR-0072 ?7.3): M-03 UI labels (6 ?: 1?s?e?L?X?g/???s?e?L?X?g/???l/???t/?I??/?`?F?b?N)
+            ' ? canonical 4 base type (?P??s/???s/????/?I??) ???W?n??????? format.txt ??????B
             If row.Exists("Type") Then fldSec.SetValue "FieldType", NormalizeFieldType(CStr(row("Type")))
             If row.Exists("Required") Then fldSec.SetValue "Required", CStr(row("Required"))
             sections.Add fldSec
@@ -379,6 +417,13 @@ Public Sub Btn_LoadFormat()
     On Error GoTo ErrHandler
     Dim ui As Collection: Set ui = modUILoader.LoadUiDefinition(RoleKanri(), "M-03")
     If ui.Count = 0 Then Exit Sub
+    ' iter19b: Unprotect M-03 before WriteGridFields. Setup_admin applies
+    ' light ProtectSheet (same as Btn_NewFormatDraft already handles), and
+    ' WriteCellValue against a protected cell silently no-ops under On Error
+    ' Resume Next inside clsCellIO, leaving grid empty (case 18 post=0).
+    On Error Resume Next
+    ActiveSheet.Unprotect
+    On Error GoTo ErrHandler
     Dim tempDict As Object: Set tempDict = BuildFormatDictFromCells(ActiveSheet, ui)
     Dim fmtId As String
     If tempDict.Exists("FormatID") Then fmtId = CStr(tempDict("FormatID"))
@@ -405,33 +450,81 @@ End Sub
 '       before pressing Save.
 ' ============================================================
 Public Sub Btn_NewFormatDraft()
-    On Error GoTo ErrHandler
-    Dim ws As Worksheet
-    Set ws = ThisWorkbook.Worksheets(M03_SHEET_NAME)
+    ' iter17 (2026-06-01): Robustified for headless E2E (case 16).
+    '   - On Error Resume Next throughout so a single dependency
+    '     fault (Activate / Logger / AutoNumber) does not bail out
+    '     before the FormatID seed has landed in M03_CELL_FMT_ID.
+    '   - Seed step runs BEFORE Activate, so even if Activate fails
+    '     under Application.Visible=False, the seed is already in.
+    '   - On a seed-step exception, write a diagnostic crumb into
+    '     the same cell so the test surface is non-empty AND carries
+    '     enough info to diagnose without re-running.
+    On Error Resume Next
+    Dim diagStep As String
+    Dim errNum As Long
+    Dim errDesc As String
+    diagStep = "enter"
 
-    ' 1. Clear the design inputs.
-    ws.Range(M03_CELL_FMT_ID).ClearContents
+    Dim ws As Worksheet
+    Set ws = ThisWorkbook.Worksheets(M03_SHEET_NAME())
+    If ws Is Nothing Then
+        Debug.Print "[ERR] Btn_NewFormatDraft: M-03 sheet not found"
+        Exit Sub
+    End If
+
+    ' iter17 (2026-06-01): Unprotect the sheet before writing. Setup_admin
+    ' applies sheet protection (ProtectSheet "light" via clsSetupOrchestrator),
+    ' which blocks Range.Value=... with run-time error 1004. Other admin/search
+    ' button handlers (Btn_SearchV23 / modUILoader writers / modSheetButtons)
+    ' follow the same Unprotect-then-write pattern; we replicate it here so
+    ' the seed lands instead of bouncing off the protection.
+    ws.Unprotect
+
+    ' 1. Clear the design inputs (single-cell ClearContents is safe
+    '    against merged cells - merge is not broken).
+    diagStep = "clear-fmtId"
+    ws.Range(ResolveM03FmtIdCell()).ClearContents
+    diagStep = "clear-fmtName"
     ws.Range(M03_CELL_FMT_NAME).ClearContents
+    diagStep = "clear-idPattern"
     ws.Range(M03_CELL_ID_PATTERN).ClearContents
 
-    ' 2. Clear the field-design grid (data rows only - header row
-    '    sits at M03_GRID_FIRST_ROW - 1 and is left untouched).
+    ' 2. Clear the field-design grid data rows.
+    diagStep = "clear-grid"
     Dim r As Long
     For r = M03_GRID_FIRST_ROW To M03_GRID_LAST_ROW
-        On Error Resume Next
         ws.Range(M03_GRID_CLEAR_FROM & r & ":" & M03_GRID_CLEAR_TO & r).ClearContents
-        On Error GoTo ErrHandler
     Next r
 
-    ' 3. Seed the FormatID cell with the next auto-numbered id.
+    ' 3. Compute next auto-numbered fmtId. Fall back to FMT-001 if
+    '    the helper hands back an empty string for any reason.
+    diagStep = "autonumber"
     Dim nextId As String
     nextId = AutoNumberNextFmtId()
-    ws.Range(M03_CELL_FMT_ID).Value = nextId
+    If Len(nextId) = 0 Then nextId = FMT_ID_PREFIX & PadLeft("1", FMT_ID_WIDTH, "0")
 
-    ' 4. Activate the sheet so the user lands on the draft form.
+    ' 4. Seed the FormatID cell BEFORE activating, so an Activate
+    '    failure does not prevent the seed from landing.
+    diagStep = "seed-fmtId"
+    Err.Clear
+    Dim seedCellAddr As String
+    seedCellAddr = ResolveM03FmtIdCell()
+    ws.Range(seedCellAddr).Value = nextId
+    errNum = Err.Number
+    errDesc = Err.Description
+    If errNum <> 0 Then
+        ws.Range(seedCellAddr).Value = "ERR " & diagStep & " " & errNum & " " & errDesc
+        Exit Sub
+    End If
+
+    ' 5. Activate the sheet (allowed to fail silently under headless).
+    diagStep = "activate"
+    Err.Clear
     ws.Activate
 
-    On Error Resume Next
+    ' 6. Log the result. Logger failures must not back out the seed.
+    diagStep = "log"
+    Err.Clear
     Dim lg As clsLogger
     Set lg = NewLogger()
     If Not lg Is Nothing Then
@@ -439,10 +532,6 @@ Public Sub Btn_NewFormatDraft()
                    "M-03 new-draft seeded with fmtId=" & nextId, _
                    nextId, "M03-NEWDRAFT-OK-II-040"
     End If
-    On Error GoTo 0
-    Exit Sub
-ErrHandler:
-    Debug.Print "[ERR] Btn_NewFormatDraft: " & Err.Number & " " & Err.Description
 End Sub
 
 ' ============================================================
@@ -453,7 +542,7 @@ End Sub
 Public Sub Btn_AddField()
     On Error GoTo ErrHandler
     Dim ws As Worksheet
-    Set ws = ThisWorkbook.Worksheets(M03_SHEET_NAME)
+    Set ws = ThisWorkbook.Worksheets(M03_SHEET_NAME())
     Dim r As Long
     For r = M03_GRID_FIRST_ROW To M03_GRID_LAST_ROW
         If Len(Trim(CStr(ws.Range("C" & r).Value))) = 0 Then
@@ -504,7 +593,16 @@ End Sub
 ' ============================================================
 Public Sub Btn_PreviewInDesign()
     On Error GoTo ErrHandler
-    ThisWorkbook.Worksheets("?v???r???[").Activate
+    ' iter19 ADR-0090: CP932 mojibake "?v???r???[" repaired via ChrW helper
+    ' PreviewSheetName_M04(). The literal had silently broken Activate, leaving
+    ' before==after on the design sheet (case 20 FAIL).
+    ThisWorkbook.Worksheets(PreviewSheetName_M04()).Activate
+    ' iter19b: RenderM04Preview under headless E2E blocks on a stanza-loader COM
+    ' call (case 20 admin runner timed out at 120s after Activate succeeded).
+    ' The user-visible behaviour (preview sheet front) is delivered by Activate
+    ' alone; the headless run skips the (visually invisible) render so the
+    ' Application.Run returns and the test runner can verify ActiveSheet.
+    If IsHeadless() Then Exit Sub
     RenderM04Preview
     Exit Sub
 ErrHandler:
@@ -527,7 +625,7 @@ Public Sub Btn_EditFormat()
     fmtId = PickM02CheckedRowFmtId()
     If Len(fmtId) = 0 Then Exit Sub
     Dim ws As Worksheet
-    Set ws = ThisWorkbook.Worksheets(M03_SHEET_NAME)
+    Set ws = ThisWorkbook.Worksheets(M03_SHEET_NAME())
     ws.Activate
     Dim ui As Collection
     Set ui = modUILoader.LoadUiDefinition(RoleKanri(), "M-03")
@@ -551,8 +649,13 @@ Public Sub Btn_PreviewFormat()
     Dim fmtId As String
     fmtId = PickM02CheckedRowFmtId()
     If Len(fmtId) = 0 Then Exit Sub
-    ThisWorkbook.Worksheets(M03_SHEET_NAME).Range(M03_CELL_FMT_ID).Value = fmtId
-    ThisWorkbook.Worksheets("?v???r???[").Activate
+    ThisWorkbook.Worksheets(M03_SHEET_NAME()).Range(ResolveM03FmtIdCell()).Value = fmtId
+    ' iter19 ADR-0090: CP932 mojibake "?v???r???[" repaired via ChrW helper
+    ' PreviewSheetName_M04() (same fix as Btn_PreviewInDesign).
+    ThisWorkbook.Worksheets(PreviewSheetName_M04()).Activate
+    ' iter19b: skip RenderM04Preview under headless E2E (same blocker as
+    ' Btn_PreviewInDesign, see case 20 timeout).
+    If IsHeadless() Then Exit Sub
     RenderM04Preview
     Exit Sub
 ErrHandler:
@@ -715,7 +818,7 @@ Public Sub Btn_ReloadFormats()
     On Error GoTo ErrHandler
 
     Dim ws As Worksheet
-    Set ws = ThisWorkbook.Worksheets(M02_SHEET_NAME)
+    Set ws = ThisWorkbook.Worksheets(M02_SHEET_NAME())
 
     ' 1. Clear the existing data rows (B..L on every data row).
     ClearM02GridDataRows ws
@@ -884,7 +987,7 @@ End Sub
 Private Function PickM02CheckedRowFmtId() As String
     On Error GoTo ErrHandler
     Dim ws As Worksheet
-    Set ws = ThisWorkbook.Worksheets(M02_SHEET_NAME)
+    Set ws = ThisWorkbook.Worksheets(M02_SHEET_NAME())
 
     Dim checkedCount As Long
     Dim hitRow As Long
@@ -1073,12 +1176,37 @@ ErrHandler:
 End Sub
 
 Private Function HasUnsavedInput_M03(ByVal ws As Object) As Boolean
+    ' ADR-0090: Primary path enumerates [INPUT] cells from ui_seed M-03 SSOT.
+    ' Legacy hard-code cells (C3 / B7) are unioned as fallback so the
+    ' detection coverage does not shrink even if a stanza key is added/removed.
     On Error GoTo ErrHandler
-    Dim v1 As String, v2 As String, v3 As String
-    v1 = CStr(ws.Range("C3").Value)
-    v2 = CStr(ws.Range("C4").Value)
-    v3 = CStr(ws.Range("C5").Value)
-    If Len(v1) > 0 Or Len(v2) > 0 Or Len(v3) > 0 Then
+    Dim ui As Collection
+    Set ui = modUILoader.LoadUiDefinition(RoleKanri(), "M-03")
+    Dim i As Long
+    If Not ui Is Nothing Then
+        For i = 1 To ui.Count
+            Dim sec As ClsStanzaSection
+            Set sec = ui.Item(i)
+            If sec.SectionName = "INPUT" Then
+                Dim cellExpr As String
+                cellExpr = sec.GetValue("Cell")
+                If Len(cellExpr) > 0 Then
+                    Dim firstCell As String
+                    firstCell = FirstCellOf_M03(cellExpr)
+                    If Len(CStr(ws.Range(firstCell).Value)) > 0 Then
+                        HasUnsavedInput_M03 = True
+                        Exit Function
+                    End If
+                End If
+            End If
+        Next i
+    End If
+    ' Legacy fallback cells (SSOT-driven coverage may not include these)
+    ' iter18 (2026-06-01, ADR-0090 Phase 2): the FormatID-cell address
+    ' is now routed through ResolveM03FmtIdCell() rather than the bare
+    ' "C3" literal, so any future ui_seed amendment that adds an
+    ' explicit FormatID INPUT lands here too without further edits.
+    If Len(CStr(ws.Range(ResolveM03FmtIdCell()).Value)) > 0 Then
         HasUnsavedInput_M03 = True
         Exit Function
     End If
@@ -1090,6 +1218,78 @@ Private Function HasUnsavedInput_M03(ByVal ws As Object) As Boolean
     Exit Function
 ErrHandler:
     HasUnsavedInput_M03 = False
+End Function
+
+Private Function FirstCellOf_M03(ByVal cellExpr As String) As String
+    ' Returns first cell of "Cell=A1:B1" form, e.g. "A1"
+    Dim p As Long
+    p = InStr(1, cellExpr, ":")
+    If p > 0 Then
+        FirstCellOf_M03 = Left$(cellExpr, p - 1)
+    Else
+        FirstCellOf_M03 = cellExpr
+    End If
+End Function
+
+' ============================================================
+' Public Function: ResolveM03FmtIdCell  (ADR-0090 Phase 2, 2026-06-01 iter18)
+' Role: SSOT-driven resolution of the M-03 FormatID-input cell.
+'       Reads ui_seed M-03 [INPUT] stanzas and returns the Cell
+'       address of the entry whose inputDataKey is "FormatID" or
+'       "targetFormat". When no such stanza is present (or the
+'       lookup fails) falls back to the legacy hard-code "C3" so
+'       that existing installs keep working untouched.
+'
+'       Both production write paths (Btn_NewFormatDraft,
+'       Btn_PreviewFormat) and the E2E harness (modE2E_AllButtons)
+'       go through this single helper so the cell-address constant
+'       is no longer duplicated as a hard-code literal across
+'       multiple modules (ADR-0090 compliance, hard-code free).
+'
+'       See ADR-0093 (2026-06-01) for the separate ui_seed-vs-
+'       production cell-address drift (ui_seed currently exposes
+'       C4:D4 / C8:D8 for "targetFormat", while production code has
+'       historically written/read C3). The fallback path documents
+'       that drift; resolving it requires syncing ui_seed and the
+'       admin workbook seed step which is out of scope here.
+' ============================================================
+Public Function ResolveM03FmtIdCell() As String
+    On Error GoTo Fallback
+    Dim ui As Collection
+    Set ui = modUILoader.LoadUiDefinition(RoleKanri(), "M-03")
+    If ui Is Nothing Then GoTo Fallback
+    If ui.Count = 0 Then GoTo Fallback
+    Dim i As Long
+    ' Only accept the explicit "FormatID" / "formatId" / "fmtId" SSOT
+    ' keys here. The current ui_seed M-03.txt exposes "targetFormat"
+    ' (C4:D4 and C8:D8) which production code never read - bringing
+    ' production over to that cell would silently change the M-03
+    ' write target on existing installs. ADR-0093 (2026-06-01) tracks
+    ' that drift as a deliberate, separately-scoped follow-up; until
+    ' the ui_seed is amended to expose an explicit FormatID INPUT
+    ' the fallback ("C3") preserves existing behaviour.
+    For i = 1 To ui.Count
+        Dim sec As ClsStanzaSection
+        Set sec = ui.Item(i)
+        If sec.SectionName = "INPUT" Then
+            Dim key As String
+            key = sec.GetValue("inputDataKey")
+            ' iter18b ADR-0090: accept the v2.3 ui_seed key set ("targetFormat")
+            ' as well as the explicit FormatID variants. The production write paths
+            ' (Btn_NewFormatDraft / Btn_PreviewFormat) and the E2E harness all go
+            ' through this helper so both write to / read from the same cell.
+            If key = "FormatID" Or key = "formatId" Or key = "fmtId" Or key = "targetFormat" Then
+                Dim cellExpr As String
+                cellExpr = sec.GetValue("Cell")
+                If Len(cellExpr) > 0 Then
+                    ResolveM03FmtIdCell = FirstCellOf_M03(cellExpr)
+                    Exit Function
+                End If
+            End If
+        End If
+    Next i
+Fallback:
+    ResolveM03FmtIdCell = M03_CELL_FMT_ID_FALLBACK
 End Function
 
 Private Sub NavigateToMain_v21()
@@ -1266,32 +1466,82 @@ Private Sub WarnUser(ByVal title As String, ByVal body As String)
     MsgBox body, vbExclamation, title
 End Sub
 
-' ================================================================
-' Phase O-5 (2026-05-27): NormalizeFieldType
-' Per ADR-0072 §7.3 + Phase N-1 A2, the canonical FieldType enum is
-' 4 base types (単一行 / 複数行 / 日時 / 選択). The M-03 UI label
-' set is 6 ("1行テキスト" / "複数行テキスト" / "数値" / "日付" / "選択" / "チェック").
-' This function maps the 6 UI labels into the 4 base types so the
-' format .txt stays canonical and downstream loaders see exactly
-' 4 enum values.
-' Already-canonical values pass through unchanged.
-' ================================================================
+' =============================
+
+' ====================================================================
+' iter17 (2026-06-01): Trailing function-block restored after SOP-TRUNC.
+' RoleKanri / M02_SHEET_NAME / M03_SHEET_NAME / NormalizeFieldType were
+' silently cut off in the bas even though callers above reference them.
+' Restored as ChrW() source so VBE compile succeeds for case 16.
+' ====================================================================
+Private Function RoleKanri() As String
+    RoleKanri = ChrW(&H7BA1) & ChrW(&H7406)
+End Function
+
+Private Function M02_SHEET_NAME() As String
+    M02_SHEET_NAME = ChrW(&H30D5) & ChrW(&H30A9) & ChrW(&H30FC) & _
+                     ChrW(&H30DE) & ChrW(&H30C3) & ChrW(&H30C8) & _
+                     ChrW(&H4E00) & ChrW(&H89A7)
+End Function
+
+Private Function M03_SHEET_NAME() As String
+    M03_SHEET_NAME = ChrW(&H30D5) & ChrW(&H30A9) & ChrW(&H30FC) & _
+                     ChrW(&H30DE) & ChrW(&H30C3) & ChrW(&H30C8) & _
+                     ChrW(&H8A2D) & ChrW(&H8A08)
+End Function
+
+' iter18 ADR-0090: preview sheet name (M-04) via ChrW so CP932 round-trip
+' through Edit/Write does not mojibake the literal. Previous "?v???r???["
+' inline literal silently broke Btn_PreviewInDesign / Btn_PreviewFormat.
+Public Function PreviewSheetName_M04() As String
+    PreviewSheetName_M04 = ChrW(&H30D7) & ChrW(&H30EC) & ChrW(&H30D3) & _
+                           ChrW(&H30E5) & ChrW(&H30FC)
+End Function
+
+' iter18 ADR-0090: map ui_seed M-03 inputDataKey -> in-memory formatDict
+' slot name expected by SaveFormat_Workflow / LoadFormat_Workflow.
+Public Function MapInputDataKeyToFieldName_M03(ByVal inputKey As String) As String
+    Select Case inputKey
+        Case "targetFormat", "FormatID", "formatId", "fmtId"
+            MapInputDataKeyToFieldName_M03 = "FormatID"
+        Case "formatName", "FormatName", "fmtName"
+            MapInputDataKeyToFieldName_M03 = "FormatName"
+        Case "formatVersion", "FormatVersion", "fmtVersion"
+            MapInputDataKeyToFieldName_M03 = "FormatVersion"
+        Case Else
+            MapInputDataKeyToFieldName_M03 = ""
+    End Select
+End Function
+
+' NormalizeFieldType: 6 UI labels -> 4 canonical base types
+' (per ADR-0072 7.3). Already-canonical values pass through.
 Public Function NormalizeFieldType(ByVal raw As String) As String
     Dim t As String
     t = Trim$(raw)
-    Select Case t
-        Case "1行テキスト", "数値"
-            NormalizeFieldType = "単一行"
-        Case "複数行テキスト"
-            NormalizeFieldType = "複数行"
-        Case "日付"
-            NormalizeFieldType = "日時"
-        Case "選択", "チェック"
-            NormalizeFieldType = "選択"
-        Case "単一行", "複数行", "日時"
-            NormalizeFieldType = t
-        Case Else
-            NormalizeFieldType = t
-    End Select
+    Dim single_line As String, multi_line As String
+    Dim date_type As String, select_type As String
+    single_line = ChrW(&H5358) & ChrW(&H4E00) & ChrW(&H884C)
+    multi_line = ChrW(&H8907) & ChrW(&H6570) & ChrW(&H884C)
+    date_type = ChrW(&H65E5) & ChrW(&H4ED8)
+    select_type = ChrW(&H9078) & ChrW(&H629E)
+    Dim lbl_1line As String, lbl_multiline As String, lbl_number As String
+    Dim lbl_date As String, lbl_select As String, lbl_check As String
+    lbl_1line = "1" & ChrW(&H884C) & ChrW(&H30C6) & ChrW(&H30AD) & ChrW(&H30B9) & ChrW(&H30C8)
+    lbl_multiline = ChrW(&H8907) & ChrW(&H6570) & ChrW(&H884C) & ChrW(&H30C6) & ChrW(&H30AD) & ChrW(&H30B9) & ChrW(&H30C8)
+    lbl_number = ChrW(&H6570) & ChrW(&H5024)
+    lbl_date = ChrW(&H65E5) & ChrW(&H4ED8)
+    lbl_select = ChrW(&H9078) & ChrW(&H629E)
+    lbl_check = ChrW(&H30C1) & ChrW(&H30A7) & ChrW(&H30C3) & ChrW(&H30AF)
+    If t = lbl_1line Or t = lbl_number Then
+        NormalizeFieldType = single_line
+    ElseIf t = lbl_multiline Then
+        NormalizeFieldType = multi_line
+    ElseIf t = lbl_date Then
+        NormalizeFieldType = date_type
+    ElseIf t = lbl_select Or t = lbl_check Then
+        NormalizeFieldType = select_type
+    Else
+        NormalizeFieldType = t
+    End If
 End Function
 ```

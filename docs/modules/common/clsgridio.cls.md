@@ -5,8 +5,8 @@ description: clsGridIO.cls のソースコード（コピペ用）
 
 # clsGridIO.cls
 
-**配置先**: `共通モジュール (3 ブック全て)` 用の VBA モジュール  
-**種類**: クラス モジュール
+**配置先**: 共通モジュール（3 ブック共通）  
+**種類**: クラスモジュール
 
 ---
 
@@ -14,12 +14,14 @@ description: clsGridIO.cls のソースコード（コピペ用）
 
 下のコードをメモ帳に貼り付け、**[名前を付けて保存]** で次のように保存してください。
 
-- 場所: `C:\KnowledgeMgr\installer\vba_modules\common\`
+- 場所: `C:\KnowledgeMgr\installer\vba_modules\common\\`
 - ファイル名: `clsGridIO.cls`
 - ファイルの種類: **すべてのファイル**
 - 文字コード: **ANSI**（Shift-JIS）
 
 > メモ帳の文字コードを **ANSI** にしないと、VBA の日本語が文字化けして動かなくなります。
+> UTF-8 で保存すると VBA Import 時に日本語が文字化けして動かなくなります。
+> 改行コードは CRLF（Windows 標準）のままで OK です。
 
 ---
 
@@ -45,6 +47,11 @@ Private Const DEFAULT_GRID_ROWS As Long = 50
 
 ' Read GRID rows from target into Collection of Dict (1 Dict per row)
 ' columns from GridSection.Columns (csv) or default Name,Type,Required
+' iter19 ADR-0090: ui_seed Columns CSV uses v2.3 keys
+'   (fieldName/fieldType/required/options) but downstream (SaveFormat_Workflow,
+'   WriteFormatDictToCells.Row->FieldName etc.) expects canonical keys
+'   (Name/Type/Required/Options). NormalizeColumnNameToCanonical bridges both
+'   without mutating ui_seed (which is SSOT for visible column headers).
 Public Function ReadGridFields(ByVal target As Object, ByVal gridSec As Object, ByVal mode As String) As Collection
     Dim fields As New Collection
     Dim startCellAddr As String, endCellAddr As String, columnsCsv As String
@@ -70,10 +77,14 @@ Public Function ReadGridFields(ByVal target As Object, ByVal gridSec As Object, 
         Dim c As Long
         For c = 0 To colCount - 1
             Dim colName As String, cellAddr As String, v As String
+            Dim canonicalName As String
             colName = Trim(columnNames(c))
+            canonicalName = NormalizeColumnNameToCanonical(colName)
             cellAddr = clsCellAddrHelper.OffsetCellAddr(startCellAddr, rowIdx - 1, c)
             v = clsCellIO.ReadCellValue(target, cellAddr)
-            rowDict(colName) = v
+            ' Store under canonical key so downstream Workflow accessors
+            ' (Name/Type/Required/Options) find the value regardless of CSV form.
+            rowDict(canonicalName) = v
             If Len(v) > 0 Then hasAny = True
         Next c
         If hasAny Then
@@ -133,12 +144,16 @@ Public Sub WriteGridFields(ByVal target As Object, ByVal gridSec As Object, ByVa
             Dim c As Long
             For c = 0 To colCount - 1
                 Dim colName As String, cellAddr As String, valStr As String
+                Dim canonicalName2 As String
                 colName = Trim(columnNames(c))
+                ' iter19 ADR-0090: Read canonical key from row dict regardless
+                ' of CSV form ("fieldName" -> "Name", etc.).
+                canonicalName2 = NormalizeColumnNameToCanonical(colName)
                 cellAddr = clsCellAddrHelper.OffsetCellAddr(startCellAddr, i - 1, c)
                 valStr = ""
-                If rowItem.Exists(colName) Then
+                If rowItem.Exists(canonicalName2) Then
                     Dim v As Variant
-                    v = rowItem(colName)
+                    v = rowItem(canonicalName2)
                     If IsArray(v) Then
                         valStr = JoinArray(v, vbLf)
                     ElseIf IsNull(v) Then
@@ -162,13 +177,29 @@ Public Sub WriteGridFields(ByVal target As Object, ByVal gridSec As Object, ByVa
 End Sub
 
 Public Function IsValidFieldType(ByVal t As String) As Boolean
-    Select Case LCase(t)
+    Dim lt As String
+    lt = LCase(t)
+    Select Case lt
         Case "string", "text", "long", "integer", "double", "number", _
              "date", "datetime", "boolean", "dropdown", "list", ""
             IsValidFieldType = True
-        Case Else
-            IsValidFieldType = False
+            Exit Function
     End Select
+    ' iter19 ADR-0090 / ADR-0088: accept canonical CJK base-type names
+    ' (NormalizeFieldType output: 単一行 / 複数行 / 日付 / 選択). Without this,
+    ' ReadGridFields drops every CJK-typed row, leaving SaveFormat with 0
+    ' fields and Btn_LoadFormat verifies failing with sample="" (case 17/18).
+    Dim single_line As String, multi_line As String
+    Dim date_type As String, select_type As String
+    single_line = ChrW(&H5358) & ChrW(&H4E00) & ChrW(&H884C)
+    multi_line = ChrW(&H8907) & ChrW(&H6570) & ChrW(&H884C)
+    date_type = ChrW(&H65E5) & ChrW(&H4ED8)
+    select_type = ChrW(&H9078) & ChrW(&H629E)
+    If t = single_line Or t = multi_line Or t = date_type Or t = select_type Then
+        IsValidFieldType = True
+    Else
+        IsValidFieldType = False
+    End If
 End Function
 
 Public Function JoinArray(ByVal arr As Variant, ByVal sep As String) As String
@@ -180,6 +211,30 @@ Public Function JoinArray(ByVal arr As Variant, ByVal sep As String) As String
         s = s & CStr(arr(i))
     Next i
     JoinArray = s
+End Function
+
+' iter19 ADR-0090: Map ui_seed column-CSV keys to canonical row-dict keys used
+' by SaveFormat_Workflow / LoadFormat_Workflow / WriteFormatDictToCells.
+' ui_seed (v2.3 M-03.txt) declares Columns=No,seq,fieldName,fieldType,required,
+' rows,options. Existing workflows store rows under Name/Type/Required/Options.
+' Aliases unify both forms without changing ui_seed (which is the visible header
+' SSOT) or Workflow keys (which are the in-memory canonical form).
+Public Function NormalizeColumnNameToCanonical(ByVal raw As String) As String
+    Dim t As String
+    t = LCase(Trim(raw))
+    Select Case t
+        Case "fieldname", "name"
+            NormalizeColumnNameToCanonical = "Name"
+        Case "fieldtype", "type"
+            NormalizeColumnNameToCanonical = "Type"
+        Case "required"
+            NormalizeColumnNameToCanonical = "Required"
+        Case "options"
+            NormalizeColumnNameToCanonical = "Options"
+        Case Else
+            ' Pass-through for No / seq / rows / future columns.
+            NormalizeColumnNameToCanonical = Trim(raw)
+    End Select
 End Function
 
 ' Parse "Name,Type,Required" -> array. Default if empty.
