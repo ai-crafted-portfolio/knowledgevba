@@ -27,5 +27,40 @@ jobs:
           python -m pip install --upgrade pip
           pip install mkdocs-material
 
+      - name: Convert docs/modules/*.md from CP932 (Shift_JIS) to UTF-8 for mkdocs build
+        # git repo stores docs/modules/**/*.md as CP932 (per user requirement so that
+        # raw view / git clone yields Shift_JIS bytes). mkdocs reads UTF-8 only, so
+        # we convert in-place inside the CI workspace before build. The converted
+        # files are NOT pushed back to the repo - they only live in the CI runner.
+        run: |
+          python - <<'PY'
+          import os
+          root = "docs/modules"
+          n_cp932 = 0
+          n_already_utf8 = 0
+          for dirpath, dirnames, filenames in os.walk(root):
+              for name in filenames:
+                  if not name.endswith(".md"):
+                      continue
+                  path = os.path.join(dirpath, name)
+                  with open(path, "rb") as f:
+                      raw = f.read()
+                  try:
+                      text = raw.decode("utf-8")
+                      n_already_utf8 += 1
+                      continue
+                  except UnicodeDecodeError:
+                      pass
+                  try:
+                      text = raw.decode("cp932")
+                  except UnicodeDecodeError as e:
+                      raise SystemExit("failed to decode " + path + " as cp932 or utf-8: " + str(e))
+                  with open(path, "wb") as f:
+                      f.write(text.encode("utf-8"))
+                  n_cp932 += 1
+          print("converted CP932 -> UTF-8: " + str(n_cp932) + " files")
+          print("already UTF-8:           " + str(n_already_utf8) + " files")
+          PY
+
       - name: Deploy to GitHub Pages
         run: mkdocs gh-deploy --force
