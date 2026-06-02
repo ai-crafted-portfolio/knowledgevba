@@ -27,15 +27,17 @@ jobs:
           python -m pip install --upgrade pip
           pip install mkdocs-material
 
-      - name: Convert docs/modules/*.md from CP932 (Shift_JIS) to UTF-8 for mkdocs build
-        # git repo stores docs/modules/**/*.md as CP932 (per user requirement so that
+      - name: Convert docs/**/*.md from CP932 (Shift_JIS) to UTF-8 for mkdocs build
+        # git repo stores docs/**/*.md as CP932 (per user requirement so that
         # raw view / git clone yields Shift_JIS bytes). mkdocs reads UTF-8 only, so
         # we convert in-place inside the CI workspace before build. The converted
         # files are NOT pushed back to the repo - they only live in the CI runner.
+        # Scope is the whole docs/ tree (was previously docs/modules only); needed
+        # because docs/stanza/**/*.md (added 2026-06-02) are also CP932.
         run: |
           python - <<'PY'
           import os
-          root = "docs/modules"
+          root = "docs"
           n_cp932 = 0
           n_already_utf8 = 0
           for dirpath, dirnames, filenames in os.walk(root):
