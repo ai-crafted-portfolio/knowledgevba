@@ -73,6 +73,21 @@ nav:
   - 設定とカスタマイズ:
       - 設定値の変更: settings.md
       - 画面のカスタマイズ: screen_customization_guide_v2.md
+  - 画面設定ファイル:
+      - 一覧: stanza/index.md
+      - 管理:
+          - M-02 フォーマット一覧: stanza/管理/M-02.txt.md
+          - M-03 フォーマット設計: stanza/管理/M-03.txt.md
+          - M-04 プレビュー: stanza/管理/M-04.txt.md
+          - M-10 格納先設定: stanza/管理/M-10.txt.md
+          - M-11 設定: stanza/管理/M-11.txt.md
+          - M-12 フォーマット変更チェック: stanza/管理/M-12.txt.md
+          - M-14 操作ログ: stanza/管理/M-14.txt.md
+      - 登録修正:
+          - M-05 ナレッジ登録: stanza/登録修正/M-05.txt.md
+          - M-06 ナレッジ修正: stanza/登録修正/M-06.txt.md
+      - 検索:
+          - M-08 ナレッジ検索: stanza/検索/M-08.txt.md
   - モジュール一覧:
       - 一覧: modules/index.md
       - 管理.xlsm 用:
@@ -210,15 +225,4 @@ nav:
           - modFormatColumns.bas: source/utility/modformatcolumns.md
           - modFormatLoader.bas: source/utility/modformatloader.md
           - modImageRender.bas: source/utility/modimagerender.md
-          - modKnowledgeFileIO.bas: source/utility/modknowledgefileio.md
-          - modLogIds.bas: source/utility/modlogids.md
-          - modSheetMap.bas: source/utility/modsheetmap.md
-          - modStanzaIO.bas: source/utility/modstanzaio.md
-          - modStringUtil.bas: source/utility/modstringutil.md
-          - modUIConfig.bas: source/utility/moduiconfig.md
-          - modUILayoutExtractor.bas: source/utility/moduilayoutextractor.md
-          - modUILoader.bas: source/utility/moduiloader.md
-      - 特殊モジュール:
-          - ThisWorkbook（検索.xlsm）: source/special/thisworkbook-search.md
-          - ThisWorkbook（登録修正.xlsm）: source/special/thisworkbook-register.md
-          - ThisWorkbook（管理.xlsm）: source/special/thisworkbook-admin.md
+          - modKnowle

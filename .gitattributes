@@ -2,3 +2,4 @@
 # git の autocrlf や text 正規化が CP932 0x5C を含むバイトを壊さないよう binary 扱いにする。
 # 注意: binary 扱いにすると git diff は表示されない。意図的。
 docs/modules/**/*.md binary
+docs/stanza/**/*.md binary
