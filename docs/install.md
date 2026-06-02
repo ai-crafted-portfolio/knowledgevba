@@ -31,10 +31,11 @@ knowledgevba は次の 3 つの Excel ブックで構成されます。
 2. **STEP 2**: 作業フォルダを 1 か所決める（例: `C:\KnowledgeMgr\`）
 3. **STEP 3**: 作業フォルダの直下に 3 つの空ブックを作る（`登録修正.xlsm` / `検索.xlsm` / `管理.xlsm`）
 4. **STEP 4**: 作業フォルダの直下にデータ用 4 フォルダを作る
-5. **STEP 5**: `installer\` フォルダを作り、3 つの bat と 1 つの ps1 を保存する
-6. **STEP 6**: VBA モジュールのフォルダ（`installer\vba_modules\`）を用意する
-7. **STEP 7**: 3 つの bat を順番にダブルクリックして実行する
-8. **STEP 8**: 動作確認
+5. **STEP 4.5**: 設定ファイル（`管理_config.txt` 等 3 ファイル）を手動で配置する
+6. **STEP 5**: `installer\` フォルダを作り、3 つの bat と 1 つの ps1 を保存する
+7. **STEP 6**: VBA モジュールのフォルダ（`installer\vba_modules\`）を用意する
+8. **STEP 7**: 3 つの bat を順番にダブルクリックして実行する
+9. **STEP 8**: 動作確認
 
 ---
 
@@ -83,12 +84,76 @@ C:\KnowledgeMgr\
 ```
 C:\KnowledgeMgr\
   ├─ data\       ← ナレッジ本体（.txt）が入る
-  ├─ format\     ← フォーマット定義（.txt）が入る
+  ├─ formats\    ← フォーマット定義（.txt）が入る
   ├─ ui\         ← 画面定義（.txt）が入る
   └─ backup\     ← 修正・削除時のバックアップが入る
 ```
 
-中身は空のままで構いません。インストール後にナレッジを登録すると `data\` に、フォーマットを追加すると `format\` に、それぞれ自動でファイルが作られます。
+中身は空のままで構いません。インストール後にナレッジを登録すると `data\` に、フォーマットを追加すると `formats\` に、それぞれ自動でファイルが作られます。
+
+---
+
+## STEP 4.5: 設定ファイル（config.txt）を手動で配置する
+
+各ブックは起動時に **同じ作業フォルダ直下** にある「ブック名_config.txt」を読み込みます。ブックごとに 1 ファイル、合計 3 ファイルを手動で作成します。
+
+!!! info "なぜ手動なのか"
+    インストーラ（bat / ps1）は、設定ファイルを自動生成しません。利用者ごとに保存先パスやログレベルを変えられるよう、テキストファイルを手で配置する方式に統一しています。
+
+### 4.5.1 配置先と名前
+
+作業フォルダ（例: `C:\KnowledgeMgr\`）の直下に、次の 3 ファイルを置きます。
+
+```
+C:\KnowledgeMgr\
+  ├─ 管理_config.txt
+  ├─ 登録修正_config.txt
+  └─ 検索_config.txt
+```
+
+### 4.5.2 ファイル本体（3 ブック共通の標準値）
+
+3 ファイルとも下の内容で問題ありません。後から保存先や `debugLevel` を変えたい場合は、メモ帳で直接書き換えてください（編集後はブックを開き直すと反映されます）。
+
+```ini
+[CONFIG]
+debugLevel=INFO
+logRotationRows=10000
+data_dir=C:\KnowledgeMgr\data\
+format_dir=C:\KnowledgeMgr\formats\
+ui_dir=C:\KnowledgeMgr\ui\
+backup_dir=C:\KnowledgeMgr\data\backup\
+uiSchemaFailMode=safeDefault
+systemSheetVisibility=Hidden
+autoReloadOnStartup=TRUE
+migrateBackupEnabled=TRUE
+```
+
+### 4.5.3 保存時の注意
+
+- メモ帳で開き、**[名前を付けて保存]** から保存します
+- ファイルの種類: **すべてのファイル**
+- 文字コード: **ANSI**（UTF-8 にすると日本語名のパスや値が文字化けします）
+- 改行コード: 既定の CRLF のままで構いません
+
+### 4.5.4 設定ファイルを置かなかった場合
+
+設定ファイルが見つからない場合、ブックは上記の標準値で起動します（エラーにはなりません）。ただし、保存先パスをカスタマイズしたい場合や、`debugLevel` を変えてログを抑えたい場合は配置してください。
+
+### 4.5.5 主な設定項目
+
+| キー | 内容 | 既定値 |
+|---|---|---|
+| `debugLevel` | ログシートに出す情報量。`ERROR` / `WARN` / `INFO` / `DEBUG` から選択 | `INFO` |
+| `logRotationRows` | LOG シートが何行を超えたら古い行を自動削除するか | `10000` |
+| `data_dir` | ナレッジ本体（.txt）の保存先フォルダ | `C:\KnowledgeMgr\data\` |
+| `format_dir` | フォーマット定義（.txt）の保存先フォルダ | `C:\KnowledgeMgr\formats\` |
+| `ui_dir` | 画面定義（.txt）の保存先フォルダ | `C:\KnowledgeMgr\ui\` |
+| `backup_dir` | 修正・削除時のバックアップ保存先 | `C:\KnowledgeMgr\data\backup\` |
+| `uiSchemaFailMode` | 画面定義に不整合があった時の動作。`safeDefault` 推奨 | `safeDefault` |
+| `systemSheetVisibility` | システム用シートの表示状態。`Hidden` / `Visible` | `Hidden` |
+| `autoReloadOnStartup` | 起動時に自動で設定を再読み込みするか | `TRUE` |
+| `migrateBackupEnabled` | フォーマット変更時にナレッジ自動マイグレーションを行うか | `TRUE` |
 
 ---
 
@@ -679,19 +744,4 @@ bat が `[ERROR]` 等で停止した場合は、[困ったとき](troubleshootin
 
 1. `C:\KnowledgeMgr\検索.xlsm` をダブルクリックで開く
 2. 「コンテンツの有効化」をクリック
-3. 「検索」シートが表示されればインストール成功
-4. **[検索]** ボタンを押し、8.1 で登録したナレッジが結果一覧に出ることを確認
-
-### 8.3 管理.xlsm
-
-1. `C:\KnowledgeMgr\管理.xlsm` をダブルクリックで開く
-2. 「コンテンツの有効化」をクリック
-3. 「フォーマット一覧」シートが表示されればインストール成功
-4. **[格納先設定]** ボタンを押すと、`data` / `format` / `ui` / `backup` の 4 つのフォルダパスが表示されることを確認
-
----
-
-## 次のステップ
-
-- [使い方](usage.md) — 3 つのブックの基本操作
-- [困ったとき](troubleshooting.md) — エラー時の対処法
+3. 「検索」シートが表示�
