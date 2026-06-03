@@ -1,0 +1,57 @@
+﻿
+=== git log -3 ===
+82fb268 feat(section1): add modUIConfig + customize page (UI parameters now configurable, button overflow fixes)
+2506326 fix(clsSheetRenderer): finalize ApplyCaptionPrefix + LogTraceSafe/LogWarnSafe/LogErrorWithErrSafe (truncation fix)
+4e0621b fix(clsSheetRenderer): add missing Safe log helpers (LogTraceSafe/LogWarnSafe/LogErrorWithErrSafe)
+
+=== git status --short (count) ===
+lines=79
+M  docs/customize.md
+M  docs/install.md
+A  docs/modules/admin/clsformatdesignscreen.cls.md
+A  docs/modules/admin/clsformatlistscreen.cls.md
+A  docs/modules/admin/clsformatpreviewscreen.cls.md
+A  docs/modules/admin/clslogscreen.cls.md
+A  docs/modules/admin/clsmigrationscreen.cls.md
+A  docs/modules/admin/clsstoragescreen.cls.md
+A  docs/modules/admin/clssystemsettingsscreen.cls.md
+A  docs/modules/admin/modentryformat.bas.md
+A  docs/modules/admin/modentrysettings.bas.md
+A  docs/modules/admin/thisworkbook.cls.md
+A  docs/modules/common/clsbuttonspec.cls.md
+A  docs/modules/common/clscelladdrhelper.cls.md
+A  docs/modules/common/clscellbinding.cls.md
+A  docs/modules/common/clscellio.cls.md
+A  docs/modules/common/clscontrolspec.cls.md
+A  docs/modules/common/clsfieldmigrator.cls.md
+A  docs/modules/common/clsfieldspec.cls.md
+A  docs/modules/common/clsformatmanager.cls.md
+A  docs/modules/common/clsformspec.cls.md
+A  docs/modules/common/clsgridio.cls.md
+A  docs/modules/common/clsknowledgemanager.cls.md
+A  docs/modules/common/clslogentry.cls.md
+A  docs/modules/common/clslogger.cls.md
+A  docs/modules/common/clsscreenspec.cls.md
+A  docs/modules/common/clssearchengine.cls.md
+A  docs/modules/common/clssectionspec.cls.md
+A  docs/modules/common/clssetuporchestrator.cls.md
+A  docs/modules/common/clssheetrenderer.cls.md
+
+=== git diff --cached --stat (head) ===
+diff lines=75
+ docs/customize.md                                  |  227 +-
+ docs/install.md                                    | 9201 ++------------------
+ docs/modules/admin/clsformatdesignscreen.cls.md    |  118 +
+ docs/modules/admin/clsformatlistscreen.cls.md      |  117 +
+ docs/modules/admin/clsformatpreviewscreen.cls.md   |  237 +
+ docs/usage.md                                      |  163 +
+ mkdocs.yml                                         |  335 +-
+ 74 files changed, 22270 insertions(+), 8837 deletions(-)
+
+=== HEAD ===
+HEAD=82fb268c3a1479cc98e5aa09ebdd3a6200098d3b
+
+=== remote main ===
+0a236b21801b4c0585ae066d99714abc9effabfa	refs/heads/main
+
+=== done ===

@@ -123,11 +123,4 @@ Public Function CreateScreen(ByVal screenId As String, _
         Case "M-13"
             Dim ff As clsFileFormatScreen: Set ff = New clsFileFormatScreen
             ff.Init renderer, spec
-            Set CreateScreen = ff
-        Case "M-14"
-            Dim lg As clsLogScreen: Set lg = New clsLogScreen
-            lg.Init renderer, spec
-            Set CreateScreen = lg
-    End Select
-End Function
-```
+  

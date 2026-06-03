@@ -1,0 +1,242 @@
+﻿
+=== remote mkdocs.yml ===
+site_name: 繝翫Ξ繝・ず邂｡逅・ヤ繝ｼ繝ｫ (VBA 陬ｽ)
+site_description: Excel VBA 繝吶・繧ｹ縺ｮ繝翫Ξ繝・ず邂｡逅・ヤ繝ｼ繝ｫ - 讒区・繝ｻ蟆主・繝ｻ謫堺ｽ懊・險ｭ險・site_url: https://ai-crafted-portfolio.github.io/knowledgevba/
+site_author: ai-crafted-portfolio
+
+copyright: Copyright &copy; 2026 ai-crafted-portfolio
+
+theme:
+  name: material
+  custom_dir: overrides
+  language: ja
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - navigation.indexes
+    - toc.integrate
+    - search.highlight
+    - search.suggest
+    - content.code.copy
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: 繝繝ｼ繧ｯ繝｢繝ｼ繝峨↓蛻・崛
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: 繝ｩ繧､繝医Δ繝ｼ繝峨↓蛻・崛
+  font:
+    text: Noto Sans JP
+    code: JetBrains Mono
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - attr_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+
+extra:
+  generator: false
+
+extra_css:
+  - stylesheets/extra.css
+
+nav:
+  - 讎りｦ・ index.md
+  - 險ｭ險・
+      - 蜈ｨ菴薙い繝ｼ繧ｭ繝・け繝√Ε: architecture.md
+      - 莉墓ｧ・ spec.md
+  - 菴ｿ縺・婿:
+      - 蟆主・謇矩・ setup.md
+      - 謫堺ｽ懈焔鬆・ operations.md
+  - 險ｭ螳壹→繧ｫ繧ｹ繧ｿ繝槭う繧ｺ:
+      - 險ｭ螳壼､縺ｮ螟画峩: settings.md
+      - 逕ｻ髱｢縺ｮ繧ｫ繧ｹ繧ｿ繝槭う繧ｺ: screen_customization_guide_v2.md
+  - 繧ｽ繝ｼ繧ｹ繧ｳ繝ｼ繝・
+      - 荳隕ｧ: source/index.md
+      - 繧､繝ｳ繧ｹ繝医・繝ｩ螻､:
+          - modSetup.bas: source/infrastructure/modsetup.md
+      - 繧ｨ繝ｳ繝医Μ繝昴う繝ｳ繝亥ｱ､:
+          - modEntryFormat.bas: source/entrypoint/modentryformat.md
+          - modEntryKnowledge.bas: source/entrypoint/modentryknowledge.md
+          - modEntrySearch.bas: source/entrypoint/modentrysearch.md
+          - modEntrySettings.bas: source/entrypoint/modentrysettings.md
+          - modSpecExamples.bas: source/entrypoint/modspecexamples.md
+      - 逕ｻ髱｢螻､:
+          - clsBackupMgmtScreen.cls: source/screen/clsbackupmgmtscreen.md
+          - clsErrorBandScreen.cls: source/screen/clserrorbandscreen.md
+          - clsFileFormatScreen.cls: source/screen/clsfileformatscreen.md
+          - clsFormatDesignScreen.cls: source/screen/clsformatdesignscreen.md
+          - clsFormatListScreen.cls: source/screen/clsformatlistscreen.md
+          - clsFormatPreviewScreen.cls: source/screen/clsformatpreviewscreen.md
+          - clsKnowledgeEditScreen.cls: source/screen/clsknowledgeeditscreen.md
+          - clsKnowledgeListScreen.cls: source/screen/clsknowledgelistscreen.md
+          - clsKnowledgeRegisterScreen.cls: source/screen/clsknowledgeregisterscreen.md
+          - clsKnowledgeViewScreen.cls: source/screen/clsknowledgeviewscreen.md
+          - clsLogScreen.cls: source/screen/clslogscreen.md
+          - clsMigrationScreen.cls: source/screen/clsmigrationscreen.md
+          - clsSearchScreen.cls: source/screen/clssearchscreen.md
+          - clsStorageScreen.cls: source/screen/clsstoragescreen.md
+          - clsSystemSettingsScreen.cls: source/screen/clssystemsettingsscreen.md
+      - 繝薙ず繝阪せ繝ｭ繧ｸ繝・け螻､:
+          - clsButtonSpec.cls: source/business-logic/clsbuttonspec.md
+          - clsControlSpec.cls: source/business-logic/clscontrolspec.md
+          - clsFieldMigrator.cls: source/business-logic/clsfieldmigrator.md
+          - clsFieldSpec.cls: source/business-logic/clsfieldspec.md
+          - clsFormatManager.cls: source/business-logic/clsformatmanager.md
+          - clsFormSpec.cls: source/business-logic/clsformspec.md
+          - clsKnowledgeManager.cls: source/business-logic/clsknowledgemanager.md
+          - clsLogger.cls: source/business-logic/clslogger.md
+          - clsScreenSpec.cls: source/business-logic/clsscreenspec.md
+          - clsSearchEngine.cls: source/business-logic/clssearchengine.md
+          - clsSectionSpec.cls: source/business-logic/clssectionspec.md
+          - clsSetupOrchestrator.cls: source/business-logic/clssetuporchestrator.md
+          - clsSheetRenderer.cls: source/business-logic/clssheetrenderer.md
+          - clsStorageResolver.cls: source/business-logic/clsstorageresolver.md
+          - clsUserFormRenderer.cls: source/business-logic/clsuserformrenderer.md
+          - IScreenRenderer.cls: source/business-logic/iscreenrenderer.md
+          - modFactory.bas: source/business-logic/modfactory.md
+          - modFormBuilder.bas: source/business-logic/modformbuilder.md
+          - modScreenRender.bas: source/business-logic/modscreenrender.md
+      - 繝ｦ繝ｼ繝・ぅ繝ｪ繝・ぅ螻､:
+          - clsCellAddrHelper.cls: source/utility/clscelladdrhelper.md
+          - clsCellBinding.cls: source/utility/clscellbinding.md
+          - clsCellIO.cls: source/utility/clscellio.md
+          - clsGridIO.cls: source/utility/clsgridio.md
+          - clsLogEntry.cls: source/utility/clslogentry.md
+          - ClsStanzaSection.cls: source/utility/clsstanzasection.md
+          - ClsStanzaValidationIssue.cls: source/utility/clsstanzavalidationissue.md
+          - ClsStanzaValidationResult.cls: source/utility/clsstanzavalidationresult.md
+          - modCommon.bas: source/utility/modcommon.md
+          - modConfigHolder.bas: source/utility/modconfigholder.md
+          - modConfigLoader.bas: source/utility/modconfigloader.md
+          - modDateUtil.bas: source/utility/moddateutil.md
+          - modFileIO.bas: source/utility/modfileio.md
+          - modFormatColumns.bas: source/utility/modformatcolumns.md
+          - modFormatLoader.bas: source/utility/modformatloader.md
+          - modImageRender.bas: source/utility/modimagerender.md
+          - modKnowledgeFileIO.bas: source/utility/modknowledgefileio.md
+          - modLogIds.bas: source/utility/modlogids.md
+          - modSheetMap.bas: source/utility/modsheetmap.md
+          - modStanzaIO.bas: source/utility/modstanzaio.md
+          - modStringUtil.bas: source/utility/modstringutil.md
+          - modUIConfig.bas: source/utility/moduiconfig.md
+          - modUILayoutExtractor.bas: source/utility/moduilayoutextractor.md
+          - modUILoader.bas: source/utility/moduiloader.md
+      - 迚ｹ谿翫Δ繧ｸ繝･繝ｼ繝ｫ:
+          - ThisWorkbook・域､懃ｴ｢.xlsm・・ source/special/thisworkbook-search.md
+          - ThisWorkbook・育匳骭ｲ菫ｮ豁｣.xlsm・・ source/special/thisworkbook-register.md
+          - ThisWorkbook・育ｮ｡逅・xlsm・・ source/special/thisworkbook-admin.md
+
+=== remote docs/index.md (first 50) ===
+---
+title: 繝翫Ξ繝・ず邂｡逅・ヤ繝ｼ繝ｫ (VBA 陬ｽ)
+description: Excel VBA 縺ｧ螳溯｣・＠縺溘リ繝ｬ繝・ず邂｡逅・ヤ繝ｼ繝ｫ v2.1 縺ｮ讒区・繝ｻ菴ｿ縺・婿繝ｻ險ｭ險医∪縺ｨ繧・---
+
+# 繝翫Ξ繝・ず邂｡逅・ヤ繝ｼ繝ｫ (VBA 陬ｽ)
+
+髫懷ｮｳ蟇ｾ蠢懊・險倬鹸繝ｻ謇矩・嶌繝ｻ繝弱え繝上え縺ｪ縺ｩ繧偵・xcel 縺九ｉ逋ｻ骭ｲ繝ｻ讀懃ｴ｢繝ｻ邱ｨ髮・〒縺阪ｋ蜀・｣ｽ繝・・繝ｫ縺ｧ縺吶ゅョ繝ｼ繧ｿ縺ｯ縺吶∋縺ｦ Excel 繝悶ャ繧ｯ縺ｮ螟門・縺ｫ繝・く繧ｹ繝医ヵ繧｡繧､繝ｫ縺ｨ縺励※菫晏ｭ倥＠縲・xcel 繝悶ャ繧ｯ縺ｯ縲後ョ繝ｼ繧ｿ繧定｡ｨ遉ｺ繝ｻ邱ｨ髮・☆繧九◆繧√・遯灘哨縲阪→縺励※蜍輔″縺ｾ縺吶・
+縺薙・繧ｵ繧､繝医・縲∫樟陦後ヰ繝ｼ繧ｸ繝ｧ繝ｳ **v2.1** 縺ｮ讒区・繝ｻ蟆主・謇矩・・謫堺ｽ懈焔鬆・・險ｭ險医ｒ縺ｾ縺ｨ繧√◆蜈ｬ髢九ラ繧ｭ繝･繝｡繝ｳ繝医〒縺吶・
+!!! tip "縺薙・繝峨く繝･繝｡繝ｳ繝医〒菴ｿ縺・畑隱・
+    - **VBA** 窶・Excel 縺ｫ讓呎ｺ匁政霈峨＆繧後※縺・ｋ繝励Ο繧ｰ繝ｩ繝溘Φ繧ｰ險隱橸ｼ・isual Basic for Applications・峨〒縺吶・    - **VBE** 窶・VBA 縺ｮ繧ｳ繝ｼ繝峨ｒ邱ｨ髮・☆繧九お繝・ぅ繧ｿ・・isual Basic Editor・峨・xcel 荳翫〒 `Alt + F11` 縺ｧ髢九″縺ｾ縺吶・    - **`.xlsm`** 窶・繝槭け繝ｭ・・BA・峨ｒ蜷ｫ繧√ｉ繧後ｋ Excel 繝悶ャ繧ｯ縺ｮ蠖｢蠑上〒縺吶・    - **繧ｹ繧ｿ繝ｳ繧ｶ** 窶・`[繧ｻ繧ｯ繧ｷ繝ｧ繝ｳ]` 陦後→ `key=value` 陦後・邨・∩蜷医ｏ縺帙〒譖ｸ縺九ｌ縺溘ユ繧ｭ繧ｹ繝亥ｽ｢蠑上〒縺吶よ悽繝・・繝ｫ縺ｯ逕ｻ髱｢繝ｻ繝輔か繝ｼ繝槭ャ繝医・險ｭ螳壹・繝翫Ξ繝・ず縺ｮ螳夂ｾｩ繧偵％縺ｮ蠖｢蠑上・繝・く繧ｹ繝医ヵ繧｡繧､繝ｫ縺ｧ謖√■縺ｾ縺吶・
+## 縺薙・繝・・繝ｫ縺ｧ縺ｧ縺阪ｋ縺薙→
+
+驕主悉縺ｮ蟇ｾ蠢懆ｨ倬鹸繧・ヮ繧ｦ繝上え繧偵√ヵ繧ｩ繝ｼ繝槭ャ繝茨ｼ亥・蜉幃・岼縺ｮ縺ｲ縺ｪ蝙具ｼ峨ｒ豎ｺ繧√※謨ｴ逅・＠縲∝ｾ後°繧峨く繝ｼ繝ｯ繝ｼ繝峨ｄ譚｡莉ｶ縺ｧ謗｢縺怜・縺帙∪縺吶りｨ倬鹸縺ｯ繝・く繧ｹ繝医ヵ繧｡繧､繝ｫ 1 莉ｶ = 1 繝翫Ξ繝・ず縺ｧ菫晏ｭ倥＆繧後ｋ縺溘ａ縲・xcel 繧剃ｽｿ繧上★繝・く繧ｹ繝医お繝・ぅ繧ｿ縺ｧ荳ｭ霄ｫ繧堤｢ｺ隱阪☆繧九％縺ｨ繧ゅ〒縺阪∪縺吶ょ・蜉幃・岼縺ｯ蝗ｺ螳壹〒縺ｯ縺ｪ縺上∵･ｭ蜍吶↓蜷医ｏ縺帙※繝輔か繝ｼ繝槭ャ繝医ｒ險ｭ險医＠縺ｦ蠅励ｄ縺帙∪縺吶・
+## 3 縺､縺ｮ繝悶ャ繧ｯ縺ｧ讒区・縺輔ｌ縺ｦ縺・∪縺・
+v2.1 縺ｧ縺ｯ縲∝ｽｹ蜑ｲ縺ｮ逡ｰ縺ｪ繧・3 縺､縺ｮ Excel 繝悶ャ繧ｯ縺ｫ蛻・°繧後※縺・∪縺吶ょ茜逕ｨ閠・・閾ｪ蛻・・菴懈･ｭ縺ｫ蟇ｾ蠢懊☆繧九ヶ繝・け繧帝幕縺・※菴ｿ縺・∪縺吶・
+| 繝悶ャ繧ｯ | 荳ｻ縺ｪ蠖ｹ蜑ｲ | 蜷ｫ縺ｾ繧後ｋ逕ｻ髱｢ |
+|---|---|---|
+| 逋ｻ骭ｲ菫ｮ豁｣.xlsm | 繝翫Ξ繝・ず縺ｮ譁ｰ隕冗匳骭ｲ縺ｨ菫ｮ豁｣ | M-05 繝翫Ξ繝・ず逋ｻ骭ｲ / M-06 繝翫Ξ繝・ず菫ｮ豁｣ |
+| 讀懃ｴ｢.xlsm | 繝翫Ξ繝・ず縺ｮ荳隕ｧ繝ｻ讀懃ｴ｢繝ｻ髢ｲ隕ｧ | M-07 繝翫Ξ繝・ず荳隕ｧ / M-08 繝翫Ξ繝・ず讀懃ｴ｢ / M-09 繝翫Ξ繝・ず陦ｨ遉ｺ |
+| 邂｡逅・xlsm | 繝輔か繝ｼ繝槭ャ繝郁ｨｭ險医・蜷・ｨｮ險ｭ螳壹・謫堺ｽ懊Ο繧ｰ | M-02縲廴-04 / M-10縲廴-14 縺ｮ 8 逕ｻ髱｢ |
+
+逕ｻ髱｢縺ｯ **M-02 縺九ｉ M-14 縺ｾ縺ｧ縺ｮ 13 逕ｻ髱｢**縺ｧ縺吶ょ推逕ｻ髱｢縺ｯ Excel 縺ｮ繧ｷ繝ｼ繝医ち繝悶〒蛻・ｊ譖ｿ縺医∪縺吶・
+## 繝・・繧ｿ縺ｮ謖√■譁ｹ
+
+縺吶∋縺ｦ縺ｮ豌ｸ邯壹ョ繝ｼ繧ｿ縺ｯ Excel 繝悶ャ繧ｯ縺ｮ螟門・縺ｮ繝輔か繝ｫ繝・域里螳壹〒縺ｯ `C:\KnowledgeMgr\`・峨↓繝・く繧ｹ繝医ヵ繧｡繧､繝ｫ縺ｨ縺励※鄂ｮ縺九ｌ縺ｾ縺吶・
+- **繝翫Ξ繝・ず譛ｬ菴・* 窶・1 莉ｶ 1 繝輔ぃ繧､繝ｫ・・<繝翫Ξ繝・ず逡ｪ蜿ｷ>.txt`・・- **繝輔か繝ｼ繝槭ャ繝亥ｮ夂ｾｩ** 窶・蜈･蜉幃・岼縺ｮ縺ｲ縺ｪ蝙具ｼ・<繝輔か繝ｼ繝槭ャ繝・ID>.txt`・・- **逕ｻ髱｢繝ｬ繧､繧｢繧ｦ繝亥ｮ夂ｾｩ** 窶・蜷・判髱｢縺ｮ隕九◆逶ｮ繧呈ｱｺ繧√ｋ繝・く繧ｹ繝・- **蜍穂ｽ懆ｨｭ螳・* 窶・繝輔か繝ｫ繝縺ｮ蝣ｴ謇繧・Ο繧ｰ縺ｮ隧ｳ邏ｰ蠎ｦ縺ｪ縺ｩ繧呈嶌縺・◆險ｭ螳壹ヵ繧｡繧､繝ｫ・医ヶ繝・け縺斐→縺ｫ 1 縺､・・
+Excel 繝悶ャ繧ｯ蛛ｴ縺ｯ縺薙ｌ繧峨ｒ隱ｭ縺ｿ霎ｼ繧薙〒逕ｻ髱｢繧堤ｵ・∩遶九※縲∬｡ｨ遉ｺ繝ｻ蜈･蜉帙ｒ莉ｲ莉九＠縺ｾ縺吶よ枚蟄励さ繝ｼ繝峨・ Shift_JIS縲∵隼陦後・ CRLF 縺ｧ邨ｱ荳縺励※縺・∪縺吶・
+## 繝壹・繧ｸ讒区・
+
+- [讎りｦ‐(index.md)・医％縺ｮ繝壹・繧ｸ・・- 險ｭ險・    - [蜈ｨ菴薙い繝ｼ繧ｭ繝・け繝√Ε](architecture.md) 窶・3 繝悶ャ繧ｯ縺ｫ蛻・￠縺溽炊逕ｱ縲√せ繧ｿ繝ｳ繧ｶ鬧・虚縺ｮ縺励￥縺ｿ縲∝ｱ､讒区・
+    - [莉墓ｧ肋(spec.md) 窶・13 逕ｻ髱｢縺ｮ荳隕ｧ縲√ョ繝ｼ繧ｿ譖ｸ蠑上∵､懃ｴ｢繝ｻ繝ｭ繧ｰ縺ｮ莉墓ｧ・- 菴ｿ縺・婿
+    - [蟆主・謇矩・(setup.md) 窶・3 縺､縺ｮ `.xlsm` 縺ｮ菴懈・縲√Δ繧ｸ繝･繝ｼ繝ｫ縺ｮ蜿悶ｊ霎ｼ縺ｿ縲√そ繝・ヨ繧｢繝・・
+    - [謫堺ｽ懈焔鬆・(operations.md) 窶・逋ｻ骭ｲ繝ｻ讀懃ｴ｢繝ｻ菫ｮ豁｣繝ｻ邂｡逅・・譌･蟶ｸ謫堺ｽ・- 險ｭ螳壹→繧ｫ繧ｹ繧ｿ繝槭う繧ｺ
+    - [險ｭ螳壼､縺ｮ螟画峩](settings.md) 窶・譬ｼ邏榊・繝輔か繝ｫ繝縲√Ο繧ｰ縺ｮ隧ｳ邏ｰ蠎ｦ縲√ヵ繧｡繧､繝ｫ蠖｢蠑剰ｨｭ螳・    - [逕ｻ髱｢縺ｮ繧ｫ繧ｹ繧ｿ繝槭う繧ｺ](screen_customization_guide_v2.md) 窶・逕ｻ髱｢繝ｬ繧､繧｢繧ｦ繝医・邱ｨ髮・婿豕・- [繧ｽ繝ｼ繧ｹ繧ｳ繝ｼ繝云(source/index.md) 窶・驟榊ｸ・ｯｾ雎｡ VBA 繝｢繧ｸ繝･繝ｼ繝ｫ縺ｮ蜈ｨ繧ｽ繝ｼ繧ｹ
+
+## 險ｭ險医・繝昴う繝ｳ繝・
+- **3 繝悶ャ繧ｯ讒区・** 窶・逋ｻ骭ｲ繝ｻ讀懃ｴ｢繝ｻ邂｡逅・ｒ蛻･繝悶ャ繧ｯ縺ｫ蛻・￠縲√◎繧後◇繧後・蛻ｩ逕ｨ閠・′蠢・ｦ√↑讖溯・縺縺代ｒ髢九￠繧九ｈ縺・↓縺励※縺・∪縺吶・- **螟夜Κ繧ｹ繧ｿ繝ｳ繧ｶ鬧・虚** 窶・逕ｻ髱｢繝ｬ繧､繧｢繧ｦ繝医ｂ繝輔か繝ｼ繝槭ャ繝医ｂ Excel 縺ｮ螟門・縺ｮ繝・く繧ｹ繝医〒螳夂ｾｩ縺励∪縺吶Ａ.xlsm` 縺ｮ荳ｭ縺ｮ繧ｳ繝ｼ繝峨ｒ譖ｸ縺肴鋤縺医★縺ｫ縲・・岼繧・ｦ九◆逶ｮ繧貞､画峩縺ｧ縺阪∪縺吶・- **螻､蛻・屬** 窶・VBA 繝｢繧ｸ繝･繝ｼ繝ｫ繧貞ｽｹ蜑ｲ縺斐→縺ｮ螻､縺ｫ蛻・￠縲∝､夜Κ繝輔ぃ繧､繝ｫ縺ｮ隱ｭ縺ｿ譖ｸ縺阪・蟆ら畑縺ｮ繝｢繧ｸ繝･繝ｼ繝ｫ縺ｫ縺ｾ縺ｨ繧√※縺・∪縺吶・- **繝｢繧ｸ繝･繝ｼ繝ｫ驟榊ｸ・婿蠑・* 窶・螳梧・縺励◆ `.xlsm` 繧帝・繧九・縺ｧ縺ｯ縺ｪ縺上〃BA 繝｢繧ｸ繝･繝ｼ繝ｫ繧貞叙繧願ｾｼ繧薙〒繧ｻ繝・ヨ繧｢繝・・縺吶ｋ蠖｢縺ｧ蜷・PC 縺ｫ螻暮幕縺励∪縺吶・
+
+=== local index.md (first 50) ===
+---
+title: 繝翫Ξ繝・ず邂｡逅・ヤ繝ｼ繝ｫ (VBA 陬ｽ)
+description: Excel VBA 縺ｧ螳溯｣・＠縺溘リ繝ｬ繝・ず邂｡逅・ヤ繝ｼ繝ｫ縺ｮ莉墓ｧ倥・謫堺ｽ懊・繧｢繝ｼ繧ｭ繝・け繝√Ε縺ｾ縺ｨ繧・
+tags:
+  - excel
+  - vba
+  - knowledge-base
+---
+
+# 繝翫Ξ繝・ず邂｡逅・ヤ繝ｼ繝ｫ (VBA 陬ｽ)
+
+繝弱え繝上え繝ｻ繝医Λ繝悶Ν蟇ｾ蠢懊Γ繝｢繝ｻ謇矩・嶌繧偵ユ繧ｭ繧ｹ繝医ヵ繧｡繧､繝ｫ・・.txt`縲ヾhift_JIS + CRLF 謾ｹ陦鯉ｼ峨〒闢・ｩ阪＠縲・xcel 縺九ｉ讓ｪ譁ｭ讀懃ｴ｢繝ｻ繧ｵ繝繝咲判蜒上▽縺阪・繝ｬ繝薙Η繝ｼ縺ｧ縺阪ｋ繧医≧縺ｫ縺吶ｋ蜀・｣ｽ繝・・繝ｫ縺ｧ縺吶・
+
+!!! tip "譛ｬ繝峨く繝･繝｡繝ｳ繝医〒菴ｿ縺・畑隱・
+    - **VBA** 窶・Excel 縺ｫ讓呎ｺ匁政霈峨＆繧後※縺・ｋ繝励Ο繧ｰ繝ｩ繝溘Φ繧ｰ險隱橸ｼ・isual Basic for Applications・・
+    - **VBE** 窶・VBA 縺ｮ繧ｳ繝ｼ繝峨ｒ譖ｸ縺上お繝・ぅ繧ｿ・・isual Basic Editor・峨・xcel 荳翫〒 `Alt+F11` 縺ｧ髢九″縺ｾ縺・
+    - **`mod` / `cls` 繝励Ξ繝輔ぅ繝・け繧ｹ** 窶・VBA 諷｣鄙偵〒讓呎ｺ悶Δ繧ｸ繝･繝ｼ繝ｫ・域焔邯壹″髮・ｼ峨→ 繧ｯ繝ｩ繧ｹ繝｢繧ｸ繝･繝ｼ繝ｫ・医が繝悶ず繧ｧ繧ｯ繝域欠蜷托ｼ峨ｒ蛹ｺ蛻･
+    - **ThisWorkbook** 窶・Excel 縺・`.xlsm` 縺斐→縺ｫ閾ｪ蜍輔〒謖√▽迚ｹ谿翫Δ繧ｸ繝･繝ｼ繝ｫ縲ＡWorkbook_Open` 遲峨・ Excel 繧､繝吶Φ繝医ｒ蜿励￠蜿悶ｊ縺ｾ縺・
+    - **dataFolder** 窶・繝翫Ξ繝・ず `.txt` 繝輔ぃ繧､繝ｫ繧堤ｽｮ縺上ヵ繧ｩ繝ｫ繝縲りｨｭ螳壹す繝ｼ繝医〒蛻・ｊ譖ｿ縺亥庄閭ｽ
+
+## 縺薙・繝・・繝ｫ縺ｧ隗｣豎ｺ縺励◆縺・％縺ｨ
+
+- 驕主悉縺ｮ髫懷ｮｳ繝｡繝｢繧・焔鬆・ｒ縲後≠縺ｮ縺ｨ縺肴嶌縺・◆縺ｯ縺壹□縲阪〒邨ゅｏ繧峨○縺ｪ縺・
+- 蜊倡ｴ斐↑繧ｭ繝ｼ繝ｯ繝ｼ繝峨ヲ繝・ヨ謨ｰ縺ｧ縺ｯ諡ｾ縺・″繧後↑縺・√ち繧､繝医Ν荳閾ｴ繧・ｯｾ雎｡繝輔ぅ繝ｼ繝ｫ繝我ｸ閾ｴ縺ｮ繝悶・繧ｹ繝医ｒ蜿肴丐縺励◆鬆・ｽ堺ｻ倥￠
+- 蟄舌・繝ｭ繧ｻ繧ｹ襍ｷ蜍輔ｒ莨ｴ繧上↑縺・・xcel 繝励Ο繧ｻ繧ｹ蜀・〒螳檎ｵ舌☆繧区､懃ｴ｢ UI 繧呈署萓帙☆繧・
+
+## 諠ｳ螳夊ｪｭ閠・
+
+- 蜷後ヤ繝ｼ繝ｫ繧貞茜逕ｨ縺吶ｋ繝｡繝ｳ繝舌・
+- VBA 繝｢繧ｸ繝･繝ｼ繝ｫ讒区・繝ｻ讀懃ｴ｢繧ｹ繧ｳ繧｢繝ｪ繝ｳ繧ｰ險ｭ險医ｒ遒ｺ隱阪＠縺溘＞莠ｺ
+- 蛻ｩ逕ｨ閠・髄縺第桃菴懈焔鬆・ｒ遒ｺ隱阪＠縺溘＞莠ｺ 竊・[謫堺ｽ懈焔鬆・(operations.md) 縺ｸ
+
+## 蜈ｨ菴灘ワ
+
+```mermaid
+flowchart LR
+    User([蛻ｩ逕ｨ閠・) -->|繧ｭ繝ｼ繝ｯ繝ｼ繝榎 MainSheet[繝｡繧､繝ｳ繧ｷ繝ｼ繝・
+    MainSheet --> SearchSheet[讀懃ｴ｢繧ｷ繝ｼ繝・
+    SearchSheet -->|讀懃ｴ｢螳溯｡芸 Engine[clsSearchEngine]
+    Engine -->|.txt 襍ｰ譟ｻ| Data[(dataFolder /<br/>*.txt SJIS+CRLF)]
+    Engine -->|繧ｵ繝繝榊叙蠕慾 Images[(kb_images /<br/>KnwNo.png)]
+    Engine -->|Score 髯埼・ Result[邨先棡荳隕ｧ<br/>繧ｵ繝繝・+ Score 蛻余
+    Result -->|陦碁∈謚・+ Macro| Form[spec 鬧・虚 UserForm<br/>隧ｳ邏ｰ繝励Ξ繝薙Η繝ｼ]
+```
+
+## 荳ｻ隕∵ｩ溯・
+
+繝翫Ξ繝・ず荳隕ｧ縺ｧ繝｡繧ｿ繝・・繧ｿ繧堤ｮ｡逅・＠縲∵､懃ｴ｢逕ｻ髱｢縺ｧ繧ｭ繝ｼ繝ｯ繝ｼ繝我ｸ閾ｴ繧偵せ繧ｳ繧｢繝ｪ繝ｳ繧ｰ・医ち繧､繝医Ν ﾃ・ + 蟇ｾ雎｡繝輔ぅ繝ｼ繝ｫ繝・ﾃ・ + 蜃ｺ迴ｾ蝗樊焚・峨＠縺ｦ髯埼・た繝ｼ繝医∫ｵ先棡荳隕ｧ縺ｮ H 蛻励↓繧ｵ繝繝搾ｼ・0ﾃ・0px・峨！ 蛻励↓ Score 繧定｡ｨ遉ｺ縺励∪縺吶らｵ先棡陦後ｒ驕ｸ謚槭＠縺ｦ `Macro_ShowSearchResultPreview` 繧貞ｮ溯｡後☆繧九→縲～clsFormSpec` 縺ｧ螳｣險縺励◆ DSL 縺九ｉ `modFormBuilder` 縺・UserForm 繧貞ｮ溯｡梧凾逕滓・縺励※隧ｳ邏ｰ繝励Ξ繝薙Η繝ｼ繧定｡ｨ遉ｺ縺励∪縺吶りｨｭ螳夂判髱｢縺ｧ `dataFolder` 繧貞・繧頑崛縺医ｌ縺ｰ隍・焚繝翫Ξ繝・ず髮・ｒ驕狗畑縺ｧ縺阪～<dataFolder 縺ｮ隕ｪ>/kb_images/<KnwNo>.png` 縺ｮ隕冗ｴ・〒逕ｻ蜒上′隗｣豎ｺ縺輔ｌ縺ｾ縺吶ＡImagePath=` 繧ｹ繧ｿ繝ｳ繧ｶ繧・`.txt` 譛ｫ蟆ｾ縺ｫ譖ｸ縺代・繝代せ荳頑嶌縺阪ｂ蜿ｯ閭ｽ縺ｧ縺吶・
+
+## 險ｭ險域婿驥昴・繝上う繝ｩ繧､繝・

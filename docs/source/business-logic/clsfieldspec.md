@@ -142,15 +142,4 @@ Public Sub Init(ByVal fieldOrder As Long, _
     m_hintText = hintText
 End Sub
 
-Public Sub SetCellAddrs(ByVal orderAddr As String, _
-                        ByVal reqMarkAddr As String, _
-                        ByVal labelAddr As String, _
-                        ByVal typeAddr As String, _
-                        ByVal inputAddr As String)
-    m_orderAddr = orderAddr
-    m_reqMarkAddr = reqMarkAddr
-    m_labelAddr = labelAddr
-    m_typeAddr = typeAddr
-    m_inputAddr = inputAddr
-End Sub
-```
+Public Sub SetCellAddrs(ByVal

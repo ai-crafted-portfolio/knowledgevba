@@ -56,16 +56,4 @@ Public Property Let Label(ByVal value As String)
     m_label = value
 End Property
 
-Public Property Get ColorHex() As String
-    ColorHex = m_colorHex
-End Property
-Public Property Let ColorHex(ByVal value As String)
-    m_colorHex = value
-End Property
-
-Public Sub Init(ByVal address As String, ByVal label As String, ByVal colorHex As String)
-    m_address = address
-    m_label = label
-    m_colorHex = colorHex
-End Sub
-```
+Public Property Get ColorHex() A

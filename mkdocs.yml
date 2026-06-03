@@ -225,4 +225,15 @@ nav:
           - modFormatColumns.bas: source/utility/modformatcolumns.md
           - modFormatLoader.bas: source/utility/modformatloader.md
           - modImageRender.bas: source/utility/modimagerender.md
-          - modKnowle
+          - modKnowledgeFileIO.bas: source/utility/modknowledgefileio.md
+          - modLogIds.bas: source/utility/modlogids.md
+          - modSheetMap.bas: source/utility/modsheetmap.md
+          - modStanzaIO.bas: source/utility/modstanzaio.md
+          - modStringUtil.bas: source/utility/modstringutil.md
+          - modUIConfig.bas: source/utility/moduiconfig.md
+          - modUILayoutExtractor.bas: source/utility/moduilayoutextractor.md
+          - modUILoader.bas: source/utility/moduiloader.md
+      - 特殊モジュール:
+          - ThisWorkbook（検索.xlsm）: source/special/thisworkbook-search.md
+          - ThisWorkbook（登録修正.xlsm）: source/special/thisworkbook-register.md
+          - ThisWorkbook（管理.xlsm）: source/special/thisworkbook-admin.md

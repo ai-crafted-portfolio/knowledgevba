@@ -117,14 +117,4 @@ ErrHandler:
 End Sub
 
 ' ================================================================
-' 関数名: frmCallback_searchResult_close
-' 概要:   spec 駆動フォームの「閉じる」ボタン Click コールバック
-' 引数:   frm - UserForm インスタンス (Application.Run の第 2 引数で渡る)
-' 備考:   Application.Run の引数として UserForm が渡るが、本モックでは
-'         単純に Unload するだけ。
-' ================================================================
-Public Sub frmCallback_searchResult_close(ByVal frm As Object)
-    On Error Resume Next
-    Unload frm
-End Sub
-```
+' 関数名: frmCallback_searchResult

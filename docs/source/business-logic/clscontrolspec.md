@@ -124,18 +124,4 @@ End Property
 '         cap     - Caption (Label/Button/CheckBox 用、省略可)
 '         onClk   - OnClick マクロ名 (Button 用、省略可)
 ' ================================================================
-Public Sub Init(ByVal cType As String, ByVal nm As String, _
-                 ByVal l As Long, ByVal t As Long, _
-                 ByVal w As Long, ByVal h As Long, _
-                 Optional ByVal cap As String = "", _
-                 Optional ByVal onClk As String = "")
-    m_controlType = cType
-    m_name = nm
-    m_left = l
-    m_top = t
-    m_width = w
-    m_height = h
-    m_caption = cap
-    m_onClick = onClk
-End Sub
-```
+Public Sub Init(By

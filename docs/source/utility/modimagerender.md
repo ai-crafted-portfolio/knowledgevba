@@ -241,17 +241,4 @@ Public Function HasShapeWithPrefix(ByVal ws As Worksheet, _
     plen = Len(prefix)
     For i = 1 To ws.Shapes.Count
         Dim shp As Shape
-        Set shp = ws.Shapes(i)
-        If Len(shp.Name) >= plen Then
-            If Left(shp.Name, plen) = prefix Then
-                HasShapeWithPrefix = True
-                Exit Function
-            End If
-        End If
-    Next i
-    HasShapeWithPrefix = False
-    Exit Function
-ErrHandler:
-    HasShapeWithPrefix = False
-End Function
-```
+        Set shp = ws.S

@@ -1,0 +1,201 @@
+﻿**********************
+Windows PowerShell トランスクリプト開始
+開始時刻: 20260601223038
+ユーザー名: TIGERPC\81904
+RunAs ユーザー: TIGERPC\81904
+構成名: 
+コンピューター: TIGERPC (Microsoft Windows NT 10.0.26200.0)
+ホスト アプリケーション: C:\WINDOWS\system32\WindowsPowerShell\v1.0\PowerShell.exe -NoProfile -ExecutionPolicy Bypass -File C:\kvba\push\_session_push.ps1
+プロセス ID: 6828
+PSVersion: 5.1.26100.8457
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.8457
+BuildVersion: 10.0.26100.8457
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+=== Phase 1: Excel zombie check ===
+EXCEL: 0 process
+
+=== Phase 1: cd + remove index.lock ===
+Removed: C:\kvba\push\.git\index.lock
+
+=== Phase 2: git add ===
+git.exe : warning: in the working copy of 'docs/customize.md', LF will be replaced by CRLF the next time Git touches it
+発生場所 C:\kvba\push\_session_push.ps1:28 文字:1
++ & git add docs/install.md docs/modules/ mkdocs.yml docs/troubleshooti ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (warning: in the... Git touches it:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+
+warning: in the working copy of 'docs/install.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/troubleshooting.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/usage.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/modules/admin/clsformatdesignscreen.cls.md', LF will be replaced by CRLF the next
+ time Git touches it
+warning: in the working copy of 'docs/modules/admin/clsformatlistscreen.cls.md', LF will be replaced by CRLF the next t
+ime Git touches it
+warning: in the working copy of 'docs/modules/admin/clsformatpreviewscreen.cls.md', LF will be replaced by CRLF the nex
+t time Git touches it
+warning: in the working copy of 'docs/modules/admin/clslogscreen.cls.md', LF will be replaced by CRLF the next time Git
+ touches it
+warning: in the working copy of 'docs/modules/admin/clsmigrationscreen.cls.md', LF will be replaced by CRLF the next ti
+me Git touches it
+warning: in the working copy of 'docs/modules/admin/clsstoragescreen.cls.md', LF will be replaced by CRLF the next time
+ Git touches it
+warning: in the working copy of 'docs/modules/admin/clssystemsettingsscreen.cls.md', LF will be replaced by CRLF the ne
+xt time Git touches it
+warning: in the working copy of 'docs/modules/admin/modentryformat.bas.md', LF will be replaced by CRLF the next time G
+it touches it
+warning: in the working copy of 'docs/modules/admin/modentrysettings.bas.md', LF will be replaced by CRLF the next time
+ Git touches it
+warning: in the working copy of 'docs/modules/admin/thisworkbook.cls.md', LF will be replaced by CRLF the next time Git
+ touches it
+warning: in the working copy of 'docs/modules/common/clsbuttonspec.cls.md', LF will be replaced by CRLF the next time G
+it touches it
+warning: in the working copy of 'docs/modules/common/clscelladdrhelper.cls.md', LF will be replaced by CRLF the next ti
+me Git touches it
+warning: in the working copy of 'docs/modules/common/clscellbinding.cls.md', LF will be replaced by CRLF the next time
+Git touches it
+warning: in the working copy of 'docs/modules/common/clscellio.cls.md', LF will be replaced by CRLF the next time Git t
+ouches it
+warning: in the working copy of 'docs/modules/common/clscontrolspec.cls.md', LF will be replaced by CRLF the next time
+Git touches it
+warning: in the working copy of 'docs/modules/common/clsfieldmigrator.cls.md', LF will be replaced by CRLF the next tim
+e Git touches it
+warning: in the working copy of 'docs/modules/common/clsfieldspec.cls.md', LF will be replaced by CRLF the next time Gi
+t touches it
+warning: in the working copy of 'docs/modules/common/clsformatmanager.cls.md', LF will be replaced by CRLF the next tim
+e Git touches it
+warning: in the working copy of 'docs/modules/common/clsformspec.cls.md', LF will be replaced by CRLF the next time Git
+ touches it
+warning: in the working copy of 'docs/modules/common/clsgridio.cls.md', LF will be replaced by CRLF the next time Git t
+ouches it
+warning: in the working copy of 'docs/modules/common/clsknowledgemanager.cls.md', LF will be replaced by CRLF the next
+time Git touches it
+warning: in the working copy of 'docs/modules/common/clslogentry.cls.md', LF will be replaced by CRLF the next time Git
+ touches it
+warning: in the working copy of 'docs/modules/common/clslogger.cls.md', LF will be replaced by CRLF the next time Git t
+ouches it
+warning: in the working copy of 'docs/modules/common/clsscreenspec.cls.md', LF will be replaced by CRLF the next time G
+it touches it
+warning: in the working copy of 'docs/modules/common/clssearchengine.cls.md', LF will be replaced by CRLF the next time
+ Git touches it
+warning: in the working copy of 'docs/modules/common/clssectionspec.cls.md', LF will be replaced by CRLF the next time
+Git touches it
+warning: in the working copy of 'docs/modules/common/clssetuporchestrator.cls.md', LF will be replaced by CRLF the next
+ time Git touches it
+warning: in the working copy of 'docs/modules/common/clssheetrenderer.cls.md', LF will be replaced by CRLF the next tim
+e Git touches it
+warning: in the working copy of 'docs/modules/common/clsstanzasection.cls.md', LF will be replaced by CRLF the next tim
+e Git touches it
+warning: in the working copy of 'docs/modules/common/clsstanzavalidationissue.cls.md', LF will be replaced by CRLF the
+next time Git touches it
+warning: in the working copy of 'docs/modules/common/clsstanzavalidationresult.cls.md', LF will be replaced by CRLF the
+ next time Git touches it
+warning: in the working copy of 'docs/modules/common/clsstorageresolver.cls.md', LF will be replaced by CRLF the next t
+ime Git touches it
+warning: in the working copy of 'docs/modules/common/clsuserformrenderer.cls.md', LF will be replaced by CRLF the next
+time Git touches it
+warning: in the working copy of 'docs/modules/common/iscreenrenderer.cls.md', LF will be replaced by CRLF the next time
+ Git touches it
+warning: in the working copy of 'docs/modules/common/modbuttonwiring.bas.md', LF will be replaced by CRLF the next time
+ Git touches it
+warning: in the working copy of 'docs/modules/common/modcommon.bas.md', LF will be replaced by CRLF the next time Git t
+ouches it
+warning: in the working copy of 'docs/modules/common/modconfigholder.bas.md', LF will be replaced by CRLF the next time
+ Git touches it
+warning: in the working copy of 'docs/modules/common/modconfigloader.bas.md', LF will be replaced by CRLF the next time
+ Git touches it
+warning: in the working copy of 'docs/modules/common/moddateutil.bas.md', LF will be replaced by CRLF the next time Git
+ touches it
+warning: in the working copy of 'docs/modules/common/mode2e_allbuttons.bas.md', LF will be replaced by CRLF the next ti
+me Git touches it
+warning: in the working copy of 'docs/modules/common/modentryuserform.bas.md', LF will be replaced by CRLF the next tim
+e Git touches it
+warning: in the working copy of 'docs/modules/common/modfactory.bas.md', LF will be replaced by CRLF the next time Git
+touches it
+warning: in the working copy of 'docs/modules/common/modfileio.bas.md', LF will be replaced by CRLF the next time Git t
+ouches it
+warning: in the working copy of 'docs/modules/common/modformatcolumns.bas.md', LF will be replaced by CRLF the next tim
+e Git touches it
+warning: in the working copy of 'docs/modules/common/modformatloader.bas.md', LF will be replaced by CRLF the next time
+ Git touches it
+warning: in the working copy of 'docs/modules/common/modformbuilder.bas.md', LF will be replaced by CRLF the next time
+Git touches it
+warning: in the working copy of 'docs/modules/common/modknowledgefileio.bas.md', LF will be replaced by CRLF the next t
+ime Git touches it
+warning: in the working copy of 'docs/modules/common/modlogids.bas.md', LF will be replaced by CRLF the next time Git t
+ouches it
+warning: in the working copy of 'docs/modules/common/modrefresh.bas.md', LF will be replaced by CRLF the next time Git
+touches it
+warning: in the working copy of 'docs/modules/common/modscreenrender.bas.md', LF will be replaced by CRLF the next time
+ Git touches it
+warning: in the working copy of 'docs/modules/common/modsetup.bas.md', LF will be replaced by CRLF the next time Git to
+uches it
+warning: in the working copy of 'docs/modules/common/modsheetbuttons.bas.md', LF will be replaced by CRLF the next time
+ Git touches it
+warning: in the working copy of 'docs/modules/common/modsheetmap.bas.md', LF will be replaced by CRLF the next time Git
+ touches it
+warning: in the working copy of 'docs/modules/common/modspecexamples.bas.md', LF will be replaced by CRLF the next time
+ Git touches it
+warning: in the working copy of 'docs/modules/common/modstanzaio.bas.md', LF will be replaced by CRLF the next time Git
+ touches it
+warning: in the working copy of 'docs/modules/common/modstringutil.bas.md', LF will be replaced by CRLF the next time G
+it touches it
+warning: in the working copy of 'docs/modules/common/modtesthelpers.bas.md', LF will be replaced by CRLF the next time
+Git touches it
+warning: in the working copy of 'docs/modules/common/moduiloader.bas.md', LF will be replaced by CRLF the next time Git
+ touches it
+warning: in the working copy of 'docs/modules/common/moduserformcallback.bas.md', LF will be replaced by CRLF the next
+time Git touches it
+warning: in the working copy of 'docs/modules/index.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/modules/register/clsknowledgeeditscreen.cls.md', LF will be replaced by CRLF the
+next time Git touches it
+warning: in the working copy of 'docs/modules/register/clsknowledgeregisterscreen.cls.md', LF will be replaced by CRLF
+the next time Git touches it
+warning: in the working copy of 'docs/modules/register/modentryknowledge.bas.md', LF will be replaced by CRLF the next
+time Git touches it
+warning: in the working copy of 'docs/modules/register/modknowledgeentryhelpers.bas.md', LF will be replaced by CRLF th
+e next time Git touches it
+warning: in the working copy of 'docs/modules/register/thisworkbook.cls.md', LF will be replaced by CRLF the next time
+Git touches it
+warning: in the working copy of 'docs/modules/search/clsknowledgeviewscreen.cls.md', LF will be replaced by CRLF the ne
+xt time Git touches it
+warning: in the working copy of 'docs/modules/search/clssearchscreen.cls.md', LF will be replaced by CRLF the next time
+ Git touches it
+warning: in the working copy of 'docs/modules/search/modentrysearch.bas.md', LF will be replaced by CRLF the next time
+Git touches it
+warning: in the working copy of 'docs/modules/search/thisworkbook.cls.md', LF will be replaced by CRLF the next time Gi
+t touches it
+ touches it
+warning: in the working copy of 'docs/modules/common/moduserformcallback.bas.md', LF will be replaced by CRLF the next
+time Git touches it
+warning: in the working copy of 'docs/modules/index.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/modules/register/clsknowledgeeditscreen.cls.md', LF will be replaced by CRLF the
+next time Git touches it
+warning: in the working copy of 'docs/modules/register/clsknowledgeregisterscreen.cls.md', LF will be replaced by CRLF
+the next time Git touches it
+warning: in the working copy of 'docs/modules/register/modentryknowledge.bas.md', LF will be replaced by CRLF the next
+time Git touches it
+warning: in the working copy of 'docs/modules/register/modknowledgeentryhelpers.bas.md', LF will be replaced by CRLF th
+e next time Git touches it
+warning: in the working copy of 'docs/modules/register/thisworkbook.cls.md', LF will be replaced by CRLF the next time
+Git touches it
+warning: in the working copy of 'docs/modules/search/clsknowledgeviewscreen.cls.md', LF will be replaced by CRLF the ne
+xt time Git touches it
+warning: in the working copy of 'docs/modules/search/clssearchscreen.cls.md', LF will be replaced by CRLF the next time
+ Git touches it
+warning: in the working copy of 'docs/modules/search/modentrysearch.bas.md', LF will be replaced by CRLF the next time
+Git touches it
+warning: in the working copy of 'docs/modules/search/thisworkbook.cls.md', LF will be replaced by CRLF the next time Gi
+t touches it
+git add exit: 0
+
+=== Phase 2: git status ===
+
+git status exit: 0
+
+=== Phase 2: git diff --cached --stat ===

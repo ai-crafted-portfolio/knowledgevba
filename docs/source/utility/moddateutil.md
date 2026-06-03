@@ -116,12 +116,4 @@ End Function
 ' 引数:   n - 変換対象の数値
 ' 戻り値: String - 2桁の文字列
 ' 備考:   100以上の値が来た場合はそのまま文字列化する
-' ================================================================
-Public Function Pad2(ByVal n As Long) As String
-    If n < 10 Then
-        Pad2 = "0" & CStr(n)
-    Else
-        Pad2 = CStr(n)
-    End If
-End Function
-```
+' =========

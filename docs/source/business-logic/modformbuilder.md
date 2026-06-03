@@ -208,15 +208,4 @@ Public Function ProgIDFromType(ByVal t As String) As String
         Case "IMAGE"
             ProgIDFromType = PROGID_IMAGE
         Case "LISTBOX"
-            ProgIDFromType = PROGID_LISTBOX
-        Case "COMBOBOX"
-            ProgIDFromType = PROGID_COMBOBOX
-        Case "FRAME"
-            ProgIDFromType = PROGID_FRAME
-        Case "CHECKBOX"
-            ProgIDFromType = PROGID_CHECKBOX
-        Case Else
-            ProgIDFromType = PROGID_LABEL
-    End Select
-End Function
-```
+            ProgIDFro

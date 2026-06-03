@@ -89,32 +89,4 @@ End Sub
 Public Sub LogScreenTrace(ByVal className As String, _
                             ByVal funcName As String, _
                             ByVal message As String, _
-                            Optional ByVal logId As String = "")
-    On Error Resume Next
-    Dim lg As clsLogger
-    Set lg = New clsLogger
-    lg.Init ThisWorkbook.Worksheets("LOG")
-    If Not lg Is Nothing Then
-        lg.LogTrace className, funcName, message, "", logId
-    End If
-End Sub
-
-' ================================================================
-' 関数名: LogScreenError
-' 概要: 画面層共通の Error ログ出力ラッパ (v1/v2 非依存)
-' ================================================================
-Public Sub LogScreenError(ByVal className As String, _
-                            ByVal funcName As String, _
-                            ByVal stepName As String, _
-                            ByVal errNum As Long, _
-                            ByVal errDesc As String, _
-                            Optional ByVal logId As String = "")
-    On Error Resume Next
-    Dim lg As clsLogger
-    Set lg = New clsLogger
-    lg.Init ThisWorkbook.Worksheets("LOG")
-    If Not lg Is Nothing Then
-        lg.LogError className, funcName, "step=" & stepName & " Err#" & errNum & " " & errDesc, "", logId
-    End If
-End Sub
-```
+  

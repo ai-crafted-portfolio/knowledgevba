@@ -106,15 +106,4 @@ Public Sub Init(ByVal btnName As String, _
                 ByVal caption As String, _
                 ByVal cellAddr As String, _
                 ByVal colorHex As String, _
-                Optional ByVal groupName As String = "", _
-                Optional ByVal hintAddr As String = "", _
-                Optional ByVal hintText As String = "")
-    m_btnName = btnName
-    m_caption = caption
-    m_cellAddr = cellAddr
-    m_colorHex = colorHex
-    m_groupName = groupName
-    m_hintAddr = hintAddr
-    m_hintText = hintText
-End Sub
-```
+               

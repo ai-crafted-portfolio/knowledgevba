@@ -1,0 +1,35 @@
+﻿
+=== BEGIN 2026-06-01 22:41:03 ===
+backup done
+remote mkdocs.yml saved to C:\kvba\push\_bk\mkdocs_remote.yml
+local mkdocs bytes=10754
+remote mkdocs bytes=7371
+local string length=10406
+remote string length=6779
+
+=== first 20 lines of remote ===
+site_name: 繝翫Ξ繝・ず邂｡逅・ヤ繝ｼ繝ｫ (VBA 陬ｽ)
+site_description: Excel VBA 繝吶・繧ｹ縺ｮ繝翫Ξ繝・ず邂｡逅・ヤ繝ｼ繝ｫ - 讒区・繝ｻ蟆主・繝ｻ謫堺ｽ懊・險ｭ險・site_url: https://ai-crafted-portfolio.github.io/knowledgevba/
+site_author: ai-crafted-portfolio
+
+copyright: Copyright &copy; 2026 ai-crafted-portfolio
+
+theme:
+  name: material
+  custom_dir: overrides
+  language: ja
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - navigation.indexes
+    - toc.integrate
+    - search.highlight
+    - search.suggest
+    - content.code.copy
+  palette:
+
+=== nav section of local (search for '繝｢繧ｸ繝･繝ｼ繝ｫ荳隕ｧ') ===
+modules nav start line=-1
+
+=== END 2026-06-01 22:41:04 ===

@@ -1,0 +1,22 @@
+docs/modules/common/clsfieldmigrator.cls.md: needs update
+docs/modules/index.md: needs update
+--- status before add --- 
+ M docs/modules/common/clsfieldmigrator.cls.md
+ M docs/modules/index.md
+?? docs/modules/search/modentrysearch.bas.md.test
+--- staged --- 
+ docs/modules/common/clsfieldmigrator.cls.md | Bin 4195 -> 4195 bytes
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+[main 3496d3c] fix(site): repair mojibake (section sign comment) in clsfieldmigrator.cls.md (CP932 strict, full 68-file sweep 2026-06-02)
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+--- after commit --- 
+3496d3c fix(site): repair mojibake (section sign comment) in clsfieldmigrator.cls.md (CP932 strict, full 68-file sweep 2026-06-02)
+016bdb4 fix(site): restore mojibake comments in clsSheetRenderer/modFormatLoader pages (CP932 strict, 42 comment lines repaired)
+b33519c fix(site): encode 68 module md files as Shift_JIS (CP932) per user requirement
+To https://github.com/ai-crafted-portfolio/knowledgevba.git
+   016bdb4..3496d3c  main -> main
+--- after push --- 
+3496d3c fix(site): repair mojibake (section sign comment) in clsfieldmigrator.cls.md (CP932 strict, full 68-file sweep 2026-06-02)
+016bdb4 fix(site): restore mojibake comments in clsSheetRenderer/modFormatLoader pages (CP932 strict, 42 comment lines repaired)
+b33519c fix(site): encode 68 module md files as Shift_JIS (CP932) per user requirement
+--done-- 

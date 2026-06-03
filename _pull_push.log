@@ -1,0 +1,87 @@
+﻿
+=== BEGIN 2026-06-01 22:37:23 ===
+
+=== pre HEAD ===
+local=7757b37a11fbc44195133a9a70a3610d7d1225d1
+
+=== git fetch ===
+git.exe : From https://github.com/ai-crafted-portfolio/knowledgevba
+発生場所 C:\kvba\push\_pull_push.ps1:16 文字:7
++ $f = (& git fetch origin 2>&1) | Out-String
++       ~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (From https://gi...io/knowledgevba:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+   82fb268..0a236b2  main       -> origin/main
+
+fetch exit=0
+
+=== branch state ===
+local=7757b37a11fbc44195133a9a70a3610d7d1225d1
+origin/main=0a236b21801b4c0585ae066d99714abc9effabfa
+
+=== log local vs origin (last 5) ===
+local: 7757b37 knowledgevba v2.3 site: 3 bat + ps1 fulltext + 68 module pages
+local: 82fb268 feat(section1): add modUIConfig + customize page (UI parameters now configurable, button overflow fixes)
+local: 2506326 fix(clsSheetRenderer): finalize ApplyCaptionPrefix + LogTraceSafe/LogWarnSafe/LogErrorWithErrSafe (truncation fix)
+local: 4e0621b fix(clsSheetRenderer): add missing Safe log helpers (LogTraceSafe/LogWarnSafe/LogErrorWithErrSafe)
+local: 1a18b11 fix(modScreenSpecRegistry): complete truncated AddStandardFieldRows For loop + add missing AddLabelField helper
+origin: 0a236b2 docs: revise site for knowledgevba v2.1 (3-xlsm split)
+origin: 82fb268 feat(section1): add modUIConfig + customize page (UI parameters now configurable, button overflow fixes)
+origin: 2506326 fix(clsSheetRenderer): finalize ApplyCaptionPrefix + LogTraceSafe/LogWarnSafe/LogErrorWithErrSafe (truncation fix)
+origin: 4e0621b fix(clsSheetRenderer): add missing Safe log helpers (LogTraceSafe/LogWarnSafe/LogErrorWithErrSafe)
+origin: 1a18b11 fix(modScreenSpecRegistry): complete truncated AddStandardFieldRows For loop + add missing AddLabelField helper
+
+=== git pull --rebase ===
+git.exe : From https://github.com/ai-crafted-portfolio/knowledgevba
+発生場所 C:\kvba\push\_pull_push.ps1:31 文字:7
++ $p = (& git pull --rebase origin main 2>&1) | Out-String
++       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (From https://gi...io/knowledgevba:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ * branch            main       -> FETCH_HEAD
+CONFLICT (modify/delete): docs/customize.md deleted in HEAD and modified in 7757b37 (knowledgevba v2.3 site: 3 bat + ps1 fulltext + 68 module pages).  Version 7757b37 (knowledgevba v2.3 site: 3 bat + ps1 fulltext + 68 module pages) of docs/customize.md left in tree.
+CONFLICT (modify/delete): docs/install.md deleted in HEAD and modified in 7757b37 (knowledgevba v2.3 site: 3 bat + ps1 fulltext + 68 module pages).  Version 7757b37 (knowledgevba v2.3 site: 3 bat + ps1 fulltext + 68 module pages) of docs/install.md left in tree.
+Auto-merging mkdocs.yml
+CONFLICT (content): Merge conflict in mkdocs.yml
+Rebasing (1/1)
+error: could not apply 7757b37... knowledgevba v2.3 site: 3 bat + ps1 fulltext + 68 module pages
+hint: Resolve all conflicts manually, mark them as resolved with
+hint: "git add/rm <conflicted_files>", then run "git rebase --continue".
+hint: You can instead skip this commit: run "git rebase --skip".
+hint: To abort and get back to the state before "git rebase", run "git rebase --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Could not apply 7757b37... # knowledgevba v2.3 site: 3 bat + ps1 fulltext + 68 module pages
+
+pull exit=1
+
+=== post-pull HEAD ===
+local=0a236b21801b4c0585ae066d99714abc9effabfa
+0a236b2 docs: revise site for knowledgevba v2.1 (3-xlsm split)
+82fb268 feat(section1): add modUIConfig + customize page (UI parameters now configurable, button overflow fixes)
+2506326 fix(clsSheetRenderer): finalize ApplyCaptionPrefix + LogTraceSafe/LogWarnSafe/LogErrorWithErrSafe (truncation fix)
+4e0621b fix(clsSheetRenderer): add missing Safe log helpers (LogTraceSafe/LogWarnSafe/LogErrorWithErrSafe)
+1a18b11 fix(modScreenSpecRegistry): complete truncated AddStandardFieldRows For loop + add missing AddLabelField helper
+
+=== git push origin main ===
+git.exe : To https://github.com/ai-crafted-portfolio/knowledgevba.git
+発生場所 C:\kvba\push\_pull_push.ps1:42 文字:8
++ $pu = (& git push origin main 2>&1) | Out-String
++        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (To https://gith...nowledgevba.git:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ ! [rejected]        main -> main (non-fast-forward)
+error: failed to push some refs to 'https://github.com/ai-crafted-portfolio/knowledgevba.git'
+hint: Updates were rejected because a pushed branch tip is behind its remote
+hint: counterpart. If you want to integrate the remote changes, use 'git pull'
+hint: before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+
+push exit=1
+
+=== post-push remote ls ===
+ls-remote=0a236b21801b4c0585ae066d99714abc9effabfa	refs/heads/main
+
+=== END 2026-06-01 22:37:27 ===

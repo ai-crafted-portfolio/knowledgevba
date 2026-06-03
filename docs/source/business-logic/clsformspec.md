@@ -106,16 +106,4 @@ End Function
 ' 概要:   指定名の Control Spec を取得 (なければ Nothing)
 ' ================================================================
 Public Function ControlByName(ByVal nm As String) As clsControlSpec
-    On Error Resume Next
-    Set ControlByName = m_controls(nm)
-    On Error GoTo 0
-End Function
-
-' ================================================================
-' 関数名: ControlCount
-' 概要:   Controls Collection の件数
-' ================================================================
-Public Function ControlCount() As Long
-    ControlCount = m_controls.Count
-End Function
-```
+    On Err

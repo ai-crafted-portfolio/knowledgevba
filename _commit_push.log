@@ -1,0 +1,114 @@
+﻿
+=== BEGIN 2026-06-01 22:36:29 ===
+
+=== Phase 3a: pre-commit HEAD ===
+preHead=82fb268c3a1479cc98e5aa09ebdd3a6200098d3b
+
+=== Phase 3b: git config ===
+email=ai-crafted-portfolio@users.noreply.github.com
+name=ai-crafted-portfolio
+origin=https://github.com/ai-crafted-portfolio/knowledgevba.git
+
+=== Phase 3c: git commit ===
+[main 7757b37] knowledgevba v2.3 site: 3 bat + ps1 fulltext + 68 module pages
+ 74 files changed, 22270 insertions(+), 8837 deletions(-)
+ create mode 100644 docs/modules/admin/clsformatdesignscreen.cls.md
+ create mode 100644 docs/modules/admin/clsformatlistscreen.cls.md
+ create mode 100644 docs/modules/admin/clsformatpreviewscreen.cls.md
+ create mode 100644 docs/modules/admin/clslogscreen.cls.md
+ create mode 100644 docs/modules/admin/clsmigrationscreen.cls.md
+ create mode 100644 docs/modules/admin/clsstoragescreen.cls.md
+ create mode 100644 docs/modules/admin/clssystemsettingsscreen.cls.md
+ create mode 100644 docs/modules/admin/modentryformat.bas.md
+ create mode 100644 docs/modules/admin/modentrysettings.bas.md
+ create mode 100644 docs/modules/admin/thisworkbook.cls.md
+ create mode 100644 docs/modules/common/clsbuttonspec.cls.md
+ create mode 100644 docs/modules/common/clscelladdrhelper.cls.md
+ create mode 100644 docs/modules/common/clscellbinding.cls.md
+ create mode 100644 docs/modules/common/clscellio.cls.md
+ create mode 100644 docs/modules/common/clscontrolspec.cls.md
+ create mode 100644 docs/modules/common/clsfieldmigrator.cls.md
+ create mode 100644 docs/modules/common/clsfieldspec.cls.md
+ create mode 100644 docs/modules/common/clsformatmanager.cls.md
+ create mode 100644 docs/modules/common/clsformspec.cls.md
+ create mode 100644 docs/modules/common/clsgridio.cls.md
+ create mode 100644 docs/modules/common/clsknowledgemanager.cls.md
+ create mode 100644 docs/modules/common/clslogentry.cls.md
+ create mode 100644 docs/modules/common/clslogger.cls.md
+ create mode 100644 docs/modules/common/clsscreenspec.cls.md
+ create mode 100644 docs/modules/common/clssearchengine.cls.md
+ create mode 100644 docs/modules/common/clssectionspec.cls.md
+ create mode 100644 docs/modules/common/clssetuporchestrator.cls.md
+ create mode 100644 docs/modules/common/clssheetrenderer.cls.md
+ create mode 100644 docs/modules/common/clsstanzasection.cls.md
+ create mode 100644 docs/modules/common/clsstanzavalidationissue.cls.md
+ create mode 100644 docs/modules/common/clsstanzavalidationresult.cls.md
+ create mode 100644 docs/modules/common/clsstorageresolver.cls.md
+ create mode 100644 docs/modules/common/clsuserformrenderer.cls.md
+ create mode 100644 docs/modules/common/iscreenrenderer.cls.md
+ create mode 100644 docs/modules/common/modbuttonwiring.bas.md
+ create mode 100644 docs/modules/common/modcommon.bas.md
+ create mode 100644 docs/modules/common/modconfigholder.bas.md
+ create mode 100644 docs/modules/common/modconfigloader.bas.md
+ create mode 100644 docs/modules/common/moddateutil.bas.md
+ create mode 100644 docs/modules/common/mode2e_allbuttons.bas.md
+ create mode 100644 docs/modules/common/modentryuserform.bas.md
+ create mode 100644 docs/modules/common/modfactory.bas.md
+ create mode 100644 docs/modules/common/modfileio.bas.md
+ create mode 100644 docs/modules/common/modformatcolumns.bas.md
+ create mode 100644 docs/modules/common/modformatloader.bas.md
+ create mode 100644 docs/modules/common/modformbuilder.bas.md
+ create mode 100644 docs/modules/common/modknowledgefileio.bas.md
+ create mode 100644 docs/modules/common/modlogids.bas.md
+ create mode 100644 docs/modules/common/modrefresh.bas.md
+ create mode 100644 docs/modules/common/modscreenrender.bas.md
+ create mode 100644 docs/modules/common/modsetup.bas.md
+ create mode 100644 docs/modules/common/modsheetbuttons.bas.md
+ create mode 100644 docs/modules/common/modsheetmap.bas.md
+ create mode 100644 docs/modules/common/modspecexamples.bas.md
+ create mode 100644 docs/modules/common/modstanzaio.bas.md
+ create mode 100644 docs/modules/common/modstringutil.bas.md
+ create mode 100644 docs/modules/common/modtesthelpers.bas.md
+ create mode 100644 docs/modules/common/moduiloader.bas.md
+ create mode 100644 docs/modules/common/moduserformcallback.bas.md
+ create mode 100644 docs/modules/index.md
+ create mode 100644 docs/modules/register/clsknowledgeeditscreen.cls.md
+ create mode 100644 docs/modules/register/clsknowledgeregisterscreen.cls.md
+ create mode 100644 docs/modules/register/modentryknowledge.bas.md
+ create mode 100644 docs/modules/register/modknowledgeentryhelpers.bas.md
+ create mode 100644 docs/modules/register/thisworkbook.cls.md
+ create mode 100644 docs/modules/search/clsknowledgeviewscreen.cls.md
+ create mode 100644 docs/modules/search/clssearchscreen.cls.md
+ create mode 100644 docs/modules/search/modentrysearch.bas.md
+ create mode 100644 docs/modules/search/thisworkbook.cls.md
+ create mode 100644 docs/troubleshooting.md
+ create mode 100644 docs/usage.md
+
+commit exit=0
+
+=== Phase 3d: post-commit HEAD ===
+postHead=7757b37a11fbc44195133a9a70a3610d7d1225d1
+log-1=7757b37 knowledgevba v2.3 site: 3 bat + ps1 fulltext + 68 module pages
+
+=== Phase 3e: git push origin main ===
+git.exe : To https://github.com/ai-crafted-portfolio/knowledgevba.git
+発生場所 C:\kvba\push\_commit_push.ps1:37 文字:13
++ $pushOut = (& git push origin main 2>&1) | Out-String
++             ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (To https://gith...nowledgevba.git:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ ! [rejected]        main -> main (fetch first)
+error: failed to push some refs to 'https://github.com/ai-crafted-portfolio/knowledgevba.git'
+hint: Updates were rejected because the remote contains work that you do not
+hint: have locally. This is usually caused by another repository pushing to
+hint: the same ref. If you want to integrate the remote changes, use
+hint: 'git pull' before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+
+push exit=1
+
+=== Phase 3f: post-push remote ls ===
+ls-remote=0a236b21801b4c0585ae066d99714abc9effabfa	refs/heads/main
+
+=== END 2026-06-01 22:36:31 ===

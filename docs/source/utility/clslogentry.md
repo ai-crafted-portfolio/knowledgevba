@@ -95,16 +95,4 @@ End Property
 '         lvl   - ログレベル
 '         msg   - メッセージ
 ' 戻り値: なし
-' ================================================================
-Public Sub Init(ByVal ts As String, _
-                 ByVal mod_ As String, _
-                 ByVal func As String, _
-                 ByVal lvl As String, _
-                 ByVal msg As String)
-    m_timestamp = ts
-    m_moduleName = mod_
-    m_functionName = func
-    m_level = lvl
-    m_message = msg
-End Sub
-```
+' =======================================
