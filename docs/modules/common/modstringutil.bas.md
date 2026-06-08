@@ -1,0 +1,274 @@
+---
+title: modStringUtil.bas
+description: modStringUtil.bas 縺ｮ繧ｽ繝ｼ繧ｹ繧ｳ繝ｼ繝会ｼ医さ繝斐・逕ｨ・・---
+
+# modStringUtil.bas
+
+**驟咲ｽｮ蜈・*: `蜈ｨ繝悶ャ繧ｯ蜈ｱ騾啻 逕ｨ縺ｮ VBA 繝｢繧ｸ繝･繝ｼ繝ｫ
+**遞ｮ鬘・*: 讓呎ｺ悶Δ繧ｸ繝･繝ｼ繝ｫ
+
+---
+
+## 繝輔ぃ繧､繝ｫ縺ｨ縺励※菫晏ｭ・
+繝｡繝｢蟶ｳ・医∪縺溘・莉ｻ諢上・繝・く繧ｹ繝医お繝・ぅ繧ｿ・峨↓荳九・繧ｽ繝ｼ繧ｹ繧ｳ繝ｼ繝牙・譁・ｒ雋ｼ繧贋ｻ倥￠縲・*`modStringUtil.bas`** 縺ｨ縺・≧蜷榊燕縺ｧ `installer\vba_modules\common\` 驟堺ｸ九↓菫晏ｭ倥＠縺ｦ縺上□縺輔＞縲よ枚蟄励さ繝ｼ繝峨・ ANSI・・hift-JIS・峨∵隼陦後・ CRLF 縺ｫ縺励※縺上□縺輔＞縲・
+---
+
+## 繧ｽ繝ｼ繧ｹ繧ｳ繝ｼ繝・
+```vb
+Attribute VB_Name = "modStringUtil"
+Option Explicit
+
+' ================================================================
+' モジュール: modStringUtil（ユーティリティ層）
+' 概要:       文字列処理の純粋関数群
+' 依存先:     modCommon
+' ================================================================
+
+' ================================================================
+' 関数名: ContainsAllKeywords
+' 概要:   対象文字列がキーワード（スペース区切り）を全て含むか判定（AND検索）
+' 引数:   target   - 検索対象の文字列
+'         keywords - スペース区切りのキーワード群（例: "メモリ サーバ"）
+' 戻り値: Boolean - 全キーワードを含むなら True
+' 備考:   大文字小文字を区別しない（LCase比較）
+'         keywordsが空の場合は True を返す
+' ================================================================
+Public Function ContainsAllKeywords(ByVal target As String, _
+                                      ByVal keywords As String) As Boolean
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1416] modStringUtil.ContainsAllKeywords ENTER"  ' [ADR-0100]
+    Dim parts() As String
+    Dim i As Long
+    Dim targetLower As String
+    
+    If Trim(keywords) = "" Then
+        ContainsAllKeywords = True
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1417] modStringUtil.ContainsAllKeywords EXIT-OK"  ' [ADR-0100]
+        Exit Function
+    End If
+    
+    targetLower = LCase(target)
+    parts = Split(Trim(keywords), " ")
+    
+    For i = LBound(parts) To UBound(parts)
+        If Trim(parts(i)) <> "" Then
+            If InStr(targetLower, LCase(parts(i))) = 0 Then
+                ContainsAllKeywords = False
+                If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1418] modStringUtil.ContainsAllKeywords EXIT-OK"  ' [ADR-0100]
+                Exit Function
+            End If
+        End If
+    Next i
+    
+    ContainsAllKeywords = True
+End Function
+
+' ================================================================
+' 関数名: ContainsAnyKeyword
+' 概要:   対象文字列がキーワード（スペース区切り）のいずれかを含むか判定（OR検索）
+' 引数:   target   - 検索対象の文字列
+'         keywords - スペース区切りのキーワード群
+' 戻り値: Boolean - いずれかのキーワードを含むなら True
+' 備考:   大文字小文字を区別しない（LCase比較）
+'         keywordsが空の場合は True を返す
+' ================================================================
+Public Function ContainsAnyKeyword(ByVal target As String, _
+                                     ByVal keywords As String) As Boolean
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1419] modStringUtil.ContainsAnyKeyword ENTER"  ' [ADR-0100]
+    Dim parts() As String
+    Dim i As Long
+    Dim targetLower As String
+    
+    If Trim(keywords) = "" Then
+        ContainsAnyKeyword = True
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1420] modStringUtil.ContainsAnyKeyword EXIT-OK"  ' [ADR-0100]
+        Exit Function
+    End If
+    
+    targetLower = LCase(target)
+    parts = Split(Trim(keywords), " ")
+    
+    For i = LBound(parts) To UBound(parts)
+        If Trim(parts(i)) <> "" Then
+            If InStr(targetLower, LCase(parts(i))) > 0 Then
+                ContainsAnyKeyword = True
+                If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1421] modStringUtil.ContainsAnyKeyword EXIT-OK"  ' [ADR-0100]
+                Exit Function
+            End If
+        End If
+    Next i
+    
+    ContainsAnyKeyword = False
+End Function
+
+' ================================================================
+' 関数名: FormatNumberByPattern
+' 概要:   採番パターンと数値から、採番後の文字列を生成する
+'         例: "INC-{0000}" + 5 -> "INC-0005"
+' 引数:   pattern  - パターン文字列（{0000}等のプレースホルダ含む）
+'         nextNum  - 採番する値
+' 戻り値: String - パターンに数値を埋め込んだ文字列
+' 備考:   {} で囲まれた 0 の個数がゼロパディング桁数になる
+'         パターンに {} が含まれない場合は pattern をそのまま返す
+' ================================================================
+Public Function FormatNumberByPattern(ByVal pattern As String, _
+                                        ByVal nextNum As Long) As String
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1422] modStringUtil.FormatNumberByPattern ENTER"  ' [ADR-0100]
+    Dim startPos As Long
+    Dim endPos As Long
+    Dim placeholder As String
+    Dim digits As Long
+    Dim numStr As String
+    Dim i As Long
+    
+    startPos = InStr(pattern, "{")
+    If startPos = 0 Then
+        FormatNumberByPattern = pattern
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1423] modStringUtil.FormatNumberByPattern EXIT-OK"  ' [ADR-0100]
+        Exit Function
+    End If
+    
+    endPos = InStr(startPos, pattern, "}")
+    If endPos = 0 Then
+        FormatNumberByPattern = pattern
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1424] modStringUtil.FormatNumberByPattern EXIT-OK"  ' [ADR-0100]
+        Exit Function
+    End If
+    
+    placeholder = Mid(pattern, startPos + 1, endPos - startPos - 1)
+    digits = Len(placeholder)
+    numStr = CStr(nextNum)
+    
+    ' 指定桁数に満たない場合はゼロパディング
+    For i = Len(numStr) + 1 To digits
+        numStr = "0" & numStr
+    Next i
+    
+    FormatNumberByPattern = Left(pattern, startPos - 1) & numStr & _
+                             Mid(pattern, endPos + 1)
+End Function
+
+' ================================================================
+' 関数名: ParseStanzaLine
+' 概要:   スタンザ1行（"Key=Value" 形式）を分解する
+' 引数:   line     - 入力行
+'         outKey   - 出力: キー
+'         outValue - 出力: 値
+' 戻り値: Boolean - 解析成功なら True
+' 備考:   "=" が含まれない行は False を返す
+'         値に "=" が含まれる場合、最初の "=" で分割する
+' ================================================================
+Public Function ParseStanzaLine(ByVal lineStr As String, _
+                                  ByRef outKey As String, _
+                                  ByRef outValue As String) As Boolean
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1425] modStringUtil.ParseStanzaLine ENTER"  ' [ADR-0100]
+    Dim pos As Long
+    
+    outKey = ""
+    outValue = ""
+    
+    pos = InStr(lineStr, "=")
+    If pos = 0 Then
+        ParseStanzaLine = False
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1426] modStringUtil.ParseStanzaLine EXIT-OK"  ' [ADR-0100]
+        Exit Function
+    End If
+    
+    outKey = Trim(Left(lineStr, pos - 1))
+    outValue = Mid(lineStr, pos + 1)
+    ParseStanzaLine = True
+End Function
+
+' ================================================================
+' 関数名: TrimAll
+' 概要:   前後の空白（半角・全角）を除去
+' 引数:   s - 対象文字列
+' 戻り値: String - 空白除去後の文字列
+' ================================================================
+Public Function TrimAll(ByVal s As String) As String
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1427] modStringUtil.TrimAll ENTER"  ' [ADR-0100]
+    Dim result As String
+    result = s
+    
+    ' 先頭の全角スペースを除去
+    Do While Len(result) > 0 And Left(result, 1) = ChrW(&H3000)
+        result = Mid(result, 2)
+    Loop
+    
+    ' 末尾の全角スペースを除去
+    Do While Len(result) > 0 And Right(result, 1) = ChrW(&H3000)
+        result = Left(result, Len(result) - 1)
+    Loop
+    
+    ' 半角スペースのトリム
+    TrimAll = Trim(result)
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1428] modStringUtil.TrimAll EXIT-OK"  ' [ADR-0100]
+End Function
+
+' ================================================================
+' 関数名: SafeCellText
+' 概要:   "=" 先頭文字列を数式解釈させないようアポストロフィを前置
+'         Excel/LibreOffice 両方で有効
+' 引数:   s - 対象文字列
+' 戻り値: String - 数式化されない文字列
+' 備考:   "=" 先頭以外はそのまま返す
+'         呼び出し側ではセル代入前に NumberFormat = "@" も併用推奨
+' ================================================================
+Public Function SafeCellText(ByVal s As String) As String
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1429] modStringUtil.SafeCellText ENTER"  ' [ADR-0100]
+    If Len(s) > 0 And Left(s, 1) = "=" Then
+        SafeCellText = "'" & s
+    Else
+        SafeCellText = s
+    End If
+End Function
+
+' ================================================================
+' 関数名: IsValidKnowledgeId
+' 概要:   ナレッジ番号が "KN-yyyy-NNNN" 形式かを検証する。
+'         パストラバーサル / UNC リダイレクト / 予約デバイス名 / 危険文字
+'         を MkDir / Kill / Open For Output 等の File system 操作直前で
+'         reject するための security ガード (s-2)。
+' 引数:   knwNo - 検証対象のナレッジ番号文字列
+' 戻り値: Boolean - 形式準拠かつ危険文字を含まない場合のみ True
+' 備考:   VBA 標準の RegExp はクロスプラットフォーム差があるため手動判定。
+'         12 文字固定 / "KN-" 先頭 / 4 桁年 / "-" 区切り / 4 桁番号 で構成。
+'         ".." "\" "/" ":" 等は二重防衛として明示 reject。
+' 関連:   ADR 0016
+' ================================================================
+Public Function IsValidKnowledgeId(ByVal knwNo As String) As Boolean
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1430] modStringUtil.IsValidKnowledgeId ENTER"  ' [ADR-0100]
+    On Error GoTo ErrHandler
+    IsValidKnowledgeId = False
+
+    If Len(knwNo) <> 12 Then Exit Function
+    If Left(knwNo, 3) <> "KN-" Then Exit Function
+    If Mid(knwNo, 8, 1) <> "-" Then Exit Function
+
+    Dim i As Long
+    Dim ch As String
+    For i = 4 To 7
+        ch = Mid(knwNo, i, 1)
+        If ch < "0" Or ch > "9" Then Exit Function
+    Next i
+    For i = 9 To 12
+        ch = Mid(knwNo, i, 1)
+        If ch < "0" Or ch > "9" Then Exit Function
+    Next i
+
+    ' 危険文字の二重防衛 reject (12 文字制約で本来は通らないが、明示)
+    Dim danger As Variant
+    danger = Array("..", "\", "/", ":", "*", "?", Chr(34), "<", ">", "|")
+    Dim d As Variant
+    For Each d In danger
+        If InStr(knwNo, CStr(d)) > 0 Then Exit Function
+    Next d
+
+    IsValidKnowledgeId = True
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1431] modStringUtil.IsValidKnowledgeId EXIT-OK"  ' [ADR-0100]
+    Exit Function
+
+ErrHandler:
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-1432] modStringUtil.IsValidKnowledgeId EXIT-ERR " & "errNum=" & Err.Number & " desc=" & Err.Description  ' [ADR-0100]
+    IsValidKnowledgeId = False
+End Function
+```
