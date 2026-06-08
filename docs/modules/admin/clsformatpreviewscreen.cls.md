@@ -10,22 +10,14 @@ description: clsFormatPreviewScreen.cls のソースコード（コピペ用）
 
 ---
 
-## 保存方法
+## ファイルとして保存
 
-下のコードをメモ帳に貼り付け、**[名前を付けて保存]** で次のように保存してください。
-
-- 場所: `C:\KnowledgeMgr\installer\vba_modules\admin\`
-- ファイル名: `clsFormatPreviewScreen.cls`
-- ファイルの種類: **すべてのファイル**
-- 文字コード: **ANSI**（Shift-JIS）
-
-> メモ帳の文字コードを **ANSI** にしないと、VBA の日本語が文字化けして動かなくなります。
-> UTF-8 で保存すると VBA Import 時に日本語が文字化けして動かなくなります。
-> 改行コードは CRLF（Windows 標準）のままで OK です。
+メモ帳（または任意のテキストエディタ）に下のソースコード全文を貼り付け、**`clsFormatPreviewScreen.cls`** という名前で `installer\vba_modules\admin\` 配下に保存してください。文字コードは ANSI（Shift-JIS）、改行は CRLF にしてください。
 
 ---
 
 ## ソースコード
+
 
 ```vb
 VERSION 1.0 CLASS
@@ -65,28 +57,27 @@ Private m_spec As clsScreenSpec
 ' UI スタンザ配置 xlsm 名 (管理.xlsm = "Kanri"。modEntryFormat の
 ' M-03 読込と同じ命名規約。screenId は m_spec.ScreenId から取得)
 Private Const UI_XLSM_NAME_LEGACY As String = "Kanri" ' deprecated, ADR-0089 (kept for ref)
+Private Const SECTION_GRID_FROM_FORMAT As String = "GRID_FROM_FORMAT"
+Private Const PREVIEW_CLEAR_RANGE As String = "A6:L39"
 Private Function UiXlsmName() As String
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0038] clsFormatPreviewScreen.UiXlsmName ENTER"  ' [ADR-0100]
     ' ADR-0089: CJK ui_seed dir name (U+7BA1 U+7406)
     UiXlsmName = ChrW(&H7BA1) & ChrW(&H7406)
 End Function
 ' フォーマット駆動プレビューグリッドのセクション名
-Private Const SECTION_GRID_FROM_FORMAT As String = "GRID_FROM_FORMAT"
 ' 再描画前にクリアする動的描画域。M-04.txt の [GRID_FROM_FORMAT]
 ' StartCell=A6 から、最下部 [NOTE] (A40:J45) の直上 39 行まで。
 ' 列は [COLUMN]/[HEADER] が定義する A:L を含める。
-Private Const PREVIEW_CLEAR_RANGE As String = "A6:L39"
 ' RenderPreview のログ ID (既存 LOG-M04-SCREENCLS-* 系を踏襲)
-Private Const LOG_PREVIEW_ENTRY As String = "LOG-M04-SCREENCLS-PREVIEW-ENTRY"
-Private Const LOG_PREVIEW_EXIT_OK As String = "LOG-M04-SCREENCLS-PREVIEW-EXIT-OK"
-Private Const LOG_PREVIEW_WARN As String = "LOG-M04-SCREENCLS-PREVIEW-WARN"
-Private Const LOG_PREVIEW_ERR As String = "LOG-M04-SCREENCLS-PREVIEW-ERR"
 
 Public Sub Init(ByVal renderer As IScreenRenderer, ByVal spec As clsScreenSpec)
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0039] clsFormatPreviewScreen.Init ENTER"  ' [ADR-0100]
     Set m_renderer = renderer
     Set m_spec = spec
 End Sub
 
 Public Sub Setup()
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0040] clsFormatPreviewScreen.Setup ENTER"  ' [ADR-0100]
     On Error GoTo ErrHandler
     Dim stepName As String : stepName = "begin"
     Call modScreenRender.LogScreenTrace("clsFormatPreviewScreen", "Setup", "ENTER sid=" & m_spec.ScreenId, "LOG-M04-SCREENCLS-SETUP-ENTRY")
@@ -95,13 +86,16 @@ Public Sub Setup()
     Call modScreenRender.RenderStandardScreen(m_renderer, m_spec)
 
     Call modScreenRender.LogScreenTrace("clsFormatPreviewScreen", "Setup", "EXIT ok", "LOG-M04-SCREENCLS-SETUP-EXIT-OK")
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0041] clsFormatPreviewScreen.Setup EXIT-OK"  ' [ADR-0100]
     Exit Sub
 
 ErrHandler:
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-0042] clsFormatPreviewScreen.Setup EXIT-ERR " & "errNum=" & Err.Number & " desc=" & Err.Description  ' [ADR-0100]
     Call modScreenRender.LogScreenError("clsFormatPreviewScreen", "Setup", stepName, Err.Number, Err.Description, "LOG-M04-SCREENCLS-SETUP-ERR")
 End Sub
 
 Public Sub Render()
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0043] clsFormatPreviewScreen.Render ENTER"  ' [ADR-0100]
     Setup
 End Sub
 
@@ -123,13 +117,17 @@ End Sub
 '         M-09 表示の clsSearchEngine.DisplayKnowledge と同型の委譲役。
 ' ================================================================
 Public Sub RenderPreview()
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0044] clsFormatPreviewScreen.RenderPreview ENTER"  ' [ADR-0100]
     On Error GoTo ErrHandler
     Dim stepName As String : stepName = "begin"
-    Call modScreenRender.LogScreenTrace("clsFormatPreviewScreen", "RenderPreview", "ENTER", LOG_PREVIEW_ENTRY)
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_DEBUG Then Debug.Print "[D-0049] clsFormatPreviewScreen.RenderPreview STEP-1 pre modScreenRender.LogScreenTrace"  ' [ADR-0100]
+    Call modScreenRender.LogScreenTrace("clsFormatPreviewScreen", "RenderPreview", "ENTER", "LOG-M04-SCREENCLS-PREVIEW-ENTRY")
 
     ' 前提: Init 済 (描画対象シートの解決に m_spec が必要)
     If m_spec Is Nothing Then
-        Call modScreenRender.LogScreenTrace("clsFormatPreviewScreen", "RenderPreview", "spec not initialised", LOG_PREVIEW_WARN)
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_DEBUG Then Debug.Print "[D-0050] clsFormatPreviewScreen.RenderPreview STEP-2 pre modScreenRender.LogScreenTrace"  ' [ADR-0100]
+        Call modScreenRender.LogScreenTrace("clsFormatPreviewScreen", "RenderPreview", "spec not initialised", "LOG-M04-SCREENCLS-PREVIEW-WARN")
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0045] clsFormatPreviewScreen.RenderPreview EXIT-OK"  ' [ADR-0100]
         Exit Sub
     End If
 
@@ -143,7 +141,9 @@ Public Sub RenderPreview()
     Dim gridSec As ClsStanzaSection
     Set gridSec = FindGridFromFormatSection()
     If gridSec Is Nothing Then
-        Call modScreenRender.LogScreenTrace("clsFormatPreviewScreen", "RenderPreview", "M-04 stanza has no GRID_FROM_FORMAT section", LOG_PREVIEW_WARN)
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_DEBUG Then Debug.Print "[D-0051] clsFormatPreviewScreen.RenderPreview STEP-3 pre modScreenRender.LogScreenTrace"  ' [ADR-0100]
+        Call modScreenRender.LogScreenTrace("clsFormatPreviewScreen", "RenderPreview", "M-04 stanza has no GRID_FROM_FORMAT section", "LOG-M04-SCREENCLS-PREVIEW-WARN")
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0046] clsFormatPreviewScreen.RenderPreview EXIT-OK"  ' [ADR-0100]
         Exit Sub
     End If
 
@@ -158,40 +158,52 @@ Public Sub RenderPreview()
     stepName = "ApplyGridFromFormat"
     modUILoader.ApplyGridFromFormat ws, gridSec
 
-    Call modScreenRender.LogScreenTrace("clsFormatPreviewScreen", "RenderPreview", "EXIT ok", LOG_PREVIEW_EXIT_OK)
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_DEBUG Then Debug.Print "[D-0052] clsFormatPreviewScreen.RenderPreview STEP-4 pre modScreenRender.LogScreenTrace"  ' [ADR-0100]
+    Call modScreenRender.LogScreenTrace("clsFormatPreviewScreen", "RenderPreview", "EXIT ok", "LOG-M04-SCREENCLS-PREVIEW-EXIT-OK")
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0047] clsFormatPreviewScreen.RenderPreview EXIT-OK"  ' [ADR-0100]
     Exit Sub
 
 ErrHandler:
-    Call modScreenRender.LogScreenError("clsFormatPreviewScreen", "RenderPreview", stepName, Err.Number, Err.Description, LOG_PREVIEW_ERR)
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_DEBUG Then Debug.Print "[D-0053] clsFormatPreviewScreen.RenderPreview STEP-5 pre modScreenRender.LogScreenError"  ' [ADR-0100]
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-0048] clsFormatPreviewScreen.RenderPreview EXIT-ERR " & "errNum=" & Err.Number & " desc=" & Err.Description  ' [ADR-0100]
+    Call modScreenRender.LogScreenError("clsFormatPreviewScreen", "RenderPreview", stepName, Err.Number, Err.Description, "LOG-M04-SCREENCLS-PREVIEW-ERR")
 End Sub
 
 Public Function ValidateInput() As Boolean
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0054] clsFormatPreviewScreen.ValidateInput ENTER"  ' [ADR-0100]
     On Error GoTo ErrHandler
     ' Screen-level input precondition check (M-04 format preview).
     ' The preview screen is display-only and defines no Required input
     ' fields, so an initialised spec validates True; an uninitialised
     ' screen (m_spec Is Nothing) fails the precondition.
     If m_spec Is Nothing Then
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_DEBUG Then Debug.Print "[D-0059] clsFormatPreviewScreen.ValidateInput STEP-1 pre modScreenRender.LogScreenTrace"  ' [ADR-0100]
         Call modScreenRender.LogScreenTrace("clsFormatPreviewScreen", "ValidateInput", "spec not initialised", "VALIDATE-WARN-WW-204")
         ValidateInput = False
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0055] clsFormatPreviewScreen.ValidateInput EXIT-OK"  ' [ADR-0100]
         Exit Function
     End If
 
     Dim fld As clsFieldSpec
     For Each fld In m_spec.Fields
         If fld.Required And Len(fld.InputAddr) > 0 Then
-            If Len(Trim$(GetInputValue(fld.InputAddr))) = 0 Then
+            If Len(Trim(GetInputValue(fld.InputAddr))) = 0 Then
+                If modCommon.gDebugLevel >= DEBUG_LEVEL_DEBUG Then Debug.Print "[D-0060] clsFormatPreviewScreen.ValidateInput STEP-2 pre modScreenRender.LogScreenTrace"  ' [ADR-0100]
                 Call modScreenRender.LogScreenTrace("clsFormatPreviewScreen", "ValidateInput", "required field empty: " & fld.Label, "VALIDATE-WARN-WW-204")
                 ValidateInput = False
+                If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0056] clsFormatPreviewScreen.ValidateInput EXIT-OK"  ' [ADR-0100]
                 Exit Function
             End If
         End If
     Next fld
 
     ValidateInput = True
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0057] clsFormatPreviewScreen.ValidateInput EXIT-OK"  ' [ADR-0100]
     Exit Function
 
 ErrHandler:
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_DEBUG Then Debug.Print "[D-0061] clsFormatPreviewScreen.ValidateInput STEP-3 pre modScreenRender.LogScreenError"  ' [ADR-0100]
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-0058] clsFormatPreviewScreen.ValidateInput EXIT-ERR " & "errNum=" & Err.Number & " desc=" & Err.Description  ' [ADR-0100]
     Call modScreenRender.LogScreenError("clsFormatPreviewScreen", "ValidateInput", "validate", Err.Number, Err.Description, "VALIDATE-WARN-WW-204")
     ValidateInput = False
 End Function
@@ -205,6 +217,7 @@ End Function
 ' 戻り値: ClsStanzaSection - 見つからなければ Nothing
 ' ================================================================
 Private Function FindGridFromFormatSection() As ClsStanzaSection
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0062] clsFormatPreviewScreen.FindGridFromFormatSection ENTER"  ' [ADR-0100]
     On Error GoTo ErrHandler
     Dim sections As Collection
     Set sections = modUILoader.LoadUiDefinition(UiXlsmName(), m_spec.ScreenId)
@@ -215,18 +228,22 @@ Private Function FindGridFromFormatSection() As ClsStanzaSection
         Set sec = sections.Item(i)
         If sec.SectionName = SECTION_GRID_FROM_FORMAT Then
             Set FindGridFromFormatSection = sec
+            If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0063] clsFormatPreviewScreen.FindGridFromFormatSection EXIT-OK"  ' [ADR-0100]
             Exit Function
         End If
     Next i
 
     Set FindGridFromFormatSection = Nothing
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0064] clsFormatPreviewScreen.FindGridFromFormatSection EXIT-OK"  ' [ADR-0100]
     Exit Function
 
 ErrHandler:
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-0065] clsFormatPreviewScreen.FindGridFromFormatSection EXIT-ERR " & "errNum=" & Err.Number & " desc=" & Err.Description  ' [ADR-0100]
     Set FindGridFromFormatSection = Nothing
 End Function
 
 Private Function GetInputValue(ByVal cellAddr As String) As String
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0066] clsFormatPreviewScreen.GetInputValue ENTER"  ' [ADR-0100]
     On Error Resume Next
     Dim ws As Worksheet
     Set ws = ThisWorkbook.Worksheets(m_spec.SheetName)
@@ -235,5 +252,6 @@ Private Function GetInputValue(ByVal cellAddr As String) As String
     Else
         GetInputValue = CStr(ws.Range(cellAddr).Value)
     End If
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0067] clsFormatPreviewScreen.GetInputValue EXIT-OK"  ' [ADR-0100]
 End Function
 ```

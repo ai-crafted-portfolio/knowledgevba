@@ -25,6 +25,7 @@ description: ThisWorkbook.cls のソースコード（コピペ用）
 
 ## ソースコード
 
+
 ```vb
 ' ================================================================
 ' ThisWorkbook 専用モジュール (検索.xlsm 専用)
@@ -58,18 +59,38 @@ Private Const STARTUP_SHEET As String = "ナレッジ検索"  ' v2.1 Q44 確定 
 '            - ActiveSheet = ナレッジ検索 (M-08) (Q44)
 ' ================================================================
 Private Sub Workbook_Open()
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1772] ThisWorkbook.Workbook_Open ENTER"  ' [ADR-0100]
+    ' [ADR-0100][gDebugLevel] init from config with safe fallback
+    On Error Resume Next
+    modCommon.gDebugLevel = modConfigHolder.GetDebugLevel()
+    If Err.Number <> 0 Or modCommon.gDebugLevel < 0 Or modCommon.gDebugLevel > 5 Then
+        modCommon.gDebugLevel = DEFAULT_DEBUG_LEVEL_FALLBACK
+    End If
+    Err.Clear
+    On Error GoTo 0
+    Debug.Print "[D-INIT] " & XLSM_NAME & " gDebugLevel=" & modCommon.gDebugLevel & " ts=" & Format$(Now, "hh:nn:ss")
+    Debug.Print "[WBOPEN-ENTER] " & XLSM_NAME & " ts=" & Format$(Now, "hh:nn:ss")  ' [WBOPEN-DEBUG-PRINT-INJECTED]
     On Error GoTo ErrHandler
     Application.EnableEvents = False
     Application.ScreenUpdating = False
 
     ' v2.1 Q34: 起動時に 90 日超バックアップ自動削除 (管理.xlsm のみ実施)
     On Error Resume Next
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_DEBUG Then Debug.Print "[D-1775] ThisWorkbook.Workbook_Open STEP-1 pre modKnowledgeFileIO.CleanupOldBackups"  ' [ADR-0100]
     Call modKnowledgeFileIO.CleanupOldBackups
     On Error GoTo ErrHandler
 
     Dim orch As clsSetupOrchestrator
     Set orch = New clsSetupOrchestrator
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_DEBUG Then Debug.Print "[D-1776] ThisWorkbook.Workbook_Open STEP-2 pre orch.RunFullSetup"  ' [ADR-0100]
     Call orch.RunFullSetup(XLSM_NAME)
+    ' 2026-06-06: delayed re-render (skip install COM)
+    On Error Resume Next
+    If Application.UserControl Then
+        Application.OnTime Now + TimeValue("0:00:01"), "modRefresh.Btn_RefreshAllSheets"
+    End If
+    Err.Clear
+    On Error GoTo ErrHandler
 
     ' S5-LOG-02: SAVE-EXIT-OK-II-003 (Workbook_Open success exit, screen 検索)
     On Error Resume Next
@@ -86,9 +107,13 @@ Private Sub Workbook_Open()
 
     Application.ScreenUpdating = True
     Application.EnableEvents = True
+    Debug.Print "[WBOPEN-EXIT] " & XLSM_NAME & " ts=" & Format$(Now, "hh:nn:ss")  ' [WBOPEN-DEBUG-PRINT-INJECTED]
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1773] ThisWorkbook.Workbook_Open EXIT-OK"  ' [ADR-0100]
     Exit Sub
 
 ErrHandler:
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-1774] ThisWorkbook.Workbook_Open EXIT-ERR " & "errNum=" & Err.Number & " desc=" & Err.Description  ' [ADR-0100]
+    Debug.Print "[WBOPEN-ERR] " & XLSM_NAME & " err=" & Err.Number & " " & Err.Description  ' [WBOPEN-DEBUG-PRINT-INJECTED]
     Application.ScreenUpdating = True
     Application.EnableEvents = True
     Dim msg As String
@@ -107,7 +132,7 @@ ErrHandler:
     ' modCommon.IsHeadless() が COM 自動実行を検出し、その場合は
     ' MsgBox を出さず clsLogger / Debug.Print のみで通知する。
     If Not modCommon.IsHeadless() Then
-        MsgBox msg, vbCritical, "Workbook_Open"
+        MsgBox msg, vbCritical, ChrW(&H8D77) & ChrW(&H52D5) & ChrW(&H30A8) & ChrW(&H30E9) & ChrW(&H30FC)
     Else
         Debug.Print "[HEADLESS] suppressed MsgBox: " & msg
         modCommon.AppendProgressLog modCommon.ProgressTs() & "ThisWorkbook(検索).Workbook_Open ErrHandler suppressed MsgBox: " & Err.Description
@@ -124,6 +149,7 @@ End Sub
 ' 対象列: 列 A～G、データ行 (14 行以降。13 行以下は header)。
 ' ================================================================
 Private Sub Workbook_SheetBeforeDoubleClick(ByVal Sh As Object, ByVal Target As Range, Cancel As Boolean)
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1777] ThisWorkbook.Workbook_SheetBeforeDoubleClick ENTER"  ' [ADR-0100]
     On Error GoTo ErrHandler
     Dim nm As String
     nm = Sh.Name
@@ -139,13 +165,15 @@ Private Sub Workbook_SheetBeforeDoubleClick(ByVal Sh As Object, ByVal Target As 
     If Target.Row < 14 Then Exit Sub
     If Target.Column < 1 Or Target.Column > 7 Then Exit Sub
     Dim kid As String
-    kid = Trim$(CStr(Sh.Cells(Target.Row, 2).Value))
+    kid = Trim(CStr(Sh.Cells(Target.Row, 2).Value))
     If Len(kid) = 0 Then Exit Sub
 
     Cancel = True   ' セル編集モード抑止
     modEntryUserForm.OpenViewWithId kid
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1778] ThisWorkbook.Workbook_SheetBeforeDoubleClick EXIT-OK"  ' [ADR-0100]
     Exit Sub
 ErrHandler:
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-1779] ThisWorkbook.Workbook_SheetBeforeDoubleClick EXIT-ERR " & "errNum=" & Err.Number & " desc=" & Err.Description  ' [ADR-0100]
     Debug.Print "[ERR] Workbook_SheetBeforeDoubleClick: " & Err.Number & " " & Err.Description
 End Sub
 
@@ -153,6 +181,7 @@ End Sub
 ' Workbook_BeforeClose
 ' ================================================================
 Private Sub Workbook_BeforeClose(Cancel As Boolean)
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1780] ThisWorkbook.Workbook_BeforeClose ENTER"  ' [ADR-0100]
     On Error Resume Next
     Dim ws As Worksheet
     Set ws = ThisWorkbook.Worksheets("LOG")
@@ -167,5 +196,6 @@ Private Sub Workbook_BeforeClose(Cancel As Boolean)
         ws.Cells(r, 5).Value = "xlsm 終了: " & XLSM_NAME
     End If
     On Error GoTo 0
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1781] ThisWorkbook.Workbook_BeforeClose EXIT-OK"  ' [ADR-0100]
 End Sub
 ```

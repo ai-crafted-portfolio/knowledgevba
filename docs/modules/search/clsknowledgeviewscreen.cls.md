@@ -10,22 +10,14 @@ description: clsKnowledgeViewScreen.cls のソースコード（コピペ用）
 
 ---
 
-## 保存方法
+## ファイルとして保存
 
-下のコードをメモ帳に貼り付け、**[名前を付けて保存]** で次のように保存してください。
-
-- 場所: `C:\KnowledgeMgr\installer\vba_modules\search\`
-- ファイル名: `clsKnowledgeViewScreen.cls`
-- ファイルの種類: **すべてのファイル**
-- 文字コード: **ANSI**（Shift-JIS）
-
-> メモ帳の文字コードを **ANSI** にしないと、VBA の日本語が文字化けして動かなくなります。
-> UTF-8 で保存すると VBA Import 時に日本語が文字化けして動かなくなります。
-> 改行コードは CRLF（Windows 標準）のままで OK です。
+メモ帳（または任意のテキストエディタ）に下のソースコード全文を貼り付け、**`clsKnowledgeViewScreen.cls`** という名前で `installer\vba_modules\search\` 配下に保存してください。文字コードは ANSI（Shift-JIS）、改行は CRLF にしてください。
 
 ---
 
 ## ソースコード
+
 
 ```vb
 VERSION 1.0 CLASS
@@ -51,11 +43,13 @@ Private m_renderer As IScreenRenderer
 Private m_spec As clsScreenSpec
 
 Public Sub Init(ByVal renderer As IScreenRenderer, ByVal spec As clsScreenSpec)
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1782] clsKnowledgeViewScreen.Init ENTER"  ' [ADR-0100]
     Set m_renderer = renderer
     Set m_spec = spec
 End Sub
 
 Public Sub Setup()
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1783] clsKnowledgeViewScreen.Setup ENTER"  ' [ADR-0100]
     On Error GoTo ErrHandler
     Dim stepName As String : stepName = "begin"
     Call modScreenRender.LogScreenTrace("clsKnowledgeViewScreen", "Setup", "ENTER sid=" & m_spec.ScreenId, "LOG-M09-SCREENCLS-SETUP-ENTRY")
@@ -64,13 +58,16 @@ Public Sub Setup()
     Call modScreenRender.RenderStandardScreen(m_renderer, m_spec)
 
     Call modScreenRender.LogScreenTrace("clsKnowledgeViewScreen", "Setup", "EXIT ok", "LOG-M09-SCREENCLS-SETUP-EXIT-OK")
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1784] clsKnowledgeViewScreen.Setup EXIT-OK"  ' [ADR-0100]
     Exit Sub
 
 ErrHandler:
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-1785] clsKnowledgeViewScreen.Setup EXIT-ERR " & "errNum=" & Err.Number & " desc=" & Err.Description  ' [ADR-0100]
     Call modScreenRender.LogScreenError("clsKnowledgeViewScreen", "Setup", stepName, Err.Number, Err.Description, "LOG-M09-SCREENCLS-SETUP-ERR")
 End Sub
 
 Public Sub Render()
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1786] clsKnowledgeViewScreen.Render ENTER"  ' [ADR-0100]
     Setup
 End Sub
 ```

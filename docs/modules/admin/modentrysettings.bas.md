@@ -10,22 +10,14 @@ description: modEntrySettings.bas のソースコード（コピペ用）
 
 ---
 
-## 保存方法
+## ファイルとして保存
 
-下のコードをメモ帳に貼り付け、**[名前を付けて保存]** で次のように保存してください。
-
-- 場所: `C:\KnowledgeMgr\installer\vba_modules\admin\`
-- ファイル名: `modEntrySettings.bas`
-- ファイルの種類: **すべてのファイル**
-- 文字コード: **ANSI**（Shift-JIS）
-
-> メモ帳の文字コードを **ANSI** にしないと、VBA の日本語が文字化けして動かなくなります。
-> UTF-8 で保存すると VBA Import 時に日本語が文字化けして動かなくなります。
-> 改行コードは CRLF（Windows 標準）のままで OK です。
+メモ帳（または任意のテキストエディタ）に下のソースコード全文を貼り付け、**`modEntrySettings.bas`** という名前で `installer\vba_modules\admin\` 配下に保存してください。文字コードは ANSI（Shift-JIS）、改行は CRLF にしてください。
 
 ---
 
 ## ソースコード
+
 
 ```vb
 Attribute VB_Name = "modEntrySettings"
@@ -105,10 +97,10 @@ Private Const ADDR_BACKUP_DIR  As String = "D14"
 ' --- M-12 cell layout (format check) ---
 ' C8 = target format id (matches ui_seed M-12.txt [INPUT] Cell=C8:E8
 ' merged area, the top-left anchor of the merged C8:E8 input slot).
-' The result grid starts at row 7 and uses 4 columns: KnowledgeNo /
+' The result grid starts at row 15 and uses 4 columns: KnowledgeNo /
 ' FieldName / CurrentValue / Issue.
 Private Const ADDR_M12_FORMAT_ID  As String = "C8"
-Private Const M12_RESULT_START_ROW As Long = 7
+Private Const M12_RESULT_START_ROW As Long = 15
 Private Const M12_RESULT_COL_KNO   As Long = 1   ' column A
 Private Const M12_RESULT_COL_FLD   As Long = 2   ' column B
 Private Const M12_RESULT_COL_VAL   As Long = 3   ' column C
@@ -126,6 +118,15 @@ Private Const DEF_FORMAT_DIR  As String = "C:\KnowledgeMgr\formats\"
 Private Const DEF_UI_DIR      As String = "C:\KnowledgeMgr\ui\"
 Private Const DEF_BACKUP_DIR  As String = "C:\KnowledgeMgr\data\backup\"
 Private Const DEF_DEBUG_LEVEL As String = "INFO"
+' Phase FC (2026-06-03, ADR-0096): M-11 [VALIDATION] / [CHECKBOX] layout.
+'   B5     debugLevel selection (data validation list)
+'   B7..B9 CheckBoxes (caption only). LinkedCells in column H.
+Private Const ADDR_DEBUG_LEVEL_FC As String = "D10"   ' 2026-06-07: new M-11 layout INPUT D10:E10
+' 2026-06-07: Checkbox UI for autoReload / migBackup / sysSheetVisibility
+' was retired. Constants kept as comments for backward archaeology.
+'   ADDR_LC_AUTORELOAD = H7 / ADDR_LC_MIGBACKUP = H8 / ADDR_LC_SYSSHEET = H9
+'   DEF_AUTORELOAD/MIGBACKUP/SYSSHEET = "TRUE"
+
 
 
 ' ============================================================
@@ -139,15 +140,33 @@ Private Const DEF_DEBUG_LEVEL As String = "INFO"
 '       startup.
 ' ============================================================
 Public Sub Btn_OpenSettings_v21()
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0252] modEntrySettings.Btn_OpenSettings_v21 ENTER"  ' [ADR-0100]
     On Error GoTo ErrHandler
+    ' [BTN-GUARD-PRELUDE-BEGIN] auto-injected by inject_btn_template.py
+    Const BTN As String = "Btn_OpenSettings_v21"
+    Dim XLSM As String
+    XLSM = ChrW(&H7BA1) & ChrW(&H7406)
+    modBtnGuard.LogEnter BTN, XLSM
+    If Not modBtnGuard.CheckPrereq(BTN, "config", XLSM) Then
+        modBtnGuard.LogExit BTN, XLSM, False
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0253] modEntrySettings.Btn_OpenSettings_v21 EXIT-OK"  ' [ADR-0100]
+        Exit Sub
+    End If
+    ' [BTN-GUARD-PRELUDE-END]
     Dim ws As Worksheet
     Set ws = ThisWorkbook.Worksheets(SHEET_SETTINGS)
     ws.Activate
     LoadSettingsToSheet ws
     LogInfoSafe "Btn_OpenSettings_v21", _
         "Settings opened", "SAVE-EXIT-OK-II-010"
+    ' [BTN-GUARD-EXIT-OK] auto-injected
+    modBtnGuard.LogExit BTN, XLSM, True
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0254] modEntrySettings.Btn_OpenSettings_v21 EXIT-OK"  ' [ADR-0100]
     Exit Sub
 ErrHandler:
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-0255] modEntrySettings.Btn_OpenSettings_v21 EXIT-ERR " & "errNum=" & Err.Number & " desc=" & Err.Description  ' [ADR-0100]
+    ' [BTN-GUARD-ERR-LOG] auto-injected
+    modBtnGuard.LogExit BTN, XLSM, False
     Debug.Print "[ERR] Btn_OpenSettings_v21: " & Err.Number & " " & Err.Description
 End Sub
 
@@ -159,7 +178,19 @@ End Sub
 '       (SaveConfigKeys keeps non-listed keys as-is).
 ' ============================================================
 Public Sub Btn_SaveSettings_v21()
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0256] modEntrySettings.Btn_SaveSettings_v21 ENTER"  ' [ADR-0100]
     On Error GoTo ErrHandler
+    ' [BTN-GUARD-PRELUDE-BEGIN] auto-injected by inject_btn_template.py
+    Const BTN As String = "Btn_SaveSettings_v21"
+    Dim XLSM As String
+    XLSM = ChrW(&H7BA1) & ChrW(&H7406)
+    modBtnGuard.LogEnter BTN, XLSM
+    If Not modBtnGuard.CheckPrereq(BTN, "config", XLSM) Then
+        modBtnGuard.LogExit BTN, XLSM, False
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0257] modEntrySettings.Btn_SaveSettings_v21 EXIT-OK"  ' [ADR-0100]
+        Exit Sub
+    End If
+    ' [BTN-GUARD-PRELUDE-END]
     Dim ws As Worksheet
     Set ws = ThisWorkbook.Worksheets(SHEET_SETTINGS)
 
@@ -169,6 +200,7 @@ Public Sub Btn_SaveSettings_v21()
         LogWarnSafe "Btn_SaveSettings_v21", _
             "Validation failed at " & ngAddr & " (" & ngLabel & ")", _
             "VALIDATE-WARN-WW-033"
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0258] modEntrySettings.Btn_SaveSettings_v21 EXIT-OK"  ' [ADR-0100]
         Exit Sub
     End If
 
@@ -176,8 +208,14 @@ Public Sub Btn_SaveSettings_v21()
 
     LogInfoSafe "Btn_SaveSettings_v21", _
         "Settings applied (config.txt + holder)", "SAVE-EXIT-OK-II-011"
+    ' [BTN-GUARD-EXIT-OK] auto-injected
+    modBtnGuard.LogExit BTN, XLSM, True
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0259] modEntrySettings.Btn_SaveSettings_v21 EXIT-OK"  ' [ADR-0100]
     Exit Sub
 ErrHandler:
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-0260] modEntrySettings.Btn_SaveSettings_v21 EXIT-ERR " & "errNum=" & Err.Number & " desc=" & Err.Description  ' [ADR-0100]
+    ' [BTN-GUARD-ERR-LOG] auto-injected
+    modBtnGuard.LogExit BTN, XLSM, False
     LogErrorSafe "Btn_SaveSettings_v21", _
         "Apply failed: " & Err.Number & " " & Err.Description, _
         "BACKTOMAIN-ERR-EE-034"
@@ -203,7 +241,19 @@ End Sub
 '   in ui_seed is TRUE only on A11).
 ' ============================================================
 Public Sub Btn_OpenStorage_v21()
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0261] modEntrySettings.Btn_OpenStorage_v21 ENTER"  ' [ADR-0100]
     On Error GoTo ErrHandler
+    ' [BTN-GUARD-PRELUDE-BEGIN] auto-injected by inject_btn_template.py
+    Const BTN As String = "Btn_OpenStorage_v21"
+    Dim XLSM As String
+    XLSM = ChrW(&H7BA1) & ChrW(&H7406)
+    modBtnGuard.LogEnter BTN, XLSM
+    If Not modBtnGuard.CheckPrereq(BTN, "config", XLSM) Then
+        modBtnGuard.LogExit BTN, XLSM, False
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0262] modEntrySettings.Btn_OpenStorage_v21 EXIT-OK"  ' [ADR-0100]
+        Exit Sub
+    End If
+    ' [BTN-GUARD-PRELUDE-END]
     Dim ws As Worksheet
     Set ws = ThisWorkbook.Worksheets(SHEET_STORAGE)
     ws.Activate
@@ -221,7 +271,7 @@ Public Sub Btn_OpenStorage_v21()
 
     If targetRow = 0 Then
         ' "saki ni hidari no check wo irete kudasai" (no checkbox is checked)
-        If Not modEntryFormat.IsHeadless() Then
+        If Not modCommon.IsHeadless() Then
             MsgBox ChrW(&H5148) & ChrW(&H306B) & ChrW(&H5DE6) & _
                    ChrW(&H306E) & ChrW(&H30C1) & ChrW(&H30A7) & _
                    ChrW(&H30C3) & ChrW(&H30AF) & ChrW(&H3092) & _
@@ -233,16 +283,18 @@ Public Sub Btn_OpenStorage_v21()
         End If
         LogWarnSafe "Btn_OpenStorage_v21", _
             "no checkbox row marked", "SAVE-EXIT-OK-II-013"
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0263] modEntrySettings.Btn_OpenStorage_v21 EXIT-OK"  ' [ADR-0100]
         Exit Sub
     End If
 
     ' Headless guard (2026-06-01): COM-automated runs never show the
     ' FolderPicker - they would block waiting for a non-existent user.
     ' In that case log and exit; the M-10 row is left untouched.
-    If modEntryFormat.IsHeadless() Then
+    If modCommon.IsHeadless() Then
         LogInfoSafe "Btn_OpenStorage_v21", _
             "headless-skip FolderPicker row=" & targetRow, _
             "SAVE-EXIT-OK-II-013"
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0264] modEntrySettings.Btn_OpenStorage_v21 EXIT-OK"  ' [ADR-0100]
         Exit Sub
     End If
 
@@ -260,6 +312,7 @@ Public Sub Btn_OpenStorage_v21()
         LogInfoSafe "Btn_OpenStorage_v21", _
             "FolderPicker cancelled row=" & targetRow, _
             "SAVE-EXIT-OK-II-013"
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0265] modEntrySettings.Btn_OpenStorage_v21 EXIT-OK"  ' [ADR-0100]
         Exit Sub
     End If
 
@@ -272,8 +325,14 @@ Public Sub Btn_OpenStorage_v21()
     LogInfoSafe "Btn_OpenStorage_v21", _
         "Storage folder picked row=" & targetRow & " path=" & selectedPath, _
         "SAVE-EXIT-OK-II-013"
+    ' [BTN-GUARD-EXIT-OK] auto-injected
+    modBtnGuard.LogExit BTN, XLSM, True
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0266] modEntrySettings.Btn_OpenStorage_v21 EXIT-OK"  ' [ADR-0100]
     Exit Sub
 ErrHandler:
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-0267] modEntrySettings.Btn_OpenStorage_v21 EXIT-ERR " & "errNum=" & Err.Number & " desc=" & Err.Description  ' [ADR-0100]
+    ' [BTN-GUARD-ERR-LOG] auto-injected
+    modBtnGuard.LogExit BTN, XLSM, False
     LogErrorSafe "Btn_OpenStorage_v21", _
         "FolderPicker failed: " & Err.Number & " " & Err.Description, _
         "BACKTOMAIN-ERR-EE-036"
@@ -287,7 +346,19 @@ End Sub
 '       are owned by M-10; debugLevel stays untouched on disk.
 ' ============================================================
 Public Sub Btn_SaveStorage_v21()
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0268] modEntrySettings.Btn_SaveStorage_v21 ENTER"  ' [ADR-0100]
     On Error GoTo ErrHandler
+    ' [BTN-GUARD-PRELUDE-BEGIN] auto-injected by inject_btn_template.py
+    Const BTN As String = "Btn_SaveStorage_v21"
+    Dim XLSM As String
+    XLSM = ChrW(&H7BA1) & ChrW(&H7406)
+    modBtnGuard.LogEnter BTN, XLSM
+    If Not modBtnGuard.CheckPrereq(BTN, "config", XLSM) Then
+        modBtnGuard.LogExit BTN, XLSM, False
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0269] modEntrySettings.Btn_SaveStorage_v21 EXIT-OK"  ' [ADR-0100]
+        Exit Sub
+    End If
+    ' [BTN-GUARD-PRELUDE-END]
     Dim ws As Worksheet
     Set ws = ThisWorkbook.Worksheets(SHEET_STORAGE)
 
@@ -297,6 +368,7 @@ Public Sub Btn_SaveStorage_v21()
         LogWarnSafe "Btn_SaveStorage_v21", _
             "Validation failed at " & ngAddr & " (" & ngLabel & ")", _
             "VALIDATE-WARN-WW-035"
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0270] modEntrySettings.Btn_SaveStorage_v21 EXIT-OK"  ' [ADR-0100]
         Exit Sub
     End If
 
@@ -305,8 +377,14 @@ Public Sub Btn_SaveStorage_v21()
     LogInfoSafe "Btn_SaveStorage_v21", _
         "Storage settings applied (config.txt + holder)", _
         "SAVE-EXIT-OK-II-014"
+    ' [BTN-GUARD-EXIT-OK] auto-injected
+    modBtnGuard.LogExit BTN, XLSM, True
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0271] modEntrySettings.Btn_SaveStorage_v21 EXIT-OK"  ' [ADR-0100]
     Exit Sub
 ErrHandler:
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-0272] modEntrySettings.Btn_SaveStorage_v21 EXIT-ERR " & "errNum=" & Err.Number & " desc=" & Err.Description  ' [ADR-0100]
+    ' [BTN-GUARD-ERR-LOG] auto-injected
+    modBtnGuard.LogExit BTN, XLSM, False
     LogErrorSafe "Btn_SaveStorage_v21", _
         "Apply failed: " & Err.Number & " " & Err.Description, _
         "BACKTOMAIN-ERR-EE-036"
@@ -323,7 +401,43 @@ End Sub
 ' Role: holder -> M-11 sheet (debugLevel).
 ' ============================================================
 Private Sub LoadSettingsToSheet(ByVal ws As Worksheet)
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0273] modEntrySettings.LoadSettingsToSheet ENTER"  ' [ADR-0100]
+    ' Legacy [INPUT] at D13 (kept for backwards compatibility).
     ws.Range(ADDR_DEBUG_LEVEL).Value = SafeGetCfg("debugLevel", DEF_DEBUG_LEVEL)
+    ' Phase FC: also mirror to the new [VALIDATION] cell B5.
+    On Error Resume Next
+    ws.Range(ADDR_DEBUG_LEVEL_FC).Value = SafeGetCfg("debugLevel", DEF_DEBUG_LEVEL)
+    ' Phase FC: pre-fill the CheckBox LinkedCells in column H.
+    ' 2026-06-07: checkbox cells retired; no read-from-config needed.
+    ' Sync CheckBox shape values to LinkedCell state (paranoia: some
+    ' Excel COM hosts skip the shape->cell mirror on initial open).
+    On Error GoTo 0
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0274] modEntrySettings.LoadSettingsToSheet EXIT-OK"  ' [ADR-0100]
+End Sub
+
+' ============================================================
+' Public Sub: EnsureSettingsCellsEditable
+' Role: [BUGFIX 2026-06-06] Make M-11 settings input cells (B5
+'       debugLevel dropdown, H7/H8/H9 CheckBox LinkedCells) user-
+'       editable by setting Locked=False. clsSheetRenderer protects
+'       the sheet with all cells Locked=True by default; without
+'       these unlocks the user gets "the cell is on a protected
+'       sheet" dialog when clicking a CheckBox (the LinkedCell
+'       update happens as user write, not as a macro write, so
+'       UserInterfaceOnly=True does not exempt it). Called from
+'       ThisWorkbook OnTime startup hook after Btn_RefreshAllSheets.
+' ============================================================
+Public Sub EnsureSettingsCellsEditable()
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-EU01] modEntrySettings.EnsureSettingsCellsEditable ENTER"
+    On Error GoTo ErrHandler
+    Dim ws As Worksheet
+    Set ws = ThisWorkbook.Worksheets(SHEET_SETTINGS)
+    ws.Range(ADDR_DEBUG_LEVEL_FC).Locked = False
+    ' 2026-06-07: checkbox cells retired; no Locked-toggle needed.
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-EU02] modEntrySettings.EnsureSettingsCellsEditable EXIT-OK"
+    Exit Sub
+ErrHandler:
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-EU03] modEntrySettings.EnsureSettingsCellsEditable EXIT-ERR " & "errNum=" & Err.Number & " desc=" & Err.Description
 End Sub
 
 ' ============================================================
@@ -333,11 +447,33 @@ End Sub
 '       SaveConfigKeys leaves other keys in config.txt untouched.
 ' ============================================================
 Private Sub ApplySettingsToHolder(ByVal ws As Worksheet)
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0275] modEntrySettings.ApplySettingsToHolder ENTER"  ' [ADR-0100]
     Dim d As Object
     Set d = CreateObject("Scripting.Dictionary")
-    d("debugLevel") = CStr(ws.Range(ADDR_DEBUG_LEVEL).Value)
+    Dim dl As String
+    ' B5 (new) wins over D13 (legacy) when both are non-empty.
+    dl = CStr(ws.Range(ADDR_DEBUG_LEVEL_FC).Value)
+    If Len(Trim$(dl)) = 0 Then
+        dl = CStr(ws.Range(ADDR_DEBUG_LEVEL).Value)
+    End If
+    If Len(Trim$(dl)) = 0 Then dl = DEF_DEBUG_LEVEL
+    d("debugLevel") = dl
+    ' CheckBox states via LinkedCell (TRUE / FALSE).
+    ' 2026-06-07: checkbox UI retired; not writing 3 booleans to dict.
     PersistConfigKeys d
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0276] modEntrySettings.ApplySettingsToHolder EXIT-OK"  ' [ADR-0100]
 End Sub
+
+' Convert a VBA Boolean into the canonical TRUE/FALSE string token used
+' in config.txt (matches the v2.3 admin / settei convention).
+Private Function BoolToToken(ByVal b As Boolean) As String
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0277] modEntrySettings.BoolToToken ENTER"  ' [ADR-0100]
+    If b Then
+        BoolToToken = "TRUE"
+    Else
+        BoolToToken = "FALSE"
+    End If
+End Function
 
 ' ============================================================
 ' Private Function: ValidateSettingsSheet
@@ -347,10 +483,22 @@ End Sub
 Private Function ValidateSettingsSheet(ByVal ws As Worksheet, _
                                        ByRef outLabel As String, _
                                        ByRef outAddr As String) As Boolean
-    If Len(CStr(ws.Range(ADDR_DEBUG_LEVEL).Value)) = 0 Then
-        outAddr = ADDR_DEBUG_LEVEL
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0278] modEntrySettings.ValidateSettingsSheet ENTER"  ' [ADR-0100]
+    ' [BUGFIX 2026-06-06] FAIL T-M11-CLICK-01: original code only checked D13
+    ' (ADDR_DEBUG_LEVEL legacy), but the UI dropdown is at B5
+    ' (ADDR_DEBUG_LEVEL_FC). D13 stays empty after Setup_admin (only B5 gets
+    ' the data validation default INFO via stanza), so validation always
+    ' failed and save silently aborted. Check B5 first, fall back to D13.
+    Dim dl As String
+    dl = CStr(ws.Range(ADDR_DEBUG_LEVEL_FC).Value)
+    If Len(Trim$(dl)) = 0 Then
+        dl = CStr(ws.Range(ADDR_DEBUG_LEVEL).Value)
+    End If
+    If Len(Trim$(dl)) = 0 Then
+        outAddr = ADDR_DEBUG_LEVEL_FC
         outLabel = "debugLevel"
         ValidateSettingsSheet = False
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0279] modEntrySettings.ValidateSettingsSheet EXIT-OK"  ' [ADR-0100]
         Exit Function
     End If
     ValidateSettingsSheet = True
@@ -365,7 +513,8 @@ End Function
 ' Private Sub: LoadStorageToSheet
 ' Role: holder -> M-10 sheet (4 dirs).
 ' ============================================================
-Private Sub LoadStorageToSheet(ByVal ws As Worksheet)
+Public Sub LoadStorageToSheet(ByVal ws As Worksheet)   ' 2026-06-07: Public to allow ThisWorkbook hook
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0280] modEntrySettings.LoadStorageToSheet ENTER"  ' [ADR-0100]
     ws.Range(ADDR_DATA_DIR).Value = SafeGetCfg("data_dir", DEF_DATA_DIR)
     ws.Range(ADDR_FORMAT_DIR).Value = SafeGetCfg("format_dir", DEF_FORMAT_DIR)
     ws.Range(ADDR_UI_DIR).Value = SafeGetCfg("ui_dir", DEF_UI_DIR)
@@ -379,6 +528,7 @@ End Sub
 '       debugLevel key in config.txt stays untouched.
 ' ============================================================
 Private Sub ApplyStorageToHolder(ByVal ws As Worksheet)
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0281] modEntrySettings.ApplyStorageToHolder ENTER"  ' [ADR-0100]
     Dim d As Object
     Set d = CreateObject("Scripting.Dictionary")
     d("data_dir") = CStr(ws.Range(ADDR_DATA_DIR).Value)
@@ -386,6 +536,7 @@ Private Sub ApplyStorageToHolder(ByVal ws As Worksheet)
     d("ui_dir") = CStr(ws.Range(ADDR_UI_DIR).Value)
     d("backup_dir") = CStr(ws.Range(ADDR_BACKUP_DIR).Value)
     PersistConfigKeys d
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0282] modEntrySettings.ApplyStorageToHolder EXIT-OK"  ' [ADR-0100]
 End Sub
 
 ' ============================================================
@@ -396,28 +547,33 @@ End Sub
 Private Function ValidateStorageSheet(ByVal ws As Worksheet, _
                                       ByRef outLabel As String, _
                                       ByRef outAddr As String) As Boolean
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0283] modEntrySettings.ValidateStorageSheet ENTER"  ' [ADR-0100]
     If Len(CStr(ws.Range(ADDR_DATA_DIR).Value)) = 0 Then
         outAddr = ADDR_DATA_DIR
         outLabel = "data_dir"
         ValidateStorageSheet = False
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0284] modEntrySettings.ValidateStorageSheet EXIT-OK"  ' [ADR-0100]
         Exit Function
     End If
     If Len(CStr(ws.Range(ADDR_FORMAT_DIR).Value)) = 0 Then
         outAddr = ADDR_FORMAT_DIR
         outLabel = "format_dir"
         ValidateStorageSheet = False
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0285] modEntrySettings.ValidateStorageSheet EXIT-OK"  ' [ADR-0100]
         Exit Function
     End If
     If Len(CStr(ws.Range(ADDR_UI_DIR).Value)) = 0 Then
         outAddr = ADDR_UI_DIR
         outLabel = "ui_dir"
         ValidateStorageSheet = False
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0286] modEntrySettings.ValidateStorageSheet EXIT-OK"  ' [ADR-0100]
         Exit Function
     End If
     If Len(CStr(ws.Range(ADDR_BACKUP_DIR).Value)) = 0 Then
         outAddr = ADDR_BACKUP_DIR
         outLabel = "backup_dir"
         ValidateStorageSheet = False
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0287] modEntrySettings.ValidateStorageSheet EXIT-OK"  ' [ADR-0100]
         Exit Function
     End If
     ValidateStorageSheet = True
@@ -439,7 +595,19 @@ End Function
 '   ensure the row count is captured and logged after the clear.
 ' ============================================================
 Public Sub Btn_DeleteAllLog()
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0288] modEntrySettings.Btn_DeleteAllLog ENTER"  ' [ADR-0100]
     On Error GoTo ErrHandler
+    ' [BTN-GUARD-PRELUDE-BEGIN] auto-injected by inject_btn_template.py
+    Const BTN As String = "Btn_DeleteAllLog"
+    Dim XLSM As String
+    XLSM = ChrW(&H7BA1) & ChrW(&H7406)
+    modBtnGuard.LogEnter BTN, XLSM
+    If Not modBtnGuard.CheckPrereq(BTN, "config", XLSM) Then
+        modBtnGuard.LogExit BTN, XLSM, False
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0289] modEntrySettings.Btn_DeleteAllLog EXIT-OK"  ' [ADR-0100]
+        Exit Sub
+    End If
+    ' [BTN-GUARD-PRELUDE-END]
     Dim ws As Worksheet
     Set ws = ThisWorkbook.Worksheets(SHEET_LOG)
 
@@ -452,15 +620,17 @@ Public Sub Btn_DeleteAllLog()
         clearedCount = 0
     End If
 
-    If modEntryFormat.IsHeadless() Then
+    If modCommon.IsHeadless() Then
         LogWarnSafe "Btn_DeleteAllLog", _
             "headless: clear skipped (confirm required), candidate=" & _
             clearedCount, "LOG-M14-CLEAR-GUARD"
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0290] modEntrySettings.Btn_DeleteAllLog EXIT-OK"  ' [ADR-0100]
         Exit Sub
     End If
 
-    If MsgBox("Delete all log rows? This cannot be undone.", _
-              vbOKCancel + vbExclamation, "Delete all log") <> vbOK Then
+    If MsgBox(ChrW(&H30ED) & ChrW(&H30B0) & ChrW(&H5168) & ChrW(&H884C) & ChrW(&H3092) & ChrW(&H524A) & ChrW(&H9664) & ChrW(&H3057) & ChrW(&H307E) & ChrW(&H3059) & ChrW(&H304B) & ChrW(&HFF1F) & ChrW(&H3053) & ChrW(&H306E) & ChrW(&H64CD) & ChrW(&H4F5C) & ChrW(&H306F) & ChrW(&H5143) & ChrW(&H306B) & ChrW(&H623B) & ChrW(&H305B) & ChrW(&H307E) & ChrW(&H305B) & ChrW(&H3093) & ChrW(&H3002), _
+              vbOKCancel + vbExclamation, ChrW(&H30ED) & ChrW(&H30B0) & ChrW(&H5168) & ChrW(&H524A) & ChrW(&H9664)) <> vbOK Then
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0291] modEntrySettings.Btn_DeleteAllLog EXIT-OK"  ' [ADR-0100]
         Exit Sub
     End If
 
@@ -471,8 +641,14 @@ Public Sub Btn_DeleteAllLog()
 
     LogInfoSafe "Btn_DeleteAllLog", _
         "log rows cleared count=" & clearedCount, "LOG-M14-CLEAR-OK"
+    ' [BTN-GUARD-EXIT-OK] auto-injected
+    modBtnGuard.LogExit BTN, XLSM, True
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0292] modEntrySettings.Btn_DeleteAllLog EXIT-OK"  ' [ADR-0100]
     Exit Sub
 ErrHandler:
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-0293] modEntrySettings.Btn_DeleteAllLog EXIT-ERR " & "errNum=" & Err.Number & " desc=" & Err.Description  ' [ADR-0100]
+    ' [BTN-GUARD-ERR-LOG] auto-injected
+    modBtnGuard.LogExit BTN, XLSM, False
     Debug.Print "[ERR] Btn_DeleteAllLog: " & Err.Number & " " & Err.Description
 End Sub
 
@@ -492,35 +668,49 @@ End Sub
 '   in v2.3) and does NOT mutate any files.
 ' ============================================================
 Public Sub Btn_CheckFormat()
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0294] modEntrySettings.Btn_CheckFormat ENTER"  ' [ADR-0100]
     On Error GoTo ErrHandler
+    ' [BTN-GUARD-PRELUDE-BEGIN] auto-injected by inject_btn_template.py
+    Const BTN As String = "Btn_CheckFormat"
+    Dim XLSM As String
+    XLSM = ChrW(&H7BA1) & ChrW(&H7406)
+    modBtnGuard.LogEnter BTN, XLSM
+    If Not modBtnGuard.CheckPrereq(BTN, "config;format_dir", XLSM) Then
+        modBtnGuard.LogExit BTN, XLSM, False
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0295] modEntrySettings.Btn_CheckFormat EXIT-OK"  ' [ADR-0100]
+        Exit Sub
+    End If
+    ' [BTN-GUARD-PRELUDE-END]
     Dim ws As Worksheet
     Set ws = ThisWorkbook.Worksheets(SHEET_MIGRATE)
 
     Dim fmtId As String
     fmtId = Trim$(CStr(ws.Range(ADDR_M12_FORMAT_ID).Value))
     If Len(fmtId) = 0 Then
-        If Not modEntryFormat.IsHeadless() Then
+        If Not modCommon.IsHeadless() Then
             MsgBox ADDR_M12_FORMAT_ID & ChrW(12395) & ChrW(23550) & ChrW(35937) & _
                    ChrW(12501) & ChrW(12457) & ChrW(12540) & ChrW(12510) & _
                    ChrW(12483) & ChrW(12488) & ChrW(12434) & ChrW(20837) & _
                    ChrW(12428) & ChrW(12390) & ChrW(12367) & ChrW(12384) & _
-                   ChrW(12373) & ChrW(12356), vbExclamation, "Check format"
+                   ChrW(12373) & ChrW(12356), vbExclamation, ChrW(&H30D5) & ChrW(&H30A9) & ChrW(&H30FC) & ChrW(&H30DE) & ChrW(&H30C3) & ChrW(&H30C8) & ChrW(&H78BA) & ChrW(&H8A8D)
         End If
         LogWarnSafe "Btn_CheckFormat", _
             "no target format id at " & ADDR_M12_FORMAT_ID, _
             "LOG-M12-CHECK-NOFMT"
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0296] modEntrySettings.Btn_CheckFormat EXIT-OK"  ' [ADR-0100]
         Exit Sub
     End If
 
     Dim fields As Object
     Set fields = LoadFormatFieldsAsDict(fmtId)
     If fields Is Nothing Then
-        If Not modEntryFormat.IsHeadless() Then
-            MsgBox "Format '" & fmtId & "' not found.", _
-                   vbExclamation, "Check format"
+        If Not modCommon.IsHeadless() Then
+            MsgBox ChrW(&H30D5) & ChrW(&H30A9) & ChrW(&H30FC) & ChrW(&H30DE) & ChrW(&H30C3) & ChrW(&H30C8) & ChrW(&H0020) & ChrW(&H0027) & fmtId & ChrW(&H0027) & ChrW(&H0020) & ChrW(&H304C) & ChrW(&H898B) & ChrW(&H3064) & ChrW(&H304B) & ChrW(&H308A) & ChrW(&H307E) & ChrW(&H305B) & ChrW(&H3093) & ChrW(&H3002), _
+                   vbExclamation, ChrW(&H30D5) & ChrW(&H30A9) & ChrW(&H30FC) & ChrW(&H30DE) & ChrW(&H30C3) & ChrW(&H30C8) & ChrW(&H78BA) & ChrW(&H8A8D)
         End If
         LogWarnSafe "Btn_CheckFormat", _
             "format not found id=" & fmtId, "LOG-M12-CHECK-NOFMTDEF"
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0297] modEntrySettings.Btn_CheckFormat EXIT-OK"  ' [ADR-0100]
         Exit Sub
     End If
 
@@ -536,8 +726,14 @@ Public Sub Btn_CheckFormat()
     LogInfoSafe "Btn_CheckFormat", _
         "check done fmtId=" & fmtId & " knowledge=" & knowledgeList.Count & _
         " issues=" & issues.Count, "LOG-M12-CHECK-OK"
+    ' [BTN-GUARD-EXIT-OK] auto-injected
+    modBtnGuard.LogExit BTN, XLSM, True
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0298] modEntrySettings.Btn_CheckFormat EXIT-OK"  ' [ADR-0100]
     Exit Sub
 ErrHandler:
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-0299] modEntrySettings.Btn_CheckFormat EXIT-ERR " & "errNum=" & Err.Number & " desc=" & Err.Description  ' [ADR-0100]
+    ' [BTN-GUARD-ERR-LOG] auto-injected
+    modBtnGuard.LogExit BTN, XLSM, False
     Debug.Print "[ERR] Btn_CheckFormat: " & Err.Number & " " & Err.Description
 End Sub
 
@@ -550,11 +746,13 @@ End Sub
 '       format file does not parse.
 ' ============================================================
 Private Function LoadFormatFieldsAsDict(ByVal fmtId As String) As Object
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0300] modEntrySettings.LoadFormatFieldsAsDict ENTER"  ' [ADR-0100]
     On Error GoTo ErrHandler
     Dim secs As Collection
     Set secs = modFormatLoader.LoadFormat(fmtId)
     If secs Is Nothing Then
         Set LoadFormatFieldsAsDict = Nothing
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0301] modEntrySettings.LoadFormatFieldsAsDict EXIT-OK"  ' [ADR-0100]
         Exit Function
     End If
 
@@ -581,8 +779,10 @@ Private Function LoadFormatFieldsAsDict(ByVal fmtId As String) As Object
     Next i
 
     Set LoadFormatFieldsAsDict = result
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0302] modEntrySettings.LoadFormatFieldsAsDict EXIT-OK"  ' [ADR-0100]
     Exit Function
 ErrHandler:
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-0303] modEntrySettings.LoadFormatFieldsAsDict EXIT-ERR " & "errNum=" & Err.Number & " desc=" & Err.Description  ' [ADR-0100]
     Set LoadFormatFieldsAsDict = Nothing
 End Function
 
@@ -595,6 +795,7 @@ End Function
 ' ============================================================
 Private Function CollectFormatIssues(ByVal knowledgeList As Collection, _
                                      ByVal fields As Object) As Collection
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0304] modEntrySettings.CollectFormatIssues ENTER"  ' [ADR-0100]
     Dim issues As Collection
     Set issues = New Collection
     On Error GoTo ErrHandler
@@ -605,8 +806,10 @@ Private Function CollectFormatIssues(ByVal knowledgeList As Collection, _
     Next kno
 
     Set CollectFormatIssues = issues
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0305] modEntrySettings.CollectFormatIssues EXIT-OK"  ' [ADR-0100]
     Exit Function
 ErrHandler:
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-0306] modEntrySettings.CollectFormatIssues EXIT-ERR " & "errNum=" & Err.Number & " desc=" & Err.Description  ' [ADR-0100]
     Set CollectFormatIssues = issues
 End Function
 
@@ -619,6 +822,7 @@ End Function
 Private Sub AccumulateIssuesForOneKnowledge(ByVal knowledgeNo As String, _
                                             ByVal fields As Object, _
                                             ByVal issues As Collection)
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0307] modEntrySettings.AccumulateIssuesForOneKnowledge ENTER"  ' [ADR-0100]
     On Error GoTo ErrHandler
     Dim data As Object
     Set data = modKnowledgeFileIO.LoadKnowledge(knowledgeNo)
@@ -640,8 +844,10 @@ Private Sub AccumulateIssuesForOneKnowledge(ByVal knowledgeNo As String, _
             issues.Add Array(knowledgeNo, CStr(fieldName), curValue, issueText)
         End If
     Next fieldName
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0308] modEntrySettings.AccumulateIssuesForOneKnowledge EXIT-OK"  ' [ADR-0100]
     Exit Sub
 ErrHandler:
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-0309] modEntrySettings.AccumulateIssuesForOneKnowledge EXIT-ERR " & "errNum=" & Err.Number & " desc=" & Err.Description  ' [ADR-0100]
     ' One bad knowledge file must not abort the whole sweep.
     issues.Add Array(knowledgeNo, "", "", _
         "load failed: " & Err.Number & " " & Err.Description)
@@ -660,6 +866,7 @@ End Sub
 ' ============================================================
 Private Function DetectFieldIssue(ByVal rules As Object, _
                                   ByVal value As String) As String
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0310] modEntrySettings.DetectFieldIssue ENTER"  ' [ADR-0100]
     Dim required As String
     Dim fieldType As String
     Dim maxLen As String
@@ -671,12 +878,14 @@ Private Function DetectFieldIssue(ByVal rules As Object, _
 
     If LCase$(required) = "true" And Len(value) = 0 Then
         DetectFieldIssue = "required field is empty"
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0311] modEntrySettings.DetectFieldIssue EXIT-OK"  ' [ADR-0100]
         Exit Function
     End If
 
     If Len(value) > 0 And fieldType = "number" Then
         If Not IsNumeric(value) Then
             DetectFieldIssue = "value is not numeric"
+            If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0312] modEntrySettings.DetectFieldIssue EXIT-OK"  ' [ADR-0100]
             Exit Function
         End If
     End If
@@ -684,6 +893,7 @@ Private Function DetectFieldIssue(ByVal rules As Object, _
     If Len(maxLen) > 0 And IsNumeric(maxLen) Then
         If Len(value) > CLng(maxLen) Then
             DetectFieldIssue = "value exceeds max length " & maxLen
+            If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0313] modEntrySettings.DetectFieldIssue EXIT-OK"  ' [ADR-0100]
             Exit Function
         End If
     End If
@@ -691,6 +901,7 @@ Private Function DetectFieldIssue(ByVal rules As Object, _
     If Len(options) > 0 And Len(value) > 0 Then
         If Not IsValueInDropdownOptions(value, options) Then
             DetectFieldIssue = "value not in dropdown options"
+            If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0314] modEntrySettings.DetectFieldIssue EXIT-OK"  ' [ADR-0100]
             Exit Function
         End If
     End If
@@ -705,12 +916,14 @@ End Function
 ' ============================================================
 Private Function IsValueInDropdownOptions(ByVal value As String, _
                                           ByVal options As String) As Boolean
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0315] modEntrySettings.IsValueInDropdownOptions ENTER"  ' [ADR-0100]
     Dim parts() As String
     parts = Split(options, "|")
     Dim i As Long
     For i = LBound(parts) To UBound(parts)
         If Trim$(parts(i)) = value Then
             IsValueInDropdownOptions = True
+            If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0316] modEntrySettings.IsValueInDropdownOptions EXIT-OK"  ' [ADR-0100]
             Exit Function
         End If
     Next i
@@ -724,12 +937,14 @@ End Function
 '       so a previous run never leaks into the new one.
 ' ============================================================
 Private Sub ClearCheckResultGrid(ByVal ws As Worksheet)
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0317] modEntrySettings.ClearCheckResultGrid ENTER"  ' [ADR-0100]
     Dim firstRow As Long
     Dim lastRow As Long
     firstRow = M12_RESULT_START_ROW
     lastRow = firstRow + M12_RESULT_CLEAR_ROWS - 1
     ws.Range(ws.Cells(firstRow, M12_RESULT_COL_KNO), _
              ws.Cells(lastRow, M12_RESULT_COL_ISS)).ClearContents
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0318] modEntrySettings.ClearCheckResultGrid EXIT-OK"  ' [ADR-0100]
 End Sub
 
 ' ============================================================
@@ -740,12 +955,14 @@ End Sub
 ' ============================================================
 Private Sub WriteCheckResultGrid(ByVal ws As Worksheet, _
                                  ByVal issues As Collection)
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0319] modEntrySettings.WriteCheckResultGrid ENTER"  ' [ADR-0100]
     If issues.Count = 0 Then
         ws.Cells(M12_RESULT_START_ROW, M12_RESULT_COL_ISS).Value = _
             "no anomalies"
         LogInfoSafe "Btn_CheckFormat", _
             "no anomalies (empty result grid marker emitted)", _
             "LOG-M12-CHECK-EMPTY"
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0320] modEntrySettings.WriteCheckResultGrid EXIT-OK"  ' [ADR-0100]
         Exit Sub
     End If
 
@@ -779,6 +996,7 @@ End Sub
 '       on one path does not break the other.
 ' ============================================================
 Private Sub PersistConfigKeys(ByVal keyValues As Object)
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0321] modEntrySettings.PersistConfigKeys ENTER"  ' [ADR-0100]
     On Error Resume Next
     modConfigLoader.SaveConfigKeys XLSM_KEY, keyValues
     On Error GoTo 0
@@ -786,6 +1004,7 @@ Private Sub PersistConfigKeys(ByVal keyValues As Object)
     On Error Resume Next
     modConfigHolder.SetConfigKeys keyValues
     On Error GoTo 0
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0322] modEntrySettings.PersistConfigKeys EXIT-OK"  ' [ADR-0100]
 End Sub
 
 ' ============================================================
@@ -793,12 +1012,14 @@ End Sub
 ' Role: exception-safe wrapper around modConfigHolder.GetValueOrDefault.
 ' ============================================================
 Private Function SafeGetCfg(ByVal key As String, ByVal defaultValue As String) As String
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0323] modEntrySettings.SafeGetCfg ENTER"  ' [ADR-0100]
     On Error Resume Next
     Dim v As String
     v = modConfigHolder.GetValueOrDefault(key, defaultValue)
     If Len(v) = 0 Then v = defaultValue
     SafeGetCfg = v
     On Error GoTo 0
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0324] modEntrySettings.SafeGetCfg EXIT-OK"  ' [ADR-0100]
 End Function
 
 ' ============================================================
@@ -807,13 +1028,16 @@ End Function
 '       Nothing on failure so callers can fall through silently.
 ' ============================================================
 Private Function NewLogger() As clsLogger
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0325] modEntrySettings.NewLogger ENTER"  ' [ADR-0100]
     On Error GoTo ErrHandler
     Dim lg As clsLogger
     Set lg = New clsLogger
     lg.Init ThisWorkbook.Worksheets(SHEET_LOG)
     Set NewLogger = lg
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0326] modEntrySettings.NewLogger EXIT-OK"  ' [ADR-0100]
     Exit Function
 ErrHandler:
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-0327] modEntrySettings.NewLogger EXIT-ERR " & "errNum=" & Err.Number & " desc=" & Err.Description  ' [ADR-0100]
     Set NewLogger = Nothing
 End Function
 
@@ -824,32 +1048,38 @@ End Function
 ' ============================================================
 Private Sub LogInfoSafe(ByVal funcName As String, ByVal msg As String, _
                         ByVal logId As String)
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0328] modEntrySettings.LogInfoSafe ENTER"  ' [ADR-0100]
     On Error Resume Next
     Dim lg As clsLogger
     Set lg = NewLogger()
     If Not lg Is Nothing Then lg.LogInfo MOD_NAME, funcName, msg, _
         "", logId
     On Error GoTo 0
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0329] modEntrySettings.LogInfoSafe EXIT-OK"  ' [ADR-0100]
 End Sub
 
 Private Sub LogWarnSafe(ByVal funcName As String, ByVal msg As String, _
                         ByVal logId As String)
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0330] modEntrySettings.LogWarnSafe ENTER"  ' [ADR-0100]
     On Error Resume Next
     Dim lg As clsLogger
     Set lg = NewLogger()
     If Not lg Is Nothing Then lg.LogWarn MOD_NAME, funcName, msg, _
         "", logId
     On Error GoTo 0
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0331] modEntrySettings.LogWarnSafe EXIT-OK"  ' [ADR-0100]
 End Sub
 
 Private Sub LogErrorSafe(ByVal funcName As String, ByVal msg As String, _
                          ByVal logId As String)
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0332] modEntrySettings.LogErrorSafe ENTER"  ' [ADR-0100]
     On Error Resume Next
     Dim lg As clsLogger
     Set lg = NewLogger()
     If Not lg Is Nothing Then lg.LogError MOD_NAME, funcName, msg, _
         "", logId
     On Error GoTo 0
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0333] modEntrySettings.LogErrorSafe EXIT-OK"  ' [ADR-0100]
 End Sub
 
 
@@ -872,18 +1102,21 @@ End Sub
 ' XLSM_KEY = "kanri" (kanri.xlsm config-file logical name)
 '   U+7BA1 U+7406
 Private Function XLSM_KEY() As String
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0334] modEntrySettings.XLSM_KEY ENTER"  ' [ADR-0100]
     XLSM_KEY = ChrW(&H7BA1) & ChrW(&H7406)
 End Function
 
 ' SHEET_SETTINGS = "settei" (M-11 sheet name)
 '   U+8A2D U+5B9A
 Private Function SHEET_SETTINGS() As String
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0335] modEntrySettings.SHEET_SETTINGS ENTER"  ' [ADR-0100]
     SHEET_SETTINGS = ChrW(&H8A2D) & ChrW(&H5B9A)
 End Function
 
 ' SHEET_STORAGE = "kakuno-saki settei" (M-10 sheet name)
 '   U+683C U+7D0D U+5148 U+8A2D U+5B9A
 Private Function SHEET_STORAGE() As String
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0336] modEntrySettings.SHEET_STORAGE ENTER"  ' [ADR-0100]
     SHEET_STORAGE = ChrW(&H683C) & ChrW(&H7D0D) & ChrW(&H5148) & _
                     ChrW(&H8A2D) & ChrW(&H5B9A)
 End Function
@@ -892,6 +1125,7 @@ End Function
 '   U+30D5 U+30A9 U+30FC U+30DE U+30C3 U+30C8 U+5909 U+66F4
 '   U+30C1 U+30A7 U+30C3 U+30AF
 Private Function SHEET_MIGRATE() As String
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0337] modEntrySettings.SHEET_MIGRATE ENTER"  ' [ADR-0100]
     SHEET_MIGRATE = ChrW(&H30D5) & ChrW(&H30A9) & ChrW(&H30FC) & _
                     ChrW(&H30DE) & ChrW(&H30C3) & ChrW(&H30C8) & _
                     ChrW(&H5909) & ChrW(&H66F4) & ChrW(&H30C1) & _

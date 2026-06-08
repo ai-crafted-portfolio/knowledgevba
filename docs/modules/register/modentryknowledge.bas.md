@@ -10,22 +10,14 @@ description: modEntryKnowledge.bas のソースコード（コピペ用）
 
 ---
 
-## 保存方法
+## ファイルとして保存
 
-下のコードをメモ帳に貼り付け、**[名前を付けて保存]** で次のように保存してください。
-
-- 場所: `C:\KnowledgeMgr\installer\vba_modules\register\`
-- ファイル名: `modEntryKnowledge.bas`
-- ファイルの種類: **すべてのファイル**
-- 文字コード: **ANSI**（Shift-JIS）
-
-> メモ帳の文字コードを **ANSI** にしないと、VBA の日本語が文字化けして動かなくなります。
-> UTF-8 で保存すると VBA Import 時に日本語が文字化けして動かなくなります。
-> 改行コードは CRLF（Windows 標準）のままで OK です。
+メモ帳（または任意のテキストエディタ）に下のソースコード全文を貼り付け、**`modEntryKnowledge.bas`** という名前で `installer\vba_modules\register\` 配下に保存してください。文字コードは ANSI（Shift-JIS）、改行は CRLF にしてください。
 
 ---
 
 ## ソースコード
+
 
 ```vb
 Attribute VB_Name = "modEntryKnowledge"

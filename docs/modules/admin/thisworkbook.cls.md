@@ -25,6 +25,7 @@ description: ThisWorkbook.cls のソースコード（コピペ用）
 
 ## ソースコード
 
+
 ```vb
 ' ================================================================
 ' ThisWorkbook 特殊モジュール (管理.xlsm 専用)
@@ -58,17 +59,36 @@ Private Const STARTUP_SHEET As String = "フォーマット一覧"  ' v2.1 Q44 �
 '            - ActiveSheet = M-02 (Q44)
 ' ================================================================
 Private Sub Workbook_Open()
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then
+        Debug.Print "[D-0001] ThisWorkbook.Workbook_Open ENTER"  ' [ADR-0100]
+    End If
+    ' [ADR-0100][gDebugLevel] init from config with safe fallback
+    On Error Resume Next
+    modCommon.gDebugLevel = modConfigHolder.GetDebugLevel()
+    If Err.Number <> 0 Or modCommon.gDebugLevel < 0 Or modCommon.gDebugLevel > 5 Then
+        modCommon.gDebugLevel = DEFAULT_DEBUG_LEVEL_FALLBACK
+    End If
+    Err.Clear
+    On Error GoTo 0
+    Debug.Print "[D-INIT] " & XLSM_NAME & " gDebugLevel=" & modCommon.gDebugLevel & " ts=" & Format$(Now, "hh:nn:ss")
+    Debug.Print "[WBOPEN-ENTER] " & XLSM_NAME & " ts=" & Format$(Now, "hh:nn:ss")  ' [WBOPEN-DEBUG-PRINT-INJECTED]
     On Error GoTo ErrHandler
     Application.EnableEvents = False
     Application.ScreenUpdating = False
 
     ' v2.1 Q34: 起動時に 90 日超バックアップを自動削除 (管理.xlsm のみ実施)
     On Error Resume Next
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_DEBUG Then
+        Debug.Print "[D-0004] ThisWorkbook.Workbook_Open STEP-1 pre modKnowledgeFileIO.CleanupOldBackups"  ' [ADR-0100]
+    End If
     Call modKnowledgeFileIO.CleanupOldBackups
     On Error GoTo ErrHandler
 
     Dim orch As clsSetupOrchestrator
     Set orch = New clsSetupOrchestrator
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_DEBUG Then
+        Debug.Print "[D-0005] ThisWorkbook.Workbook_Open STEP-2 pre orch.RunFullSetup"  ' [ADR-0100]
+    End If
     Call orch.RunFullSetup(XLSM_NAME)
 
     ' S5-LOG-02: SAVE-EXIT-OK-II-003 (Workbook_Open success exit, screen 管理)
@@ -86,9 +106,17 @@ Private Sub Workbook_Open()
 
     Application.ScreenUpdating = True
     Application.EnableEvents = True
+    Debug.Print "[WBOPEN-EXIT] " & XLSM_NAME & " ts=" & Format$(Now, "hh:nn:ss")  ' [WBOPEN-DEBUG-PRINT-INJECTED]
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then
+        Debug.Print "[D-0002] ThisWorkbook.Workbook_Open EXIT-OK"  ' [ADR-0100]
+    End If
     Exit Sub
 
 ErrHandler:
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then
+        Debug.Print "[D-0003] ThisWorkbook.Workbook_Open EXIT-ERR " & "errNum=" & Err.Number & " desc=" & Err.Description  ' [ADR-0100]
+    End If
+    Debug.Print "[WBOPEN-ERR] " & XLSM_NAME & " err=" & Err.Number & " " & Err.Description  ' [WBOPEN-DEBUG-PRINT-INJECTED]
     Application.ScreenUpdating = True
     Application.EnableEvents = True
     Dim msg As String
@@ -120,6 +148,9 @@ End Sub
 ' Workbook_BeforeClose
 ' ================================================================
 Private Sub Workbook_BeforeClose(Cancel As Boolean)
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then
+        Debug.Print "[D-0006] ThisWorkbook.Workbook_BeforeClose ENTER"  ' [ADR-0100]
+    End If
     On Error Resume Next
     Dim ws As Worksheet
     Set ws = ThisWorkbook.Worksheets("LOG")
@@ -134,5 +165,59 @@ Private Sub Workbook_BeforeClose(Cancel As Boolean)
         ws.Cells(r, 5).Value = "xlsm 終了: " & XLSM_NAME
     End If
     On Error GoTo 0
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then
+        Debug.Print "[D-0007] ThisWorkbook.Workbook_BeforeClose EXIT-OK"  ' [ADR-0100]
+    End If
+End Sub
+
+
+' ================================================================
+' Workbook_SheetBeforeDoubleClick (2026-06-08 UX fix for M-02 checkbox)
+' Double-click on column A row 17..60 toggles between check mark ChrW(2713) and empty.
+' Target sheet: M-02 list (formatList).
+' ================================================================
+Private Sub Workbook_SheetBeforeDoubleClick(ByVal Sh As Object, ByVal Target As Range, Cancel As Boolean)
+    On Error GoTo ErrHandler
+    Dim nm As String
+    nm = Sh.Name
+    ' M-02 format list: col A rows 17..60 toggle check mark
+    Dim NM_M02 As String
+    NM_M02 = ChrW(&H30D5) & ChrW(&H30A9) & ChrW(&H30FC) & ChrW(&H30DE) & ChrW(&H30C3) & ChrW(&H30C8) & ChrW(&H4E00) & ChrW(&H89A7)
+    Dim NM_M10 As String
+    NM_M10 = ChrW(&H683C) & ChrW(&H7D0D) & ChrW(&H5148) & ChrW(&H8A2D) & ChrW(&H5B9A)
+    If nm = NM_M02 Then
+        If Target.Column <> 1 Then Exit Sub
+        If Target.Row < 17 Or Target.Row > 60 Then Exit Sub
+        Cancel = True
+        Dim cur02 As String
+        cur02 = CStr(Target.Value)
+        If cur02 = ChrW(&H2713) Then
+            Target.Value = ""
+        Else
+            Target.Value = ChrW(&H2713)
+        End If
+        Exit Sub
+    ElseIf nm = NM_M10 Then
+        If Target.Column <> 1 Then Exit Sub
+        If Target.Row < 11 Or Target.Row > 14 Then Exit Sub
+        Cancel = True
+        Dim cur10 As String
+        cur10 = CStr(Target.Value)
+        Dim ri As Long
+        If cur10 = ChrW(&H25CF) Then
+            ' Currently selected -> deselect (no other change)
+            Target.Value = ChrW(&H25CB)
+        Else
+            ' Radio-select: clear all rows 11..14 then set this one
+            For ri = 11 To 14
+                Sh.Cells(ri, 1).Value = ChrW(&H25CB)
+            Next ri
+            Target.Value = ChrW(&H25CF)
+        End If
+        Exit Sub
+    End If
+    Exit Sub
+ErrHandler:
+    Debug.Print "[ERR] SheetBeforeDoubleClick toggle: " & Err.Number & " " & Err.Description
 End Sub
 ```
