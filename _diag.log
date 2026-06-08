@@ -1,0 +1,452 @@
+﻿
+=== current state ===
+HEAD=0a236b21801b4c0585ae066d99714abc9effabfa
+status:
+DU docs/customize.md
+DU docs/install.md
+A  docs/modules/admin/clsformatdesignscreen.cls.md
+A  docs/modules/admin/clsformatlistscreen.cls.md
+A  docs/modules/admin/clsformatpreviewscreen.cls.md
+A  docs/modules/admin/clslogscreen.cls.md
+A  docs/modules/admin/clsmigrationscreen.cls.md
+A  docs/modules/admin/clsstoragescreen.cls.md
+A  docs/modules/admin/clssystemsettingsscreen.cls.md
+A  docs/modules/admin/modentryformat.bas.md
+A  docs/modules/admin/modentrysettings.bas.md
+A  docs/modules/admin/thisworkbook.cls.md
+A  docs/modules/common/clsbuttonspec.cls.md
+A  docs/modules/common/clscelladdrhelper.cls.md
+A  docs/modules/common/clscellbinding.cls.md
+A  docs/modules/common/clscellio.cls.md
+A  docs/modules/common/clscontrolspec.cls.md
+A  docs/modules/common/clsfieldmigrator.cls.md
+A  docs/modules/common/clsfieldspec.cls.md
+A  docs/modules/common/clsformatmanager.cls.md
+A  docs/modules/common/clsformspec.cls.md
+A  docs/modules/common/clsgridio.cls.md
+A  docs/modules/common/clsknowledgemanager.cls.md
+A  docs/modules/common/clslogentry.cls.md
+A  docs/modules/common/clslogger.cls.md
+A  docs/modules/common/clsscreenspec.cls.md
+A  docs/modules/common/clssearchengine.cls.md
+A  docs/modules/common/clssectionspec.cls.md
+A  docs/modules/common/clssetuporchestrator.cls.md
+A  docs/modules/common/clssheetrenderer.cls.md
+A  docs/modules/common/clsstanzasection.cls.md
+A  docs/modules/common/clsstanzavalidationissue.cls.md
+A  docs/modules/common/clsstanzavalidationresult.cls.md
+A  docs/modules/common/clsstorageresolver.cls.md
+A  docs/modules/common/clsuserformrenderer.cls.md
+A  docs/modules/common/iscreenrenderer.cls.md
+A  docs/modules/common/modbuttonwiring.bas.md
+A  docs/modules/common/modcommon.bas.md
+A  docs/modules/common/modconfigholder.bas.md
+A  docs/modules/common/modconfigloader.bas.md
+A  docs/modules/common/moddateutil.bas.md
+A  docs/modules/common/mode2e_allbuttons.bas.md
+A  docs/modules/common/modentryuserform.bas.md
+A  docs/modules/common/modfactory.bas.md
+A  docs/modules/common/modfileio.bas.md
+A  docs/modules/common/modformatcolumns.bas.md
+A  docs/modules/common/modformatloader.bas.md
+A  docs/modules/common/modformbuilder.bas.md
+A  docs/modules/common/modknowledgefileio.bas.md
+A  docs/modules/common/modlogids.bas.md
+A  docs/modules/common/modrefresh.bas.md
+A  docs/modules/common/modscreenrender.bas.md
+A  docs/modules/common/modsetup.bas.md
+A  docs/modules/common/modsheetbuttons.bas.md
+A  docs/modules/common/modsheetmap.bas.md
+A  docs/modules/common/modspecexamples.bas.md
+A  docs/modules/common/modstanzaio.bas.md
+A  docs/modules/common/modstringutil.bas.md
+A  docs/modules/common/modtesthelpers.bas.md
+A  docs/modules/common/moduiloader.bas.md
+A  docs/modules/common/moduserformcallback.bas.md
+A  docs/modules/index.md
+A  docs/modules/register/clsknowledgeeditscreen.cls.md
+A  docs/modules/register/clsknowledgeregisterscreen.cls.md
+A  docs/modules/register/modentryknowledge.bas.md
+A  docs/modules/register/modknowledgeentryhelpers.bas.md
+A  docs/modules/register/thisworkbook.cls.md
+A  docs/modules/search/clsknowledgeviewscreen.cls.md
+A  docs/modules/search/clssearchscreen.cls.md
+A  docs/modules/search/modentrysearch.bas.md
+A  docs/modules/search/thisworkbook.cls.md
+A  docs/troubleshooting.md
+A  docs/usage.md
+UU mkdocs.yml
+?? _chk.log
+?? _chk.ps1
+?? _commit_push.log
+?? _commit_push.ps1
+?? _diag.log
+?? _diag.ps1
+?? _pull_push.log
+?? _pull_push.ps1
+?? _session_push.log
+?? _session_push.ps1
+?? docs/_writetest.tmp
+
+=== rebase abort ===
+
+abort exit=0
+
+=== post-abort state ===
+HEAD=7757b37a11fbc44195133a9a70a3610d7d1225d1
+status:
+?? _chk.log
+?? _chk.ps1
+?? _commit_push.log
+?? _commit_push.ps1
+?? _diag.log
+?? _diag.ps1
+?? _pull_push.log
+?? _pull_push.ps1
+?? _session_push.log
+?? _session_push.ps1
+?? docs/_writetest.tmp
+
+=== remote 0a236b2 file listing under docs/ ===
+docs/architecture.md
+docs/index.md
+docs/operations.md
+docs/screen_customization_guide_v2.md
+docs/settings.md
+docs/setup.md
+docs/source/business-logic/clsbuttonspec.md
+docs/source/business-logic/clscontrolspec.md
+docs/source/business-logic/clsfieldmigrator.md
+docs/source/business-logic/clsfieldspec.md
+docs/source/business-logic/clsformatmanager.md
+docs/source/business-logic/clsformspec.md
+docs/source/business-logic/clsknowledgemanager.md
+docs/source/business-logic/clslogger.md
+docs/source/business-logic/clsscreenspec.md
+docs/source/business-logic/clssearchengine.md
+docs/source/business-logic/clssectionspec.md
+docs/source/business-logic/clssetuporchestrator.md
+docs/source/business-logic/clssheetrenderer.md
+docs/source/business-logic/clsstorageresolver.md
+docs/source/business-logic/clsuserformrenderer.md
+docs/source/business-logic/iscreenrenderer.md
+docs/source/business-logic/modfactory.md
+docs/source/business-logic/modformbuilder.md
+docs/source/business-logic/modscreenrender.md
+docs/source/entrypoint/modentryformat.md
+docs/source/entrypoint/modentryknowledge.md
+docs/source/entrypoint/modentrysearch.md
+docs/source/entrypoint/modentrysettings.md
+docs/source/entrypoint/modspecexamples.md
+docs/source/index.md
+docs/source/infrastructure/modsetup.md
+docs/source/screen/clsbackupmgmtscreen.md
+docs/source/screen/clserrorbandscreen.md
+docs/source/screen/clsfileformatscreen.md
+docs/source/screen/clsformatdesignscreen.md
+docs/source/screen/clsformatlistscreen.md
+docs/source/screen/clsformatpreviewscreen.md
+docs/source/screen/clsknowledgeeditscreen.md
+docs/source/screen/clsknowledgelistscreen.md
+docs/source/screen/clsknowledgeregisterscreen.md
+docs/source/screen/clsknowledgeviewscreen.md
+docs/source/screen/clslogscreen.md
+docs/source/screen/clsmigrationscreen.md
+docs/source/screen/clssearchscreen.md
+docs/source/screen/clsstoragescreen.md
+docs/source/screen/clssystemsettingsscreen.md
+docs/source/special/thisworkbook-admin.md
+docs/source/special/thisworkbook-register.md
+docs/source/special/thisworkbook-search.md
+docs/source/utility/clscelladdrhelper.md
+docs/source/utility/clscellbinding.md
+docs/source/utility/clscellio.md
+docs/source/utility/clsgridio.md
+docs/source/utility/clslogentry.md
+docs/source/utility/clsstanzasection.md
+docs/source/utility/clsstanzavalidationissue.md
+docs/source/utility/clsstanzavalidationresult.md
+docs/source/utility/modcommon.md
+docs/source/utility/modconfigholder.md
+docs/source/utility/modconfigloader.md
+docs/source/utility/moddateutil.md
+docs/source/utility/modfileio.md
+docs/source/utility/modformatcolumns.md
+docs/source/utility/modformatloader.md
+docs/source/utility/modimagerender.md
+docs/source/utility/modknowledgefileio.md
+docs/source/utility/modlogids.md
+docs/source/utility/modsheetmap.md
+docs/source/utility/modstanzaio.md
+docs/source/utility/modstringutil.md
+docs/source/utility/moduiconfig.md
+docs/source/utility/moduilayoutextractor.md
+docs/source/utility/moduiloader.md
+docs/spec.md
+docs/stylesheets/extra.css
+
+=== local 7757b37 file listing under docs/ ===
+docs/architecture.md
+docs/customize.md
+docs/images/operations/M-01.png
+docs/images/operations/M-02.png
+docs/images/operations/M-03.png
+docs/images/operations/M-04.png
+docs/images/operations/M-05.png
+docs/images/operations/M-06.png
+docs/images/operations/M-07.png
+docs/images/operations/M-08.png
+docs/images/operations/M-09.png
+docs/images/operations/M-10.png
+docs/images/operations/M-11.png
+docs/images/operations/M-12.png
+docs/images/operations/M-13.png
+docs/images/operations/M-14.png
+docs/index.md
+docs/install.md
+docs/modules/admin/clsformatdesignscreen.cls.md
+docs/modules/admin/clsformatlistscreen.cls.md
+docs/modules/admin/clsformatpreviewscreen.cls.md
+docs/modules/admin/clslogscreen.cls.md
+docs/modules/admin/clsmigrationscreen.cls.md
+docs/modules/admin/clsstoragescreen.cls.md
+docs/modules/admin/clssystemsettingsscreen.cls.md
+docs/modules/admin/modentryformat.bas.md
+docs/modules/admin/modentrysettings.bas.md
+docs/modules/admin/thisworkbook.cls.md
+docs/modules/common/clsbuttonspec.cls.md
+docs/modules/common/clscelladdrhelper.cls.md
+docs/modules/common/clscellbinding.cls.md
+docs/modules/common/clscellio.cls.md
+docs/modules/common/clscontrolspec.cls.md
+docs/modules/common/clsfieldmigrator.cls.md
+docs/modules/common/clsfieldspec.cls.md
+docs/modules/common/clsformatmanager.cls.md
+docs/modules/common/clsformspec.cls.md
+docs/modules/common/clsgridio.cls.md
+docs/modules/common/clsknowledgemanager.cls.md
+docs/modules/common/clslogentry.cls.md
+docs/modules/common/clslogger.cls.md
+docs/modules/common/clsscreenspec.cls.md
+docs/modules/common/clssearchengine.cls.md
+docs/modules/common/clssectionspec.cls.md
+docs/modules/common/clssetuporchestrator.cls.md
+docs/modules/common/clssheetrenderer.cls.md
+docs/modules/common/clsstanzasection.cls.md
+docs/modules/common/clsstanzavalidationissue.cls.md
+docs/modules/common/clsstanzavalidationresult.cls.md
+docs/modules/common/clsstorageresolver.cls.md
+docs/modules/common/clsuserformrenderer.cls.md
+docs/modules/common/iscreenrenderer.cls.md
+docs/modules/common/modbuttonwiring.bas.md
+docs/modules/common/modcommon.bas.md
+docs/modules/common/modconfigholder.bas.md
+docs/modules/common/modconfigloader.bas.md
+docs/modules/common/moddateutil.bas.md
+docs/modules/common/mode2e_allbuttons.bas.md
+docs/modules/common/modentryuserform.bas.md
+docs/modules/common/modfactory.bas.md
+docs/modules/common/modfileio.bas.md
+docs/modules/common/modformatcolumns.bas.md
+docs/modules/common/modformatloader.bas.md
+docs/modules/common/modformbuilder.bas.md
+docs/modules/common/modknowledgefileio.bas.md
+docs/modules/common/modlogids.bas.md
+docs/modules/common/modrefresh.bas.md
+docs/modules/common/modscreenrender.bas.md
+docs/modules/common/modsetup.bas.md
+docs/modules/common/modsheetbuttons.bas.md
+docs/modules/common/modsheetmap.bas.md
+docs/modules/common/modspecexamples.bas.md
+docs/modules/common/modstanzaio.bas.md
+docs/modules/common/modstringutil.bas.md
+docs/modules/common/modtesthelpers.bas.md
+docs/modules/common/moduiloader.bas.md
+docs/modules/common/moduserformcallback.bas.md
+docs/modules/index.md
+docs/modules/register/clsknowledgeeditscreen.cls.md
+docs/modules/register/clsknowledgeregisterscreen.cls.md
+docs/modules/register/modentryknowledge.bas.md
+docs/modules/register/modknowledgeentryhelpers.bas.md
+docs/modules/register/thisworkbook.cls.md
+docs/modules/search/clsknowledgeviewscreen.cls.md
+docs/modules/search/clssearchscreen.cls.md
+docs/modules/search/modentrysearch.bas.md
+docs/modules/search/thisworkbook.cls.md
+docs/operations.md
+docs/setup.md
+docs/source/business-logic/clsbuttonspec.md
+docs/source/business-logic/clscontrolspec.md
+docs/source/business-logic/clsfieldmigrator.md
+docs/source/business-logic/clsfieldspec.md
+docs/source/business-logic/clsformatmanager.md
+docs/source/business-logic/clsformspec.md
+docs/source/business-logic/clsknowledgemanager.md
+docs/source/business-logic/clslogger.md
+docs/source/business-logic/clsscreenspec.md
+docs/source/business-logic/clssearchengine.md
+docs/source/business-logic/clssectionspec.md
+docs/source/business-logic/clssetuporchestrator.md
+docs/source/business-logic/clssheetrenderer.md
+docs/source/business-logic/clsstorageresolver.md
+docs/source/business-logic/clstaskcontroller.md
+docs/source/business-logic/clsuserformrenderer.md
+docs/source/business-logic/iscreenrenderer.md
+docs/source/business-logic/modfactory.md
+docs/source/business-logic/modformbuilder.md
+docs/source/business-logic/modscreenrender.md
+docs/source/business-logic/modscreenspecregistry.md
+docs/source/entrypoint/modentryformat.md
+docs/source/entrypoint/modentryknowledge.md
+docs/source/entrypoint/modentrymain.md
+docs/source/entrypoint/modentrysearch.md
+docs/source/entrypoint/modentrysettings.md
+docs/source/entrypoint/modspecexamples.md
+docs/source/index.md
+docs/source/infrastructure/modsetup.md
+docs/source/screen/clsfileformatscreen.md
+docs/source/screen/clsformatdesignscreen.md
+docs/source/screen/clsformatlistscreen.md
+docs/source/screen/clsformatpreviewscreen.md
+docs/source/screen/clsknowledgeeditscreen.md
+docs/source/screen/clsknowledgelistscreen.md
+docs/source/screen/clsknowledgeregisterscreen.md
+docs/source/screen/clsknowledgeviewscreen.md
+docs/source/screen/clslogscreen.md
+docs/source/screen/clsmainscreen.md
+docs/source/screen/clsmigrationscreen.md
+docs/source/screen/clssearchscreen.md
+docs/source/screen/clsstoragescreen.md
+docs/source/screen/clssystemsettingsscreen.md
+docs/source/special/thisworkbook.md
+docs/source/utility/clslogentry.md
+docs/source/utility/modcommon.md
+docs/source/utility/moddateutil.md
+docs/source/utility/modfileio.md
+docs/source/utility/modimagerender.md
+docs/source/utility/modstringutil.md
+docs/source/utility/moduiconfig.md
+docs/spec.md
+docs/stylesheets/extra.css
+docs/troubleshooting.md
+docs/usage.md
+
+=== files in remote NOT in local 7757b37 ===
+docs/screen_customization_guide_v2.md
+docs/settings.md
+docs/source/screen/clsbackupmgmtscreen.md
+docs/source/screen/clserrorbandscreen.md
+docs/source/special/thisworkbook-admin.md
+docs/source/special/thisworkbook-register.md
+docs/source/special/thisworkbook-search.md
+docs/source/utility/clscelladdrhelper.md
+docs/source/utility/clscellbinding.md
+docs/source/utility/clscellio.md
+docs/source/utility/clsgridio.md
+docs/source/utility/clsstanzasection.md
+docs/source/utility/clsstanzavalidationissue.md
+docs/source/utility/clsstanzavalidationresult.md
+docs/source/utility/modconfigholder.md
+docs/source/utility/modconfigloader.md
+docs/source/utility/modformatcolumns.md
+docs/source/utility/modformatloader.md
+docs/source/utility/modknowledgefileio.md
+docs/source/utility/modlogids.md
+docs/source/utility/modsheetmap.md
+docs/source/utility/modstanzaio.md
+docs/source/utility/moduilayoutextractor.md
+docs/source/utility/moduiloader.md
+
+=== files in local 7757b37 NOT in remote ===
+docs/customize.md
+docs/images/operations/M-01.png
+docs/images/operations/M-02.png
+docs/images/operations/M-03.png
+docs/images/operations/M-04.png
+docs/images/operations/M-05.png
+docs/images/operations/M-06.png
+docs/images/operations/M-07.png
+docs/images/operations/M-08.png
+docs/images/operations/M-09.png
+docs/images/operations/M-10.png
+docs/images/operations/M-11.png
+docs/images/operations/M-12.png
+docs/images/operations/M-13.png
+docs/images/operations/M-14.png
+docs/install.md
+docs/modules/admin/clsformatdesignscreen.cls.md
+docs/modules/admin/clsformatlistscreen.cls.md
+docs/modules/admin/clsformatpreviewscreen.cls.md
+docs/modules/admin/clslogscreen.cls.md
+docs/modules/admin/clsmigrationscreen.cls.md
+docs/modules/admin/clsstoragescreen.cls.md
+docs/modules/admin/clssystemsettingsscreen.cls.md
+docs/modules/admin/modentryformat.bas.md
+docs/modules/admin/modentrysettings.bas.md
+docs/modules/admin/thisworkbook.cls.md
+docs/modules/common/clsbuttonspec.cls.md
+docs/modules/common/clscelladdrhelper.cls.md
+docs/modules/common/clscellbinding.cls.md
+docs/modules/common/clscellio.cls.md
+docs/modules/common/clscontrolspec.cls.md
+docs/modules/common/clsfieldmigrator.cls.md
+docs/modules/common/clsfieldspec.cls.md
+docs/modules/common/clsformatmanager.cls.md
+docs/modules/common/clsformspec.cls.md
+docs/modules/common/clsgridio.cls.md
+docs/modules/common/clsknowledgemanager.cls.md
+docs/modules/common/clslogentry.cls.md
+docs/modules/common/clslogger.cls.md
+docs/modules/common/clsscreenspec.cls.md
+docs/modules/common/clssearchengine.cls.md
+docs/modules/common/clssectionspec.cls.md
+docs/modules/common/clssetuporchestrator.cls.md
+docs/modules/common/clssheetrenderer.cls.md
+docs/modules/common/clsstanzasection.cls.md
+docs/modules/common/clsstanzavalidationissue.cls.md
+docs/modules/common/clsstanzavalidationresult.cls.md
+docs/modules/common/clsstorageresolver.cls.md
+docs/modules/common/clsuserformrenderer.cls.md
+docs/modules/common/iscreenrenderer.cls.md
+docs/modules/common/modbuttonwiring.bas.md
+docs/modules/common/modcommon.bas.md
+docs/modules/common/modconfigholder.bas.md
+docs/modules/common/modconfigloader.bas.md
+docs/modules/common/moddateutil.bas.md
+docs/modules/common/mode2e_allbuttons.bas.md
+docs/modules/common/modentryuserform.bas.md
+docs/modules/common/modfactory.bas.md
+docs/modules/common/modfileio.bas.md
+docs/modules/common/modformatcolumns.bas.md
+docs/modules/common/modformatloader.bas.md
+docs/modules/common/modformbuilder.bas.md
+docs/modules/common/modknowledgefileio.bas.md
+docs/modules/common/modlogids.bas.md
+docs/modules/common/modrefresh.bas.md
+docs/modules/common/modscreenrender.bas.md
+docs/modules/common/modsetup.bas.md
+docs/modules/common/modsheetbuttons.bas.md
+docs/modules/common/modsheetmap.bas.md
+docs/modules/common/modspecexamples.bas.md
+docs/modules/common/modstanzaio.bas.md
+docs/modules/common/modstringutil.bas.md
+docs/modules/common/modtesthelpers.bas.md
+docs/modules/common/moduiloader.bas.md
+docs/modules/common/moduserformcallback.bas.md
+docs/modules/index.md
+docs/modules/register/clsknowledgeeditscreen.cls.md
+docs/modules/register/clsknowledgeregisterscreen.cls.md
+docs/modules/register/modentryknowledge.bas.md
+docs/modules/register/modknowledgeentryhelpers.bas.md
+docs/modules/register/thisworkbook.cls.md
+docs/modules/search/clsknowledgeviewscreen.cls.md
+docs/modules/search/clssearchscreen.cls.md
+docs/modules/search/modentrysearch.bas.md
+docs/modules/search/thisworkbook.cls.md
+docs/source/business-logic/clstaskcontroller.md
+docs/source/business-logic/modscreenspecregistry.md
+docs/source/entrypoint/modentrymain.md
+docs/source/screen/clsmainscreen.md
+docs/source/special/thisworkbook.md
+docs/troubleshooting.md
+docs/usage.md

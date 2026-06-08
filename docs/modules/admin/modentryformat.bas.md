@@ -1,31 +1,23 @@
 ---
 title: modEntryFormat.bas
-description: modEntryFormat.bas ÇÃÉ\Å[ÉXÉRÅ[ÉhÅiÉRÉsÉyópÅj
+description: modEntryFormat.bas „ÅÆ„ÇΩ„Éº„Çπ„Ç≥„Éº„ÉâÔºà„Ç≥„Éî„ÉöÁî®Ôºâ
 ---
 
 # modEntryFormat.bas
 
-**îzíuêÊ**: `ä«óù.xlsm` ópÇÃ VBA ÉÇÉWÉÖÅ[Éã  
-**éÌóﬁ**: ïWèÄÉÇÉWÉÖÅ[Éã
+**ÈÖçÁΩÆÂÖà**: `ÁÆ°ÁêÜ.xlsm` Áî®„ÅÆ VBA „É¢„Ç∏„É•„Éº„É´
+**Á®ÆÈ°û**: Ê®ôÊ∫ñ„É¢„Ç∏„É•„Éº„É´
 
 ---
 
-## ï€ë∂ï˚ñ@
+## „Éï„Ç°„Ç§„É´„Å®„Åó„Å¶‰øùÂ≠ò
 
-â∫ÇÃÉRÅ[ÉhÇÉÅÉÇí†Ç…ì\ÇËïtÇØÅA**[ñºëOÇïtÇØÇƒï€ë∂]** Ç≈éüÇÃÇÊÇ§Ç…ï€ë∂ÇµÇƒÇ≠ÇæÇ≥Ç¢ÅB
-
-- èÍèä: `C:\KnowledgeMgr\installer\vba_modules\admin\`
-- ÉtÉ@ÉCÉãñº: `modEntryFormat.bas`
-- ÉtÉ@ÉCÉãÇÃéÌóﬁ: **Ç∑Ç◊ÇƒÇÃÉtÉ@ÉCÉã**
-- ï∂éöÉRÅ[Éh: **ANSI**ÅiShift-JISÅj
-
-> ÉÅÉÇí†ÇÃï∂éöÉRÅ[ÉhÇ **ANSI** Ç…ÇµÇ»Ç¢Ç∆ÅAVBA ÇÃì˙ñ{åÍÇ™ï∂éöâªÇØÇµÇƒìÆÇ©Ç»Ç≠Ç»ÇËÇ‹Ç∑ÅB
-> UTF-8 Ç≈ï€ë∂Ç∑ÇÈÇ∆ VBA Import éûÇ…ì˙ñ{åÍÇ™ï∂éöâªÇØÇµÇƒìÆÇ©Ç»Ç≠Ç»ÇËÇ‹Ç∑ÅB
-> â¸çsÉRÅ[ÉhÇÕ CRLFÅiWindows ïWèÄÅjÇÃÇ‹Ç‹Ç≈ OK Ç≈Ç∑ÅB
+„É°„É¢Â∏≥Ôºà„Åæ„Åü„ÅØ‰ªªÊÑè„ÅÆ„ÉÜ„Ç≠„Çπ„Éà„Ç®„Éá„Ç£„ÇøÔºâ„Å´‰∏ã„ÅÆ„ÇΩ„Éº„Çπ„Ç≥„Éº„ÉâÂÖ®Êñá„ÇíË≤º„Çä‰ªò„Åë„ÄÅ**`modEntryFormat.bas`** „Å®„ÅÑ„ÅÜÂêçÂâç„Åß `installer\vba_modules\admin\` ÈÖç‰∏ã„Å´‰øùÂ≠ò„Åó„Å¶„Åè„Å†„Åï„ÅÑ„ÄÇÊñáÂ≠ó„Ç≥„Éº„Éâ„ÅØ ANSIÔºàShift-JISÔºâ„ÄÅÊîπË°å„ÅØ CRLF „Å´„Åó„Å¶„Åè„Å†„Åï„ÅÑ„ÄÇ
 
 ---
 
-## É\Å[ÉXÉRÅ[Éh
+## „ÇΩ„Éº„Çπ„Ç≥„Éº„Éâ
+
 
 ```vb
 Attribute VB_Name = "modEntryFormat"
@@ -117,28 +109,27 @@ Private Const FIELDS_KEY As String = "Fields"
 ' ADR-0090 fix (2026-06-01): the previous CP932 literal got corrupted to
 ' "?t?H?[?}?b?g??" through a UTF-8 round-trip. The CJK literal is now
 ' exposed at the bottom of the module via M02_SHEET_NAME() ChrW helper.
-Private Const M02_DATA_FIRST_ROW  As Long = 11
+Private Const M02_DATA_FIRST_ROW  As Long = 17
 Private Const M02_DATA_LAST_ROW   As Long = 60
-Private Const M02_COL_ROWCHECK    As String = "B"
-Private Const M02_COL_NO          As String = "C"
-Private Const M02_COL_FMT_ID      As String = "D"
-Private Const M02_COL_FMT_NAME    As String = "E"
-Private Const M02_COL_ID_PATTERN  As String = "F"
-Private Const M02_COL_NEXT_NUM    As String = "G"
-Private Const M02_COL_VERSION     As String = "H"
-Private Const M02_COL_FIELD_COUNT As String = "I"
-Private Const M02_COL_KNW_COUNT   As String = "J"
-Private Const M02_COL_UPDATED     As String = "K"
-Private Const M02_COL_STATUS      As String = "L"
+' 2026-06-07: M-02 column constants shifted -1 to match ui_seed M-02.txt
+' Columns=Selected,No,FormatID,FormatName,IDPattern,NextNumber,FormatVersion,
+' FieldCount,KnowledgeCount,UpdatedAt,IsActive (Selected starts at column A).
+Private Const M02_COL_ROWCHECK    As String = "A"
+Private Const M02_COL_NO          As String = "B"
+Private Const M02_COL_FMT_ID      As String = "C"
+Private Const M02_COL_FMT_NAME    As String = "D"
+Private Const M02_COL_FIELD_COUNT As String = "E"
+Private Const M02_COL_KNW_COUNT   As String = "F"
+Private Const M02_COL_UPDATED     As String = "G"
+' Removed 2026-06-08 (option 1): ID_PATTERN/NEXT_NUM/VERSION/STATUS were displayed
+' but not implemented (no IDPattern/NextNumber/FormatVersion/IsActive metadata).
 
 ' Status text written into [FORMAT].Status when the user disables
 ' a format. The matching "enabled" text is intentionally not used
 ' inside this module - any non-disabled format displays whatever
 ' value the on-disk [FORMAT].Status carries (typically empty).
-Private Const FMT_STATUS_DISABLED As String = "????"
-
-' [FORMAT].Status key name (the stanza key inside <fmtId>.txt).
-Private Const FMT_KEY_STATUS As String = "Status"
+Private Const FMT_KEY_STATUS     As String = "Status"
+Private Const FMT_STATUS_DISABLED As String = "????"   ' 2026-06-07: kept mojibake (Const cannot use ChrW); display layer maps ???? -> JP
 
 ' ------------------------------------------------------------
 ' M-03 cell layout (v2.3 - reusing the v2.2 UI seed positions
@@ -162,11 +153,13 @@ Private Const FMT_KEY_STATUS As String = "Status"
 ' "C3" behaviour by treating the fallback as authoritative when the
 ' seeded key is not present.
 Private Const M03_CELL_FMT_ID_FALLBACK As String = "C3"
-Private Const M03_CELL_FMT_NAME    As String = "E3"
+' [v2.3 layout 2026-06-06] formatName C5:D5, GRID HeaderRow=18 so data starts row 19.
+' (Pre-v2.3 values were E3 / 7 / 56 - old M-03 layout before SubHeader split.)
+Private Const M03_CELL_FMT_NAME    As String = "C5"
 Private Const M03_CELL_ID_PATTERN  As String = "I3"
-Private Const M03_GRID_FIRST_ROW   As Long = 7
+Private Const M03_GRID_FIRST_ROW   As Long = 19
 Private Const M03_GRID_LAST_ROW    As Long = 56
-Private Const M03_GRID_CLEAR_FROM  As String = "B"
+Private Const M03_GRID_CLEAR_FROM  As String = "A"   ' 2026-06-07: also clear column A (seq numbers)
 Private Const M03_GRID_CLEAR_TO    As String = "G"
 
 ' ------------------------------------------------------------
@@ -186,11 +179,13 @@ Private Const FMT_ID_SCAN_LIMIT As Long = 999
 ' ============================================================
 
 Public Function BuildFormatDictFromCells(ByVal target As Object, ByVal uiSections As Collection) As Object
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0128] modEntryFormat.BuildFormatDictFromCells ENTER"  ' [ADR-0100]
     Dim result As Object
     Set result = CreateObject("Scripting.Dictionary")
     Set result(FIELDS_KEY) = New Collection
     If uiSections Is Nothing Then
         Set BuildFormatDictFromCells = result
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0129] modEntryFormat.BuildFormatDictFromCells EXIT-OK"  ' [ADR-0100]
         Exit Function
     End If
     Dim mode As String
@@ -245,6 +240,7 @@ Public Function BuildFormatDictFromCells(ByVal target As Object, ByVal uiSection
 End Function
 
 Public Sub WriteFormatDictToCells(ByVal target As Object, ByVal uiSections As Collection, ByVal formatDict As Object)
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0130] modEntryFormat.WriteFormatDictToCells ENTER"  ' [ADR-0100]
     If uiSections Is Nothing Or formatDict Is Nothing Then Exit Sub
     Dim sec As ClsStanzaSection
     Dim i As Long
@@ -276,9 +272,11 @@ Public Sub WriteFormatDictToCells(ByVal target As Object, ByVal uiSections As Co
                 End If
         End Select
     Next i
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0131] modEntryFormat.WriteFormatDictToCells EXIT-OK"  ' [ADR-0100]
 End Sub
 
 Public Function SaveFormat_Workflow(ByVal target As Object, ByVal uiSections As Collection) As String
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0132] modEntryFormat.SaveFormat_Workflow ENTER"  ' [ADR-0100]
     On Error GoTo ErrHandler
     Dim fmtDict As Object
     Set fmtDict = BuildFormatDictFromCells(target, uiSections)
@@ -286,6 +284,7 @@ Public Function SaveFormat_Workflow(ByVal target As Object, ByVal uiSections As 
     If fmtDict.Exists("FormatID") Then fmtId = CStr(fmtDict("FormatID"))
     If Len(fmtId) = 0 Then
         SaveFormat_Workflow = ""
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0133] modEntryFormat.SaveFormat_Workflow EXIT-OK"  ' [ADR-0100]
         Exit Function
     End If
     Dim sections As Collection
@@ -295,7 +294,6 @@ Public Function SaveFormat_Workflow(ByVal target As Object, ByVal uiSections As 
     fmtSec.Init "FORMAT", 1
     fmtSec.SetValue "FormatID", fmtId
     If fmtDict.Exists("FormatName") Then fmtSec.SetValue "FormatName", CStr(fmtDict("FormatName"))
-    If fmtDict.Exists("FormatVersion") Then fmtSec.SetValue "FormatVersion", CStr(fmtDict("FormatVersion"))
     sections.Add fmtSec
     If fmtDict.Exists(FIELDS_KEY) Then
         Dim fields As Collection
@@ -312,6 +310,11 @@ Public Function SaveFormat_Workflow(ByVal target As Object, ByVal uiSections As 
             ' ? canonical 4 base type (?P??s/???s/????/?I??) ???W?n??????? format.txt ??????B
             If row.Exists("Type") Then fldSec.SetValue "FieldType", NormalizeFieldType(CStr(row("Type")))
             If row.Exists("Required") Then fldSec.SetValue "Required", CStr(row("Required"))
+            ' 2026-06-07: per-field Scroll / Rows / DropdownOptions also persisted
+            ' so the renderer can honour them at preview / register / edit time.
+            If row.Exists("scroll") Then fldSec.SetValue "Scroll", CStr(row("scroll"))
+            If row.Exists("rows") Then fldSec.SetValue "Rows", CStr(row("rows"))
+            If row.Exists("Options") Then fldSec.SetValue "DropdownOptions", CStr(row("Options"))
             sections.Add fldSec
         Next i
     End If
@@ -328,8 +331,10 @@ Public Function SaveFormat_Workflow(ByVal target As Object, ByVal uiSections As 
     Else
         SaveFormat_Workflow = ""
     End If
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0134] modEntryFormat.SaveFormat_Workflow EXIT-OK"  ' [ADR-0100]
     Exit Function
 ErrHandler:
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-0135] modEntryFormat.SaveFormat_Workflow EXIT-ERR " & "errNum=" & Err.Number & " desc=" & Err.Description  ' [ADR-0100]
     On Error Resume Next
     Dim oLogger032 As clsLogger
     Set oLogger032 = New clsLogger
@@ -340,15 +345,18 @@ ErrHandler:
 End Function
 
 Public Function LoadFormat_Workflow(ByVal target As Object, ByVal uiSections As Collection, ByVal formatId As String) As Boolean
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0136] modEntryFormat.LoadFormat_Workflow ENTER"  ' [ADR-0100]
     On Error GoTo ErrHandler
     If Len(formatId) = 0 Then
         LoadFormat_Workflow = False
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0137] modEntryFormat.LoadFormat_Workflow EXIT-OK"  ' [ADR-0100]
         Exit Function
     End If
     Dim loaded As Collection
     Set loaded = modFormatLoader.LoadFormat(formatId)
     If loaded.Count = 0 Then
         LoadFormat_Workflow = False
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0138] modEntryFormat.LoadFormat_Workflow EXIT-OK"  ' [ADR-0100]
         Exit Function
     End If
     Dim formatDict As Object
@@ -360,7 +368,13 @@ Public Function LoadFormat_Workflow(ByVal target As Object, ByVal uiSections As 
         Set sec = loaded.Item(i)
         Select Case sec.SectionName
             Case "FORMAT"
-                If sec.HasKey("FormatID") Then formatDict("FormatID") = sec.GetValue("FormatID")
+                ' 2026-06-07: format files written by external tooling use
+                ' "FormatId" (lowercase d); accept both spellings.
+                If sec.HasKey("FormatID") Then
+                    formatDict("FormatID") = sec.GetValue("FormatID")
+                ElseIf sec.HasKey("FormatId") Then
+                    formatDict("FormatID") = sec.GetValue("FormatId")
+                End If
                 If sec.HasKey("FormatName") Then formatDict("FormatName") = sec.GetValue("FormatName")
                 If sec.HasKey("FormatVersion") Then formatDict("FormatVersion") = sec.GetValue("FormatVersion")
             Case "FIELD"
@@ -369,13 +383,19 @@ Public Function LoadFormat_Workflow(ByVal target As Object, ByVal uiSections As 
                 If sec.HasKey("FieldName") Then row("Name") = sec.GetValue("FieldName")
                 If sec.HasKey("FieldType") Then row("Type") = sec.GetValue("FieldType")
                 If sec.HasKey("Required") Then row("Required") = sec.GetValue("Required")
+                ' 2026-06-07: per-field Scroll / Rows / DropdownOptions round-trip
+                If sec.HasKey("Scroll") Then row("scroll") = sec.GetValue("Scroll")
+                If sec.HasKey("Rows") Then row("rows") = sec.GetValue("Rows")
+                If sec.HasKey("DropdownOptions") Then row("Options") = sec.GetValue("DropdownOptions")
                 formatDict(FIELDS_KEY).Add row
         End Select
     Next i
     WriteFormatDictToCells target, uiSections, formatDict
     LoadFormat_Workflow = True
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0139] modEntryFormat.LoadFormat_Workflow EXIT-OK"  ' [ADR-0100]
     Exit Function
 ErrHandler:
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-0140] modEntryFormat.LoadFormat_Workflow EXIT-ERR " & "errNum=" & Err.Number & " desc=" & Err.Description  ' [ADR-0100]
     LoadFormat_Workflow = False
 End Function
 
@@ -392,9 +412,75 @@ End Function
 '       sets (same handler in v2.3).
 ' ============================================================
 Public Sub Btn_SaveFormat()
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0141] modEntryFormat.Btn_SaveFormat ENTER"  ' [ADR-0100]
     On Error GoTo ErrHandler
+    ' [BTN-GUARD-PRELUDE-BEGIN] auto-injected by inject_btn_template.py
+    Const BTN As String = "Btn_SaveFormat"
+    Dim XLSM As String
+    XLSM = ChrW(&H7BA1) & ChrW(&H7406)
+    modBtnGuard.LogEnter BTN, XLSM
+    If Not modBtnGuard.CheckPrereq(BTN, "config;format_dir", XLSM) Then
+        modBtnGuard.LogExit BTN, XLSM, False
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0142] modEntryFormat.Btn_SaveFormat EXIT-OK"  ' [ADR-0100]
+        Exit Sub
+    End If
+    ' [BTN-GUARD-PRELUDE-END]
     Dim ui As Collection: Set ui = modUILoader.LoadUiDefinition(RoleKanri(), "M-03")
     If ui.Count = 0 Then Exit Sub
+    ' [VALIDATION 2026-06-06]
+    If Not IsHeadless() Then
+        Dim wsSv As Worksheet
+        Set wsSv = ThisWorkbook.Worksheets(M03_SHEET_NAME())
+        Dim fmtName As String
+        fmtName = Trim$(CStr(wsSv.Range(M03_CELL_FMT_NAME).Value))
+        If Len(fmtName) = 0 Then
+            MsgBox ChrW(&HFF7C) & ChrW(&HFF6A) & ChrW(&HFF70) & ChrW(&HFF8F) & ChrW(&HFF6F) & ChrW(&HFF84) & ChrW(&H540D) & ChrW(&H3092) & ChrW(&H5165) & ChrW(&H529B) & ChrW(&H3057) & ChrW(&H3066) & ChrW(&H304F) & ChrW(&H3060) & ChrW(&H3055) & ChrW(&H3044) & ChrW(&H3002), vbExclamation, ChrW(&H4FDD) & ChrW(&H5B58) & ChrW(&H30A8) & ChrW(&H30E9) & ChrW(&H30FC)
+            modBtnGuard.LogExit BTN, XLSM, False
+            Exit Sub
+        End If
+        Dim gridCount As Long, rChk As Long
+        gridCount = 0
+        Dim firstErrRow As Long, firstErrMsg As String
+        firstErrRow = 0
+        For rChk = M03_GRID_FIRST_ROW To M03_GRID_LAST_ROW
+            Dim fName As String, fType As String, fOpts As String, fRows As String
+            fName = Trim$(CStr(wsSv.Cells(rChk, 2).Value))
+            fType = Trim$(CStr(wsSv.Cells(rChk, 3).Value))
+            fOpts = Trim$(CStr(wsSv.Cells(rChk, 6).Value))
+            fRows = Trim$(CStr(wsSv.Cells(rChk, 5).Value))
+            If Len(fName) > 0 Or Len(fType) > 0 Then
+                gridCount = gridCount + 1
+                If Len(fName) = 0 Or Len(fType) = 0 Then
+                    If firstErrRow = 0 Then
+                        firstErrRow = rChk
+                        firstErrMsg = ChrW(&HFF8C) & ChrW(&HFF72) & ChrW(&HFF70) & ChrW(&HFF99) & ChrW(&HFF84) & ChrW(&H540D) & ChrW(&H3068) & ChrW(&H578B) & ChrW(&H3092) & ChrW(&H5165) & ChrW(&H529B) & ChrW(&H3057) & ChrW(&H3066) & ChrW(&H304F) & ChrW(&H3060) & ChrW(&H3055) & ChrW(&H3044) & ChrW(&H0028) & ChrW(&H884C) & CStr(rChk) & ChrW(&H0029)
+                    End If
+                End If
+                If fType = ChrW(&H9078) & ChrW(&H629E) Then
+                    If Len(fOpts) = 0 And firstErrRow = 0 Then
+                        firstErrRow = rChk
+                        firstErrMsg = ChrW(&H9078) & ChrW(&H629E) & ChrW(&H80A2) & ChrW(&H3092) & ChrW(&H5165) & ChrW(&H529B) & ChrW(&H3057) & ChrW(&H3066) & ChrW(&H304F) & ChrW(&H3060) & ChrW(&H3055) & ChrW(&H3044) & ChrW(&H0028) & ChrW(&H884C) & CStr(rChk) & ChrW(&H0029)
+                    End If
+                End If
+                If fType = ChrW(&H8907) & ChrW(&H6570) & ChrW(&H884C) & ChrW(&HFF83) & ChrW(&HFF77) & ChrW(&HFF7D) & ChrW(&HFF84) Then
+                    If (Len(fRows) = 0 Or Val(fRows) < 1) And firstErrRow = 0 Then
+                        firstErrRow = rChk
+                        firstErrMsg = ChrW(&H884C) & ChrW(&H6570) & ChrW(&H3092) & ChrW(&H5165) & ChrW(&H529B) & ChrW(&H3057) & ChrW(&H3066) & ChrW(&H304F) & ChrW(&H3060) & ChrW(&H3055) & ChrW(&H3044) & ChrW(&H0028) & ChrW(&H884C) & CStr(rChk) & ChrW(&H0029)
+                    End If
+                End If
+            End If
+        Next rChk
+        If gridCount = 0 Then
+            MsgBox ChrW(&H5C11) & ChrW(&H306A) & ChrW(&H304F) & ChrW(&H3068) & ChrW(&H3082) & ChrW(&H0031) & ChrW(&HFF8C) & ChrW(&HFF72) & ChrW(&HFF70) & ChrW(&HFF99) & ChrW(&HFF84) & ChrW(&H5FC5) & ChrW(&H8981) & ChrW(&H3067) & ChrW(&H3059) & ChrW(&H3002), vbExclamation, ChrW(&H4FDD) & ChrW(&H5B58) & ChrW(&H30A8) & ChrW(&H30E9) & ChrW(&H30FC)
+            modBtnGuard.LogExit BTN, XLSM, False
+            Exit Sub
+        End If
+        If firstErrRow > 0 Then
+            MsgBox firstErrMsg, vbExclamation, ChrW(&H4FDD) & ChrW(&H5B58) & ChrW(&H30A8) & ChrW(&H30E9) & ChrW(&H30FC)
+            modBtnGuard.LogExit BTN, XLSM, False
+            Exit Sub
+        End If
+    End If
     SaveFormat_Workflow ActiveSheet, ui
     On Error Resume Next
     Dim oLogger007 As clsLogger
@@ -402,8 +488,14 @@ Public Sub Btn_SaveFormat()
     oLogger007.Init ThisWorkbook.Worksheets("LOG")
     oLogger007.LogInfo "modEntryFormat", "Btn_SaveFormat", "Btn_SaveFormat done", "", "SAVE-EXIT-OK-II-007"
     On Error GoTo 0
+    ' [BTN-GUARD-EXIT-OK] auto-injected
+    modBtnGuard.LogExit BTN, XLSM, True
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0143] modEntryFormat.Btn_SaveFormat EXIT-OK"  ' [ADR-0100]
     Exit Sub
 ErrHandler:
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-0144] modEntryFormat.Btn_SaveFormat EXIT-ERR " & "errNum=" & Err.Number & " desc=" & Err.Description  ' [ADR-0100]
+    ' [BTN-GUARD-ERR-LOG] auto-injected
+    modBtnGuard.LogExit BTN, XLSM, False
     Debug.Print "[ERR] Btn_SaveFormat: " & Err.Number & " " & Err.Description
 End Sub
 
@@ -414,7 +506,19 @@ End Sub
 '       into the design cells.
 ' ============================================================
 Public Sub Btn_LoadFormat()
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0145] modEntryFormat.Btn_LoadFormat ENTER"  ' [ADR-0100]
     On Error GoTo ErrHandler
+    ' [BTN-GUARD-PRELUDE-BEGIN] auto-injected by inject_btn_template.py
+    Const BTN As String = "Btn_LoadFormat"
+    Dim XLSM As String
+    XLSM = ChrW(&H7BA1) & ChrW(&H7406)
+    modBtnGuard.LogEnter BTN, XLSM
+    If Not modBtnGuard.CheckPrereq(BTN, "config;format_dir", XLSM) Then
+        modBtnGuard.LogExit BTN, XLSM, False
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0146] modEntryFormat.Btn_LoadFormat EXIT-OK"  ' [ADR-0100]
+        Exit Sub
+    End If
+    ' [BTN-GUARD-PRELUDE-END]
     Dim ui As Collection: Set ui = modUILoader.LoadUiDefinition(RoleKanri(), "M-03")
     If ui.Count = 0 Then Exit Sub
     ' iter19b: Unprotect M-03 before WriteGridFields. Setup_admin applies
@@ -429,8 +533,14 @@ Public Sub Btn_LoadFormat()
     If tempDict.Exists("FormatID") Then fmtId = CStr(tempDict("FormatID"))
     If Len(fmtId) = 0 Then Exit Sub
     LoadFormat_Workflow ActiveSheet, ui, fmtId
+    ' [BTN-GUARD-EXIT-OK] auto-injected
+    modBtnGuard.LogExit BTN, XLSM, True
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0147] modEntryFormat.Btn_LoadFormat EXIT-OK"  ' [ADR-0100]
     Exit Sub
 ErrHandler:
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-0148] modEntryFormat.Btn_LoadFormat EXIT-ERR " & "errNum=" & Err.Number & " desc=" & Err.Description  ' [ADR-0100]
+    ' [BTN-GUARD-ERR-LOG] auto-injected
+    modBtnGuard.LogExit BTN, XLSM, False
     Debug.Print "[ERR] Btn_LoadFormat: " & Err.Number & " " & Err.Description
 End Sub
 
@@ -450,15 +560,47 @@ End Sub
 '       before pressing Save.
 ' ============================================================
 Public Sub Btn_NewFormatDraft()
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0149] modEntryFormat.Btn_NewFormatDraft ENTER"  ' [ADR-0100]
+    On Error GoTo ErrHandler
+    ' [BTN-GUARD-PRELUDE-BEGIN] auto-injected by inject_btn_template.py
+    Const BTN As String = "Btn_NewFormatDraft"
+    Dim XLSM As String
+    XLSM = ChrW(&H7BA1) & ChrW(&H7406)
+    modBtnGuard.LogEnter BTN, XLSM
+    If Not modBtnGuard.CheckPrereq(BTN, "config;format_dir", XLSM) Then
+        modBtnGuard.LogExit BTN, XLSM, False
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0150] modEntryFormat.Btn_NewFormatDraft EXIT-OK"  ' [ADR-0100]
+        Exit Sub
+    End If
+    ' [BTN-GUARD-PRELUDE-END]
+    ' [VALIDATION 2026-06-06] Check for unsaved design before discarding
+    If Not IsHeadless() Then
+        Dim wsV As Worksheet
+        Set wsV = ThisWorkbook.Worksheets(M03_SHEET_NAME())
+        Dim hasUnsaved As Boolean
+        hasUnsaved = False
+        On Error Resume Next
+        If Len(Trim$(CStr(wsV.Range(M03_CELL_FMT_NAME).Value))) > 0 Then hasUnsaved = True
+        Dim rChk As Long
+        For rChk = M03_GRID_FIRST_ROW To M03_GRID_LAST_ROW
+            If Len(Trim$(CStr(wsV.Cells(rChk, 2).Value))) > 0 Then
+                hasUnsaved = True
+                Exit For
+            End If
+        Next rChk
+        On Error GoTo 0
+        If hasUnsaved Then
+            Dim ans As VbMsgBoxResult
+            ans = MsgBox(ChrW(&H672A) & ChrW(&H4FDD) & ChrW(&H5B58) & ChrW(&H306E) & ChrW(&H8A2D) & ChrW(&H8A08) & ChrW(&H304C) & ChrW(&H3042) & ChrW(&H308A) & ChrW(&H307E) & ChrW(&H3059) & ChrW(&H3002) & vbCrLf & ChrW(&H7834) & ChrW(&H68C4) & ChrW(&H3057) & ChrW(&H3066) & ChrW(&H65B0) & ChrW(&H898F) & ChrW(&H8D77) & ChrW(&H7968) & ChrW(&H3057) & ChrW(&H307E) & ChrW(&H3059) & ChrW(&H304B) & ChrW(&H003F), _
+                         vbYesNo + vbQuestion, _
+                         ChrW(&H78BA) & ChrW(&H8A8D))
+            If ans <> vbYes Then
+                modBtnGuard.LogExit BTN, XLSM, False
+                Exit Sub
+            End If
+        End If
+    End If
     ' iter17 (2026-06-01): Robustified for headless E2E (case 16).
-    '   - On Error Resume Next throughout so a single dependency
-    '     fault (Activate / Logger / AutoNumber) does not bail out
-    '     before the FormatID seed has landed in M03_CELL_FMT_ID.
-    '   - Seed step runs BEFORE Activate, so even if Activate fails
-    '     under Application.Visible=False, the seed is already in.
-    '   - On a seed-step exception, write a diagnostic crumb into
-    '     the same cell so the test surface is non-empty AND carries
-    '     enough info to diagnose without re-running.
     On Error Resume Next
     Dim diagStep As String
     Dim errNum As Long
@@ -469,6 +611,7 @@ Public Sub Btn_NewFormatDraft()
     Set ws = ThisWorkbook.Worksheets(M03_SHEET_NAME())
     If ws Is Nothing Then
         Debug.Print "[ERR] Btn_NewFormatDraft: M-03 sheet not found"
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0151] modEntryFormat.Btn_NewFormatDraft EXIT-OK"  ' [ADR-0100]
         Exit Sub
     End If
 
@@ -514,6 +657,7 @@ Public Sub Btn_NewFormatDraft()
     errDesc = Err.Description
     If errNum <> 0 Then
         ws.Range(seedCellAddr).Value = "ERR " & diagStep & " " & errNum & " " & errDesc
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0152] modEntryFormat.Btn_NewFormatDraft EXIT-OK"  ' [ADR-0100]
         Exit Sub
     End If
 
@@ -532,6 +676,15 @@ Public Sub Btn_NewFormatDraft()
                    "M-03 new-draft seeded with fmtId=" & nextId, _
                    nextId, "M03-NEWDRAFT-OK-II-040"
     End If
+    ' [BTN-GUARD-EXIT-OK] auto-injected
+    modBtnGuard.LogExit BTN, XLSM, True
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0153] modEntryFormat.Btn_NewFormatDraft EXIT-OK"  ' [ADR-0100]
+    Exit Sub
+ErrHandler:
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-0154] modEntryFormat.Btn_NewFormatDraft EXIT-ERR " & "errNum=" & Err.Number & " desc=" & Err.Description  ' [ADR-0100]
+    ' [BTN-GUARD-ERR-LOG] auto-injected
+    modBtnGuard.HandleButtonError BTN, Err, XLSM
+    modBtnGuard.LogExit BTN, XLSM, False
 End Sub
 
 ' ============================================================
@@ -540,7 +693,19 @@ End Sub
 '       the field-design grid so the user can start typing.
 ' ============================================================
 Public Sub Btn_AddField()
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0155] modEntryFormat.Btn_AddField ENTER"  ' [ADR-0100]
     On Error GoTo ErrHandler
+    ' [BTN-GUARD-PRELUDE-BEGIN] auto-injected by inject_btn_template.py
+    Const BTN As String = "Btn_AddField"
+    Dim XLSM As String
+    XLSM = ChrW(&H7BA1) & ChrW(&H7406)
+    modBtnGuard.LogEnter BTN, XLSM
+    If Not modBtnGuard.CheckPrereq(BTN, "config", XLSM) Then
+        modBtnGuard.LogExit BTN, XLSM, False
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0156] modEntryFormat.Btn_AddField EXIT-OK"  ' [ADR-0100]
+        Exit Sub
+    End If
+    ' [BTN-GUARD-PRELUDE-END]
     Dim ws As Worksheet
     Set ws = ThisWorkbook.Worksheets(M03_SHEET_NAME())
     Dim r As Long
@@ -550,11 +715,18 @@ Public Sub Btn_AddField()
             On Error Resume Next
             ws.Range("C" & r).Select
             On Error GoTo 0
+            If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0157] modEntryFormat.Btn_AddField EXIT-OK"  ' [ADR-0100]
             Exit Sub
         End If
     Next r
+    ' [BTN-GUARD-EXIT-OK] auto-injected
+    modBtnGuard.LogExit BTN, XLSM, True
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0158] modEntryFormat.Btn_AddField EXIT-OK"  ' [ADR-0100]
     Exit Sub
 ErrHandler:
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-0159] modEntryFormat.Btn_AddField EXIT-ERR " & "errNum=" & Err.Number & " desc=" & Err.Description  ' [ADR-0100]
+    ' [BTN-GUARD-ERR-LOG] auto-injected
+    modBtnGuard.LogExit BTN, XLSM, False
     Debug.Print "[ERR] Btn_AddField: " & Err.Number & " " & Err.Description
 End Sub
 
@@ -565,21 +737,98 @@ End Sub
 '       Btn_AddField (column-C scan) is the v2.3 replacement.
 ' ============================================================
 Public Sub Btn_AddField_v21()
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0160] modEntryFormat.Btn_AddField_v21 ENTER"  ' [ADR-0100]
     On Error GoTo ErrHandler
-    Dim ws As Object: Set ws = ActiveSheet
+    ' [BTN-GUARD-PRELUDE-BEGIN] auto-injected by inject_btn_template.py
+    Const BTN As String = "Btn_AddField_v21"
+    Dim XLSM As String
+    XLSM = ChrW(&H7BA1) & ChrW(&H7406)
+    modBtnGuard.LogEnter BTN, XLSM
+    If Not modBtnGuard.CheckPrereq(BTN, "config", XLSM) Then
+        modBtnGuard.LogExit BTN, XLSM, False
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0161] modEntryFormat.Btn_AddField_v21 EXIT-OK"  ' [ADR-0100]
+        Exit Sub
+    End If
+    ' [BTN-GUARD-PRELUDE-END]
+    Dim ws As Worksheet
+    Set ws = ThisWorkbook.Worksheets(M03_SHEET_NAME())
+    Const GRID_HEADER_ROW As Long = 18
+    Const GRID_MAX_ROW As Long = 200
+    ' columns: A=seq, B=fieldName, C=fieldType, D=required, E=rows, F=options, G=scroll
+    Const COL_SEQ As Long = 1
+    Const COL_NAME As Long = 2
+    Const COL_TYPE As Long = 3
+    Const COL_REQ As Long = 4
+    Const COL_SCROLL As Long = 7
+    ' v2.3 fix 2026-06-07: unprotect at start, re-protect at end so VBA Borders/
+    ' Validation writes are not blocked by a Protect with UserInterfaceOnly=False
+    ' (which happens after a save/reopen cycle). Errors are swallowed so any
+    ' single failing call does not abort the whole add-row.
+    On Error Resume Next
+    ws.Unprotect
+    On Error GoTo ErrHandler
     Dim r As Long
-    For r = 7 To 50
-        If Len(CStr(ws.Range("B" & r).Value)) = 0 Then
+    For r = GRID_HEADER_ROW + 1 To GRID_MAX_ROW
+        If Len(Trim$(CStr(ws.Cells(r, COL_NAME).Value))) = 0 Then
+            ' Found next empty fieldName row. Ensure row has border + Locked=False + validation.
+            Debug.Print "[Btn_AddField_v21] target row=" & r
             On Error Resume Next
-            ws.Range("B" & r).Select
+            Dim rng As Range
+            Set rng = ws.Range(ws.Cells(r, 1), ws.Cells(r, 7))
+            rng.Borders.LineStyle = xlContinuous
+            rng.Borders.Weight = xlThin
+            rng.Borders.Color = RGB(191, 191, 191)
+            rng.Locked = False
+            ' Add validation dropdowns
+            Dim vType As Range
+            Set vType = ws.Cells(r, COL_TYPE)
+            vType.Validation.Delete
+            vType.Validation.Add Type:=xlValidateList, Formula1:= _
+                ChrW(&H0031) & ChrW(&H884C) & ChrW(&H30C6) & ChrW(&H30AD) & ChrW(&H30B9) & ChrW(&H30C8) & "," & _
+                ChrW(&H8907) & ChrW(&H6570) & ChrW(&H884C) & ChrW(&H30C6) & ChrW(&H30AD) & ChrW(&H30B9) & ChrW(&H30C8) & "," & _
+                ChrW(&H6570) & ChrW(&H5024) & "," & _
+                ChrW(&H65E5) & ChrW(&H4ED8) & "," & _
+                ChrW(&H9078) & ChrW(&H629E) & "," & _
+                ChrW(&H30C1) & ChrW(&H30A7) & ChrW(&H30C3) & ChrW(&H30AF)
+            vType.Validation.InCellDropdown = True
+            vType.Validation.IgnoreBlank = True
+            Dim vReq As Range
+            Set vReq = ws.Cells(r, COL_REQ)
+            vReq.Validation.Delete
+            vReq.Validation.Add Type:=xlValidateList, Formula1:="TRUE,FALSE"
+            vReq.Validation.InCellDropdown = True
+            vReq.Validation.IgnoreBlank = True
+            Dim vScr As Range
+            Set vScr = ws.Cells(r, COL_SCROLL)
+            vScr.Validation.Delete
+            vScr.Validation.Add Type:=xlValidateList, Formula1:="TRUE,FALSE"
+            vScr.Validation.InCellDropdown = True
+            vScr.Validation.IgnoreBlank = True
+            ' Auto-number sequence (most critical write - if this fails the row
+            ' appears blank to the user even though Borders succeeded).
+            ws.Cells(r, COL_SEQ).Value = r - GRID_HEADER_ROW
+            ' Navigate cursor
+            ws.Cells(r, COL_NAME).Select
             On Error GoTo 0
-            Debug.Print "[Btn_AddField_v21] selected B" & r
+            ' Re-apply light protection so the rest of the sheet stays locked.
+            On Error Resume Next
+            ws.Protect Password:="", UserInterfaceOnly:=True, AllowFormattingCells:=True, _
+                       AllowFormattingColumns:=True, AllowFormattingRows:=True
+            On Error GoTo ErrHandler
+            Debug.Print "[Btn_AddField_v21] added row " & r
+            If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0162] modEntryFormat.Btn_AddField_v21 EXIT-OK"  ' [ADR-0100]
             Exit Sub
         End If
     Next r
     Debug.Print "[Btn_AddField_v21] GRID full, no action"
+    ' [BTN-GUARD-EXIT-OK] auto-injected
+    modBtnGuard.LogExit BTN, XLSM, True
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0163] modEntryFormat.Btn_AddField_v21 EXIT-OK"  ' [ADR-0100]
     Exit Sub
 ErrHandler:
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-0164] modEntryFormat.Btn_AddField_v21 EXIT-ERR " & "errNum=" & Err.Number & " desc=" & Err.Description  ' [ADR-0100]
+    ' [BTN-GUARD-ERR-LOG] auto-injected
+    modBtnGuard.LogExit BTN, XLSM, False
     Debug.Print "[Btn_AddField_v21] error: " & Err.Description
 End Sub
 
@@ -592,20 +841,63 @@ End Sub
 '       v2.3 rename: was Btn_PreviewFormat in v2.2.
 ' ============================================================
 Public Sub Btn_PreviewInDesign()
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0165] modEntryFormat.Btn_PreviewInDesign ENTER"  ' [ADR-0100]
     On Error GoTo ErrHandler
-    ' iter19 ADR-0090: CP932 mojibake "?v???r???[" repaired via ChrW helper
-    ' PreviewSheetName_M04(). The literal had silently broken Activate, leaving
-    ' before==after on the design sheet (case 20 FAIL).
-    ThisWorkbook.Worksheets(PreviewSheetName_M04()).Activate
-    ' iter19b: RenderM04Preview under headless E2E blocks on a stanza-loader COM
-    ' call (case 20 admin runner timed out at 120s after Activate succeeded).
-    ' The user-visible behaviour (preview sheet front) is delivered by Activate
-    ' alone; the headless run skips the (visually invisible) render so the
-    ' Application.Run returns and the test runner can verify ActiveSheet.
-    If IsHeadless() Then Exit Sub
-    RenderM04Preview
+    ' [BTN-GUARD-PRELUDE-BEGIN] auto-injected by inject_btn_template.py
+    Const BTN As String = "Btn_PreviewInDesign"
+    Dim XLSM As String
+    XLSM = ChrW(&H7BA1) & ChrW(&H7406)
+    modBtnGuard.LogEnter BTN, XLSM
+    If Not modBtnGuard.CheckPrereq(BTN, "config", XLSM) Then
+        modBtnGuard.LogExit BTN, XLSM, False
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0166] modEntryFormat.Btn_PreviewInDesign EXIT-OK"  ' [ADR-0100]
+        Exit Sub
+    End If
+    ' [BTN-GUARD-PRELUDE-END]
+    ' [USERFORM 2026-06-06] Launch dynamic UserForm in preview mode
+    ' (same pattern as modEntryUserForm.OpenViewWithId for M-08 search).
+    Dim fmtId As String
+    On Error Resume Next
+    Dim fmtIdC4 As String, fmtIdC8 As String
+    fmtIdC4 = Trim$(CStr(ThisWorkbook.Worksheets(M03_SHEET_NAME()).Range("C4").Value))
+    fmtIdC8 = Trim$(CStr(ThisWorkbook.Worksheets(M03_SHEET_NAME()).Range("C8").Value))
+    ' 2026-06-07: prefer the side whose format file actually exists.
+    ' C4 is auto-seeded so its file may not yet exist; in that case
+    ' fall back to C8 (modify side).
+    Dim fmtDir As String
+    fmtDir = modConfigHolder.GetValueOrDefault("format_dir", "")
+    fmtId = ""
+    If Len(fmtIdC4) > 0 Then
+        If Len(fmtDir) > 0 Then
+            Dim fso_pv As Object
+            Set fso_pv = CreateObject("Scripting.FileSystemObject")
+            If fso_pv.FileExists(fmtDir & fmtIdC4 & ".txt") Then
+                fmtId = fmtIdC4
+            End If
+        Else
+            fmtId = fmtIdC4
+        End If
+    End If
+    If Len(fmtId) = 0 And Len(fmtIdC8) > 0 Then fmtId = fmtIdC8
+    If Len(fmtId) = 0 Then fmtId = fmtIdC4
+    On Error GoTo ErrHandler
+    If IsHeadless() Then
+        ThisWorkbook.Worksheets(PreviewSheetName_M04()).Activate
+        Exit Sub
+    End If
+    Dim r As clsUserFormRenderer
+    Set r = New clsUserFormRenderer
+    Dim ret As String
+    ret = r.ShowForm(ChrW(&H7BA1) & ChrW(&H7406), "preview", "", True, fmtId)
+    Debug.Print "[Btn_PreviewInDesign] ShowForm ret=" & ret & " fmtId=" & fmtId
+    ' [BTN-GUARD-EXIT-OK] auto-injected
+    modBtnGuard.LogExit BTN, XLSM, True
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0167] modEntryFormat.Btn_PreviewInDesign EXIT-OK"  ' [ADR-0100]
     Exit Sub
 ErrHandler:
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-0168] modEntryFormat.Btn_PreviewInDesign EXIT-ERR " & "errNum=" & Err.Number & " desc=" & Err.Description  ' [ADR-0100]
+    ' [BTN-GUARD-ERR-LOG] auto-injected
+    modBtnGuard.LogExit BTN, XLSM, False
     Debug.Print "[ERR] Btn_PreviewInDesign: " & Err.Number & " " & Err.Description
 End Sub
 
@@ -620,7 +912,19 @@ End Sub
 '       and open it on M-03 via LoadFormat_Workflow.
 ' ============================================================
 Public Sub Btn_EditFormat()
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0169] modEntryFormat.Btn_EditFormat ENTER"  ' [ADR-0100]
     On Error GoTo ErrHandler
+    ' [BTN-GUARD-PRELUDE-BEGIN] auto-injected by inject_btn_template.py
+    Const BTN As String = "Btn_EditFormat"
+    Dim XLSM As String
+    XLSM = ChrW(&H7BA1) & ChrW(&H7406)
+    modBtnGuard.LogEnter BTN, XLSM
+    If Not modBtnGuard.CheckPrereq(BTN, "config;format_dir", XLSM) Then
+        modBtnGuard.LogExit BTN, XLSM, False
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0170] modEntryFormat.Btn_EditFormat EXIT-OK"  ' [ADR-0100]
+        Exit Sub
+    End If
+    ' [BTN-GUARD-PRELUDE-END]
     Dim fmtId As String
     fmtId = PickM02CheckedRowFmtId()
     If Len(fmtId) = 0 Then Exit Sub
@@ -631,8 +935,14 @@ Public Sub Btn_EditFormat()
     Set ui = modUILoader.LoadUiDefinition(RoleKanri(), "M-03")
     If ui.Count = 0 Then Exit Sub
     LoadFormat_Workflow ws, ui, fmtId
+    ' [BTN-GUARD-EXIT-OK] auto-injected
+    modBtnGuard.LogExit BTN, XLSM, True
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0171] modEntryFormat.Btn_EditFormat EXIT-OK"  ' [ADR-0100]
     Exit Sub
 ErrHandler:
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-0172] modEntryFormat.Btn_EditFormat EXIT-ERR " & "errNum=" & Err.Number & " desc=" & Err.Description  ' [ADR-0100]
+    ' [BTN-GUARD-ERR-LOG] auto-injected
+    modBtnGuard.LogExit BTN, XLSM, False
     Debug.Print "[ERR] Btn_EditFormat: " & Err.Number & " " & Err.Description
 End Sub
 
@@ -645,7 +955,19 @@ End Sub
 '       v2.3 rename: was Btn_ShowFormatPreview in v2.2.
 ' ============================================================
 Public Sub Btn_PreviewFormat()
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0173] modEntryFormat.Btn_PreviewFormat ENTER"  ' [ADR-0100]
     On Error GoTo ErrHandler
+    ' [BTN-GUARD-PRELUDE-BEGIN] auto-injected by inject_btn_template.py
+    Const BTN As String = "Btn_PreviewFormat"
+    Dim XLSM As String
+    XLSM = ChrW(&H7BA1) & ChrW(&H7406)
+    modBtnGuard.LogEnter BTN, XLSM
+    If Not modBtnGuard.CheckPrereq(BTN, "config;format_dir", XLSM) Then
+        modBtnGuard.LogExit BTN, XLSM, False
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0174] modEntryFormat.Btn_PreviewFormat EXIT-OK"  ' [ADR-0100]
+        Exit Sub
+    End If
+    ' [BTN-GUARD-PRELUDE-END]
     Dim fmtId As String
     fmtId = PickM02CheckedRowFmtId()
     If Len(fmtId) = 0 Then Exit Sub
@@ -657,8 +979,14 @@ Public Sub Btn_PreviewFormat()
     ' Btn_PreviewInDesign, see case 20 timeout).
     If IsHeadless() Then Exit Sub
     RenderM04Preview
+    ' [BTN-GUARD-EXIT-OK] auto-injected
+    modBtnGuard.LogExit BTN, XLSM, True
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0175] modEntryFormat.Btn_PreviewFormat EXIT-OK"  ' [ADR-0100]
     Exit Sub
 ErrHandler:
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-0176] modEntryFormat.Btn_PreviewFormat EXIT-ERR " & "errNum=" & Err.Number & " desc=" & Err.Description  ' [ADR-0100]
+    ' [BTN-GUARD-ERR-LOG] auto-injected
+    modBtnGuard.LogExit BTN, XLSM, False
     Debug.Print "[ERR] Btn_PreviewFormat: " & Err.Number & " " & Err.Description
 End Sub
 
@@ -683,7 +1011,19 @@ End Sub
 '       value immediately.
 ' ============================================================
 Public Sub Btn_DisableFormat()
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0177] modEntryFormat.Btn_DisableFormat ENTER"  ' [ADR-0100]
     On Error GoTo ErrHandler
+    ' [BTN-GUARD-PRELUDE-BEGIN] auto-injected by inject_btn_template.py
+    Const BTN As String = "Btn_DisableFormat"
+    Dim XLSM As String
+    XLSM = ChrW(&H7BA1) & ChrW(&H7406)
+    modBtnGuard.LogEnter BTN, XLSM
+    If Not modBtnGuard.CheckPrereq(BTN, "config;format_dir", XLSM) Then
+        modBtnGuard.LogExit BTN, XLSM, False
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0178] modEntryFormat.Btn_DisableFormat EXIT-OK"  ' [ADR-0100]
+        Exit Sub
+    End If
+    ' [BTN-GUARD-PRELUDE-END]
 
     ' 1. Pick the single checked row.
     Dim fmtId As String
@@ -694,13 +1034,15 @@ Public Sub Btn_DisableFormat()
     Dim sections As Collection
     Set sections = modFormatLoader.LoadFormat(fmtId)
     If sections Is Nothing Then
-        WarnUser "Disable format", _
-                 "Format " & fmtId & " could not be loaded."
+        WarnUser ChrW(&H30D5) & ChrW(&H30A9) & ChrW(&H30FC) & ChrW(&H30DE) & ChrW(&H30C3) & ChrW(&H30C8) & ChrW(&H7121) & ChrW(&H52B9) & ChrW(&H5316), _
+                 ChrW(&H30D5) & ChrW(&H30A9) & ChrW(&H30FC) & ChrW(&H30DE) & ChrW(&H30C3) & ChrW(&H30C8) & ChrW(&H0020) & fmtId & ChrW(&H0020) & ChrW(&H3092) & ChrW(&H8AAD) & ChrW(&H307F) & ChrW(&H8FBC) & ChrW(&H3081) & ChrW(&H307E) & ChrW(&H305B) & ChrW(&H3093) & ChrW(&H3067) & ChrW(&H3057) & ChrW(&H305F) & ChrW(&H3002)
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0179] modEntryFormat.Btn_DisableFormat EXIT-OK"  ' [ADR-0100]
         Exit Sub
     End If
     If sections.Count = 0 Then
-        WarnUser "Disable format", _
-                 "Format " & fmtId & " has no definition file."
+        WarnUser ChrW(&H30D5) & ChrW(&H30A9) & ChrW(&H30FC) & ChrW(&H30DE) & ChrW(&H30C3) & ChrW(&H30C8) & ChrW(&H7121) & ChrW(&H52B9) & ChrW(&H5316), _
+                 ChrW(&H30D5) & ChrW(&H30A9) & ChrW(&H30FC) & ChrW(&H30DE) & ChrW(&H30C3) & ChrW(&H30C8) & ChrW(&H0020) & fmtId & ChrW(&H0020) & ChrW(&H306E) & ChrW(&H5B9A) & ChrW(&H7FA9) & ChrW(&H30D5) & ChrW(&H30A1) & ChrW(&H30A4) & ChrW(&H30EB) & ChrW(&H304C) & ChrW(&H3042) & ChrW(&H308A) & ChrW(&H307E) & ChrW(&H305B) & ChrW(&H3093) & ChrW(&H3002)
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0180] modEntryFormat.Btn_DisableFormat EXIT-OK"  ' [ADR-0100]
         Exit Sub
     End If
 
@@ -719,8 +1061,9 @@ Public Sub Btn_DisableFormat()
         End If
     Next i
     If fmtSec Is Nothing Then
-        WarnUser "Disable format", _
-                 "Format " & fmtId & " is missing the [FORMAT] section."
+        WarnUser ChrW(&H30D5) & ChrW(&H30A9) & ChrW(&H30FC) & ChrW(&H30DE) & ChrW(&H30C3) & ChrW(&H30C8) & ChrW(&H7121) & ChrW(&H52B9) & ChrW(&H5316), _
+                 ChrW(&H30D5) & ChrW(&H30A9) & ChrW(&H30FC) & ChrW(&H30DE) & ChrW(&H30C3) & ChrW(&H30C8) & ChrW(&H0020) & fmtId & ChrW(&H0020) & ChrW(&H306B) & ChrW(&H0020) & ChrW(&H005B) & ChrW(&H0046) & ChrW(&H004F) & ChrW(&H0052) & ChrW(&H004D) & ChrW(&H0041) & ChrW(&H0054) & ChrW(&H005D) & ChrW(&H0020) & ChrW(&H30BB) & ChrW(&H30AF) & ChrW(&H30B7) & ChrW(&H30E7) & ChrW(&H30F3) & ChrW(&H304C) & ChrW(&H3042) & ChrW(&H308A) & ChrW(&H307E) & ChrW(&H305B) & ChrW(&H3093) & ChrW(&H3002)
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0181] modEntryFormat.Btn_DisableFormat EXIT-OK"  ' [ADR-0100]
         Exit Sub
     End If
     fmtSec.SetValue FMT_KEY_STATUS, FMT_STATUS_DISABLED
@@ -729,9 +1072,9 @@ Public Sub Btn_DisableFormat()
     Dim rc As Long
     rc = modFormatLoader.SaveFormat(fmtId, sections)
     If rc <> 0 Then
-        WarnUser "Disable format", _
-                 "Failed to write disable flag for " & fmtId & _
-                 " (rc=" & rc & ")."
+        WarnUser ChrW(&H30D5) & ChrW(&H30A9) & ChrW(&H30FC) & ChrW(&H30DE) & ChrW(&H30C3) & ChrW(&H30C8) & ChrW(&H7121) & ChrW(&H52B9) & ChrW(&H5316), _
+                 ChrW(&H30D5) & ChrW(&H30A9) & ChrW(&H30FC) & ChrW(&H30DE) & ChrW(&H30C3) & ChrW(&H30C8) & ChrW(&H0020) & fmtId & ChrW(&H0020) & ChrW(&H306E) & ChrW(&H7121) & ChrW(&H52B9) & ChrW(&H5316) & ChrW(&H30D5) & ChrW(&H30E9) & ChrW(&H30B0) & ChrW(&H3092) & ChrW(&H66F8) & ChrW(&H304D) & ChrW(&H8FBC) & ChrW(&H3081) & ChrW(&H307E) & ChrW(&H305B) & ChrW(&H3093) & ChrW(&H3067) & ChrW(&H3057) & ChrW(&H305F) & ChrW(&H0020) & ChrW(&H0028) & ChrW(&H0072) & ChrW(&H0063) & ChrW(&H003D) & rc & ChrW(&H0029) & ChrW(&H3002)
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0182] modEntryFormat.Btn_DisableFormat EXIT-OK"  ' [ADR-0100]
         Exit Sub
     End If
 
@@ -748,8 +1091,14 @@ Public Sub Btn_DisableFormat()
 
     ' 6. Refresh the M-02 grid so column L shows "????".
     Btn_ReloadFormats
+    ' [BTN-GUARD-EXIT-OK] auto-injected
+    modBtnGuard.LogExit BTN, XLSM, True
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0183] modEntryFormat.Btn_DisableFormat EXIT-OK"  ' [ADR-0100]
     Exit Sub
 ErrHandler:
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-0184] modEntryFormat.Btn_DisableFormat EXIT-ERR " & "errNum=" & Err.Number & " desc=" & Err.Description  ' [ADR-0100]
+    ' [BTN-GUARD-ERR-LOG] auto-injected
+    modBtnGuard.LogExit BTN, XLSM, False
     On Error Resume Next
     Dim lgErr As clsLogger
     Set lgErr = NewLogger()
@@ -772,13 +1121,25 @@ End Sub
 '       in v2.2; v2.3 uses checkbox row select).
 ' ============================================================
 Public Sub Btn_DeleteFormat()
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0185] modEntryFormat.Btn_DeleteFormat ENTER"  ' [ADR-0100]
     On Error GoTo ErrHandler
+    ' [BTN-GUARD-PRELUDE-BEGIN] auto-injected by inject_btn_template.py
+    Const BTN As String = "Btn_DeleteFormat"
+    Dim XLSM As String
+    XLSM = ChrW(&H7BA1) & ChrW(&H7406)
+    modBtnGuard.LogEnter BTN, XLSM
+    If Not modBtnGuard.CheckPrereq(BTN, "config;format_dir", XLSM) Then
+        modBtnGuard.LogExit BTN, XLSM, False
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0186] modEntryFormat.Btn_DeleteFormat EXIT-OK"  ' [ADR-0100]
+        Exit Sub
+    End If
+    ' [BTN-GUARD-PRELUDE-END]
     Dim fmtId As String
     fmtId = PickM02CheckedRowFmtId()
     If Len(fmtId) = 0 Then Exit Sub
     If Not IsHeadless() Then
-        If MsgBox("Delete format " & fmtId & " ?", vbYesNo + vbExclamation, _
-                  "Delete format") <> vbYes Then Exit Sub
+        If MsgBox(ChrW(&H30D5) & ChrW(&H30A9) & ChrW(&H30FC) & ChrW(&H30DE) & ChrW(&H30C3) & ChrW(&H30C8) & " " & fmtId & " " & ChrW(&H3092) & ChrW(&H524A) & ChrW(&H9664) & ChrW(&H3057) & ChrW(&H307E) & ChrW(&H3059) & ChrW(&H304B) & ChrW(&HFF1F), vbYesNo + vbExclamation, _
+                  ChrW(&H524A) & ChrW(&H9664) & ChrW(&H78BA) & ChrW(&H8A8D)) <> vbYes Then Exit Sub
     End If
     Dim mgr As clsFormatManager
     Set mgr = New clsFormatManager
@@ -790,8 +1151,14 @@ Public Sub Btn_DeleteFormat()
         ' Refresh the grid after a successful delete.
         Btn_ReloadFormats
     End If
+    ' [BTN-GUARD-EXIT-OK] auto-injected
+    modBtnGuard.LogExit BTN, XLSM, True
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0187] modEntryFormat.Btn_DeleteFormat EXIT-OK"  ' [ADR-0100]
     Exit Sub
 ErrHandler:
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-0188] modEntryFormat.Btn_DeleteFormat EXIT-ERR " & "errNum=" & Err.Number & " desc=" & Err.Description  ' [ADR-0100]
+    ' [BTN-GUARD-ERR-LOG] auto-injected
+    modBtnGuard.LogExit BTN, XLSM, False
     Debug.Print "[ERR] Btn_DeleteFormat: " & Err.Number & " " & Err.Description
 End Sub
 
@@ -815,13 +1182,32 @@ End Sub
 '       part of the reload - the user re-checks after refresh.
 ' ============================================================
 Public Sub Btn_ReloadFormats()
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0189] modEntryFormat.Btn_ReloadFormats ENTER"  ' [ADR-0100]
     On Error GoTo ErrHandler
+    ' [BTN-GUARD-PRELUDE-BEGIN] auto-injected by inject_btn_template.py
+    Const BTN As String = "Btn_ReloadFormats"
+    Dim XLSM As String
+    XLSM = ChrW(&H7BA1) & ChrW(&H7406)
+    modBtnGuard.LogEnter BTN, XLSM
+    If Not modBtnGuard.CheckPrereq(BTN, "config;format_dir", XLSM) Then
+        modBtnGuard.LogExit BTN, XLSM, False
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0190] modEntryFormat.Btn_ReloadFormats EXIT-OK"  ' [ADR-0100]
+        Exit Sub
+    End If
+    ' [BTN-GUARD-PRELUDE-END]
 
     Dim ws As Worksheet
     Set ws = ThisWorkbook.Worksheets(M02_SHEET_NAME())
 
+    ' 2026-06-06: explicit Unprotect before writes (sheet protection blocks VBA writes after reload)
+    Dim wasProtected As Boolean: wasProtected = ws.ProtectContents
+    If wasProtected Then ws.Unprotect
+
     ' 1. Clear the existing data rows (B..L on every data row).
     ClearM02GridDataRows ws
+
+    ' 2026-06-06: unlock data cells so users can write checkbox marks in column B
+    ws.Range(M02_COL_ROWCHECK & M02_DATA_FIRST_ROW & ":" & M02_COL_ROWCHECK & M02_DATA_LAST_ROW).Locked = False
 
     ' 2. Enumerate all format files.
     Dim allIds As Collection
@@ -847,6 +1233,9 @@ Public Sub Btn_ReloadFormats()
         writtenRows = writtenRows + 1
     Next idVar
 
+    ' 2026-06-06: re-apply Protect after writes
+    If wasProtected Then ws.Protect Password:="", UserInterfaceOnly:=True
+
     ' 3. Log the reload count.
     On Error Resume Next
     Dim lg As clsLogger
@@ -857,8 +1246,14 @@ Public Sub Btn_ReloadFormats()
                    "", "M02-RELOAD-OK-II-042"
     End If
     On Error GoTo 0
+    ' [BTN-GUARD-EXIT-OK] auto-injected
+    modBtnGuard.LogExit BTN, XLSM, True
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0191] modEntryFormat.Btn_ReloadFormats EXIT-OK"  ' [ADR-0100]
     Exit Sub
 ErrHandler:
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-0192] modEntryFormat.Btn_ReloadFormats EXIT-ERR " & "errNum=" & Err.Number & " desc=" & Err.Description  ' [ADR-0100]
+    ' [BTN-GUARD-ERR-LOG] auto-injected
+    modBtnGuard.LogExit BTN, XLSM, False
     On Error Resume Next
     Dim lgErr As clsLogger
     Set lgErr = NewLogger()
@@ -884,12 +1279,14 @@ End Sub
 '       used elsewhere in the module for readability.
 ' ============================================================
 Private Sub ClearM02GridDataRows(ByVal ws As Worksheet)
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0193] modEntryFormat.ClearM02GridDataRows ENTER"  ' [ADR-0100]
     Dim addr As String
     addr = M02_COL_ROWCHECK & M02_DATA_FIRST_ROW & ":" & _
-           M02_COL_STATUS & M02_DATA_LAST_ROW
+           M02_COL_UPDATED & M02_DATA_LAST_ROW
     On Error Resume Next
     ws.Range(addr).ClearContents
     On Error GoTo 0
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0194] modEntryFormat.ClearM02GridDataRows EXIT-OK"  ' [ADR-0100]
 End Sub
 
 ' ============================================================
@@ -905,6 +1302,7 @@ Private Sub WriteM02RowFor(ByVal ws As Worksheet, _
                            ByVal fmtId As String, _
                            ByVal fmtDir As String, _
                            ByVal fso As Object)
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0195] modEntryFormat.WriteM02RowFor ENTER"  ' [ADR-0100]
     On Error GoTo ErrHandler
 
     ' Load the sections (may be empty if file missing/unparsable).
@@ -962,15 +1360,13 @@ Private Sub WriteM02RowFor(ByVal ws As Worksheet, _
     ws.Range(M02_COL_NO & rowNum).Value = rowNum - M02_DATA_FIRST_ROW + 1
     ws.Range(M02_COL_FMT_ID & rowNum).Value = fmtId
     ws.Range(M02_COL_FMT_NAME & rowNum).Value = fmtName
-    ws.Range(M02_COL_ID_PATTERN & rowNum).Value = fmtIdPat
-    ws.Range(M02_COL_NEXT_NUM & rowNum).Value = fmtNxtNum
-    ws.Range(M02_COL_VERSION & rowNum).Value = fmtVer
     ws.Range(M02_COL_FIELD_COUNT & rowNum).Value = fieldCount
     ws.Range(M02_COL_KNW_COUNT & rowNum).Value = knwCount
     ws.Range(M02_COL_UPDATED & rowNum).Value = updatedAt
-    ws.Range(M02_COL_STATUS & rowNum).Value = fmtStat
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0196] modEntryFormat.WriteM02RowFor EXIT-OK"  ' [ADR-0100]
     Exit Sub
 ErrHandler:
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-0197] modEntryFormat.WriteM02RowFor EXIT-ERR " & "errNum=" & Err.Number & " desc=" & Err.Description  ' [ADR-0100]
     ' Don't let a single broken format kill the whole reload.
     Debug.Print "[WriteM02RowFor] " & fmtId & " row=" & rowNum & _
                 " err=" & Err.Number & " " & Err.Description
@@ -985,6 +1381,7 @@ End Sub
 '       the user-facing warning is issued from here).
 ' ============================================================
 Private Function PickM02CheckedRowFmtId() As String
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0198] modEntryFormat.PickM02CheckedRowFmtId ENTER"  ' [ADR-0100]
     On Error GoTo ErrHandler
     Dim ws As Worksheet
     Set ws = ThisWorkbook.Worksheets(M02_SHEET_NAME())
@@ -1004,29 +1401,34 @@ Private Function PickM02CheckedRowFmtId() As String
     Next r
 
     If checkedCount = 0 Then
-        WarnUser "Format list", _
-                 "Check exactly one format row first."
+        WarnUser ChrW(&H30D5) & ChrW(&H30A9) & ChrW(&H30FC) & ChrW(&H30DE) & ChrW(&H30C3) & ChrW(&H30C8) & ChrW(&H4E00) & ChrW(&H89A7), _
+                 ChrW(&H30D5) & ChrW(&H30A9) & ChrW(&H30FC) & ChrW(&H30DE) & ChrW(&H30C3) & ChrW(&H30C8) & ChrW(&H884C) & ChrW(&H3092) & ChrW(&H0031) & ChrW(&H3064) & ChrW(&H3060) & ChrW(&H3051) & ChrW(&H9078) & ChrW(&H629E) & ChrW(&H3057) & ChrW(&H3066) & ChrW(&H304F) & ChrW(&H3060) & ChrW(&H3055) & ChrW(&H3044) & ChrW(&H3002)
         PickM02CheckedRowFmtId = ""
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0199] modEntryFormat.PickM02CheckedRowFmtId EXIT-OK"  ' [ADR-0100]
         Exit Function
     End If
     If checkedCount > 1 Then
-        WarnUser "Format list", _
-                 "Multiple rows checked. Check exactly one."
+        WarnUser ChrW(&H30D5) & ChrW(&H30A9) & ChrW(&H30FC) & ChrW(&H30DE) & ChrW(&H30C3) & ChrW(&H30C8) & ChrW(&H4E00) & ChrW(&H89A7), _
+                 ChrW(&H8907) & ChrW(&H6570) & ChrW(&H884C) & ChrW(&H304C) & ChrW(&H9078) & ChrW(&H629E) & ChrW(&H3055) & ChrW(&H308C) & ChrW(&H3066) & ChrW(&H3044) & ChrW(&H307E) & ChrW(&H3059) & ChrW(&H3002) & ChrW(&H0031) & ChrW(&H3064) & ChrW(&H3060) & ChrW(&H3051) & ChrW(&H9078) & ChrW(&H629E) & ChrW(&H3057) & ChrW(&H3066) & ChrW(&H304F) & ChrW(&H3060) & ChrW(&H3055) & ChrW(&H3044) & ChrW(&H3002)
         PickM02CheckedRowFmtId = ""
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0200] modEntryFormat.PickM02CheckedRowFmtId EXIT-OK"  ' [ADR-0100]
         Exit Function
     End If
 
     Dim fmtId As String
     fmtId = Trim(CStr(ws.Range(M02_COL_FMT_ID & hitRow).Value))
     If Len(fmtId) = 0 Then
-        WarnUser "Format list", _
-                 "The checked row has no FormatID."
+        WarnUser ChrW(&H30D5) & ChrW(&H30A9) & ChrW(&H30FC) & ChrW(&H30DE) & ChrW(&H30C3) & ChrW(&H30C8) & ChrW(&H4E00) & ChrW(&H89A7), _
+                 ChrW(&H9078) & ChrW(&H629E) & ChrW(&H3057) & ChrW(&H305F) & ChrW(&H884C) & ChrW(&H306B) & ChrW(&H0020) & ChrW(&H0046) & ChrW(&H006F) & ChrW(&H0072) & ChrW(&H006D) & ChrW(&H0061) & ChrW(&H0074) & ChrW(&H0049) & ChrW(&H0044) & ChrW(&H0020) & ChrW(&H304C) & ChrW(&H3042) & ChrW(&H308A) & ChrW(&H307E) & ChrW(&H305B) & ChrW(&H3093) & ChrW(&H3002)
         PickM02CheckedRowFmtId = ""
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0201] modEntryFormat.PickM02CheckedRowFmtId EXIT-OK"  ' [ADR-0100]
         Exit Function
     End If
     PickM02CheckedRowFmtId = fmtId
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0202] modEntryFormat.PickM02CheckedRowFmtId EXIT-OK"  ' [ADR-0100]
     Exit Function
 ErrHandler:
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-0203] modEntryFormat.PickM02CheckedRowFmtId EXIT-ERR " & "errNum=" & Err.Number & " desc=" & Err.Description  ' [ADR-0100]
     PickM02CheckedRowFmtId = ""
 End Function
 
@@ -1038,10 +1440,12 @@ End Function
 '       treated as unchecked.
 ' ============================================================
 Private Function IsRowChecked(ByVal v As Variant) As Boolean
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0204] modEntryFormat.IsRowChecked ENTER"  ' [ADR-0100]
     If IsEmpty(v) Then Exit Function
     If IsNull(v) Then Exit Function
     If VarType(v) = vbBoolean Then
         IsRowChecked = CBool(v)
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0205] modEntryFormat.IsRowChecked EXIT-OK"  ' [ADR-0100]
         Exit Function
     End If
     Dim s As String
@@ -1072,6 +1476,7 @@ End Function
 '       (the user will overwrite anyway).
 ' ============================================================
 Private Function AutoNumberNextFmtId() As String
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0206] modEntryFormat.AutoNumberNextFmtId ENTER"  ' [ADR-0100]
     On Error GoTo ErrHandler
     Dim used As Object
     Set used = CreateObject("Scripting.Dictionary")
@@ -1090,14 +1495,60 @@ Private Function AutoNumberNextFmtId() As String
         candidate = FMT_ID_PREFIX & PadLeft(CStr(i), FMT_ID_WIDTH, "0")
         If Not used.Exists(candidate) Then
             AutoNumberNextFmtId = candidate
+            If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0207] modEntryFormat.AutoNumberNextFmtId EXIT-OK"  ' [ADR-0100]
             Exit Function
         End If
     Next i
     AutoNumberNextFmtId = FMT_ID_PREFIX & PadLeft("1", FMT_ID_WIDTH, "0")
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0208] modEntryFormat.AutoNumberNextFmtId EXIT-OK"  ' [ADR-0100]
     Exit Function
 ErrHandler:
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-0209] modEntryFormat.AutoNumberNextFmtId EXIT-ERR " & "errNum=" & Err.Number & " desc=" & Err.Description  ' [ADR-0100]
     AutoNumberNextFmtId = FMT_ID_PREFIX & PadLeft("1", FMT_ID_WIDTH, "0")
 End Function
+
+' ============================================================
+' Public Sub: SeedM03FormatIdIfEmpty (2026-06-07)
+' Role: clsFormatDesignScreen.Setup hook. If the FormatID cell on M-03
+'       (typically C4 for the new-draft side, resolved via
+'       ResolveM03FmtIdCell -> ui_seed) is empty, seed it with the next
+'       available auto-numbered FmtId (FMT-NNN). This lets a freshly
+'       installed workbook show "FMT-001" (or next free) on first open
+'       without requiring the user to press the New Draft button.
+' Behavior: does NOT overwrite a non-empty existing value, so the seed
+'       only fires the first time the screen has no FormatID.
+' ============================================================
+Public Sub SeedM03FormatIdIfEmpty()
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0260] modEntryFormat.SeedM03FormatIdIfEmpty ENTER"  ' [ADR-0100]
+    On Error GoTo ErrHandler
+    Dim ws As Worksheet
+    Set ws = ThisWorkbook.Worksheets(M03_SHEET_NAME())
+    Dim cell As String
+    cell = ResolveM03FmtIdCell()
+    If Len(cell) = 0 Then cell = M03_CELL_FMT_ID_FALLBACK
+    Dim cur As String
+    cur = Trim$(CStr(ws.Range(cell).Value))
+    If Len(cur) > 0 Then
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0261] modEntryFormat.SeedM03FormatIdIfEmpty EXIT-OK (already seeded)"  ' [ADR-0100]
+        Exit Sub
+    End If
+    Dim nextId As String
+    nextId = AutoNumberNextFmtId()
+    If Len(nextId) = 0 Then nextId = FMT_ID_PREFIX & PadLeft("1", FMT_ID_WIDTH, "0")
+    ' Unprotect-write-reprotect so the seed lands even when M-03 is light-protected.
+    On Error Resume Next
+    ws.Unprotect
+    On Error GoTo ErrHandler
+    ws.Range(cell).Value = nextId
+    On Error Resume Next
+    ws.Protect Password:="", UserInterfaceOnly:=True, AllowFormattingCells:=True, _
+               AllowFormattingColumns:=True, AllowFormattingRows:=True
+    On Error GoTo ErrHandler
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0262] modEntryFormat.SeedM03FormatIdIfEmpty EXIT-OK seeded=" & nextId  ' [ADR-0100]
+    Exit Sub
+ErrHandler:
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-0263] modEntryFormat.SeedM03FormatIdIfEmpty EXIT-ERR err=" & Err.Number & " " & Err.Description  ' [ADR-0100]
+End Sub
 
 ' ============================================================
 ' Private Function: PadLeft
@@ -1107,12 +1558,14 @@ End Function
 '       us to a per-width string template.
 ' ============================================================
 Private Function PadLeft(ByVal s As String, ByVal width As Long, ByVal pad As String) As String
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0210] modEntryFormat.PadLeft ENTER"  ' [ADR-0100]
     Dim out As String
     out = s
     Do While Len(out) < width
         out = pad & out
     Loop
     PadLeft = out
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0211] modEntryFormat.PadLeft EXIT-OK"  ' [ADR-0100]
 End Function
 
 
@@ -1128,7 +1581,19 @@ End Function
 '       still in the same place.
 ' ============================================================
 Public Sub Btn_BackToMain_v21()
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0212] modEntryFormat.Btn_BackToMain_v21 ENTER"  ' [ADR-0100]
     On Error GoTo ErrHandler
+    ' [BTN-GUARD-PRELUDE-BEGIN] auto-injected by inject_btn_template.py
+    Const BTN As String = "Btn_BackToMain_v21"
+    Dim XLSM As String
+    XLSM = ChrW(&H7BA1) & ChrW(&H7406)
+    modBtnGuard.LogEnter BTN, XLSM
+    If Not modBtnGuard.CheckPrereq(BTN, "config", XLSM) Then
+        modBtnGuard.LogExit BTN, XLSM, False
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0213] modEntryFormat.Btn_BackToMain_v21 EXIT-OK"  ' [ADR-0100]
+        Exit Sub
+    End If
+    ' [BTN-GUARD-PRELUDE-END]
     Dim hasInput As Boolean
     hasInput = HasUnsavedInput_M03(ActiveSheet)
     If hasInput Then
@@ -1144,7 +1609,7 @@ Public Sub Btn_BackToMain_v21()
         If IsHeadless() Then
             r = vbNo
         Else
-            r = MsgBox("Unsaved input. Save before back to main?" & vbCrLf & _
+            r = MsgBox(ChrW(&H672A) & ChrW(&H4FDD) & ChrW(&H5B58) & ChrW(&H306E) & ChrW(&H5165) & ChrW(&H529B) & ChrW(&H304C) & ChrW(&H3042) & ChrW(&H308A) & ChrW(&H307E) & ChrW(&H3059) & ChrW(&H3002) & ChrW(&H623B) & ChrW(&H308B) & ChrW(&H524D) & ChrW(&H306B) & ChrW(&H4FDD) & ChrW(&H5B58) & ChrW(&H3057) & ChrW(&H307E) & ChrW(&H3059) & ChrW(&H304B) & ChrW(&HFF1F) & vbCrLf & _
                        "Yes=Save and back / No=Discard and back / Cancel=Stay editing", _
                        vbYesNoCancel + vbExclamation, "Confirm")
         End If
@@ -1155,13 +1620,20 @@ Public Sub Btn_BackToMain_v21()
             Case vbNo
                 NavigateToMain_v21
             Case vbCancel
+                If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0214] modEntryFormat.Btn_BackToMain_v21 EXIT-OK"  ' [ADR-0100]
                 Exit Sub
         End Select
     Else
         NavigateToMain_v21
     End If
+    ' [BTN-GUARD-EXIT-OK] auto-injected
+    modBtnGuard.LogExit BTN, XLSM, True
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0215] modEntryFormat.Btn_BackToMain_v21 EXIT-OK"  ' [ADR-0100]
     Exit Sub
 ErrHandler:
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-0216] modEntryFormat.Btn_BackToMain_v21 EXIT-ERR " & "errNum=" & Err.Number & " desc=" & Err.Description  ' [ADR-0100]
+    ' [BTN-GUARD-ERR-LOG] auto-injected
+    modBtnGuard.LogExit BTN, XLSM, False
     On Error Resume Next
     Dim oLogger032b As clsLogger
     Set oLogger032b = New clsLogger
@@ -1169,13 +1641,14 @@ ErrHandler:
     oLogger032b.LogError "modEntryFormat", "Btn_BackToMain_v21", "Back to main transition error: " & Err.Description, "", "BACKTOMAIN-ERR-EE-032"
     On Error GoTo 0
     If Not IsHeadless() Then
-        MsgBox "Btn_BackToMain_v21 error: " & Err.Description, vbCritical, "Error"
+        MsgBox ChrW(&H30E1) & ChrW(&H30A4) & ChrW(&H30F3) & ChrW(&H753B) & ChrW(&H9762) & ChrW(&H623B) & ChrW(&H308A) & ChrW(&H51E6) & ChrW(&H7406) & ChrW(&H3067) & ChrW(&H30A8) & ChrW(&H30E9) & ChrW(&H30FC) & ChrW(&H003A) & ChrW(&H0020) & Err.Description, vbCritical, ChrW(&H30A8) & ChrW(&H30E9) & ChrW(&H30FC)
     Else
         Debug.Print "[ERR] Btn_BackToMain_v21: " & Err.Number & " " & Err.Description
     End If
 End Sub
 
 Private Function HasUnsavedInput_M03(ByVal ws As Object) As Boolean
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0217] modEntryFormat.HasUnsavedInput_M03 ENTER"  ' [ADR-0100]
     ' ADR-0090: Primary path enumerates [INPUT] cells from ui_seed M-03 SSOT.
     ' Legacy hard-code cells (C3 / B7) are unioned as fallback so the
     ' detection coverage does not shrink even if a stanza key is added/removed.
@@ -1195,6 +1668,7 @@ Private Function HasUnsavedInput_M03(ByVal ws As Object) As Boolean
                     firstCell = FirstCellOf_M03(cellExpr)
                     If Len(CStr(ws.Range(firstCell).Value)) > 0 Then
                         HasUnsavedInput_M03 = True
+                        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0218] modEntryFormat.HasUnsavedInput_M03 EXIT-OK"  ' [ADR-0100]
                         Exit Function
                     End If
                 End If
@@ -1208,27 +1682,33 @@ Private Function HasUnsavedInput_M03(ByVal ws As Object) As Boolean
     ' explicit FormatID INPUT lands here too without further edits.
     If Len(CStr(ws.Range(ResolveM03FmtIdCell()).Value)) > 0 Then
         HasUnsavedInput_M03 = True
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0219] modEntryFormat.HasUnsavedInput_M03 EXIT-OK"  ' [ADR-0100]
         Exit Function
     End If
     If Len(CStr(ws.Range("B7").Value)) > 0 Then
         HasUnsavedInput_M03 = True
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0220] modEntryFormat.HasUnsavedInput_M03 EXIT-OK"  ' [ADR-0100]
         Exit Function
     End If
     HasUnsavedInput_M03 = False
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0221] modEntryFormat.HasUnsavedInput_M03 EXIT-OK"  ' [ADR-0100]
     Exit Function
 ErrHandler:
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-0222] modEntryFormat.HasUnsavedInput_M03 EXIT-ERR " & "errNum=" & Err.Number & " desc=" & Err.Description  ' [ADR-0100]
     HasUnsavedInput_M03 = False
 End Function
 
 Private Function FirstCellOf_M03(ByVal cellExpr As String) As String
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0223] modEntryFormat.FirstCellOf_M03 ENTER"  ' [ADR-0100]
     ' Returns first cell of "Cell=A1:B1" form, e.g. "A1"
     Dim p As Long
     p = InStr(1, cellExpr, ":")
     If p > 0 Then
-        FirstCellOf_M03 = Left$(cellExpr, p - 1)
+        FirstCellOf_M03 = Left(cellExpr, p - 1)
     Else
         FirstCellOf_M03 = cellExpr
     End If
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0224] modEntryFormat.FirstCellOf_M03 EXIT-OK"  ' [ADR-0100]
 End Function
 
 ' ============================================================
@@ -1254,6 +1734,7 @@ End Function
 '       admin workbook seed step which is out of scope here.
 ' ============================================================
 Public Function ResolveM03FmtIdCell() As String
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0225] modEntryFormat.ResolveM03FmtIdCell ENTER"  ' [ADR-0100]
     On Error GoTo Fallback
     Dim ui As Collection
     Set ui = modUILoader.LoadUiDefinition(RoleKanri(), "M-03")
@@ -1283,6 +1764,7 @@ Public Function ResolveM03FmtIdCell() As String
                 cellExpr = sec.GetValue("Cell")
                 If Len(cellExpr) > 0 Then
                     ResolveM03FmtIdCell = FirstCellOf_M03(cellExpr)
+                    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0226] modEntryFormat.ResolveM03FmtIdCell EXIT-OK"  ' [ADR-0100]
                     Exit Function
                 End If
             End If
@@ -1293,6 +1775,7 @@ Fallback:
 End Function
 
 Private Sub NavigateToMain_v21()
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0227] modEntryFormat.NavigateToMain_v21 ENTER"  ' [ADR-0100]
     ' v2.3 (2026-05-26): M-01 / Main ??p?~ (ADR-0053 ??2.1)?B
     ' v2.1 legacy path ????? On Error Resume Next ??S???????????v?B
     ' R-2-Fix2b (2026-05-28): M-01 / Main menu removed (ADR-0053 2.1); the old
@@ -1305,6 +1788,7 @@ Private Sub NavigateToMain_v21()
     If wsMenu Is Nothing Then Set wsMenu = ThisWorkbook.Worksheets("M-01")
     If Not wsMenu Is Nothing Then wsMenu.Activate
     On Error GoTo 0
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0228] modEntryFormat.NavigateToMain_v21 EXIT-OK"  ' [ADR-0100]
 End Sub
 
 ' ============================================================
@@ -1316,7 +1800,19 @@ End Sub
 '       wired in case the legacy migrate UI is still seeded.
 ' ============================================================
 Public Sub Btn_ConfirmDiff()
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0229] modEntryFormat.Btn_ConfirmDiff ENTER"  ' [ADR-0100]
     On Error GoTo ErrHandler
+    ' [BTN-GUARD-PRELUDE-BEGIN] auto-injected by inject_btn_template.py
+    Const BTN As String = "Btn_ConfirmDiff"
+    Dim XLSM As String
+    XLSM = ChrW(&H7BA1) & ChrW(&H7406)
+    modBtnGuard.LogEnter BTN, XLSM
+    If Not modBtnGuard.CheckPrereq(BTN, "config", XLSM) Then
+        modBtnGuard.LogExit BTN, XLSM, False
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0230] modEntryFormat.Btn_ConfirmDiff EXIT-OK"  ' [ADR-0100]
+        Exit Sub
+    End If
+    ' [BTN-GUARD-PRELUDE-END]
     Dim ws As Object: Set ws = ActiveSheet
     Dim ui As Collection: Set ui = modUILoader.LoadUiDefinition(RoleKanri(), "M-03")
     If ui.Count = 0 Then Exit Sub
@@ -1358,16 +1854,22 @@ Public Sub Btn_ConfirmDiff()
         ' is left as a documented no-op so legacy wired buttons
         ' that still call Btn_ConfirmDiff do not crash the host.
         If Not IsHeadless() Then
-            MsgBox "Migration is not available in v2.3 (M-12 auto-reflect retired).", _
-                   vbInformation, "Result"
+            MsgBox ChrW(&H0076) & ChrW(&H0032) & ChrW(&H002E) & ChrW(&H0033) & ChrW(&H0020) & ChrW(&H3067) & ChrW(&H306F) & ChrW(&H79FB) & ChrW(&H884C) & ChrW(&H6A5F) & ChrW(&H80FD) & ChrW(&H306F) & ChrW(&H5229) & ChrW(&H7528) & ChrW(&H3067) & ChrW(&H304D) & ChrW(&H307E) & ChrW(&H305B) & ChrW(&H3093) & ChrW(&H0020) & ChrW(&H0028) & ChrW(&H004D) & ChrW(&H002D) & ChrW(&H0031) & ChrW(&H0032) & ChrW(&H0020) & ChrW(&H81EA) & ChrW(&H52D5) & ChrW(&H53CD) & ChrW(&H6620) & ChrW(&H306F) & ChrW(&H5EC3) & ChrW(&H6B62) & ChrW(&H3055) & ChrW(&H308C) & ChrW(&H307E) & ChrW(&H3057) & ChrW(&H305F) & ChrW(&H0029) & ChrW(&H3002), _
+                   vbInformation, ChrW(&H7D50) & ChrW(&H679C)
         Else
             Debug.Print "[Btn_ConfirmDiff] migrate path is a no-op under v2.3"
         End If
     End If
+    ' [BTN-GUARD-EXIT-OK] auto-injected
+    modBtnGuard.LogExit BTN, XLSM, True
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0231] modEntryFormat.Btn_ConfirmDiff EXIT-OK"  ' [ADR-0100]
     Exit Sub
 ErrHandler:
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-0232] modEntryFormat.Btn_ConfirmDiff EXIT-ERR " & "errNum=" & Err.Number & " desc=" & Err.Description  ' [ADR-0100]
+    ' [BTN-GUARD-ERR-LOG] auto-injected
+    modBtnGuard.LogExit BTN, XLSM, False
     If Not IsHeadless() Then
-        MsgBox "Btn_ConfirmDiff error: " & Err.Description, vbCritical, "Error"
+        MsgBox ChrW(&H5DEE) & ChrW(&H5206) & ChrW(&H78BA) & ChrW(&H5B9A) & ChrW(&H51E6) & ChrW(&H7406) & ChrW(&H3067) & ChrW(&H30A8) & ChrW(&H30E9) & ChrW(&H30FC) & ChrW(&H003A) & ChrW(&H0020) & Err.Description, vbCritical, ChrW(&H30A8) & ChrW(&H30E9) & ChrW(&H30FC)
     Else
         Debug.Print "[ERR] Btn_ConfirmDiff: " & Err.Number & " " & Err.Description
     End If
@@ -1383,7 +1885,8 @@ End Sub
 '   - Application.Visible     = False -> Excel window is hidden
 ' If EITHER indicates headless, treat the run as headless.
 ' ------------------------------------------------------------
-Public Function IsHeadless() As Boolean
+Private Function IsHeadless() As Boolean
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0233] modEntryFormat.IsHeadless ENTER"  ' [ADR-0100]
     On Error Resume Next
     Dim notInteractive As Boolean
     Dim notVisible As Boolean
@@ -1391,6 +1894,7 @@ Public Function IsHeadless() As Boolean
     notVisible = (Application.Visible = False)
     IsHeadless = (notInteractive Or notVisible)
     On Error GoTo 0
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0234] modEntryFormat.IsHeadless EXIT-OK"  ' [ADR-0100]
 End Function
 
 ' ============================================================
@@ -1401,6 +1905,7 @@ End Function
 '       RenderPreview.
 ' ============================================================
 Private Sub RenderM04Preview()
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0235] modEntryFormat.RenderM04Preview ENTER"  ' [ADR-0100]
     On Error GoTo ErrHandler
     Dim spec As clsScreenSpec
     Set spec = New clsScreenSpec
@@ -1410,8 +1915,10 @@ Private Sub RenderM04Preview()
     Set prev = New clsFormatPreviewScreen
     prev.Init Nothing, spec
     prev.RenderPreview
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0236] modEntryFormat.RenderM04Preview EXIT-OK"  ' [ADR-0100]
     Exit Sub
 ErrHandler:
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-0237] modEntryFormat.RenderM04Preview EXIT-ERR " & "errNum=" & Err.Number & " desc=" & Err.Description  ' [ADR-0100]
     Debug.Print "[ERR] RenderM04Preview: " & Err.Number & " " & Err.Description
 End Sub
 
@@ -1422,19 +1929,25 @@ End Sub
 '       2=knowledge-still-using reject / else=failure.
 ' ============================================================
 Private Sub ShowDeleteFormatResult(ByVal fmtId As String, ByVal rc As Long)
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0238] modEntryFormat.ShowDeleteFormatResult ENTER"  ' [ADR-0100]
     If IsHeadless() Then Exit Sub
     Dim msg As String
     Select Case rc
         Case 0
-            msg = "Format " & fmtId & " was deleted."
+            ' format deleted JP
+            msg = ChrW(&H30D5) & ChrW(&H30A9) & ChrW(&H30FC) & ChrW(&H30DE) & ChrW(&H30C3) & ChrW(&H30C8) & " " & fmtId & " " & ChrW(&H3092) & ChrW(&H524A) & ChrW(&H9664) & ChrW(&H3057) & ChrW(&H307E) & ChrW(&H3057) & ChrW(&H305F) & ChrW(&H3002)
         Case 1
-            msg = "Rejected: format delete is allowed from the admin workbook only."
+            ' delete from admin only JP
+            msg = ChrW(&H7BA1) & ChrW(&H7406) & ".xlsm " & ChrW(&H304B) & ChrW(&H3089) & ChrW(&H3057) & ChrW(&H304B) & ChrW(&H524A) & ChrW(&H9664) & ChrW(&H3067) & ChrW(&H304D) & ChrW(&H307E) & ChrW(&H305B) & ChrW(&H3093) & ChrW(&H3002)
         Case 2
-            msg = "Rejected: knowledge entries still use format " & fmtId & "."
+            ' knowledge still uses format JP
+            msg = ChrW(&H3053) & ChrW(&H306E) & ChrW(&H30D5) & ChrW(&H30A9) & ChrW(&H30FC) & ChrW(&H30DE) & ChrW(&H30C3) & ChrW(&H30C8) & " " & fmtId & " " & ChrW(&H3092) & ChrW(&H4F7F) & ChrW(&H3046) & ChrW(&H30CA) & ChrW(&H30EC) & ChrW(&H30C3) & ChrW(&H30B8) & ChrW(&H304C) & ChrW(&H6B8B) & ChrW(&H3063) & ChrW(&H3066) & ChrW(&H3044) & ChrW(&H308B) & ChrW(&H305F) & ChrW(&H3081) & ChrW(&H524A) & ChrW(&H9664) & ChrW(&H3067) & ChrW(&H304D) & ChrW(&H307E) & ChrW(&H305B) & ChrW(&H3093) & ChrW(&H3002)
         Case Else
-            msg = "Failed to delete format " & fmtId & "."
+            ' delete failed JP
+            msg = ChrW(&H30D5) & ChrW(&H30A9) & ChrW(&H30FC) & ChrW(&H30DE) & ChrW(&H30C3) & ChrW(&H30C8) & " " & fmtId & " " & ChrW(&H306E) & ChrW(&H524A) & ChrW(&H9664) & ChrW(&H306B) & ChrW(&H5931) & ChrW(&H6557) & ChrW(&H3057) & ChrW(&H307E) & ChrW(&H3057) & ChrW(&H305F) & ChrW(&H3002)
     End Select
-    MsgBox msg, vbInformation, "Delete format"
+    MsgBox msg, vbInformation, ChrW(&H30D5) & ChrW(&H30A9) & ChrW(&H30FC) & ChrW(&H30DE) & ChrW(&H30C3) & ChrW(&H30C8) & ChrW(&H524A) & ChrW(&H9664)
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0239] modEntryFormat.ShowDeleteFormatResult EXIT-OK"  ' [ADR-0100]
 End Sub
 
 ' ============================================================
@@ -1443,13 +1956,16 @@ End Sub
 '       failure so callers can fall back to Debug.Print.
 ' ============================================================
 Private Function NewLogger() As clsLogger
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0240] modEntryFormat.NewLogger ENTER"  ' [ADR-0100]
     On Error GoTo ErrHandler
     Dim lg As clsLogger
     Set lg = New clsLogger
     lg.Init ThisWorkbook.Worksheets("LOG")
     Set NewLogger = lg
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0241] modEntryFormat.NewLogger EXIT-OK"  ' [ADR-0100]
     Exit Function
 ErrHandler:
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-0242] modEntryFormat.NewLogger EXIT-ERR " & "errNum=" & Err.Number & " desc=" & Err.Description  ' [ADR-0100]
     Set NewLogger = Nothing
 End Function
 
@@ -1459,6 +1975,7 @@ End Function
 '       under COM automation but visible to a real Excel user.
 ' ============================================================
 Private Sub WarnUser(ByVal title As String, ByVal body As String)
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0243] modEntryFormat.WarnUser ENTER"  ' [ADR-0100]
     If IsHeadless() Then
         Debug.Print "[WARN " & title & "] " & body
         Exit Sub
@@ -1475,16 +1992,19 @@ End Sub
 ' Restored as ChrW() source so VBE compile succeeds for case 16.
 ' ====================================================================
 Private Function RoleKanri() As String
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0244] modEntryFormat.RoleKanri ENTER"  ' [ADR-0100]
     RoleKanri = ChrW(&H7BA1) & ChrW(&H7406)
 End Function
 
 Private Function M02_SHEET_NAME() As String
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0245] modEntryFormat.M02_SHEET_NAME ENTER"  ' [ADR-0100]
     M02_SHEET_NAME = ChrW(&H30D5) & ChrW(&H30A9) & ChrW(&H30FC) & _
                      ChrW(&H30DE) & ChrW(&H30C3) & ChrW(&H30C8) & _
                      ChrW(&H4E00) & ChrW(&H89A7)
 End Function
 
 Private Function M03_SHEET_NAME() As String
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0246] modEntryFormat.M03_SHEET_NAME ENTER"  ' [ADR-0100]
     M03_SHEET_NAME = ChrW(&H30D5) & ChrW(&H30A9) & ChrW(&H30FC) & _
                      ChrW(&H30DE) & ChrW(&H30C3) & ChrW(&H30C8) & _
                      ChrW(&H8A2D) & ChrW(&H8A08)
@@ -1494,6 +2014,7 @@ End Function
 ' through Edit/Write does not mojibake the literal. Previous "?v???r???["
 ' inline literal silently broke Btn_PreviewInDesign / Btn_PreviewFormat.
 Public Function PreviewSheetName_M04() As String
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0247] modEntryFormat.PreviewSheetName_M04 ENTER"  ' [ADR-0100]
     PreviewSheetName_M04 = ChrW(&H30D7) & ChrW(&H30EC) & ChrW(&H30D3) & _
                            ChrW(&H30E5) & ChrW(&H30FC)
 End Function
@@ -1501,6 +2022,7 @@ End Function
 ' iter18 ADR-0090: map ui_seed M-03 inputDataKey -> in-memory formatDict
 ' slot name expected by SaveFormat_Workflow / LoadFormat_Workflow.
 Public Function MapInputDataKeyToFieldName_M03(ByVal inputKey As String) As String
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0248] modEntryFormat.MapInputDataKeyToFieldName_M03 ENTER"  ' [ADR-0100]
     Select Case inputKey
         Case "targetFormat", "FormatID", "formatId", "fmtId"
             MapInputDataKeyToFieldName_M03 = "FormatID"
@@ -1511,13 +2033,15 @@ Public Function MapInputDataKeyToFieldName_M03(ByVal inputKey As String) As Stri
         Case Else
             MapInputDataKeyToFieldName_M03 = ""
     End Select
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0249] modEntryFormat.MapInputDataKeyToFieldName_M03 EXIT-OK"  ' [ADR-0100]
 End Function
 
 ' NormalizeFieldType: 6 UI labels -> 4 canonical base types
 ' (per ADR-0072 7.3). Already-canonical values pass through.
 Public Function NormalizeFieldType(ByVal raw As String) As String
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0250] modEntryFormat.NormalizeFieldType ENTER"  ' [ADR-0100]
     Dim t As String
-    t = Trim$(raw)
+    t = Trim(raw)
     Dim single_line As String, multi_line As String
     Dim date_type As String, select_type As String
     single_line = ChrW(&H5358) & ChrW(&H4E00) & ChrW(&H884C)
@@ -1543,5 +2067,6 @@ Public Function NormalizeFieldType(ByVal raw As String) As String
     Else
         NormalizeFieldType = t
     End If
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0251] modEntryFormat.NormalizeFieldType EXIT-OK"  ' [ADR-0100]
 End Function
 ```

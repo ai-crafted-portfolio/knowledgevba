@@ -1,0 +1,149 @@
+﻿site_name: 繝翫Ξ繝・ず邂｡逅・ヤ繝ｼ繝ｫ (VBA 陬ｽ)
+site_description: Excel VBA 繝吶・繧ｹ縺ｮ繝翫Ξ繝・ず邂｡逅・ヤ繝ｼ繝ｫ - 讒区・繝ｻ蟆主・繝ｻ謫堺ｽ懊・險ｭ險・site_url: https://ai-crafted-portfolio.github.io/knowledgevba/
+site_author: ai-crafted-portfolio
+
+copyright: Copyright &copy; 2026 ai-crafted-portfolio
+
+theme:
+  name: material
+  custom_dir: overrides
+  language: ja
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - navigation.indexes
+    - toc.integrate
+    - search.highlight
+    - search.suggest
+    - content.code.copy
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: 繝繝ｼ繧ｯ繝｢繝ｼ繝峨↓蛻・崛
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: 繝ｩ繧､繝医Δ繝ｼ繝峨↓蛻・崛
+  font:
+    text: Noto Sans JP
+    code: JetBrains Mono
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - attr_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+
+extra:
+  generator: false
+
+extra_css:
+  - stylesheets/extra.css
+
+nav:
+  - 讎りｦ・ index.md
+  - 險ｭ險・
+      - 蜈ｨ菴薙い繝ｼ繧ｭ繝・け繝√Ε: architecture.md
+      - 莉墓ｧ・ spec.md
+  - 菴ｿ縺・婿:
+      - 蟆主・謇矩・ setup.md
+      - 謫堺ｽ懈焔鬆・ operations.md
+  - 險ｭ螳壹→繧ｫ繧ｹ繧ｿ繝槭う繧ｺ:
+      - 險ｭ螳壼､縺ｮ螟画峩: settings.md
+      - 逕ｻ髱｢縺ｮ繧ｫ繧ｹ繧ｿ繝槭う繧ｺ: screen_customization_guide_v2.md
+  - 繧ｽ繝ｼ繧ｹ繧ｳ繝ｼ繝・
+      - 荳隕ｧ: source/index.md
+      - 繧､繝ｳ繧ｹ繝医・繝ｩ螻､:
+          - modSetup.bas: source/infrastructure/modsetup.md
+      - 繧ｨ繝ｳ繝医Μ繝昴う繝ｳ繝亥ｱ､:
+          - modEntryFormat.bas: source/entrypoint/modentryformat.md
+          - modEntryKnowledge.bas: source/entrypoint/modentryknowledge.md
+          - modEntrySearch.bas: source/entrypoint/modentrysearch.md
+          - modEntrySettings.bas: source/entrypoint/modentrysettings.md
+          - modSpecExamples.bas: source/entrypoint/modspecexamples.md
+      - 逕ｻ髱｢螻､:
+          - clsBackupMgmtScreen.cls: source/screen/clsbackupmgmtscreen.md
+          - clsErrorBandScreen.cls: source/screen/clserrorbandscreen.md
+          - clsFileFormatScreen.cls: source/screen/clsfileformatscreen.md
+          - clsFormatDesignScreen.cls: source/screen/clsformatdesignscreen.md
+          - clsFormatListScreen.cls: source/screen/clsformatlistscreen.md
+          - clsFormatPreviewScreen.cls: source/screen/clsformatpreviewscreen.md
+          - clsKnowledgeEditScreen.cls: source/screen/clsknowledgeeditscreen.md
+          - clsKnowledgeListScreen.cls: source/screen/clsknowledgelistscreen.md
+          - clsKnowledgeRegisterScreen.cls: source/screen/clsknowledgeregisterscreen.md
+          - clsKnowledgeViewScreen.cls: source/screen/clsknowledgeviewscreen.md
+          - clsLogScreen.cls: source/screen/clslogscreen.md
+          - clsMigrationScreen.cls: source/screen/clsmigrationscreen.md
+          - clsSearchScreen.cls: source/screen/clssearchscreen.md
+          - clsStorageScreen.cls: source/screen/clsstoragescreen.md
+          - clsSystemSettingsScreen.cls: source/screen/clssystemsettingsscreen.md
+      - 繝薙ず繝阪せ繝ｭ繧ｸ繝・け螻､:
+          - clsButtonSpec.cls: source/business-logic/clsbuttonspec.md
+          - clsControlSpec.cls: source/business-logic/clscontrolspec.md
+          - clsFieldMigrator.cls: source/business-logic/clsfieldmigrator.md
+          - clsFieldSpec.cls: source/business-logic/clsfieldspec.md
+          - clsFormatManager.cls: source/business-logic/clsformatmanager.md
+          - clsFormSpec.cls: source/business-logic/clsformspec.md
+          - clsKnowledgeManager.cls: source/business-logic/clsknowledgemanager.md
+          - clsLogger.cls: source/business-logic/clslogger.md
+          - clsScreenSpec.cls: source/business-logic/clsscreenspec.md
+          - clsSearchEngine.cls: source/business-logic/clssearchengine.md
+          - clsSectionSpec.cls: source/business-logic/clssectionspec.md
+          - clsSetupOrchestrator.cls: source/business-logic/clssetuporchestrator.md
+          - clsSheetRenderer.cls: source/business-logic/clssheetrenderer.md
+          - clsStorageResolver.cls: source/business-logic/clsstorageresolver.md
+          - clsUserFormRenderer.cls: source/business-logic/clsuserformrenderer.md
+          - IScreenRenderer.cls: source/business-logic/iscreenrenderer.md
+          - modFactory.bas: source/business-logic/modfactory.md
+          - modFormBuilder.bas: source/business-logic/modformbuilder.md
+          - modScreenRender.bas: source/business-logic/modscreenrender.md
+      - 繝ｦ繝ｼ繝・ぅ繝ｪ繝・ぅ螻､:
+          - clsCellAddrHelper.cls: source/utility/clscelladdrhelper.md
+          - clsCellBinding.cls: source/utility/clscellbinding.md
+          - clsCellIO.cls: source/utility/clscellio.md
+          - clsGridIO.cls: source/utility/clsgridio.md
+          - clsLogEntry.cls: source/utility/clslogentry.md
+          - ClsStanzaSection.cls: source/utility/clsstanzasection.md
+          - ClsStanzaValidationIssue.cls: source/utility/clsstanzavalidationissue.md
+          - ClsStanzaValidationResult.cls: source/utility/clsstanzavalidationresult.md
+          - modCommon.bas: source/utility/modcommon.md
+          - modConfigHolder.bas: source/utility/modconfigholder.md
+          - modConfigLoader.bas: source/utility/modconfigloader.md
+          - modDateUtil.bas: source/utility/moddateutil.md
+          - modFileIO.bas: source/utility/modfileio.md
+          - modFormatColumns.bas: source/utility/modformatcolumns.md
+          - modFormatLoader.bas: source/utility/modformatloader.md
+          - modImageRender.bas: source/utility/modimagerender.md
+          - modKnowledgeFileIO.bas: source/utility/modknowledgefileio.md
+          - modLogIds.bas: source/utility/modlogids.md
+          - modSheetMap.bas: source/utility/modsheetmap.md
+          - modStanzaIO.bas: source/utility/modstanzaio.md
+          - modStringUtil.bas: source/utility/modstringutil.md
+          - modUIConfig.bas: source/utility/moduiconfig.md
+          - modUILayoutExtractor.bas: source/utility/moduilayoutextractor.md
+          - modUILoader.bas: source/utility/moduiloader.md
+      - 迚ｹ谿翫Δ繧ｸ繝･繝ｼ繝ｫ:
+          - ThisWorkbook・域､懃ｴ｢.xlsm・・ source/special/thisworkbook-search.md
+          - ThisWorkbook・育匳骭ｲ菫ｮ豁｣.xlsm・・ source/special/thisworkbook-register.md
+          - ThisWorkbook・育ｮ｡逅・xlsm・・ source/special/thisworkbook-admin.md

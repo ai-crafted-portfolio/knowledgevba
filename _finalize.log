@@ -1,0 +1,257 @@
+﻿
+=== BEGIN 2026-06-01 22:43:34 ===
+
+=== Phase A: git reset --hard origin/main ===
+HEAD is now at 0a236b2 docs: revise site for knowledgevba v2.1 (3-xlsm split)
+
+reset exit=0
+HEAD=0a236b21801b4c0585ae066d99714abc9effabfa
+
+=== Phase B: restore install.md / usage.md / troubleshooting.md ===
+copied install/usage/troubleshooting
+
+=== Phase C: restore docs\modules\ tree ===
+modules tree restored, file count=69
+
+=== Phase D: replace mkdocs.yml with merged version ===
+mkdocs.yml replaced
+
+=== Phase E: clean stray writetest tmp ===
+removed _writetest.tmp
+
+=== Phase F: git status ===
+ M mkdocs.yml
+?? _bk/
+?? _chk.log
+?? _chk.ps1
+?? _commit_push.log
+?? _commit_push.ps1
+?? _diag.log
+?? _diag.ps1
+?? _finalize.log
+?? _finalize.ps1
+?? _merge_mkdocs.log
+?? _merge_mkdocs.ps1
+?? _mkdocs_merge.log
+?? _mkdocs_merge.py
+?? _mkdocs_merge_stdout.txt
+?? _pull_push.log
+?? _pull_push.ps1
+?? _rebase_strategy.ps1
+?? _session_push.log
+?? _session_push.ps1
+?? _show_remote.log
+?? _show_remote.ps1
+?? docs/install.md
+?? docs/modules/
+?? docs/troubleshooting.md
+?? docs/usage.md
+
+=== Phase G: git add ===
+git.exe : warning: in the working copy of 'mkdocs.yml', LF will be replaced by CRLF the next time Git touches it
+発生場所 C:\kvba\push\_finalize.ps1:49 文字:7
++ $g = (& git add docs/install.md docs/usage.md docs/troubleshooting.md ...
++       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (warning: in the... Git touches it:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+
+add exit=0
+
+=== Phase H: git status (post-add) ===
+A  docs/install.md
+A  docs/modules/admin/clsformatdesignscreen.cls.md
+A  docs/modules/admin/clsformatlistscreen.cls.md
+A  docs/modules/admin/clsformatpreviewscreen.cls.md
+A  docs/modules/admin/clslogscreen.cls.md
+A  docs/modules/admin/clsmigrationscreen.cls.md
+A  docs/modules/admin/clsstoragescreen.cls.md
+A  docs/modules/admin/clssystemsettingsscreen.cls.md
+A  docs/modules/admin/modentryformat.bas.md
+A  docs/modules/admin/modentrysettings.bas.md
+A  docs/modules/admin/thisworkbook.cls.md
+A  docs/modules/common/clsbuttonspec.cls.md
+A  docs/modules/common/clscelladdrhelper.cls.md
+A  docs/modules/common/clscellbinding.cls.md
+A  docs/modules/common/clscellio.cls.md
+A  docs/modules/common/clscontrolspec.cls.md
+A  docs/modules/common/clsfieldmigrator.cls.md
+A  docs/modules/common/clsfieldspec.cls.md
+A  docs/modules/common/clsformatmanager.cls.md
+A  docs/modules/common/clsformspec.cls.md
+A  docs/modules/common/clsgridio.cls.md
+A  docs/modules/common/clsknowledgemanager.cls.md
+A  docs/modules/common/clslogentry.cls.md
+A  docs/modules/common/clslogger.cls.md
+A  docs/modules/common/clsscreenspec.cls.md
+A  docs/modules/common/clssearchengine.cls.md
+A  docs/modules/common/clssectionspec.cls.md
+A  docs/modules/common/clssetuporchestrator.cls.md
+A  docs/modules/common/clssheetrenderer.cls.md
+A  docs/modules/common/clsstanzasection.cls.md
+A  docs/modules/common/clsstanzavalidationissue.cls.md
+A  docs/modules/common/clsstanzavalidationresult.cls.md
+A  docs/modules/common/clsstorageresolver.cls.md
+A  docs/modules/common/clsuserformrenderer.cls.md
+A  docs/modules/common/iscreenrenderer.cls.md
+A  docs/modules/common/modbuttonwiring.bas.md
+A  docs/modules/common/modcommon.bas.md
+A  docs/modules/common/modconfigholder.bas.md
+A  docs/modules/common/modconfigloader.bas.md
+A  docs/modules/common/moddateutil.bas.md
+A  docs/modules/common/mode2e_allbuttons.bas.md
+A  docs/modules/common/modentryuserform.bas.md
+A  docs/modules/common/modfactory.bas.md
+A  docs/modules/common/modfileio.bas.md
+A  docs/modules/common/modformatcolumns.bas.md
+A  docs/modules/common/modformatloader.bas.md
+A  docs/modules/common/modformbuilder.bas.md
+A  docs/modules/common/modknowledgefileio.bas.md
+A  docs/modules/common/modlogids.bas.md
+A  docs/modules/common/modrefresh.bas.md
+A  docs/modules/common/modscreenrender.bas.md
+A  docs/modules/common/modsetup.bas.md
+A  docs/modules/common/modsheetbuttons.bas.md
+A  docs/modules/common/modsheetmap.bas.md
+A  docs/modules/common/modspecexamples.bas.md
+A  docs/modules/common/modstanzaio.bas.md
+A  docs/modules/common/modstringutil.bas.md
+A  docs/modules/common/modtesthelpers.bas.md
+A  docs/modules/common/moduiloader.bas.md
+A  docs/modules/common/moduserformcallback.bas.md
+A  docs/modules/index.md
+A  docs/modules/register/clsknowledgeeditscreen.cls.md
+A  docs/modules/register/clsknowledgeregisterscreen.cls.md
+A  docs/modules/register/modentryknowledge.bas.md
+A  docs/modules/register/modknowledgeentryhelpers.bas.md
+A  docs/modules/register/thisworkbook.cls.md
+A  docs/modules/search/clsknowledgeviewscreen.cls.md
+A  docs/modules/search/clssearchscreen.cls.md
+A  docs/modules/search/modentrysearch.bas.md
+A  docs/modules/search/thisworkbook.cls.md
+A  docs/troubleshooting.md
+A  docs/usage.md
+M  mkdocs.yml
+?? _bk/
+?? _chk.log
+?? _chk.ps1
+?? _commit_push.log
+?? _commit_push.ps1
+?? _diag.log
+?? _diag.ps1
+?? _finalize.log
+?? _finalize.ps1
+?? _merge_mkdocs.log
+?? _merge_mkdocs.ps1
+?? _mkdocs_merge.log
+?? _mkdocs_merge.py
+?? _mkdocs_merge_stdout.txt
+?? _pull_push.log
+?? _pull_push.ps1
+?? _rebase_strategy.ps1
+?? _session_push.log
+?? _session_push.ps1
+?? _show_remote.log
+?? _show_remote.ps1
+
+=== Phase I: git diff --cached --stat ===
+staged file count=74
+ docs/usage.md                                      |  163 ++
+ mkdocs.yml                                         |   84 +-
+ 73 files changed, 22120 insertions(+), 5 deletions(-)
+
+=== Phase J: git commit ===
+[main 79f6aee] knowledgevba v2.3 site: 3 bat + ps1 fulltext + 68 module pages
+ 73 files changed, 22120 insertions(+), 5 deletions(-)
+ create mode 100644 docs/install.md
+ create mode 100644 docs/modules/admin/clsformatdesignscreen.cls.md
+ create mode 100644 docs/modules/admin/clsformatlistscreen.cls.md
+ create mode 100644 docs/modules/admin/clsformatpreviewscreen.cls.md
+ create mode 100644 docs/modules/admin/clslogscreen.cls.md
+ create mode 100644 docs/modules/admin/clsmigrationscreen.cls.md
+ create mode 100644 docs/modules/admin/clsstoragescreen.cls.md
+ create mode 100644 docs/modules/admin/clssystemsettingsscreen.cls.md
+ create mode 100644 docs/modules/admin/modentryformat.bas.md
+ create mode 100644 docs/modules/admin/modentrysettings.bas.md
+ create mode 100644 docs/modules/admin/thisworkbook.cls.md
+ create mode 100644 docs/modules/common/clsbuttonspec.cls.md
+ create mode 100644 docs/modules/common/clscelladdrhelper.cls.md
+ create mode 100644 docs/modules/common/clscellbinding.cls.md
+ create mode 100644 docs/modules/common/clscellio.cls.md
+ create mode 100644 docs/modules/common/clscontrolspec.cls.md
+ create mode 100644 docs/modules/common/clsfieldmigrator.cls.md
+ create mode 100644 docs/modules/common/clsfieldspec.cls.md
+ create mode 100644 docs/modules/common/clsformatmanager.cls.md
+ create mode 100644 docs/modules/common/clsformspec.cls.md
+ create mode 100644 docs/modules/common/clsgridio.cls.md
+ create mode 100644 docs/modules/common/clsknowledgemanager.cls.md
+ create mode 100644 docs/modules/common/clslogentry.cls.md
+ create mode 100644 docs/modules/common/clslogger.cls.md
+ create mode 100644 docs/modules/common/clsscreenspec.cls.md
+ create mode 100644 docs/modules/common/clssearchengine.cls.md
+ create mode 100644 docs/modules/common/clssectionspec.cls.md
+ create mode 100644 docs/modules/common/clssetuporchestrator.cls.md
+ create mode 100644 docs/modules/common/clssheetrenderer.cls.md
+ create mode 100644 docs/modules/common/clsstanzasection.cls.md
+ create mode 100644 docs/modules/common/clsstanzavalidationissue.cls.md
+ create mode 100644 docs/modules/common/clsstanzavalidationresult.cls.md
+ create mode 100644 docs/modules/common/clsstorageresolver.cls.md
+ create mode 100644 docs/modules/common/clsuserformrenderer.cls.md
+ create mode 100644 docs/modules/common/iscreenrenderer.cls.md
+ create mode 100644 docs/modules/common/modbuttonwiring.bas.md
+ create mode 100644 docs/modules/common/modcommon.bas.md
+ create mode 100644 docs/modules/common/modconfigholder.bas.md
+ create mode 100644 docs/modules/common/modconfigloader.bas.md
+ create mode 100644 docs/modules/common/moddateutil.bas.md
+ create mode 100644 docs/modules/common/mode2e_allbuttons.bas.md
+ create mode 100644 docs/modules/common/modentryuserform.bas.md
+ create mode 100644 docs/modules/common/modfactory.bas.md
+ create mode 100644 docs/modules/common/modfileio.bas.md
+ create mode 100644 docs/modules/common/modformatcolumns.bas.md
+ create mode 100644 docs/modules/common/modformatloader.bas.md
+ create mode 100644 docs/modules/common/modformbuilder.bas.md
+ create mode 100644 docs/modules/common/modknowledgefileio.bas.md
+ create mode 100644 docs/modules/common/modlogids.bas.md
+ create mode 100644 docs/modules/common/modrefresh.bas.md
+ create mode 100644 docs/modules/common/modscreenrender.bas.md
+ create mode 100644 docs/modules/common/modsetup.bas.md
+ create mode 100644 docs/modules/common/modsheetbuttons.bas.md
+ create mode 100644 docs/modules/common/modsheetmap.bas.md
+ create mode 100644 docs/modules/common/modspecexamples.bas.md
+ create mode 100644 docs/modules/common/modstanzaio.bas.md
+ create mode 100644 docs/modules/common/modstringutil.bas.md
+ create mode 100644 docs/modules/common/modtesthelpers.bas.md
+ create mode 100644 docs/modules/common/moduiloader.bas.md
+ create mode 100644 docs/modules/common/moduserformcallback.bas.md
+ create mode 100644 docs/modules/index.md
+ create mode 100644 docs/modules/register/clsknowledgeeditscreen.cls.md
+ create mode 100644 docs/modules/register/clsknowledgeregisterscreen.cls.md
+ create mode 100644 docs/modules/register/modentryknowledge.bas.md
+ create mode 100644 docs/modules/register/modknowledgeentryhelpers.bas.md
+ create mode 100644 docs/modules/register/thisworkbook.cls.md
+ create mode 100644 docs/modules/search/clsknowledgeviewscreen.cls.md
+ create mode 100644 docs/modules/search/clssearchscreen.cls.md
+ create mode 100644 docs/modules/search/modentrysearch.bas.md
+ create mode 100644 docs/modules/search/thisworkbook.cls.md
+ create mode 100644 docs/troubleshooting.md
+ create mode 100644 docs/usage.md
+
+commit exit=0
+HEAD=79f6aeef1dfb28f54adb02087531cd26c3fd8145
+
+=== Phase K: git push origin main ===
+git.exe : To https://github.com/ai-crafted-portfolio/knowledgevba.git
+発生場所 C:\kvba\push\_finalize.ps1:73 文字:7
++ $p = (& git push origin main 2>&1) | Out-String
++       ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (To https://gith...nowledgevba.git:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+   0a236b2..79f6aee  main -> main
+
+push exit=0
+
+=== Phase L: post-push ls-remote ===
+ls-remote=79f6aeef1dfb28f54adb02087531cd26c3fd8145	refs/heads/main
+
+=== END 2026-06-01 22:43:38 ===

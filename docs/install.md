@@ -181,6 +181,7 @@ C:\KnowledgeMgr\
 
 ```bat
 @echo off
+chcp 932 > nul
 setlocal EnableDelayedExpansion
 cd /d "%~dp0"
 
@@ -267,6 +268,7 @@ exit /b !PS_EXIT!
 
 ```bat
 @echo off
+chcp 932 > nul
 setlocal EnableDelayedExpansion
 cd /d "%~dp0"
 
@@ -347,6 +349,7 @@ exit /b !PS_EXIT!
 
 ```bat
 @echo off
+chcp 932 > nul
 setlocal EnableDelayedExpansion
 cd /d "%~dp0"
 
@@ -433,7 +436,7 @@ exit /b !PS_EXIT!
 - 文字コード: **UTF-8 (BOM 付き)**
 
 ```powershell
-[CmdletBinding()]
+�ｻｿ[CmdletBinding()]
 param(
     [Parameter(Mandatory = $true)]
     [string]$XlsmPath,
@@ -449,35 +452,35 @@ try { [Console]::OutputEncoding = [System.Text.Encoding]::UTF8 } catch {}
 # ====================================================================
 #  knowledgevba v2.3  _auto_install.ps1
 #  - install_register.bat / install_search.bat / install_admin.bat
-#    から共通で呼ばれる本体スクリプト。
-#  - 保存時の文字コード: UTF-8 (BOM 付き) / 改行: CRLF
-#  - 配置: C:\KnowledgeMgr\installer\_auto_install.ps1
+#    縺九ｉ蜈ｱ騾壹〒蜻ｼ縺ｰ繧後ｋ譛ｬ菴薙せ繧ｯ繝ｪ繝励ヨ縲�
+#  - 菫晏ｭ俶凾縺ｮ譁�蟄励さ繝ｼ繝�: UTF-8 (BOM 莉倥″) / 謾ｹ陦�: CRLF
+#  - 驟咲ｽｮ: C:\KnowledgeMgr\installer\_auto_install.ps1
 # ====================================================================
 
 function Write-Log($msg) {
     Write-Host ('[{0}] {1}' -f (Get-Date -Format 'HH:mm:ss'), $msg)
 }
 
-# ---- Step 1. パス検証 ----
+# ---- Step 1. 繝代せ讀懆ｨｼ ----
 if (-not (Test-Path -LiteralPath $XlsmPath)) {
-    Write-Host "[ERROR] ターゲット .xlsm が見つかりません: $XlsmPath" -ForegroundColor Red
+    Write-Host "[ERROR] 繧ｿ繝ｼ繧ｲ繝�繝� .xlsm 縺瑚ｦ九▽縺九ｊ縺ｾ縺帙ｓ: $XlsmPath" -ForegroundColor Red
     exit 1
 }
 $target = (Resolve-Path -LiteralPath $XlsmPath).Path
 $ext = [IO.Path]::GetExtension($target).ToLowerInvariant()
 if ($ext -ne '.xlsm') {
-    Write-Host "[ERROR] .xlsm ではありません (拡張子 $ext)。本書 §16.4 で .xlsm を作成してください。" -ForegroundColor Red
+    Write-Host "[ERROR] .xlsm 縺ｧ縺ｯ縺ゅｊ縺ｾ縺帙ｓ (諡｡蠑ｵ蟄� $ext)縲よ悽譖ｸ ﾂｧ16.4 縺ｧ .xlsm 繧剃ｽ懈�舌＠縺ｦ縺上□縺輔＞縲�" -ForegroundColor Red
     exit 1
 }
 
-# ---- Step 1.5 (v2.3 2026-05-27): ui_seed を config の ui_dir に自動配布 ----
-# 配布物は dist_v2\ui_seed\{管理|登録修正|検索}\M-NN.txt を含む。
-# config.txt の ui_dir (例: C:\KnowledgeMgr\ui\) 直下へ <xlsmFolder>\M-NN.txt を
-# コピーする。既存ファイルは上書き (旧 v2.2 stanza の置換が目的)。
+# ---- Step 1.5 (v2.3 2026-05-27): ui_seed 繧� config 縺ｮ ui_dir 縺ｫ閾ｪ蜍暮�榊ｸ� ----
+# 驟榊ｸ�迚ｩ縺ｯ dist_v2\ui_seed\{邂｡逅�|逋ｻ骭ｲ菫ｮ豁｣|讀懃ｴ｢}\M-NN.txt 繧貞性繧縲�
+# config.txt 縺ｮ ui_dir (萓�: C:\KnowledgeMgr\ui\) 逶ｴ荳九∈ <xlsmFolder>\M-NN.txt 繧�
+# 繧ｳ繝斐�ｼ縺吶ｋ縲よ里蟄倥ヵ繧｡繧､繝ｫ縺ｯ荳頑嶌縺� (譌ｧ v2.2 stanza 縺ｮ鄂ｮ謠帙′逶ｮ逧�)縲�
 $roleToJp = @{
-    'admin'    = ([char]0x7BA1)+([char]0x7406)                     # 管理
-    'register' = ([char]0x767B)+([char]0x9332)+([char]0x4FEE)+([char]0x6B63)  # 登録修正
-    'search'   = ([char]0x691C)+([char]0x7D22)                     # 検索
+    'admin'    = ([char]0x7BA1)+([char]0x7406)                     # 邂｡逅�
+    'register' = ([char]0x767B)+([char]0x9332)+([char]0x4FEE)+([char]0x6B63)  # 逋ｻ骭ｲ菫ｮ豁｣
+    'search'   = ([char]0x691C)+([char]0x7D22)                     # 讀懃ｴ｢
 }
 $xlsmJp = $roleToJp[$Role]
 $uiSeedSrc = Join-Path (Split-Path -Parent $MyInvocation.MyCommand.Definition) ('..\ui_seed\' + $xlsmJp)
@@ -508,37 +511,46 @@ if($uiDir -and (Test-Path -LiteralPath $uiSeedSrc)){
     Get-ChildItem -LiteralPath $uiSeedSrc -File | ForEach-Object {
         Copy-Item -LiteralPath $_.FullName -Destination $uiDst -Force
     }
-    Write-Log ("[OK] ui_seed 配布: {0} -> {1}" -f $uiSeedSrc, $uiDst)
+    Write-Log ("[OK] ui_seed 驟榊ｸ�: {0} -> {1}" -f $uiSeedSrc, $uiDst)
 } else {
-    Write-Log ("[INFO] ui_seed 配布スキップ (uiDir={0} src={1})" -f $uiDir, $uiSeedSrc)
+    Write-Log ("[INFO] ui_seed 驟榊ｸ�繧ｹ繧ｭ繝�繝� (uiDir={0} src={1})" -f $uiDir, $uiSeedSrc)
 }
 
-# ---- Step 2. モジュール配置 (common + <role>) を列挙 ----
+# ---- Step 2. 繝｢繧ｸ繝･繝ｼ繝ｫ驟咲ｽｮ (common + <role>) 繧貞�玲嫌 ----
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Definition
 $commonDir = Join-Path $scriptDir 'vba_modules\common'
 $roleDir   = Join-Path $scriptDir ('vba_modules\' + $Role)
 
 foreach ($d in @($commonDir, $roleDir)) {
     if (-not (Test-Path -LiteralPath $d)) {
-        Write-Host "[ERROR] フォルダが見つかりません: $d" -ForegroundColor Red
+        Write-Host "[ERROR] 繝輔か繝ｫ繝縺瑚ｦ九▽縺九ｊ縺ｾ縺帙ｓ: $d" -ForegroundColor Red
         exit 1
     }
 }
 
 $allFiles = @()
-$allFiles += Get-ChildItem -LiteralPath $commonDir -Recurse -File | Where-Object { $_.Extension -in @('.bas', '.cls') }
-$allFiles += Get-ChildItem -LiteralPath $roleDir   -Recurse -File | Where-Object { $_.Extension -in @('.bas', '.cls') }
+# Filter: only allow well-formed module names (modX/clsX/ClsX/IX + .bas/.cls)
+# Reject: literal-path-as-filename buggy files, .bak.* / .bak_* artifacts
+$validFilter = {
+    $_.Extension -in @('.bas', '.cls') -and
+    $_.Length -gt 100 -and
+    $_.Name -match '^[A-Za-z][A-Za-z0-9_]*\.(bas|cls)$' -and
+    $_.Name -notlike '*.bak.*' -and
+    $_.Name -notlike '*.bak_*'
+}
+$allFiles += Get-ChildItem -LiteralPath $commonDir -Recurse -File | Where-Object $validFilter
+$allFiles += Get-ChildItem -LiteralPath $roleDir   -Recurse -File | Where-Object $validFilter
 
-# ThisWorkbook.cls は Document module なので Import せず CodeModule.AddFromString で本体だけ流し込む
+# ThisWorkbook.cls 縺ｯ Document module 縺ｪ縺ｮ縺ｧ Import 縺帙★ CodeModule.AddFromString 縺ｧ譛ｬ菴薙□縺第ｵ√＠霎ｼ繧
 $thisWorkbookFile = $allFiles | Where-Object { $_.Name -eq 'ThisWorkbook.cls' } | Select-Object -First 1
 $importFiles      = $allFiles | Where-Object { $_.Name -ne 'ThisWorkbook.cls' }
 
-Write-Log ('[OK] モジュール列挙: 全 {0} 本 (内 ThisWorkbook 1 / Import 対象 {1})' -f $allFiles.Count, $importFiles.Count)
+Write-Log ('[OK] 繝｢繧ｸ繝･繝ｼ繝ｫ蛻玲嫌: 蜈ｨ {0} 譛ｬ (蜀� ThisWorkbook 1 / Import 蟇ｾ雎｡ {1})' -f $allFiles.Count, $importFiles.Count)
 
-# ---- Step 3. staging: source は CP932+CRLF (Phase E 規約)。
-# v2.3 fix (2026-05-27): source が UTF-8 (BOM 有無問わず) の場合も対応。
-# UTF-8 として valid なら UTF-8 として decode、そうでなければ CP932 として decode。
-# 書き戻しは常に CP932 + CRLF (VBE Import が CP932 を期待するため)。
+# ---- Step 3. staging: source 縺ｯ CP932+CRLF (Phase E 隕冗ｴ�)縲�
+# v2.3 fix (2026-05-27): source 縺� UTF-8 (BOM 譛臥┌蝠上ｏ縺�) 縺ｮ蝣ｴ蜷医ｂ蟇ｾ蠢懊�
+# UTF-8 縺ｨ縺励※ valid 縺ｪ繧� UTF-8 縺ｨ縺励※ decode縲√◎縺�縺ｧ縺ｪ縺代ｌ縺ｰ CP932 縺ｨ縺励※ decode縲�
+# 譖ｸ縺肴綾縺励�ｯ蟶ｸ縺ｫ CP932 + CRLF (VBE Import 縺� CP932 繧呈悄蠕�縺吶ｋ縺溘ａ)縲�
 $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
 $utf8Strict = New-Object System.Text.UTF8Encoding($false, $true)
 $cp932     = [System.Text.Encoding]::GetEncoding(932)
@@ -566,15 +578,15 @@ foreach ($f in $importFiles) {
     $bytes  = [IO.File]::ReadAllBytes($f.FullName)
     $text   = Decode-Source $bytes
     $text   = $text -replace "`r`n", "`n"
-    $text   = $text -replace "`n", "`r`n"   # CRLF 強制
+    $text   = $text -replace "`n", "`r`n"   # CRLF 蠑ｷ蛻ｶ
     # Encode CP932 with replacement fallback (any non-CP932 char becomes '?' but no crash)
     $outBytes = $cp932Repl.GetBytes($text)
     [IO.File]::WriteAllBytes($destFp, $outBytes)
     $stagedPaths += $destFp
 }
-Write-Log ('[OK] staging 完了: {0}' -f $staging)
+Write-Log ('[OK] staging 螳御ｺ�: {0}' -f $staging)
 
-# ---- Step 4. ThisWorkbook.cls 本体抽出 ----
+# ---- Step 4. ThisWorkbook.cls 譛ｬ菴捺歓蜃ｺ ----
 $thisWorkbookBody = ''
 if ($thisWorkbookFile -ne $null) {
     $twbBytes = [IO.File]::ReadAllBytes($thisWorkbookFile.FullName)
@@ -591,45 +603,62 @@ if ($thisWorkbookFile -ne $null) {
         if ($seenAttr -or $trim -ne '') { $startIdx = $i; break }
     }
     $thisWorkbookBody = ($rawLines[$startIdx..($rawLines.Count - 1)] -join "`r`n")
-    Write-Log '[OK] ThisWorkbook 本体抽出 完了'
+    Write-Log '[OK] ThisWorkbook 譛ｬ菴捺歓蜃ｺ 螳御ｺ�'
 } else {
-    Write-Host "[WARN] ThisWorkbook.cls が見つかりません (Role=$Role)。" -ForegroundColor Yellow
+    Write-Host "[WARN] ThisWorkbook.cls 縺瑚ｦ九▽縺九ｊ縺ｾ縺帙ｓ (Role=$Role)縲�" -ForegroundColor Yellow
 }
 
-# ---- Step 5. Excel COM 起動 ----
-Write-Log '[..] Excel COM 起動'
+# ---- Step 5. Excel COM 襍ｷ蜍� ----
+Write-Log '[..] Excel COM 襍ｷ蜍�'
 $excel = New-Object -ComObject Excel.Application
-$excel.Visible        = $false
+$excel.Visible        = $true
 $excel.DisplayAlerts  = $false
-$excel.EnableEvents   = $false   # Workbook_Open 暴発抑止
+$excel.EnableEvents   = $false   # Workbook_Open 證ｴ逋ｺ謚第ｭ｢
 $excel.AskToUpdateLinks = $false
 try { $excel.AutomationSecurity = 1 } catch {}   # msoAutomationSecurityLow
 
 $wb = $null
 try {
     $wb = $excel.Workbooks.Open($target, 0, $false)
-    $vbProj = $wb.VBProject   # ← VBA project model 信頼が ON でないと「アクセスが拒否されました」
+    $vbProj = $wb.VBProject   # 竊� VBA project model 菫｡鬆ｼ縺� ON 縺ｧ縺ｪ縺�縺ｨ縲後い繧ｯ繧ｻ繧ｹ縺梧拠蜷ｦ縺輔ｌ縺ｾ縺励◆縲�
 
-    # ---- Step 6. 既存同名モジュール削除 (Document module = Type 100 はスキップ) ----
-    $existing = @()
-    foreach ($vc in $vbProj.VBComponents) { $existing += [string]$vc.Name }
+    # ---- Step 6. 譌｢蟄伜酔蜷阪Δ繧ｸ繝･繝ｼ繝ｫ蜑企勁 + 菴吝�� module strict purge (Document module = Type 100 縺ｯ繧ｹ繧ｭ繝�繝�) ----
+    # iter23 (2026-06-01): canonical role 縺ｨ辟｡髢｢菫ゅ↑驕主悉谿狗蕗 module 繧貞�ｨ驛ｨ Remove 縺吶ｋ
+    # strict mode 蛹悶ゅ％繧後′縺ｪ縺�縺ｨ驕主悉 install 縺ｧ豺ｷ蜈･縺励◆ modEntrySettings 遲峨′螻�蠎ｧ縺｣縺ｦ
+    # Application.Run 隗｣豎ｺ陦晉ｪ√ｒ襍ｷ縺薙＠縲・2E 縺後後�槭け繝ｭ繧貞ｮ溯｡後〒縺阪∪縺帙ｓ縲阪〒螟ｱ謨励☆繧九�
+    $importNameSet = @{}
     foreach ($f in $importFiles) {
-        $modName = [IO.Path]::GetFileNameWithoutExtension($f.Name)
-        if ($existing -contains $modName) {
+        $importNameSet[[IO.Path]::GetFileNameWithoutExtension($f.Name)] = $true
+    }
+    $allComponentNames = @()
+    foreach ($vc in $vbProj.VBComponents) { $allComponentNames += [string]$vc.Name }
+    foreach ($modName in $allComponentNames) {
+        try {
             $vc = $vbProj.VBComponents.Item($modName)
-            if ($vc.Type -ne 100) {
-                $vbProj.VBComponents.Remove($vc) | Out-Null
-            }
+        } catch { continue }
+        if ($vc.Type -eq 100) { continue }   # Document module (ThisWorkbook/Sheet*) 縺ｯ keep
+        # canonical importFiles 縺ｫ蜷ｫ縺ｾ繧後ｋ name 縺ｯ蜀� Import 縺ｧ鄂ｮ謠帙☆繧九◆繧� Remove
+        # canonical importFiles 縺ｫ蜷ｫ縺ｾ繧後↑縺� name 縺ｯ菴吝��谿狗蕗 竊� 蜷後§縺� Remove (strict purge)
+        try {
+            $vbProj.VBComponents.Remove($vc) | Out-Null
+        } catch {
+            Write-Log ('[WARN] Remove FAIL: ' + $modName + ' (' + $_.Exception.Message + ')')
         }
     }
 
-    # ---- Step 7. .bas / .cls を全件 Import ----
+    # ---- Step 6.5. deferred Remove 遒ｺ螳� (feedback_cls_deferred_remove) ----
+    Write-Log '[..] Step 6.5 wb.Save() after Remove (deferred remove flush)'
+    $wb.Save()
+    Start-Sleep -Seconds 1
+    Write-Log '[OK] Step 6.5 Save + Sleep complete'
+
+    # ---- Step 7. .bas / .cls 繧貞�ｨ莉ｶ Import ----
     foreach ($p in $stagedPaths) {
         $vbProj.VBComponents.Import($p) | Out-Null
     }
-    Write-Log ('[OK] Import 完了 ({0} module)' -f $stagedPaths.Count)
+    Write-Log ('[OK] Import 螳御ｺ� ({0} module)' -f $stagedPaths.Count)
 
-    # ---- Step 8. ThisWorkbook 本体差し替え ----
+    # ---- Step 8. ThisWorkbook 譛ｬ菴灘ｷｮ縺玲崛縺� ----
     if ($thisWorkbookBody -ne '') {
         $twb = $vbProj.VBComponents.Item('ThisWorkbook')
         $cm  = $twb.CodeModule
@@ -637,26 +666,26 @@ try {
             $cm.DeleteLines(1, $cm.CountOfLines) | Out-Null
         }
         $cm.AddFromString($thisWorkbookBody)
-        Write-Log '[OK] ThisWorkbook 本体注入 完了'
+        Write-Log '[OK] ThisWorkbook 譛ｬ菴捺ｳｨ蜈･ 螳御ｺ�'
     }
 
-    # ---- Step 9. 一旦保存 (コンパイル確定) ----
+    # ---- Step 9. 荳譌ｦ菫晏ｭ� (繧ｳ繝ｳ繝代う繝ｫ遒ｺ螳�) ----
     $wb.Save()
 
-    # ---- Step 10. セットアップマクロを Application.Run で起動 ----
+    # ---- Step 10. 繧ｻ繝�繝医い繝�繝励�槭け繝ｭ繧� Application.Run 縺ｧ襍ｷ蜍� ----
     $setupName = 'Setup_' + $Role   # Setup_register / Setup_search / Setup_admin
     Write-Log ('[..] Application.Run "{0}"' -f $setupName)
     try {
         $excel.Run($setupName) | Out-Null
-        Write-Log ('[OK] {0} 完了' -f $setupName)
+        Write-Log ('[OK] {0} 螳御ｺ�' -f $setupName)
     } catch {
-        Write-Host ('[ERROR] {0} 実行に失敗: {1}' -f $setupName, $_.Exception.Message) -ForegroundColor Red
+        Write-Host ('[ERROR] {0} 螳溯｡後↓螟ｱ謨�: {1}' -f $setupName, $_.Exception.Message) -ForegroundColor Red
         throw
     }
 
-    # ---- Step 11. セットアップ後の状態を保存 ----
+    # ---- Step 11. 繧ｻ繝�繝医い繝�繝怜ｾ後�ｮ迥ｶ諷九ｒ菫晏ｭ� ----
     $wb.Save()
-    Write-Log '[OK] xlsm 保存 完了'
+    Write-Log '[OK] xlsm 菫晏ｭ� 螳御ｺ�'
 }
 catch {
     Write-Host ('[ERROR] {0}' -f $_.Exception.Message) -ForegroundColor Red
@@ -673,7 +702,7 @@ finally {
     try { Remove-Item -LiteralPath $staging -Recurse -Force -ErrorAction SilentlyContinue } catch {}
 }
 
-Write-Log '[DONE] install + setup 完了'
+Write-Log '[DONE] install + setup 螳御ｺ�'
 exit 0
 ```
 
@@ -700,9 +729,9 @@ C:\KnowledgeMgr\
 | `vba_modules\admin\` | 10 | [管理.xlsm 用モジュール一覧](modules/index.md#xlsm-installervba_modulesadmin) |
 | `vba_modules\register\` | 5 | [登録修正.xlsm 用モジュール一覧](modules/index.md#xlsm-installervba_modulesregister) |
 | `vba_modules\search\` | 4 | [検索.xlsm 用モジュール一覧](modules/index.md#xlsm-installervba_modulessearch) |
-| `vba_modules\common\` | 49 | [共通モジュール一覧](modules/index.md#installervba_modulescommon) |
+| `vba_modules\common\` | 64 | [共通モジュール一覧](modules/index.md#installervba_modulescommon) |
 
-合計 **68 ファイル** あります。すべて保存し終わったら STEP 7 に進んでください。
+合計 **83 ファイル** あります。すべて保存し終わったら STEP 7 に進んでください。
 
 !!! warning "モジュールファイルの保存形式"
     `.bas` / `.cls` の文字コードは **ANSI（Shift-JIS）** で保存してください。本インストーラは UTF-8 (BOM 有無いずれも) でも自動変換しますが、CP932（ANSI）が確実です。改行コードは **CRLF** にしてください。

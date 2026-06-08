@@ -1,31 +1,23 @@
 ---
 title: modEntrySearch.bas
-description: modEntrySearch.bas ‚Ìƒ\[ƒXƒR[ƒhiƒRƒsƒy—pj
+description: modEntrySearch.bas ã®ã‚½ãƒ¼ã‚¹ã‚³ãƒ¼ãƒ‰ï¼ˆã‚³ãƒ”ãƒšç”¨ï¼‰
 ---
 
 # modEntrySearch.bas
 
-**”z’uæ**: `ŒŸõ.xlsm` —p‚Ì VBA ƒ‚ƒWƒ…[ƒ‹  
-**Ží—Þ**: •W€ƒ‚ƒWƒ…[ƒ‹
+**é…ç½®å…ˆ**: `æ¤œç´¢.xlsm` ç”¨ã® VBA ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«
+**ç¨®é¡ž**: æ¨™æº–ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«
 
 ---
 
-## •Û‘¶•û–@
+## ãƒ•ã‚¡ã‚¤ãƒ«ã¨ã—ã¦ä¿å­˜
 
-‰º‚ÌƒR[ƒh‚ðƒƒ‚’ ‚É“\‚è•t‚¯A**[–¼‘O‚ð•t‚¯‚Ä•Û‘¶]** ‚ÅŽŸ‚Ì‚æ‚¤‚É•Û‘¶‚µ‚Ä‚­‚¾‚³‚¢B
-
-- êŠ: `C:\KnowledgeMgr\installer\vba_modules\search\`
-- ƒtƒ@ƒCƒ‹–¼: `modEntrySearch.bas`
-- ƒtƒ@ƒCƒ‹‚ÌŽí—Þ: **‚·‚×‚Ä‚Ìƒtƒ@ƒCƒ‹**
-- •¶ŽšƒR[ƒh: **ANSI**iShift-JISj
-
-> ƒƒ‚’ ‚Ì•¶ŽšƒR[ƒh‚ð **ANSI** ‚É‚µ‚È‚¢‚ÆAVBA ‚Ì“ú–{Œê‚ª•¶Žš‰»‚¯‚µ‚Ä“®‚©‚È‚­‚È‚è‚Ü‚·B
-> UTF-8 ‚Å•Û‘¶‚·‚é‚Æ VBA Import Žž‚É“ú–{Œê‚ª•¶Žš‰»‚¯‚µ‚Ä“®‚©‚È‚­‚È‚è‚Ü‚·B
-> ‰üsƒR[ƒh‚Í CRLFiWindows •W€j‚Ì‚Ü‚Ü‚Å OK ‚Å‚·B
+ãƒ¡ãƒ¢å¸³ï¼ˆã¾ãŸã¯ä»»æ„ã®ãƒ†ã‚­ã‚¹ãƒˆã‚¨ãƒ‡ã‚£ã‚¿ï¼‰ã«ä¸‹ã®ã‚½ãƒ¼ã‚¹ã‚³ãƒ¼ãƒ‰å…¨æ–‡ã‚’è²¼ã‚Šä»˜ã‘ã€**`modEntrySearch.bas`** ã¨ã„ã†åå‰ã§ `installer\vba_modules\search\` é…ä¸‹ã«ä¿å­˜ã—ã¦ãã ã•ã„ã€‚æ–‡å­—ã‚³ãƒ¼ãƒ‰ã¯ ANSIï¼ˆShift-JISï¼‰ã€æ”¹è¡Œã¯ CRLF ã«ã—ã¦ãã ã•ã„ã€‚
 
 ---
 
-## ƒ\[ƒXƒR[ƒh
+## ã‚½ãƒ¼ã‚¹ã‚³ãƒ¼ãƒ‰
+
 
 ```vb
 Attribute VB_Name = "modEntrySearch"
@@ -49,7 +41,19 @@ Private Const M08_RESULT_START_ROW As Long = 14
 Private Const M08_RESULT_LAST_ROW As Long = 200
 
 Public Sub Btn_SearchV23()
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1792] modEntrySearch.Btn_SearchV23 ENTER"  ' [ADR-0100]
     On Error GoTo ErrHandler
+    ' [BTN-GUARD-PRELUDE-BEGIN] auto-injected by inject_btn_template.py
+    Const BTN As String = "Btn_SearchV23"
+    Dim XLSM As String
+    XLSM = ChrW(&H691C) & ChrW(&H7D22)
+    modBtnGuard.LogEnter BTN, XLSM
+    If Not modBtnGuard.CheckPrereq(BTN, "config;data_dir", XLSM) Then
+        modBtnGuard.LogExit BTN, XLSM, False
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1793] modEntrySearch.Btn_SearchV23 EXIT-OK"  ' [ADR-0100]
+        Exit Sub
+    End If
+    ' [BTN-GUARD-PRELUDE-END]
     Dim ws As Worksheet
     Set ws = ResolveSearchSheet()
     If ws Is Nothing Then Exit Sub
@@ -59,8 +63,8 @@ Public Sub Btn_SearchV23()
     On Error GoTo ErrHandler
 
     Dim keyword As String, fmtFilter As String
-    keyword = Trim$(CStr(ws.Range(M08_CELL_KEYWORD).Value))
-    fmtFilter = Trim$(CStr(ws.Range(M08_CELL_FORMAT).Value))
+    keyword = Trim(CStr(ws.Range(M08_CELL_KEYWORD).Value))
+    fmtFilter = Trim(CStr(ws.Range(M08_CELL_FORMAT).Value))
 
     Dim clearRng As Range
     Set clearRng = ws.Range(ws.Cells(M08_RESULT_START_ROW, 1), ws.Cells(M08_RESULT_LAST_ROW, 8))
@@ -80,6 +84,7 @@ Public Sub Btn_SearchV23()
     Set fso = CreateObject("Scripting.FileSystemObject")
     If Not fso.FolderExists(dataDir) Then
         ws.Range("A" & M08_RESULT_START_ROW).Value = "(data_dir not found: " & dataDir & ")"
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1794] modEntrySearch.Btn_SearchV23 EXIT-OK"  ' [ADR-0100]
         Exit Sub
     End If
 
@@ -90,7 +95,7 @@ Public Sub Btn_SearchV23()
 
     Dim f As Object
     For Each f In fso.GetFolder(dataDir).Files
-        If LCase$(fso.GetExtensionName(f.Name)) = "txt" Then
+        If LCase(fso.GetExtensionName(f.Name)) = "txt" Then
             Dim knwNo As String
             knwNo = fso.GetBaseName(f.Name)
             Dim data As Object
@@ -98,8 +103,8 @@ Public Sub Btn_SearchV23()
             If Not data Is Nothing Then
                 If MatchesSearchV23(data, keyword, fmtFilter) Then
                     ' SPEC_DRIFT-NEW3 fix (2026-05-31): format-aware subject/excerpt
-                    ' resolution. Old NthFieldValue(data,1/2) placed FldA into Œ–¼ col
-                    ' and FldB into Ž–Û”²ˆ col for SAGYO - wrong order.
+                    ' resolution. Old NthFieldValue(data,1/2) placed FldA into ä»¶å col
+                    ' and FldB into äº‹è±¡æŠœç²‹ col for SAGYO - wrong order.
                     Dim subjKey As String, excKey As String
                     SubjectAndExcerptKeys data, SafeStr(data, "FormatID"), subjKey, excKey
 
@@ -126,6 +131,24 @@ Public Sub Btn_SearchV23()
         End If
     Next f
 
+    ' 2026-06-08 UX: extend grid borders/styling to all written rows so
+    ' result rows past the initial 10 don't appear as bare cells.
+    If hitCount > 0 Then
+        Dim styRng As Range
+        Set styRng = ws.Range(ws.Cells(M08_RESULT_START_ROW, 1), ws.Cells(outRow - 1, 7))
+        styRng.Borders.LineStyle = xlContinuous
+        styRng.Borders.Weight = xlThin
+        styRng.Borders.Color = RGB(191, 191, 191)
+        Dim rr As Long
+        For rr = M08_RESULT_START_ROW To outRow - 1
+            If (rr - M08_RESULT_START_ROW) Mod 2 = 1 Then
+                ws.Range(ws.Cells(rr, 1), ws.Cells(rr, 7)).Interior.Color = RGB(247, 247, 247)
+            Else
+                ws.Range(ws.Cells(rr, 1), ws.Cells(rr, 7)).Interior.ColorIndex = xlNone
+            End If
+        Next rr
+    End If
+
     On Error Resume Next
     Dim lg As clsLogger
     Set lg = New clsLogger
@@ -134,14 +157,32 @@ Public Sub Btn_SearchV23()
         "search done keyword=" & keyword & " fmt=" & fmtFilter & " hits=" & hitCount, _
         "", "LOG-M08-SEARCH-OK"
     On Error GoTo 0
+    ' [BTN-GUARD-EXIT-OK] auto-injected
+    modBtnGuard.LogExit BTN, XLSM, True
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1795] modEntrySearch.Btn_SearchV23 EXIT-OK"  ' [ADR-0100]
     Exit Sub
 
 ErrHandler:
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-1796] modEntrySearch.Btn_SearchV23 EXIT-ERR " & "errNum=" & Err.Number & " desc=" & Err.Description  ' [ADR-0100]
+    ' [BTN-GUARD-ERR-LOG] auto-injected
+    modBtnGuard.LogExit BTN, XLSM, False
     Debug.Print "[ERR] Btn_SearchV23: " & Err.Number & " " & Err.Description
 End Sub
 
 Public Sub Btn_SearchClearV23()
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1797] modEntrySearch.Btn_SearchClearV23 ENTER"  ' [ADR-0100]
     On Error GoTo ErrHandler
+    ' [BTN-GUARD-PRELUDE-BEGIN] auto-injected by inject_btn_template.py
+    Const BTN As String = "Btn_SearchClearV23"
+    Dim XLSM As String
+    XLSM = ChrW(&H691C) & ChrW(&H7D22)
+    modBtnGuard.LogEnter BTN, XLSM
+    If Not modBtnGuard.CheckPrereq(BTN, "config", XLSM) Then
+        modBtnGuard.LogExit BTN, XLSM, False
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1798] modEntrySearch.Btn_SearchClearV23 EXIT-OK"  ' [ADR-0100]
+        Exit Sub
+    End If
+    ' [BTN-GUARD-PRELUDE-END]
     Dim ws As Worksheet
     Set ws = ResolveSearchSheet()
     If ws Is Nothing Then Exit Sub
@@ -158,14 +199,24 @@ Public Sub Btn_SearchClearV23()
     Set aColRng = ws.Range(ws.Cells(M08_RESULT_START_ROW, 1), ws.Cells(M08_RESULT_LAST_ROW, 1))
     aColRng.Font.ColorIndex = xlAutomatic
     aColRng.Font.Underline = xlUnderlineStyleNone
+    ' 2026-06-08 UX: also clear extended grid borders + alternating row tint
+    clearRng.Borders.LineStyle = xlNone
+    clearRng.Interior.ColorIndex = xlNone
+    ' [BTN-GUARD-EXIT-OK] auto-injected
+    modBtnGuard.LogExit BTN, XLSM, True
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1799] modEntrySearch.Btn_SearchClearV23 EXIT-OK"  ' [ADR-0100]
     Exit Sub
 ErrHandler:
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-1800] modEntrySearch.Btn_SearchClearV23 EXIT-ERR " & "errNum=" & Err.Number & " desc=" & Err.Description  ' [ADR-0100]
+    ' [BTN-GUARD-ERR-LOG] auto-injected
+    modBtnGuard.LogExit BTN, XLSM, False
     Debug.Print "[ERR] Btn_SearchClearV23: " & Err.Number & " " & Err.Description
 End Sub
 
 ' --- helpers ---
 
 Private Function ResolveSearchSheet() As Worksheet
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1801] modEntrySearch.ResolveSearchSheet ENTER"  ' [ADR-0100]
     On Error Resume Next
     Dim jp As String
     jp = ChrW(&H30CA) & ChrW(&H30EC) & ChrW(&H30C3) & ChrW(&H30B8) & ChrW(&H691C) & ChrW(&H7D22)
@@ -174,19 +225,23 @@ Private Function ResolveSearchSheet() As Worksheet
     If ws Is Nothing Then Set ws = ThisWorkbook.Worksheets("M-08")
     Set ResolveSearchSheet = ws
     On Error GoTo 0
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1802] modEntrySearch.ResolveSearchSheet EXIT-OK"  ' [ADR-0100]
 End Function
 
 Private Function MatchesSearchV23(ByVal data As Object, ByVal keyword As String, ByVal fmtFilter As String) As Boolean
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1803] modEntrySearch.MatchesSearchV23 ENTER"  ' [ADR-0100]
     If Len(fmtFilter) > 0 Then
         Dim actual As String
         actual = SafeStr(data, "FormatID")
         If actual <> fmtFilter Then
             MatchesSearchV23 = False
+            If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1804] modEntrySearch.MatchesSearchV23 EXIT-OK"  ' [ADR-0100]
             Exit Function
         End If
     End If
     If Len(keyword) = 0 Then
         MatchesSearchV23 = True
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1805] modEntrySearch.MatchesSearchV23 EXIT-OK"  ' [ADR-0100]
         Exit Function
     End If
     Dim k As Variant
@@ -195,6 +250,7 @@ Private Function MatchesSearchV23(ByVal data As Object, ByVal keyword As String,
         v = CStr(data(CStr(k)))
         If InStr(1, v, keyword, vbTextCompare) > 0 Then
             MatchesSearchV23 = True
+            If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1806] modEntrySearch.MatchesSearchV23 EXIT-OK"  ' [ADR-0100]
             Exit Function
         End If
     Next k
@@ -202,12 +258,14 @@ Private Function MatchesSearchV23(ByVal data As Object, ByVal keyword As String,
 End Function
 
 Private Function SafeStr(ByVal data As Object, ByVal key As String) As String
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1807] modEntrySearch.SafeStr ENTER"  ' [ADR-0100]
     If data Is Nothing Then Exit Function
     If data.Exists(key) Then SafeStr = CStr(data(key))
 End Function
 
 ' Phase R-3-Omega legacy helper (kept for now).
 Private Function NthFieldValue(ByVal data As Object, ByVal n As Long) As String
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1808] modEntrySearch.NthFieldValue ENTER"  ' [ADR-0100]
     If data Is Nothing Then Exit Function
     Dim meta As String
     meta = "|KnowledgeNo|FormatID|FormatId|FormatVersion|CreatedAt|UpdatedAt|"
@@ -220,8 +278,9 @@ Private Function NthFieldValue(ByVal data As Object, ByVal n As Long) As String
             If cnt = n Then
                 Dim v As String
                 v = CStr(data(CStr(k)))
-                If Len(v) > 50 Then v = Left$(v, 50) & "..."
+                If Len(v) > 50 Then v = Left(v, 50) & "..."
                 NthFieldValue = v
+                If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1809] modEntrySearch.NthFieldValue EXIT-OK"  ' [ADR-0100]
                 Exit Function
             End If
         End If
@@ -229,6 +288,7 @@ Private Function NthFieldValue(ByVal data As Object, ByVal n As Long) As String
 End Function
 
 Private Function FirstTextFieldValue(ByVal data As Object) As String
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1810] modEntrySearch.FirstTextFieldValue ENTER"  ' [ADR-0100]
     If data Is Nothing Then Exit Function
     Dim k As Variant
     For Each k In data.Keys
@@ -238,8 +298,9 @@ Private Function FirstTextFieldValue(ByVal data As Object) As String
             Dim v As String
             v = CStr(data(ks))
             If Len(v) > 0 Then
-                If Len(v) > 50 Then v = Left$(v, 50) & "..."
+                If Len(v) > 50 Then v = Left(v, 50) & "..."
                 FirstTextFieldValue = v
+                If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1811] modEntrySearch.FirstTextFieldValue EXIT-OK"  ' [ADR-0100]
                 Exit Function
             End If
         End If
@@ -248,14 +309,16 @@ End Function
 
 ' SPEC_DRIFT-NEW3 (2026-05-31): trim a value for the subject / excerpt result columns.
 Private Function TrimExcerpt(ByVal v As String) As String
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1812] modEntrySearch.TrimExcerpt ENTER"  ' [ADR-0100]
     Dim s As String
     s = v
     s = Replace(s, vbCrLf, " ")
     s = Replace(s, vbCr, " ")
     s = Replace(s, vbLf, " ")
-    s = Trim$(s)
-    If Len(s) > 50 Then s = Left$(s, 50) & "..."
+    s = Trim(s)
+    If Len(s) > 50 Then s = Left(s, 50) & "..."
     TrimExcerpt = s
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1813] modEntrySearch.TrimExcerpt EXIT-OK"  ' [ADR-0100]
 End Function
 
 ' SPEC_DRIFT-NEW3 (2026-05-31): resolve subject/excerpt keys for a record.
@@ -263,6 +326,7 @@ Private Sub SubjectAndExcerptKeys(ByVal data As Object, _
                                   ByVal formatId As String, _
                                   ByRef subjKey As String, _
                                   ByRef excKey As String)
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1814] modEntrySearch.SubjectAndExcerptKeys ENTER"  ' [ADR-0100]
     subjKey = ""
     excKey = ""
 
@@ -344,6 +408,7 @@ Private Sub SubjectAndExcerptKeys(ByVal data As Object, _
             End If
         Next k
     End If
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1815] modEntrySearch.SubjectAndExcerptKeys EXIT-OK"  ' [ADR-0100]
 End Sub
 
 ' ================================================================
@@ -355,7 +420,19 @@ End Sub
 ' IsTestMode guard skips modal MsgBox during E2E runs.
 ' ================================================================
 Public Sub Btn_OpenViewFromSheet()
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1816] modEntrySearch.Btn_OpenViewFromSheet ENTER"  ' [ADR-0100]
     On Error GoTo ErrHandler
+    ' [BTN-GUARD-PRELUDE-BEGIN] auto-injected by inject_btn_template.py
+    Const BTN As String = "Btn_OpenViewFromSheet"
+    Dim XLSM As String
+    XLSM = ChrW(&H691C) & ChrW(&H7D22)
+    modBtnGuard.LogEnter BTN, XLSM
+    If Not modBtnGuard.CheckPrereq(BTN, "config;data_dir", XLSM) Then
+        modBtnGuard.LogExit BTN, XLSM, False
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1817] modEntrySearch.Btn_OpenViewFromSheet EXIT-OK"  ' [ADR-0100]
+        Exit Sub
+    End If
+    ' [BTN-GUARD-PRELUDE-END]
     Dim jpName As String
     jpName = ChrW(&H30CA) & ChrW(&H30EC) & ChrW(&H30C3) & ChrW(&H30B8) & ChrW(&H8868) & ChrW(&H793A)
     Dim ws As Worksheet
@@ -365,21 +442,23 @@ Public Sub Btn_OpenViewFromSheet()
     On Error GoTo ErrHandler
     If ws Is Nothing Then
         Debug.Print "[INFO] Btn_OpenViewFromSheet: M-09 sheet retired (ADR-0085)"
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1818] modEntrySearch.Btn_OpenViewFromSheet EXIT-OK"  ' [ADR-0100]
         Exit Sub
     End If
 
     Dim kidCell As String
     kidCell = ResolveM09KidCell()
     Dim kid As String
-    kid = Trim$(CStr(ws.Range(kidCell).Value))
+    kid = Trim(CStr(ws.Range(kidCell).Value))
 
     If Len(kid) = 0 Then
         If Not IsTestMode() Then
             Dim msgEmpty As String
             msgEmpty = kidCell & ChrW(&H306B) & ChrW(&H30CA) & ChrW(&H30EC) & ChrW(&H30C3) & ChrW(&H30B8) & ChrW(&H756A) & ChrW(&H53F7) & ChrW(&H3092) & ChrW(&H5165) & ChrW(&H529B) & ChrW(&H3057) & ChrW(&H3066) & ChrW(&H304F) & ChrW(&H3060) & ChrW(&H3055) & ChrW(&H3044)
-            MsgBox msgEmpty, vbExclamation, "Btn_OpenViewFromSheet"
+            MsgBox msgEmpty, vbExclamation, ChrW(&H8A73) & ChrW(&H7D30) & ChrW(&H8868) & ChrW(&H793A)
         End If
         Debug.Print "[WARN] Btn_OpenViewFromSheet: kid empty cell=" & kidCell
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1819] modEntrySearch.Btn_OpenViewFromSheet EXIT-OK"  ' [ADR-0100]
         Exit Sub
     End If
 
@@ -388,13 +467,20 @@ Public Sub Btn_OpenViewFromSheet()
     Set engine = NewSearchEngine()
     If Not engine Is Nothing Then engine.DisplayKnowledge kid
     On Error GoTo ErrHandler
+    ' [BTN-GUARD-EXIT-OK] auto-injected
+    modBtnGuard.LogExit BTN, XLSM, True
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1820] modEntrySearch.Btn_OpenViewFromSheet EXIT-OK"  ' [ADR-0100]
     Exit Sub
 
 ErrHandler:
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-1821] modEntrySearch.Btn_OpenViewFromSheet EXIT-ERR " & "errNum=" & Err.Number & " desc=" & Err.Description  ' [ADR-0100]
+    ' [BTN-GUARD-ERR-LOG] auto-injected
+    modBtnGuard.LogExit BTN, XLSM, False
     Debug.Print "[ERR] Btn_OpenViewFromSheet: " & Err.Number & " " & Err.Description
 End Sub
 
 Private Function ResolveM09KidCell() As String
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1822] modEntrySearch.ResolveM09KidCell ENTER"  ' [ADR-0100]
     On Error Resume Next
     Dim uiCol As Collection
     Set uiCol = modUILoader.LoadUiDefinition("search", "M-09")
@@ -416,18 +502,22 @@ Private Function ResolveM09KidCell() As String
     Err.Clear
     On Error GoTo 0
     ResolveM09KidCell = "C5"
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1823] modEntrySearch.ResolveM09KidCell EXIT-OK"  ' [ADR-0100]
 End Function
 
 Private Function IsTestMode() As Boolean
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1824] modEntrySearch.IsTestMode ENTER"  ' [ADR-0100]
     On Error Resume Next
     IsTestMode = False
     Dim v As String
     v = Environ$("KNW_TEST_MODE")
-    If LCase$(v) = "1" Or LCase$(v) = "true" Then IsTestMode = True
+    If LCase(v) = "1" Or LCase(v) = "true" Then IsTestMode = True
     On Error GoTo 0
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1825] modEntrySearch.IsTestMode EXIT-OK"  ' [ADR-0100]
 End Function
 
 Private Function NewSearchEngine() As clsSearchEngine
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1826] modEntrySearch.NewSearchEngine ENTER"  ' [ADR-0100]
     On Error Resume Next
     Set NewSearchEngine = New clsSearchEngine
     On Error GoTo 0
