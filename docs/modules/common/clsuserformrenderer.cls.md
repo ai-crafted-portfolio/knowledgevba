@@ -1,19 +1,32 @@
 ---
 title: clsUserFormRenderer.cls
-description: clsUserFormRenderer.cls ã®ã‚½ãƒ¼ã‚¹ã‚³ãƒ¼ãƒ‰ï¼ˆã‚³ãƒ”ãEç”¨EE---
+description: clsUserFormRenderer.cls ã®ã‚½ãƒ¼ã‚¹ã‚³ãƒ¼ãƒ‰ï¼ˆã‚³ãƒ”ãƒšç”¨ï¼‰
+---
 
 # clsUserFormRenderer.cls
 
-**é…ç½®å…E*: `å…¨ãƒ–ãƒƒã‚¯å…±é€š` ç”¨ã® VBA ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«
-**ç¨®é¡E*: ã‚¯ãƒ©ã‚¹ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«
+**é…ç½®å…ˆ**: å…±é€šãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ï¼ˆ3 ãƒ–ãƒƒã‚¯å…±é€šï¼‰
+**ç¨®é¡**: ã‚¯ãƒ©ã‚¹ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«
 
 ---
 
-## ãƒ•ã‚¡ã‚¤ãƒ«ã¨ã—ã¦ä¿å­E
-ãƒ¡ãƒ¢å¸³Eˆã¾ãŸãEä»»æ„ãEãƒE‚­ã‚¹ãƒˆã‚¨ãƒE‚£ã‚¿E‰ã«ä¸‹ãEã‚½ãƒ¼ã‚¹ã‚³ãƒ¼ãƒ‰åEæ–E‚’è²¼ã‚Šä»˜ã‘ã€E*`clsUserFormRenderer.cls`** ã¨ãE†åå‰ã§ `installer\vba_modules\common\` é…ä¸‹ã«ä¿å­˜ã—ã¦ãã ã•ã„ã€‚æ–‡å­—ã‚³ãƒ¼ãƒ‰ãE ANSIEEhift-JISE‰ã€æ”¹è¡ŒãE CRLF ã«ã—ã¦ãã ã•ã„ã€E
+## ä¿å­˜æ–¹æ³•
+
+ä¸‹ã®ã‚³ãƒ¼ãƒ‰ã‚’ãƒ¡ãƒ¢å¸³ã«è²¼ã‚Šä»˜ã‘ã€**[åå‰ã‚’ä»˜ã‘ã¦ä¿å­˜]** ã§æ¬¡ã®ã‚ˆã†ã«ä¿å­˜ã—ã¦ãã ã•ã„ã€‚
+
+- å ´æ‰€: `C:\KnowledgeMgr\installer\vba_modules\common\\`
+- ãƒ•ã‚¡ã‚¤ãƒ«å: `clsUserFormRenderer.cls`
+- ãƒ•ã‚¡ã‚¤ãƒ«ã®ç¨®é¡: **ã™ã¹ã¦ã®ãƒ•ã‚¡ã‚¤ãƒ«**
+- æ–‡å­—ã‚³ãƒ¼ãƒ‰: **ANSI**ï¼ˆShift-JISï¼‰
+
+> ãƒ¡ãƒ¢å¸³ã®æ–‡å­—ã‚³ãƒ¼ãƒ‰ã‚’ **ANSI** ã«ã—ãªã„ã¨ã€VBA ã®æ—¥æœ¬èªãŒæ–‡å­—åŒ–ã‘ã—ã¦å‹•ã‹ãªããªã‚Šã¾ã™ã€‚
+> UTF-8 ã§ä¿å­˜ã™ã‚‹ã¨ VBA Import æ™‚ã«æ—¥æœ¬èªãŒæ–‡å­—åŒ–ã‘ã—ã¦å‹•ã‹ãªããªã‚Šã¾ã™ã€‚
+> æ”¹è¡Œã‚³ãƒ¼ãƒ‰ã¯ CRLFï¼ˆWindows æ¨™æº–ï¼‰ã®ã¾ã¾ã§ OK ã§ã™ã€‚
+
 ---
 
-## ã‚½ãƒ¼ã‚¹ã‚³ãƒ¼ãƒE
+## ã‚½ãƒ¼ã‚¹ã‚³ãƒ¼ãƒ‰
+
 ```vb
 VERSION 1.0 CLASS
 BEGIN
@@ -43,16 +56,16 @@ Attribute VB_Exposed = False
 '   ????   -> Forms.TextBox.1 (single line + date validation in change event)
 '   ?I??   -> Forms.ComboBox.1 (Style=fmStyleDropDownList)
 ' Layout (design book A4):
-'   formWidth = 540 (ˆÄA’ù³ mock 720px=540pt), label width = 120, control width = formWidth - 140
+'   formWidth = 540 (æ¡ˆAè¨‚æ­£ mock 720px=540pt), label width = 120, control width = formWidth - 140
 '   headerHeight = 48, rowHeight ?P??s/????/?I?? = 24, rowHeight ?????s = 60
 '   buttonBarHeight = 40, bottomMargin = 16
 ' ================================================================
 Implements IScreenRenderer
 Option Explicit
 
-' --- Layout DEFAULTS (˜A4 ˆÄA’ù³ŒãEmock €‹’ 540pt/720px; overridable via [USERFORM] stanza) ---
-' ˜A4 À‘• SSOT: formWidth=540(pt; mock 720px €‹’ ˆÄA 2026-05-28), labelWidth=120, headerHeight=48, rowHeight(’Pˆês/“ú/‘I‘ğ)=24,
-' rowHeight(•¡”s)=60, margin=10, buttonBarHeight=40, button ‚‚³=24/ŠÔŠu=8, bottomMargin=16.
+' --- Layout DEFAULTS (Â§A4 æ¡ˆAè¨‚æ­£å¾Œãƒ»mock æº–æ‹  540pt/720px; overridable via [USERFORM] stanza) ---
+' Â§A4 å®Ÿè£… SSOT: formWidth=540(pt; mock 720px æº–æ‹  æ¡ˆA 2026-05-28), labelWidth=120, headerHeight=48, rowHeight(å˜ä¸€è¡Œ/æ—¥æ™‚/é¸æŠ)=24,
+' rowHeight(è¤‡æ•°è¡Œ)=60, margin=10, buttonBarHeight=40, button é«˜ã•=24/é–“éš”=8, bottomMargin=16.
 ' All values can be overridden per-screen via ui_seed/<role>/M-XX.txt [USERFORM] section.
 Private Const DEFAULT_FORM_WIDTH As Long = 486
 Private Const DEFAULT_FORM_HEIGHT As Long = 0                 ' 0 = auto-compute from rows
@@ -62,14 +75,14 @@ Private Const DEFAULT_MARGIN As Long = 18
 Private Const DEFAULT_BADGE_WIDTH As Long = 29
 Private Const DEFAULT_BADGE_HEIGHT As Long = 16
 Private Const DEFAULT_BADGE_GAP As Long = 3
-' Phase R-3-ƒÔ-3 (2026-05-28): c•À‚Ñ layout (label sã + data s‘S•‰º)B
-' row pitch(total) = labelZone(18) + dataHeight + rowSpacing(6)B
+' Phase R-3-Ï‡-3 (2026-05-28): ç¸¦ä¸¦ã³ layout (label è¡Œä¸Š + data è¡Œå…¨å¹…ä¸‹)ã€‚
+' row pitch(total) = labelZone(18) + dataHeight + rowSpacing(6)ã€‚
 '   single 48 = 18 + 24 + 6 / multi 114 = 18 + 90 + 6 / multiLong 129 = 18 + 105 + 6
 Private Const DEFAULT_ROW_HEIGHT_SINGLE As Long = 48
 Private Const DEFAULT_ROW_HEIGHT_MULTI As Long = 114
 Private Const DEFAULT_ROW_HEIGHT_MULTI_LONG As Long = 129
-' c•À‚Ñ layout ’è” (label control ‚ / label-data ŠÔ gap / data ‰º spacing)B
-' label zone = VLABEL_H + VLABEL_GAP = 18BdataHeight = rowPitch - 18 - VROW_SPACINGB
+' ç¸¦ä¸¦ã³ layout å®šæ•° (label control é«˜ / label-data é–“ gap / data ä¸‹ spacing)ã€‚
+' label zone = VLABEL_H + VLABEL_GAP = 18ã€‚dataHeight = rowPitch - 18 - VROW_SPACINGã€‚
 Private Const VLABEL_H As Long = 16
 Private Const VLABEL_GAP As Long = 2
 Private Const VROW_SPACING As Long = 6
@@ -135,7 +148,7 @@ Private m_captionOverride As String       ' empty = use mode-derived title
 Private m_backColor As String             ' RRGGBB hex; empty = OS default
 Private m_headerFields As String          ' Phase R-2 F-1: comma-separated ids
 Private m_formatSelectorType As String    ' Phase R-2 F-3: "textbox" | "dropdown"
-Private m_formatRowEnabled As Boolean      ' Phase R-3-ƒÔ-5: format s•\¦(default mode=register ‚Ì‚İAui_seed formatRowEnabled ‚Åã‘‚«‰Â)
+Private m_formatRowEnabled As Boolean      ' Phase R-3-Ï‡-5: format è¡Œè¡¨ç¤º(default mode=register ã®ã¿ã€ui_seed formatRowEnabled ã§ä¸Šæ›¸ãå¯)
 Private m_knowledgeData As Object         ' Phase R-2: header field value source
 Private m_formatHelp As String            ' Phase R-2 F-2: help line under format selector
 Private m_headerHelp As Object            ' Phase R-2 F-2: Dict id->help line text
@@ -156,14 +169,14 @@ Private Const PROGID_TEXTBOX As String = "Forms.TextBox.1"
 Private Const PROGID_COMBOBOX As String = "Forms.ComboBox.1"
 Private Const PROGID_LABEL As String = "Forms.Label.1"
 Private Const PROGID_BUTTON As String = "Forms.CommandButton.1"
-' Phase R-3-ƒÔ-4 (2026-05-28): ˆÄC/ˆÄA scroll ‰» ? ŒÅ’è header + frScroll FrameB
+' Phase R-3-Ï‡-4 (2026-05-28): æ¡ˆC/æ¡ˆA scroll åŒ– ? å›ºå®š header + frScroll Frameã€‚
 Private Const PROGID_FRAME As String = "Forms.Frame.1"
-' V5 fix (2026-05-30) BUG-1: 1080px ‰æ–Ê‚Å button bar ‚ª‰æ–ÊŠO‚Éo‚é regression ‚ğ–h‚®‚½‚ß
-' SCROLL_FORM_CAP ‚ğ 900¨720 ‚É‰º‚° (72pt/inch ~ 10in = 720pt = ~960pxAExcel chrome + taskbar TœŒã‚Ì
-' ˆÀ‘SŒ—)B’´‰ß•ª‚Í frScroll “àƒXƒNƒ[ƒ‹‚Å‹zû‚·‚éB
-' V4 fix (2026-05-29) #3 —š—ğ: M-09uŒ´ˆöv‰B‚ê‰ñ”ğ‚Å 900pt ‚ÉŠg’£‚µ‚½‚ªA1080px screen ‚Å
-' button bar ‰æ–ÊŠO–ŒÌ‚ªo‚½‚½‚ßÄk¬B’· field ‚Í frame scroll ‚ÅŒ©‚¹‚éB
-Private Const SCROLL_FORM_CAP As Long = 720   ' form inside ‚‚ÌãŒÀ(pt)B’´‰ß•ª‚Í frame “àƒXƒNƒ[ƒ‹B
+' V5 fix (2026-05-30) BUG-1: 1080px ç”»é¢ã§ button bar ãŒç”»é¢å¤–ã«å‡ºã‚‹ regression ã‚’é˜²ããŸã‚
+' SCROLL_FORM_CAP ã‚’ 900â†’720 ã«ä¸‹ã’ (72pt/inch Ã— 10in = 720pt = ~960pxã€Excel chrome + taskbar æ§é™¤å¾Œã®
+' å®‰å…¨åœ)ã€‚è¶…éåˆ†ã¯ frScroll å†…ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ã§å¸åã™ã‚‹ã€‚
+' V4 fix (2026-05-29) #3 å±¥æ­´: M-09ã€ŒåŸå› ã€éš ã‚Œå›é¿ã§ 900pt ã«æ‹¡å¼µã—ãŸãŒã€1080px screen ã§
+' button bar ç”»é¢å¤–äº‹æ•…ãŒå‡ºãŸãŸã‚å†ç¸®å°ã€‚é•· field ã¯ frame scroll ã§è¦‹ã›ã‚‹ã€‚
+Private Const SCROLL_FORM_CAP As Long = 720   ' form inside é«˜ã®ä¸Šé™(pt)ã€‚è¶…éåˆ†ã¯ frame å†…ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ã€‚
 
 ' --- Module-level state (single-instance UserForm session) ---
 Private m_returnId As String          ' return value from form: knowledgeId / "DELETED" / ""
@@ -175,10 +188,10 @@ Private m_readOnlyFormat As Boolean   ' format selection locked (edit/view)
 Private m_fieldCount As Long
 Private m_dynFormName As String
 
-' Phase R-3-ƒÔ-4: scroll ‰» ? ŒÅ’è header ‚Ì‰º‚É’u‚­ frScroll Frame ‚Æ¡–@B
-Private m_scrollFrame As Object       ' frScroll Frame (field ŒQ‚Ì container)
-Private m_headerHeightPx As Long      ' ŒÅ’è header ‚(format selector + button bar)
-Private m_scrollHeightPx As Long      ' frame “à content total ‚ (= Frame.ScrollHeight)
+' Phase R-3-Ï‡-4: scroll åŒ– ? å›ºå®š header ã®ä¸‹ã«ç½®ã frScroll Frame ã¨å¯¸æ³•ã€‚
+Private m_scrollFrame As Object       ' frScroll Frame (field ç¾¤ã® container)
+Private m_headerHeightPx As Long      ' å›ºå®š header é«˜(format selector + button bar)
+Private m_scrollHeightPx As Long      ' frame å†… content total é«˜ (= Frame.ScrollHeight)
 
 ' Phase R-1-j (2026-05-28): path-verify dump output path. When non-empty,
 ' BuildAndShow performs the build phase, dumps designer.Controls to this
@@ -258,8 +271,8 @@ Public Function ShowForm( _
         Set knowledgeData = Nothing
     End If
 
-    ' Phase R-3-ƒÔ-2: preview mode (M-04) ? fixed format from caller, no data load.
-    ' M-09 ‚Æ“¯ interface (•\¦ê—p popup) ‚ÅA·‚ÍuÀƒf[ƒ^‚ğ load ‚µ‚È‚¢v“_‚Ì‚İB
+    ' Phase R-3-Ï‡-2: preview mode (M-04) ? fixed format from caller, no data load.
+    ' M-09 ã¨åŒ interface (è¡¨ç¤ºå°‚ç”¨ popup) ã§ã€å·®ã¯ã€Œå®Ÿãƒ‡ãƒ¼ã‚¿ã‚’ load ã—ãªã„ã€ç‚¹ã®ã¿ã€‚
     If m_mode = "preview" And Len(formatId) > 0 Then m_formatId = formatId
 
     ' Build dynamic form, generate controls, show, dispose. Result in m_returnId.
@@ -328,7 +341,7 @@ Private Sub InitFormConfig()
     m_backColor = DEFAULT_BACK_COLOR
     m_headerFields = DEFAULT_HEADER_FIELDS
     m_formatSelectorType = "textbox"
-    ' Phase R-3-ƒÔ-5: format s‚ÍŠù’è‚Å register ‚Ì‚İ•\¦(M-04/M-06/M-09 ‚Í–{‘Ì‚©‚çœŠO)B
+    ' Phase R-3-Ï‡-5: format è¡Œã¯æ—¢å®šã§ register ã®ã¿è¡¨ç¤º(M-04/M-06/M-09 ã¯æœ¬ä½“ã‹ã‚‰é™¤å¤–)ã€‚
     m_formatRowEnabled = (m_mode = "register")
     m_formatHelp = ""
     Set m_headerHelp = CreateObject("Scripting.Dictionary")
@@ -471,7 +484,7 @@ Private Sub ApplyConfigFromStanza(ByVal sec As ClsStanzaSection)
     If Len(v) > 0 Then m_headerFields = v
     v = Trim(sec.GetValue("formatSelectorType"))
     If Len(v) > 0 Then m_formatSelectorType = LCase(v)
-    ' Phase R-3-ƒÔ-5: format s‚Ì•\¦‰Â”Û‚ğ ui_seed ‚Å–¾¦ã‘‚«(M-04/06/09=false)B
+    ' Phase R-3-Ï‡-5: format è¡Œã®è¡¨ç¤ºå¯å¦ã‚’ ui_seed ã§æ˜ç¤ºä¸Šæ›¸ã(M-04/06/09=false)ã€‚
     v = LCase(Trim(sec.GetValue("formatRowEnabled")))
     If Len(v) > 0 Then m_formatRowEnabled = (v = "true" Or v = "1" Or v = "yes")
     v = Trim(sec.GetValue("formatHelp"))
@@ -579,7 +592,7 @@ Private Sub BuildAndShow(ByVal knowledgeData As Object)
     m_headerHeightPx = hdrFmtBottom
     LogToSheet "BuildAndShow", "step 7 fixed header(title+format) headerH=" & m_headerHeightPx, "LOG-UF-STEP-07"
 
-    ' chrome À‘ª‚Ì‚½‚ß Width/Height ‚ğb’èİ’è
+    ' chrome å®Ÿæ¸¬ã®ãŸã‚ Width/Height ã‚’æš«å®šè¨­å®š
     Dim chromeW As Long, chromeH As Long
     chromeW = 0: chromeH = 0
     vbc.Properties("Width") = m_formWidth
@@ -591,32 +604,32 @@ Private Sub BuildAndShow(ByVal knowledgeData As Object)
     If chromeW < 1 Then chromeW = 12
     If chromeH < 1 Then chromeH = 29
 
-    ' scroll area Frame (header ‚Ì‰º)
+    ' scroll area Frame (header ã®ä¸‹)
     Dim fr As Object
     Set fr = designer.Controls.Add(PROGID_FRAME, "frScroll", True)
     fr.caption = ""
     fr.top = m_headerHeightPx
     fr.left = 0
     fr.Width = m_formWidth
-    ' V4 fix (2026-05-29) #1/#5 (revised): Frame ‚Ì sunken/etched ˜g + ŠDF”wŒi‚ğÁ‚·B
-    ' V4-iter1 ‚Å BorderStyle=fmBorderStyleNone ‚ğ’Ç‰Á‚µ‚½‚ç M-05 register ‚ª
-    ' 1 field ‚µ‚©•`‰æ‚³‚ê‚È‚¢ regression ‚ªo‚½‚½‚ß (frame ‚Ì inset+clipping d—l•Ï‰»)A
-    ' BorderStyle ‚Í default (0=fmBorderStyleNone ‚Í•Ï‚¦‚¸) + SpecialEffect=0(flat)
-    ' + BackColor=”’ ‚Åu˜gŒ©‚½–Ú‚¾‚¯v—}‚¦‚é•ûŒü‚ÉU‚éB
+    ' V4 fix (2026-05-29) #1/#5 (revised): Frame ã® sunken/etched æ  + ç°è‰²èƒŒæ™¯ã‚’æ¶ˆã™ã€‚
+    ' V4-iter1 ã§ BorderStyle=fmBorderStyleNone ã‚’è¿½åŠ ã—ãŸã‚‰ M-05 register ãŒ
+    ' 1 field ã—ã‹æç”»ã•ã‚Œãªã„ regression ãŒå‡ºãŸãŸã‚ (frame ã® inset+clipping ä»•æ§˜å¤‰åŒ–)ã€
+    ' BorderStyle ã¯ default (0=fmBorderStyleNone ã¯å¤‰ãˆãš) + SpecialEffect=0(flat)
+    ' + BackColor=ç™½ ã§ã€Œæ è¦‹ãŸç›®ã ã‘ã€æŠ‘ãˆã‚‹æ–¹å‘ã«æŒ¯ã‚‹ã€‚
     On Error Resume Next
-    fr.SpecialEffect = 0       ' fmSpecialEffectFlat (etched ˜g‚ğÁ‚·)
+    fr.SpecialEffect = 0       ' fmSpecialEffectFlat (etched æ ã‚’æ¶ˆã™)
     Dim bcFrame As Long
     bcFrame = ParseHexColor(m_backColor)
     If bcFrame >= 0 Then fr.BackColor = bcFrame
     On Error GoTo ErrHandler
     Set m_scrollFrame = fr
 
-    ' scroll content (frame-relative À•W‚Å frScroll “à‚É¶¬)
+    ' scroll content (frame-relative åº§æ¨™ã§ frScroll å†…ã«ç”Ÿæˆ)
     Dim y As Long
     Dim kOff As Long
-    kOff = AddKnowledgeNoRow(fr)                        ' ƒiƒŒƒbƒW”Ô†s(edit/view); M-05=0
+    kOff = AddKnowledgeNoRow(fr)                        ' ãƒŠãƒ¬ãƒƒã‚¸ç•ªå·è¡Œ(edit/view); M-05=0
     y = m_margin + kOff
-    y = AddHeaderFields(fr, y)                          ' —\’è”Ô† “™ header fields
+    y = AddHeaderFields(fr, y)                          ' äºˆå®šç•ªå· ç­‰ header fields
     AddSubheaderRow fr, y
     y = y + m_subheaderHeight
     Dim i As Long
@@ -630,7 +643,7 @@ Private Sub BuildAndShow(ByVal knowledgeData As Object)
     m_scrollHeightPx = contentBottom
     LogToSheet "BuildAndShow", "step 8 scroll content bottom=" & contentBottom, "LOG-UF-STEP-08"
 
-    ' ŒÅ’è form inside ‚: “à—e‚ªû‚Ü‚ê‚Î‚»‚Ì‚Ü‚ÜA’´‚¦‚½‚ç cap ‚Å frame “àƒXƒNƒ[ƒ‹
+    ' å›ºå®š form inside é«˜: å†…å®¹ãŒåã¾ã‚Œã°ãã®ã¾ã¾ã€è¶…ãˆãŸã‚‰ cap ã§ frame å†…ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«
     Dim formInsideH As Long
     Dim fullNeeded As Long
     fullNeeded = m_headerHeightPx + contentBottom + m_buttonBarHeight + 8
@@ -682,9 +695,9 @@ Private Sub BuildAndShow(ByVal knowledgeData As Object)
     Set ufInstance = VBA.UserForms.Add(m_dynFormName)
     PopulateComboBoxesOnInstance ufInstance
 
-    ' V4 fix (2026-05-29) #M-05: register ƒ‚[ƒh‚Å frScroll “à‚Ì field ŒQ‚ª
-    ' 1 Œ‚µ‚© paint ‚³‚ê‚È‚¢ regression ‚ª”­¶ (q agent dump ‚Å 11 Œ‘S\’zÏ
-    ' Šm”F)Bframe ‚Ì ScrollTop ‚ğ 0 ‚É reset + Repaint nudge ‚Å‰Šú•`‰æ‚ğ‹­§B
+    ' V4 fix (2026-05-29) #M-05: register ãƒ¢ãƒ¼ãƒ‰ã§ frScroll å†…ã® field ç¾¤ãŒ
+    ' 1 ä»¶ã—ã‹ paint ã•ã‚Œãªã„ regression ãŒç™ºç”Ÿ (å­ agent dump ã§ 11 ä»¶å…¨æ§‹ç¯‰æ¸ˆ
+    ' ç¢ºèª)ã€‚frame ã® ScrollTop ã‚’ 0 ã« reset + Repaint nudge ã§åˆæœŸæç”»ã‚’å¼·åˆ¶ã€‚
     On Error Resume Next
     Dim frLive As Object
     Set frLive = ufInstance.Controls("frScroll")
@@ -723,8 +736,8 @@ ErrHandler:
     On Error GoTo 0
 End Sub
 
-' Phase R-3-ƒÔ-4: find a control by name on the live form, searching direct
-' controls then the frScroll frame's children (one level). field Œn‚Í frScroll “àB
+' Phase R-3-Ï‡-4: find a control by name on the live form, searching direct
+' controls then the frScroll frame's children (one level). field ç³»ã¯ frScroll å†…ã€‚
 Private Function FindCtlOnForm(ByVal uf As Object, ByVal ctlName As String) As Object
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0792] clsUserFormRenderer.FindCtlOnForm ENTER"  ' [ADR-0100]
     On Error Resume Next
@@ -761,7 +774,7 @@ Private Sub PopulateComboBoxesOnInstance(ByVal uf As Object)
         Dim items As Variant
         items = m_comboItemsByCtl(CStr(ctlName))
         Dim cb As Object
-        Set cb = FindCtlOnForm(uf, CStr(ctlName))   ' R-3-ƒÔ-4: frScroll frame “à‚à’Tõ
+        Set cb = FindCtlOnForm(uf, CStr(ctlName))   ' R-3-Ï‡-4: frScroll frame å†…ã‚‚æ¢ç´¢
         If Not cb Is Nothing Then
             Dim i As Long
             For i = LBound(items) To UBound(items)
@@ -803,7 +816,7 @@ Private Function ResolveFormTitle() As String
         Case "edit":     ResolveFormTitle = ChrW(&H30CA) & ChrW(&H30EC) & ChrW(&H30C3) & ChrW(&H30B8) & ChrW(&H4FEE) & ChrW(&H6B63)
         Case "view":     ResolveFormTitle = ChrW(&H30CA) & ChrW(&H30EC) & ChrW(&H30C3) & ChrW(&H30B8) & ChrW(&H8868) & ChrW(&H793A)
         Case "preview"
-            ' ƒvƒŒƒrƒ…[ (V4 fix 2026-05-29: drop ": <formatId>" suffix perew¦#4)
+            ' ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ (V4 fix 2026-05-29: drop ": <formatId>" suffix perè¦ªæŒ‡ç¤º#4)
             ResolveFormTitle = ChrW(&H30D7) & ChrW(&H30EC) & ChrW(&H30D3) & ChrW(&H30E5) & ChrW(&H30FC)
         Case Else:       ResolveFormTitle = "UserForm"
     End Select
@@ -857,7 +870,7 @@ Private Function ComputeRowsHeight(ByVal flds As Collection) As Long
     For i = 1 To flds.count
         Set sec = flds.Item(i)
         If sec.GetValue("FieldType") = ChrW(&H8907) & ChrW(&H6570) & ChrW(&H884C) Then  ' ?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E?s
-            ' Long multi-line for known "long" fields (?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??û–, ?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E?, ?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E? ?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E?); others use short
+            ' Long multi-line for known "long" fields (?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??è‡, ?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E?, ?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E? ?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E?); others use short
             If IsLongMultilineField(sec.GetValue("FieldName")) Then
                 h = h + m_rowHeightMultiLong
             Else
@@ -870,19 +883,13 @@ Private Function ComputeRowsHeight(ByVal flds As Collection) As Long
     ComputeRowsHeight = h
 End Function
 
-' Heuristic: identify field names that mock shows as tall multi-line boxes.
-' These get m_rowHeightMultiLong; other multi-line fields get m_rowHeightMulti.
+' [USER-REQ 2026-06-09] Hardcoded heuristic removed (was: tall row for fields
+' named ä½œæ¥­æ‰‹é † / äº‹è±¡ / åŸå›  / è©³ç´° / å†…å®¹). Format spec says Rows= is the
+' single source of truth for multi-line height. If a format file wants a tall
+' multi-line, it must specify Rows= explicitly.
 Private Function IsLongMultilineField(ByVal fieldName As String) As Boolean
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0808] clsUserFormRenderer.IsLongMultilineField ENTER"  ' [ADR-0100]
-    Dim s As String
-    s = fieldName
-    ' ?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??û– / ?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E? / ?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E? / ?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E???? / ?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??? / ?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E?e ?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E?c
-    If InStr(s, ChrW(&H4F5C) & ChrW(&H696D) & ChrW(&H624B) & ChrW(&H9806)) > 0 Then IsLongMultilineField = True: Exit Function
-    If InStr(s, ChrW(&H4E8B) & ChrW(&H8C61)) > 0 Then IsLongMultilineField = True: Exit Function
-    If InStr(s, ChrW(&H539F) & ChrW(&H56E0)) > 0 Then IsLongMultilineField = True: Exit Function
-    If InStr(s, ChrW(&H8A73) & ChrW(&H7D30)) > 0 Then IsLongMultilineField = True: Exit Function
-    If InStr(s, ChrW(&H5185) & ChrW(&H5BB9)) > 0 Then IsLongMultilineField = True: Exit Function
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0809] clsUserFormRenderer.IsLongMultilineField EXIT-OK"  ' [ADR-0100]
+    IsLongMultilineField = False
 End Function
 
 ' Phase R-2 F-2: render a grey 9pt help line at (leftX, y) of given width.
@@ -923,7 +930,7 @@ Private Function AddKnowledgeNoRow(ByVal designer As Object) As Long
         If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0813] clsUserFormRenderer.AddKnowledgeNoRow EXIT-OK"  ' [ADR-0100]
         Exit Function
     End If
-    ' Phase R-3-ƒÔ-3 c•À‚Ñ: label sãEdata s(‘S•)‰ºB
+    ' Phase R-3-Ï‡-3 ç¸¦ä¸¦ã³: label è¡Œä¸Šãƒ»data è¡Œ(å…¨å¹…)ä¸‹ã€‚
     Dim y As Long
     y = m_margin
     Dim fullWK As Long, dataTopK As Long, dataHK As Long
@@ -991,7 +998,7 @@ Private Function AddHeaderRow(ByVal designer As Object) As Long
     lbl.Height = VLABEL_H
     ApplyBaseFont lbl
 
-    ' Phase R-3-ƒÔ-3 c•À‚Ñ: format selector ‚à label ãEdata ‘S•‰ºB
+    ' Phase R-3-Ï‡-3 ç¸¦ä¸¦ã³: format selector ã‚‚ label ä¸Šãƒ»data å…¨å¹…ä¸‹ã€‚
     Dim ctlW As Long
     ctlW = m_formWidth - m_margin * 2
     Dim dataTopH As Long, dataHH As Long
@@ -1024,7 +1031,7 @@ Private Function AddHeaderRow(ByVal designer As Object) As Long
     ctl.Height = dataHH
     ApplyBaseFont ctl
 
-    ' Phase R-2 F-2 / R-3-ƒÔ-3: help line under the format selector (data s’¼‰º)B
+    ' Phase R-2 F-2 / R-3-Ï‡-3: help line under the format selector (data è¡Œç›´ä¸‹)ã€‚
     Dim helpH As Long
     helpH = RenderHelpLine(designer, "lblFormatHelp", dataTopH + dataHH + 2, m_margin, ctlW, m_formatHelp)
     ' R-3-g1A: return the actual format-block bottom (control + formatHelp + gap)
@@ -1040,20 +1047,29 @@ End Function
 ' Returns a string array (possibly empty).
 Private Function ListFormatIds() As Variant
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0816] clsUserFormRenderer.ListFormatIds ENTER"  ' [ADR-0100]
+    ' [USER-REQ 2026-06-09] Show FormatName in dropdown (not FormatID).
+    ' Disabled formats are filtered out (LoadFormatList already excludes them).
     On Error GoTo Fail
     Dim col As Collection
-    Set col = modFormatLoader.ListAllFormats()
+    Set col = modFormatLoader.LoadFormatList()
     If col Is Nothing Then GoTo Fail
     If col.count = 0 Then
         ListFormatIds = Array()
-        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0817] clsUserFormRenderer.ListFormatIds EXIT-OK"  ' [ADR-0100]
         Exit Function
     End If
     Dim arr() As String
     ReDim arr(0 To col.count - 1)
     Dim i As Long
     For i = 1 To col.count
-        arr(i - 1) = CStr(col.Item(i))
+        Dim ent As Object
+        Set ent = col.Item(i)
+        Dim nm As String
+        nm = ""
+        On Error Resume Next
+        If ent.Exists("Description") Then nm = CStr(ent("Description"))
+        If Len(nm) = 0 And ent.Exists("FormatID") Then nm = CStr(ent("FormatID"))
+        On Error GoTo Fail
+        arr(i - 1) = nm
     Next i
     ListFormatIds = arr
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0818] clsUserFormRenderer.ListFormatIds EXIT-OK"  ' [ADR-0100]
@@ -1079,9 +1095,9 @@ End Function
 Private Function ResolveHeaderFieldLabel(ByVal id As String) As String
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0821] clsUserFormRenderer.ResolveHeaderFieldLabel ENTER"  ' [ADR-0100]
     Select Case LCase(Trim(id))
-        Case "knowledgeid": ResolveHeaderFieldLabel = ChrW(&H4E88) & ChrW(&H5B9A) & ChrW(&H756A) & ChrW(&H53F7)        ' —\’è”Ô†
-        Case "createdat":   ResolveHeaderFieldLabel = ChrW(&H767B) & ChrW(&H9332) & ChrW(&H65E5) & ChrW(&H4ED8)        ' “o˜^“ú
-        Case "updatedat":   ResolveHeaderFieldLabel = ChrW(&H66F4) & ChrW(&H65B0) & ChrW(&H65E5) & ChrW(&H4ED8)        ' XV“ú
+        Case "knowledgeid": ResolveHeaderFieldLabel = ChrW(&H4E88) & ChrW(&H5B9A) & ChrW(&H756A) & ChrW(&H53F7)        ' äºˆå®šç•ªå·
+        Case "createdat":   ResolveHeaderFieldLabel = ChrW(&H767B) & ChrW(&H9332) & ChrW(&H65E5) & ChrW(&H4ED8)        ' ç™»éŒ²æ—¥æ™‚
+        Case "updatedat":   ResolveHeaderFieldLabel = ChrW(&H66F4) & ChrW(&H65B0) & ChrW(&H65E5) & ChrW(&H4ED8)        ' æ›´æ–°æ—¥æ™‚
         Case Else:          ResolveHeaderFieldLabel = id
     End Select
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0822] clsUserFormRenderer.ResolveHeaderFieldLabel EXIT-OK"  ' [ADR-0100]
@@ -1130,7 +1146,7 @@ Private Function AddHeaderFields(ByVal designer As Object, ByVal yStart As Long)
             idxStr = Format$(k + 1, "000")
             Dim lbl As Object
             Set lbl = designer.Controls.Add(PROGID_LABEL, "hdrlbl_" & idxStr, True)
-            ' Phase R-3-ƒÔ-3 c•À‚Ñ: header field ‚à label ãEdata ‘S•‰ºB
+            ' Phase R-3-Ï‡-3 ç¸¦ä¸¦ã³: header field ã‚‚ label ä¸Šãƒ»data å…¨å¹…ä¸‹ã€‚
             lbl.caption = ResolveHeaderFieldLabel(id)
             lbl.top = y
             lbl.left = m_margin
@@ -1149,12 +1165,12 @@ Private Function AddHeaderFields(ByVal designer As Object, ByVal yStart As Long)
             ctl.Width = m_formWidth - m_margin * 2
             ctl.Height = dataHHF
             ' knowledgeId is auto-assigned but editable; view/preview locks it.
-            ctl.Locked = (m_mode = "view" Or m_mode = "preview")
+            ctl.Locked = (m_mode = "view")  ' [USER-REQ 2026-06-09] preview is trial-input per spec
             ApplyBaseFont ctl
 
             Dim hfExtra As Long
             hfExtra = 0
-            ' Phase R-2 F-2: per-header-field help line (data s’¼‰º)B
+            ' Phase R-2 F-2: per-header-field help line (data è¡Œç›´ä¸‹)ã€‚
             If Not m_headerHelp Is Nothing Then
                 If m_headerHelp.Exists(id) Then
                     hfExtra = RenderHelpLine(designer, "hdrhelp_" & idxStr, dataTopHF + dataHHF + 2, _
@@ -1167,7 +1183,7 @@ Private Function AddHeaderFields(ByVal designer As Object, ByVal yStart As Long)
     AddHeaderFields = y
 End Function
 
-' Apply ƒƒCƒŠƒI base font (Phase R-1-c, spec ?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E?1)
+' Apply ãƒ¡ã‚¤ãƒªã‚ª base font (Phase R-1-c, spec ?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E?1)
 Private Sub ApplyBaseFont(ByVal ctl As Object)
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0827] clsUserFormRenderer.ApplyBaseFont ENTER"  ' [ADR-0100]
     On Error Resume Next
@@ -1246,7 +1262,7 @@ Private Function AddFieldRow(ByVal designer As Object, _
     ' Label
     Dim lbl As Object
     Set lbl = designer.Controls.Add(PROGID_LABEL, "lbl_" & idxStr, True)
-    ' Phase R-3-ƒÔ-3 c•À‚Ñ: label ‚Íã‚ÌsE‘S•(badge •ª‚ğTœ)B
+    ' Phase R-3-Ï‡-3 ç¸¦ä¸¦ã³: label ã¯ä¸Šã®è¡Œãƒ»å…¨å¹…(badge åˆ†ã‚’æ§é™¤)ã€‚
     lbl.caption = fieldName
     lbl.top = y
     lbl.left = m_margin
@@ -1265,7 +1281,7 @@ Private Function AddFieldRow(ByVal designer As Object, _
         Dim badge As Object
         Set badge = designer.Controls.Add(PROGID_LABEL, "bdg_" & idxStr, True)
         badge.caption = ChrW(&H5FC5) & ChrW(&H9808)   ' ?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E?K?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E?{
-        ' c•À‚Ñ: badge ‚Í label s‚Ì‰E’[‚É”z’u
+        ' ç¸¦ä¸¦ã³: badge ã¯ label è¡Œã®å³ç«¯ã«é…ç½®
         badge.top = y + (VLABEL_H - m_badgeHeight) \ 2
         badge.left = m_formWidth - m_margin - m_badgeWidth
         badge.Width = m_badgeWidth
@@ -1313,21 +1329,24 @@ Private Function AddFieldRow(ByVal designer As Object, _
                 End Select
             End If
             ctl.Text = curVal
-            ' Long multi-line for ?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??û–/?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E?/?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E?/?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E???/?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E?e; others short
-            ' 2026-06-07: per-field Rows= override (M-03 GRID column E).
-            ' Each row ~ 20px including padding; falls back to legacy heuristic
-            ' (IsLongMultilineField) when the format file does not specify Rows.
+            ' Long multi-line for ?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??è‡/?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E?/?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E?/?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E???/?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E?e; others short
+            ' [USER-REQ 2026-06-09] No hardcoded fake defaults. Read Rows from
+            ' the format file as-is. If the format does not specify Rows, render
+            ' at single-line height. Format files that need a tall textbox must
+            ' explicitly set Rows= in the [FIELD] stanza.
+            ' Also accept FieldLineCount as the spec-documented alias.
             Dim rowsN As Long
             rowsN = 0
             On Error Resume Next
             rowsN = CLng(Val(Trim(sec.GetValue("Rows"))))
+            If rowsN < 1 Then rowsN = CLng(Val(Trim(sec.GetValue("FieldLineCount"))))
             On Error GoTo 0
             If rowsN >= 1 Then
-                rowH = m_rowHeightSingle + (rowsN * 20)
-            ElseIf IsLongMultilineField(fieldName) Then
-                rowH = m_rowHeightMultiLong
+                ' [USER-REQ 2026-06-09] Rows=1 should render as 1 visible row, not 2.
+                ' Previously: single + (rowsN * 20) made Rows=N render as N+1 rows.
+                rowH = m_rowHeightSingle + ((rowsN - 1) * 20)
             Else
-                rowH = m_rowHeightMulti
+                rowH = m_rowHeightSingle  ' Rows unspecified -> 1-line height
             End If
         Case ChrW(&H65E5) & ChrW(&H4ED8)  ' ?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E? - mark for Change-event validation
             Set ctl = designer.Controls.Add(PROGID_TEXTBOX, ctlName, True)
@@ -1355,8 +1374,8 @@ Private Function AddFieldRow(ByVal designer As Object, _
             ctl.Text = curVal
     End Select
 
-    ' Phase R-3-ƒÔ-3 c•À‚Ñ: data ‚Í label s‚Ì‰ºE‘S•B
-    ' dataHeight = sƒsƒbƒ`(rowH) - labelZone(VLABEL_H+VLABEL_GAP) - VROW_SPACINGB
+    ' Phase R-3-Ï‡-3 ç¸¦ä¸¦ã³: data ã¯ label è¡Œã®ä¸‹ãƒ»å…¨å¹…ã€‚
+    ' dataHeight = è¡Œãƒ”ãƒƒãƒ(rowH) - labelZone(VLABEL_H+VLABEL_GAP) - VROW_SPACINGã€‚
     Dim dataTop As Long, dataH As Long
     dataTop = y + VLABEL_H + VLABEL_GAP
     dataH = rowH - VLABEL_H - VLABEL_GAP - VROW_SPACING
@@ -1366,8 +1385,8 @@ Private Function AddFieldRow(ByVal designer As Object, _
     ctl.Height = dataH
     ApplyBaseFont ctl
 
-    ' Apply mode-based locking (view ‚Æ preview ‚Í•\¦ê—p = readonly)
-    If m_mode = "view" Or m_mode = "preview" Then
+    ' Apply mode-based locking (view ã¨ preview ã¯è¡¨ç¤ºå°‚ç”¨ = readonly)
+    If m_mode = "view" Then  ' [USER-REQ 2026-06-09] preview is trial-input
         On Error Resume Next
         ctl.Locked = True
         ctl.BackColor = RGB(240, 240, 240)
@@ -1377,8 +1396,8 @@ Private Function AddFieldRow(ByVal designer As Object, _
     ' Phase R-2 F-4: placeholder grey text in empty TextBoxes (not view mode,
     ' not ComboBox). Stored so InjectFormCode can emit Enter/Exit handlers and
     ' the persistence layer can treat a still-placeholder field as empty.
-    ' Phase R-3-ƒÔ-2: preview (M-04) ‚ÍÀƒf[ƒ^‚ğ‚½‚¸ placeholder(‹L“ü—á)‚Ì‚İ•\¦B
-    ' readonly ‚Ì‚½‚ß focus-clear ƒnƒ“ƒhƒ‰‚Í¶¬‚¹‚¸ static ‚Éo‚·B
+    ' Phase R-3-Ï‡-2: preview (M-04) ã¯å®Ÿãƒ‡ãƒ¼ã‚¿ã‚’æŒãŸãš placeholder(è¨˜å…¥ä¾‹)ã®ã¿è¡¨ç¤ºã€‚
+    ' readonly ã®ãŸã‚ focus-clear ãƒãƒ³ãƒ‰ãƒ©ã¯ç”Ÿæˆã›ãš static ã«å‡ºã™ã€‚
     If TypeName(ctl) = "TextBox" And m_mode <> "view" And Len(curVal) = 0 Then
         Dim ph As String
         ph = Trim(sec.GetValue("fieldPlaceholder"))
@@ -1453,7 +1472,7 @@ Private Sub AddButtonBar(ByVal designer As Object, ByVal y As Long)
             labels = Split(ChrW(&H7DE8) & ChrW(&H96C6) & "|" & ChrW(&H524A) & ChrW(&H9664) & "|" & ChrW(&H9589) & ChrW(&H3058) & ChrW(&H308B), "|")
             kinds = Split("s|d|p", "|")
         Case "preview"
-            ' Phase R-3-ƒÔ-2: M-04 ƒvƒŒƒrƒ…[‚Íu•Â‚¶‚év’P“Æ (M-09 ‚Æ“¯ btnClose)
+            ' Phase R-3-Ï‡-2: M-04 ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã¯ã€Œé–‰ã˜ã‚‹ã€å˜ç‹¬ (M-09 ã¨åŒ btnClose)
             names = Split("btnClose", "|")
             labels = Split(ChrW(&H9589) & ChrW(&H3058) & ChrW(&H308B), "|")
             kinds = Split("p", "|")
@@ -1466,16 +1485,16 @@ Private Sub AddButtonBar(ByVal designer As Object, ByVal y As Long)
     Dim helpTexts() As String
     Select Case m_mode
         Case "register"
-            ' ƒNƒŠƒA / “o˜^
+            ' ã‚¯ãƒªã‚¢ / ç™»éŒ²
             helpTexts = Split(ChrW(&H5165) & ChrW(&H529B) & ChrW(&H6B04) & ChrW(&H3092) & ChrW(&H7A7A) & ChrW(&H306B) & ChrW(&H623B) & ChrW(&H3057) & ChrW(&H307E) & ChrW(&H3059) & "|" & ChrW(&H5185) & ChrW(&H5BB9) & ChrW(&H3092) & ChrW(&H4FDD) & ChrW(&H5B58) & ChrW(&H3057) & ChrW(&H3066) & ChrW(&H767B) & ChrW(&H9332) & ChrW(&H3057) & ChrW(&H307E) & ChrW(&H3059), "|")
         Case "edit"
-            ' íœ / XV
+            ' å‰Šé™¤ / æ›´æ–°
             helpTexts = Split(ChrW(&H78BA) & ChrW(&H8A8D) & ChrW(&H306E) & ChrW(&H3046) & ChrW(&H3048) & ChrW(&H524A) & ChrW(&H9664) & ChrW(&H3057) & ChrW(&H307E) & ChrW(&H3059) & "|" & ChrW(&H5185) & ChrW(&H5BB9) & ChrW(&H3092) & ChrW(&H4E0A) & ChrW(&H66F8) & ChrW(&H304D) & ChrW(&H4FDD) & ChrW(&H5B58) & ChrW(&H3057) & ChrW(&H307E) & ChrW(&H3059), "|")
         Case "view"
-            ' •ÒŠåE/ íœ / •Â‚¶‚ßE
+            ' ç·¨é›E/ å‰Šé™¤ / é–‰ã˜ã‚E
             helpTexts = Split("|" & "|" & ChrW(&H691C) & ChrW(&H7D22) & ChrW(&H753B) & ChrW(&H9762) & ChrW(&H306B) & ChrW(&H623B) & ChrW(&H308A) & ChrW(&H307E) & ChrW(&H3059), "|")
         Case "preview"
-            ' ƒvƒŒƒrƒ…[‚ğ•Â‚¶‚Ü‚·
+            ' ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã‚’é–‰ã˜ã¾ã™
             helpTexts = Split(ChrW(&H30D7) & ChrW(&H30EC) & ChrW(&H30D3) & ChrW(&H30E5) & ChrW(&H30FC) & ChrW(&H3092) & ChrW(&H9589) & ChrW(&H3058) & ChrW(&H307E) & ChrW(&H3059), "|")
         Case Else
             helpTexts = Split("|", "|")
@@ -1547,9 +1566,9 @@ Private Sub AddButtonBar(ByVal designer As Object, ByVal y As Long)
                 btn.BackColor = RGB(240, 240, 240)
                 btn.ForeColor = RGB(60, 60, 60)
         End Select
-        ' V5 fix (2026-05-30) BUG-2: Default/Cancel –¾¦ setBprimary(p) ‚ğ Enter ‚Å”­‰Î‚·‚é
-        ' Default ‚ÉAClear/Close ‚ğ Esc ‚Å”­‰Î‚·‚é Cancel ‚ÉB‚±‚ê‚Å Tab ‚Å field ˆÚ“®’†‚Ì
-        ' Œë Enter ‚ªuƒNƒŠƒAv‚ğ”­‰Î‚µ‚Ä field ‘SÁ¸‚·‚é UX –ŒÌ‚ğ–h‚®B
+        ' V5 fix (2026-05-30) BUG-2: Default/Cancel æ˜ç¤º setã€‚primary(p) ã‚’ Enter ã§ç™ºç«ã™ã‚‹
+        ' Default ã«ã€Clear/Close ã‚’ Esc ã§ç™ºç«ã™ã‚‹ Cancel ã«ã€‚ã“ã‚Œã§ Tab ã§ field ç§»å‹•ä¸­ã®
+        ' èª¤ Enter ãŒã€Œã‚¯ãƒªã‚¢ã€ã‚’ç™ºç«ã—ã¦ field å…¨æ¶ˆå¤±ã™ã‚‹ UX äº‹æ•…ã‚’é˜²ãã€‚
         On Error Resume Next
         Select Case kinds(i)
             Case "p"
@@ -1557,7 +1576,7 @@ Private Sub AddButtonBar(ByVal designer As Object, ByVal y As Long)
                 btn.Cancel = False
             Case Else
                 btn.Default = False
-                ' btnClear / btnClose ‚ğ Esc ƒL[‚Å”­‰Î‚³‚¹‚é
+                ' btnClear / btnClose ã‚’ Esc ã‚­ãƒ¼ã§ç™ºç«ã•ã›ã‚‹
                 If names(i) = "btnClear" Or names(i) = "btnClose" Then
                     btn.Cancel = True
                 Else
@@ -1566,8 +1585,8 @@ Private Sub AddButtonBar(ByVal designer As Object, ByVal y As Long)
         End Select
         On Error GoTo 0
 
-        ' R-3-g1A (2026-05-28): per-button help (mock €‹’AˆÄc “‡•â••¶‚ğ“P‰ñ)B
-        ' buttonWidth(113) •“à‚Éû‚ß‰E‚İ‚«‚ê/d‚È‚è‚ğ‰ñ”ğB
+        ' R-3-g1A (2026-05-28): per-button help (mock æº–æ‹ ã€æ¡ˆc çµ±åˆè£œåŠ©æ–‡ã‚’æ’¤å›)ã€‚
+        ' buttonWidth(113) å¹…å†…ã«åã‚å³ã¿ãã‚Œ/é‡ãªã‚Šã‚’å›é¿ã€‚
         If i <= UBound(helpTexts) Then
             If Len(helpTexts(i)) > 0 Then
                 Dim bhelp As Object
@@ -1647,7 +1666,7 @@ Private Sub InjectFormCode(ByVal vbc As Object)
     s = s & "End Sub" & vbCrLf
     ' Phase R-2 F-3: format dropdown change -> re-render with new format's fields.
     ' Only injected in dropdown mode (the cboFormatId control exists).
-    ' Phase R-3-ƒÔ-5: format s‚ª–³‚¢ mode ‚Å‚Í cboFormatId ‚ª‘¶İ‚µ‚È‚¢‚½‚ß inject ‚µ‚È‚¢B
+    ' Phase R-3-Ï‡-5: format è¡ŒãŒç„¡ã„ mode ã§ã¯ cboFormatId ãŒå­˜åœ¨ã—ãªã„ãŸã‚ inject ã—ãªã„ã€‚
     If m_formatSelectorType = "dropdown" And m_formatRowEnabled Then
         s = s & vbCrLf
         s = s & "Private Sub cboFormatId_Change()" & vbCrLf
@@ -1891,8 +1910,8 @@ Private Sub DumpFormToFile(ByVal vbc As Object, ByVal designer As Object, _
         s = s & i & "|" & fn & "|" & ft & "|" & fr & vbCrLf
     Next i
 
-    ' R-3-ƒÔ-4: designer.Controls ‚Í frame q‚à flatten ‚µ‚ÄŠÜ‚Ş(frame-relative À•W)‚½‚ßA
-    ' frame q‚Í [CONTROLS] ‚©‚çœŠO‚µ [FRAMECONTROLS] ‚É‚Ì‚İo‚·B
+    ' R-3-Ï‡-4: designer.Controls ã¯ frame å­ã‚‚ flatten ã—ã¦å«ã‚€(frame-relative åº§æ¨™)ãŸã‚ã€
+    ' frame å­ã¯ [CONTROLS] ã‹ã‚‰é™¤å¤–ã— [FRAMECONTROLS] ã«ã®ã¿å‡ºã™ã€‚
     Dim frChildren As Object
     Set frChildren = CreateObject("Scripting.Dictionary")
     If Not m_scrollFrame Is Nothing Then
@@ -1936,7 +1955,7 @@ Private Sub DumpFormToFile(ByVal vbc As Object, ByVal designer As Object, _
     Next j
     s = s & "count=" & emitted & vbCrLf & hdrLines
 
-    ' Phase R-3-ƒÔ-4: frScroll frame geometry + ‚»‚Ìq controls (frame-relative À•W)
+    ' Phase R-3-Ï‡-4: frScroll frame geometry + ãã®å­ controls (frame-relative åº§æ¨™)
     s = s & "[FRAME]" & vbCrLf
     If m_scrollFrame Is Nothing Then
         s = s & "present=0" & vbCrLf

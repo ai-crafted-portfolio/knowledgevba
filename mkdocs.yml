@@ -83,11 +83,29 @@ nav:
           - M-11 設定: stanza/管理/M-11.txt.md
           - M-12 フォーマット変更チェック: stanza/管理/M-12.txt.md
           - M-14 操作ログ: stanza/管理/M-14.txt.md
-      - 登録修正:
-          - M-05 ナレッジ登録: stanza/登録修正/M-05.txt.md
-          - M-06 ナレッジ修正: stanza/登録修正/M-06.txt.md
       - 検索:
+          - M-05 ナレッジ登録: stanza/検索/M-05.txt.md
           - M-08 ナレッジ検索: stanza/検索/M-08.txt.md
+  - サンプルデータ:
+      - 一覧: sample_data/index.md
+      - フォーマット定義:
+          - FMT-001 テスト標準フォーマット: sample_data/formats/fmt-001.md
+          - FAULT 障害対応: sample_data/formats/fault.md
+          - SAGYO 作業手順書: sample_data/formats/sagyo.md
+      - ナレッジデータ:
+          - FAULT-0001 経理システムへログインできない: sample_data/data/fault-0001.md
+          - FAULT-0002: sample_data/data/fault-0002.md
+          - FAULT-0003: sample_data/data/fault-0003.md
+          - FAULT-0004 メール送信遅延: sample_data/data/fault-0004.md
+          - FAULT-0005 本番DBサーバ応答遅延: sample_data/data/fault-0005.md
+          - FAULT-0006 VPN接続不可: sample_data/data/fault-0006.md
+          - FAULT-0007 ファイルサーバ容量不足: sample_data/data/fault-0007.md
+          - SAGYO-0001 サーバ室UPS月次点検: sample_data/data/sagyo-0001.md
+          - SAGYO-0002: sample_data/data/sagyo-0002.md
+          - SAGYO-0003: sample_data/data/sagyo-0003.md
+          - SAGYO-0004 バックアップサーバ容量チェック: sample_data/data/sagyo-0004.md
+          - SAGYO-0005 監視カメラ録画装置メンテナンス: sample_data/data/sagyo-0005.md
+          - SAGYO-0006 ファイアウォール設定変更: sample_data/data/sagyo-0006.md
   - モジュール一覧:
       - 一覧: modules/index.md
       - 管理.xlsm 用:
