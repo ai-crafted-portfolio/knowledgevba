@@ -42,7 +42,7 @@ searchTarget=TRUE
 FieldName=作業区分
 FieldType=選択
 Required=FALSE
-DropdownOptions=月次点検,週次点検,日次点検,緊急対応
+DropdownOptions=月次点検|週次点検|日次点検|緊急対応
 fieldPlaceholder=（例）月次点検
 searchTarget=FALSE
 ===
@@ -50,7 +50,7 @@ searchTarget=FALSE
 FieldName=危険度
 FieldType=選択
 Required=FALSE
-DropdownOptions=低,中,高
+DropdownOptions=低|中|高
 fieldPlaceholder=（例）中
 searchTarget=FALSE
 ===

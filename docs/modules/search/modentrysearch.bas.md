@@ -153,16 +153,17 @@ Public Sub Btn_SearchV23()
         hKnwNo = CStr(hRec("knwNo"))
 
         ws.Cells(outRow, 1).Value = hitCount + 1
-        ws.Cells(outRow, 2).Value = hKnwNo
+        ' [USER-REQ 2026-06-09] Reorder columns: A=No, B=FormatName, C-E=search fields, F=UpdatedAt, G=knwNo (hidden)
         Dim fmtNm As String
         fmtNm = ResolveFormatName(SafeStr(hData, "FormatID"))
-        ws.Cells(outRow, 3).Value = fmtNm
+        ws.Cells(outRow, 2).Value = fmtNm
         Dim sFields(1 To 3) As String
         GetSearchTargetFieldValues hData, SafeStr(hData, "FormatID"), sFields
-        ws.Cells(outRow, 4).Value = TrimExcerpt(sFields(1))
-        ws.Cells(outRow, 5).Value = TrimExcerpt(sFields(2))
-        ws.Cells(outRow, 6).Value = TrimExcerpt(sFields(3))
-        ws.Cells(outRow, 7).Value = SafeStr(hData, "UpdatedAt")
+        ws.Cells(outRow, 3).Value = TrimExcerpt(sFields(1))
+        ws.Cells(outRow, 4).Value = TrimExcerpt(sFields(2))
+        ws.Cells(outRow, 5).Value = TrimExcerpt(sFields(3))
+        ws.Cells(outRow, 6).Value = SafeStr(hData, "UpdatedAt")
+        ws.Cells(outRow, 7).Value = hKnwNo
         With ws.Cells(outRow, 1)
             .Font.Color = RGB(0, 0, 255)
             .Font.Underline = xlUnderlineStyleSingle
@@ -191,6 +192,12 @@ Public Sub Btn_SearchV23()
             End If
         Next rr
     End If
+
+    ' [USER-REQ 2026-06-09] Force column G (knowledgeNo) to be hidden after each search.
+    ' Setup_search applies HideColumnsFrom=G but Excel sometimes loses it on workbook reopen.
+    On Error Resume Next
+    ws.Columns("G:G").Hidden = True
+    On Error GoTo 0
 
     On Error Resume Next
     Dim lg As clsLogger

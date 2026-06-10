@@ -85,10 +85,10 @@ def main():
         if not os.path.isdir(dst_dir):
             os.makedirs(dst_dir)
         dst = os.path.join(dst_dir, fname + ".md")
-        with codecs.open(dst, "w", encoding="cp932") as f:
+        with codecs.open(dst, "w", encoding="utf-8") as f:
             f.write(md_text)
 
-        with codecs.open(dst, encoding="cp932") as f:
+        with codecs.open(dst, encoding="utf-8") as f:
             rb = f.read()
         assert rb == md_text, "round-trip mismatch: " + dst
         assert "```\r\n" in rb, "missing closing fence: " + dst

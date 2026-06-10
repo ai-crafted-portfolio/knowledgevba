@@ -41,7 +41,7 @@ searchTarget=TRUE
 FieldName=カテゴリ
 FieldType=選択
 Required=FALSE
-DropdownOptions=アプリ障害,インフラ障害,ネットワーク障害,セキュリティ
+DropdownOptions=アプリ障害|インフラ障害|ネットワーク障害|セキュリティ
 fieldPlaceholder=（例）アプリ障害
 searchTarget=FALSE
 ===
@@ -49,7 +49,7 @@ searchTarget=FALSE
 FieldName=優先度
 FieldType=選択
 Required=FALSE
-DropdownOptions=低,中,高,緊急
+DropdownOptions=低|中|高|緊急
 fieldPlaceholder=（例）高
 searchTarget=FALSE
 ===

@@ -120,6 +120,11 @@ Public Sub Setup_admin()
     SetupM10RadioButtons
     On Error GoTo 0
 
+    ' [USER-REQ 2026-06-09] Apply TRUE/FALSE dropdown to M-03 searchTarget column (I19:I60)
+    On Error Resume Next
+    SetupM03SearchTargetValidation
+    On Error GoTo 0
+
     Debug.Print "[SETUP-EXIT] Setup_admin ts=" & Format$(Now, "hh:nn:ss")  ' [SETUP-DEBUG-PRINT-INJECTED]
 End Sub
 
@@ -304,5 +309,30 @@ Private Sub LogSetupAdminError(ByVal roleName As String, _
                 errNum & " " & errDesc
     On Error GoTo 0
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1348] modSetup.LogSetupAdminError EXIT-OK"  ' [ADR-0100]
+End Sub
+
+
+' [USER-REQ 2026-06-09] Public Sub: SetupM03SearchTargetValidation
+' Applies TRUE/FALSE dropdown validation to M-03 grid column I (searchTarget)
+' so the dropdown is visible even before user clicks 読込 / フィールド追加.
+Public Sub SetupM03SearchTargetValidation()
+    On Error Resume Next
+    Dim wsName As String
+    wsName = ChrW(&H30D5) & ChrW(&H30A9) & ChrW(&H30FC) & ChrW(&H30DE) & ChrW(&H30C3) & ChrW(&H30C8) & ChrW(&H8A2D) & ChrW(&H8A08)
+    Dim ws As Worksheet
+    Set ws = ThisWorkbook.Worksheets(wsName)
+    If ws Is Nothing Then Exit Sub
+    Dim wasProt As Boolean
+    wasProt = ws.ProtectContents
+    If wasProt Then ws.Unprotect
+    Dim r As Range
+    Set r = ws.Range("I19:I60")
+    r.Validation.Delete
+    r.Validation.Add Type:=xlValidateList, Formula1:="TRUE,FALSE"
+    r.Validation.InCellDropdown = True
+    r.Validation.IgnoreBlank = True
+    ' Also unlock for direct edit
+    r.Locked = False
+    If wasProt Then ws.Protect Password:="", UserInterfaceOnly:=True, AllowFormattingCells:=True
 End Sub
 ```
