@@ -65,6 +65,7 @@ extra_css:
 nav:
   - 概要: index.md
   - インストール: install.md
+  - 一発インストーラ: install_one_shot.md
   - 使い方: usage.md
   - 困ったとき: troubleshooting.md
   - 設計:
