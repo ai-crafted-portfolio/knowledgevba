@@ -1,66 +1,3 @@
----
-title: 一発インストーラ
-description: 1 ファイルコピー＆実行で knowledgevba を導入
----
-
-# 一発インストーラ
-
-VBA モジュールを手動でコピーする手間を省き、**1 ファイルだけで knowledgevba v2.3 を完全導入** できる PowerShell スクリプトです。
-
-## 使い方 (推奨: ダウンロード)
-
-PowerShell を開いて次の 2 行を実行します:
-
-```
-irm https://raw.githubusercontent.com/ai-crafted-portfolio/knowledgevba/main/docs/files/knowledgevba_install.ps1 -OutFile knowledgevba_install.ps1
-powershell -NoProfile -ExecutionPolicy Bypass -File knowledgevba_install.ps1
-```
-
-## 使い方 (代替: 全文コピペ)
-
-1. このページ下のコードブロック全文を **メモ帳にコピー**
-2. **`knowledgevba_install.ps1`** という名前で保存 (文字コード: **UTF-8** / そのままで可 — 本スクリプトは全文 ASCII のため文字コード事故が起きません)
-3. PowerShell から実行:
-   ```
-   powershell -NoProfile -ExecutionPolicy Bypass -File knowledgevba_install.ps1
-   ```
-
-> コピペが途中で切れていても安全です: スクリプト先頭で **EOF マーカー自己検査** を行い、
-> 切断を検出すると何も書き込まずに終了します。さらに全ペイロードは **sha256 照合付き** です。
-
-## 事前に 1 度だけ必要な Excel 設定
-
-Excel → ファイル → オプション → セキュリティ センター → セキュリティ センターの設定 →
-マクロの設定 → **「VBA プロジェクト オブジェクト モデルへのアクセスを信頼する」** にチェック。
-
-## 動作内容
-
-| Step | 処理 |
-|---|---|
-| 0 | 自己検査 (EOF マーカー / 各ペイロード sha256) |
-| 1 | `%LOCALAPPDATA%\KnowledgeMgr\dist\` へ installer + vba_modules + ui_seed を展開 |
-| 2 | `C:\KnowledgeMgr\` 配下 6 フォルダ + default config 生成 |
-| 3 | Excel COM で blank の 管理.xlsm / 検索.xlsm を生成 |
-| 4 | VBA モジュール Import + Setup_admin / Setup_search 実行 |
-
-書き込み先はユーザ領域のみです (開発ツリーへの書き込みは guardrail が拒否します)。
-
-## launcher bat (任意)
-
-ダブルクリックで実行したい場合は、同じフォルダに以下を `knowledgevba_install.bat` として保存:
-
-```bat
-@echo off
-rem knowledgevba v2.3 one-shot installer launcher (ASCII only)
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0knowledgevba_install.ps1"
-exit /b %errorlevel%
-```
-
-## ファイル全文
-
-下のコードを **すべて** コピーしてください (2.0 MB / sha256 `30bb1f7446b24f0f21900d41f9e610c32edd5588fdaaf5ebaefeccdd468822e5` / generated 2026-06-11 02:26)。
-
-```powershell
 # ============================================================
 # knowledgevba v2.3 one-shot installer (generated file - DO NOT EDIT)
 # built: 2026-06-11 01:31:57  by build_knowledgevba_install.py
@@ -27231,4 +27168,3 @@ if ($rcTotal -eq 0) {
     exit 1
 }
 # === KVBA_EOF_V23 ===
-```
