@@ -7,6 +7,7 @@ description: clsLogger.cls のソースコード（コピペ用）
 
 **配置先**: 共通モジュール（3 ブック共通）
 **種類**: クラスモジュール
+**更新日**: 2026-06-12 01:23
 
 ---
 
@@ -105,9 +106,8 @@ Public Sub Init(ByVal logSheet As Worksheet, Optional ByVal debugLevelOverride A
     m_rotationRows = CLng(modConfigHolder.GetValueOrDefault("logRotationRows", "10000"))
 
     ' Q2: LOG sheet 既定 Visible = xlSheetHidden（VeryHidden ではない、ユーザ右クリック再表示可）
-    If m_logSheet.Visible <> xlSheetHidden Then  ' R-2-Fix2b: LOG VeryHidden (Visible/Hidden both)
-        m_logSheet.Visible = xlSheetHidden
-    End If
+    ' [N8 2026-06-12] do NOT force-hide on every Init: setup hides LOG initially;
+    ' the user may unhide it deliberately and Logger kept re-hiding it.
     ' v2.3 AD-LOG: mark ready and flush any pre-Init buffered entries
     m_initialized = True
     FlushBuffer

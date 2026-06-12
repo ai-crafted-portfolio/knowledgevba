@@ -7,6 +7,7 @@ description: modEntryFormat.bas のソースコード（コピペ用）
 
 **配置先**: `管理.xlsm` 用の VBA モジュール
 **種類**: 標準モジュール
+**更新日**: 2026-06-12 01:22
 
 ---
 
@@ -329,7 +330,19 @@ Public Function SaveFormat_Workflow(ByVal target As Object, ByVal uiSections As 
             ' so the renderer can honour them at preview / register / edit time.
             If row.Exists("scroll") Then fldSec.SetValue "Scroll", CStr(row("scroll"))
             If row.Exists("rows") Then fldSec.SetValue "Rows", CStr(row("rows"))
-            If row.Exists("Options") Then fldSec.SetValue "DropdownOptions", CStr(row("Options"))
+            ' 2026-06-11 fix (C-03-001): clsGridIO.ReadGridFields stores Options
+            ' as a String array (Split). CStr(array) raised Type Mismatch (13),
+            ' so every format containing a select field failed to save.
+            If row.Exists("Options") Then
+                Dim optV032 As Variant
+                optV032 = row("Options")
+                ' 2026-06-11: canonical file separator is pipe (matches FAULT/SAGYO).
+                If IsArray(optV032) Then
+                    fldSec.SetValue "DropdownOptions", Join(optV032, "|")
+                Else
+                    fldSec.SetValue "DropdownOptions", Replace(CStr(optV032), ",", "|")
+                End If
+            End If
             ' [USER-REQ 2026-06-09] placeholder column round-trip
             If row.Exists("placeholder") Then fldSec.SetValue "fieldPlaceholder", CStr(row("placeholder"))
             ' [USER-REQ 2026-06-09] searchTarget round-trip
@@ -353,12 +366,21 @@ Public Function SaveFormat_Workflow(ByVal target As Object, ByVal uiSections As 
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0134] modEntryFormat.SaveFormat_Workflow EXIT-OK"  ' [ADR-0100]
     Exit Function
 ErrHandler:
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-0135] modEntryFormat.SaveFormat_Workflow EXIT-ERR " & "errNum=" & Err.Number & " desc=" & Err.Description  ' [ADR-0100]
+    ' 2026-06-11 fix: capture Err BEFORE any On Error statement clears it
+    ' (previous code logged Err.Description after On Error Resume Next,
+    '  so WW-032 always carried an empty reason).
+    Dim errNum032 As Long
+    Dim errDesc032 As String
+    Dim errSrc032 As String
+    errNum032 = Err.Number
+    errDesc032 = Err.Description
+    errSrc032 = Err.Source
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-0135] modEntryFormat.SaveFormat_Workflow EXIT-ERR " & "errNum=" & errNum032 & " desc=" & errDesc032  ' [ADR-0100]
     On Error Resume Next
     Dim oLogger032 As clsLogger
     Set oLogger032 = New clsLogger
     oLogger032.Init ThisWorkbook.Worksheets("LOG")
-    oLogger032.LogWarn "modEntryFormat", "SaveFormat_Workflow", "Format save failed: " & Err.Description, fmtId, "VALIDATE-WARN-WW-032"
+    oLogger032.LogWarn "modEntryFormat", "SaveFormat_Workflow", "Format save failed: errNum=" & errNum032 & " src=" & errSrc032 & " desc=" & errDesc032, fmtId, "VALIDATE-WARN-WW-032"
     On Error GoTo 0
     SaveFormat_Workflow = ""
 End Function
@@ -409,7 +431,9 @@ Public Function LoadFormat_Workflow(ByVal target As Object, ByVal uiSections As 
                 If Len(seqVal) = 0 Then seqVal = CStr(formatDict(FIELDS_KEY).Count + 1)
                 row("seq") = seqVal
                 If sec.HasKey("FieldName") Then row("Name") = sec.GetValue("FieldName")
-                If sec.HasKey("FieldType") Then row("Type") = sec.GetValue("FieldType")
+                ' [BUG-B13 2026-06-11] files hold canonical types; M-03 shows
+                ' UI labels, so denormalize for the display round-trip.
+                If sec.HasKey("FieldType") Then row("Type") = DenormalizeFieldType(sec.GetValue("FieldType"))
                 If sec.HasKey("Required") Then row("Required") = sec.GetValue("Required")
                 ' 2026-06-07: per-field Scroll / Rows / DropdownOptions round-trip
                 If sec.HasKey("Scroll") Then row("scroll") = sec.GetValue("Scroll")
@@ -512,6 +536,36 @@ Public Sub Btn_SaveFormat()
                 End If
             End If
         Next rChk
+        ' [B24 2026-06-11] reject duplicate field names and duplicate order
+        ' numbers (user decision: both abort the save).
+        If firstErrRow = 0 Then
+            Dim dupNames As Object, dupOrds As Object
+            Set dupNames = CreateObject("Scripting.Dictionary")
+            dupNames.CompareMode = vbTextCompare
+            Set dupOrds = CreateObject("Scripting.Dictionary")
+            Dim rDup As Long
+            For rDup = M03_GRID_FIRST_ROW To M03_GRID_LAST_ROW
+                Dim dNm As String, dOd As String
+                dNm = Trim$(CStr(wsSv.Cells(rDup, 2).Value))
+                dOd = Trim$(CStr(wsSv.Cells(rDup, 1).Value))
+                If Len(dNm) > 0 Then
+                    If dupNames.Exists(dNm) Then
+                        firstErrRow = rDup
+                        firstErrMsg = ChrW(&H30D5) & ChrW(&H30A3) & ChrW(&H30FC) & ChrW(&H30EB) & ChrW(&H30C9) & ChrW(&H540D) & ChrW(&H304C) & ChrW(&H91CD) & ChrW(&H8907) & ChrW(&H3057) & ChrW(&H3066) & ChrW(&H3044) & ChrW(&H307E) & ChrW(&H3059) & ChrW(&H0020) & ChrW(&H0028) & ChrW(&H884C) & CStr(rDup) & ChrW(&H0029)
+                        Exit For
+                    End If
+                    dupNames.Add dNm, 1
+                    If Len(dOd) > 0 Then
+                        If dupOrds.Exists(dOd) Then
+                            firstErrRow = rDup
+                            firstErrMsg = ChrW(&H4E26) & ChrW(&H3073) & ChrW(&H306E) & ChrW(&H756A) & ChrW(&H53F7) & ChrW(&H304C) & ChrW(&H91CD) & ChrW(&H8907) & ChrW(&H3057) & ChrW(&H3066) & ChrW(&H3044) & ChrW(&H307E) & ChrW(&H3059) & ChrW(&H0020) & ChrW(&H0028) & ChrW(&H884C) & CStr(rDup) & ChrW(&H0029)
+                            Exit For
+                        End If
+                        dupOrds.Add dOd, 1
+                    End If
+                End If
+            Next rDup
+        End If
         If gridCount = 0 Then
             MsgBox ChrW(&H5C11) & ChrW(&H306A) & ChrW(&H304F) & ChrW(&H3068) & ChrW(&H3082) & ChrW(&H0031) & ChrW(&HFF8C) & ChrW(&HFF72) & ChrW(&HFF70) & ChrW(&HFF99) & ChrW(&HFF84) & ChrW(&H5FC5) & ChrW(&H8981) & ChrW(&H3067) & ChrW(&H3059) & ChrW(&H3002), vbExclamation, ChrW(&H4FDD) & ChrW(&H5B58) & ChrW(&H30A8) & ChrW(&H30E9) & ChrW(&H30FC)
             modBtnGuard.LogExit BTN, XLSM, False
@@ -577,7 +631,8 @@ Public Sub Btn_LoadFormat()
     ' WriteCellValue against a protected cell silently no-ops under On Error
     ' Resume Next inside clsCellIO, leaving grid empty (case 18 post=0).
     On Error Resume Next
-    ActiveSheet.Unprotect
+    ' [N5 2026-06-12] explicit M-03 target (was ActiveSheet = wrong-sheet risk)
+    ThisWorkbook.Worksheets(M03_SHEET_NAME()).Unprotect
     On Error GoTo ErrHandler
     ' [USER-REQ 2026-06-09] Btn_LoadFormat is the modify (修正) side 読込 button.
     ' Read the modify-side cell (C8) first so the user can specify a format to
@@ -598,7 +653,21 @@ Public Sub Btn_LoadFormat()
         If tempDict.Exists("FormatID") Then fmtId = CStr(tempDict("FormatID"))
     End If
     If Len(fmtId) = 0 Then Exit Sub
-    LoadFormat_Workflow ActiveSheet, ui, fmtId
+    ' [BUG-B17 2026-06-11] non-existent format id -> LoadFormat_Workflow
+    ' returns False silently (stale grid, no feedback). Spec C-03-003
+    ' expects an error. Warn the user when the load finds nothing.
+    Dim okLoad As Boolean
+    okLoad = LoadFormat_Workflow(ActiveSheet, ui, fmtId)
+    If Not okLoad Then
+        If Not modCommon.IsHeadless() Then
+            MsgBox MsgFormatNotFound() & fmtId, vbExclamation, MsgLoadTitle()
+        End If
+        modBtnGuard.LogExit BTN, XLSM, True
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0147b] modEntryFormat.Btn_LoadFormat EXIT-OK (not found)"  ' [ADR-0100]
+        Exit Sub
+    End If
+    ' [N5/N6/N7 2026-06-12] re-protect M-03 (Unprotect was one-way)
+    modCommon.ReProtectLight ThisWorkbook.Worksheets(M03_SHEET_NAME())
     ' [BTN-GUARD-EXIT-OK] auto-injected
     modBtnGuard.LogExit BTN, XLSM, True
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0147] modEntryFormat.Btn_LoadFormat EXIT-OK"  ' [ADR-0100]
@@ -731,6 +800,8 @@ Public Sub Btn_NewFormatDraft()
                    "M-03 new-draft seeded with fmtId=" & nextId, _
                    nextId, "M03-NEWDRAFT-OK-II-040"
     End If
+    ' [N5/N6/N7 2026-06-12] re-protect M-03 (Unprotect was one-way)
+    modCommon.ReProtectLight ThisWorkbook.Worksheets(M03_SHEET_NAME())
     ' [BTN-GUARD-EXIT-OK] auto-injected
     modBtnGuard.LogExit BTN, XLSM, True
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0153] modEntryFormat.Btn_NewFormatDraft EXIT-OK"  ' [ADR-0100]
@@ -885,6 +956,8 @@ Public Sub Btn_AddField_v21()
         End If
     Next r
     Debug.Print "[Btn_AddField_v21] GRID full, no action"
+    ' [N5/N6/N7 2026-06-12] re-protect M-03 (Unprotect was one-way)
+    modCommon.ReProtectLight ThisWorkbook.Worksheets(M03_SHEET_NAME())
     ' [BTN-GUARD-EXIT-OK] auto-injected
     modBtnGuard.LogExit BTN, XLSM, True
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0163] modEntryFormat.Btn_AddField_v21 EXIT-OK"  ' [ADR-0100]
@@ -1357,6 +1430,20 @@ Public Sub Btn_ReloadFormats()
         writeRow = writeRow + 1
         writtenRows = writtenRows + 1
     Next idVar
+
+    ' 2026-06-11 B20: rows written beyond the ui_seed InitialRows=10 block
+    ' had no borders (rows 11+ looked unformatted). Re-apply the thin grid
+    ' border to every written row (A..H), same style as the seed rows.
+    If writtenRows > 0 Then
+        On Error Resume Next
+        Dim brdRng As Range
+        Set brdRng = ws.Range(M02_COL_ROWCHECK & M02_DATA_FIRST_ROW & ":" & _
+                              M02_COL_STATUS & (M02_DATA_FIRST_ROW + writtenRows - 1))
+        brdRng.Borders.LineStyle = xlContinuous
+        brdRng.Borders.Weight = xlThin
+        brdRng.Borders.Color = RGB(191, 191, 191)
+        On Error GoTo ErrHandler
+    End If
 
     ' 2026-06-06: re-apply Protect after writes
     If wasProtected Then ws.Protect Password:="", UserInterfaceOnly:=True
@@ -2169,6 +2256,20 @@ Public Function MapInputDataKeyToFieldName_M03(ByVal inputKey As String) As Stri
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0249] modEntryFormat.MapInputDataKeyToFieldName_M03 EXIT-OK"  ' [ADR-0100]
 End Function
 
+' [BUG-B17 2026-06-11] "shitei sareta format ga mitsukarimasen: "
+Private Function MsgFormatNotFound() As String
+    MsgFormatNotFound = ChrW(&H6307) & ChrW(&H5B9A) & ChrW(&H3055) & ChrW(&H308C) & _
+                        ChrW(&H305F) & ChrW(&H30D5) & ChrW(&H30A9) & ChrW(&H30FC) & _
+                        ChrW(&H30DE) & ChrW(&H30C3) & ChrW(&H30C8) & ChrW(&H304C) & _
+                        ChrW(&H898B) & ChrW(&H3064) & ChrW(&H304B) & ChrW(&H308A) & _
+                        ChrW(&H307E) & ChrW(&H305B) & ChrW(&H3093) & ": "
+End Function
+
+' [BUG-B17] title "format yomikomi"
+Private Function MsgLoadTitle() As String
+    MsgLoadTitle = ChrW(&H30D5) & ChrW(&H30A9) & ChrW(&H30FC) & ChrW(&H30DE) & ChrW(&H30C3) & ChrW(&H30C8) & ChrW(&H8AAD) & ChrW(&H8FBC)
+End Function
+
 ' NormalizeFieldType: 6 UI labels -> 4 canonical base types
 ' (per ADR-0072 7.3). Already-canonical values pass through.
 Public Function NormalizeFieldType(ByVal raw As String) As String
@@ -2201,6 +2302,25 @@ Public Function NormalizeFieldType(ByVal raw As String) As String
         NormalizeFieldType = t
     End If
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0251] modEntryFormat.NormalizeFieldType EXIT-OK"  ' [ADR-0100]
+End Function
+
+' [BUG-B13 2026-06-11] canonical 4 types -> UI labels for M-03 display.
+' (number/check collapse into single-line/select on save and cannot be
+'  recovered; they reappear as 1-line-text/select, which NormalizeFieldType
+'  maps straight back, so the save round-trip stays stable.)
+Public Function DenormalizeFieldType(ByVal raw As String) As String
+    Dim t As String
+    t = Trim(raw)
+    Dim single_line As String, multi_line As String
+    single_line = ChrW(&H5358) & ChrW(&H4E00) & ChrW(&H884C)
+    multi_line = ChrW(&H8907) & ChrW(&H6570) & ChrW(&H884C)
+    If t = single_line Then
+        DenormalizeFieldType = "1" & ChrW(&H884C) & ChrW(&H30C6) & ChrW(&H30AD) & ChrW(&H30B9) & ChrW(&H30C8)
+    ElseIf t = multi_line Then
+        DenormalizeFieldType = ChrW(&H8907) & ChrW(&H6570) & ChrW(&H884C) & ChrW(&H30C6) & ChrW(&H30AD) & ChrW(&H30B9) & ChrW(&H30C8)
+    Else
+        DenormalizeFieldType = t
+    End If
 End Function
 
 ' [USER-REQ 2026-06-09] Convert Options field (String array from ReadGridFields,

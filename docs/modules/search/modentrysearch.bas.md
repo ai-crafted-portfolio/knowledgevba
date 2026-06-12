@@ -7,6 +7,7 @@ description: modEntrySearch.bas のソースコード（コピペ用）
 
 **配置先**: `検索.xlsm` 用の VBA モジュール
 **種類**: 標準モジュール
+**更新日**: 2026-06-12 01:22
 
 ---
 
@@ -74,10 +75,30 @@ Public Sub Btn_SearchV23()
     keyword = Trim(CStr(ws.Range(M08_CELL_KEYWORD).Value))
     fmtFilter = Trim(CStr(ws.Range(M08_CELL_FORMAT).Value))
 
+    ' [BUG-B8 2026-06-11] C10 dropdown holds FormatName (display name) but
+    ' matching compares FormatID (same root cause as B5). Resolve display
+    ' name to ID; unknown values pass through so direct ID input still works.
+    fmtFilter = ResolveFormatIdFromDisplay(fmtFilter)
+
+    ' [SPEC T-24 / BUG-B10 2026-06-11] zero search conditions must show a
+    ' message and NOT fall back to listing every knowledge file.
+    If Len(keyword) = 0 And Len(fmtFilter) = 0 Then
+        If Not IsTestMode() Then
+            MsgBox MsgNoCondition(), vbExclamation, XLSM
+        End If
+        modBtnGuard.LogExit BTN, XLSM, True
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1792b] modEntrySearch.Btn_SearchV23 EXIT-OK (no condition)"  ' [ADR-0100]
+        Exit Sub
+    End If
+
     Dim clearRng As Range
     Set clearRng = ws.Range(ws.Cells(M08_RESULT_START_ROW, 1), ws.Cells(M08_RESULT_LAST_ROW, 8))
     On Error Resume Next
     clearRng.ClearContents
+    ' [N4 2026-06-12] strip previous run's borders/zebra so a smaller result
+    ' set does not leave stale formatting below the new rows.
+    clearRng.Borders.LineStyle = xlNone
+    clearRng.Interior.ColorIndex = xlNone
     ' 2026-05-31 UX: reset column A font (blue + underline hyperlink-look)
     ' that was applied to the previous search result.
     Dim aColRng As Range
@@ -199,6 +220,9 @@ Public Sub Btn_SearchV23()
     ws.Columns("G:G").Hidden = True
     On Error GoTo 0
 
+    ' [N1 2026-06-12] Unprotect was one-way - restore light protection
+    modCommon.ReProtectLight ws
+
     On Error Resume Next
     Dim lg As clsLogger
     Set lg = New clsLogger
@@ -252,6 +276,14 @@ Public Sub Btn_SearchClearV23()
     ' 2026-06-08 UX: also clear extended grid borders + alternating row tint
     clearRng.Borders.LineStyle = xlNone
     clearRng.Interior.ColorIndex = xlNone
+    ' [N3 2026-06-12] restore the seed look: thin border on the initial 10 rows
+    Dim seedRng As Range
+    Set seedRng = ws.Range(ws.Cells(M08_RESULT_START_ROW, 1), ws.Cells(M08_RESULT_START_ROW + 9, 7))
+    seedRng.Borders.LineStyle = xlContinuous
+    seedRng.Borders.Weight = xlThin
+    seedRng.Borders.Color = RGB(191, 191, 191)
+    ' [N2 2026-06-12] re-protect (Unprotect was one-way)
+    modCommon.ReProtectLight ws
     ' [BTN-GUARD-EXIT-OK] auto-injected
     modBtnGuard.LogExit BTN, XLSM, True
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1799] modEntrySearch.Btn_SearchClearV23 EXIT-OK"  ' [ADR-0100]
@@ -295,23 +327,20 @@ Private Function MatchesSearchV23(ByVal data As Object, ByVal keyword As String,
         Exit Function
     End If
     ' [USER-REQ 2026-06-09] Keyword matching restricted to searchTarget=TRUE fields.
+    ' [BUG-B9 2026-06-11] Space-separated keywords (half/full width) are AND
+    ' conditions over the combined searchTarget text, not one long literal.
     Dim searchFields As Collection
     Set searchFields = GetSearchTargetFieldNames(SafeStr(data, "FormatID"))
+    Dim combined As String
+    combined = ""
     Dim sfi As Long
     For sfi = 1 To searchFields.Count
         Dim fname As String
         fname = CStr(searchFields(sfi))
-        If data.Exists(fname) Then
-            Dim v As String
-            v = CStr(data(fname))
-            If InStr(1, v, keyword, vbTextCompare) > 0 Then
-                MatchesSearchV23 = True
-                If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1806] modEntrySearch.MatchesSearchV23 EXIT-OK"  ' [ADR-0100]
-                Exit Function
-            End If
-        End If
+        If data.Exists(fname) Then combined = combined & " " & CStr(data(fname))
     Next sfi
-    MatchesSearchV23 = False
+    MatchesSearchV23 = ContainsAllTerms(combined, keyword)
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1806] modEntrySearch.MatchesSearchV23 EXIT-OK"  ' [ADR-0100]
 End Function
 
 ' [USER-REQ 2026-06-09] Returns all FIELD names where searchTarget=TRUE
@@ -615,6 +644,74 @@ Private Function NewSearchEngine() As clsSearchEngine
     On Error GoTo 0
 End Function
 
+
+' ================================================================
+' Function: ContainsAllTerms ([BUG-B9 2026-06-11])
+' Outline:  AND match - every space-separated term in terms must appear
+'           in target (case-insensitive). Full-width spaces normalized.
+' Args:     target - combined searchTarget field text
+'           terms  - raw keyword cell value
+' Returns:  Boolean - True when ALL terms hit (empty terms -> True)
+' ================================================================
+Private Function ContainsAllTerms(ByVal target As String, ByVal terms As String) As Boolean
+    Dim norm As String
+    norm = Replace(terms, ChrW(&H3000), " ")
+    Dim parts() As String
+    parts = Split(Trim$(norm), " ")
+    Dim i As Long
+    For i = LBound(parts) To UBound(parts)
+        If Len(parts(i)) > 0 Then
+            If InStr(1, target, parts(i), vbTextCompare) = 0 Then
+                ContainsAllTerms = False
+                Exit Function
+            End If
+        End If
+    Next i
+    ContainsAllTerms = True
+End Function
+
+' ================================================================
+' Function: ResolveFormatIdFromDisplay ([BUG-B8 2026-06-11])
+' Outline:  Resolve format display name (FormatName) to FormatID via
+'           modFormatLoader.LoadFormatList (same pattern as the B5 fix
+'           clsUserFormRenderer.ResolveDisplayToFormatId).
+' Args:     disp - dropdown cell value (display name or raw FormatID)
+' Returns:  String - FormatID when resolved, otherwise disp pass-through
+' ================================================================
+Private Function ResolveFormatIdFromDisplay(ByVal disp As String) As String
+    On Error GoTo ErrHandler
+    ResolveFormatIdFromDisplay = disp
+    If Len(disp) = 0 Then Exit Function
+    Dim formats As Collection
+    Set formats = modFormatLoader.LoadFormatList()
+    If formats Is Nothing Then Exit Function
+    Dim i As Long
+    For i = 1 To formats.Count
+        Dim ent As Object
+        Set ent = formats.Item(i)
+        If ent.Exists("Description") Then
+            If CStr(ent("Description")) = disp Then
+                If ent.Exists("FormatID") Then ResolveFormatIdFromDisplay = CStr(ent("FormatID"))
+                Exit Function
+            End If
+        End If
+    Next i
+    Exit Function
+ErrHandler:
+    ' keep pass-through value on error (no resource to release)
+End Function
+
+' ================================================================
+' Function: MsgNoCondition ([SPEC T-24 / BUG-B10 2026-06-11])
+' Outline:  "Enter a search condition" message. JP literal built with
+'           ChrW per ADR-0006/0090/0094 (no raw JP literals in code).
+' Returns:  String - message text
+' ================================================================
+Private Function MsgNoCondition() As String
+    MsgNoCondition = ChrW(&H691C) & ChrW(&H7D22) & ChrW(&H6761) & ChrW(&H4EF6) & _
+                     ChrW(&H3092) & ChrW(&H5165) & ChrW(&H529B) & ChrW(&H3057) & _
+                     ChrW(&H3066) & ChrW(&H304F) & ChrW(&H3060) & ChrW(&H3055) & ChrW(&H3044)
+End Function
 
 ' [USER-REQ 2026-06-09] Look up format display name from format file
 Private Function ResolveFormatName(ByVal fmtId As String) As String

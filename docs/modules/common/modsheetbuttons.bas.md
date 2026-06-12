@@ -7,6 +7,7 @@ description: modSheetButtons.bas のソースコード（コピペ用）
 
 **配置先**: 共通モジュール（3 ブック共通）
 **種類**: 標準モジュール
+**更新日**: 2026-06-12 01:23
 
 ---
 
@@ -76,8 +77,10 @@ Private Sub PlaceM05Buttons()
     ws.Unprotect
     ClearV23Buttons ws
     ' Phase R-3-omega: top 10->40 so buttons sit below the navy title bar (row1).
-    AddV23Button ws, 10, 40, 140, 28, ChrW(&H65B0) & ChrW(&H898F) & ChrW(&H767B) & ChrW(&H9332), "TestPhaseP_ShowRegister"
+    AddV23Button ws, 10, 40, 140, 28, ChrW(&H65B0) & ChrW(&H898F) & ChrW(&H767B) & ChrW(&H9332), "Btn_OpenRegisterForm"
     ' [USER-REQ 2026-06-09] クリア button removed (not needed).
+    ' [N9 2026-06-12] re-protect (placement runs after ApplyProtection)
+    modCommon.ReProtectLight ws
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1356] modSheetButtons.PlaceM05Buttons EXIT-OK"  ' [ADR-0100]
 End Sub
 
@@ -94,6 +97,8 @@ Private Sub PlaceM06Buttons()
     AddV23Button ws, 10, 40, 200, 28, _
         ChrW(&H4FEE) & ChrW(&H6B63) & ChrW(&H30D5) & ChrW(&H30A9) & ChrW(&H30FC) & ChrW(&H30E0) & ChrW(&H3092) & ChrW(&H958B) & ChrW(&H304F), _
         "Btn_OpenEditForm"
+    ' [N9 2026-06-12] re-protect (placement runs after ApplyProtection)
+    modCommon.ReProtectLight ws
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1358] modSheetButtons.PlaceM06Buttons EXIT-OK"  ' [ADR-0100]
 End Sub
 

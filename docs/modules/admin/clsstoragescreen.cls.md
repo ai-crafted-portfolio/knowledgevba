@@ -7,6 +7,7 @@ description: clsStorageScreen.cls のソースコード（コピペ用）
 
 **配置先**: `管理.xlsm` 用の VBA モジュール
 **種類**: クラスモジュール
+**更新日**: 2026-06-03 23:22
 
 ---
 
@@ -98,7 +99,7 @@ Public Function ValidateInput() As Boolean
     Dim fld As clsFieldSpec
     For Each fld In m_spec.Fields
         If fld.Required And Len(fld.InputAddr) > 0 Then
-            If Len(Trim(GetInputValue(fld.InputAddr))) = 0 Then
+            If Len(Trim$(GetInputValue(fld.InputAddr))) = 0 Then
                 If modCommon.gDebugLevel >= DEBUG_LEVEL_DEBUG Then Debug.Print "[D-0109] clsStorageScreen.ValidateInput STEP-2 pre modScreenRender.LogScreenTrace"  ' [ADR-0100]
                 Call modScreenRender.LogScreenTrace("clsStorageScreen", "ValidateInput", "required field empty: " & fld.Label, "VALIDATE-WARN-WW-210")
                 ValidateInput = False

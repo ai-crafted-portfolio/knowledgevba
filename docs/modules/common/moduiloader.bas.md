@@ -7,6 +7,7 @@ description: modUILoader.bas のソースコード（コピペ用）
 
 **配置先**: 共通モジュール（3 ブック共通）
 **種類**: 標準モジュール
+**更新日**: 2026-06-12 01:22
 
 ---
 
@@ -708,6 +709,10 @@ Private Sub ApplyInput(ByVal ws As Worksheet, ByVal sec As ClsStanzaSection)
     ' data validation by InputType (schema 3.6 enum)
     Dim inputType As String
     inputType = LCase(sec.GetValue("InputType"))
+    ' [B28 2026-06-12] see ApplyDropdownValidation
+    On Error Resume Next
+    r.Worksheet.Unprotect
+    On Error GoTo 0
     On Error Resume Next
     r.Validation.Delete
     On Error GoTo 0
@@ -776,6 +781,12 @@ End Sub
 ' Supported (schema 3.6): static:v1,v2,...  /  format:<id>:fields:<no> (deferred).
 Private Sub ApplyDropdownValidation(ByVal r As Range, ByVal source As String)
     Debug.Print "[D-1496] modUILoader.ApplyDropdownValidation ENTER"  ' [ADR-0100]
+    ' [B28 2026-06-12] Validation writes fail silently on a protected sheet even
+    ' with UserInterfaceOnly (refresh path lost dropdowns). Unprotect here;
+    ' the pipeline re-protects at its ApplyProtection step.
+    On Error Resume Next
+    r.Worksheet.Unprotect
+    On Error GoTo 0
     If Len(source) = 0 Then Exit Sub
     Dim listCsv As String
     If Left(source, 7) = "static:" Then

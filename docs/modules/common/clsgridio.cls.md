@@ -7,6 +7,7 @@ description: clsGridIO.cls のソースコード（コピペ用）
 
 **配置先**: 共通モジュール（3 ブック共通）
 **種類**: クラスモジュール
+**更新日**: 2026-06-11 15:18
 
 ---
 
@@ -109,8 +110,19 @@ Public Function ReadGridFields(ByVal target As Object, ByVal gridSec As Object, 
                     Dim optStr As String
                     optStr = CStr(rowDict("Options"))
                     If Len(optStr) > 0 Then
+                        ' 2026-06-11 fix: M-03 cell input is comma-separated (spec),
+                        ' the canonical file format is pipe-separated (FAULT/SAGYO),
+                        ' and the old code split on vbLf (matched nothing).
+                        ' Normalize comma/vbLf to pipe, then split.
+                        optStr = Replace(optStr, vbLf, "|")
+                        optStr = Replace(optStr, ",", "|")
+                        optStr = Replace(optStr, ChrW(&HFF0C), "|")   ' full-width comma
                         Dim opts() As String
-                        opts = Split(optStr, vbLf)
+                        opts = Split(optStr, "|")
+                        Dim oi As Long
+                        For oi = LBound(opts) To UBound(opts)
+                            opts(oi) = Trim(opts(oi))
+                        Next oi
                         rowDict("Options") = opts
                     End If
                 End If
@@ -258,17 +270,19 @@ Public Function IsValidFieldType(ByVal t As String) As Boolean
     multi_line = ChrW(&H8907) & ChrW(&H6570) & ChrW(&H884C)
     date_type = ChrW(&H65E5) & ChrW(&H4ED8)
     select_type = ChrW(&H9078) & ChrW(&H629E)
-    Dim ui_1line As String, ui_multiline As String, ui_number As String
-    Dim ui_date As String, ui_select As String, ui_check As String
-    ui_1line = "1" & ChrW(&H884C) & ChrW(&H30C6) & ChrW(&H30AD) & ChrW(&H30B9) & ChrW(&H30C8)
-    ui_multiline = ChrW(&H8907) & ChrW(&H6570) & ChrW(&H884C) & ChrW(&H30C6) & ChrW(&H30AD) & ChrW(&H30B9) & ChrW(&H30C8)
-    ui_number = ChrW(&H6570) & ChrW(&H5024)
-    ui_date = ChrW(&H65E5) & ChrW(&H4ED8)
-    ui_select = ChrW(&H9078) & ChrW(&H629E)
-    ui_check = ChrW(&H30C1) & ChrW(&H30A7) & ChrW(&H30C3) & ChrW(&H30AF)
+    ' 2026-06-11 fix (C-03-001): the M-03 grid carries UI labels (6 values)
+    ' and they reach this validator BEFORE NormalizeFieldType runs. The four
+    ' labels below were rejected, so rows typed with them were silently
+    ' dropped in warn mode (fields lost on save).
+    Dim lbl_1line As String, lbl_multiline As String
+    Dim lbl_number As String, lbl_check As String
+    lbl_1line = "1" & ChrW(&H884C) & ChrW(&H30C6) & ChrW(&H30AD) & ChrW(&H30B9) & ChrW(&H30C8)
+    lbl_multiline = ChrW(&H8907) & ChrW(&H6570) & ChrW(&H884C) & ChrW(&H30C6) & ChrW(&H30AD) & ChrW(&H30B9) & ChrW(&H30C8)
+    lbl_number = ChrW(&H6570) & ChrW(&H5024)
+    lbl_check = ChrW(&H30C1) & ChrW(&H30A7) & ChrW(&H30C3) & ChrW(&H30AF)
     If t = single_line Or t = multi_line Or t = date_type Or t = select_type Then
         IsValidFieldType = True
-    ElseIf t = ui_1line Or t = ui_multiline Or t = ui_number Or t = ui_date Or t = ui_select Or t = ui_check Then
+    ElseIf t = lbl_1line Or t = lbl_multiline Or t = lbl_number Or t = lbl_check Then
         IsValidFieldType = True
     Else
         IsValidFieldType = False

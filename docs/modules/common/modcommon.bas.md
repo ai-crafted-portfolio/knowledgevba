@@ -7,6 +7,7 @@ description: modCommon.bas のソースコード（コピペ用）
 
 **配置先**: 共通モジュール（3 ブック共通）
 **種類**: 標準モジュール
+**更新日**: 2026-06-12 01:22
 
 ---
 
@@ -276,4 +277,12 @@ End Property
 Public Property Get XLSM_KANRI() As String
     XLSM_KANRI = ChrW(&H7BA1) & ChrW(&H7406)
 End Property
+
+
+' [N-PROT 2026-06-12] 書込後に標準の軽量保護を再適用する (Unprotect 片道経路の対称化)
+Public Sub ReProtectLight(ByVal ws As Object)
+    On Error Resume Next
+    ws.Protect Password:="", UserInterfaceOnly:=True
+    On Error GoTo 0
+End Sub
 ```

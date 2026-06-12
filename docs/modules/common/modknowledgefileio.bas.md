@@ -7,6 +7,7 @@ description: modKnowledgeFileIO.bas のソースコード（コピペ用）
 
 **配置先**: 共通モジュール（3 ブック共通）
 **種類**: 標準モジュール
+**更新日**: 2026-06-11 15:52
 
 ---
 
@@ -270,6 +271,11 @@ Private Function ParseKnowledgeStanza(ByVal content As String) As Object
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1287] modKnowledgeFileIO.ParseKnowledgeStanza ENTER"  ' [ADR-0100]
     Dim d As Object
     Set d = CreateObject("Scripting.Dictionary")
+    ' [BUG-B7 2026-06-11] data stanza keys vary in case across generations
+    ' (###FormatID### vs ###formatId###, UpdatedAt vs updatedAt). Consumers
+    ' (modEntrySearch.SafeStr etc.) look keys up case-sensitively, so force
+    ' TextCompare BEFORE any key is added.
+    d.CompareMode = vbTextCompare
     Dim lines() As String
     Dim norm As String
     norm = Replace(content, vbCrLf, vbLf)

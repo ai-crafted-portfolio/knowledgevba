@@ -7,6 +7,7 @@ description: clsKnowledgeRegisterScreen.cls のソースコード（コピペ用
 
 **配置先**: `登録修正.xlsm` 用の VBA モジュール
 **種類**: クラスモジュール
+**更新日**: 2026-06-03 23:22
 
 ---
 

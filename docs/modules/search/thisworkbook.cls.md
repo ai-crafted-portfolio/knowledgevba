@@ -7,6 +7,7 @@ description: ThisWorkbook.cls のソースコード（コピペ用）
 
 **配置先**: `検索.xlsm` 用の VBA モジュール
 **種類**: クラスモジュール
+**更新日**: 2026-06-11 16:37
 
 ---
 
@@ -164,7 +165,10 @@ Private Sub Workbook_SheetBeforeDoubleClick(ByVal Sh As Object, ByVal Target As 
     If Target.Row < 14 Then Exit Sub
     If Target.Column < 1 Or Target.Column > 7 Then Exit Sub
     Dim kid As String
-    kid = Trim(CStr(Sh.Cells(Target.Row, 2).Value))
+    ' [BUG-B11 2026-06-11] grid reorder (2026-06-09) moved knowledgeNo from
+    ' column B (col 2) to column G (col 7, hidden); column B now holds the
+    ' FormatName, so reading col 2 fed a bogus kid to the view form (empty).
+    kid = Trim(CStr(Sh.Cells(Target.Row, 7).Value))
     If Len(kid) = 0 Then Exit Sub
 
     Cancel = True   ' セル編集モード抑止

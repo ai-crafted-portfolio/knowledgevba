@@ -7,6 +7,7 @@ description: clsSystemSettingsScreen.cls のソースコード（コピペ用）
 
 **配置先**: `管理.xlsm` 用の VBA モジュール
 **種類**: クラスモジュール
+**更新日**: 2026-06-04 12:30
 
 ---
 

@@ -7,6 +7,7 @@ description: clsUserFormRenderer.cls のソースコード（コピペ用）
 
 **配置先**: 共通モジュール（3 ブック共通）
 **種類**: クラスモジュール
+**更新日**: 2026-06-12 08:51
 
 ---
 
@@ -211,6 +212,7 @@ Private m_modelessVbc As Object
 ' names like  / cannot collide, and the persistence layer
 ' looks up the fieldName via this dictionary.
 Private m_fieldNamesByIdx As Object       ' Dictionary: ctlName -> fieldName
+Private m_fieldRequiredByCtl As Object     ' [BUG-B16] Dictionary: ctlName -> Boolean (required)
 Private m_dateFieldIndices As Object       ' Dictionary: idxStr -> True for ???? fields
 ' Phase P fix (2026-05-27): ComboBox items added on Designer.Controls.Add
 ' do not persist to the runtime UserForm instance returned by
@@ -218,6 +220,7 @@ Private m_dateFieldIndices As Object       ' Dictionary: idxStr -> True for ????
 ' populate the live instance after UserForms.Add (before Show).
 Private m_comboItemsByCtl As Object       ' Dictionary: ctlName -> Array of items
 Private m_comboInitialByCtl As Object     ' Dictionary: ctlName -> initial selected value
+Private m_displayToFmtId As Object        ' 2026-06-11 fix: Dictionary: FormatName(display) -> FormatID
 Private m_placeholderByCtl As Object      ' Phase R-2 F-4: ctlName -> placeholder text
 
 ' --- Public API (Phase N-3, ADR-0073 ??3.1) ---
@@ -544,9 +547,11 @@ Private Sub BuildAndShow(ByVal knowledgeData As Object)
 
     ' Phase O-2: reset per-form maps (control-name -> field-name; ???? set)
     Set m_fieldNamesByIdx = CreateObject("Scripting.Dictionary")
+    Set m_fieldRequiredByCtl = CreateObject("Scripting.Dictionary")
     Set m_dateFieldIndices = CreateObject("Scripting.Dictionary")
     Set m_comboItemsByCtl = CreateObject("Scripting.Dictionary")
     Set m_comboInitialByCtl = CreateObject("Scripting.Dictionary")
+    Set m_displayToFmtId = CreateObject("Scripting.Dictionary")
     Set m_placeholderByCtl = CreateObject("Scripting.Dictionary")
     LogToSheet "BuildAndShow", "step 3 dicts created", "LOG-UF-STEP-03"
 
@@ -1017,7 +1022,10 @@ Private Function AddHeaderRow(ByVal designer As Object) As Long
             ctl.AddItem CStr(fmts(fi))
         Next fi
         m_comboItemsByCtl("cboFormatId") = fmts
-        If Len(m_formatId) > 0 Then m_comboInitialByCtl("cboFormatId") = m_formatId
+        ' [BUG-B15 2026-06-11] items are display names (FormatName); the
+        ' initial value must be the display name too, or the DropDownList
+        ' rejects the raw FormatID and the combo shows blank after re-render.
+        If Len(m_formatId) > 0 Then m_comboInitialByCtl("cboFormatId") = ResolveFormatIdToDisplay(m_formatId)
         ctl.Locked = m_readOnlyFormat
     Else
         Set ctl = designer.Controls.Add(PROGID_TEXTBOX, "txtFormatId", True)
@@ -1045,6 +1053,30 @@ End Function
 
 ' Phase R-2 F-3: list available format ids (basenames of formats/*.txt).
 ' Returns a string array (possibly empty).
+' 2026-06-11 fix: resolve a dropdown display name back to its FormatID.
+' Unknown names (or direct IDs typed in textbox mode) pass through unchanged.
+Public Function ResolveDisplayToFormatId(ByVal disp As String) As String
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0816b] clsUserFormRenderer.ResolveDisplayToFormatId ENTER"  ' [ADR-0100]
+    ResolveDisplayToFormatId = disp
+    If m_displayToFmtId Is Nothing Then Exit Function
+    If m_displayToFmtId.Exists(disp) Then ResolveDisplayToFormatId = CStr(m_displayToFmtId(disp))
+End Function
+
+' [BUG-B15 2026-06-11] Reverse of ResolveDisplayToFormatId: FormatID ->
+' display name (FormatName). Pass-through when unknown.
+Public Function ResolveFormatIdToDisplay(ByVal fmtId As String) As String
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0816c] clsUserFormRenderer.ResolveFormatIdToDisplay ENTER"  ' [ADR-0100]
+    ResolveFormatIdToDisplay = fmtId
+    If m_displayToFmtId Is Nothing Then Exit Function
+    Dim k As Variant
+    For Each k In m_displayToFmtId.Keys
+        If CStr(m_displayToFmtId(k)) = fmtId Then
+            ResolveFormatIdToDisplay = CStr(k)
+            Exit Function
+        End If
+    Next k
+End Function
+
 Private Function ListFormatIds() As Variant
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0816] clsUserFormRenderer.ListFormatIds ENTER"  ' [ADR-0100]
     ' [USER-REQ 2026-06-09] Show FormatName in dropdown (not FormatID).
@@ -1068,6 +1100,13 @@ Private Function ListFormatIds() As Variant
         On Error Resume Next
         If ent.Exists("Description") Then nm = CStr(ent("Description"))
         If Len(nm) = 0 And ent.Exists("FormatID") Then nm = CStr(ent("FormatID"))
+        ' 2026-06-11 fix: the dropdown shows FormatName but downstream
+        ' (OnFormatChange / PersistFromActiveForm) needs the FormatID.
+        ' Keep a display->ID reverse map (last-one-wins on duplicate names).
+        If ent.Exists("FormatID") Then
+            If m_displayToFmtId Is Nothing Then Set m_displayToFmtId = CreateObject("Scripting.Dictionary")
+            m_displayToFmtId(nm) = CStr(ent("FormatID"))
+        End If
         On Error GoTo Fail
         arr(i - 1) = nm
     Next i
@@ -1300,6 +1339,7 @@ Private Function AddFieldRow(ByVal designer As Object, _
     rowH = m_rowHeightSingle
     Dim ctl As Object
     m_fieldNamesByIdx(ctlName) = fieldName
+    m_fieldRequiredByCtl(ctlName) = isReq   ' [BUG-B16] remember required flag for runtime validation
 
     Select Case fieldType
         Case ChrW(&H5358) & ChrW(&H4E00) & ChrW(&H884C)  ' ?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E?P?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E?s
@@ -1348,7 +1388,7 @@ Private Function AddFieldRow(ByVal designer As Object, _
             Else
                 rowH = m_rowHeightSingle  ' Rows unspecified -> 1-line height
             End If
-        Case ChrW(&H65E5) & ChrW(&H4ED8)  ' ?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E? - mark for Change-event validation
+        Case ChrW(&H65E5) & ChrW(&H4ED8), ChrW(&H65E5) & ChrW(&H6642)  ' [Q2.a 2026-06-11] nichiji = alias of date ' ?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E? - mark for Change-event validation
             Set ctl = designer.Controls.Add(PROGID_TEXTBOX, ctlName, True)
             ctl.MultiLine = False
             ctl.Text = curVal
@@ -1359,6 +1399,9 @@ Private Function AddFieldRow(ByVal designer As Object, _
             Dim opts As String
             opts = sec.GetValue("DropdownOptions")
             If Len(opts) > 0 Then
+                ' 2026-06-11 fix: accept comma-separated values too (M-03 spec input);
+                ' canonical file separator is pipe.
+                opts = Replace(opts, ",", "|")
                 Dim parts() As String
                 parts = Split(opts, "|")
                 Dim k As Long
@@ -1539,6 +1582,12 @@ Private Sub AddButtonBar(ByVal designer As Object, ByVal y As Long)
             helpTexts = fHelp
         End If
     End If
+    ' [B26 2026-06-11] maximize toggle on every form (user request).
+    ' Added after the [USERFORM] buttons filter so seeds cannot drop it.
+    names = Split("btnMaximize|" & Join(names, "|"), "|")
+    labels = Split(ChrW(&H6700) & ChrW(&H5927) & ChrW(&H5316) & "|" & Join(labels, "|"), "|")
+    kinds = Split("s|" & Join(kinds, "|"), "|")
+    helpTexts = Split(ChrW(&H753B) & ChrW(&H9762) & ChrW(&H3092) & ChrW(&H6700) & ChrW(&H5927) & ChrW(&H5316) & ChrW(&H3057) & ChrW(&H307E) & ChrW(&H3059) & "|" & Join(helpTexts, "|"), "|")
     n = UBound(names) - LBound(names) + 1
     Dim i As Long
     For i = 0 To n - 1
@@ -1619,9 +1668,11 @@ Private Sub InjectFormCode(ByVal vbc As Object)
     Set cm = vbc.CodeModule
     Dim s As String
     s = "Option Explicit" & vbCrLf & vbCrLf
+    ' [BUG-B12 2026-06-11] spec M-05: show a completion message and KEEP the
+    ' form open after register (was: silent Unload Me). OnRegisterV2 shows
+    ' the message itself (headless-guarded); failures also keep the form.
     s = s & "Private Sub btnRegister_Click()" & vbCrLf
-    s = s & "    Application.Run ""modUserFormCallback.OnRegister""" & vbCrLf
-    s = s & "    Unload Me" & vbCrLf
+    s = s & "    Application.Run ""modUserFormCallback.OnRegisterV2""" & vbCrLf
     s = s & "End Sub" & vbCrLf & vbCrLf
     s = s & "Private Sub btnUpdate_Click()" & vbCrLf
     s = s & "    Application.Run ""modUserFormCallback.OnUpdate""" & vbCrLf
@@ -1644,6 +1695,58 @@ Private Sub InjectFormCode(ByVal vbc As Object)
     s = s & "Private Sub btnClose_Click()" & vbCrLf
     s = s & "    Unload Me" & vbCrLf
     s = s & "End Sub" & vbCrLf
+    ' [B26 2026-06-11] maximize/restore toggle. Resizes the form to the
+    ' Excel application bounds, grows frScroll, and shifts the bottom
+    ' button bar (buttons + help labels) by the delta.
+    s = s & vbCrLf
+    s = s & "Private Sub btnMaximize_Click()" & vbCrLf
+    s = s & "    On Error Resume Next" & vbCrLf
+    s = s & "    Static origW As Double, origH As Double, isMax As Boolean" & vbCrLf
+    s = s & "    Dim dW As Double, dH As Double, thr As Double" & vbCrLf
+    s = s & "    Dim frS As Object" & vbCrLf
+    s = s & "    Set frS = Me.Controls(""frScroll"")" & vbCrLf
+    s = s & "    If frS Is Nothing Then Exit Sub" & vbCrLf
+    s = s & "    thr = frS.Top + frS.Height - 5" & vbCrLf
+    s = s & "    If Not isMax Then" & vbCrLf
+    s = s & "        origW = Me.Width: origH = Me.Height" & vbCrLf
+    s = s & "        dW = Application.Width - Me.Width: dH = Application.Height - Me.Height" & vbCrLf
+    s = s & "        If dW < 0 Then dW = 0" & vbCrLf
+    s = s & "        If dH < 0 Then dH = 0" & vbCrLf
+    s = s & "        Me.Move Application.Left, Application.Top, origW + dW, origH + dH" & vbCrLf
+    s = s & "        isMax = True" & vbCrLf
+    s = s & "        Me.Controls(""btnMaximize"").Caption = " & Chr(34) & ChrW(&H5143) & ChrW(&H306B) & ChrW(&H623B) & ChrW(&H3059) & Chr(34) & vbCrLf
+    s = s & "    Else" & vbCrLf
+    s = s & "        dW = origW - Me.Width: dH = origH - Me.Height" & vbCrLf
+    s = s & "        Me.Move Application.Left + (Application.Width - origW) / 2, Application.Top + (Application.Height - origH) / 2, origW, origH" & vbCrLf
+    s = s & "        isMax = False" & vbCrLf
+    s = s & "        Me.Controls(""btnMaximize"").Caption = " & Chr(34) & ChrW(&H6700) & ChrW(&H5927) & ChrW(&H5316) & Chr(34) & vbCrLf
+    s = s & "    End If" & vbCrLf
+    s = s & "    frS.Width = frS.Width + dW: frS.Height = frS.Height + dH" & vbCrLf
+    ' [B26v2 2026-06-12] widen the title bar and field controls too (user report)
+    s = s & "    Dim tbar As Object" & vbCrLf
+    s = s & "    Set tbar = Nothing" & vbCrLf
+    s = s & "    Set tbar = Me.Controls(""lblTitleBar"")" & vbCrLf
+    s = s & "    If Not tbar Is Nothing Then tbar.Width = tbar.Width + dW" & vbCrLf
+    s = s & "    Dim c2 As Object" & vbCrLf
+    s = s & "    For Each c2 In frS.Controls" & vbCrLf
+    s = s & "        If TypeName(c2) = ""TextBox"" Or TypeName(c2) = ""ComboBox"" Then c2.Width = c2.Width + dW" & vbCrLf
+    s = s & "    Next c2" & vbCrLf
+    s = s & "    Dim c As Object" & vbCrLf
+    s = s & "    For Each c In Me.Controls" & vbCrLf
+    s = s & "        If Not (c Is frS) Then" & vbCrLf
+    s = s & "            Dim isTop As Boolean" & vbCrLf
+    s = s & "            isTop = False" & vbCrLf
+    s = s & "            isTop = (c.Parent Is Me)" & vbCrLf
+    s = s & "            If isTop And c.Top >= thr Then" & vbCrLf
+    s = s & "                c.Top = c.Top + dH: c.Left = c.Left + dW" & vbCrLf
+    s = s & "            ElseIf isTop And (TypeName(c) = ""TextBox"" Or TypeName(c) = ""ComboBox"") Then" & vbCrLf
+    s = s & "                c.Width = c.Width + dW  '' [B26v3] header-area fields" & vbCrLf
+    s = s & "            End If" & vbCrLf
+    s = s & "        End If" & vbCrLf
+    s = s & "    Next c" & vbCrLf
+    s = s & "    Me.Repaint" & vbCrLf
+    s = s & "End Sub" & vbCrLf
+
     ' V4 fix (2026-05-29) #M-05: in register mode the first empty DropDownList
     ' ComboBox halts the frScroll initial paint, leaving later fields blank.
     ' UserForm_Activate fires even under modal Show, so scroll the frame to the
@@ -2051,6 +2154,13 @@ Public Function GetDynFormName() As String
     GetDynFormName = m_dynFormName
 End Function
 ' Phase O-2: expose ctlName -> fieldName mapping for the callback bridge.
+' [BUG-B16 2026-06-11] True when the control maps to a required field.
+Public Function IsRequiredCtl(ByVal ctlName As String) As Boolean
+    IsRequiredCtl = False
+    If m_fieldRequiredByCtl Is Nothing Then Exit Function
+    If m_fieldRequiredByCtl.Exists(ctlName) Then IsRequiredCtl = CBool(m_fieldRequiredByCtl(ctlName))
+End Function
+
 Public Function GetFieldNameForCtl(ByVal ctlName As String) As String
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0859] clsUserFormRenderer.GetFieldNameForCtl ENTER"  ' [ADR-0100]
     If m_fieldNamesByIdx Is Nothing Then Exit Function
@@ -2101,4 +2211,18 @@ End Sub
 Private Property Get DEFAULT_FONT_NAME() As String
     DEFAULT_FONT_NAME = ChrW(&H30E1) & ChrW(&H30A4) & ChrW(&H30EA) & ChrW(&H30AA)
 End Property
+
+' [B32 2026-06-12] date-type lookup for register/update validation
+Public Function IsDateCtl(ByVal ctlName As String) As Boolean
+    IsDateCtl = False
+    On Error Resume Next
+    If m_dateFieldIndices Is Nothing Then Exit Function
+    Dim kk As Variant
+    For Each kk In m_dateFieldIndices.Keys
+    If "ctl_" & CStr(kk) = ctlName Then
+        IsDateCtl = True
+        Exit Function
+    End If
+    Next kk
+End Function
 ```

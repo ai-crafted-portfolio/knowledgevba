@@ -7,6 +7,7 @@ description: modEntrySettings.bas のソースコード（コピペ用）
 
 **配置先**: `管理.xlsm` 用の VBA モジュール
 **種類**: 標準モジュール
+**更新日**: 2026-06-11 22:50
 
 ---
 
@@ -268,12 +269,15 @@ Public Sub Btn_OpenStorage_v21()
     Set ws = ThisWorkbook.Worksheets(SHEET_STORAGE)
     ws.Activate
 
-    ' Locate the row whose checkbox cell holds U+25A0 (filled square).
+    ' [B21 2026-06-11] Locate the selected radio row: marker is U+25CF
+    ' (filled circle, written by ThisWorkbook.ToggleM10Radio) and the
+    ' grid spans rows 11..15 (5th row = config_dir). The old code looked
+    ' for U+25A0 in rows 11..14 and could never find a selection.
     Dim targetRow As Long
     targetRow = 0
     Dim i As Long
-    For i = 11 To 14
-        If CStr(ws.Cells(i, 1).Value) = ChrW(&H25A0) Then
+    For i = 11 To 15
+        If CStr(ws.Cells(i, 1).Value) = ChrW(&H25CF) Then
             targetRow = i
             Exit For
         End If
@@ -442,7 +446,13 @@ Public Sub EnsureSettingsCellsEditable()
     On Error GoTo ErrHandler
     Dim ws As Worksheet
     Set ws = ThisWorkbook.Worksheets(SHEET_SETTINGS)
+    ' [BUG-B14 2026-06-11] setting Locked on a protected sheet raises 1004;
+    ' toggle protection around the change (same pattern as modEntryFormat).
+    Dim wasProtected As Boolean
+    wasProtected = ws.ProtectContents
+    If wasProtected Then ws.Unprotect Password:=""
     ws.Range(ADDR_DEBUG_LEVEL_FC).Locked = False
+    If wasProtected Then ws.Protect Password:="", UserInterfaceOnly:=True
     ' 2026-06-07: checkbox cells retired; no Locked-toggle needed.
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-EU02] modEntrySettings.EnsureSettingsCellsEditable EXIT-OK"
     Exit Sub
@@ -594,6 +604,25 @@ Private Function ValidateStorageSheet(ByVal ws As Worksheet, _
         ValidateStorageSheet = False
         Exit Function
     End If
+    ' [B25 2026-06-11] reject non-existent folders (user decision).
+    Dim chkAddrs As Variant, chkLabels As Variant, iChk As Long
+    chkAddrs = Array(ADDR_DATA_DIR, ADDR_FORMAT_DIR, ADDR_UI_DIR, ADDR_BACKUP_DIR, ADDR_CONFIG_DIR)
+    chkLabels = Array("data_dir", "format_dir", "ui_dir", "backup_dir", "config_dir")
+    For iChk = 0 To 4
+        Dim pChk As String
+        pChk = Trim$(CStr(ws.Range(CStr(chkAddrs(iChk))).Value))
+        On Error Resume Next
+        Dim hitChk As String
+        hitChk = ""
+        hitChk = Dir$(pChk, vbDirectory)
+        On Error GoTo 0
+        If Len(hitChk) = 0 Then
+            outAddr = CStr(chkAddrs(iChk))
+            outLabel = chkLabels(iChk) & " " & ChrW(&H0028) & ChrW(&H30D5) & ChrW(&H30A9) & ChrW(&H30EB) & ChrW(&H30C0) & ChrW(&H304C) & ChrW(&H5B58) & ChrW(&H5728) & ChrW(&H3057) & ChrW(&H307E) & ChrW(&H305B) & ChrW(&H3093) & ChrW(&H0029)
+            ValidateStorageSheet = False
+            Exit Function
+        End If
+    Next iChk
     ValidateStorageSheet = True
 End Function
 
