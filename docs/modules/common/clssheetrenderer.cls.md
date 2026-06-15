@@ -7,7 +7,7 @@ description: clsSheetRenderer.cls のソースコード（コピペ用）
 
 **配置先**: 共通モジュール（3 ブック共通）
 **種類**: クラスモジュール
-**更新日**: 2026-06-05 22:31
+**更新日**: 2026-06-14 14:15
 
 ---
 
@@ -139,10 +139,25 @@ Private Sub IScreenRenderer_ClearScreen()
     m_targetSheet.Unprotect Password:=""
     On Error GoTo ErrHandler
     m_targetSheet.Cells.Clear
-    ' Shape 系（ボタン等）を削除
+    ' [B37 2026-06-13] start every render from a DV-clean sheet (Cells.Clear
+    ' does not remove data-validation rules).
+    On Error Resume Next
+    m_targetSheet.Cells.Validation.Delete
+    On Error GoTo ErrHandler
+    ' Shape delete (buttons etc.)
     Dim shp As Shape
     For Each shp In m_targetSheet.Shapes
-        shp.Delete
+        ' [B39 2026-06-13] correcting B37: keep ONLY Excel's internal in-cell
+        ' DV dropdown (msoFormControl named "Drop Down N"); deleting it kills
+        ' the DV arrow workbook-wide (B37's purpose). App-created form controls
+        ' (buttons via AddFormControl FC_BUTTON, checkboxes, listboxes) MUST be
+        ' deleted here, otherwise they persist/duplicate on every re-render
+        ' (root cause of the M-10 radio double-marker bug). See ADR-0130.
+        If shp.Type = msoFormControl And (shp.Name Like "Drop Down*") Then
+            ' keep: Excel internal DV dropdown
+        Else
+            shp.Delete
+        End If
     Next shp
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0748] clsSheetRenderer.IScreenRenderer_ClearScreen EXIT-OK"  ' [ADR-0100]
     Exit Sub
