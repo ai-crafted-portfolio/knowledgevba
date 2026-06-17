@@ -7,7 +7,7 @@ description: modEntryUserForm.bas のソースコード（コピペ用）
 
 **配置先**: 共通モジュール（3 ブック共通）
 **種類**: 標準モジュール
-**更新日**: 2026-06-04 12:30
+**更新日**: 2026-06-17 01:05
 
 ---
 
@@ -81,7 +81,7 @@ Public Sub Btn_OpenRegisterForm()
     Dim r As clsUserFormRenderer
     Set r = New clsUserFormRenderer
     Dim ret As String
-    ret = r.ShowForm(NM_TOUROKU(), "register", "")
+    ret = r.ShowForm(NM_KENSAKU(), "register", "")
     LogShowFormResult "Btn_OpenRegisterForm", ret
     ' [BTN-GUARD-EXIT-OK] auto-injected
     modBtnGuard.LogExit BTN, XLSM, True

@@ -7,7 +7,7 @@ description: modEntrySearch.bas のソースコード（コピペ用）
 
 **配置先**: `検索.xlsm` 用の VBA モジュール
 **種類**: 標準モジュール
-**更新日**: 2026-06-12 01:22
+**更新日**: 2026-06-12 22:19
 
 ---
 
@@ -131,9 +131,20 @@ Public Sub Btn_SearchV23()
             Dim knwNo As String
             knwNo = fso.GetBaseName(f.Name)
             Dim data As Object
+            Set data = Nothing
+            ' [B34 2026-06-12] per-file guard: one unparsable knowledge file
+            ' must not poison the whole scan (was: error state leaked and
+            ' every later file evaluated false -> all searches returned 0).
+            On Error Resume Next
             Set data = modKnowledgeFileIO.LoadKnowledge(knwNo)
+            On Error GoTo ErrHandler
             If Not data Is Nothing Then
-                If MatchesSearchV23(data, keyword, fmtFilter) Then
+                Dim isHit As Boolean
+                isHit = False
+                On Error Resume Next
+                isHit = MatchesSearchV23(data, keyword, fmtFilter)
+                On Error GoTo ErrHandler
+                If isHit Then
                     Dim hit As Object
                     Set hit = CreateObject("Scripting.Dictionary")
                     hit("knwNo") = knwNo
@@ -222,6 +233,12 @@ Public Sub Btn_SearchV23()
 
     ' [N1 2026-06-12] Unprotect was one-way - restore light protection
     modCommon.ReProtectLight ws
+
+    ' [B33 2026-06-12] user request: always show the hit count after a search
+    ' (0 hits looked like "blank data" without any feedback).
+    If Not modCommon.IsHeadless() Then
+        MsgBox ChrW(&H691C) & ChrW(&H7D22) & ChrW(&H7D50) & ChrW(&H679C) & ChrW(&H003A) & ChrW(&H0020) & CStr(hitCount) & ChrW(&H0020) & ChrW(&H4EF6), vbInformation, ChrW(&H30CA) & ChrW(&H30EC) & ChrW(&H30C3) & ChrW(&H30B8) & ChrW(&H691C) & ChrW(&H7D22)
+    End If
 
     On Error Resume Next
     Dim lg As clsLogger

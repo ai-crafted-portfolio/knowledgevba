@@ -7,7 +7,7 @@ description: modEntryFormat.bas のソースコード（コピペ用）
 
 **配置先**: `管理.xlsm` 用の VBA モジュール
 **種類**: 標準モジュール
-**更新日**: 2026-06-12 01:22
+**更新日**: 2026-06-13 01:10
 
 ---
 
@@ -449,13 +449,20 @@ Public Function LoadFormat_Workflow(ByVal target As Object, ByVal uiSections As 
     WriteFormatDictToCells target, uiSections, formatDict
     ' [USER-REQ 2026-06-09] Apply TRUE/FALSE dropdown validation to searchTarget
     ' (column I = 9) for all loaded rows.
+    ' [B36 2026-06-12] Validation.Add fails silently on a protected sheet even
+    ' with UserInterfaceOnly (B14/B19/B28 family) and was swallowed by On Error
+    ' Resume Next. The Btn_EditFormat path (M-02 edit -> M-03) reaches here
+    ' WITHOUT Unprotect, so the searchTarget dropdown never landed (UAT
+    ' re-report 2026-06-12). Unprotect -> Validation -> ReProtectLight.
     On Error Resume Next
+    target.Unprotect
     Dim stRng As Range
     Set stRng = target.Range("I19:I60")
     stRng.Validation.Delete
     stRng.Validation.Add Type:=xlValidateList, Formula1:="TRUE,FALSE"
     stRng.Validation.InCellDropdown = True
     stRng.Validation.IgnoreBlank = True
+    modCommon.ReProtectLight target
     On Error GoTo ErrHandler
     LoadFormat_Workflow = True
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0139] modEntryFormat.LoadFormat_Workflow EXIT-OK"  ' [ADR-0100]
@@ -1260,7 +1267,17 @@ Public Sub Btn_DisableFormat()
         If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0181] modEntryFormat.Btn_DisableFormat EXIT-OK"  ' [ADR-0100]
         Exit Sub
     End If
-    fmtSec.SetValue FMT_KEY_STATUS, FMT_STATUS_DISABLED
+    ' [B38 / USER-REQ 2026-06-13] toggle: pressing the disable button on an
+    ' already-disabled format re-enables it (Status -> ChrW yuko). Anything
+    ' other than the disabled markers counts as enabled (IsFormatDisabled).
+    Dim curStat As String
+    curStat = ""
+    If fmtSec.HasKey(FMT_KEY_STATUS) Then curStat = CStr(fmtSec.GetValue(FMT_KEY_STATUS))
+    If curStat = FMT_STATUS_DISABLED Or curStat = ChrW(&H7121) & ChrW(&H52B9) Then
+        fmtSec.SetValue FMT_KEY_STATUS, ChrW(&H6709) & ChrW(&H52B9)
+    Else
+        fmtSec.SetValue FMT_KEY_STATUS, FMT_STATUS_DISABLED
+    End If
 
     ' 4. Persist back to disk via modFormatLoader.SaveFormat.
     Dim rc As Long
@@ -1278,7 +1295,7 @@ Public Sub Btn_DisableFormat()
     Set lg = NewLogger()
     If Not lg Is Nothing Then
         lg.LogInfo "modEntryFormat", "Btn_DisableFormat", _
-                   "Format disabled (logical, not deleted): " & fmtId, _
+                   "Format status toggled (disable<->enable): " & fmtId, _
                    fmtId, "M02-DISABLE-OK-II-041"
     End If
     On Error GoTo ErrHandler
