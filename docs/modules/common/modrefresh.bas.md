@@ -7,7 +7,7 @@ description: modRefresh.bas のソースコード（コピペ用）
 
 **配置先**: 共通モジュール（3 ブック共通）
 **種類**: 標準モジュール
-**更新日**: 2026-06-09 09:22
+**更新日**: 2026-06-12 22:33
 
 ---
 
@@ -82,6 +82,15 @@ Public Sub Btn_RefreshAllSheets()
 
     On Error Resume Next
     If Not activeWs Is Nothing Then activeWs.Activate
+    ' [B35 2026-06-12] after a full re-render the sheet can stay in a non-
+    ' interactive paint state: cells look frozen and dropdown arrows do not
+    ' appear until the user switches sheets. Force a screen + selection
+    ' refresh so the active sheet is immediately usable.
+    Application.ScreenUpdating = True
+    Application.Interactive = True
+    If Not activeWs Is Nothing Then
+        activeWs.Range(activeWs.Cells(1, 1), activeWs.Cells(1, 1)).Select
+    End If
     Application.EnableEvents = prevEv
     Application.StatusBar = RefreshedMsg()
     On Error GoTo 0

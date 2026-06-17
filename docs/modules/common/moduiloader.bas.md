@@ -7,7 +7,7 @@ description: modUILoader.bas のソースコード（コピペ用）
 
 **配置先**: 共通モジュール（3 ブック共通）
 **種類**: 標準モジュール
-**更新日**: 2026-06-12 01:22
+**更新日**: 2026-06-12 23:05
 
 ---
 
@@ -969,6 +969,15 @@ Private Sub ApplyGrid(ByVal ws As Worksheet, ByVal sec As ClsStanzaSection)
                     colRng.Validation.IgnoreBlank = True
                     colRng.Validation.InCellDropdown = True
                 Case "scroll"
+                    colRng.Validation.Delete
+                    colRng.Validation.Add Type:=xlValidateList, Formula1:="TRUE,FALSE"
+                    colRng.Validation.IgnoreBlank = True
+                    colRng.Validation.InCellDropdown = True
+                ' [B36 2026-06-12] searchTarget was missing from this Select
+                ' Case, so seed/refresh never applied the TRUE/FALSE dropdown
+                ' to column I while fieldType/required/scroll got theirs
+                ' (UAT re-report 2026-06-12: M-03 search-target listbox).
+                Case "searchtarget"
                     colRng.Validation.Delete
                     colRng.Validation.Add Type:=xlValidateList, Formula1:="TRUE,FALSE"
                     colRng.Validation.IgnoreBlank = True
