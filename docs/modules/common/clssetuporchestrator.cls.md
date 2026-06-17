@@ -7,7 +7,7 @@ description: clsSetupOrchestrator.cls のソースコード（コピペ用）
 
 **配置先**: 共通モジュール（3 ブック共通）
 **種類**: クラスモジュール
-**更新日**: 2026-06-09 22:14
+**更新日**: 2026-06-17 17:29
 
 ---
 
@@ -57,6 +57,10 @@ Option Explicit
 
 
 Private m_logger As clsLogger
+' ADR-0131 Fix-2: guard so the "ui_seed not found" MsgBox shows at most
+' once per RunFullSetup (reset at RunFullSetup entry). Prevents MsgBox
+' flooding when several sheets fail to resolve their display name.
+Private m_uiSeedErrShown As Boolean
 
 ' xlsm ?? sheet ?\???iADR-0053 ??2.1 / modSetup.bas SHEETS_* ????l?AR6-01?j
 ' SSOT: ADR-0053 ??2.1 ?\?i??2.1.1 ?T?u?O???[?v???j?B?o?^?C??=M-05/M-06?A????=M-08?A???=M-02/M-03/M-04/M-12/M-13/M-10/M-11/M-14?iLOG ??S xlsm ????j
@@ -245,6 +249,9 @@ Public Sub RunFullSetup(ByVal xlsmName As String)
     ' LOG ?V?[?g??? m_logger.LogInfo ??????B
     Dim t As String
 
+    ' ADR-0131 Fix-2: reset per-run MsgBox guard
+    m_uiSeedErrShown = False
+
     t = "[setup] [" & Format$(Now(), "hh:nn:ss") & "] "
     Debug.Print t & "RunFullSetup step 0 : enter xlsmName=" & xlsmName
     modCommon.AppendProgressLog t & "RunFullSetup step 0 : enter xlsmName=" & xlsmName
@@ -267,10 +274,23 @@ Public Sub RunFullSetup(ByVal xlsmName As String)
     Debug.Print t & "RunFullSetup step 1 pre : LoadConfig(" & xlsmName & ")"
     modCommon.AppendProgressLog t & "RunFullSetup step 1 pre : LoadConfig(" & xlsmName & ")"
     If modCommon.gDebugLevel >= DEBUG_LEVEL_DEBUG Then Debug.Print "[D-0704] clsSetupOrchestrator.RunFullSetup STEP-1 pre modConfigLoader.LoadConfig"  ' [ADR-0100]
-    Call modConfigLoader.LoadConfig(xlsmName)
+    Dim cfgLoaded As Boolean
+    cfgLoaded = modConfigLoader.LoadConfig(xlsmName)
+    ' ADR-0131 Fix-1 D2: a failed config load (file absent / unparseable)
+    ' must not be silent. We still continue on safe defaults (ADR-0053
+    ' OQ-07) so the workbook opens, but surface a MsgBox in interactive
+    ' mode so the user knows their edited config was not read.
+    If (Not cfgLoaded) And (Not modCommon.IsHeadless()) Then
+        Dim c1 As String, c2 As String, c3 As String, ct As String
+        c1 = ChrW(&H8A2D) & ChrW(&H5B9A) & ChrW(&H30D5) & ChrW(&H30A1) & ChrW(&H30A4) & ChrW(&H30EB) & ChrW(&H0020)
+        c2 = ChrW(&H0020) & ChrW(&H3092) & ChrW(&H8AAD) & ChrW(&H307F) & ChrW(&H8FBC) & ChrW(&H3081) & ChrW(&H307E) & ChrW(&H305B) & ChrW(&H3093) & ChrW(&H3067) & ChrW(&H3057) & ChrW(&H305F) & ChrW(&H0028) & ChrW(&H4E0D) & ChrW(&H5728) & ChrW(&H307E) & ChrW(&H305F) & ChrW(&H306F) & ChrW(&H4E0D) & ChrW(&H6B63) & ChrW(&H0029) & ChrW(&H3002)
+        c3 = ChrW(&H30D5) & ChrW(&H30A1) & ChrW(&H30A4) & ChrW(&H30EB) & ChrW(&H306E) & ChrW(&H5B58) & ChrW(&H5728) & ChrW(&H3068) & ChrW(&H5185) & ChrW(&H5BB9) & ChrW(&H3092) & ChrW(&H78BA) & ChrW(&H8A8D) & ChrW(&H3057) & ChrW(&H3066) & ChrW(&H304F) & ChrW(&H3060) & ChrW(&H3055) & ChrW(&H3044) & ChrW(&H3002)
+        ct = ChrW(&H8A2D) & ChrW(&H5B9A) & ChrW(&H30A8) & ChrW(&H30E9) & ChrW(&H30FC)
+        MsgBox c1 & modConfigLoader.LastConfigPath() & c2 & vbCrLf & c3, vbExclamation, ct
+    End If
     t = "[setup] [" & Format$(Now(), "hh:nn:ss") & "] "
-    Debug.Print t & "RunFullSetup step 1 post : LoadConfig done"
-    modCommon.AppendProgressLog t & "RunFullSetup step 1 post : LoadConfig done"
+    Debug.Print t & "RunFullSetup step 1 post : LoadConfig done ok=" & cfgLoaded
+    modCommon.AppendProgressLog t & "RunFullSetup step 1 post : LoadConfig done ok=" & cfgLoaded
 
     ' (2) clsLogger ???????iQ7 ???? ERROR?j
     t = "[setup] [" & Format$(Now(), "hh:nn:ss") & "] "
@@ -656,8 +676,10 @@ Private Sub EnsureSheetExists(ByVal xlsmName As String, ByVal screenId As String
 
     ' (1) resolve display name from ui_seed
     Dim displayName As String
+    Dim seedResolved As Boolean
     displayName = ReadDisplayNameFromUiSeed(xlsmName, screenId)
-    If Len(displayName) = 0 Then displayName = screenId   ' LOG / unseeded fallback
+    seedResolved = (Len(displayName) > 0)
+    If Not seedResolved Then displayName = screenId   ' LOG / unseeded fallback
 
     ' (2) sheet with display name already exists -> nothing to do
     Dim ws As Worksheet
@@ -686,7 +708,18 @@ Private Sub EnsureSheetExists(ByVal xlsmName As String, ByVal screenId As String
     End If
     Err.Clear
 
-    ' (4) neither exists -> create and name with display name
+    ' (4) neither exists -> create and name with display name.
+    ' ADR-0131 Fix-2: if the ui_seed display name could NOT be resolved
+    ' (ui_dir wrong or seed file missing) and this is not the LOG sheet,
+    ' do NOT create a literal "M-NN" sheet. That silent Worksheets.Add is
+    ' the root cause of the literal-sheet multiplication bug AND it masks a
+    ' misconfigured ui_dir. Surface a clear error (once/run) and skip.
+    If (Not seedResolved) And screenId <> "LOG" Then
+        On Error GoTo 0
+        NotifyUiSeedMissing xlsmName, screenId
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0745] clsSetupOrchestrator.EnsureSheetExists EXIT-OK"  ' [ADR-0100]
+        Exit Sub
+    End If
     Set ws = ThisWorkbook.Worksheets.Add(After:=ThisWorkbook.Worksheets(ThisWorkbook.Worksheets.Count))
     ws.Name = displayName
     If Err.Number <> 0 Then
@@ -979,6 +1012,37 @@ Private Function ScreenIdForSheetName(ByVal sheetName As String, ByVal xlsmName 
 EH:
     ScreenIdForSheetName = ""
 End Function
+' ADR-0131 Fix-2: surface a clear, one-shot error instead of silently
+' creating a literal "M-NN" sheet when the ui_seed display name cannot be
+' resolved (ui_dir wrong or seed file missing). Skips the Worksheets.Add so
+' the literal-sheet multiplication bug cannot recur. headless install path
+' suppresses the MsgBox and only logs.
+Private Sub NotifyUiSeedMissing(ByVal xlsmName As String, ByVal screenId As String)
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0743] clsSetupOrchestrator.NotifyUiSeedMissing ENTER"  ' [ADR-0100]
+    On Error Resume Next
+    Dim missPath As String
+    missPath = modConfigHolder.GetUiDir() & xlsmName & "\" & screenId & ".txt"
+    modCommon.AppendProgressLog modCommon.ProgressTs() & "NotifyUiSeedMissing screen=" & screenId & " path=" & missPath
+    If Not m_logger Is Nothing Then
+        m_logger.LogWarn "clsSetupOrchestrator", "EnsureSheetExists", "ui_seed not found, sheet not created: " & missPath, xlsmName, "LOG-SETUP-UISEED-MISSING"
+    End If
+    If Not modCommon.IsHeadless() Then
+        If Not m_uiSeedErrShown Then
+            m_uiSeedErrShown = True
+            Dim m1 As String, m2 As String, m3 As String, mt As String
+            m1 = ChrW(&H753B) & ChrW(&H9762) & ChrW(&H5B9A) & ChrW(&H7FA9) & ChrW(&H30D5) & ChrW(&H30A1) & ChrW(&H30A4) & ChrW(&H30EB) & ChrW(&H0020)
+            m2 = ChrW(&H0020) & ChrW(&H304C) & ChrW(&H898B) & ChrW(&H3064) & ChrW(&H304B) & ChrW(&H308A) & ChrW(&H307E) & ChrW(&H305B) & ChrW(&H3093) & ChrW(&H3002)
+            m3 = ChrW(&H8A2D) & ChrW(&H5B9A) & ChrW(&H30D5) & ChrW(&H30A1) & ChrW(&H30A4) & ChrW(&H30EB) & ChrW(&H306E) & ChrW(&H0020) & ChrW(&H0075) & ChrW(&H0069) & ChrW(&H005F) & ChrW(&H0064) & ChrW(&H0069) & ChrW(&H0072) & ChrW(&H0020) & ChrW(&H3092) & ChrW(&H78BA) & ChrW(&H8A8D) & ChrW(&H3057) & ChrW(&H3066) & ChrW(&H304F) & ChrW(&H3060) & ChrW(&H3055) & ChrW(&H3044) & ChrW(&H3002)
+            mt = ChrW(&H8A2D) & ChrW(&H5B9A) & ChrW(&H30A8) & ChrW(&H30E9) & ChrW(&H30FC)
+            MsgBox m1 & missPath & m2 & vbCrLf & m3, vbCritical, mt
+        End If
+    Else
+        Debug.Print "[HEADLESS] suppressed ui_seed-missing MsgBox: " & missPath
+    End If
+    On Error GoTo 0
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0744] clsSetupOrchestrator.NotifyUiSeedMissing EXIT-OK"  ' [ADR-0100]
+End Sub
+
 Private Function GetTabColor(ByVal xlsmName As String) As Long
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0741] clsSetupOrchestrator.GetTabColor ENTER"  ' [ADR-0100]
     Select Case xlsmName
