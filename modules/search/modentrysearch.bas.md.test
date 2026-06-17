@@ -1,0 +1,7 @@
+# TEST WRITE
+Attribute VB_Name = "modEntrySearch"
+Option Explicit
+
+' ================================================================
+' v2.3 search entry points (Phase Q-1, 2026-05-27)
+' Read M-08 search form inpu

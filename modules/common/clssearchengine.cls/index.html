@@ -1,0 +1,5944 @@
+
+<!doctype html>
+<html lang="ja" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="clsSearchEngine.cls のソースコード（コピペ用）">
+      
+      
+        <meta name="author" content="ai-crafted-portfolio">
+      
+      
+        <link rel="canonical" href="https://ai-crafted-portfolio.github.io/knowledgevba/modules/common/clssearchengine.cls/">
+      
+      
+        <link rel="prev" href="../clsscreenspec.cls/">
+      
+      
+        <link rel="next" href="../clssectionspec.cls/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>clsSearchEngine.cls - ナレッジ管理ツール (VBA 製)</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+JP:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Noto Sans JP";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  <meta name="robots" content="noindex,nofollow">
+
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#clssearchenginecls" class="md-skip">
+          コンテンツにスキップ
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="ヘッダー">
+    <a href="../../.." title="ナレッジ管理ツール (VBA 製)" class="md-header__button md-logo" aria-label="ナレッジ管理ツール (VBA 製)" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ナレッジ管理ツール (VBA 製)
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              clsSearchEngine.cls
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="ダークモードに切替"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="ダークモードに切替" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="ライトモードに切替"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="ライトモードに切替" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="検索" placeholder="検索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="検索">
+        
+        <button type="reset" class="md-search__icon md-icon" title="クリア" aria-label="クリア" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            検索を初期化
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="タブ" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  概要
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../install/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  インストール
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../install_one_shot/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  一発インストーラ
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../usage/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  使い方
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../troubleshooting/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  困ったとき
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../architecture/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  設計
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../settings/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  設定とカスタマイズ
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../stanza/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  画面設定ファイル
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../sample_data/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  サンプルデータ
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../" class="md-tabs__link">
+          
+  
+  
+    
+  
+  モジュール一覧
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="ナビゲーション" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="ナレッジ管理ツール (VBA 製)" class="md-nav__button md-logo" aria-label="ナレッジ管理ツール (VBA 製)" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    ナレッジ管理ツール (VBA 製)
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    概要
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../install/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    インストール
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../install_one_shot/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    一発インストーラ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../usage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    使い方
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    困ったとき
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    設計
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    設計
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    全体アーキテクチャ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../spec/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    仕様
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    設定とカスタマイズ
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    設定とカスタマイズ
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../settings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    設定値の変更
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../screen_customization_guide_v2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    画面のカスタマイズ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../stanza/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    画面設定ファイル
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_8" id="__nav_8_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    画面設定ファイル
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_8_2" id="__nav_8_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    管理
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    管理
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../stanza/%E7%AE%A1%E7%90%86/M-02.txt/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    M-02 フォーマット一覧
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../stanza/%E7%AE%A1%E7%90%86/M-03.txt/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    M-03 フォーマット設計
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../stanza/%E7%AE%A1%E7%90%86/M-04.txt/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    M-04 プレビュー
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../stanza/%E7%AE%A1%E7%90%86/M-10.txt/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    M-10 格納先設定
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../stanza/%E7%AE%A1%E7%90%86/M-11.txt/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    M-11 設定
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../stanza/%E7%AE%A1%E7%90%86/M-12.txt/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    M-12 フォーマット変更チェック
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../stanza/%E7%AE%A1%E7%90%86/M-14.txt/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    M-14 操作ログ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_8_3" id="__nav_8_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    検索
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    検索
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../stanza/%E6%A4%9C%E7%B4%A2/M-05.txt/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    M-05 ナレッジ登録
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../stanza/%E6%A4%9C%E7%B4%A2/M-08.txt/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    M-08 ナレッジ検索
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../sample_data/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    サンプルデータ
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_9" id="__nav_9_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    サンプルデータ
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_9_2" id="__nav_9_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    フォーマット定義
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_9_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    フォーマット定義
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../sample_data/formats/fmt-001/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FMT-001 テスト標準フォーマット
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../sample_data/formats/fault/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FAULT 障害対応
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../sample_data/formats/sagyo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SAGYO 作業手順書
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_9_3" id="__nav_9_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ナレッジデータ
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_9_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ナレッジデータ
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../sample_data/data/fault-0001/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FAULT-0001 経理システムへログインできない
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../sample_data/data/fault-0002/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FAULT-0002
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../sample_data/data/fault-0003/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FAULT-0003
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../sample_data/data/fault-0004/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FAULT-0004 メール送信遅延
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../sample_data/data/fault-0005/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FAULT-0005 本番DBサーバ応答遅延
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../sample_data/data/fault-0006/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FAULT-0006 VPN接続不可
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../sample_data/data/fault-0007/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FAULT-0007 ファイルサーバ容量不足
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../sample_data/data/sagyo-0001/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SAGYO-0001 サーバ室UPS月次点検
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../sample_data/data/sagyo-0002/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SAGYO-0002
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../sample_data/data/sagyo-0003/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SAGYO-0003
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../sample_data/data/sagyo-0004/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SAGYO-0004 バックアップサーバ容量チェック
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../sample_data/data/sagyo-0005/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SAGYO-0005 監視カメラ録画装置メンテナンス
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../sample_data/data/sagyo-0006/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SAGYO-0006 ファイアウォール設定変更
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    モジュール一覧
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_10" id="__nav_10_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    モジュール一覧
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_10_2" id="__nav_10_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    管理.xlsm 用
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_10_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    管理.xlsm 用
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../admin/thisworkbook.cls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ThisWorkbook.cls
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../admin/clsformatdesignscreen.cls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsFormatDesignScreen.cls
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../admin/clsformatlistscreen.cls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsFormatListScreen.cls
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../admin/clsformatpreviewscreen.cls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsFormatPreviewScreen.cls
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../admin/clslogscreen.cls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsLogScreen.cls
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../admin/clsmigrationscreen.cls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsMigrationScreen.cls
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../admin/clsstoragescreen.cls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsStorageScreen.cls
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../admin/clssystemsettingsscreen.cls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsSystemSettingsScreen.cls
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../admin/modentryformat.bas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    modEntryFormat.bas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../admin/modentrysettings.bas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    modEntrySettings.bas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_10_3" id="__nav_10_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    登録修正.xlsm 用
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_10_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    登録修正.xlsm 用
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../register/thisworkbook.cls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ThisWorkbook.cls
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../register/clsknowledgeeditscreen.cls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsKnowledgeEditScreen.cls
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../register/clsknowledgeregisterscreen.cls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsKnowledgeRegisterScreen.cls
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../register/modentryknowledge.bas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    modEntryKnowledge.bas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../register/modknowledgeentryhelpers.bas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    modKnowledgeEntryHelpers.bas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_10_4" id="__nav_10_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    検索.xlsm 用
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_10_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    検索.xlsm 用
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../search/thisworkbook.cls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ThisWorkbook.cls
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../search/clsknowledgeviewscreen.cls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsKnowledgeViewScreen.cls
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../search/clssearchscreen.cls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsSearchScreen.cls
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../search/modentrysearch.bas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    modEntrySearch.bas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_10_5" id="__nav_10_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    共通モジュール
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_10_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_10_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    共通モジュール
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../clsbuttonspec.cls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsButtonSpec.cls
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../clscelladdrhelper.cls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsCellAddrHelper.cls
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../clscellbinding.cls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsCellBinding.cls
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../clscellio.cls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsCellIO.cls
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../clscontrolspec.cls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsControlSpec.cls
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../clsfieldmigrator.cls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsFieldMigrator.cls
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../clsfieldspec.cls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsFieldSpec.cls
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../clsformatmanager.cls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsFormatManager.cls
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../clsformspec.cls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsFormSpec.cls
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../clsgridio.cls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsGridIO.cls
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../clsknowledgemanager.cls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsKnowledgeManager.cls
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../clslogentry.cls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsLogEntry.cls
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../clslogger.cls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsLogger.cls
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../clsscreenspec.cls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsScreenSpec.cls
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsSearchEngine.cls
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsSearchEngine.cls
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目次">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目次
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        保存方法
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ソースコード
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../clssectionspec.cls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsSectionSpec.cls
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../clssetuporchestrator.cls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsSetupOrchestrator.cls
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../clssheetrenderer.cls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsSheetRenderer.cls
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../clsstanzasection.cls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ClsStanzaSection.cls
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../clsstanzavalidationissue.cls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ClsStanzaValidationIssue.cls
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../clsstanzavalidationresult.cls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ClsStanzaValidationResult.cls
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../clsstorageresolver.cls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsStorageResolver.cls
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../clsuserformrenderer.cls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    clsUserFormRenderer.cls
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../iscreenrenderer.cls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IScreenRenderer.cls
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../modbtnguard.bas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    modBtnGuard.bas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../modbtnmessages.bas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    modBtnMessages.bas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../modbuttonwiring.bas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    modButtonWiring.bas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../modcommon.bas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    modCommon.bas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../modconfigholder.bas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    modConfigHolder.bas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../modconfigloader.bas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    modConfigLoader.bas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../moddateutil.bas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    modDateUtil.bas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mode2e_abnormal.bas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    modE2E_Abnormal.bas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mode2e_adrcompliance.bas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    modE2E_ADRCompliance.bas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mode2e_allbuttons.bas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    modE2E_AllButtons.bas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mode2e_backup.bas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    modE2E_Backup.bas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mode2e_dataformat.bas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    modE2E_DataFormat.bas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mode2e_environment.bas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    modE2E_Environment.bas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mode2e_fieldtype.bas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    modE2E_FieldType.bas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mode2e_lifecycle.bas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    modE2E_Lifecycle.bas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mode2e_multirole.bas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    modE2E_MultiRole.bas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mode2e_search.bas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    modE2E_Search.bas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mode2e_userform.bas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    modE2E_UserForm.bas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../modentryuserform.bas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    modEntryUserForm.bas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../modfactory.bas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    modFactory.bas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../modfileio.bas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    modFileIO.bas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../modformatcolumns.bas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    modFormatColumns.bas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../modformatloader.bas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    modFormatLoader.bas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../modformbuilder.bas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    modFormBuilder.bas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../modformcontrolwiring.bas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    modFormControlWiring.bas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../modknowledgefileio.bas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    modKnowledgeFileIO.bas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../modlogids.bas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    modLogIds.bas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../modperftest.bas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    modPerfTest.bas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../modpreviewform.bas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    modPreviewForm.bas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../modrefresh.bas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    modRefresh.bas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../modscreenrender.bas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    modScreenRender.bas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../modsetup.bas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    modSetup.bas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../modsheetbuttons.bas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    modSheetButtons.bas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../modsheetmap.bas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    modSheetMap.bas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../modspecexamples.bas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    modSpecExamples.bas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../modstanzaio.bas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    modStanzaIO.bas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../modstringutil.bas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    modStringUtil.bas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../modtesthelpers.bas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    modTestHelpers.bas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../moduiloader.bas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    modUILoader.bas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../moduserformcallback.bas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    modUserFormCallback.bas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="clssearchenginecls">clsSearchEngine.cls<a class="headerlink" href="#clssearchenginecls" title="Permanent link">&para;</a></h1>
+<p><strong>配置先</strong>: 共通モジュール（3 ブック共通）
+<strong>種類</strong>: クラスモジュール
+<strong>更新日</strong>: 2026-06-05 19:06</p>
+<hr />
+<h2 id="_1">保存方法<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<p>下のコードをメモ帳に貼り付け、<strong>[名前を付けて保存]</strong> で次のように保存してください。</p>
+<ul>
+<li>場所: <code>C:\KnowledgeMgr\installer\vba_modules\common\\</code></li>
+<li>ファイル名: <code>clsSearchEngine.cls</code></li>
+<li>ファイルの種類: <strong>すべてのファイル</strong></li>
+<li>文字コード: <strong>ANSI</strong>（Shift-JIS）</li>
+</ul>
+<blockquote>
+<p>メモ帳の文字コードを <strong>ANSI</strong> にしないと、VBA の日本語が文字化けして動かなくなります。
+UTF-8 で保存すると VBA Import 時に日本語が文字化けして動かなくなります。
+改行コードは CRLF（Windows 標準）のままで OK です。</p>
+</blockquote>
+<hr />
+<h2 id="_2">ソースコード<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>VERSION 1.0 CLASS
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>BEGIN
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>  MultiUse = -1  &#39;True
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>END
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>Attribute VB_Name = &quot;clsSearchEngine&quot;
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>Attribute VB_GlobalNameSpace = False
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>Attribute VB_Creatable = False
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>Attribute VB_PredeclaredId = False
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>Attribute VB_Exposed = False
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>Option Explicit
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>&#39; ================================================================
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>&#39; クラス: clsSearchEngine（ビジネスロジック層）
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>&#39; 概要:   ナレッジ検索を担当
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>&#39;         番号ダイレクト検索、キーワード検索（AND/OR）、日付範囲フィルタ
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>&#39;         スコアリング (出現回数 + タイトル/フィールドブースト)、
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>&#39;         結果サムネ表示、詳細画像ペイン表示までを担う。
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>&#39; 依存先: clsLogger, modFileIO, modStringUtil, modDateUtil, modCommon,
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>&#39;         modImageRender (新規; サムネ/詳細画像 Shape 描画)
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>&#39; ================================================================
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>&#39;
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>&#39; ====================================================================
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>&#39; [真版 ChromaDB 連動 切替ポイント]
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>&#39; 本クラスはモック実装として &lt;dataFolder&gt;/*.txt を ADODB で SJIS 読込し
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>&#39; スタンザを line-split して match 判定する。真版では事前 ETL で
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>&#39; &quot;Data&quot; シートに chunks を export しておき ScanAndMatch の txt ループを
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>&#39; Range 走査に置き換える。VBA 子プロセス禁止 (Shell/Run/Exec/CreateObject
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>&#39; Exec 系全部禁止) のため、本クラスから外部プロセスを起動しない。
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>&#39; ====================================================================
+<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>
+<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>&#39; --- 内部固定値 (UI 化されない searchMode/targetField の既定) ---
+<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>Private Const DEFAULT_SEARCH_MODE As String = &quot;AND&quot;
+<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>Private Const DEFAULT_TARGET_FIELD As String = &quot;&quot;  &#39; 空 = 全フィールド対象
+<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>
+<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>&#39; --- 結果一覧の表示上限 ---
+<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>Private Const RESULT_MAX_ROWS As Long = 200
+<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>
+<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>&#39; --- スコアリングのブースト係数 ---
+<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>Private Const SCORE_BOOST_TITLE As Double = 3#
+<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>Private Const SCORE_BOOST_TARGET_FIELD As Double = 2#
+<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>
+<a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>&#39; --- ImagePath スタンザのキー名 ---
+<a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>Private Const IMAGE_PATH_KEY As String = &quot;ImagePath&quot;
+<a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>
+<a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>&#39; --- v2.2 検索エンジン v2 / M-09 表示描画で追加 (task 6.4 / 6.10) ---
+<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>Private Const EXCERPT_MAX_LEN As Long = 60
+<a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>Private Const M09_FORM_CLEAR_RANGE As String = &quot;A8:L39&quot;
+<a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>
+<a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>Private m_logger As clsLogger
+<a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>Private m_dataFolder As String
+<a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>
+<a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a>&#39; ================================================================
+<a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a>&#39; 関数名: Init
+<a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a>&#39; 概要:   初期化
+<a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a>&#39; 引数:   logger     - ログ出力用
+<a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a>&#39;         dataFolder - ナレッジデータフォルダ
+<a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>&#39; 戻り値: なし
+<a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a>&#39; ================================================================
+<a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a>Public Sub Init(ByVal logger As clsLogger, ByVal dataFolder As String)
+<a id="__codelineno-0-60" name="__codelineno-0-60" href="#__codelineno-0-60"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0617] clsSearchEngine.Init ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a>    Set m_logger = logger
+<a id="__codelineno-0-62" name="__codelineno-0-62" href="#__codelineno-0-62"></a>    m_dataFolder = dataFolder
+<a id="__codelineno-0-63" name="__codelineno-0-63" href="#__codelineno-0-63"></a>End Sub
+<a id="__codelineno-0-64" name="__codelineno-0-64" href="#__codelineno-0-64"></a>
+<a id="__codelineno-0-65" name="__codelineno-0-65" href="#__codelineno-0-65"></a>&#39; ================================================================
+<a id="__codelineno-0-66" name="__codelineno-0-66" href="#__codelineno-0-66"></a>&#39; 関数名: FindByNumber
+<a id="__codelineno-0-67" name="__codelineno-0-67" href="#__codelineno-0-67"></a>&#39; 概要:   指定番号のナレッジが存在するか確認
+<a id="__codelineno-0-68" name="__codelineno-0-68" href="#__codelineno-0-68"></a>&#39; 引数:   knowledgeNo - ナレッジ番号
+<a id="__codelineno-0-69" name="__codelineno-0-69" href="#__codelineno-0-69"></a>&#39; 戻り値: Boolean - 存在すれば True
+<a id="__codelineno-0-70" name="__codelineno-0-70" href="#__codelineno-0-70"></a>&#39; ================================================================
+<a id="__codelineno-0-71" name="__codelineno-0-71" href="#__codelineno-0-71"></a>Public Function FindByNumber(ByVal knowledgeNo As String) As Boolean
+<a id="__codelineno-0-72" name="__codelineno-0-72" href="#__codelineno-0-72"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0618] clsSearchEngine.FindByNumber ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-73" name="__codelineno-0-73" href="#__codelineno-0-73"></a>    On Error GoTo ErrHandler
+<a id="__codelineno-0-74" name="__codelineno-0-74" href="#__codelineno-0-74"></a>
+<a id="__codelineno-0-75" name="__codelineno-0-75" href="#__codelineno-0-75"></a>    Dim filePath As String
+<a id="__codelineno-0-76" name="__codelineno-0-76" href="#__codelineno-0-76"></a>    filePath = CombineFilePath(m_dataFolder, knowledgeNo &amp; &quot;.txt&quot;)
+<a id="__codelineno-0-77" name="__codelineno-0-77" href="#__codelineno-0-77"></a>
+<a id="__codelineno-0-78" name="__codelineno-0-78" href="#__codelineno-0-78"></a>    FindByNumber = FileExists(filePath)
+<a id="__codelineno-0-79" name="__codelineno-0-79" href="#__codelineno-0-79"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0619] clsSearchEngine.FindByNumber EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-80" name="__codelineno-0-80" href="#__codelineno-0-80"></a>    Exit Function
+<a id="__codelineno-0-81" name="__codelineno-0-81" href="#__codelineno-0-81"></a>
+<a id="__codelineno-0-82" name="__codelineno-0-82" href="#__codelineno-0-82"></a>ErrHandler:
+<a id="__codelineno-0-83" name="__codelineno-0-83" href="#__codelineno-0-83"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print &quot;[D-0620] clsSearchEngine.FindByNumber EXIT-ERR &quot; &amp; &quot;errNum=&quot; &amp; Err.Number &amp; &quot; desc=&quot; &amp; Err.Description  &#39; [ADR-0100]
+<a id="__codelineno-0-84" name="__codelineno-0-84" href="#__codelineno-0-84"></a>    FindByNumber = False
+<a id="__codelineno-0-85" name="__codelineno-0-85" href="#__codelineno-0-85"></a>End Function
+<a id="__codelineno-0-86" name="__codelineno-0-86" href="#__codelineno-0-86"></a>
+<a id="__codelineno-0-87" name="__codelineno-0-87" href="#__codelineno-0-87"></a>&#39; ================================================================
+<a id="__codelineno-0-88" name="__codelineno-0-88" href="#__codelineno-0-88"></a>&#39; 関数名: ExecuteSearch (v2.2 task 6.4)
+<a id="__codelineno-0-89" name="__codelineno-0-89" href="#__codelineno-0-89"></a>&#39; 概要:   検索条件 Dictionary を受け取り data\ 配下を全件 scan して
+<a id="__codelineno-0-90" name="__codelineno-0-90" href="#__codelineno-0-90"></a>&#39;         一致ナレッジを「行 Dictionary の Collection」で返す。
+<a id="__codelineno-0-91" name="__codelineno-0-91" href="#__codelineno-0-91"></a>&#39;         modEntrySearch.Search_Workflow が定める契約
+<a id="__codelineno-0-92" name="__codelineno-0-92" href="#__codelineno-0-92"></a>&#39;         (searchExecutor.ExecuteSearch(searchDict) As Collection、
+<a id="__codelineno-0-93" name="__codelineno-0-93" href="#__codelineno-0-93"></a>&#39;         stub clsTestSearchExecutor と同一 I/F) の実体実装。
+<a id="__codelineno-0-94" name="__codelineno-0-94" href="#__codelineno-0-94"></a>&#39;         v1 の固定セル SS_ROW_* 読み・自己結果書込 PopulateResults は
+<a id="__codelineno-0-95" name="__codelineno-0-95" href="#__codelineno-0-95"></a>&#39;         廃止し、scan/スコアリング内部ロジックのみを流用する。
+<a id="__codelineno-0-96" name="__codelineno-0-96" href="#__codelineno-0-96"></a>&#39; 引数:   searchDict - 検索条件。キーは OP-5 確定の 8 キー
+<a id="__codelineno-0-97" name="__codelineno-0-97" href="#__codelineno-0-97"></a>&#39;                      (keyword/targetFields/formatId/dateFrom/dateTo/
+<a id="__codelineno-0-98" name="__codelineno-0-98" href="#__codelineno-0-98"></a>&#39;                      category/assignee/directNo)。
+<a id="__codelineno-0-99" name="__codelineno-0-99" href="#__codelineno-0-99"></a>&#39; 戻り値: Collection - 1 行 1 Dictionary。各 Dictionary のキーは
+<a id="__codelineno-0-100" name="__codelineno-0-100" href="#__codelineno-0-100"></a>&#39;                      検索結果グリッドの論理列名 (No/KnowledgeNo/
+<a id="__codelineno-0-101" name="__codelineno-0-101" href="#__codelineno-0-101"></a>&#39;                      FormatName/CreatedDate/UpdatedDate/Title/
+<a id="__codelineno-0-102" name="__codelineno-0-102" href="#__codelineno-0-102"></a>&#39;                      Excerpt/Category/Assignee)。
+<a id="__codelineno-0-103" name="__codelineno-0-103" href="#__codelineno-0-103"></a>&#39; ================================================================
+<a id="__codelineno-0-104" name="__codelineno-0-104" href="#__codelineno-0-104"></a>Public Function ExecuteSearch(ByVal searchDict As Object) As Collection
+<a id="__codelineno-0-105" name="__codelineno-0-105" href="#__codelineno-0-105"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0621] clsSearchEngine.ExecuteSearch ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-106" name="__codelineno-0-106" href="#__codelineno-0-106"></a>    On Error GoTo ErrHandler
+<a id="__codelineno-0-107" name="__codelineno-0-107" href="#__codelineno-0-107"></a>
+<a id="__codelineno-0-108" name="__codelineno-0-108" href="#__codelineno-0-108"></a>    Dim results As Collection
+<a id="__codelineno-0-109" name="__codelineno-0-109" href="#__codelineno-0-109"></a>    Set results = New Collection
+<a id="__codelineno-0-110" name="__codelineno-0-110" href="#__codelineno-0-110"></a>
+<a id="__codelineno-0-111" name="__codelineno-0-111" href="#__codelineno-0-111"></a>    Dim keyword As String, formatId As String
+<a id="__codelineno-0-112" name="__codelineno-0-112" href="#__codelineno-0-112"></a>    Dim dateFrom As String, dateTo As String
+<a id="__codelineno-0-113" name="__codelineno-0-113" href="#__codelineno-0-113"></a>    Dim category As String, assignee As String, directNo As String
+<a id="__codelineno-0-114" name="__codelineno-0-114" href="#__codelineno-0-114"></a>    keyword = GetDictStr(searchDict, &quot;keyword&quot;)
+<a id="__codelineno-0-115" name="__codelineno-0-115" href="#__codelineno-0-115"></a>    formatId = GetDictStr(searchDict, &quot;formatId&quot;)
+<a id="__codelineno-0-116" name="__codelineno-0-116" href="#__codelineno-0-116"></a>    dateFrom = GetDictStr(searchDict, &quot;dateFrom&quot;)
+<a id="__codelineno-0-117" name="__codelineno-0-117" href="#__codelineno-0-117"></a>    dateTo = GetDictStr(searchDict, &quot;dateTo&quot;)
+<a id="__codelineno-0-118" name="__codelineno-0-118" href="#__codelineno-0-118"></a>    category = GetDictStr(searchDict, &quot;category&quot;)
+<a id="__codelineno-0-119" name="__codelineno-0-119" href="#__codelineno-0-119"></a>    assignee = GetDictStr(searchDict, &quot;assignee&quot;)
+<a id="__codelineno-0-120" name="__codelineno-0-120" href="#__codelineno-0-120"></a>    directNo = GetDictStr(searchDict, &quot;directNo&quot;)
+<a id="__codelineno-0-121" name="__codelineno-0-121" href="#__codelineno-0-121"></a>
+<a id="__codelineno-0-122" name="__codelineno-0-122" href="#__codelineno-0-122"></a>    &#39; spec の placeholder 文字列を除去 (v1 SearchByKeywords と同じ前処理)
+<a id="__codelineno-0-123" name="__codelineno-0-123" href="#__codelineno-0-123"></a>    keyword = StripPlaceholder(keyword)
+<a id="__codelineno-0-124" name="__codelineno-0-124" href="#__codelineno-0-124"></a>    category = StripPlaceholder(category)
+<a id="__codelineno-0-125" name="__codelineno-0-125" href="#__codelineno-0-125"></a>    assignee = StripPlaceholder(assignee)
+<a id="__codelineno-0-126" name="__codelineno-0-126" href="#__codelineno-0-126"></a>    dateFrom = StripPlaceholder(dateFrom)
+<a id="__codelineno-0-127" name="__codelineno-0-127" href="#__codelineno-0-127"></a>    dateTo = StripPlaceholder(dateTo)
+<a id="__codelineno-0-128" name="__codelineno-0-128" href="#__codelineno-0-128"></a>
+<a id="__codelineno-0-129" name="__codelineno-0-129" href="#__codelineno-0-129"></a>    &#39; フォーマット dropdown の全件選択肢 &quot;すべて&quot; は絞込なし扱い
+<a id="__codelineno-0-130" name="__codelineno-0-130" href="#__codelineno-0-130"></a>    If formatId = ALL_FORMATS_TOKEN Then formatId = &quot;&quot;
+<a id="__codelineno-0-131" name="__codelineno-0-131" href="#__codelineno-0-131"></a>
+<a id="__codelineno-0-132" name="__codelineno-0-132" href="#__codelineno-0-132"></a>    &#39; 番号ダイレクト検索: directNo 指定時はその 1 件のみ返す
+<a id="__codelineno-0-133" name="__codelineno-0-133" href="#__codelineno-0-133"></a>    If Trim(directNo) &lt;&gt; &quot;&quot; Then
+<a id="__codelineno-0-134" name="__codelineno-0-134" href="#__codelineno-0-134"></a>        If FindByNumber(Trim(directNo)) Then
+<a id="__codelineno-0-135" name="__codelineno-0-135" href="#__codelineno-0-135"></a>            results.Add BuildResultRow(1, Trim(directNo))
+<a id="__codelineno-0-136" name="__codelineno-0-136" href="#__codelineno-0-136"></a>        End If
+<a id="__codelineno-0-137" name="__codelineno-0-137" href="#__codelineno-0-137"></a>        Set ExecuteSearch = results
+<a id="__codelineno-0-138" name="__codelineno-0-138" href="#__codelineno-0-138"></a>        If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0622] clsSearchEngine.ExecuteSearch EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-139" name="__codelineno-0-139" href="#__codelineno-0-139"></a>        Exit Function
+<a id="__codelineno-0-140" name="__codelineno-0-140" href="#__codelineno-0-140"></a>    End If
+<a id="__codelineno-0-141" name="__codelineno-0-141" href="#__codelineno-0-141"></a>
+<a id="__codelineno-0-142" name="__codelineno-0-142" href="#__codelineno-0-142"></a>    &#39; data\ 全件 scan (scan/スコアリング内部ロジックを流用)
+<a id="__codelineno-0-143" name="__codelineno-0-143" href="#__codelineno-0-143"></a>    Dim matched() As String
+<a id="__codelineno-0-144" name="__codelineno-0-144" href="#__codelineno-0-144"></a>    Dim scores() As Double
+<a id="__codelineno-0-145" name="__codelineno-0-145" href="#__codelineno-0-145"></a>    Dim matchCount As Long
+<a id="__codelineno-0-146" name="__codelineno-0-146" href="#__codelineno-0-146"></a>    matchCount = ScanAndMatch(formatId, keyword, _
+<a id="__codelineno-0-147" name="__codelineno-0-147" href="#__codelineno-0-147"></a>                              DEFAULT_SEARCH_MODE, DEFAULT_TARGET_FIELD, _
+<a id="__codelineno-0-148" name="__codelineno-0-148" href="#__codelineno-0-148"></a>                              category, assignee, _
+<a id="__codelineno-0-149" name="__codelineno-0-149" href="#__codelineno-0-149"></a>                              dateFrom, dateTo, matched, scores)
+<a id="__codelineno-0-150" name="__codelineno-0-150" href="#__codelineno-0-150"></a>
+<a id="__codelineno-0-151" name="__codelineno-0-151" href="#__codelineno-0-151"></a>    Dim i As Long
+<a id="__codelineno-0-152" name="__codelineno-0-152" href="#__codelineno-0-152"></a>    For i = 0 To matchCount - 1
+<a id="__codelineno-0-153" name="__codelineno-0-153" href="#__codelineno-0-153"></a>        results.Add BuildResultRow(i + 1, matched(i))
+<a id="__codelineno-0-154" name="__codelineno-0-154" href="#__codelineno-0-154"></a>    Next i
+<a id="__codelineno-0-155" name="__codelineno-0-155" href="#__codelineno-0-155"></a>
+<a id="__codelineno-0-156" name="__codelineno-0-156" href="#__codelineno-0-156"></a>    Set ExecuteSearch = results
+<a id="__codelineno-0-157" name="__codelineno-0-157" href="#__codelineno-0-157"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0623] clsSearchEngine.ExecuteSearch EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-158" name="__codelineno-0-158" href="#__codelineno-0-158"></a>    Exit Function
+<a id="__codelineno-0-159" name="__codelineno-0-159" href="#__codelineno-0-159"></a>
+<a id="__codelineno-0-160" name="__codelineno-0-160" href="#__codelineno-0-160"></a>ErrHandler:
+<a id="__codelineno-0-161" name="__codelineno-0-161" href="#__codelineno-0-161"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print &quot;[D-0624] clsSearchEngine.ExecuteSearch EXIT-ERR &quot; &amp; &quot;errNum=&quot; &amp; Err.Number &amp; &quot; desc=&quot; &amp; Err.Description  &#39; [ADR-0100]
+<a id="__codelineno-0-162" name="__codelineno-0-162" href="#__codelineno-0-162"></a>    If Not m_logger Is Nothing Then
+<a id="__codelineno-0-163" name="__codelineno-0-163" href="#__codelineno-0-163"></a>        m_logger.LogError &quot;clsSearchEngine&quot;, &quot;ExecuteSearch&quot;, Err.Description, &quot;&quot;, &quot;LOG-M08-SEARCH-ERR&quot;
+<a id="__codelineno-0-164" name="__codelineno-0-164" href="#__codelineno-0-164"></a>    End If
+<a id="__codelineno-0-165" name="__codelineno-0-165" href="#__codelineno-0-165"></a>    Set ExecuteSearch = New Collection
+<a id="__codelineno-0-166" name="__codelineno-0-166" href="#__codelineno-0-166"></a>End Function
+<a id="__codelineno-0-167" name="__codelineno-0-167" href="#__codelineno-0-167"></a>
+<a id="__codelineno-0-168" name="__codelineno-0-168" href="#__codelineno-0-168"></a>&#39; ================================================================
+<a id="__codelineno-0-169" name="__codelineno-0-169" href="#__codelineno-0-169"></a>&#39; 関数名: GetDictStr
+<a id="__codelineno-0-170" name="__codelineno-0-170" href="#__codelineno-0-170"></a>&#39; 概要:   Dictionary から key の値を文字列で取得 (不在時は空文字列)
+<a id="__codelineno-0-171" name="__codelineno-0-171" href="#__codelineno-0-171"></a>&#39; 引数:   d   - 検索条件 Dictionary
+<a id="__codelineno-0-172" name="__codelineno-0-172" href="#__codelineno-0-172"></a>&#39;         key - 取得キー
+<a id="__codelineno-0-173" name="__codelineno-0-173" href="#__codelineno-0-173"></a>&#39; 戻り値: String - 値 (不在・Nothing なら &quot;&quot;)
+<a id="__codelineno-0-174" name="__codelineno-0-174" href="#__codelineno-0-174"></a>&#39; ================================================================
+<a id="__codelineno-0-175" name="__codelineno-0-175" href="#__codelineno-0-175"></a>Private Function GetDictStr(ByVal d As Object, ByVal key As String) As String
+<a id="__codelineno-0-176" name="__codelineno-0-176" href="#__codelineno-0-176"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0625] clsSearchEngine.GetDictStr ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-177" name="__codelineno-0-177" href="#__codelineno-0-177"></a>    If d Is Nothing Then
+<a id="__codelineno-0-178" name="__codelineno-0-178" href="#__codelineno-0-178"></a>        GetDictStr = &quot;&quot;
+<a id="__codelineno-0-179" name="__codelineno-0-179" href="#__codelineno-0-179"></a>        If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0626] clsSearchEngine.GetDictStr EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-180" name="__codelineno-0-180" href="#__codelineno-0-180"></a>        Exit Function
+<a id="__codelineno-0-181" name="__codelineno-0-181" href="#__codelineno-0-181"></a>    End If
+<a id="__codelineno-0-182" name="__codelineno-0-182" href="#__codelineno-0-182"></a>    If d.Exists(key) Then
+<a id="__codelineno-0-183" name="__codelineno-0-183" href="#__codelineno-0-183"></a>        GetDictStr = CStr(d(key))
+<a id="__codelineno-0-184" name="__codelineno-0-184" href="#__codelineno-0-184"></a>    Else
+<a id="__codelineno-0-185" name="__codelineno-0-185" href="#__codelineno-0-185"></a>        GetDictStr = &quot;&quot;
+<a id="__codelineno-0-186" name="__codelineno-0-186" href="#__codelineno-0-186"></a>    End If
+<a id="__codelineno-0-187" name="__codelineno-0-187" href="#__codelineno-0-187"></a>End Function
+<a id="__codelineno-0-188" name="__codelineno-0-188" href="#__codelineno-0-188"></a>
+<a id="__codelineno-0-189" name="__codelineno-0-189" href="#__codelineno-0-189"></a>&#39; ================================================================
+<a id="__codelineno-0-190" name="__codelineno-0-190" href="#__codelineno-0-190"></a>&#39; 関数名: BuildResultRow
+<a id="__codelineno-0-191" name="__codelineno-0-191" href="#__codelineno-0-191"></a>&#39; 概要:   1 件のナレッジから検索結果 1 行ぶんの Dictionary を組む。
+<a id="__codelineno-0-192" name="__codelineno-0-192" href="#__codelineno-0-192"></a>&#39;         キーは検索結果グリッドの論理列名と一致させる。
+<a id="__codelineno-0-193" name="__codelineno-0-193" href="#__codelineno-0-193"></a>&#39; 引数:   rowNo - 1 始まりの連番
+<a id="__codelineno-0-194" name="__codelineno-0-194" href="#__codelineno-0-194"></a>&#39;         knwNo - ナレッジ番号
+<a id="__codelineno-0-195" name="__codelineno-0-195" href="#__codelineno-0-195"></a>&#39; 戻り値: Object - 行 Dictionary
+<a id="__codelineno-0-196" name="__codelineno-0-196" href="#__codelineno-0-196"></a>&#39; ================================================================
+<a id="__codelineno-0-197" name="__codelineno-0-197" href="#__codelineno-0-197"></a>Private Function BuildResultRow(ByVal rowNo As Long, ByVal knwNo As String) As Object
+<a id="__codelineno-0-198" name="__codelineno-0-198" href="#__codelineno-0-198"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0627] clsSearchEngine.BuildResultRow ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-199" name="__codelineno-0-199" href="#__codelineno-0-199"></a>    Dim d As Object
+<a id="__codelineno-0-200" name="__codelineno-0-200" href="#__codelineno-0-200"></a>    Set d = CreateObject(&quot;Scripting.Dictionary&quot;)
+<a id="__codelineno-0-201" name="__codelineno-0-201" href="#__codelineno-0-201"></a>
+<a id="__codelineno-0-202" name="__codelineno-0-202" href="#__codelineno-0-202"></a>    Dim filePath As String
+<a id="__codelineno-0-203" name="__codelineno-0-203" href="#__codelineno-0-203"></a>    filePath = CombineFilePath(m_dataFolder, knwNo &amp; &quot;.txt&quot;)
+<a id="__codelineno-0-204" name="__codelineno-0-204" href="#__codelineno-0-204"></a>    Dim content As String
+<a id="__codelineno-0-205" name="__codelineno-0-205" href="#__codelineno-0-205"></a>    content = ReadShiftJisFile(filePath)
+<a id="__codelineno-0-206" name="__codelineno-0-206" href="#__codelineno-0-206"></a>
+<a id="__codelineno-0-207" name="__codelineno-0-207" href="#__codelineno-0-207"></a>    d(&quot;No&quot;) = rowNo
+<a id="__codelineno-0-208" name="__codelineno-0-208" href="#__codelineno-0-208"></a>    d(&quot;KnowledgeNo&quot;) = knwNo
+<a id="__codelineno-0-209" name="__codelineno-0-209" href="#__codelineno-0-209"></a>    d(&quot;FormatName&quot;) = ExtractStanzaValue(content, &quot;FormatName&quot;)
+<a id="__codelineno-0-210" name="__codelineno-0-210" href="#__codelineno-0-210"></a>    d(&quot;CreatedDate&quot;) = ExtractStanzaValue(content, &quot;CreatedDate&quot;)
+<a id="__codelineno-0-211" name="__codelineno-0-211" href="#__codelineno-0-211"></a>    d(&quot;UpdatedDate&quot;) = ExtractStanzaValue(content, &quot;UpdatedDate&quot;)
+<a id="__codelineno-0-212" name="__codelineno-0-212" href="#__codelineno-0-212"></a>    d(&quot;Title&quot;) = ExtractKeyValueFromItems(content, ChrW(&amp;H30BF) &amp; ChrW(&amp;H30A4) &amp; ChrW(&amp;H30C8) &amp; ChrW(&amp;H30EB))
+<a id="__codelineno-0-213" name="__codelineno-0-213" href="#__codelineno-0-213"></a>    d(&quot;Excerpt&quot;) = BuildExcerpt(content)
+<a id="__codelineno-0-214" name="__codelineno-0-214" href="#__codelineno-0-214"></a>    d(&quot;Category&quot;) = ExtractKeyValueFromItems(content, ChrW(&amp;H30AB) &amp; ChrW(&amp;H30C6) &amp; ChrW(&amp;H30B4) &amp; ChrW(&amp;H30EA))
+<a id="__codelineno-0-215" name="__codelineno-0-215" href="#__codelineno-0-215"></a>    d(&quot;Assignee&quot;) = ExtractKeyValueFromItems(content, ChrW(&amp;H62C5) &amp; ChrW(&amp;H5F53) &amp; ChrW(&amp;H8005))
+<a id="__codelineno-0-216" name="__codelineno-0-216" href="#__codelineno-0-216"></a>
+<a id="__codelineno-0-217" name="__codelineno-0-217" href="#__codelineno-0-217"></a>    Set BuildResultRow = d
+<a id="__codelineno-0-218" name="__codelineno-0-218" href="#__codelineno-0-218"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0628] clsSearchEngine.BuildResultRow EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-219" name="__codelineno-0-219" href="#__codelineno-0-219"></a>End Function
+<a id="__codelineno-0-220" name="__codelineno-0-220" href="#__codelineno-0-220"></a>
+<a id="__codelineno-0-221" name="__codelineno-0-221" href="#__codelineno-0-221"></a>&#39; ================================================================
+<a id="__codelineno-0-222" name="__codelineno-0-222" href="#__codelineno-0-222"></a>&#39; 関数名: BuildExcerpt
+<a id="__codelineno-0-223" name="__codelineno-0-223" href="#__codelineno-0-223"></a>&#39; 概要:   検索結果グリッドの「事象抜粋」列用に、事象フィールド値の
+<a id="__codelineno-0-224" name="__codelineno-0-224" href="#__codelineno-0-224"></a>&#39;         先頭 EXCERPT_MAX_LEN 文字を抜粋する。
+<a id="__codelineno-0-225" name="__codelineno-0-225" href="#__codelineno-0-225"></a>&#39; 引数:   content - ナレッジファイル内容
+<a id="__codelineno-0-226" name="__codelineno-0-226" href="#__codelineno-0-226"></a>&#39; 戻り値: String - 事象抜粋 (上限超過時は末尾に &quot;...&quot;)
+<a id="__codelineno-0-227" name="__codelineno-0-227" href="#__codelineno-0-227"></a>&#39; ================================================================
+<a id="__codelineno-0-228" name="__codelineno-0-228" href="#__codelineno-0-228"></a>Private Function BuildExcerpt(ByVal content As String) As String
+<a id="__codelineno-0-229" name="__codelineno-0-229" href="#__codelineno-0-229"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0629] clsSearchEngine.BuildExcerpt ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-230" name="__codelineno-0-230" href="#__codelineno-0-230"></a>    Dim s As String
+<a id="__codelineno-0-231" name="__codelineno-0-231" href="#__codelineno-0-231"></a>    s = ExtractKeyValueFromItems(content, ChrW(&amp;H4E8B) &amp; ChrW(&amp;H8C61))
+<a id="__codelineno-0-232" name="__codelineno-0-232" href="#__codelineno-0-232"></a>    If Len(s) &gt; EXCERPT_MAX_LEN Then
+<a id="__codelineno-0-233" name="__codelineno-0-233" href="#__codelineno-0-233"></a>        s = Left(s, EXCERPT_MAX_LEN) &amp; &quot;...&quot;
+<a id="__codelineno-0-234" name="__codelineno-0-234" href="#__codelineno-0-234"></a>    End If
+<a id="__codelineno-0-235" name="__codelineno-0-235" href="#__codelineno-0-235"></a>    BuildExcerpt = s
+<a id="__codelineno-0-236" name="__codelineno-0-236" href="#__codelineno-0-236"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0630] clsSearchEngine.BuildExcerpt EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-237" name="__codelineno-0-237" href="#__codelineno-0-237"></a>End Function
+<a id="__codelineno-0-238" name="__codelineno-0-238" href="#__codelineno-0-238"></a>
+<a id="__codelineno-0-239" name="__codelineno-0-239" href="#__codelineno-0-239"></a>&#39; ================================================================
+<a id="__codelineno-0-240" name="__codelineno-0-240" href="#__codelineno-0-240"></a>&#39; 関数名: DisplayKnowledge (v2.2 task 6.10 / OP-3 確定)
+<a id="__codelineno-0-241" name="__codelineno-0-241" href="#__codelineno-0-241"></a>&#39; 概要:   指定ナレッジを M-09 ナレッジ表示画面へ描画する。
+<a id="__codelineno-0-242" name="__codelineno-0-242" href="#__codelineno-0-242"></a>&#39;         v1 の固定セル (KD_*) 直書きは廃止し、M-09 スタンザの
+<a id="__codelineno-0-243" name="__codelineno-0-243" href="#__codelineno-0-243"></a>&#39;         [FORM_FROM_FORMAT] (ReadOnly=TRUE 表示モード) を
+<a id="__codelineno-0-244" name="__codelineno-0-244" href="#__codelineno-0-244"></a>&#39;         modUILoader.ApplyFormFromFormat 経由で動的描画する経路に
+<a id="__codelineno-0-245" name="__codelineno-0-245" href="#__codelineno-0-245"></a>&#39;         一本化した (architecture_v2 §0.6.6.1)。本 Sub はメタ帯セル
+<a id="__codelineno-0-246" name="__codelineno-0-246" href="#__codelineno-0-246"></a>&#39;         (PopulateFromKnowledge=ナレッジ番号セル / SourceFormatRef=
+<a id="__codelineno-0-247" name="__codelineno-0-247" href="#__codelineno-0-247"></a>&#39;         FormatID セル) へ値を書き、ApplyFormFromFormat へ委譲する。
+<a id="__codelineno-0-248" name="__codelineno-0-248" href="#__codelineno-0-248"></a>&#39; 引数:   knowledgeNo - ナレッジ番号
+<a id="__codelineno-0-249" name="__codelineno-0-249" href="#__codelineno-0-249"></a>&#39; 戻り値: なし
+<a id="__codelineno-0-250" name="__codelineno-0-250" href="#__codelineno-0-250"></a>&#39; ================================================================
+<a id="__codelineno-0-251" name="__codelineno-0-251" href="#__codelineno-0-251"></a>Public Sub DisplayKnowledge(ByVal knowledgeNo As String)
+<a id="__codelineno-0-252" name="__codelineno-0-252" href="#__codelineno-0-252"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0631] clsSearchEngine.DisplayKnowledge ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-253" name="__codelineno-0-253" href="#__codelineno-0-253"></a>    On Error GoTo ErrHandler
+<a id="__codelineno-0-254" name="__codelineno-0-254" href="#__codelineno-0-254"></a>
+<a id="__codelineno-0-255" name="__codelineno-0-255" href="#__codelineno-0-255"></a>    Dim filePath As String
+<a id="__codelineno-0-256" name="__codelineno-0-256" href="#__codelineno-0-256"></a>    filePath = CombineFilePath(m_dataFolder, knowledgeNo &amp; &quot;.txt&quot;)
+<a id="__codelineno-0-257" name="__codelineno-0-257" href="#__codelineno-0-257"></a>    If Not FileExists(filePath) Then Exit Sub
+<a id="__codelineno-0-258" name="__codelineno-0-258" href="#__codelineno-0-258"></a>
+<a id="__codelineno-0-259" name="__codelineno-0-259" href="#__codelineno-0-259"></a>    Dim content As String
+<a id="__codelineno-0-260" name="__codelineno-0-260" href="#__codelineno-0-260"></a>    content = ReadShiftJisFile(filePath)
+<a id="__codelineno-0-261" name="__codelineno-0-261" href="#__codelineno-0-261"></a>    If content = &quot;&quot; Then Exit Sub
+<a id="__codelineno-0-262" name="__codelineno-0-262" href="#__codelineno-0-262"></a>
+<a id="__codelineno-0-263" name="__codelineno-0-263" href="#__codelineno-0-263"></a>    &#39; SourceFormatRef セルへ書く FormatID をナレッジ本文から取得
+<a id="__codelineno-0-264" name="__codelineno-0-264" href="#__codelineno-0-264"></a>    Dim formatId As String
+<a id="__codelineno-0-265" name="__codelineno-0-265" href="#__codelineno-0-265"></a>    formatId = ExtractStanzaValue(content, &quot;FormatID&quot;)
+<a id="__codelineno-0-266" name="__codelineno-0-266" href="#__codelineno-0-266"></a>
+<a id="__codelineno-0-267" name="__codelineno-0-267" href="#__codelineno-0-267"></a>    Dim ws As Worksheet
+<a id="__codelineno-0-268" name="__codelineno-0-268" href="#__codelineno-0-268"></a>    Set ws = ThisWorkbook.Worksheets(SHEET_KNW_DISPLAY)
+<a id="__codelineno-0-269" name="__codelineno-0-269" href="#__codelineno-0-269"></a>
+<a id="__codelineno-0-270" name="__codelineno-0-270" href="#__codelineno-0-270"></a>    &#39; M-09 スタンザの [FORM_FROM_FORMAT] セクションを取得
+<a id="__codelineno-0-271" name="__codelineno-0-271" href="#__codelineno-0-271"></a>    Dim formSec As ClsStanzaSection
+<a id="__codelineno-0-272" name="__codelineno-0-272" href="#__codelineno-0-272"></a>    Set formSec = FindFormFromFormatSection()
+<a id="__codelineno-0-273" name="__codelineno-0-273" href="#__codelineno-0-273"></a>    If formSec Is Nothing Then
+<a id="__codelineno-0-274" name="__codelineno-0-274" href="#__codelineno-0-274"></a>        If Not m_logger Is Nothing Then
+<a id="__codelineno-0-275" name="__codelineno-0-275" href="#__codelineno-0-275"></a>            m_logger.LogError &quot;clsSearchEngine&quot;, &quot;DisplayKnowledge&quot;, _
+<a id="__codelineno-0-276" name="__codelineno-0-276" href="#__codelineno-0-276"></a>                &quot;M-09 stanza has no FORM_FROM_FORMAT section&quot;, &quot;&quot;, &quot;LOG-M09-GOTOEDIT-ENTRY&quot;
+<a id="__codelineno-0-277" name="__codelineno-0-277" href="#__codelineno-0-277"></a>        End If
+<a id="__codelineno-0-278" name="__codelineno-0-278" href="#__codelineno-0-278"></a>        If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0632] clsSearchEngine.DisplayKnowledge EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-279" name="__codelineno-0-279" href="#__codelineno-0-279"></a>        Exit Sub
+<a id="__codelineno-0-280" name="__codelineno-0-280" href="#__codelineno-0-280"></a>    End If
+<a id="__codelineno-0-281" name="__codelineno-0-281" href="#__codelineno-0-281"></a>
+<a id="__codelineno-0-282" name="__codelineno-0-282" href="#__codelineno-0-282"></a>    &#39; メタ帯セルへ値を流し込む (ApplyFormFromFormat がこのセルから
+<a id="__codelineno-0-283" name="__codelineno-0-283" href="#__codelineno-0-283"></a>    &#39; knowledgeNo / FormatID を読む。schema 3.12)
+<a id="__codelineno-0-284" name="__codelineno-0-284" href="#__codelineno-0-284"></a>    Dim knwCell As String, fmtCell As String
+<a id="__codelineno-0-285" name="__codelineno-0-285" href="#__codelineno-0-285"></a>    knwCell = LocalCellRef(formSec.GetValue(&quot;PopulateFromKnowledge&quot;))
+<a id="__codelineno-0-286" name="__codelineno-0-286" href="#__codelineno-0-286"></a>    fmtCell = LocalCellRef(formSec.GetValue(&quot;SourceFormatRef&quot;))
+<a id="__codelineno-0-287" name="__codelineno-0-287" href="#__codelineno-0-287"></a>    If Len(knwCell) &gt; 0 Then ws.Range(knwCell).Value = knowledgeNo
+<a id="__codelineno-0-288" name="__codelineno-0-288" href="#__codelineno-0-288"></a>    If Len(fmtCell) &gt; 0 Then ws.Range(fmtCell).Value = formatId
+<a id="__codelineno-0-289" name="__codelineno-0-289" href="#__codelineno-0-289"></a>
+<a id="__codelineno-0-290" name="__codelineno-0-290" href="#__codelineno-0-290"></a>    &#39; 旧描画行のクリア (再描画時の余分行除去、StartCell～ボタン行手前)
+<a id="__codelineno-0-291" name="__codelineno-0-291" href="#__codelineno-0-291"></a>    On Error Resume Next
+<a id="__codelineno-0-292" name="__codelineno-0-292" href="#__codelineno-0-292"></a>    ws.Range(M09_FORM_CLEAR_RANGE).ClearContents
+<a id="__codelineno-0-293" name="__codelineno-0-293" href="#__codelineno-0-293"></a>    On Error GoTo ErrHandler
+<a id="__codelineno-0-294" name="__codelineno-0-294" href="#__codelineno-0-294"></a>
+<a id="__codelineno-0-295" name="__codelineno-0-295" href="#__codelineno-0-295"></a>    &#39; [FORM_FROM_FORMAT] 描画を modUILoader へ委譲 (ReadOnly=TRUE 表示モード)
+<a id="__codelineno-0-296" name="__codelineno-0-296" href="#__codelineno-0-296"></a>    modUILoader.ApplyFormFromFormat ws, formSec
+<a id="__codelineno-0-297" name="__codelineno-0-297" href="#__codelineno-0-297"></a>
+<a id="__codelineno-0-298" name="__codelineno-0-298" href="#__codelineno-0-298"></a>    If Not m_logger Is Nothing Then
+<a id="__codelineno-0-299" name="__codelineno-0-299" href="#__codelineno-0-299"></a>        m_logger.LogInfo &quot;clsSearchEngine&quot;, &quot;DisplayKnowledge&quot;, logId:=&quot;LOG-M09-GOTOEDIT-EXIT-OK&quot;, message:= _
+<a id="__codelineno-0-300" name="__codelineno-0-300" href="#__codelineno-0-300"></a>                          ChrW(&amp;H8868) &amp; ChrW(&amp;H793A) &amp; &quot;: &quot; &amp; knowledgeNo
+<a id="__codelineno-0-301" name="__codelineno-0-301" href="#__codelineno-0-301"></a>    End If
+<a id="__codelineno-0-302" name="__codelineno-0-302" href="#__codelineno-0-302"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0633] clsSearchEngine.DisplayKnowledge EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-303" name="__codelineno-0-303" href="#__codelineno-0-303"></a>    Exit Sub
+<a id="__codelineno-0-304" name="__codelineno-0-304" href="#__codelineno-0-304"></a>
+<a id="__codelineno-0-305" name="__codelineno-0-305" href="#__codelineno-0-305"></a>ErrHandler:
+<a id="__codelineno-0-306" name="__codelineno-0-306" href="#__codelineno-0-306"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print &quot;[D-0634] clsSearchEngine.DisplayKnowledge EXIT-ERR &quot; &amp; &quot;errNum=&quot; &amp; Err.Number &amp; &quot; desc=&quot; &amp; Err.Description  &#39; [ADR-0100]
+<a id="__codelineno-0-307" name="__codelineno-0-307" href="#__codelineno-0-307"></a>    If Not m_logger Is Nothing Then
+<a id="__codelineno-0-308" name="__codelineno-0-308" href="#__codelineno-0-308"></a>        m_logger.LogError &quot;clsSearchEngine&quot;, &quot;DisplayKnowledge&quot;, Err.Description, &quot;&quot;, &quot;LOG-M09-GOTOEDIT-ENTRY&quot;
+<a id="__codelineno-0-309" name="__codelineno-0-309" href="#__codelineno-0-309"></a>    End If
+<a id="__codelineno-0-310" name="__codelineno-0-310" href="#__codelineno-0-310"></a>End Sub
+<a id="__codelineno-0-311" name="__codelineno-0-311" href="#__codelineno-0-311"></a>
+<a id="__codelineno-0-312" name="__codelineno-0-312" href="#__codelineno-0-312"></a>&#39; ================================================================
+<a id="__codelineno-0-313" name="__codelineno-0-313" href="#__codelineno-0-313"></a>&#39; 関数名: FindFormFromFormatSection
+<a id="__codelineno-0-314" name="__codelineno-0-314" href="#__codelineno-0-314"></a>&#39; 概要:   M-09 の UI スタンザを読み [FORM_FROM_FORMAT] セクションを返す。
+<a id="__codelineno-0-315" name="__codelineno-0-315" href="#__codelineno-0-315"></a>&#39; 戻り値: ClsStanzaSection - 見つからなければ Nothing
+<a id="__codelineno-0-316" name="__codelineno-0-316" href="#__codelineno-0-316"></a>&#39; ================================================================
+<a id="__codelineno-0-317" name="__codelineno-0-317" href="#__codelineno-0-317"></a>Private Function FindFormFromFormatSection() As ClsStanzaSection
+<a id="__codelineno-0-318" name="__codelineno-0-318" href="#__codelineno-0-318"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0635] clsSearchEngine.FindFormFromFormatSection ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-319" name="__codelineno-0-319" href="#__codelineno-0-319"></a>    Dim sections As Collection
+<a id="__codelineno-0-320" name="__codelineno-0-320" href="#__codelineno-0-320"></a>    Set sections = modUILoader.LoadUiDefinition(UiRoleKensaku(), &quot;M-09&quot;)  &#39; R-3-b: UI-def id は M-NN(ファイル名)。シート名定数は流用しない
+<a id="__codelineno-0-321" name="__codelineno-0-321" href="#__codelineno-0-321"></a>    Dim i As Long
+<a id="__codelineno-0-322" name="__codelineno-0-322" href="#__codelineno-0-322"></a>    Dim sec As ClsStanzaSection
+<a id="__codelineno-0-323" name="__codelineno-0-323" href="#__codelineno-0-323"></a>    For i = 1 To sections.Count
+<a id="__codelineno-0-324" name="__codelineno-0-324" href="#__codelineno-0-324"></a>        Set sec = sections.Item(i)
+<a id="__codelineno-0-325" name="__codelineno-0-325" href="#__codelineno-0-325"></a>        If sec.SectionName = &quot;FORM_FROM_FORMAT&quot; Then
+<a id="__codelineno-0-326" name="__codelineno-0-326" href="#__codelineno-0-326"></a>            Set FindFormFromFormatSection = sec
+<a id="__codelineno-0-327" name="__codelineno-0-327" href="#__codelineno-0-327"></a>            If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0636] clsSearchEngine.FindFormFromFormatSection EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-328" name="__codelineno-0-328" href="#__codelineno-0-328"></a>            Exit Function
+<a id="__codelineno-0-329" name="__codelineno-0-329" href="#__codelineno-0-329"></a>        End If
+<a id="__codelineno-0-330" name="__codelineno-0-330" href="#__codelineno-0-330"></a>    Next i
+<a id="__codelineno-0-331" name="__codelineno-0-331" href="#__codelineno-0-331"></a>    Set FindFormFromFormatSection = Nothing
+<a id="__codelineno-0-332" name="__codelineno-0-332" href="#__codelineno-0-332"></a>End Function
+<a id="__codelineno-0-333" name="__codelineno-0-333" href="#__codelineno-0-333"></a>
+<a id="__codelineno-0-334" name="__codelineno-0-334" href="#__codelineno-0-334"></a>&#39; ================================================================
+<a id="__codelineno-0-335" name="__codelineno-0-335" href="#__codelineno-0-335"></a>&#39; 関数名: LocalCellRef
+<a id="__codelineno-0-336" name="__codelineno-0-336" href="#__codelineno-0-336"></a>&#39; 概要:   A1 参照からシート修飾 (Sheet!) を除いたローカルセル番地を返す。
+<a id="__codelineno-0-337" name="__codelineno-0-337" href="#__codelineno-0-337"></a>&#39; 引数:   cellRef - A1 参照 (シート修飾可)
+<a id="__codelineno-0-338" name="__codelineno-0-338" href="#__codelineno-0-338"></a>&#39; 戻り値: String - ローカルセル番地
+<a id="__codelineno-0-339" name="__codelineno-0-339" href="#__codelineno-0-339"></a>&#39; ================================================================
+<a id="__codelineno-0-340" name="__codelineno-0-340" href="#__codelineno-0-340"></a>Private Function LocalCellRef(ByVal cellRef As String) As String
+<a id="__codelineno-0-341" name="__codelineno-0-341" href="#__codelineno-0-341"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0637] clsSearchEngine.LocalCellRef ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-342" name="__codelineno-0-342" href="#__codelineno-0-342"></a>    Dim p As Long
+<a id="__codelineno-0-343" name="__codelineno-0-343" href="#__codelineno-0-343"></a>    p = InStr(cellRef, &quot;!&quot;)
+<a id="__codelineno-0-344" name="__codelineno-0-344" href="#__codelineno-0-344"></a>    If p &gt; 0 Then
+<a id="__codelineno-0-345" name="__codelineno-0-345" href="#__codelineno-0-345"></a>        LocalCellRef = Mid(cellRef, p + 1)
+<a id="__codelineno-0-346" name="__codelineno-0-346" href="#__codelineno-0-346"></a>    Else
+<a id="__codelineno-0-347" name="__codelineno-0-347" href="#__codelineno-0-347"></a>        LocalCellRef = cellRef
+<a id="__codelineno-0-348" name="__codelineno-0-348" href="#__codelineno-0-348"></a>    End If
+<a id="__codelineno-0-349" name="__codelineno-0-349" href="#__codelineno-0-349"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0638] clsSearchEngine.LocalCellRef EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-350" name="__codelineno-0-350" href="#__codelineno-0-350"></a>End Function
+<a id="__codelineno-0-351" name="__codelineno-0-351" href="#__codelineno-0-351"></a>
+<a id="__codelineno-0-352" name="__codelineno-0-352" href="#__codelineno-0-352"></a>&#39; ================================================================
+<a id="__codelineno-0-353" name="__codelineno-0-353" href="#__codelineno-0-353"></a>&#39; 関数名: ScoreMatchPublic
+<a id="__codelineno-0-354" name="__codelineno-0-354" href="#__codelineno-0-354"></a>&#39; 概要:   ScoreMatch のテスト用 Public ラッパ。
+<a id="__codelineno-0-355" name="__codelineno-0-355" href="#__codelineno-0-355"></a>&#39;         BUG-001 修正 (2026-05-12): category / assignee 引数を追加。
+<a id="__codelineno-0-356" name="__codelineno-0-356" href="#__codelineno-0-356"></a>&#39;         既存テスト互換のため searchMode/targetField は引き続き受け取る。
+<a id="__codelineno-0-357" name="__codelineno-0-357" href="#__codelineno-0-357"></a>&#39; 戻り値: Double - 0=miss、1+=score
+<a id="__codelineno-0-358" name="__codelineno-0-358" href="#__codelineno-0-358"></a>&#39; 備考:   テスト層 (T4-006/007) から直接呼び出し可能にするための公開関数。
+<a id="__codelineno-0-359" name="__codelineno-0-359" href="#__codelineno-0-359"></a>&#39;         本番フローは ScanAndMatch 経由で内部呼び出しされるため通常は使わない。
+<a id="__codelineno-0-360" name="__codelineno-0-360" href="#__codelineno-0-360"></a>&#39; ================================================================
+<a id="__codelineno-0-361" name="__codelineno-0-361" href="#__codelineno-0-361"></a>Public Function ScoreMatchPublic(ByVal content As String, _
+<a id="__codelineno-0-362" name="__codelineno-0-362" href="#__codelineno-0-362"></a>                                   ByVal formatId As String, _
+<a id="__codelineno-0-363" name="__codelineno-0-363" href="#__codelineno-0-363"></a>                                   ByVal keywords As String, _
+<a id="__codelineno-0-364" name="__codelineno-0-364" href="#__codelineno-0-364"></a>                                   ByVal searchMode As String, _
+<a id="__codelineno-0-365" name="__codelineno-0-365" href="#__codelineno-0-365"></a>                                   ByVal targetField As String, _
+<a id="__codelineno-0-366" name="__codelineno-0-366" href="#__codelineno-0-366"></a>                                   ByVal fromDateStr As String, _
+<a id="__codelineno-0-367" name="__codelineno-0-367" href="#__codelineno-0-367"></a>                                   ByVal toDateStr As String, _
+<a id="__codelineno-0-368" name="__codelineno-0-368" href="#__codelineno-0-368"></a>                                   Optional ByVal category As String = &quot;&quot;, _
+<a id="__codelineno-0-369" name="__codelineno-0-369" href="#__codelineno-0-369"></a>                                   Optional ByVal assignee As String = &quot;&quot;) As Double
+<a id="__codelineno-0-370" name="__codelineno-0-370" href="#__codelineno-0-370"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0639] clsSearchEngine.ScoreMatchPublic ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-371" name="__codelineno-0-371" href="#__codelineno-0-371"></a>    Dim fromDate As Date
+<a id="__codelineno-0-372" name="__codelineno-0-372" href="#__codelineno-0-372"></a>    Dim toDate As Date
+<a id="__codelineno-0-373" name="__codelineno-0-373" href="#__codelineno-0-373"></a>    Dim hasFromDate As Boolean
+<a id="__codelineno-0-374" name="__codelineno-0-374" href="#__codelineno-0-374"></a>    Dim hasToDate As Boolean
+<a id="__codelineno-0-375" name="__codelineno-0-375" href="#__codelineno-0-375"></a>    hasFromDate = TryParseDate(fromDateStr, fromDate)
+<a id="__codelineno-0-376" name="__codelineno-0-376" href="#__codelineno-0-376"></a>    hasToDate = TryParseDate(toDateStr, toDate)
+<a id="__codelineno-0-377" name="__codelineno-0-377" href="#__codelineno-0-377"></a>
+<a id="__codelineno-0-378" name="__codelineno-0-378" href="#__codelineno-0-378"></a>    ScoreMatchPublic = ScoreMatch(content, formatId, keywords, searchMode, _
+<a id="__codelineno-0-379" name="__codelineno-0-379" href="#__codelineno-0-379"></a>                                    targetField, category, assignee, _
+<a id="__codelineno-0-380" name="__codelineno-0-380" href="#__codelineno-0-380"></a>                                    fromDate, hasFromDate, _
+<a id="__codelineno-0-381" name="__codelineno-0-381" href="#__codelineno-0-381"></a>                                    toDate, hasToDate)
+<a id="__codelineno-0-382" name="__codelineno-0-382" href="#__codelineno-0-382"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0640] clsSearchEngine.ScoreMatchPublic EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-383" name="__codelineno-0-383" href="#__codelineno-0-383"></a>End Function
+<a id="__codelineno-0-384" name="__codelineno-0-384" href="#__codelineno-0-384"></a>
+<a id="__codelineno-0-385" name="__codelineno-0-385" href="#__codelineno-0-385"></a>&#39; ================================================================
+<a id="__codelineno-0-386" name="__codelineno-0-386" href="#__codelineno-0-386"></a>&#39; 関数名: ExtractImagePathPublic
+<a id="__codelineno-0-387" name="__codelineno-0-387" href="#__codelineno-0-387"></a>&#39; 概要:   ExtractImagePath のテスト用 Public ラッパ
+<a id="__codelineno-0-388" name="__codelineno-0-388" href="#__codelineno-0-388"></a>&#39; 引数:   content     - ナレッジファイル内容
+<a id="__codelineno-0-389" name="__codelineno-0-389" href="#__codelineno-0-389"></a>&#39;         knowledgeNo - ナレッジ番号 (既定パス生成用)
+<a id="__codelineno-0-390" name="__codelineno-0-390" href="#__codelineno-0-390"></a>&#39; 戻り値: String - ImagePath スタンザ値 or 既定値 (knowledgeNo &amp; &quot;.png&quot;)
+<a id="__codelineno-0-391" name="__codelineno-0-391" href="#__codelineno-0-391"></a>&#39; ================================================================
+<a id="__codelineno-0-392" name="__codelineno-0-392" href="#__codelineno-0-392"></a>Public Function ExtractImagePathPublic(ByVal content As String, _
+<a id="__codelineno-0-393" name="__codelineno-0-393" href="#__codelineno-0-393"></a>                                         ByVal knowledgeNo As String) As String
+<a id="__codelineno-0-394" name="__codelineno-0-394" href="#__codelineno-0-394"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0641] clsSearchEngine.ExtractImagePathPublic ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-395" name="__codelineno-0-395" href="#__codelineno-0-395"></a>    ExtractImagePathPublic = ExtractImagePath(content, knowledgeNo)
+<a id="__codelineno-0-396" name="__codelineno-0-396" href="#__codelineno-0-396"></a>End Function
+<a id="__codelineno-0-397" name="__codelineno-0-397" href="#__codelineno-0-397"></a>
+<a id="__codelineno-0-398" name="__codelineno-0-398" href="#__codelineno-0-398"></a>&#39; ================================================================
+<a id="__codelineno-0-399" name="__codelineno-0-399" href="#__codelineno-0-399"></a>&#39; 関数名: ResolveImageFolderPublic
+<a id="__codelineno-0-400" name="__codelineno-0-400" href="#__codelineno-0-400"></a>&#39; 概要:   ResolveImageFolder のテスト用 Public ラッパ
+<a id="__codelineno-0-401" name="__codelineno-0-401" href="#__codelineno-0-401"></a>&#39; 引数:   dataFolder - データフォルダのパス
+<a id="__codelineno-0-402" name="__codelineno-0-402" href="#__codelineno-0-402"></a>&#39; 戻り値: String - &lt;dataFolder&gt;/../kb_images
+<a id="__codelineno-0-403" name="__codelineno-0-403" href="#__codelineno-0-403"></a>&#39; ================================================================
+<a id="__codelineno-0-404" name="__codelineno-0-404" href="#__codelineno-0-404"></a>Public Function ResolveImageFolderPublic(ByVal dataFolder As String) As String
+<a id="__codelineno-0-405" name="__codelineno-0-405" href="#__codelineno-0-405"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0642] clsSearchEngine.ResolveImageFolderPublic ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-406" name="__codelineno-0-406" href="#__codelineno-0-406"></a>    ResolveImageFolderPublic = ResolveImageFolder(dataFolder)
+<a id="__codelineno-0-407" name="__codelineno-0-407" href="#__codelineno-0-407"></a>End Function
+<a id="__codelineno-0-408" name="__codelineno-0-408" href="#__codelineno-0-408"></a>
+<a id="__codelineno-0-409" name="__codelineno-0-409" href="#__codelineno-0-409"></a>&#39; ================================================================
+<a id="__codelineno-0-410" name="__codelineno-0-410" href="#__codelineno-0-410"></a>&#39; 関数名: ScanAndMatch
+<a id="__codelineno-0-411" name="__codelineno-0-411" href="#__codelineno-0-411"></a>&#39; 概要:   データフォルダ内の全ナレッジファイルをスキャンして条件一致を抽出
+<a id="__codelineno-0-412" name="__codelineno-0-412" href="#__codelineno-0-412"></a>&#39;         + 各ファイルにスコアを付け、降順で並び替えた配列を返す
+<a id="__codelineno-0-413" name="__codelineno-0-413" href="#__codelineno-0-413"></a>&#39; 引数:   formatId     - フォーマットID (絞込、空なら全)
+<a id="__codelineno-0-414" name="__codelineno-0-414" href="#__codelineno-0-414"></a>&#39;         keywords     - キーワード
+<a id="__codelineno-0-415" name="__codelineno-0-415" href="#__codelineno-0-415"></a>&#39;         searchMode   - &quot;AND&quot; or &quot;OR&quot;
+<a id="__codelineno-0-416" name="__codelineno-0-416" href="#__codelineno-0-416"></a>&#39;         targetField  - 対象フィールド
+<a id="__codelineno-0-417" name="__codelineno-0-417" href="#__codelineno-0-417"></a>&#39;         fromDateStr  - 作成日From
+<a id="__codelineno-0-418" name="__codelineno-0-418" href="#__codelineno-0-418"></a>&#39;         toDateStr    - 作成日To
+<a id="__codelineno-0-419" name="__codelineno-0-419" href="#__codelineno-0-419"></a>&#39;         outMatched   - 出力: マッチしたナレッジ番号の配列 (score 降順)
+<a id="__codelineno-0-420" name="__codelineno-0-420" href="#__codelineno-0-420"></a>&#39;         outScores    - 出力: 対応するスコア配列
+<a id="__codelineno-0-421" name="__codelineno-0-421" href="#__codelineno-0-421"></a>&#39; 戻り値: Long - マッチ件数
+<a id="__codelineno-0-422" name="__codelineno-0-422" href="#__codelineno-0-422"></a>&#39; ================================================================
+<a id="__codelineno-0-423" name="__codelineno-0-423" href="#__codelineno-0-423"></a>Private Function ScanAndMatch(ByVal formatId As String, _
+<a id="__codelineno-0-424" name="__codelineno-0-424" href="#__codelineno-0-424"></a>                                ByVal keywords As String, _
+<a id="__codelineno-0-425" name="__codelineno-0-425" href="#__codelineno-0-425"></a>                                ByVal searchMode As String, _
+<a id="__codelineno-0-426" name="__codelineno-0-426" href="#__codelineno-0-426"></a>                                ByVal targetField As String, _
+<a id="__codelineno-0-427" name="__codelineno-0-427" href="#__codelineno-0-427"></a>                                ByVal category As String, _
+<a id="__codelineno-0-428" name="__codelineno-0-428" href="#__codelineno-0-428"></a>                                ByVal assignee As String, _
+<a id="__codelineno-0-429" name="__codelineno-0-429" href="#__codelineno-0-429"></a>                                ByVal fromDateStr As String, _
+<a id="__codelineno-0-430" name="__codelineno-0-430" href="#__codelineno-0-430"></a>                                ByVal toDateStr As String, _
+<a id="__codelineno-0-431" name="__codelineno-0-431" href="#__codelineno-0-431"></a>                                ByRef outMatched() As String, _
+<a id="__codelineno-0-432" name="__codelineno-0-432" href="#__codelineno-0-432"></a>                                ByRef outScores() As Double) As Long
+<a id="__codelineno-0-433" name="__codelineno-0-433" href="#__codelineno-0-433"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0643] clsSearchEngine.ScanAndMatch ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-434" name="__codelineno-0-434" href="#__codelineno-0-434"></a>    Dim files As Variant
+<a id="__codelineno-0-435" name="__codelineno-0-435" href="#__codelineno-0-435"></a>    files = ListFilesInFolder(m_dataFolder, &quot;txt&quot;)
+<a id="__codelineno-0-436" name="__codelineno-0-436" href="#__codelineno-0-436"></a>
+<a id="__codelineno-0-437" name="__codelineno-0-437" href="#__codelineno-0-437"></a>    ReDim outMatched(0 To RESULT_MAX_ROWS - 1)
+<a id="__codelineno-0-438" name="__codelineno-0-438" href="#__codelineno-0-438"></a>    ReDim outScores(0 To RESULT_MAX_ROWS - 1)
+<a id="__codelineno-0-439" name="__codelineno-0-439" href="#__codelineno-0-439"></a>    Dim matchCount As Long
+<a id="__codelineno-0-440" name="__codelineno-0-440" href="#__codelineno-0-440"></a>    matchCount = 0
+<a id="__codelineno-0-441" name="__codelineno-0-441" href="#__codelineno-0-441"></a>
+<a id="__codelineno-0-442" name="__codelineno-0-442" href="#__codelineno-0-442"></a>    Dim fromDate As Date
+<a id="__codelineno-0-443" name="__codelineno-0-443" href="#__codelineno-0-443"></a>    Dim toDate As Date
+<a id="__codelineno-0-444" name="__codelineno-0-444" href="#__codelineno-0-444"></a>    Dim hasFromDate As Boolean
+<a id="__codelineno-0-445" name="__codelineno-0-445" href="#__codelineno-0-445"></a>    Dim hasToDate As Boolean
+<a id="__codelineno-0-446" name="__codelineno-0-446" href="#__codelineno-0-446"></a>    hasFromDate = TryParseDate(fromDateStr, fromDate)
+<a id="__codelineno-0-447" name="__codelineno-0-447" href="#__codelineno-0-447"></a>    hasToDate = TryParseDate(toDateStr, toDate)
+<a id="__codelineno-0-448" name="__codelineno-0-448" href="#__codelineno-0-448"></a>
+<a id="__codelineno-0-449" name="__codelineno-0-449" href="#__codelineno-0-449"></a>    Dim i As Long
+<a id="__codelineno-0-450" name="__codelineno-0-450" href="#__codelineno-0-450"></a>    For i = LBound(files) To UBound(files)
+<a id="__codelineno-0-451" name="__codelineno-0-451" href="#__codelineno-0-451"></a>        Dim fileName As String
+<a id="__codelineno-0-452" name="__codelineno-0-452" href="#__codelineno-0-452"></a>        fileName = CStr(files(i))
+<a id="__codelineno-0-453" name="__codelineno-0-453" href="#__codelineno-0-453"></a>
+<a id="__codelineno-0-454" name="__codelineno-0-454" href="#__codelineno-0-454"></a>        Dim filePath As String
+<a id="__codelineno-0-455" name="__codelineno-0-455" href="#__codelineno-0-455"></a>        filePath = CombineFilePath(m_dataFolder, fileName)
+<a id="__codelineno-0-456" name="__codelineno-0-456" href="#__codelineno-0-456"></a>
+<a id="__codelineno-0-457" name="__codelineno-0-457" href="#__codelineno-0-457"></a>        Dim content As String
+<a id="__codelineno-0-458" name="__codelineno-0-458" href="#__codelineno-0-458"></a>        content = ReadShiftJisFile(filePath)
+<a id="__codelineno-0-459" name="__codelineno-0-459" href="#__codelineno-0-459"></a>        If content &lt;&gt; &quot;&quot; Then
+<a id="__codelineno-0-460" name="__codelineno-0-460" href="#__codelineno-0-460"></a>            Dim sc As Double
+<a id="__codelineno-0-461" name="__codelineno-0-461" href="#__codelineno-0-461"></a>            sc = ScoreMatch(content, formatId, keywords, searchMode, _
+<a id="__codelineno-0-462" name="__codelineno-0-462" href="#__codelineno-0-462"></a>                              targetField, category, assignee, _
+<a id="__codelineno-0-463" name="__codelineno-0-463" href="#__codelineno-0-463"></a>                              fromDate, hasFromDate, _
+<a id="__codelineno-0-464" name="__codelineno-0-464" href="#__codelineno-0-464"></a>                              toDate, hasToDate)
+<a id="__codelineno-0-465" name="__codelineno-0-465" href="#__codelineno-0-465"></a>            If sc &gt; 0# Then
+<a id="__codelineno-0-466" name="__codelineno-0-466" href="#__codelineno-0-466"></a>                If matchCount &lt; RESULT_MAX_ROWS Then
+<a id="__codelineno-0-467" name="__codelineno-0-467" href="#__codelineno-0-467"></a>                    outMatched(matchCount) = Left(fileName, Len(fileName) - 4)
+<a id="__codelineno-0-468" name="__codelineno-0-468" href="#__codelineno-0-468"></a>                    outScores(matchCount) = sc
+<a id="__codelineno-0-469" name="__codelineno-0-469" href="#__codelineno-0-469"></a>                    matchCount = matchCount + 1
+<a id="__codelineno-0-470" name="__codelineno-0-470" href="#__codelineno-0-470"></a>                End If
+<a id="__codelineno-0-471" name="__codelineno-0-471" href="#__codelineno-0-471"></a>            End If
+<a id="__codelineno-0-472" name="__codelineno-0-472" href="#__codelineno-0-472"></a>        End If
+<a id="__codelineno-0-473" name="__codelineno-0-473" href="#__codelineno-0-473"></a>    Next i
+<a id="__codelineno-0-474" name="__codelineno-0-474" href="#__codelineno-0-474"></a>
+<a id="__codelineno-0-475" name="__codelineno-0-475" href="#__codelineno-0-475"></a>    &#39; スコア降順ソート (バブルソート、件数 200 以下なので十分)
+<a id="__codelineno-0-476" name="__codelineno-0-476" href="#__codelineno-0-476"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_DEBUG Then Debug.Print &quot;[D-0645] clsSearchEngine.ScanAndMatch STEP-1 pre SortByScoreDesc&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-477" name="__codelineno-0-477" href="#__codelineno-0-477"></a>    Call SortByScoreDesc(outMatched, outScores, matchCount)
+<a id="__codelineno-0-478" name="__codelineno-0-478" href="#__codelineno-0-478"></a>
+<a id="__codelineno-0-479" name="__codelineno-0-479" href="#__codelineno-0-479"></a>    ScanAndMatch = matchCount
+<a id="__codelineno-0-480" name="__codelineno-0-480" href="#__codelineno-0-480"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0644] clsSearchEngine.ScanAndMatch EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-481" name="__codelineno-0-481" href="#__codelineno-0-481"></a>End Function
+<a id="__codelineno-0-482" name="__codelineno-0-482" href="#__codelineno-0-482"></a>
+<a id="__codelineno-0-483" name="__codelineno-0-483" href="#__codelineno-0-483"></a>&#39; ================================================================
+<a id="__codelineno-0-484" name="__codelineno-0-484" href="#__codelineno-0-484"></a>&#39; 関数名: SortByScoreDesc
+<a id="__codelineno-0-485" name="__codelineno-0-485" href="#__codelineno-0-485"></a>&#39; 概要:   matched / scores の対を score 降順に並び替える (バブルソート)
+<a id="__codelineno-0-486" name="__codelineno-0-486" href="#__codelineno-0-486"></a>&#39; 備考:   同点の場合は入力順を維持 (stable)
+<a id="__codelineno-0-487" name="__codelineno-0-487" href="#__codelineno-0-487"></a>&#39; ================================================================
+<a id="__codelineno-0-488" name="__codelineno-0-488" href="#__codelineno-0-488"></a>Private Sub SortByScoreDesc(ByRef matched() As String, _
+<a id="__codelineno-0-489" name="__codelineno-0-489" href="#__codelineno-0-489"></a>                              ByRef scores() As Double, _
+<a id="__codelineno-0-490" name="__codelineno-0-490" href="#__codelineno-0-490"></a>                              ByVal n As Long)
+<a id="__codelineno-0-491" name="__codelineno-0-491" href="#__codelineno-0-491"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0646] clsSearchEngine.SortByScoreDesc ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-492" name="__codelineno-0-492" href="#__codelineno-0-492"></a>    Dim i As Long, j As Long
+<a id="__codelineno-0-493" name="__codelineno-0-493" href="#__codelineno-0-493"></a>    For i = 0 To n - 2
+<a id="__codelineno-0-494" name="__codelineno-0-494" href="#__codelineno-0-494"></a>        For j = 0 To n - 2 - i
+<a id="__codelineno-0-495" name="__codelineno-0-495" href="#__codelineno-0-495"></a>            If scores(j) &lt; scores(j + 1) Then
+<a id="__codelineno-0-496" name="__codelineno-0-496" href="#__codelineno-0-496"></a>                Dim ts As Double
+<a id="__codelineno-0-497" name="__codelineno-0-497" href="#__codelineno-0-497"></a>                Dim tm As String
+<a id="__codelineno-0-498" name="__codelineno-0-498" href="#__codelineno-0-498"></a>                ts = scores(j)
+<a id="__codelineno-0-499" name="__codelineno-0-499" href="#__codelineno-0-499"></a>                scores(j) = scores(j + 1)
+<a id="__codelineno-0-500" name="__codelineno-0-500" href="#__codelineno-0-500"></a>                scores(j + 1) = ts
+<a id="__codelineno-0-501" name="__codelineno-0-501" href="#__codelineno-0-501"></a>                tm = matched(j)
+<a id="__codelineno-0-502" name="__codelineno-0-502" href="#__codelineno-0-502"></a>                matched(j) = matched(j + 1)
+<a id="__codelineno-0-503" name="__codelineno-0-503" href="#__codelineno-0-503"></a>                matched(j + 1) = tm
+<a id="__codelineno-0-504" name="__codelineno-0-504" href="#__codelineno-0-504"></a>            End If
+<a id="__codelineno-0-505" name="__codelineno-0-505" href="#__codelineno-0-505"></a>        Next j
+<a id="__codelineno-0-506" name="__codelineno-0-506" href="#__codelineno-0-506"></a>    Next i
+<a id="__codelineno-0-507" name="__codelineno-0-507" href="#__codelineno-0-507"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0647] clsSearchEngine.SortByScoreDesc EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-508" name="__codelineno-0-508" href="#__codelineno-0-508"></a>End Sub
+<a id="__codelineno-0-509" name="__codelineno-0-509" href="#__codelineno-0-509"></a>
+<a id="__codelineno-0-510" name="__codelineno-0-510" href="#__codelineno-0-510"></a>&#39; ================================================================
+<a id="__codelineno-0-511" name="__codelineno-0-511" href="#__codelineno-0-511"></a>&#39; 関数名: ScoreMatch
+<a id="__codelineno-0-512" name="__codelineno-0-512" href="#__codelineno-0-512"></a>&#39; 概要:   1 つのナレッジファイル内容にスコアを付与
+<a id="__codelineno-0-513" name="__codelineno-0-513" href="#__codelineno-0-513"></a>&#39;         0 = フィルタで弾かれた (該当なし)
+<a id="__codelineno-0-514" name="__codelineno-0-514" href="#__codelineno-0-514"></a>&#39;         1 以上 = キーワード出現回数 × ブースト係数
+<a id="__codelineno-0-515" name="__codelineno-0-515" href="#__codelineno-0-515"></a>&#39; 引数:   IsMatch とほぼ同じ + ブースト計算
+<a id="__codelineno-0-516" name="__codelineno-0-516" href="#__codelineno-0-516"></a>&#39; 戻り値: Double - スコア (0 = 該当なし)
+<a id="__codelineno-0-517" name="__codelineno-0-517" href="#__codelineno-0-517"></a>&#39; 備考:   既存 IsMatch (Boolean) はテスト互換性のため残してあり、
+<a id="__codelineno-0-518" name="__codelineno-0-518" href="#__codelineno-0-518"></a>&#39;         本関数で完全に上位互換できる。
+<a id="__codelineno-0-519" name="__codelineno-0-519" href="#__codelineno-0-519"></a>&#39; ================================================================
+<a id="__codelineno-0-520" name="__codelineno-0-520" href="#__codelineno-0-520"></a>Private Function ScoreMatch(ByVal content As String, _
+<a id="__codelineno-0-521" name="__codelineno-0-521" href="#__codelineno-0-521"></a>                              ByVal formatId As String, _
+<a id="__codelineno-0-522" name="__codelineno-0-522" href="#__codelineno-0-522"></a>                              ByVal keywords As String, _
+<a id="__codelineno-0-523" name="__codelineno-0-523" href="#__codelineno-0-523"></a>                              ByVal searchMode As String, _
+<a id="__codelineno-0-524" name="__codelineno-0-524" href="#__codelineno-0-524"></a>                              ByVal targetField As String, _
+<a id="__codelineno-0-525" name="__codelineno-0-525" href="#__codelineno-0-525"></a>                              ByVal category As String, _
+<a id="__codelineno-0-526" name="__codelineno-0-526" href="#__codelineno-0-526"></a>                              ByVal assignee As String, _
+<a id="__codelineno-0-527" name="__codelineno-0-527" href="#__codelineno-0-527"></a>                              ByVal fromDate As Date, _
+<a id="__codelineno-0-528" name="__codelineno-0-528" href="#__codelineno-0-528"></a>                              ByVal hasFromDate As Boolean, _
+<a id="__codelineno-0-529" name="__codelineno-0-529" href="#__codelineno-0-529"></a>                              ByVal toDate As Date, _
+<a id="__codelineno-0-530" name="__codelineno-0-530" href="#__codelineno-0-530"></a>                              ByVal hasToDate As Boolean) As Double
+<a id="__codelineno-0-531" name="__codelineno-0-531" href="#__codelineno-0-531"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0648] clsSearchEngine.ScoreMatch ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-532" name="__codelineno-0-532" href="#__codelineno-0-532"></a>    &#39; フィルタ判定 (既存 IsMatch と同じ)
+<a id="__codelineno-0-533" name="__codelineno-0-533" href="#__codelineno-0-533"></a>    If formatId &lt;&gt; &quot;&quot; Then
+<a id="__codelineno-0-534" name="__codelineno-0-534" href="#__codelineno-0-534"></a>        Dim actualFmt As String
+<a id="__codelineno-0-535" name="__codelineno-0-535" href="#__codelineno-0-535"></a>        actualFmt = ExtractStanzaValue(content, &quot;FormatID&quot;)
+<a id="__codelineno-0-536" name="__codelineno-0-536" href="#__codelineno-0-536"></a>        If actualFmt &lt;&gt; formatId Then
+<a id="__codelineno-0-537" name="__codelineno-0-537" href="#__codelineno-0-537"></a>            ScoreMatch = 0#
+<a id="__codelineno-0-538" name="__codelineno-0-538" href="#__codelineno-0-538"></a>            If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0649] clsSearchEngine.ScoreMatch EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-539" name="__codelineno-0-539" href="#__codelineno-0-539"></a>            Exit Function
+<a id="__codelineno-0-540" name="__codelineno-0-540" href="#__codelineno-0-540"></a>        End If
+<a id="__codelineno-0-541" name="__codelineno-0-541" href="#__codelineno-0-541"></a>    End If
+<a id="__codelineno-0-542" name="__codelineno-0-542" href="#__codelineno-0-542"></a>
+<a id="__codelineno-0-543" name="__codelineno-0-543" href="#__codelineno-0-543"></a>    &#39; --- BUG-001 修正: カテゴリ絞込 (部分一致、大文字小文字無視) ---
+<a id="__codelineno-0-544" name="__codelineno-0-544" href="#__codelineno-0-544"></a>    If Trim(category) &lt;&gt; &quot;&quot; Then
+<a id="__codelineno-0-545" name="__codelineno-0-545" href="#__codelineno-0-545"></a>        Dim categoryActual As String
+<a id="__codelineno-0-546" name="__codelineno-0-546" href="#__codelineno-0-546"></a>        categoryActual = ExtractKeyValueFromItems(content, ChrW(&amp;H30AB) &amp; ChrW(&amp;H30C6) &amp; ChrW(&amp;H30B4) &amp; ChrW(&amp;H30EA))
+<a id="__codelineno-0-547" name="__codelineno-0-547" href="#__codelineno-0-547"></a>        If InStr(1, LCase(categoryActual), LCase(Trim(category))) = 0 Then
+<a id="__codelineno-0-548" name="__codelineno-0-548" href="#__codelineno-0-548"></a>            ScoreMatch = 0#
+<a id="__codelineno-0-549" name="__codelineno-0-549" href="#__codelineno-0-549"></a>            If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0650] clsSearchEngine.ScoreMatch EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-550" name="__codelineno-0-550" href="#__codelineno-0-550"></a>            Exit Function
+<a id="__codelineno-0-551" name="__codelineno-0-551" href="#__codelineno-0-551"></a>        End If
+<a id="__codelineno-0-552" name="__codelineno-0-552" href="#__codelineno-0-552"></a>    End If
+<a id="__codelineno-0-553" name="__codelineno-0-553" href="#__codelineno-0-553"></a>
+<a id="__codelineno-0-554" name="__codelineno-0-554" href="#__codelineno-0-554"></a>    &#39; --- BUG-001 修正: 担当者絞込 (部分一致、大文字小文字無視) ---
+<a id="__codelineno-0-555" name="__codelineno-0-555" href="#__codelineno-0-555"></a>    If Trim(assignee) &lt;&gt; &quot;&quot; Then
+<a id="__codelineno-0-556" name="__codelineno-0-556" href="#__codelineno-0-556"></a>        Dim assigneeActual As String
+<a id="__codelineno-0-557" name="__codelineno-0-557" href="#__codelineno-0-557"></a>        assigneeActual = ExtractKeyValueFromItems(content, ChrW(&amp;H62C5) &amp; ChrW(&amp;H5F53) &amp; ChrW(&amp;H8005))
+<a id="__codelineno-0-558" name="__codelineno-0-558" href="#__codelineno-0-558"></a>        If InStr(1, LCase(assigneeActual), LCase(Trim(assignee))) = 0 Then
+<a id="__codelineno-0-559" name="__codelineno-0-559" href="#__codelineno-0-559"></a>            ScoreMatch = 0#
+<a id="__codelineno-0-560" name="__codelineno-0-560" href="#__codelineno-0-560"></a>            If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0651] clsSearchEngine.ScoreMatch EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-561" name="__codelineno-0-561" href="#__codelineno-0-561"></a>            Exit Function
+<a id="__codelineno-0-562" name="__codelineno-0-562" href="#__codelineno-0-562"></a>        End If
+<a id="__codelineno-0-563" name="__codelineno-0-563" href="#__codelineno-0-563"></a>    End If
+<a id="__codelineno-0-564" name="__codelineno-0-564" href="#__codelineno-0-564"></a>
+<a id="__codelineno-0-565" name="__codelineno-0-565" href="#__codelineno-0-565"></a>    If hasFromDate Or hasToDate Then
+<a id="__codelineno-0-566" name="__codelineno-0-566" href="#__codelineno-0-566"></a>        Dim createdStr As String
+<a id="__codelineno-0-567" name="__codelineno-0-567" href="#__codelineno-0-567"></a>        createdStr = ExtractStanzaValue(content, &quot;CreatedDate&quot;)
+<a id="__codelineno-0-568" name="__codelineno-0-568" href="#__codelineno-0-568"></a>        Dim createdDate As Date
+<a id="__codelineno-0-569" name="__codelineno-0-569" href="#__codelineno-0-569"></a>        If TryParseDate(createdStr, createdDate) Then
+<a id="__codelineno-0-570" name="__codelineno-0-570" href="#__codelineno-0-570"></a>            If hasFromDate And createdDate &lt; fromDate Then
+<a id="__codelineno-0-571" name="__codelineno-0-571" href="#__codelineno-0-571"></a>                ScoreMatch = 0#
+<a id="__codelineno-0-572" name="__codelineno-0-572" href="#__codelineno-0-572"></a>                If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0652] clsSearchEngine.ScoreMatch EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-573" name="__codelineno-0-573" href="#__codelineno-0-573"></a>                Exit Function
+<a id="__codelineno-0-574" name="__codelineno-0-574" href="#__codelineno-0-574"></a>            End If
+<a id="__codelineno-0-575" name="__codelineno-0-575" href="#__codelineno-0-575"></a>            If hasToDate And createdDate &gt; toDate Then
+<a id="__codelineno-0-576" name="__codelineno-0-576" href="#__codelineno-0-576"></a>                ScoreMatch = 0#
+<a id="__codelineno-0-577" name="__codelineno-0-577" href="#__codelineno-0-577"></a>                If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0653] clsSearchEngine.ScoreMatch EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-578" name="__codelineno-0-578" href="#__codelineno-0-578"></a>                Exit Function
+<a id="__codelineno-0-579" name="__codelineno-0-579" href="#__codelineno-0-579"></a>            End If
+<a id="__codelineno-0-580" name="__codelineno-0-580" href="#__codelineno-0-580"></a>        Else
+<a id="__codelineno-0-581" name="__codelineno-0-581" href="#__codelineno-0-581"></a>            &#39; 2026-06-06: date range specified but file CreatedDate is missing/unparseable.
+<a id="__codelineno-0-582" name="__codelineno-0-582" href="#__codelineno-0-582"></a>            &#39; User explicitly filtered by date -&gt; exclude this file from results.
+<a id="__codelineno-0-583" name="__codelineno-0-583" href="#__codelineno-0-583"></a>            ScoreMatch = 0#
+<a id="__codelineno-0-584" name="__codelineno-0-584" href="#__codelineno-0-584"></a>            If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0653b] clsSearchEngine.ScoreMatch EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-585" name="__codelineno-0-585" href="#__codelineno-0-585"></a>            Exit Function
+<a id="__codelineno-0-586" name="__codelineno-0-586" href="#__codelineno-0-586"></a>        End If
+<a id="__codelineno-0-587" name="__codelineno-0-587" href="#__codelineno-0-587"></a>    End If
+<a id="__codelineno-0-588" name="__codelineno-0-588" href="#__codelineno-0-588"></a>
+<a id="__codelineno-0-589" name="__codelineno-0-589" href="#__codelineno-0-589"></a>    &#39; キーワード判定
+<a id="__codelineno-0-590" name="__codelineno-0-590" href="#__codelineno-0-590"></a>    If Trim(keywords) = &quot;&quot; Then
+<a id="__codelineno-0-591" name="__codelineno-0-591" href="#__codelineno-0-591"></a>        &#39; キーワードなし = 全件ヒット (score=1)
+<a id="__codelineno-0-592" name="__codelineno-0-592" href="#__codelineno-0-592"></a>        ScoreMatch = 1#
+<a id="__codelineno-0-593" name="__codelineno-0-593" href="#__codelineno-0-593"></a>        If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0654] clsSearchEngine.ScoreMatch EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-594" name="__codelineno-0-594" href="#__codelineno-0-594"></a>        Exit Function
+<a id="__codelineno-0-595" name="__codelineno-0-595" href="#__codelineno-0-595"></a>    End If
+<a id="__codelineno-0-596" name="__codelineno-0-596" href="#__codelineno-0-596"></a>
+<a id="__codelineno-0-597" name="__codelineno-0-597" href="#__codelineno-0-597"></a>    &#39; searchMode 判定 (空 or AND/OR でない場合は AND 扱い)
+<a id="__codelineno-0-598" name="__codelineno-0-598" href="#__codelineno-0-598"></a>    Dim isOr As Boolean
+<a id="__codelineno-0-599" name="__codelineno-0-599" href="#__codelineno-0-599"></a>    isOr = (UCase(searchMode) = &quot;OR&quot;)
+<a id="__codelineno-0-600" name="__codelineno-0-600" href="#__codelineno-0-600"></a>
+<a id="__codelineno-0-601" name="__codelineno-0-601" href="#__codelineno-0-601"></a>    &#39; AND/OR の bool 判定 (既存ロジック維持) で 0 確定をスキップ
+<a id="__codelineno-0-602" name="__codelineno-0-602" href="#__codelineno-0-602"></a>    Dim allText As String
+<a id="__codelineno-0-603" name="__codelineno-0-603" href="#__codelineno-0-603"></a>    allText = BuildSearchTarget(content, targetField)
+<a id="__codelineno-0-604" name="__codelineno-0-604" href="#__codelineno-0-604"></a>    Dim hitAll As Boolean
+<a id="__codelineno-0-605" name="__codelineno-0-605" href="#__codelineno-0-605"></a>    If isOr Then
+<a id="__codelineno-0-606" name="__codelineno-0-606" href="#__codelineno-0-606"></a>        hitAll = ContainsAnyKeyword(allText, keywords)
+<a id="__codelineno-0-607" name="__codelineno-0-607" href="#__codelineno-0-607"></a>    Else
+<a id="__codelineno-0-608" name="__codelineno-0-608" href="#__codelineno-0-608"></a>        hitAll = ContainsAllKeywords(allText, keywords)
+<a id="__codelineno-0-609" name="__codelineno-0-609" href="#__codelineno-0-609"></a>    End If
+<a id="__codelineno-0-610" name="__codelineno-0-610" href="#__codelineno-0-610"></a>    If Not hitAll Then
+<a id="__codelineno-0-611" name="__codelineno-0-611" href="#__codelineno-0-611"></a>        ScoreMatch = 0#
+<a id="__codelineno-0-612" name="__codelineno-0-612" href="#__codelineno-0-612"></a>        If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0655] clsSearchEngine.ScoreMatch EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-613" name="__codelineno-0-613" href="#__codelineno-0-613"></a>        Exit Function
+<a id="__codelineno-0-614" name="__codelineno-0-614" href="#__codelineno-0-614"></a>    End If
+<a id="__codelineno-0-615" name="__codelineno-0-615" href="#__codelineno-0-615"></a>
+<a id="__codelineno-0-616" name="__codelineno-0-616" href="#__codelineno-0-616"></a>    &#39; --- ブースト計算 ---
+<a id="__codelineno-0-617" name="__codelineno-0-617" href="#__codelineno-0-617"></a>    &#39; 全フィールド連結への出現回数
+<a id="__codelineno-0-618" name="__codelineno-0-618" href="#__codelineno-0-618"></a>    Dim baseHits As Long
+<a id="__codelineno-0-619" name="__codelineno-0-619" href="#__codelineno-0-619"></a>    baseHits = CountKeywordHits(allText, keywords)
+<a id="__codelineno-0-620" name="__codelineno-0-620" href="#__codelineno-0-620"></a>
+<a id="__codelineno-0-621" name="__codelineno-0-621" href="#__codelineno-0-621"></a>    &#39; タイトルへの出現はブースト
+<a id="__codelineno-0-622" name="__codelineno-0-622" href="#__codelineno-0-622"></a>    Dim titleText As String
+<a id="__codelineno-0-623" name="__codelineno-0-623" href="#__codelineno-0-623"></a>    titleText = ExtractKeyValueFromItems(content, ChrW(&amp;H30BF) &amp; ChrW(&amp;H30A4) &amp; ChrW(&amp;H30C8) &amp; ChrW(&amp;H30EB))
+<a id="__codelineno-0-624" name="__codelineno-0-624" href="#__codelineno-0-624"></a>    Dim titleHits As Long
+<a id="__codelineno-0-625" name="__codelineno-0-625" href="#__codelineno-0-625"></a>    titleHits = CountKeywordHits(titleText, keywords)
+<a id="__codelineno-0-626" name="__codelineno-0-626" href="#__codelineno-0-626"></a>
+<a id="__codelineno-0-627" name="__codelineno-0-627" href="#__codelineno-0-627"></a>    &#39; targetField 指定時は通常ブーストの代わりに targetField ヒットを強調
+<a id="__codelineno-0-628" name="__codelineno-0-628" href="#__codelineno-0-628"></a>    Dim fieldBoost As Double
+<a id="__codelineno-0-629" name="__codelineno-0-629" href="#__codelineno-0-629"></a>    fieldBoost = 0#
+<a id="__codelineno-0-630" name="__codelineno-0-630" href="#__codelineno-0-630"></a>    If targetField &lt;&gt; &quot;&quot; And targetField &lt;&gt; &quot;(&quot; &amp; ChrW(&amp;H5168) &amp; ChrW(&amp;H30D5) &amp; ChrW(&amp;H30A3) &amp; ChrW(&amp;H30FC) &amp; ChrW(&amp;H30EB) &amp; ChrW(&amp;H30C9) &amp; &quot;)&quot; Then
+<a id="__codelineno-0-631" name="__codelineno-0-631" href="#__codelineno-0-631"></a>        Dim fieldText As String
+<a id="__codelineno-0-632" name="__codelineno-0-632" href="#__codelineno-0-632"></a>        fieldText = ExtractKeyValueFromItems(content, targetField)
+<a id="__codelineno-0-633" name="__codelineno-0-633" href="#__codelineno-0-633"></a>        Dim fieldHits As Long
+<a id="__codelineno-0-634" name="__codelineno-0-634" href="#__codelineno-0-634"></a>        fieldHits = CountKeywordHits(fieldText, keywords)
+<a id="__codelineno-0-635" name="__codelineno-0-635" href="#__codelineno-0-635"></a>        fieldBoost = fieldHits * SCORE_BOOST_TARGET_FIELD
+<a id="__codelineno-0-636" name="__codelineno-0-636" href="#__codelineno-0-636"></a>    End If
+<a id="__codelineno-0-637" name="__codelineno-0-637" href="#__codelineno-0-637"></a>
+<a id="__codelineno-0-638" name="__codelineno-0-638" href="#__codelineno-0-638"></a>    ScoreMatch = CDbl(baseHits) + (CDbl(titleHits) * SCORE_BOOST_TITLE) + fieldBoost
+<a id="__codelineno-0-639" name="__codelineno-0-639" href="#__codelineno-0-639"></a>End Function
+<a id="__codelineno-0-640" name="__codelineno-0-640" href="#__codelineno-0-640"></a>
+<a id="__codelineno-0-641" name="__codelineno-0-641" href="#__codelineno-0-641"></a>&#39; ================================================================
+<a id="__codelineno-0-642" name="__codelineno-0-642" href="#__codelineno-0-642"></a>&#39; 関数名: CountKeywordHits
+<a id="__codelineno-0-643" name="__codelineno-0-643" href="#__codelineno-0-643"></a>&#39; 概要:   target にスペース区切り keywords の各語が出現する合計回数を返す
+<a id="__codelineno-0-644" name="__codelineno-0-644" href="#__codelineno-0-644"></a>&#39;         (大文字小文字無視)
+<a id="__codelineno-0-645" name="__codelineno-0-645" href="#__codelineno-0-645"></a>&#39; ================================================================
+<a id="__codelineno-0-646" name="__codelineno-0-646" href="#__codelineno-0-646"></a>Private Function CountKeywordHits(ByVal target As String, _
+<a id="__codelineno-0-647" name="__codelineno-0-647" href="#__codelineno-0-647"></a>                                    ByVal keywords As String) As Long
+<a id="__codelineno-0-648" name="__codelineno-0-648" href="#__codelineno-0-648"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0656] clsSearchEngine.CountKeywordHits ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-649" name="__codelineno-0-649" href="#__codelineno-0-649"></a>    If Trim(target) = &quot;&quot; Or Trim(keywords) = &quot;&quot; Then
+<a id="__codelineno-0-650" name="__codelineno-0-650" href="#__codelineno-0-650"></a>        CountKeywordHits = 0
+<a id="__codelineno-0-651" name="__codelineno-0-651" href="#__codelineno-0-651"></a>        If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0657] clsSearchEngine.CountKeywordHits EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-652" name="__codelineno-0-652" href="#__codelineno-0-652"></a>        Exit Function
+<a id="__codelineno-0-653" name="__codelineno-0-653" href="#__codelineno-0-653"></a>    End If
+<a id="__codelineno-0-654" name="__codelineno-0-654" href="#__codelineno-0-654"></a>
+<a id="__codelineno-0-655" name="__codelineno-0-655" href="#__codelineno-0-655"></a>    Dim parts() As String
+<a id="__codelineno-0-656" name="__codelineno-0-656" href="#__codelineno-0-656"></a>    parts = Split(Trim(keywords), &quot; &quot;)
+<a id="__codelineno-0-657" name="__codelineno-0-657" href="#__codelineno-0-657"></a>    Dim total As Long
+<a id="__codelineno-0-658" name="__codelineno-0-658" href="#__codelineno-0-658"></a>    total = 0
+<a id="__codelineno-0-659" name="__codelineno-0-659" href="#__codelineno-0-659"></a>    Dim targetLower As String
+<a id="__codelineno-0-660" name="__codelineno-0-660" href="#__codelineno-0-660"></a>    targetLower = LCase(target)
+<a id="__codelineno-0-661" name="__codelineno-0-661" href="#__codelineno-0-661"></a>
+<a id="__codelineno-0-662" name="__codelineno-0-662" href="#__codelineno-0-662"></a>    Dim i As Long
+<a id="__codelineno-0-663" name="__codelineno-0-663" href="#__codelineno-0-663"></a>    For i = LBound(parts) To UBound(parts)
+<a id="__codelineno-0-664" name="__codelineno-0-664" href="#__codelineno-0-664"></a>        Dim k As String
+<a id="__codelineno-0-665" name="__codelineno-0-665" href="#__codelineno-0-665"></a>        k = Trim(parts(i))
+<a id="__codelineno-0-666" name="__codelineno-0-666" href="#__codelineno-0-666"></a>        If k &lt;&gt; &quot;&quot; Then
+<a id="__codelineno-0-667" name="__codelineno-0-667" href="#__codelineno-0-667"></a>            total = total + CountOccurrences(targetLower, LCase(k))
+<a id="__codelineno-0-668" name="__codelineno-0-668" href="#__codelineno-0-668"></a>        End If
+<a id="__codelineno-0-669" name="__codelineno-0-669" href="#__codelineno-0-669"></a>    Next i
+<a id="__codelineno-0-670" name="__codelineno-0-670" href="#__codelineno-0-670"></a>    CountKeywordHits = total
+<a id="__codelineno-0-671" name="__codelineno-0-671" href="#__codelineno-0-671"></a>End Function
+<a id="__codelineno-0-672" name="__codelineno-0-672" href="#__codelineno-0-672"></a>
+<a id="__codelineno-0-673" name="__codelineno-0-673" href="#__codelineno-0-673"></a>&#39; ================================================================
+<a id="__codelineno-0-674" name="__codelineno-0-674" href="#__codelineno-0-674"></a>&#39; 関数名: CountOccurrences
+<a id="__codelineno-0-675" name="__codelineno-0-675" href="#__codelineno-0-675"></a>&#39; 概要:   needle が haystack に何回出現するかカウント (重複なし)
+<a id="__codelineno-0-676" name="__codelineno-0-676" href="#__codelineno-0-676"></a>&#39; ================================================================
+<a id="__codelineno-0-677" name="__codelineno-0-677" href="#__codelineno-0-677"></a>Private Function CountOccurrences(ByVal haystack As String, _
+<a id="__codelineno-0-678" name="__codelineno-0-678" href="#__codelineno-0-678"></a>                                    ByVal needle As String) As Long
+<a id="__codelineno-0-679" name="__codelineno-0-679" href="#__codelineno-0-679"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0658] clsSearchEngine.CountOccurrences ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-680" name="__codelineno-0-680" href="#__codelineno-0-680"></a>    If needle = &quot;&quot; Then
+<a id="__codelineno-0-681" name="__codelineno-0-681" href="#__codelineno-0-681"></a>        CountOccurrences = 0
+<a id="__codelineno-0-682" name="__codelineno-0-682" href="#__codelineno-0-682"></a>        If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0659] clsSearchEngine.CountOccurrences EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-683" name="__codelineno-0-683" href="#__codelineno-0-683"></a>        Exit Function
+<a id="__codelineno-0-684" name="__codelineno-0-684" href="#__codelineno-0-684"></a>    End If
+<a id="__codelineno-0-685" name="__codelineno-0-685" href="#__codelineno-0-685"></a>    Dim cnt As Long
+<a id="__codelineno-0-686" name="__codelineno-0-686" href="#__codelineno-0-686"></a>    Dim startPos As Long
+<a id="__codelineno-0-687" name="__codelineno-0-687" href="#__codelineno-0-687"></a>    startPos = 1
+<a id="__codelineno-0-688" name="__codelineno-0-688" href="#__codelineno-0-688"></a>    cnt = 0
+<a id="__codelineno-0-689" name="__codelineno-0-689" href="#__codelineno-0-689"></a>    Do While startPos &lt;= Len(haystack)
+<a id="__codelineno-0-690" name="__codelineno-0-690" href="#__codelineno-0-690"></a>        Dim pos As Long
+<a id="__codelineno-0-691" name="__codelineno-0-691" href="#__codelineno-0-691"></a>        pos = InStr(startPos, haystack, needle)
+<a id="__codelineno-0-692" name="__codelineno-0-692" href="#__codelineno-0-692"></a>        If pos = 0 Then Exit Do
+<a id="__codelineno-0-693" name="__codelineno-0-693" href="#__codelineno-0-693"></a>        cnt = cnt + 1
+<a id="__codelineno-0-694" name="__codelineno-0-694" href="#__codelineno-0-694"></a>        startPos = pos + Len(needle)
+<a id="__codelineno-0-695" name="__codelineno-0-695" href="#__codelineno-0-695"></a>    Loop
+<a id="__codelineno-0-696" name="__codelineno-0-696" href="#__codelineno-0-696"></a>    CountOccurrences = cnt
+<a id="__codelineno-0-697" name="__codelineno-0-697" href="#__codelineno-0-697"></a>End Function
+<a id="__codelineno-0-698" name="__codelineno-0-698" href="#__codelineno-0-698"></a>
+<a id="__codelineno-0-699" name="__codelineno-0-699" href="#__codelineno-0-699"></a>&#39; ================================================================
+<a id="__codelineno-0-700" name="__codelineno-0-700" href="#__codelineno-0-700"></a>&#39; 関数名: IsMatch (既存互換)
+<a id="__codelineno-0-701" name="__codelineno-0-701" href="#__codelineno-0-701"></a>&#39; 概要:   既存テスト (T4 系) との互換のため Bool 版を残す
+<a id="__codelineno-0-702" name="__codelineno-0-702" href="#__codelineno-0-702"></a>&#39;         内部的には ScoreMatch &gt; 0 と等価
+<a id="__codelineno-0-703" name="__codelineno-0-703" href="#__codelineno-0-703"></a>&#39; ================================================================
+<a id="__codelineno-0-704" name="__codelineno-0-704" href="#__codelineno-0-704"></a>Private Function IsMatch(ByVal content As String, _
+<a id="__codelineno-0-705" name="__codelineno-0-705" href="#__codelineno-0-705"></a>                           ByVal formatId As String, _
+<a id="__codelineno-0-706" name="__codelineno-0-706" href="#__codelineno-0-706"></a>                           ByVal keywords As String, _
+<a id="__codelineno-0-707" name="__codelineno-0-707" href="#__codelineno-0-707"></a>                           ByVal searchMode As String, _
+<a id="__codelineno-0-708" name="__codelineno-0-708" href="#__codelineno-0-708"></a>                           ByVal targetField As String, _
+<a id="__codelineno-0-709" name="__codelineno-0-709" href="#__codelineno-0-709"></a>                           ByVal fromDate As Date, _
+<a id="__codelineno-0-710" name="__codelineno-0-710" href="#__codelineno-0-710"></a>                           ByVal hasFromDate As Boolean, _
+<a id="__codelineno-0-711" name="__codelineno-0-711" href="#__codelineno-0-711"></a>                           ByVal toDate As Date, _
+<a id="__codelineno-0-712" name="__codelineno-0-712" href="#__codelineno-0-712"></a>                           ByVal hasToDate As Boolean) As Boolean
+<a id="__codelineno-0-713" name="__codelineno-0-713" href="#__codelineno-0-713"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0660] clsSearchEngine.IsMatch ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-714" name="__codelineno-0-714" href="#__codelineno-0-714"></a>    &#39; BUG-001 修正: ScoreMatch のシグニチャに category/assignee が追加された
+<a id="__codelineno-0-715" name="__codelineno-0-715" href="#__codelineno-0-715"></a>    &#39;              ため、IsMatch は空文字を渡して既存判定と等価動作させる。
+<a id="__codelineno-0-716" name="__codelineno-0-716" href="#__codelineno-0-716"></a>    IsMatch = (ScoreMatch(content, formatId, keywords, searchMode, _
+<a id="__codelineno-0-717" name="__codelineno-0-717" href="#__codelineno-0-717"></a>                           targetField, &quot;&quot;, &quot;&quot;, _
+<a id="__codelineno-0-718" name="__codelineno-0-718" href="#__codelineno-0-718"></a>                           fromDate, hasFromDate, _
+<a id="__codelineno-0-719" name="__codelineno-0-719" href="#__codelineno-0-719"></a>                           toDate, hasToDate) &gt; 0#)
+<a id="__codelineno-0-720" name="__codelineno-0-720" href="#__codelineno-0-720"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0661] clsSearchEngine.IsMatch EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-721" name="__codelineno-0-721" href="#__codelineno-0-721"></a>End Function
+<a id="__codelineno-0-722" name="__codelineno-0-722" href="#__codelineno-0-722"></a>
+<a id="__codelineno-0-723" name="__codelineno-0-723" href="#__codelineno-0-723"></a>&#39; ================================================================
+<a id="__codelineno-0-724" name="__codelineno-0-724" href="#__codelineno-0-724"></a>&#39; 関数名: BuildSearchTarget
+<a id="__codelineno-0-725" name="__codelineno-0-725" href="#__codelineno-0-725"></a>&#39; 概要:   検索対象文字列を構築 (対象フィールド指定時は特定のみ)
+<a id="__codelineno-0-726" name="__codelineno-0-726" href="#__codelineno-0-726"></a>&#39; ================================================================
+<a id="__codelineno-0-727" name="__codelineno-0-727" href="#__codelineno-0-727"></a>Private Function BuildSearchTarget(ByVal content As String, _
+<a id="__codelineno-0-728" name="__codelineno-0-728" href="#__codelineno-0-728"></a>                                     ByVal targetField As String) As String
+<a id="__codelineno-0-729" name="__codelineno-0-729" href="#__codelineno-0-729"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0662] clsSearchEngine.BuildSearchTarget ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-730" name="__codelineno-0-730" href="#__codelineno-0-730"></a>    Dim lines() As String
+<a id="__codelineno-0-731" name="__codelineno-0-731" href="#__codelineno-0-731"></a>    Dim result As String
+<a id="__codelineno-0-732" name="__codelineno-0-732" href="#__codelineno-0-732"></a>    Dim i As Long
+<a id="__codelineno-0-733" name="__codelineno-0-733" href="#__codelineno-0-733"></a>
+<a id="__codelineno-0-734" name="__codelineno-0-734" href="#__codelineno-0-734"></a>    lines = Split(content, vbCrLf)
+<a id="__codelineno-0-735" name="__codelineno-0-735" href="#__codelineno-0-735"></a>
+<a id="__codelineno-0-736" name="__codelineno-0-736" href="#__codelineno-0-736"></a>    For i = LBound(lines) To UBound(lines)
+<a id="__codelineno-0-737" name="__codelineno-0-737" href="#__codelineno-0-737"></a>        If InStr(lines(i), &quot;FieldName=&quot;) &gt; 0 And _
+<a id="__codelineno-0-738" name="__codelineno-0-738" href="#__codelineno-0-738"></a>           InStr(lines(i), &quot;Value=&quot;) &gt; 0 Then
+<a id="__codelineno-0-739" name="__codelineno-0-739" href="#__codelineno-0-739"></a>            Dim fName As String
+<a id="__codelineno-0-740" name="__codelineno-0-740" href="#__codelineno-0-740"></a>            Dim fValue As String
+<a id="__codelineno-0-741" name="__codelineno-0-741" href="#__codelineno-0-741"></a>            fName = ExtractKeyFromItem(lines(i), &quot;FieldName&quot;)
+<a id="__codelineno-0-742" name="__codelineno-0-742" href="#__codelineno-0-742"></a>            fValue = ExtractKeyFromItem(lines(i), &quot;Value&quot;)
+<a id="__codelineno-0-743" name="__codelineno-0-743" href="#__codelineno-0-743"></a>
+<a id="__codelineno-0-744" name="__codelineno-0-744" href="#__codelineno-0-744"></a>            If targetField = &quot;&quot; Or _
+<a id="__codelineno-0-745" name="__codelineno-0-745" href="#__codelineno-0-745"></a>               targetField = &quot;(&quot; &amp; ChrW(&amp;H5168) &amp; ChrW(&amp;H30D5) &amp; ChrW(&amp;H30A3) &amp; ChrW(&amp;H30FC) &amp; ChrW(&amp;H30EB) &amp; ChrW(&amp;H30C9) &amp; &quot;)&quot; Or _
+<a id="__codelineno-0-746" name="__codelineno-0-746" href="#__codelineno-0-746"></a>               targetField = fName Then
+<a id="__codelineno-0-747" name="__codelineno-0-747" href="#__codelineno-0-747"></a>                result = result &amp; &quot; &quot; &amp; fValue
+<a id="__codelineno-0-748" name="__codelineno-0-748" href="#__codelineno-0-748"></a>            End If
+<a id="__codelineno-0-749" name="__codelineno-0-749" href="#__codelineno-0-749"></a>        End If
+<a id="__codelineno-0-750" name="__codelineno-0-750" href="#__codelineno-0-750"></a>    Next i
+<a id="__codelineno-0-751" name="__codelineno-0-751" href="#__codelineno-0-751"></a>
+<a id="__codelineno-0-752" name="__codelineno-0-752" href="#__codelineno-0-752"></a>    BuildSearchTarget = result
+<a id="__codelineno-0-753" name="__codelineno-0-753" href="#__codelineno-0-753"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0663] clsSearchEngine.BuildSearchTarget EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-754" name="__codelineno-0-754" href="#__codelineno-0-754"></a>End Function
+<a id="__codelineno-0-755" name="__codelineno-0-755" href="#__codelineno-0-755"></a>
+<a id="__codelineno-0-756" name="__codelineno-0-756" href="#__codelineno-0-756"></a>&#39; ================================================================
+<a id="__codelineno-0-757" name="__codelineno-0-757" href="#__codelineno-0-757"></a>&#39; 関数名: ExtractKeyFromItem
+<a id="__codelineno-0-758" name="__codelineno-0-758" href="#__codelineno-0-758"></a>&#39; 概要:   ITEM 行から指定キーの値を抽出
+<a id="__codelineno-0-759" name="__codelineno-0-759" href="#__codelineno-0-759"></a>&#39; ================================================================
+<a id="__codelineno-0-760" name="__codelineno-0-760" href="#__codelineno-0-760"></a>Private Function ExtractKeyFromItem(ByVal lineStr As String, _
+<a id="__codelineno-0-761" name="__codelineno-0-761" href="#__codelineno-0-761"></a>                                      ByVal keyName As String) As String
+<a id="__codelineno-0-762" name="__codelineno-0-762" href="#__codelineno-0-762"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0664] clsSearchEngine.ExtractKeyFromItem ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-763" name="__codelineno-0-763" href="#__codelineno-0-763"></a>    Dim searchKey As String
+<a id="__codelineno-0-764" name="__codelineno-0-764" href="#__codelineno-0-764"></a>    Dim startPos As Long
+<a id="__codelineno-0-765" name="__codelineno-0-765" href="#__codelineno-0-765"></a>    Dim endPos As Long
+<a id="__codelineno-0-766" name="__codelineno-0-766" href="#__codelineno-0-766"></a>
+<a id="__codelineno-0-767" name="__codelineno-0-767" href="#__codelineno-0-767"></a>    searchKey = keyName &amp; &quot;=&quot;
+<a id="__codelineno-0-768" name="__codelineno-0-768" href="#__codelineno-0-768"></a>    startPos = InStr(lineStr, searchKey)
+<a id="__codelineno-0-769" name="__codelineno-0-769" href="#__codelineno-0-769"></a>    If startPos = 0 Then
+<a id="__codelineno-0-770" name="__codelineno-0-770" href="#__codelineno-0-770"></a>        ExtractKeyFromItem = &quot;&quot;
+<a id="__codelineno-0-771" name="__codelineno-0-771" href="#__codelineno-0-771"></a>        If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0665] clsSearchEngine.ExtractKeyFromItem EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-772" name="__codelineno-0-772" href="#__codelineno-0-772"></a>        Exit Function
+<a id="__codelineno-0-773" name="__codelineno-0-773" href="#__codelineno-0-773"></a>    End If
+<a id="__codelineno-0-774" name="__codelineno-0-774" href="#__codelineno-0-774"></a>
+<a id="__codelineno-0-775" name="__codelineno-0-775" href="#__codelineno-0-775"></a>    startPos = startPos + Len(searchKey)
+<a id="__codelineno-0-776" name="__codelineno-0-776" href="#__codelineno-0-776"></a>    endPos = InStr(startPos, lineStr, &quot; / &quot;)
+<a id="__codelineno-0-777" name="__codelineno-0-777" href="#__codelineno-0-777"></a>    If endPos = 0 Then
+<a id="__codelineno-0-778" name="__codelineno-0-778" href="#__codelineno-0-778"></a>        ExtractKeyFromItem = Mid(lineStr, startPos)
+<a id="__codelineno-0-779" name="__codelineno-0-779" href="#__codelineno-0-779"></a>    Else
+<a id="__codelineno-0-780" name="__codelineno-0-780" href="#__codelineno-0-780"></a>        ExtractKeyFromItem = Mid(lineStr, startPos, endPos - startPos)
+<a id="__codelineno-0-781" name="__codelineno-0-781" href="#__codelineno-0-781"></a>    End If
+<a id="__codelineno-0-782" name="__codelineno-0-782" href="#__codelineno-0-782"></a>End Function
+<a id="__codelineno-0-783" name="__codelineno-0-783" href="#__codelineno-0-783"></a>
+<a id="__codelineno-0-784" name="__codelineno-0-784" href="#__codelineno-0-784"></a>&#39; ================================================================
+<a id="__codelineno-0-785" name="__codelineno-0-785" href="#__codelineno-0-785"></a>&#39; 関数名: ExtractStanzaValue
+<a id="__codelineno-0-786" name="__codelineno-0-786" href="#__codelineno-0-786"></a>&#39; 概要:   スタンザ Key=Value 形式から単純抽出
+<a id="__codelineno-0-787" name="__codelineno-0-787" href="#__codelineno-0-787"></a>&#39; ================================================================
+<a id="__codelineno-0-788" name="__codelineno-0-788" href="#__codelineno-0-788"></a>Private Function ExtractStanzaValue(ByVal content As String, _
+<a id="__codelineno-0-789" name="__codelineno-0-789" href="#__codelineno-0-789"></a>                                      ByVal keyName As String) As String
+<a id="__codelineno-0-790" name="__codelineno-0-790" href="#__codelineno-0-790"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0666] clsSearchEngine.ExtractStanzaValue ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-791" name="__codelineno-0-791" href="#__codelineno-0-791"></a>    Dim lines() As String
+<a id="__codelineno-0-792" name="__codelineno-0-792" href="#__codelineno-0-792"></a>    Dim i As Long
+<a id="__codelineno-0-793" name="__codelineno-0-793" href="#__codelineno-0-793"></a>
+<a id="__codelineno-0-794" name="__codelineno-0-794" href="#__codelineno-0-794"></a>    lines = Split(content, vbCrLf)
+<a id="__codelineno-0-795" name="__codelineno-0-795" href="#__codelineno-0-795"></a>    For i = LBound(lines) To UBound(lines)
+<a id="__codelineno-0-796" name="__codelineno-0-796" href="#__codelineno-0-796"></a>        If InStr(lines(i), keyName &amp; &quot;=&quot;) = 1 Then
+<a id="__codelineno-0-797" name="__codelineno-0-797" href="#__codelineno-0-797"></a>            ExtractStanzaValue = Mid(lines(i), Len(keyName) + 2)
+<a id="__codelineno-0-798" name="__codelineno-0-798" href="#__codelineno-0-798"></a>            If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0667] clsSearchEngine.ExtractStanzaValue EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-799" name="__codelineno-0-799" href="#__codelineno-0-799"></a>            Exit Function
+<a id="__codelineno-0-800" name="__codelineno-0-800" href="#__codelineno-0-800"></a>        End If
+<a id="__codelineno-0-801" name="__codelineno-0-801" href="#__codelineno-0-801"></a>    Next i
+<a id="__codelineno-0-802" name="__codelineno-0-802" href="#__codelineno-0-802"></a>    ExtractStanzaValue = &quot;&quot;
+<a id="__codelineno-0-803" name="__codelineno-0-803" href="#__codelineno-0-803"></a>End Function
+<a id="__codelineno-0-804" name="__codelineno-0-804" href="#__codelineno-0-804"></a>
+<a id="__codelineno-0-805" name="__codelineno-0-805" href="#__codelineno-0-805"></a>&#39; ================================================================
+<a id="__codelineno-0-806" name="__codelineno-0-806" href="#__codelineno-0-806"></a>&#39; 関数名: ExtractImagePath
+<a id="__codelineno-0-807" name="__codelineno-0-807" href="#__codelineno-0-807"></a>&#39; 概要:   ImagePath スタンザを取得。なければ既定値 (knwNo &amp; &quot;.png&quot;) を返す
+<a id="__codelineno-0-808" name="__codelineno-0-808" href="#__codelineno-0-808"></a>&#39; 引数:   content     - ナレッジファイル内容
+<a id="__codelineno-0-809" name="__codelineno-0-809" href="#__codelineno-0-809"></a>&#39;         knowledgeNo - ナレッジ番号 (既定パス生成用)
+<a id="__codelineno-0-810" name="__codelineno-0-810" href="#__codelineno-0-810"></a>&#39; 戻り値: String - ImagePath 値 or 既定値
+<a id="__codelineno-0-811" name="__codelineno-0-811" href="#__codelineno-0-811"></a>&#39; 備考:   既存ファイル互換: ImagePath 行が無い場合も knwNo.png にフォールバック
+<a id="__codelineno-0-812" name="__codelineno-0-812" href="#__codelineno-0-812"></a>&#39; ================================================================
+<a id="__codelineno-0-813" name="__codelineno-0-813" href="#__codelineno-0-813"></a>Private Function ExtractImagePath(ByVal content As String, _
+<a id="__codelineno-0-814" name="__codelineno-0-814" href="#__codelineno-0-814"></a>                                    ByVal knowledgeNo As String) As String
+<a id="__codelineno-0-815" name="__codelineno-0-815" href="#__codelineno-0-815"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0668] clsSearchEngine.ExtractImagePath ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-816" name="__codelineno-0-816" href="#__codelineno-0-816"></a>    Dim v As String
+<a id="__codelineno-0-817" name="__codelineno-0-817" href="#__codelineno-0-817"></a>    v = ExtractStanzaValue(content, IMAGE_PATH_KEY)
+<a id="__codelineno-0-818" name="__codelineno-0-818" href="#__codelineno-0-818"></a>    If v = &quot;&quot; Then
+<a id="__codelineno-0-819" name="__codelineno-0-819" href="#__codelineno-0-819"></a>        ExtractImagePath = knowledgeNo &amp; &quot;.png&quot;
+<a id="__codelineno-0-820" name="__codelineno-0-820" href="#__codelineno-0-820"></a>    Else
+<a id="__codelineno-0-821" name="__codelineno-0-821" href="#__codelineno-0-821"></a>        ExtractImagePath = v
+<a id="__codelineno-0-822" name="__codelineno-0-822" href="#__codelineno-0-822"></a>    End If
+<a id="__codelineno-0-823" name="__codelineno-0-823" href="#__codelineno-0-823"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0669] clsSearchEngine.ExtractImagePath EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-824" name="__codelineno-0-824" href="#__codelineno-0-824"></a>End Function
+<a id="__codelineno-0-825" name="__codelineno-0-825" href="#__codelineno-0-825"></a>
+<a id="__codelineno-0-826" name="__codelineno-0-826" href="#__codelineno-0-826"></a>&#39; ================================================================
+<a id="__codelineno-0-827" name="__codelineno-0-827" href="#__codelineno-0-827"></a>&#39; 関数名: ResolveImageFolder
+<a id="__codelineno-0-828" name="__codelineno-0-828" href="#__codelineno-0-828"></a>&#39; 概要:   &lt;dataFolder&gt;/../kb_images/ のフルパスを返す
+<a id="__codelineno-0-829" name="__codelineno-0-829" href="#__codelineno-0-829"></a>&#39; 引数:   dataFolder - データフォルダパス
+<a id="__codelineno-0-830" name="__codelineno-0-830" href="#__codelineno-0-830"></a>&#39; 戻り値: String - 画像フォルダパス (末尾区切り無し)
+<a id="__codelineno-0-831" name="__codelineno-0-831" href="#__codelineno-0-831"></a>&#39; 備考:   path 区切りは Windows と互換 (\ 区切りを保持)
+<a id="__codelineno-0-832" name="__codelineno-0-832" href="#__codelineno-0-832"></a>&#39; ================================================================
+<a id="__codelineno-0-833" name="__codelineno-0-833" href="#__codelineno-0-833"></a>Private Function ResolveImageFolder(ByVal dataFolder As String) As String
+<a id="__codelineno-0-834" name="__codelineno-0-834" href="#__codelineno-0-834"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0670] clsSearchEngine.ResolveImageFolder ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-835" name="__codelineno-0-835" href="#__codelineno-0-835"></a>    Dim base As String
+<a id="__codelineno-0-836" name="__codelineno-0-836" href="#__codelineno-0-836"></a>    base = dataFolder
+<a id="__codelineno-0-837" name="__codelineno-0-837" href="#__codelineno-0-837"></a>    &#39; 末尾の \ / を除去
+<a id="__codelineno-0-838" name="__codelineno-0-838" href="#__codelineno-0-838"></a>    Do While Len(base) &gt; 0 And (Right(base, 1) = &quot;\&quot; Or Right(base, 1) = &quot;/&quot;)
+<a id="__codelineno-0-839" name="__codelineno-0-839" href="#__codelineno-0-839"></a>        base = Left(base, Len(base) - 1)
+<a id="__codelineno-0-840" name="__codelineno-0-840" href="#__codelineno-0-840"></a>    Loop
+<a id="__codelineno-0-841" name="__codelineno-0-841" href="#__codelineno-0-841"></a>    &#39; 親フォルダ
+<a id="__codelineno-0-842" name="__codelineno-0-842" href="#__codelineno-0-842"></a>    Dim parentEnd As Long
+<a id="__codelineno-0-843" name="__codelineno-0-843" href="#__codelineno-0-843"></a>    parentEnd = InStrRev(base, &quot;\&quot;)
+<a id="__codelineno-0-844" name="__codelineno-0-844" href="#__codelineno-0-844"></a>    If parentEnd = 0 Then parentEnd = InStrRev(base, &quot;/&quot;)
+<a id="__codelineno-0-845" name="__codelineno-0-845" href="#__codelineno-0-845"></a>    If parentEnd = 0 Then
+<a id="__codelineno-0-846" name="__codelineno-0-846" href="#__codelineno-0-846"></a>        ResolveImageFolder = base &amp; &quot;\kb_images&quot;
+<a id="__codelineno-0-847" name="__codelineno-0-847" href="#__codelineno-0-847"></a>    Else
+<a id="__codelineno-0-848" name="__codelineno-0-848" href="#__codelineno-0-848"></a>        ResolveImageFolder = Left(base, parentEnd - 1) &amp; &quot;\kb_images&quot;
+<a id="__codelineno-0-849" name="__codelineno-0-849" href="#__codelineno-0-849"></a>    End If
+<a id="__codelineno-0-850" name="__codelineno-0-850" href="#__codelineno-0-850"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0671] clsSearchEngine.ResolveImageFolder EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-851" name="__codelineno-0-851" href="#__codelineno-0-851"></a>End Function
+<a id="__codelineno-0-852" name="__codelineno-0-852" href="#__codelineno-0-852"></a>
+<a id="__codelineno-0-853" name="__codelineno-0-853" href="#__codelineno-0-853"></a>&#39; ================================================================
+<a id="__codelineno-0-854" name="__codelineno-0-854" href="#__codelineno-0-854"></a>&#39; 関数名: ResolveImageFullPath
+<a id="__codelineno-0-855" name="__codelineno-0-855" href="#__codelineno-0-855"></a>&#39; 概要:   ImagePath (相対 or 絶対) を絶対パスに解決
+<a id="__codelineno-0-856" name="__codelineno-0-856" href="#__codelineno-0-856"></a>&#39; 引数:   imagePath  - スタンザの ImagePath 値 or 既定値
+<a id="__codelineno-0-857" name="__codelineno-0-857" href="#__codelineno-0-857"></a>&#39;         dataFolder - 解決基準フォルダ (&lt;dataFolder&gt;/../kb_images がベース)
+<a id="__codelineno-0-858" name="__codelineno-0-858" href="#__codelineno-0-858"></a>&#39; 戻り値: String - 絶対パス
+<a id="__codelineno-0-859" name="__codelineno-0-859" href="#__codelineno-0-859"></a>&#39; 備考:   imagePath が &quot;X:\...&quot; or &quot;\...&quot; なら絶対扱い、そうでなければ
+<a id="__codelineno-0-860" name="__codelineno-0-860" href="#__codelineno-0-860"></a>&#39;         &lt;imageFolder&gt;\&lt;imagePath&gt; として解決
+<a id="__codelineno-0-861" name="__codelineno-0-861" href="#__codelineno-0-861"></a>&#39; ================================================================
+<a id="__codelineno-0-862" name="__codelineno-0-862" href="#__codelineno-0-862"></a>Private Function ResolveImageFullPath(ByVal imagePath As String, _
+<a id="__codelineno-0-863" name="__codelineno-0-863" href="#__codelineno-0-863"></a>                                        ByVal dataFolder As String) As String
+<a id="__codelineno-0-864" name="__codelineno-0-864" href="#__codelineno-0-864"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0672] clsSearchEngine.ResolveImageFullPath ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-865" name="__codelineno-0-865" href="#__codelineno-0-865"></a>    If Len(imagePath) &gt;= 2 Then
+<a id="__codelineno-0-866" name="__codelineno-0-866" href="#__codelineno-0-866"></a>        If Mid(imagePath, 2, 1) = &quot;:&quot; Or Left(imagePath, 2) = &quot;\&quot; Then
+<a id="__codelineno-0-867" name="__codelineno-0-867" href="#__codelineno-0-867"></a>            ResolveImageFullPath = imagePath
+<a id="__codelineno-0-868" name="__codelineno-0-868" href="#__codelineno-0-868"></a>            If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0673] clsSearchEngine.ResolveImageFullPath EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-869" name="__codelineno-0-869" href="#__codelineno-0-869"></a>            Exit Function
+<a id="__codelineno-0-870" name="__codelineno-0-870" href="#__codelineno-0-870"></a>        End If
+<a id="__codelineno-0-871" name="__codelineno-0-871" href="#__codelineno-0-871"></a>    End If
+<a id="__codelineno-0-872" name="__codelineno-0-872" href="#__codelineno-0-872"></a>    ResolveImageFullPath = ResolveImageFolder(dataFolder) &amp; &quot;\&quot; &amp; imagePath
+<a id="__codelineno-0-873" name="__codelineno-0-873" href="#__codelineno-0-873"></a>End Function
+<a id="__codelineno-0-874" name="__codelineno-0-874" href="#__codelineno-0-874"></a>
+<a id="__codelineno-0-875" name="__codelineno-0-875" href="#__codelineno-0-875"></a>&#39; ================================================================
+<a id="__codelineno-0-876" name="__codelineno-0-876" href="#__codelineno-0-876"></a>&#39; 関数名: ExtractKeyValueFromItems
+<a id="__codelineno-0-877" name="__codelineno-0-877" href="#__codelineno-0-877"></a>&#39; 概要:   [ITEM] 行から FieldName 指定の値を抽出
+<a id="__codelineno-0-878" name="__codelineno-0-878" href="#__codelineno-0-878"></a>&#39; ================================================================
+<a id="__codelineno-0-879" name="__codelineno-0-879" href="#__codelineno-0-879"></a>Private Function ExtractKeyValueFromItems(ByVal content As String, _
+<a id="__codelineno-0-880" name="__codelineno-0-880" href="#__codelineno-0-880"></a>                                            ByVal fieldName As String) As String
+<a id="__codelineno-0-881" name="__codelineno-0-881" href="#__codelineno-0-881"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0674] clsSearchEngine.ExtractKeyValueFromItems ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-882" name="__codelineno-0-882" href="#__codelineno-0-882"></a>    Dim lines() As String
+<a id="__codelineno-0-883" name="__codelineno-0-883" href="#__codelineno-0-883"></a>    Dim i As Long
+<a id="__codelineno-0-884" name="__codelineno-0-884" href="#__codelineno-0-884"></a>
+<a id="__codelineno-0-885" name="__codelineno-0-885" href="#__codelineno-0-885"></a>    lines = Split(content, vbCrLf)
+<a id="__codelineno-0-886" name="__codelineno-0-886" href="#__codelineno-0-886"></a>    For i = LBound(lines) To UBound(lines)
+<a id="__codelineno-0-887" name="__codelineno-0-887" href="#__codelineno-0-887"></a>        If InStr(lines(i), &quot;FieldName=&quot; &amp; fieldName) &gt; 0 Then
+<a id="__codelineno-0-888" name="__codelineno-0-888" href="#__codelineno-0-888"></a>            ExtractKeyValueFromItems = ExtractKeyFromItem(lines(i), &quot;Value&quot;)
+<a id="__codelineno-0-889" name="__codelineno-0-889" href="#__codelineno-0-889"></a>            If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0675] clsSearchEngine.ExtractKeyValueFromItems EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-890" name="__codelineno-0-890" href="#__codelineno-0-890"></a>            Exit Function
+<a id="__codelineno-0-891" name="__codelineno-0-891" href="#__codelineno-0-891"></a>        End If
+<a id="__codelineno-0-892" name="__codelineno-0-892" href="#__codelineno-0-892"></a>    Next i
+<a id="__codelineno-0-893" name="__codelineno-0-893" href="#__codelineno-0-893"></a>    ExtractKeyValueFromItems = &quot;&quot;
+<a id="__codelineno-0-894" name="__codelineno-0-894" href="#__codelineno-0-894"></a>End Function
+<a id="__codelineno-0-895" name="__codelineno-0-895" href="#__codelineno-0-895"></a>
+<a id="__codelineno-0-896" name="__codelineno-0-896" href="#__codelineno-0-896"></a>&#39; ================================================================
+<a id="__codelineno-0-897" name="__codelineno-0-897" href="#__codelineno-0-897"></a>&#39; 関数名: CombineFilePath
+<a id="__codelineno-0-898" name="__codelineno-0-898" href="#__codelineno-0-898"></a>&#39; 概要:   フォルダパスとファイル名を結合
+<a id="__codelineno-0-899" name="__codelineno-0-899" href="#__codelineno-0-899"></a>&#39; ================================================================
+<a id="__codelineno-0-900" name="__codelineno-0-900" href="#__codelineno-0-900"></a>Private Function CombineFilePath(ByVal folder As String, _
+<a id="__codelineno-0-901" name="__codelineno-0-901" href="#__codelineno-0-901"></a>                                   ByVal fileName As String) As String
+<a id="__codelineno-0-902" name="__codelineno-0-902" href="#__codelineno-0-902"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0676] clsSearchEngine.CombineFilePath ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-903" name="__codelineno-0-903" href="#__codelineno-0-903"></a>    If Right(folder, 1) = &quot;\&quot; Or Right(folder, 1) = &quot;/&quot; Then
+<a id="__codelineno-0-904" name="__codelineno-0-904" href="#__codelineno-0-904"></a>        CombineFilePath = folder &amp; fileName
+<a id="__codelineno-0-905" name="__codelineno-0-905" href="#__codelineno-0-905"></a>    Else
+<a id="__codelineno-0-906" name="__codelineno-0-906" href="#__codelineno-0-906"></a>        CombineFilePath = folder &amp; &quot;\&quot; &amp; fileName
+<a id="__codelineno-0-907" name="__codelineno-0-907" href="#__codelineno-0-907"></a>    End If
+<a id="__codelineno-0-908" name="__codelineno-0-908" href="#__codelineno-0-908"></a>End Function
+<a id="__codelineno-0-909" name="__codelineno-0-909" href="#__codelineno-0-909"></a>
+<a id="__codelineno-0-910" name="__codelineno-0-910" href="#__codelineno-0-910"></a>&#39; ================================================================
+<a id="__codelineno-0-911" name="__codelineno-0-911" href="#__codelineno-0-911"></a>&#39; 関数名: StripPlaceholder (BUG-001 修正で追加)
+<a id="__codelineno-0-912" name="__codelineno-0-912" href="#__codelineno-0-912"></a>&#39; 概要:   検索画面で spec の HintText (例: &quot;(キーワードを入力)&quot;) が
+<a id="__codelineno-0-913" name="__codelineno-0-913" href="#__codelineno-0-913"></a>&#39;         入力欄セルに残ったままだと engine が誤って検索文字列として
+<a id="__codelineno-0-914" name="__codelineno-0-914" href="#__codelineno-0-914"></a>&#39;         扱ってしまうため、placeholder 文字列を空文字に変換する。
+<a id="__codelineno-0-915" name="__codelineno-0-915" href="#__codelineno-0-915"></a>&#39; 引数:   raw - セルから読み取った文字列
+<a id="__codelineno-0-916" name="__codelineno-0-916" href="#__codelineno-0-916"></a>&#39; 戻り値: String - placeholder と判定した場合は &quot;&quot;、それ以外はそのまま
+<a id="__codelineno-0-917" name="__codelineno-0-917" href="#__codelineno-0-917"></a>&#39; 備考:   placeholder 判定条件: 先頭が &quot;(&quot; かつ末尾が &quot;)&quot; (全角丸括弧不要)。
+<a id="__codelineno-0-918" name="__codelineno-0-918" href="#__codelineno-0-918"></a>&#39;         ユーザが意図的に &quot;(...)&quot; を検索キーに使うケースは現状想定外。
+<a id="__codelineno-0-919" name="__codelineno-0-919" href="#__codelineno-0-919"></a>&#39;         必要になれば spec 側で sentinel 文字を埋め込む等で識別する。
+<a id="__codelineno-0-920" name="__codelineno-0-920" href="#__codelineno-0-920"></a>&#39; ================================================================
+<a id="__codelineno-0-921" name="__codelineno-0-921" href="#__codelineno-0-921"></a>Private Function StripPlaceholder(ByVal raw As String) As String
+<a id="__codelineno-0-922" name="__codelineno-0-922" href="#__codelineno-0-922"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0677] clsSearchEngine.StripPlaceholder ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-923" name="__codelineno-0-923" href="#__codelineno-0-923"></a>    Dim t As String
+<a id="__codelineno-0-924" name="__codelineno-0-924" href="#__codelineno-0-924"></a>    t = Trim(raw)
+<a id="__codelineno-0-925" name="__codelineno-0-925" href="#__codelineno-0-925"></a>    If Len(t) &gt;= 2 Then
+<a id="__codelineno-0-926" name="__codelineno-0-926" href="#__codelineno-0-926"></a>        If Left(t, 1) = &quot;(&quot; And Right(t, 1) = &quot;)&quot; Then
+<a id="__codelineno-0-927" name="__codelineno-0-927" href="#__codelineno-0-927"></a>            StripPlaceholder = &quot;&quot;
+<a id="__codelineno-0-928" name="__codelineno-0-928" href="#__codelineno-0-928"></a>            If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0678] clsSearchEngine.StripPlaceholder EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-929" name="__codelineno-0-929" href="#__codelineno-0-929"></a>            Exit Function
+<a id="__codelineno-0-930" name="__codelineno-0-930" href="#__codelineno-0-930"></a>        End If
+<a id="__codelineno-0-931" name="__codelineno-0-931" href="#__codelineno-0-931"></a>    End If
+<a id="__codelineno-0-932" name="__codelineno-0-932" href="#__codelineno-0-932"></a>    StripPlaceholder = raw
+<a id="__codelineno-0-933" name="__codelineno-0-933" href="#__codelineno-0-933"></a>End Function
+<a id="__codelineno-0-934" name="__codelineno-0-934" href="#__codelineno-0-934"></a>
+<a id="__codelineno-0-935" name="__codelineno-0-935" href="#__codelineno-0-935"></a>&#39; ADR-0089: CJK ui_seed dir name (U+691C U+7D22)
+<a id="__codelineno-0-936" name="__codelineno-0-936" href="#__codelineno-0-936"></a>&#39; VBA Const cannot hold ChrW(); use Private Function instead.
+<a id="__codelineno-0-937" name="__codelineno-0-937" href="#__codelineno-0-937"></a>Private Function UiRoleKensaku() As String
+<a id="__codelineno-0-938" name="__codelineno-0-938" href="#__codelineno-0-938"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0679] clsSearchEngine.UiRoleKensaku ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-939" name="__codelineno-0-939" href="#__codelineno-0-939"></a>    UiRoleKensaku = ChrW(&amp;H691C) &amp; ChrW(&amp;H7D22)
+<a id="__codelineno-0-940" name="__codelineno-0-940" href="#__codelineno-0-940"></a>End Function
+<a id="__codelineno-0-941" name="__codelineno-0-941" href="#__codelineno-0-941"></a>
+<a id="__codelineno-0-942" name="__codelineno-0-942" href="#__codelineno-0-942"></a>&#39; ADR-0006/0090/0094 JP literal removal:
+<a id="__codelineno-0-943" name="__codelineno-0-943" href="#__codelineno-0-943"></a>Private Property Get ALL_FORMATS_TOKEN() As String
+<a id="__codelineno-0-944" name="__codelineno-0-944" href="#__codelineno-0-944"></a>    ALL_FORMATS_TOKEN = ChrW(&amp;H3059) &amp; ChrW(&amp;H3079) &amp; ChrW(&amp;H3066)
+<a id="__codelineno-0-945" name="__codelineno-0-945" href="#__codelineno-0-945"></a>End Property
+</code></pre></div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  ページトップへ戻る
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2026 ai-crafted-portfolio
+    </div>
+  
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.indexes", "toc.integrate", "search.highlight", "search.suggest", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u30b3\u30d4\u30fc\u3057\u307e\u3057\u305f", "clipboard.copy": "\u30af\u30ea\u30c3\u30d7\u30dc\u30fc\u30c9\u3078\u30b3\u30d4\u30fc", "search.result.more.one": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3082\u30461\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.more.other": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3042\u3068#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.none": "\u4f55\u3082\u898b\u3064\u304b\u308a\u307e\u305b\u3093\u3067\u3057\u305f", "search.result.one": "1\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.other": "#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.placeholder": "\u691c\u7d22\u30ad\u30fc\u30ef\u30fc\u30c9\u3092\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044", "search.result.term.missing": "\u691c\u7d22\u306b\u542b\u307e\u308c\u306a\u3044", "select.version": "\u30d0\u30fc\u30b8\u30e7\u30f3\u5207\u308a\u66ff\u3048"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
