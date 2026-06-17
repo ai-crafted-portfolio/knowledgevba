@@ -64,6 +64,15 @@ extra_css:
 
 nav:
   - 概要: index.md
+  - ユーザマニュアル:
+      - 全体像: manual/index.md
+      - セットアップ: manual/setup.md
+      - 検索ブックの使い方: manual/search.md
+      - 管理ブックの使い方: manual/admin.md
+      - 登録・編集の流れ: manual/register.md
+      - フォーマット設計の流れ: manual/format.md
+      - 困ったとき: manual/faq.md
+      - 用語集・付録: manual/glossary.md
   - インストール: install.md
   - 一発インストーラ: install_one_shot.md
   - 使い方: usage.md
