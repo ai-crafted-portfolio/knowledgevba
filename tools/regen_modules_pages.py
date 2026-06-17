@@ -28,8 +28,10 @@ ROLE_JP = {
 
 SRC_ROOT_WIN = r"C:\kvba\publish\dist_v2\installer\vba_modules"
 OUT_ROOT_WIN = r"C:\kvba\push\docs\modules"
-SRC_ROOT_LIN = "/sessions/confident-gracious-brown/mnt/kvba/publish/dist_v2/installer/vba_modules"
-OUT_ROOT_LIN = "/sessions/confident-gracious-brown/mnt/kvba/push/docs/modules"
+import glob as _glob
+_kvba = (_glob.glob("/sessions/*/mnt/kvba") or ["/sessions/none/mnt/kvba"])[0]
+SRC_ROOT_LIN = _kvba + "/publish/dist_v2/installer/vba_modules"
+OUT_ROOT_LIN = _kvba + "/push/docs/modules"
 
 if os.path.exists(SRC_ROOT_WIN):
     SRC_ROOT = SRC_ROOT_WIN
@@ -51,7 +53,7 @@ def list_canonical(role):
     return out
 
 
-def render_md(role, src_name, src_text):
+def render_md(role, src_name, src_text, mtime_str):
     ext = ".bas" if src_name.endswith(".bas") else ".cls"
     kind_label = "標準モジュール" if ext == ".bas" else "クラスモジュール"
     if role == "common":
@@ -99,7 +101,8 @@ def render_md(role, src_name, src_text):
         "---\n\n"
         "# " + src_name + "\n\n"
         "**配置先**: " + target_book + "\n"
-        "**種類**: " + kind_label + "\n\n"
+        "**種類**: " + kind_label + "\n"
+        "**更新日**: " + mtime_str + "\n\n"
         "---\n\n"
         + notice +
         "\n---\n\n"
@@ -111,17 +114,57 @@ def render_md(role, src_name, src_text):
     return body
 
 
+def gen_index(collected):
+    intro = (
+        "---\n"
+        "title: モジュール一覧\n"
+        "description: VBA モジュール（.bas / .cls）のコピペ用ソースコード一覧\n"
+        "---\n\n"
+        "# モジュール一覧\n\n"
+        "knowledgevba を構成する VBA モジュールのソースコード一覧です。各ページに該当ファイルの全文がコピペできる形で掲載されています。\n\n"
+        "[インストール手順](../install.md) の **STEP 6** で、これらを `installer\\vba_modules\\<役割>\\` 配下に保存してください。\n\n"
+        "**更新日** は canonical ソースの最終更新日時です。手元のファイルより新しければ差し替えてください。\n\n"
+        "!!! info \"保存時のお願い\"\n"
+        "    - メモ帳で **[名前を付けて保存]** → 文字コードは **ANSI**（Shift-JIS）を選んでください\n"
+        "    - UTF-8 で保存すると日本語が文字化けして動かなくなります\n"
+        "    - ファイル名は **大文字小文字を区別しません**（VBE 側で正しい名前が付きます）\n\n"
+        "---\n\n"
+    )
+    body = intro
+    heads = {"admin": "## 管理.xlsm 用 (`installer\\vba_modules\\admin\\`)",
+             "register": "## 登録修正.xlsm 用 (`installer\\vba_modules\\register\\`) ※v2.3 では廃止ブック（参考掲載）",
+             "search": "## 検索.xlsm 用 (`installer\\vba_modules\\search\\`)",
+             "common": "## 共通モジュール (`installer\\vba_modules\\common\\`)"}
+    for role in ROLES:
+        rows = collected.get(role, [])
+        body += heads[role] + "\n\n**" + str(len(rows)) + " ファイル**\n\n"
+        body += "| ファイル名 | 種類 | 更新日 |\n|---|---|---|\n"
+        for fname, mt in rows:
+            kind = "標準" if fname.endswith(".bas") else "クラス"
+            body += "| [`" + fname + "`](" + role + "/" + fname.lower() + ".md) | " + kind + " | " + mt + " |\n"
+        body += "\n"
+    out_path = os.path.join(OUT_ROOT, "index.md")
+    with open(out_path, "w", encoding="utf-8", newline="\n") as f:
+        f.write(body)
+    print("[done] index.md regenerated with dates")
+
+
 def main():
     total = 0
     failures = []
+    import datetime
+    collected = {}
     for role in ROLES:
         src_dir = os.path.join(SRC_ROOT, role)
         out_dir = os.path.join(OUT_ROOT, role)
         os.makedirs(out_dir, exist_ok=True)
         files = list_canonical(role)
         print("[" + role + "] " + str(len(files)) + " files")
+        collected[role] = []
         for fname in files:
             src_path = os.path.join(src_dir, fname)
+            mtime_str = datetime.datetime.fromtimestamp(os.path.getmtime(src_path), datetime.timezone(datetime.timedelta(hours=9))).strftime("%Y-%m-%d %H:%M")
+            collected[role].append((fname, mtime_str))
             with open(src_path, "rb") as f:
                 raw = f.read()
             try:
@@ -136,12 +179,13 @@ def main():
                     failures.append((src_path, "cp932/utf8 decode fail: " + str(e)))
                     continue
             txt_lf = txt.replace("\r\n", "\n").replace("\r", "\n").rstrip("\n")
-            md_text = render_md(role, fname, txt_lf)
+            md_text = render_md(role, fname, txt_lf, mtime_str)
             out_name = fname.lower() + ".md"
             out_path = os.path.join(out_dir, out_name)
             with open(out_path, "w", encoding="utf-8", newline="\n") as f:
                 f.write(md_text)
             total += 1
+    gen_index(collected)
     print("[done] regenerated " + str(total) + " pages")
     if failures:
         print("[fail] " + str(len(failures)) + " files")

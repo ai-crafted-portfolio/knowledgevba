@@ -7,7 +7,7 @@ description: modEntrySettings.bas のソースコード（コピペ用）
 
 **配置先**: `管理.xlsm` 用の VBA モジュール
 **種類**: 標準モジュール
-**更新日**: 2026-06-11 22:50
+**更新日**: 2026-06-17 22:19
 
 ---
 
@@ -123,11 +123,8 @@ Private Const M12_RESULT_CLEAR_ROWS As Long = 500
 Private Const LOG_DATA_START_ROW As Long = 9
 
 ' --- config.txt default fallbacks (used only when holder is empty) ---
-Private Const DEF_DATA_DIR    As String = "C:\KnowledgeMgr\data\"
-Private Const DEF_FORMAT_DIR  As String = "C:\KnowledgeMgr\formats\"
-Private Const DEF_UI_DIR      As String = "C:\KnowledgeMgr\ui\"
-Private Const DEF_BACKUP_DIR  As String = "C:\KnowledgeMgr\data\backup\"
-Private Const DEF_CONFIG_DIR  As String = "C:\KnowledgeMgr\config\"
+' Fix-4 (ADR-0132): DEF_*_DIR path defaults moved to install-time
+' modInstallConfig.bas (Public Const DEFAULT_*_DIR). No hard-coded path here.
 Private Const DEF_DEBUG_LEVEL As String = "INFO"
 ' Phase FC (2026-06-03, ADR-0096): M-11 [VALIDATION] / [CHECKBOX] layout.
 '   B5     debugLevel selection (data validation list)
@@ -535,11 +532,11 @@ End Function
 ' ============================================================
 Public Sub LoadStorageToSheet(ByVal ws As Worksheet)   ' 2026-06-07: Public to allow ThisWorkbook hook
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0280] modEntrySettings.LoadStorageToSheet ENTER"  ' [ADR-0100]
-    ws.Range(ADDR_DATA_DIR).Value = SafeGetCfg("data_dir", DEF_DATA_DIR)
-    ws.Range(ADDR_FORMAT_DIR).Value = SafeGetCfg("format_dir", DEF_FORMAT_DIR)
-    ws.Range(ADDR_UI_DIR).Value = SafeGetCfg("ui_dir", DEF_UI_DIR)
-    ws.Range(ADDR_BACKUP_DIR).Value = SafeGetCfg("backup_dir", DEF_BACKUP_DIR)
-    ws.Range(ADDR_CONFIG_DIR).Value = SafeGetCfg("config_dir", DEF_CONFIG_DIR)
+    ws.Range(ADDR_DATA_DIR).Value = SafeGetCfg("data_dir", modInstallConfig.DEFAULT_DATA_DIR)
+    ws.Range(ADDR_FORMAT_DIR).Value = SafeGetCfg("format_dir", modInstallConfig.DEFAULT_FORMAT_DIR)
+    ws.Range(ADDR_UI_DIR).Value = SafeGetCfg("ui_dir", modInstallConfig.DEFAULT_UI_DIR)
+    ws.Range(ADDR_BACKUP_DIR).Value = SafeGetCfg("backup_dir", modInstallConfig.DEFAULT_BACKUP_DIR)
+    ws.Range(ADDR_CONFIG_DIR).Value = SafeGetCfg("config_dir", modInstallConfig.DEFAULT_CONFIG_DIR)
 End Sub
 
 ' ============================================================

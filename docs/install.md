@@ -155,6 +155,38 @@ migrateBackupEnabled=TRUE
 | `autoReloadOnStartup` | 起動時に自動で設定を再読み込みするか | `TRUE` |
 | `migrateBackupEnabled` | フォーマット変更時にナレッジ自動マイグレーションを行うか | `TRUE` |
 
+### 4.5.6 データの保存場所をまとめて変えたい場合
+
+ナレッジやフォーマット、画面定義の保存先は、すべて設定ファイル（`ブック名_config.txt`）の次の 4 行で決まります。標準では、いずれも作業フォルダ（例: `C:\KnowledgeMgr\`）の下に置かれます。
+
+```ini
+data_dir=C:\KnowledgeMgr\data\
+format_dir=C:\KnowledgeMgr\formats\
+ui_dir=C:\KnowledgeMgr\ui\
+backup_dir=C:\KnowledgeMgr\data\backup\
+```
+
+別のドライブや共有フォルダにまとめて移したい場合は、**この 4 行の先頭部分を、新しい保存先フォルダに書き換えるだけ**です。たとえば `D:\業務データ\KnowledgeMgr\` に移すなら、次のようにします。
+
+```ini
+data_dir=D:\業務データ\KnowledgeMgr\data\
+format_dir=D:\業務データ\KnowledgeMgr\formats\
+ui_dir=D:\業務データ\KnowledgeMgr\ui\
+backup_dir=D:\業務データ\KnowledgeMgr\data\backup\
+```
+
+**変更の手順**
+
+1. 新しい保存先フォルダ（上の例なら `D:\業務データ\KnowledgeMgr\` と、その下の `data` / `formats` / `ui` / `backup`）をあらかじめ作成します
+2. これまで使っていたフォルダの中身（`.txt` ファイル）を、対応する新しいフォルダへ**移動またはコピー**します
+3. 3 つの設定ファイル（`管理_config.txt` / `登録修正_config.txt` / `検索_config.txt`）の 4 行を、新しい保存先に書き換えます
+4. 文字コードは **ANSI**（Shift-JIS）のまま上書き保存し、ブックを開き直します
+
+!!! warning "書き換え後の注意"
+    - パスの**末尾は `\`（円マーク）で終える**ようにしてください
+    - 指定したフォルダが**実在しない**と、起動時に「ファイルが見つかりません」といったメッセージが出ることがあります。先にフォルダを作成してから書き換えてください（[困ったとき](troubleshooting.md) も参照）
+    - 3 ファイルとも同じ保存先に揃えておくと、ブック間でデータが食い違いません
+
 ---
 
 ## STEP 5: installer フォルダを作る

@@ -7,7 +7,7 @@ description: modConfigLoader.bas のソースコード（コピペ用）
 
 **配置先**: 共通モジュール（3 ブック共通）
 **種類**: 標準モジュール
-**更新日**: 2026-06-07 00:50
+**更新日**: 2026-06-17 22:19
 
 ---
 
@@ -45,7 +45,7 @@ Attribute VB_Name = "modConfigLoader"
 '          Q8  (xlsm name -> 3 config files)
 '          Q17 (public I/F: LoadConfig / Reload, no Save API)
 '               -> v2.3: added SaveConfigKeys partial-writeback API
-'          Q22 (default path root C:\KnowledgeMgr\)
+'          Q22 (default path root via modInstallConfig)
 ' Note:    Japanese block comments were lost (no backup) during a
 '          v2.1 bug-fix edit and restored here in ASCII. Logic unchanged.
 ' ================================================================
@@ -56,12 +56,8 @@ Option Explicit
 ' ----------------------------------------------------------------
 Private Const DEFAULT_DEBUG_LEVEL As String = "ERROR"
 Private Const DEFAULT_LOG_ROTATION_ROWS As String = "10000"
-Private Const DEFAULT_DATA_DIR As String = "C:\KnowledgeMgr\data\"
-Private Const DEFAULT_FORMAT_DIR As String = "C:\KnowledgeMgr\formats\"
-Private Const DEFAULT_UI_DIR As String = "C:\KnowledgeMgr\ui\"
-Private Const DEFAULT_BACKUP_DIR As String = "C:\KnowledgeMgr\backup\"
-Private Const DEFAULT_LOG_DIR As String = "C:\KnowledgeMgr\log\"
-Private Const DEFAULT_CONFIG_DIR As String = "C:\KnowledgeMgr\"
+' Fix-4 (ADR-0132): path defaults moved to install-time modInstallConfig.bas
+' (Public Const DEFAULT_*_DIR). Canonical no longer hard-codes any path.
 Private Const DEFAULT_UI_SCHEMA_FAIL_MODE As String = "safeDefault"
 Private Const DEFAULT_SYSTEM_SHEET_VISIBILITY As String = "Hidden"
 Private Const DEFAULT_AUTO_RELOAD_ON_STARTUP As String = "TRUE"
@@ -115,7 +111,7 @@ End Function
 ' Private: ResolveConfigDir
 '   Resolves the config-file directory. When the holder is already
 '   initialized and carries a config_dir value, that value wins;
-'   otherwise fall back to DEFAULT_CONFIG_DIR (Q22).
+'   otherwise fall back to modInstallConfig.DEFAULT_CONFIG_DIR (Q22).
 '   This also lets callers / tests redirect the config directory
 '   without abort (architecture OQ-07 safeDefault).
 ' ----------------------------------------------------------------
@@ -127,7 +123,7 @@ Private Function ResolveConfigDir() As String
         dir = modConfigHolder.GetValue("config_dir")
     End If
     If Len(dir) = 0 Then
-        dir = DEFAULT_CONFIG_DIR
+        dir = modInstallConfig.DEFAULT_CONFIG_DIR
     End If
     ResolveConfigDir = dir
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0964] modConfigLoader.ResolveConfigDir EXIT-OK"  ' [ADR-0100]
@@ -162,6 +158,19 @@ Public Function Reload() As Boolean
         Exit Function
     End If
     Reload = LoadConfigFromPath(m_currentConfigPath)
+End Function
+
+' ================================================================
+' Function: LastConfigPath (ADR-0131 Fix-1 D2)
+' Summary:  Path of the config file the last LoadConfig / Reload
+'           attempted to read. Empty before any load. Lets callers
+'           name the file in a non-silent "could not read config"
+'           MsgBox instead of degrading to hard-code defaults
+'           silently.
+' ================================================================
+Public Function LastConfigPath() As String
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0993] modConfigLoader.LastConfigPath ENTER"  ' [ADR-0100]
+    LastConfigPath = m_currentConfigPath
 End Function
 
 ' ----------------------------------------------------------------
@@ -227,12 +236,12 @@ Private Sub LoadDefaults(ByVal configDict As Object)
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0971] modConfigLoader.LoadDefaults ENTER"  ' [ADR-0100]
     configDict("debugLevel") = DEFAULT_DEBUG_LEVEL
     configDict("logRotationRows") = DEFAULT_LOG_ROTATION_ROWS
-    configDict("data_dir") = DEFAULT_DATA_DIR
-    configDict("format_dir") = DEFAULT_FORMAT_DIR
-    configDict("ui_dir") = DEFAULT_UI_DIR
-    configDict("backup_dir") = DEFAULT_BACKUP_DIR
-    configDict("log_dir") = DEFAULT_LOG_DIR
-    configDict("config_dir") = DEFAULT_CONFIG_DIR
+    configDict("data_dir") = modInstallConfig.DEFAULT_DATA_DIR
+    configDict("format_dir") = modInstallConfig.DEFAULT_FORMAT_DIR
+    configDict("ui_dir") = modInstallConfig.DEFAULT_UI_DIR
+    configDict("backup_dir") = modInstallConfig.DEFAULT_BACKUP_DIR
+    configDict("log_dir") = modInstallConfig.DEFAULT_LOG_DIR
+    configDict("config_dir") = modInstallConfig.DEFAULT_CONFIG_DIR
     configDict("uiSchemaFailMode") = DEFAULT_UI_SCHEMA_FAIL_MODE
     ' 2026-06-07: retired keys (systemSheetVisibility/autoReloadOnStartup/migrateBackupEnabled)
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0972] modConfigLoader.LoadDefaults EXIT-OK"  ' [ADR-0100]
@@ -270,7 +279,7 @@ End Sub
 ' Return:   Long - count of keys actually written (updated+added).
 '                  0 on any I/O error (logged, see Note).
 ' Note:     If LoadConfig has not been called yet, ResolveConfigDir
-'           falls back to DEFAULT_CONFIG_DIR (C:\KnowledgeMgr\),
+'           falls back to modInstallConfig.DEFAULT_CONFIG_DIR,
 '           same as LoadConfig. Caller is responsible for invoking
 '           modConfigHolder.SetConfigKeys to sync in-memory state.
 ' ================================================================
