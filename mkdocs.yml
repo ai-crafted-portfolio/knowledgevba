@@ -71,6 +71,8 @@ nav:
       - 管理ブックの使い方: manual/admin.md
       - 登録・編集の流れ: manual/register.md
       - フォーマット設計の流れ: manual/format.md
+      - フィールド型の説明: manual/types.md
+      - 外部設定ファイル: manual/config.md
       - 困ったとき: manual/faq.md
       - 用語集・付録: manual/glossary.md
   - インストール: install.md
