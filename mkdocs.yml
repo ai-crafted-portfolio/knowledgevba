@@ -186,7 +186,6 @@ nav:
           - modFormatLoader.bas: modules/common/modformatloader.bas.md
           - modFormBuilder.bas: modules/common/modformbuilder.bas.md
           - modFormControlWiring.bas: modules/common/modformcontrolwiring.bas.md
-          - modInstallConfig.bas: modules/common/modinstallconfig.bas.md
           - modKnowledgeFileIO.bas: modules/common/modknowledgefileio.bas.md
           - modLogIds.bas: modules/common/modlogids.bas.md
           - modPerfTest.bas: modules/common/modperftest.bas.md
