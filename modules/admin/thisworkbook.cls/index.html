@@ -5063,7 +5063,7 @@
 <h1 id="thisworkbookcls">ThisWorkbook.cls<a class="headerlink" href="#thisworkbookcls" title="Permanent link">&para;</a></h1>
 <p><strong>配置先</strong>: <code>管理.xlsm</code> 用の VBA モジュール
 <strong>種類</strong>: クラスモジュール
-<strong>更新日</strong>: 2026-06-11 19:15 JST</p>
+<strong>更新日</strong>: 2026-06-18 19:48 JST</p>
 <hr />
 <h2 id="thisworkbook">取り込み方法（ThisWorkbook は特別）<a class="headerlink" href="#thisworkbook" title="Permanent link">&para;</a></h2>
 <p><strong>【重要】<code>ThisWorkbook</code> は Excel のブック（.xlsm）に最初から存在する document module です。ファイルとして Import できません。</strong></p>
@@ -5226,88 +5226,53 @@
 <a id="__codelineno-0-146" name="__codelineno-0-146" href="#__codelineno-0-146"></a>
 <a id="__codelineno-0-147" name="__codelineno-0-147" href="#__codelineno-0-147"></a>&#39; ================================================================
 <a id="__codelineno-0-148" name="__codelineno-0-148" href="#__codelineno-0-148"></a>&#39; Workbook_SheetBeforeDoubleClick (B19 restore, 2026-06-11)
-<a id="__codelineno-0-149" name="__codelineno-0-149" href="#__codelineno-0-149"></a>&#39; Role:   M-02 / M-10 row-select UX. Double-click on column A toggles
+<a id="__codelineno-0-149" name="__codelineno-0-149" href="#__codelineno-0-149"></a>&#39; Role:   M-02 row-select UX. Double-click on column A toggles
 <a id="__codelineno-0-150" name="__codelineno-0-150" href="#__codelineno-0-150"></a>&#39;         the selection mark.
 <a id="__codelineno-0-151" name="__codelineno-0-151" href="#__codelineno-0-151"></a>&#39;         - M-02 (format list)  rows 17..60: check ChrW(2713) &lt;-&gt; empty
-<a id="__codelineno-0-152" name="__codelineno-0-152" href="#__codelineno-0-152"></a>&#39;         - M-10 (storage)      rows 11..15: single-select radio
-<a id="__codelineno-0-153" name="__codelineno-0-153" href="#__codelineno-0-153"></a>&#39;           ChrW(25CF)=selected / ChrW(25CB)=not selected
-<a id="__codelineno-0-154" name="__codelineno-0-154" href="#__codelineno-0-154"></a>&#39; Why:    The 2026-06-08 build had this handler (see
-<a id="__codelineno-0-155" name="__codelineno-0-155" href="#__codelineno-0-155"></a>&#39;         evidence_summary_2026-06-08.md sec 2.1) but it was never
-<a id="__codelineno-0-156" name="__codelineno-0-156" href="#__codelineno-0-156"></a>&#39;         backported to canonical, so every reinstall (ThisWorkbook
-<a id="__codelineno-0-157" name="__codelineno-0-157" href="#__codelineno-0-157"></a>&#39;         body injection) silently dropped it = regression B19.
-<a id="__codelineno-0-158" name="__codelineno-0-158" href="#__codelineno-0-158"></a>&#39; Note:   Unprotect -&gt; write -&gt; Protect(UserInterfaceOnly) pattern is
-<a id="__codelineno-0-159" name="__codelineno-0-159" href="#__codelineno-0-159"></a>&#39;         required because UserInterfaceOnly does NOT survive a
-<a id="__codelineno-0-160" name="__codelineno-0-160" href="#__codelineno-0-160"></a>&#39;         save/reopen cycle (same root cause as B14).
-<a id="__codelineno-0-161" name="__codelineno-0-161" href="#__codelineno-0-161"></a>&#39; ================================================================
-<a id="__codelineno-0-162" name="__codelineno-0-162" href="#__codelineno-0-162"></a>Private Sub Workbook_SheetBeforeDoubleClick(ByVal Sh As Object, ByVal Target As Range, Cancel As Boolean)
-<a id="__codelineno-0-163" name="__codelineno-0-163" href="#__codelineno-0-163"></a>    On Error GoTo ErrHandler
-<a id="__codelineno-0-164" name="__codelineno-0-164" href="#__codelineno-0-164"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0008] ThisWorkbook.Workbook_SheetBeforeDoubleClick ENTER&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-165" name="__codelineno-0-165" href="#__codelineno-0-165"></a>    &#39; Sheet names via ChrW (CP932-safe): M-02 / M-10
-<a id="__codelineno-0-166" name="__codelineno-0-166" href="#__codelineno-0-166"></a>    Dim nmM02 As String
-<a id="__codelineno-0-167" name="__codelineno-0-167" href="#__codelineno-0-167"></a>    nmM02 = ChrW(&amp;H30D5) &amp; ChrW(&amp;H30A9) &amp; ChrW(&amp;H30FC) &amp; ChrW(&amp;H30DE) &amp; ChrW(&amp;H30C3) &amp; ChrW(&amp;H30C8) &amp; ChrW(&amp;H4E00) &amp; ChrW(&amp;H89A7)
-<a id="__codelineno-0-168" name="__codelineno-0-168" href="#__codelineno-0-168"></a>    Dim nmM10 As String
-<a id="__codelineno-0-169" name="__codelineno-0-169" href="#__codelineno-0-169"></a>    nmM10 = ChrW(&amp;H683C) &amp; ChrW(&amp;H7D0D) &amp; ChrW(&amp;H5148) &amp; ChrW(&amp;H8A2D) &amp; ChrW(&amp;H5B9A)
-<a id="__codelineno-0-170" name="__codelineno-0-170" href="#__codelineno-0-170"></a>    If Sh.Name = nmM02 Then
-<a id="__codelineno-0-171" name="__codelineno-0-171" href="#__codelineno-0-171"></a>        Call ToggleM02RowCheck(Sh, Target, Cancel)
-<a id="__codelineno-0-172" name="__codelineno-0-172" href="#__codelineno-0-172"></a>    ElseIf Sh.Name = nmM10 Then
-<a id="__codelineno-0-173" name="__codelineno-0-173" href="#__codelineno-0-173"></a>        Call ToggleM10Radio(Sh, Target, Cancel)
-<a id="__codelineno-0-174" name="__codelineno-0-174" href="#__codelineno-0-174"></a>    End If
-<a id="__codelineno-0-175" name="__codelineno-0-175" href="#__codelineno-0-175"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0009] ThisWorkbook.Workbook_SheetBeforeDoubleClick EXIT-OK&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-176" name="__codelineno-0-176" href="#__codelineno-0-176"></a>    Exit Sub
-<a id="__codelineno-0-177" name="__codelineno-0-177" href="#__codelineno-0-177"></a>ErrHandler:
-<a id="__codelineno-0-178" name="__codelineno-0-178" href="#__codelineno-0-178"></a>    Debug.Print &quot;[ERR] SheetBeforeDoubleClick toggle: &quot; &amp; Err.Number &amp; &quot; &quot; &amp; Err.Description
-<a id="__codelineno-0-179" name="__codelineno-0-179" href="#__codelineno-0-179"></a>End Sub
-<a id="__codelineno-0-180" name="__codelineno-0-180" href="#__codelineno-0-180"></a>
-<a id="__codelineno-0-181" name="__codelineno-0-181" href="#__codelineno-0-181"></a>&#39; ================================================================
-<a id="__codelineno-0-182" name="__codelineno-0-182" href="#__codelineno-0-182"></a>&#39; ToggleM02RowCheck (B19)
-<a id="__codelineno-0-183" name="__codelineno-0-183" href="#__codelineno-0-183"></a>&#39; Role: M-02 col A rows 17..60 - toggle check mark on double-click.
-<a id="__codelineno-0-184" name="__codelineno-0-184" href="#__codelineno-0-184"></a>&#39; ================================================================
-<a id="__codelineno-0-185" name="__codelineno-0-185" href="#__codelineno-0-185"></a>Private Sub ToggleM02RowCheck(ByVal Sh As Object, ByVal Target As Range, ByRef outCancel As Boolean)
-<a id="__codelineno-0-186" name="__codelineno-0-186" href="#__codelineno-0-186"></a>    Const COL_CHECK As Long = 1
-<a id="__codelineno-0-187" name="__codelineno-0-187" href="#__codelineno-0-187"></a>    Const FIRST_ROW As Long = 17   &#39; = modEntryFormat M02_DATA_FIRST_ROW
-<a id="__codelineno-0-188" name="__codelineno-0-188" href="#__codelineno-0-188"></a>    Const LAST_ROW As Long = 60    &#39; = modEntryFormat M02_DATA_LAST_ROW
-<a id="__codelineno-0-189" name="__codelineno-0-189" href="#__codelineno-0-189"></a>    If Target.Column &lt;&gt; COL_CHECK Then Exit Sub
-<a id="__codelineno-0-190" name="__codelineno-0-190" href="#__codelineno-0-190"></a>    If Target.Row &lt; FIRST_ROW Or Target.Row &gt; LAST_ROW Then Exit Sub
-<a id="__codelineno-0-191" name="__codelineno-0-191" href="#__codelineno-0-191"></a>    outCancel = True
-<a id="__codelineno-0-192" name="__codelineno-0-192" href="#__codelineno-0-192"></a>    On Error Resume Next
-<a id="__codelineno-0-193" name="__codelineno-0-193" href="#__codelineno-0-193"></a>    Sh.Unprotect
-<a id="__codelineno-0-194" name="__codelineno-0-194" href="#__codelineno-0-194"></a>    If CStr(Target.Value) = ChrW(&amp;H2713) Then
-<a id="__codelineno-0-195" name="__codelineno-0-195" href="#__codelineno-0-195"></a>        Target.Value = &quot;&quot;
-<a id="__codelineno-0-196" name="__codelineno-0-196" href="#__codelineno-0-196"></a>    Else
-<a id="__codelineno-0-197" name="__codelineno-0-197" href="#__codelineno-0-197"></a>        Target.Value = ChrW(&amp;H2713)
-<a id="__codelineno-0-198" name="__codelineno-0-198" href="#__codelineno-0-198"></a>    End If
-<a id="__codelineno-0-199" name="__codelineno-0-199" href="#__codelineno-0-199"></a>    Sh.Protect Password:=&quot;&quot;, UserInterfaceOnly:=True
-<a id="__codelineno-0-200" name="__codelineno-0-200" href="#__codelineno-0-200"></a>    On Error GoTo 0
-<a id="__codelineno-0-201" name="__codelineno-0-201" href="#__codelineno-0-201"></a>End Sub
-<a id="__codelineno-0-202" name="__codelineno-0-202" href="#__codelineno-0-202"></a>
-<a id="__codelineno-0-203" name="__codelineno-0-203" href="#__codelineno-0-203"></a>&#39; ================================================================
-<a id="__codelineno-0-204" name="__codelineno-0-204" href="#__codelineno-0-204"></a>&#39; ToggleM10Radio (B19)
-<a id="__codelineno-0-205" name="__codelineno-0-205" href="#__codelineno-0-205"></a>&#39; Role: M-10 col A rows 11..15 - single-select radio on double-click.
-<a id="__codelineno-0-206" name="__codelineno-0-206" href="#__codelineno-0-206"></a>&#39;       Selected row -&gt; deselect; other row -&gt; clear all + select it.
-<a id="__codelineno-0-207" name="__codelineno-0-207" href="#__codelineno-0-207"></a>&#39;       2026-06-11: rows 11..15 (5th row = config_dir was added after
-<a id="__codelineno-0-208" name="__codelineno-0-208" href="#__codelineno-0-208"></a>&#39;       the original 06-08 handler which covered 11..14 only).
-<a id="__codelineno-0-209" name="__codelineno-0-209" href="#__codelineno-0-209"></a>&#39; ================================================================
-<a id="__codelineno-0-210" name="__codelineno-0-210" href="#__codelineno-0-210"></a>Private Sub ToggleM10Radio(ByVal Sh As Object, ByVal Target As Range, ByRef outCancel As Boolean)
-<a id="__codelineno-0-211" name="__codelineno-0-211" href="#__codelineno-0-211"></a>    Const COL_CHECK As Long = 1
-<a id="__codelineno-0-212" name="__codelineno-0-212" href="#__codelineno-0-212"></a>    Const FIRST_ROW As Long = 11
-<a id="__codelineno-0-213" name="__codelineno-0-213" href="#__codelineno-0-213"></a>    Const LAST_ROW As Long = 15
-<a id="__codelineno-0-214" name="__codelineno-0-214" href="#__codelineno-0-214"></a>    If Target.Column &lt;&gt; COL_CHECK Then Exit Sub
-<a id="__codelineno-0-215" name="__codelineno-0-215" href="#__codelineno-0-215"></a>    If Target.Row &lt; FIRST_ROW Or Target.Row &gt; LAST_ROW Then Exit Sub
-<a id="__codelineno-0-216" name="__codelineno-0-216" href="#__codelineno-0-216"></a>    outCancel = True
-<a id="__codelineno-0-217" name="__codelineno-0-217" href="#__codelineno-0-217"></a>    On Error Resume Next
-<a id="__codelineno-0-218" name="__codelineno-0-218" href="#__codelineno-0-218"></a>    Sh.Unprotect
-<a id="__codelineno-0-219" name="__codelineno-0-219" href="#__codelineno-0-219"></a>    Dim ri As Long
-<a id="__codelineno-0-220" name="__codelineno-0-220" href="#__codelineno-0-220"></a>    If CStr(Target.Value) = ChrW(&amp;H25CF) Then
-<a id="__codelineno-0-221" name="__codelineno-0-221" href="#__codelineno-0-221"></a>        Target.Value = ChrW(&amp;H25CB)
-<a id="__codelineno-0-222" name="__codelineno-0-222" href="#__codelineno-0-222"></a>    Else
-<a id="__codelineno-0-223" name="__codelineno-0-223" href="#__codelineno-0-223"></a>        For ri = FIRST_ROW To LAST_ROW
-<a id="__codelineno-0-224" name="__codelineno-0-224" href="#__codelineno-0-224"></a>            Sh.Cells(ri, COL_CHECK).Value = ChrW(&amp;H25CB)
-<a id="__codelineno-0-225" name="__codelineno-0-225" href="#__codelineno-0-225"></a>        Next ri
-<a id="__codelineno-0-226" name="__codelineno-0-226" href="#__codelineno-0-226"></a>        Target.Value = ChrW(&amp;H25CF)
-<a id="__codelineno-0-227" name="__codelineno-0-227" href="#__codelineno-0-227"></a>    End If
-<a id="__codelineno-0-228" name="__codelineno-0-228" href="#__codelineno-0-228"></a>    Sh.Protect Password:=&quot;&quot;, UserInterfaceOnly:=True
-<a id="__codelineno-0-229" name="__codelineno-0-229" href="#__codelineno-0-229"></a>    On Error GoTo 0
-<a id="__codelineno-0-230" name="__codelineno-0-230" href="#__codelineno-0-230"></a>End Sub
+<a id="__codelineno-0-152" name="__codelineno-0-152" href="#__codelineno-0-152"></a>&#39; Why:    The 2026-06-08 build had this handler (see
+<a id="__codelineno-0-153" name="__codelineno-0-153" href="#__codelineno-0-153"></a>&#39;         evidence_summary_2026-06-08.md sec 2.1) but it was never
+<a id="__codelineno-0-154" name="__codelineno-0-154" href="#__codelineno-0-154"></a>&#39;         backported to canonical, so every reinstall (ThisWorkbook
+<a id="__codelineno-0-155" name="__codelineno-0-155" href="#__codelineno-0-155"></a>&#39;         body injection) silently dropped it = regression B19.
+<a id="__codelineno-0-156" name="__codelineno-0-156" href="#__codelineno-0-156"></a>&#39; Note:   Unprotect -&gt; write -&gt; Protect(UserInterfaceOnly) pattern is
+<a id="__codelineno-0-157" name="__codelineno-0-157" href="#__codelineno-0-157"></a>&#39;         required because UserInterfaceOnly does NOT survive a
+<a id="__codelineno-0-158" name="__codelineno-0-158" href="#__codelineno-0-158"></a>&#39;         save/reopen cycle (same root cause as B14).
+<a id="__codelineno-0-159" name="__codelineno-0-159" href="#__codelineno-0-159"></a>&#39; ================================================================
+<a id="__codelineno-0-160" name="__codelineno-0-160" href="#__codelineno-0-160"></a>Private Sub Workbook_SheetBeforeDoubleClick(ByVal Sh As Object, ByVal Target As Range, Cancel As Boolean)
+<a id="__codelineno-0-161" name="__codelineno-0-161" href="#__codelineno-0-161"></a>    On Error GoTo ErrHandler
+<a id="__codelineno-0-162" name="__codelineno-0-162" href="#__codelineno-0-162"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0008] ThisWorkbook.Workbook_SheetBeforeDoubleClick ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-163" name="__codelineno-0-163" href="#__codelineno-0-163"></a>    &#39; Sheet names via ChrW (CP932-safe): M-02
+<a id="__codelineno-0-164" name="__codelineno-0-164" href="#__codelineno-0-164"></a>    Dim nmM02 As String
+<a id="__codelineno-0-165" name="__codelineno-0-165" href="#__codelineno-0-165"></a>    nmM02 = ChrW(&amp;H30D5) &amp; ChrW(&amp;H30A9) &amp; ChrW(&amp;H30FC) &amp; ChrW(&amp;H30DE) &amp; ChrW(&amp;H30C3) &amp; ChrW(&amp;H30C8) &amp; ChrW(&amp;H4E00) &amp; ChrW(&amp;H89A7)
+<a id="__codelineno-0-166" name="__codelineno-0-166" href="#__codelineno-0-166"></a>    If Sh.Name = nmM02 Then
+<a id="__codelineno-0-167" name="__codelineno-0-167" href="#__codelineno-0-167"></a>        Call ToggleM02RowCheck(Sh, Target, Cancel)
+<a id="__codelineno-0-168" name="__codelineno-0-168" href="#__codelineno-0-168"></a>    End If
+<a id="__codelineno-0-169" name="__codelineno-0-169" href="#__codelineno-0-169"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0009] ThisWorkbook.Workbook_SheetBeforeDoubleClick EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-170" name="__codelineno-0-170" href="#__codelineno-0-170"></a>    Exit Sub
+<a id="__codelineno-0-171" name="__codelineno-0-171" href="#__codelineno-0-171"></a>ErrHandler:
+<a id="__codelineno-0-172" name="__codelineno-0-172" href="#__codelineno-0-172"></a>    Debug.Print &quot;[ERR] SheetBeforeDoubleClick toggle: &quot; &amp; Err.Number &amp; &quot; &quot; &amp; Err.Description
+<a id="__codelineno-0-173" name="__codelineno-0-173" href="#__codelineno-0-173"></a>End Sub
+<a id="__codelineno-0-174" name="__codelineno-0-174" href="#__codelineno-0-174"></a>
+<a id="__codelineno-0-175" name="__codelineno-0-175" href="#__codelineno-0-175"></a>&#39; ================================================================
+<a id="__codelineno-0-176" name="__codelineno-0-176" href="#__codelineno-0-176"></a>&#39; ToggleM02RowCheck (B19)
+<a id="__codelineno-0-177" name="__codelineno-0-177" href="#__codelineno-0-177"></a>&#39; Role: M-02 col A rows 17..60 - toggle check mark on double-click.
+<a id="__codelineno-0-178" name="__codelineno-0-178" href="#__codelineno-0-178"></a>&#39; ================================================================
+<a id="__codelineno-0-179" name="__codelineno-0-179" href="#__codelineno-0-179"></a>Private Sub ToggleM02RowCheck(ByVal Sh As Object, ByVal Target As Range, ByRef outCancel As Boolean)
+<a id="__codelineno-0-180" name="__codelineno-0-180" href="#__codelineno-0-180"></a>    Const COL_CHECK As Long = 1
+<a id="__codelineno-0-181" name="__codelineno-0-181" href="#__codelineno-0-181"></a>    Const FIRST_ROW As Long = 17   &#39; = modEntryFormat M02_DATA_FIRST_ROW
+<a id="__codelineno-0-182" name="__codelineno-0-182" href="#__codelineno-0-182"></a>    Const LAST_ROW As Long = 60    &#39; = modEntryFormat M02_DATA_LAST_ROW
+<a id="__codelineno-0-183" name="__codelineno-0-183" href="#__codelineno-0-183"></a>    If Target.Column &lt;&gt; COL_CHECK Then Exit Sub
+<a id="__codelineno-0-184" name="__codelineno-0-184" href="#__codelineno-0-184"></a>    If Target.Row &lt; FIRST_ROW Or Target.Row &gt; LAST_ROW Then Exit Sub
+<a id="__codelineno-0-185" name="__codelineno-0-185" href="#__codelineno-0-185"></a>    outCancel = True
+<a id="__codelineno-0-186" name="__codelineno-0-186" href="#__codelineno-0-186"></a>    On Error Resume Next
+<a id="__codelineno-0-187" name="__codelineno-0-187" href="#__codelineno-0-187"></a>    Sh.Unprotect
+<a id="__codelineno-0-188" name="__codelineno-0-188" href="#__codelineno-0-188"></a>    If CStr(Target.Value) = ChrW(&amp;H2713) Then
+<a id="__codelineno-0-189" name="__codelineno-0-189" href="#__codelineno-0-189"></a>        Target.Value = &quot;&quot;
+<a id="__codelineno-0-190" name="__codelineno-0-190" href="#__codelineno-0-190"></a>    Else
+<a id="__codelineno-0-191" name="__codelineno-0-191" href="#__codelineno-0-191"></a>        Target.Value = ChrW(&amp;H2713)
+<a id="__codelineno-0-192" name="__codelineno-0-192" href="#__codelineno-0-192"></a>    End If
+<a id="__codelineno-0-193" name="__codelineno-0-193" href="#__codelineno-0-193"></a>    Sh.Protect Password:=&quot;&quot;, UserInterfaceOnly:=True
+<a id="__codelineno-0-194" name="__codelineno-0-194" href="#__codelineno-0-194"></a>    On Error GoTo 0
+<a id="__codelineno-0-195" name="__codelineno-0-195" href="#__codelineno-0-195"></a>End Sub
 </code></pre></div>
 
 

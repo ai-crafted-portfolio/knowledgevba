@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="3 つのブックの基本操作">
+        <meta name="description" content="2 つのブックの基本操作">
       
       
         <meta name="author" content="ai-crafted-portfolio">
@@ -983,12 +983,12 @@
   <a href="#1-xlsm" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. ナレッジを登録する（登録修正.xlsm）
+        1. ナレッジを登録する（検索.xlsm）
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="1. ナレッジを登録する（登録修正.xlsm）">
+    <nav class="md-nav" aria-label="1. ナレッジを登録する（検索.xlsm）">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -5234,7 +5234,7 @@
 
 
 <h1 id="_1">使い方<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
-<p>knowledgevba は 3 つの Excel ブックを目的別に使い分けます。</p>
+<p>knowledgevba は 2 つの Excel ブックを目的別に使い分けます。</p>
 <table>
 <thead>
 <tr>
@@ -5244,12 +5244,8 @@
 </thead>
 <tbody>
 <tr>
-<td><code>登録修正.xlsm</code></td>
-<td>ナレッジを新しく書き留めたい / 既存ナレッジを編集・削除したい</td>
-</tr>
-<tr>
 <td><code>検索.xlsm</code></td>
-<td>過去のナレッジを探したい / 詳細を見たい</td>
+<td>過去のナレッジを探したい / 詳細を見たい / ナレッジを新しく書き留めたい / 既存ナレッジを編集・削除したい</td>
 </tr>
 <tr>
 <td><code>管理.xlsm</code></td>
@@ -5257,7 +5253,7 @@
 </tr>
 </tbody>
 </table>
-<p>各ブックは独立しており、3 人で並行して使うこともできます。データ本体（<code>.txt</code> ファイル）は <code>data\</code> フォルダに置かれ、3 ブックすべてが同じフォルダを参照します。</p>
+<p>各ブックは独立しており、2 人で並行して使うこともできます。データ本体（<code>.txt</code> ファイル）は <code>data\</code> フォルダに置かれ、2 ブックとも同じフォルダを参照します。</p>
 <hr />
 <h2 id="_2">用語<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <ul>
@@ -5266,12 +5262,12 @@
 <li><strong>ナレッジ番号</strong> ― <code>&lt;FormatID&gt;-NNNN</code> の形式の通し番号。登録時に自動採番されます</li>
 </ul>
 <hr />
-<h2 id="1-xlsm">1. ナレッジを登録する（登録修正.xlsm）<a class="headerlink" href="#1-xlsm" title="Permanent link">&para;</a></h2>
+<h2 id="1-xlsm">1. ナレッジを登録する（検索.xlsm）<a class="headerlink" href="#1-xlsm" title="Permanent link">&para;</a></h2>
 <h3 id="11">1.1 新規ナレッジを登録する<a class="headerlink" href="#11" title="Permanent link">&para;</a></h3>
 <ol>
-<li><code>登録修正.xlsm</code> をダブルクリックで開く</li>
+<li><code>検索.xlsm</code> をダブルクリックで開く</li>
 <li>「コンテンツの有効化」をクリック</li>
-<li>起動時に表示される <strong>「ナレッジ登録」シート（M-05）</strong> が登録画面です</li>
+<li><strong>「ナレッジ登録」シート（M-05）</strong> タブを開く。これが登録画面です</li>
 <li><strong>[フォーマット]</strong> ドロップダウンから、登録したい型を 1 つ選択</li>
 <li>フォーマットに応じたフィールドが画面上に展開されるので、内容を入力<ul>
 <li>必須項目には印が付いています。空のままだと登録できません</li>
@@ -5385,7 +5381,7 @@
 <li><strong>[チェック]</strong> ボタンをクリック</li>
 <li>該当フォーマットの全ナレッジを走査し、不整合（フィールド過不足・型ミスマッチ等）が一覧表示されます<ul>
 <li>結果に何も出ない場合は整合性が取れています</li>
-<li>不整合がある場合は、<code>登録修正.xlsm</code> のナレッジ修正画面で個別に修正してください</li>
+<li>不整合がある場合は、<code>検索.xlsm</code> のナレッジ修正画面で個別に修正してください</li>
 </ul>
 </li>
 </ol>

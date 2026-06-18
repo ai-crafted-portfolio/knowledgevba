@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Excel VBA で実装したナレッジ管理ツール v2.1 の構成・使い方・設計まとめ">
+        <meta name="description" content="Excel VBA で実装したナレッジ管理ツール v2.3 の構成・使い方・設計まとめ">
       
       
         <meta name="author" content="ai-crafted-portfolio">
@@ -553,10 +553,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3" class="md-nav__link">
+  <a href="#2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3 つのブックで構成されています
+        2 つのブックで構成されています
       
     </span>
   </a>
@@ -5077,20 +5077,20 @@
 
 <h1 id="vba">ナレッジ管理ツール (VBA 製)<a class="headerlink" href="#vba" title="Permanent link">&para;</a></h1>
 <p>障害対応の記録・手順書・ノウハウなどを、Excel から登録・検索・編集できる内製ツールです。データはすべて Excel ブックの外側にテキストファイルとして保存し、Excel ブックは「データを表示・編集するための窓口」として動きます。</p>
-<p>このサイトは、現行バージョン <strong>v2.1</strong> の構成・導入手順・操作手順・設計をまとめた公開ドキュメントです。</p>
+<p>このサイトは、現行バージョン <strong>v2.3</strong> の構成・導入手順・操作手順・設計をまとめた公開ドキュメントです。</p>
 <div class="admonition tip">
 <p class="admonition-title">このドキュメントで使う用語</p>
 <ul>
 <li><strong>VBA</strong> ? Excel に標準搭載されているプログラミング言語（Visual Basic for Applications）です。</li>
 <li><strong>VBE</strong> ? VBA のコードを編集するエディタ（Visual Basic Editor）。Excel 上で <code>Alt + F11</code> で開きます。</li>
 <li><strong><code>.xlsm</code></strong> ? マクロ（VBA）を含められる Excel ブックの形式です。</li>
-<li><strong>スタンザ</strong> ? <code>[セクション]</code> 行と <code>key=value</code> 行の組み合わせで書かれたテキスト形式です。本ツールは画面・フォーマット・設定・ナレッジの定義をこの形式のテキストファイルで持ちます。</li>
+<li><strong>スタンザ</strong> ? <code>[セクション]</code> 行と <code>key=value</code> 行の組み合わせで書かれたテキスト形式です。本ツールは画面・フォーマット・ナレッジの定義をこの形式のテキストファイルで持ちます。</li>
 </ul>
 </div>
 <h2 id="_1">このツールでできること<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <p>過去の対応記録やノウハウを、フォーマット（入力項目のひな型）を決めて整理し、後からキーワードや条件で探し出せます。記録はテキストファイル 1 件 = 1 ナレッジで保存されるため、Excel を使わずテキストエディタで中身を確認することもできます。入力項目は固定ではなく、業務に合わせてフォーマットを設計して増やせます。</p>
-<h2 id="3">3 つのブックで構成されています<a class="headerlink" href="#3" title="Permanent link">&para;</a></h2>
-<p>v2.1 では、役割の異なる 3 つの Excel ブックに分かれています。利用者は自分の作業に対応するブックを開いて使います。</p>
+<h2 id="2">2 つのブックで構成されています<a class="headerlink" href="#2" title="Permanent link">&para;</a></h2>
+<p>v2.3 では、役割の異なる 2 つの Excel ブックに分かれています。利用者は自分の作業に対応するブックを開いて使います。</p>
 <table>
 <thead>
 <tr>
@@ -5101,14 +5101,9 @@
 </thead>
 <tbody>
 <tr>
-<td>登録修正.xlsm</td>
-<td>ナレッジの新規登録と修正</td>
-<td>M-05 ナレッジ登録 / M-06 ナレッジ修正</td>
-</tr>
-<tr>
 <td>検索.xlsm</td>
-<td>ナレッジの一覧・検索・閲覧</td>
-<td>M-07 ナレッジ一覧 / M-08 ナレッジ検索 / M-09 ナレッジ表示</td>
+<td>ナレッジの登録・修正・一覧・検索・閲覧</td>
+<td>M-05 ナレッジ登録 / M-06 ナレッジ修正 / M-07 ナレッジ一覧 / M-08 ナレッジ検索 / M-09 ナレッジ表示</td>
 </tr>
 <tr>
 <td>管理.xlsm</td>
@@ -5124,19 +5119,19 @@
 <li><strong>ナレッジ本体</strong> ? 1 件 1 ファイル（<code>&lt;ナレッジ番号&gt;.txt</code>）</li>
 <li><strong>フォーマット定義</strong> ? 入力項目のひな型（<code>&lt;フォーマット ID&gt;.txt</code>）</li>
 <li><strong>画面レイアウト定義</strong> ? 各画面の見た目を決めるテキスト</li>
-<li><strong>動作設定</strong> ? フォルダの場所やログの詳細度などを書いた設定ファイル（ブックごとに 1 つ）</li>
+<li><strong>動作設定</strong> ? 保存先フォルダやログの詳細度などの設定。各ブック内の「格納先設定」シートで管理します（テキストファイルではありません）</li>
 </ul>
 <p>Excel ブック側はこれらを読み込んで画面を組み立て、表示・入力を仲介します。文字コードは Shift_JIS、改行は CRLF で統一しています。</p>
 <h2 id="_3">ページ構成<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="./">概要</a>（このページ）</li>
 <li>設計<ul>
-<li><a href="architecture/">全体アーキテクチャ</a> ? 3 ブックに分けた理由、スタンザ駆動のしくみ、層構成</li>
+<li><a href="architecture/">全体アーキテクチャ</a> ? 2 ブックに分けた理由、スタンザ駆動のしくみ、層構成</li>
 <li><a href="spec/">仕様</a> ? 13 画面の一覧、データ書式、検索・ログの仕様</li>
 </ul>
 </li>
 <li>使い方<ul>
-<li><a href="setup/">導入手順</a> ? 3 つの <code>.xlsm</code> の作成、モジュールの取り込み、セットアップ</li>
+<li><a href="setup/">導入手順</a> ? 2 つの <code>.xlsm</code> の作成、モジュールの取り込み、セットアップ</li>
 <li><a href="operations/">操作手順</a> ? 登録・検索・修正・管理の日常操作</li>
 </ul>
 </li>
@@ -5145,15 +5140,15 @@
 <li><a href="screen_customization_guide_v2/">画面のカスタマイズ</a> ? 画面レイアウトの編集方法</li>
 </ul>
 </li>
-<li><a href="source/index.md">ソースコード</a> ? 配布対象 VBA モジュールの全ソース</li>
+<li><a href="modules/">モジュール一覧</a> ? 配布対象 VBA モジュールの全ソース</li>
 </ul>
 <h2 id="_4">設計のポイント<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>3 ブック構成</strong> ? 登録・検索・管理を別ブックに分け、それぞれの利用者が必要な機能だけを開けるようにしています。</li>
+<li><strong>2 ブック構成</strong> ? 検索（登録・修正・閲覧）と管理を別ブックに分け、それぞれの利用者が必要な機能だけを開けるようにしています。</li>
 <li><strong>外部スタンザ駆動</strong> ? 画面レイアウトもフォーマットも Excel の外側のテキストで定義します。<code>.xlsm</code> の中のコードを書き換えずに、項目や見た目を変更できます。</li>
 <li><strong>層分離</strong> ? VBA モジュールを役割ごとの層に分け、外部ファイルの読み書きは専用のモジュールにまとめています。</li>
 <li><strong>モジュール配布方式</strong> ? 完成した <code>.xlsm</code> を配るのではなく、VBA モジュールを取り込んでセットアップする形で各 PC に展開します。
-                                                                                                                                                                                                                                                                                                             trigger redeploy at Mon Jun  8 13:24:54 UTC 2026</li>
+  trigger redeploy at Mon Jun  8 13:24:54 UTC 2026</li>
 </ul>
 <!-- redeploy trigger: 2026-06-09 00:34:09 -->
 

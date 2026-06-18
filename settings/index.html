@@ -1210,12 +1210,12 @@
   <a href="#1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. 動作設定ファイル
+        1. 格納先設定シート
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="1. 動作設定ファイル">
+    <nav class="md-nav" aria-label="1. 格納先設定シート">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -5111,39 +5111,20 @@
 
 
 <h1 id="_1">設定値の変更<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
-<p>ナレッジ管理ツール v2.1 の動作は、ブックごとの動作設定ファイルで調整します。このページでは、利用者が変更する設定値とその変更方法を説明します。</p>
-<h2 id="1">1. 動作設定ファイル<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
-<p>設定は、ブックごとに 1 つの動作設定ファイルにまとまっています。</p>
-<ul>
-<li><code>登録修正_config.txt</code></li>
-<li><code>検索_config.txt</code></li>
-<li><code>管理_config.txt</code></li>
-</ul>
-<p>3 ファイルとも、対応するブックと同じフォルダ（既定では <code>C:\KnowledgeMgr\</code>）に置きます。中身は <code>[CONFIG]</code> セクションに <code>key=value</code> を並べたテキストです。</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>[CONFIG]
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>debugLevel=INFO
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>logRotationRows=10000
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>data_dir=C:\KnowledgeMgr\data\
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>format_dir=C:\KnowledgeMgr\formats\
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>ui_dir=C:\KnowledgeMgr\ui\
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>backup_dir=C:\KnowledgeMgr\data\backup\
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>uiSchemaFailMode=safeDefault
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>systemSheetVisibility=Hidden
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>autoReloadOnStartup=TRUE
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>migrateBackupEnabled=TRUE
-</code></pre></div>
+<p>ナレッジ管理ツール v2.3 の動作は、ブックごとの <strong>「格納先設定」シート</strong> で調整します。このページでは、利用者が変更する設定値とその変更方法を説明します。</p>
+<h2 id="1">1. 格納先設定シート<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
+<p>設定は、各ブック（検索.xlsm / 管理.xlsm）の中の <strong>「格納先設定」シート</strong> に 9 項目としてまとまっています。以前のテキスト形式の設定ファイルは v2.3 で廃止しました。設定はブックと一緒に保存されます。</p>
+<p>シートは 6 つの保存先フォルダ（<code>data_dir</code> / <code>format_dir</code> / <code>ui_dir</code> / <code>log_dir</code> / <code>backup_dir</code> / <code>config_dir</code>）と、3 つの動作設定（<code>debugLevel</code> / <code>logRotationRows</code> / <code>uiSchemaFailMode</code>）で構成されます。</p>
 <h3 id="_2">変更のしかた<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
-<p>設定ファイルはテキストエディタ（メモ帳など）で直接編集するのが基本です。</p>
 <ol>
-<li>編集の前にファイルのコピーを取っておきます。</li>
-<li>テキストエディタで開いて値を書き換えます。</li>
-<li><strong>文字コードは Shift_JIS（ANSI）、改行は CRLF</strong> で上書き保存します。</li>
-<li>設定はブックの起動時に読み込まれます。変更を反映するには、対象のブックを開き直します。</li>
+<li><strong>管理.xlsm の M-10「格納先設定」画面</strong> を開きます（検索.xlsm も同じ「格納先設定」シートを持ちます）。</li>
+<li>値の列のセルを書き換えます。<code>debugLevel</code> と <code>uiSchemaFailMode</code> はドロップダウンから選べます。</li>
+<li><strong>[保存]</strong> ボタンを押します。ブックが上書き保存され、設定がブックに保持されます。</li>
+<li>変更は次回起動時から有効になります。保存先フォルダを変えたときは、ブックを開き直してください。</li>
 </ol>
-<p>格納先フォルダと一部の動作設定は、ブックの画面からも変更できます（後述）。</p>
 <div class="admonition note">
-<p class="admonition-title">設定ファイルが壊れているとき</p>
-<p>設定ファイルが読み込めない場合でも、ツールは既定値で起動します。個々の項目に書き間違いがあった場合は、その項目だけ既定値が使われ、起動は続行されます。</p>
+<p class="admonition-title">初回起動時の自動設定</p>
+<p>インストール後にブックを初めて開いたとき、6 つの保存先がすべて空であれば、保存先の親フォルダをたずねるダイアログが表示されます（既定 <code>C:\KnowledgeMgr</code>）。入力すると、その下に 6 つのフォルダが自動で設定され、ブックに保存されます。設定し忘れても既定値で起動します。</p>
 </div>
 <h2 id="2">2. 格納先フォルダ<a class="headerlink" href="#2" title="Permanent link">&para;</a></h2>
 <p>ナレッジ・フォーマット・画面定義・バックアップを置くフォルダを指定します。いずれも絶対パスで、末尾に <code>\</code> を付けます。</p>
@@ -5171,9 +5152,17 @@
 <td><code>backup_dir</code></td>
 <td>フォーマット変更時などに取得するバックアップの置き場所</td>
 </tr>
+<tr>
+<td><code>log_dir</code></td>
+<td>操作ログの置き場所</td>
+</tr>
+<tr>
+<td><code>config_dir</code></td>
+<td>設定の基準フォルダ</td>
+</tr>
 </tbody>
 </table>
-<p>格納先フォルダは、管理.xlsm の <strong>M-10 格納先設定</strong>画面からも変更できます。フォルダを別の場所へ移したときは、ファイルを移動したうえでこの 4 つのパスを合わせてください。</p>
+<p>格納先フォルダは、管理.xlsm の <strong>M-10 格納先設定</strong> 画面で変更し、<strong>[保存]</strong> ボタンで保存します。フォルダを別の場所へ移したときは、ファイルを移動したうえでこれらのパスを合わせてください。</p>
 <h2 id="3-debuglevel">3. ログの詳細度（debugLevel）<a class="headerlink" href="#3-debuglevel" title="Permanent link">&para;</a></h2>
 <p><code>debugLevel</code> は、LOG シートに残す操作ログの詳しさを決めます。値は次の 6 段階です。上にいくほど記録量が少なく、下にいくほど詳しくなります。</p>
 <table>
@@ -5210,7 +5199,7 @@
 </tr>
 </tbody>
 </table>
-<p>設定ファイルに <code>debugLevel</code> の記載が無い場合の既定は <code>ERROR</code>（最小限）です。通常の運用では <code>INFO</code> を推奨します。不具合を調べたいときだけ一時的に <code>DEBUG</code> や <code>TRACE</code> に上げ、調査が終わったら戻すと、LOG シートが余計に大きくなりません。</p>
+<p><code>debugLevel</code> の初期値は <code>INFO</code> です。通常の運用では <code>INFO</code> のままで十分です。不具合を調べたいときだけ一時的に <code>DEBUG</code> や <code>TRACE</code> に上げ、調査が終わったら戻すと、LOG シートが余計に大きくなりません。</p>
 <p><code>debugLevel</code> は、管理.xlsm の <strong>M-11 設定</strong>画面からも変更できます。</p>
 <p>関連する設定として、<code>logRotationRows</code> は LOG シートに保持するログ行数の上限です（既定 10000 行）。上限に達すると古い行から自動で削除されます。</p>
 <h2 id="4">4. その他の動作設定<a class="headerlink" href="#4" title="Permanent link">&para;</a></h2>
@@ -5229,19 +5218,9 @@
 <td><code>safeDefault</code></td>
 </tr>
 <tr>
-<td><code>systemSheetVisibility</code></td>
-<td>LOG シートなど管理用シートの表示状態。<code>Hidden</code>／<code>Visible</code>／<code>VeryHidden</code></td>
-<td><code>Hidden</code></td>
-</tr>
-<tr>
-<td><code>autoReloadOnStartup</code></td>
-<td>起動時にフォーマット定義・画面定義を読み直すかどうか</td>
-<td><code>TRUE</code></td>
-</tr>
-<tr>
-<td><code>migrateBackupEnabled</code></td>
-<td>フォーマット変更を既存ナレッジへ反映する際にバックアップを取るかどうか。安全のため <code>TRUE</code> のままを推奨</td>
-<td><code>TRUE</code></td>
+<td><code>logRotationRows</code></td>
+<td>LOG シートに保持するログ行数の上限。超えると古い行から削除</td>
+<td><code>10000</code></td>
 </tr>
 </tbody>
 </table>
@@ -5249,7 +5228,7 @@
 <p>出力するファイルの形式に関する設定は、管理.xlsm の <strong>M-13 ファイル形式設定</strong>画面でまとめて行います。M-13 には文字コード・改行・テンプレートなどに関する 15 項目があり、画面上で値を選んで設定します。</p>
 <p>M-13 の画面には、設定の不整合などを知らせるエラー表示帯（4 列の表）が連動して表示されます。</p>
 <h2 id="6">6. 画面の見た目を変えたいとき<a class="headerlink" href="#6" title="Permanent link">&para;</a></h2>
-<p>ボタンの位置・ラベル・色、入力枠の大きさ、列幅といった画面の見た目は、動作設定ファイルではなく画面レイアウト定義ファイル（<code>ui\&lt;ブック&gt;\&lt;画面&gt;.txt</code>）で決まります。変更方法は<a href="../screen_customization_guide_v2/">画面のカスタマイズ</a>を参照してください。</p>
+<p>ボタンの位置・ラベル・色、入力枠の大きさ、列幅といった画面の見た目は、格納先設定ではなく画面レイアウト定義ファイル（<code>ui\&lt;ブック&gt;\&lt;画面&gt;.txt</code>）で決まります。変更方法は<a href="../screen_customization_guide_v2/">画面のカスタマイズ</a>を参照してください。</p>
 
 
 

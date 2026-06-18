@@ -1076,7 +1076,7 @@
   <a href="#_9" class="md-nav__link">
     <span class="md-ellipsis">
       
-        設定ファイルの保存先を変更したら、エラーメッセージが表示される
+        保存先フォルダを変更したら、エラーメッセージが表示される
       
     </span>
   </a>
@@ -5180,12 +5180,12 @@
 <p>症状別の対処法をまとめています。当てはまる症状を選んで、上から順に試してください。</p>
 <hr />
 <h2 id="_2">ブックを開いた瞬間にコンパイル エラーが出る<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
-<p><strong>症状</strong>: <code>登録修正.xlsm</code> / <code>検索.xlsm</code> / <code>管理.xlsm</code> のいずれかを開くと、Excel 起動と同時に <strong>「Microsoft Visual Basic for Applications コンパイル エラー」</strong> ダイアログが表示される。</p>
+<p><strong>症状</strong>: <code>検索.xlsm</code> / <code>管理.xlsm</code> のいずれかを開くと、Excel 起動と同時に <strong>「Microsoft Visual Basic for Applications コンパイル エラー」</strong> ダイアログが表示される。</p>
 <p><strong>対処</strong>:</p>
 <ol>
 <li>ダイアログの <strong>[OK]</strong> を押し、Excel を一度閉じる</li>
 <li>Excel の確認メッセージで <strong>[保存しない]</strong> を選ぶ</li>
-<li><a href="../install/">インストール</a> の STEP 7 に戻り、該当ブックの bat（<code>install_register.bat</code> / <code>install_search.bat</code> / <code>install_admin.bat</code>）を再度ダブルクリックして実行</li>
+<li><a href="../install/">インストール</a> の STEP 7 に戻り、該当ブックの bat（<code>install_search.bat</code> / <code>install_admin.bat</code>）を再度ダブルクリックして実行</li>
 <li><code>[DONE] Install + setup succeeded.</code> を確認してから、Excel でブックを開き直す</li>
 </ol>
 <p>それでも同じエラーが出る場合は、VBA モジュールファイル（<code>.bas</code> / <code>.cls</code>）の保存形式を確認してください。<strong>ANSI（Shift-JIS）+ CRLF</strong> で保存されている必要があります。</p>
@@ -5205,7 +5205,7 @@
 <ol>
 <li><code>format\</code> フォルダの中身を確認 → <code>.txt</code> ファイルが 0 件なら、フォーマット定義が登録されていません</li>
 <li><code>管理.xlsm</code> を開き、<strong>「フォーマット一覧」シート（M-02）</strong> → <strong>[新規作成]</strong> ボタンから少なくとも 1 つフォーマットを作成（<a href="../usage/#32">使い方 3.2</a> を参照）</li>
-<li>フォーマット作成後、<code>登録修正.xlsm</code> / <code>検索.xlsm</code> をいったん閉じて開き直す</li>
+<li>フォーマット作成後、<code>検索.xlsm</code> をいったん閉じて開き直す</li>
 </ol>
 <hr />
 <h2 id="_5">検索結果が出ない<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
@@ -5214,7 +5214,7 @@
 <ol>
 <li><strong>[フォーマット]</strong> が「すべて」になっているか、登録済みフォーマットになっているか確認 → 登録済みナレッジが存在しないフォーマットを選んでいると結果は空になります</li>
 <li><strong>[キーワード]</strong> を空欄にして、もう一度 <strong>[検索]</strong> をクリック → これでも空なら <code>data\</code> フォルダにナレッジ（<code>.txt</code>）が 1 件もありません</li>
-<li><code>data\</code> の中身を確認し、空であれば <code>登録修正.xlsm</code> から最低 1 件ナレッジを登録してください</li>
+<li><code>data\</code> の中身を確認し、空であれば <code>検索.xlsm</code> から最低 1 件ナレッジを登録してください</li>
 <li>キーワードが入っている状態で結果が出ない場合は、より短い・一般的なキーワードに変えて試す</li>
 </ol>
 <hr />
@@ -5250,18 +5250,18 @@
 <li>ナレッジ番号の英大文字・小文字が一致しているか確認（例: <code>fault-0001</code> ではなく <code>FAULT-0001</code>）</li>
 </ol>
 <hr />
-<h2 id="_9">設定ファイルの保存先を変更したら、エラーメッセージが表示される<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
-<p><strong>症状</strong>: 設定ファイル（<code>管理_config.txt</code> など）で保存先フォルダ（<code>data_dir</code> / <code>format_dir</code> / <code>ui_dir</code> / <code>backup_dir</code>）を別の場所に書き換えたあと、ブックを開くと <strong>「ファイルが見つかりません」「画面定義ファイルが見つかりません」</strong> といったメッセージが出る、または以前のデータが表示されない。</p>
+<h2 id="_9">保存先フォルダを変更したら、エラーメッセージが表示される<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
+<p><strong>症状</strong>: 「格納先設定」シートで保存先フォルダ（<code>data_dir</code> / <code>format_dir</code> / <code>ui_dir</code> / <code>backup_dir</code>）を別の場所に書き換えたあと、ブックを開くと <strong>「ファイルが見つかりません」「画面定義ファイルが見つかりません」</strong> といったメッセージが出る、または以前のデータが表示されない。</p>
 <p><strong>対処</strong>:</p>
 <ol>
-<li>設定ファイルに書いた各フォルダ（<code>data_dir</code> / <code>format_dir</code> / <code>ui_dir</code> / <code>backup_dir</code>）が、<strong>実際に存在するか</strong>を確認します。なければ作成してください</li>
+<li>「格納先設定」シートに書いた各フォルダ（<code>data_dir</code> / <code>format_dir</code> / <code>ui_dir</code> / <code>backup_dir</code>）が、<strong>実際に存在するか</strong>を確認します。なければ作成してください</li>
 <li>元のフォルダに入っていた <code>.txt</code>（ナレッジ・フォーマット・<strong>画面定義</strong>）を、新しいフォルダへ<strong>移動またはコピー</strong>します。とくに <code>ui_dir</code>（画面定義）の中身が無いと、画面を開くときにメッセージが出ます</li>
 <li>パスは<strong>半角</strong>で書き、<strong>末尾は <code>\</code>（円マーク）</strong> で終えます（例: <code>data_dir=D:\業務データ\KnowledgeMgr\data\</code>）</li>
-<li>3 つの設定ファイルすべてを同じ保存先に揃え、文字コードを <strong>ANSI</strong>（Shift-JIS）にして上書き保存します</li>
+<li>各ブックの「格納先設定」シートを同じ保存先に揃え、<strong>[保存]</strong> ボタンでブックを保存します</li>
 <li>ブックをいったん閉じて、開き直します</li>
 </ol>
 <blockquote>
-<p>保存場所をまとめて変える手順は <a href="../install/">インストール手順の 4.5.6</a> にもまとめています。フォルダを先に作ってから設定ファイルを書き換えるのが安全です。</p>
+<p>保存場所をまとめて変える手順は <a href="../install/">インストール手順の STEP 4.5</a> にもまとめています。フォルダを先に作ってから書き換えるのが安全です。</p>
 </blockquote>
 <hr />
 <h2 id="_10">期待していたシートが見えない / タブが少ない<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h2>
@@ -5297,7 +5297,7 @@
 </ol>
 <hr />
 <h2 id="bat-error-vba_modulesxxx">bat 実行中に <code>[ERROR] vba_modules\xxx フォルダが見つかりません</code><a class="headerlink" href="#bat-error-vba_modulesxxx" title="Permanent link">&para;</a></h2>
-<p><strong>症状</strong>: install bat が、<code>common</code> / <code>register</code> / <code>search</code> / <code>admin</code> のいずれかのフォルダがないと停止する。</p>
+<p><strong>症状</strong>: install bat が、<code>common</code> / <code>search</code> / <code>admin</code> のいずれかのフォルダがないと停止する。</p>
 <p><strong>対処</strong>:</p>
 <ol>
 <li><code>C:\KnowledgeMgr\installer\vba_modules\</code> を開く</li>
@@ -5308,7 +5308,7 @@
 <hr />
 <h2 id="_12">それでも解決しないとき<a class="headerlink" href="#_12" title="Permanent link">&para;</a></h2>
 <ul>
-<li>すべての Excel を閉じ、<code>installer\</code> フォルダ内の 3 つの bat を最初から順番に再実行してみてください</li>
+<li>すべての Excel を閉じ、<code>installer\</code> フォルダ内の 2 つの bat を最初から順番に再実行してみてください</li>
 <li>フォルダ構成は <a href="../install/">インストール</a> の各 STEP どおりになっているか確認し</li>
 </ul>
 

@@ -5155,20 +5155,19 @@
 
 
 <h1 id="_1">画面のカスタマイズ<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
-<p>ナレッジ管理ツール v2.1 の画面の見た目は、Excel ブックの外側に置いたテキストファイルで定義されています。このページでは、その定義ファイルを編集して画面を調整する方法を説明します。</p>
+<p>ナレッジ管理ツール v2.3 の画面の見た目は、Excel ブックの外側に置いたテキストファイルで定義されています。このページでは、その定義ファイルを編集して画面を調整する方法を説明します。</p>
 <h2 id="1">1. 画面レイアウトは外部ファイルで決まる<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
 <p>各画面（M-02?M-14）の見た目は、<code>ui_dir</code>（既定 <code>C:\KnowledgeMgr\ui\</code>）の下にある<strong>画面レイアウト定義ファイル</strong>で決まります。ファイルはブック・画面ごとに 1 つです。</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>C:\KnowledgeMgr\ui\
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  ├ 登録修正\
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  ├ 検索\
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>  │   ├ M-05.txt
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>  │   └ M-06.txt
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>  ├ 検索\
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>  │   ├ M-07.txt
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>  │   ├ M-08.txt
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>  │   └ M-09.txt
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>  └ 管理\
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>      ├ M-02.txt ? M-04.txt
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>      └ M-10.txt ? M-14.txt
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>  │   ├ M-06.txt
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>  │   ├ M-07.txt
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>  │   ├ M-08.txt
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>  │   └ M-09.txt
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>  └ 管理\
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>      ├ M-02.txt ? M-04.txt
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>      └ M-10.txt ? M-14.txt
 </code></pre></div>
 <p>ブックを開くと、ツールがこの定義ファイルを読み込んでシート上に画面を組み立てます。<strong>そのため、画面の見た目を変えるときは、Excel ブックの中の VBA コードを書き換えるのではなく、対応する画面レイアウト定義ファイルを編集します。</strong></p>
 <p>定義ファイルは Shift_JIS、改行 CRLF のテキストです。編集の前に必ずコピーを取っておいてください。</p>
