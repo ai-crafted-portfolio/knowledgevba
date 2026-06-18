@@ -7,7 +7,7 @@ description: clsSetupOrchestrator.cls のソースコード（コピペ用）
 
 **配置先**: 共通モジュール（検索.xlsm / 管理.xlsm 共通）
 **種類**: クラスモジュール
-**更新日**: 2026-06-17 17:29 JST
+**更新日**: 2026-06-18 18:14 JST
 
 ---
 
@@ -175,6 +175,7 @@ Public Sub ReapplyAllSheets()
     On Error Resume Next
     If modCommon.gDebugLevel >= DEBUG_LEVEL_DEBUG Then Debug.Print "[D-0695] clsSetupOrchestrator.ReapplyAllSheets STEP-1 pre modSheetButtons.PlaceV23SheetButtons"  ' [ADR-0100]
     Call modSheetButtons.PlaceV23SheetButtons
+    modConfigLoader.RestoreSheetFromHolder   ' Fix-6 (ADR-0133): restore SSOT cells post-clear
     On Error GoTo EH
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0694] clsSetupOrchestrator.ReapplyAllSheets EXIT-OK"  ' [ADR-0100]
     Exit Sub
@@ -207,6 +208,7 @@ Public Sub ReapplySheet(ByVal screenId As String)
     On Error Resume Next
     If modCommon.gDebugLevel >= DEBUG_LEVEL_DEBUG Then Debug.Print "[D-0698] clsSetupOrchestrator.ReapplySheet STEP-1 pre modSheetButtons.PlaceV23SheetButtons"  ' [ADR-0100]
     Call modSheetButtons.PlaceV23SheetButtons
+    modConfigLoader.RestoreSheetFromHolder   ' Fix-6 (ADR-0133): restore SSOT cells post-clear
     On Error GoTo EH
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0697] clsSetupOrchestrator.ReapplySheet EXIT-OK"  ' [ADR-0100]
     Exit Sub
@@ -281,12 +283,11 @@ Public Sub RunFullSetup(ByVal xlsmName As String)
     ' OQ-07) so the workbook opens, but surface a MsgBox in interactive
     ' mode so the user knows their edited config was not read.
     If (Not cfgLoaded) And (Not modCommon.IsHeadless()) Then
-        Dim c1 As String, c2 As String, c3 As String, ct As String
-        c1 = ChrW(&H8A2D) & ChrW(&H5B9A) & ChrW(&H30D5) & ChrW(&H30A1) & ChrW(&H30A4) & ChrW(&H30EB) & ChrW(&H0020)
-        c2 = ChrW(&H0020) & ChrW(&H3092) & ChrW(&H8AAD) & ChrW(&H307F) & ChrW(&H8FBC) & ChrW(&H3081) & ChrW(&H307E) & ChrW(&H305B) & ChrW(&H3093) & ChrW(&H3067) & ChrW(&H3057) & ChrW(&H305F) & ChrW(&H0028) & ChrW(&H4E0D) & ChrW(&H5728) & ChrW(&H307E) & ChrW(&H305F) & ChrW(&H306F) & ChrW(&H4E0D) & ChrW(&H6B63) & ChrW(&H0029) & ChrW(&H3002)
-        c3 = ChrW(&H30D5) & ChrW(&H30A1) & ChrW(&H30A4) & ChrW(&H30EB) & ChrW(&H306E) & ChrW(&H5B58) & ChrW(&H5728) & ChrW(&H3068) & ChrW(&H5185) & ChrW(&H5BB9) & ChrW(&H3092) & ChrW(&H78BA) & ChrW(&H8A8D) & ChrW(&H3057) & ChrW(&H3066) & ChrW(&H304F) & ChrW(&H3060) & ChrW(&H3055) & ChrW(&H3044) & ChrW(&H3002)
-        ct = ChrW(&H8A2D) & ChrW(&H5B9A) & ChrW(&H30A8) & ChrW(&H30E9) & ChrW(&H30FC)
-        MsgBox c1 & modConfigLoader.LastConfigPath() & c2 & vbCrLf & c3, vbExclamation, ct
+        ' Fix-6 (ADR-0133): LoadConfig reads the 9-cell settings sheet and
+        ' returns False only on an interactive partial-missing sheet (it has
+        ' already shown the specific MsgBox). Abort the rest of setup so the
+        ' user fixes the settings sheet and reopens.
+        Exit Sub
     End If
     t = "[setup] [" & Format$(Now(), "hh:nn:ss") & "] "
     Debug.Print t & "RunFullSetup step 1 post : LoadConfig done ok=" & cfgLoaded
@@ -416,6 +417,14 @@ Public Sub RunFullSetup(ByVal xlsmName As String)
     If modCommon.gDebugLevel >= DEBUG_LEVEL_DEBUG Then Debug.Print "[D-0706] clsSetupOrchestrator.RunFullSetup STEP-3 pre modSheetButtons.PlaceV23SheetButtons"  ' [ADR-0100]
     Call modSheetButtons.PlaceV23SheetButtons
     m_logger.LogInfo "clsSetupOrchestrator", "RunFullSetup", "[progress] step 8.5 : PlaceV23SheetButtons done", xlsmName, "LOG-SETUP-PROG"
+    On Error GoTo ErrHandler
+
+    ' Fix-6 (ADR-0133): ApplyUiStanzas Cells.Clear wiped the admin M-10
+    ' (== settings sheet) value cells; restore the 9 SSOT values from the
+    ' holder so they round-trip across every Workbook_Open. No-op for
+    ' search/register (their settings sheet is not ui_seed-rendered).
+    On Error Resume Next
+    modConfigLoader.RestoreSheetFromHolder
     On Error GoTo ErrHandler
 
     m_logger.LogInfo "clsSetupOrchestrator", "RunFullSetup", "????: " & xlsmName, "", "LOG-SETUP-OK"

@@ -7,7 +7,7 @@ description: modEntrySettings.bas のソースコード（コピペ用）
 
 **配置先**: `管理.xlsm` 用の VBA モジュール
 **種類**: 標準モジュール
-**更新日**: 2026-06-17 22:19 JST
+**更新日**: 2026-06-18 18:14 JST
 
 ---
 
@@ -52,9 +52,8 @@ Attribute VB_Name = "modEntrySettings"
 '   M-11 settings (debugLevel):
 '     Btn_OpenSettings_v21   -- open (holder -> sheet)
 '     Btn_SaveSettings_v21   -- validate -> SaveConfigKeys -> SetConfigKeys
-'   M-10 storage (4 dirs):
-'     Btn_OpenStorage_v21    -- open (holder -> sheet)
-'     Btn_SaveStorage_v21    -- validate -> SaveConfigKeys -> SetConfigKeys
+'   M-10 storage (6 dirs + 3 behaviour):
+'     Btn_SaveWorkbook       -- Fix-6 (ADR-0133): persist workbook (ThisWorkbook.Save)
 '   M-12 read-only check:
 '     Btn_CheckFormat        -- read-only consistency check, results to grid
 '   M-14 log admin:
@@ -101,8 +100,9 @@ Private Const ADDR_DEBUG_LEVEL As String = "D13"
 Private Const ADDR_DATA_DIR    As String = "D11"
 Private Const ADDR_FORMAT_DIR  As String = "D12"
 Private Const ADDR_UI_DIR      As String = "D13"
-Private Const ADDR_BACKUP_DIR  As String = "D14"
-Private Const ADDR_CONFIG_DIR  As String = "D15"
+Private Const ADDR_LOG_DIR     As String = "D14"
+Private Const ADDR_BACKUP_DIR  As String = "D15"
+Private Const ADDR_CONFIG_DIR  As String = "D16"
 
 ' --- M-12 cell layout (format check) ---
 ' C8 = target format id (matches ui_seed M-12.txt [INPUT] Cell=C8:E8
@@ -123,8 +123,8 @@ Private Const M12_RESULT_CLEAR_ROWS As Long = 500
 Private Const LOG_DATA_START_ROW As Long = 9
 
 ' --- config.txt default fallbacks (used only when holder is empty) ---
-' Fix-4 (ADR-0132): DEF_*_DIR path defaults moved to install-time
-' modInstallConfig.bas (Public Const DEFAULT_*_DIR). No hard-coded path here.
+' Fix-6 (ADR-0133): path defaults removed; the 9-cell settings sheet
+' (modConfigLoader) is the SSOT. No hard-coded path here.
 Private Const DEF_DEBUG_LEVEL As String = "INFO"
 ' Phase FC (2026-06-03, ADR-0096): M-11 [VALIDATION] / [CHECKBOX] layout.
 '   B5     debugLevel selection (data validation list)
@@ -134,7 +134,6 @@ Private Const ADDR_DEBUG_LEVEL_FC As String = "D10"   ' 2026-06-07: new M-11 lay
 ' was retired. Constants kept as comments for backward archaeology.
 '   ADDR_LC_AUTORELOAD = H7 / ADDR_LC_MIGBACKUP = H8 / ADDR_LC_SYSSHEET = H9
 '   DEF_AUTORELOAD/MIGBACKUP/SYSSHEET = "TRUE"
-
 
 
 ' ============================================================
@@ -235,171 +234,31 @@ End Sub
 ' ===== M-10 storage (4 dirs) entry ==========================
 ' ============================================================
 
-' ============================================================
-' Public Sub: Btn_OpenStorage_v21
-' Role: SPEC_DRIFT-4 fix (2026-05-30): open FolderPicker dialog and
-'   write the selected folder path into the D-column input cell of
-'   the row whose A-column checkbox glyph is U+25A0 (filled square).
-'   When invoked with no row checked, show an instruction message.
-'   M-10 sheet layout (per ui_seed M-10.txt):
-'     A11/A12/A13/A14 : checkbox glyph (U+25A0 = checked, U+25A1 = unchecked)
-'     D11:E11 .. D14:E14 : input cell for data_dir / format_dir /
-'                          ui_dir / backup_dir
-'   Only one row is expected to be checked at a time (DefaultChecked
-'   in ui_seed is TRUE only on A11).
-' ============================================================
-Public Sub Btn_OpenStorage_v21()
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0261] modEntrySettings.Btn_OpenStorage_v21 ENTER"  ' [ADR-0100]
-    On Error GoTo ErrHandler
-    ' [BTN-GUARD-PRELUDE-BEGIN] auto-injected by inject_btn_template.py
-    Const BTN As String = "Btn_OpenStorage_v21"
-    Dim XLSM As String
-    XLSM = ChrW(&H7BA1) & ChrW(&H7406)
-    modBtnGuard.LogEnter BTN, XLSM
-    If Not modBtnGuard.CheckPrereq(BTN, "config", XLSM) Then
-        modBtnGuard.LogExit BTN, XLSM, False
-        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0262] modEntrySettings.Btn_OpenStorage_v21 EXIT-OK"  ' [ADR-0100]
-        Exit Sub
-    End If
-    ' [BTN-GUARD-PRELUDE-END]
-    Dim ws As Worksheet
-    Set ws = ThisWorkbook.Worksheets(SHEET_STORAGE)
-    ws.Activate
 
-    ' [B21 2026-06-11] Locate the selected radio row: marker is U+25CF
-    ' (filled circle, written by ThisWorkbook.ToggleM10Radio) and the
-    ' grid spans rows 11..15 (5th row = config_dir). The old code looked
-    ' for U+25A0 in rows 11..14 and could never find a selection.
-    Dim targetRow As Long
-    targetRow = 0
-    Dim i As Long
-    For i = 11 To 15
-        If CStr(ws.Cells(i, 1).Value) = ChrW(&H25CF) Then
-            targetRow = i
-            Exit For
-        End If
-    Next i
-
-    If targetRow = 0 Then
-        ' "saki ni hidari no check wo irete kudasai" (no checkbox is checked)
+' ============================================================
+' Public Sub: Btn_SaveWorkbook
+' Role: Fix-6 (ADR-0133): the 9-cell settings sheet is the SSOT, so
+'       "save" simply persists the workbook (ThisWorkbook.Save).
+'       The cell values are validated at load time by modConfigLoader;
+'       this button no longer writes config.txt or touches the holder.
+' ============================================================
+Public Sub Btn_SaveWorkbook()
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0268] modEntrySettings.Btn_SaveWorkbook ENTER"  ' [ADR-0100]
+    On Error Resume Next
+    ThisWorkbook.Save
+    If Err.Number = 0 Then
         If Not modCommon.IsHeadless() Then
-            MsgBox ChrW(&H5148) & ChrW(&H306B) & ChrW(&H5DE6) & _
-                   ChrW(&H306E) & ChrW(&H30C1) & ChrW(&H30A7) & _
-                   ChrW(&H30C3) & ChrW(&H30AF) & ChrW(&H3092) & _
-                   ChrW(&H5165) & ChrW(&H308C) & ChrW(&H3066) & _
-                   ChrW(&H304F) & ChrW(&H3060) & ChrW(&H3055) & _
-                   ChrW(&H3044), vbExclamation, _
-                   ChrW(&H683C) & ChrW(&H7D0D) & ChrW(&H5148) & _
-                   ChrW(&H8A2D) & ChrW(&H5B9A)
+            MsgBox ChrW(&H30EF) & ChrW(&H30FC) & ChrW(&H30AF) & ChrW(&H30D6) & ChrW(&H30C3) & ChrW(&H30AF) & ChrW(&H3092) & ChrW(&H4FDD) & ChrW(&H5B58) & ChrW(&H3057) & ChrW(&H307E) & ChrW(&H3057) & ChrW(&H305F) & ChrW(&H3002), vbInformation, ChrW(&H4FDD) & ChrW(&H5B58) & ChrW(&H5B8C) & ChrW(&H4E86)
         End If
-        LogWarnSafe "Btn_OpenStorage_v21", _
-            "no checkbox row marked", "SAVE-EXIT-OK-II-013"
-        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0263] modEntrySettings.Btn_OpenStorage_v21 EXIT-OK"  ' [ADR-0100]
-        Exit Sub
+        LogInfoSafe "Btn_SaveWorkbook", "workbook saved", "SAVE-EXIT-OK-II-014"
+    Else
+        If Not modCommon.IsHeadless() Then
+            MsgBox ChrW(&H4FDD) & ChrW(&H5B58) & ChrW(&H306B) & ChrW(&H5931) & ChrW(&H6557) & ChrW(&H3057) & ChrW(&H307E) & ChrW(&H3057) & ChrW(&H305F) & ChrW(&H003A) & ChrW(&H0020) & Err.Description, vbExclamation, ChrW(&H4FDD) & ChrW(&H5B58) & ChrW(&H30A8) & ChrW(&H30E9) & ChrW(&H30FC)
+        End If
+        LogErrorSafe "Btn_SaveWorkbook", "save failed: " & Err.Number & " " & Err.Description, "BACKTOMAIN-ERR-EE-036"
     End If
-
-    ' Headless guard (2026-06-01): COM-automated runs never show the
-    ' FolderPicker - they would block waiting for a non-existent user.
-    ' In that case log and exit; the M-10 row is left untouched.
-    If modCommon.IsHeadless() Then
-        LogInfoSafe "Btn_OpenStorage_v21", _
-            "headless-skip FolderPicker row=" & targetRow, _
-            "SAVE-EXIT-OK-II-013"
-        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0264] modEntrySettings.Btn_OpenStorage_v21 EXIT-OK"  ' [ADR-0100]
-        Exit Sub
-    End If
-
-    ' FolderPicker dialog.
-    Dim fd As Object
-    Set fd = Application.FileDialog(4) ' msoFileDialogFolderPicker = 4
-    fd.AllowMultiSelect = False
-    ' Title: "kakuno-saki folder wo erabu"
-    fd.Title = ChrW(&H683C) & ChrW(&H7D0D) & ChrW(&H5148) & _
-               ChrW(&H30D5) & ChrW(&H30A9) & ChrW(&H30EB) & _
-               ChrW(&H30C0) & ChrW(&H3092) & ChrW(&H9078) & _
-               ChrW(&H3076)
-
-    If fd.Show <> -1 Then
-        LogInfoSafe "Btn_OpenStorage_v21", _
-            "FolderPicker cancelled row=" & targetRow, _
-            "SAVE-EXIT-OK-II-013"
-        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0265] modEntrySettings.Btn_OpenStorage_v21 EXIT-OK"  ' [ADR-0100]
-        Exit Sub
-    End If
-
-    Dim selectedPath As String
-    selectedPath = CStr(fd.SelectedItems(1))
-
-    ' Write to D-column input cell (D11..D14, anchor of merged D:E).
-    ws.Cells(targetRow, 4).Value = selectedPath
-
-    LogInfoSafe "Btn_OpenStorage_v21", _
-        "Storage folder picked row=" & targetRow & " path=" & selectedPath, _
-        "SAVE-EXIT-OK-II-013"
-    ' [BTN-GUARD-EXIT-OK] auto-injected
-    modBtnGuard.LogExit BTN, XLSM, True
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0266] modEntrySettings.Btn_OpenStorage_v21 EXIT-OK"  ' [ADR-0100]
-    Exit Sub
-ErrHandler:
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-0267] modEntrySettings.Btn_OpenStorage_v21 EXIT-ERR " & "errNum=" & Err.Number & " desc=" & Err.Description  ' [ADR-0100]
-    ' [BTN-GUARD-ERR-LOG] auto-injected
-    modBtnGuard.LogExit BTN, XLSM, False
-    LogErrorSafe "Btn_OpenStorage_v21", _
-        "FolderPicker failed: " & Err.Number & " " & Err.Description, _
-        "BACKTOMAIN-ERR-EE-036"
-    Debug.Print "[ERR] Btn_OpenStorage_v21: " & Err.Number & " " & Err.Description
-End Sub
-
-' ============================================================
-' Public Sub: Btn_SaveStorage_v21
-' Role: M-10 sheet -> validate -> persist via SaveConfigKeys ->
-'       sync in-memory via SetConfigKeys. Only the 4 path keys
-'       are owned by M-10; debugLevel stays untouched on disk.
-' ============================================================
-Public Sub Btn_SaveStorage_v21()
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0268] modEntrySettings.Btn_SaveStorage_v21 ENTER"  ' [ADR-0100]
-    On Error GoTo ErrHandler
-    ' [BTN-GUARD-PRELUDE-BEGIN] auto-injected by inject_btn_template.py
-    Const BTN As String = "Btn_SaveStorage_v21"
-    Dim XLSM As String
-    XLSM = ChrW(&H7BA1) & ChrW(&H7406)
-    modBtnGuard.LogEnter BTN, XLSM
-    If Not modBtnGuard.CheckPrereq(BTN, "config", XLSM) Then
-        modBtnGuard.LogExit BTN, XLSM, False
-        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0269] modEntrySettings.Btn_SaveStorage_v21 EXIT-OK"  ' [ADR-0100]
-        Exit Sub
-    End If
-    ' [BTN-GUARD-PRELUDE-END]
-    Dim ws As Worksheet
-    Set ws = ThisWorkbook.Worksheets(SHEET_STORAGE)
-
-    Dim ngLabel As String
-    Dim ngAddr As String
-    If Not ValidateStorageSheet(ws, ngLabel, ngAddr) Then
-        LogWarnSafe "Btn_SaveStorage_v21", _
-            "Validation failed at " & ngAddr & " (" & ngLabel & ")", _
-            "VALIDATE-WARN-WW-035"
-        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0270] modEntrySettings.Btn_SaveStorage_v21 EXIT-OK"  ' [ADR-0100]
-        Exit Sub
-    End If
-
-    ApplyStorageToHolder ws
-
-    LogInfoSafe "Btn_SaveStorage_v21", _
-        "Storage settings applied (config.txt + holder)", _
-        "SAVE-EXIT-OK-II-014"
-    ' [BTN-GUARD-EXIT-OK] auto-injected
-    modBtnGuard.LogExit BTN, XLSM, True
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0271] modEntrySettings.Btn_SaveStorage_v21 EXIT-OK"  ' [ADR-0100]
-    Exit Sub
-ErrHandler:
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-0272] modEntrySettings.Btn_SaveStorage_v21 EXIT-ERR " & "errNum=" & Err.Number & " desc=" & Err.Description  ' [ADR-0100]
-    ' [BTN-GUARD-ERR-LOG] auto-injected
-    modBtnGuard.LogExit BTN, XLSM, False
-    LogErrorSafe "Btn_SaveStorage_v21", _
-        "Apply failed: " & Err.Number & " " & Err.Description, _
-        "BACKTOMAIN-ERR-EE-036"
-    Debug.Print "[ERR] Btn_SaveStorage_v21: " & Err.Number & " " & Err.Description
+    On Error GoTo 0
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0271] modEntrySettings.Btn_SaveWorkbook EXIT-OK"  ' [ADR-0100]
 End Sub
 
 
@@ -532,96 +391,10 @@ End Function
 ' ============================================================
 Public Sub LoadStorageToSheet(ByVal ws As Worksheet)   ' 2026-06-07: Public to allow ThisWorkbook hook
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0280] modEntrySettings.LoadStorageToSheet ENTER"  ' [ADR-0100]
-    ws.Range(ADDR_DATA_DIR).Value = SafeGetCfg("data_dir", modInstallConfig.DEFAULT_DATA_DIR)
-    ws.Range(ADDR_FORMAT_DIR).Value = SafeGetCfg("format_dir", modInstallConfig.DEFAULT_FORMAT_DIR)
-    ws.Range(ADDR_UI_DIR).Value = SafeGetCfg("ui_dir", modInstallConfig.DEFAULT_UI_DIR)
-    ws.Range(ADDR_BACKUP_DIR).Value = SafeGetCfg("backup_dir", modInstallConfig.DEFAULT_BACKUP_DIR)
-    ws.Range(ADDR_CONFIG_DIR).Value = SafeGetCfg("config_dir", modInstallConfig.DEFAULT_CONFIG_DIR)
+    ' Fix-6 (ADR-0133): settings sheet is the SSOT; restore the 9 cells
+    ' from the holder (ApplyUiStanzas Cells.Clear wiped them on re-render).
+    modConfigLoader.RestoreSheetFromHolder
 End Sub
-
-' ============================================================
-' Private Sub: ApplyStorageToHolder
-' Role: M-10 sheet -> config.txt + holder, via SaveConfigKeys +
-'       SetConfigKeys. Only the 4 path keys are written; the
-'       debugLevel key in config.txt stays untouched.
-' ============================================================
-Private Sub ApplyStorageToHolder(ByVal ws As Worksheet)
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0281] modEntrySettings.ApplyStorageToHolder ENTER"  ' [ADR-0100]
-    Dim d As Object
-    Set d = CreateObject("Scripting.Dictionary")
-    d("data_dir") = CStr(ws.Range(ADDR_DATA_DIR).Value)
-    d("format_dir") = CStr(ws.Range(ADDR_FORMAT_DIR).Value)
-    d("ui_dir") = CStr(ws.Range(ADDR_UI_DIR).Value)
-    d("backup_dir") = CStr(ws.Range(ADDR_BACKUP_DIR).Value)
-    d("config_dir") = CStr(ws.Range(ADDR_CONFIG_DIR).Value)
-    PersistConfigKeys d
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0282] modEntrySettings.ApplyStorageToHolder EXIT-OK"  ' [ADR-0100]
-End Sub
-
-' ============================================================
-' Private Function: ValidateStorageSheet
-' Role: each of the 4 path keys must be non-empty.
-' Return: True = OK, False = NG (outLabel / outAddr carry the NG)
-' ============================================================
-Private Function ValidateStorageSheet(ByVal ws As Worksheet, _
-                                      ByRef outLabel As String, _
-                                      ByRef outAddr As String) As Boolean
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0283] modEntrySettings.ValidateStorageSheet ENTER"  ' [ADR-0100]
-    If Len(CStr(ws.Range(ADDR_DATA_DIR).Value)) = 0 Then
-        outAddr = ADDR_DATA_DIR
-        outLabel = "data_dir"
-        ValidateStorageSheet = False
-        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0284] modEntrySettings.ValidateStorageSheet EXIT-OK"  ' [ADR-0100]
-        Exit Function
-    End If
-    If Len(CStr(ws.Range(ADDR_FORMAT_DIR).Value)) = 0 Then
-        outAddr = ADDR_FORMAT_DIR
-        outLabel = "format_dir"
-        ValidateStorageSheet = False
-        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0285] modEntrySettings.ValidateStorageSheet EXIT-OK"  ' [ADR-0100]
-        Exit Function
-    End If
-    If Len(CStr(ws.Range(ADDR_UI_DIR).Value)) = 0 Then
-        outAddr = ADDR_UI_DIR
-        outLabel = "ui_dir"
-        ValidateStorageSheet = False
-        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0286] modEntrySettings.ValidateStorageSheet EXIT-OK"  ' [ADR-0100]
-        Exit Function
-    End If
-    If Len(CStr(ws.Range(ADDR_BACKUP_DIR).Value)) = 0 Then
-        outAddr = ADDR_BACKUP_DIR
-        outLabel = "backup_dir"
-        ValidateStorageSheet = False
-        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0287] modEntrySettings.ValidateStorageSheet EXIT-OK"  ' [ADR-0100]
-        Exit Function
-    End If
-    If Len(CStr(ws.Range(ADDR_CONFIG_DIR).Value)) = 0 Then
-        outAddr = ADDR_CONFIG_DIR
-        outLabel = "config_dir"
-        ValidateStorageSheet = False
-        Exit Function
-    End If
-    ' [B25 2026-06-11] reject non-existent folders (user decision).
-    Dim chkAddrs As Variant, chkLabels As Variant, iChk As Long
-    chkAddrs = Array(ADDR_DATA_DIR, ADDR_FORMAT_DIR, ADDR_UI_DIR, ADDR_BACKUP_DIR, ADDR_CONFIG_DIR)
-    chkLabels = Array("data_dir", "format_dir", "ui_dir", "backup_dir", "config_dir")
-    For iChk = 0 To 4
-        Dim pChk As String
-        pChk = Trim$(CStr(ws.Range(CStr(chkAddrs(iChk))).Value))
-        On Error Resume Next
-        Dim hitChk As String
-        hitChk = ""
-        hitChk = Dir$(pChk, vbDirectory)
-        On Error GoTo 0
-        If Len(hitChk) = 0 Then
-            outAddr = CStr(chkAddrs(iChk))
-            outLabel = chkLabels(iChk) & " " & ChrW(&H0028) & ChrW(&H30D5) & ChrW(&H30A9) & ChrW(&H30EB) & ChrW(&H30C0) & ChrW(&H304C) & ChrW(&H5B58) & ChrW(&H5728) & ChrW(&H3057) & ChrW(&H307E) & ChrW(&H305B) & ChrW(&H3093) & ChrW(&H0029)
-            ValidateStorageSheet = False
-            Exit Function
-        End If
-    Next iChk
-    ValidateStorageSheet = True
-End Function
 
 
 ' ============================================================
@@ -1032,21 +805,14 @@ End Sub
 ' ============================================================
 ' Private Sub: PersistConfigKeys
 ' Role: shared backend for the M-10 / M-11 Save buttons.
-'       writes the supplied key dictionary into config.txt via
-'       modConfigLoader.SaveConfigKeys (file-side, leaves other
-'       keys untouched), then syncs the in-memory holder via
-'       modConfigHolder.SetConfigKeys.
-'       Both calls are exception-guarded so a transient I/O glitch
-'       on one path does not break the other.
+'       Fix-6 (ADR-0133): persists the supplied keys into the 9-cell
+'       settings sheet (the SSOT) and refreshes the holder, via
+'       modConfigLoader.WriteSettingsFromDict. Exception-guarded.
 ' ============================================================
 Private Sub PersistConfigKeys(ByVal keyValues As Object)
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0321] modEntrySettings.PersistConfigKeys ENTER"  ' [ADR-0100]
     On Error Resume Next
-    modConfigLoader.SaveConfigKeys XLSM_KEY, keyValues
-    On Error GoTo 0
-
-    On Error Resume Next
-    modConfigHolder.SetConfigKeys keyValues
+    modConfigLoader.WriteSettingsFromDict keyValues
     On Error GoTo 0
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0322] modEntrySettings.PersistConfigKeys EXIT-OK"  ' [ADR-0100]
 End Sub

@@ -7,7 +7,7 @@ description: modConfigHolder.bas のソースコード（コピペ用）
 
 **配置先**: 共通モジュール（検索.xlsm / 管理.xlsm 共通）
 **種類**: 標準モジュール
-**更新日**: 2026-06-17 22:19 JST
+**更新日**: 2026-06-18 18:14 JST
 
 ---
 
@@ -40,11 +40,11 @@ Attribute VB_Name = "modConfigHolder"
 '          v2.3 Phase A: added SetConfigKeys (partial merge API)
 '          to mirror modConfigLoader.SaveConfigKeys behavior in
 '          memory.
-' Depends: modInstallConfig (install-injected path defaults, ADR-0132)
+' Depends: (none) Fix-6 ADR-0133: path defaults removed; the 9-cell
 ' Related: ADR-0053 section 5.2 / 7.3 N6
 '          Q7  (debugLevel default ERROR)
 '          Q17 (GetDebugLevel As Long, enum return)
-'          Q22 (path default root via modInstallConfig)
+'          Fix-6 ADR-0133: getters return the worksheet SSOT value
 ' Note:    Japanese block comments were lost in an earlier accident
 '          and restored here in ASCII to avoid encoding fragility.
 '          Logic unchanged; original public API surface preserved.
@@ -170,32 +170,32 @@ End Function
 ' ================================================================
 Public Function GetDataDir() As String
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0950] modConfigHolder.GetDataDir ENTER"  ' [ADR-0100]
-    GetDataDir = GetValueOrDefault("data_dir", modInstallConfig.DEFAULT_DATA_DIR)
+    GetDataDir = GetValueOrDefault("data_dir", vbNullString)
 End Function
 
 Public Function GetBackupDir() As String
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0951] modConfigHolder.GetBackupDir ENTER"  ' [ADR-0100]
-    GetBackupDir = GetValueOrDefault("backup_dir", modInstallConfig.DEFAULT_BACKUP_DIR)
+    GetBackupDir = GetValueOrDefault("backup_dir", vbNullString)
 End Function
 
 Public Function GetFormatDir() As String
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0952] modConfigHolder.GetFormatDir ENTER"  ' [ADR-0100]
-    GetFormatDir = GetValueOrDefault("format_dir", modInstallConfig.DEFAULT_FORMAT_DIR)
+    GetFormatDir = GetValueOrDefault("format_dir", vbNullString)
 End Function
 
 Public Function GetUiDir() As String
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0953] modConfigHolder.GetUiDir ENTER"  ' [ADR-0100]
-    GetUiDir = GetValueOrDefault("ui_dir", modInstallConfig.DEFAULT_UI_DIR)
+    GetUiDir = GetValueOrDefault("ui_dir", vbNullString)
 End Function
 
 Public Function GetLogDir() As String
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0954] modConfigHolder.GetLogDir ENTER"  ' [ADR-0100]
-    GetLogDir = GetValueOrDefault("log_dir", modInstallConfig.DEFAULT_LOG_DIR)
+    GetLogDir = GetValueOrDefault("log_dir", vbNullString)
 End Function
 
 Public Function GetConfigDir() As String
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0955] modConfigHolder.GetConfigDir ENTER"  ' [ADR-0100]
-    GetConfigDir = GetValueOrDefault("config_dir", modInstallConfig.DEFAULT_CONFIG_DIR)
+    GetConfigDir = GetValueOrDefault("config_dir", vbNullString)
 End Function
 
 Public Function GetDebugLevelStr() As String
