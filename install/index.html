@@ -1133,6 +1133,45 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="STEP 6: VBA モジュールフォルダを用意する">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-common-50" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 common\ フォルダ（50 ファイル）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-search-8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 search\ フォルダ（8 ファイル）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-admin-9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3 admin\ フォルダ（9 ファイル）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -5532,6 +5571,10 @@
 </tbody>
 </table>
 <p>各ブックを 1 つずつ「インストール」することで、ボタン・シート・自動処理がブック内に展開されます。本ページの手順を上から順に行ってください。</p>
+<div class="admonition note">
+<p class="admonition-title">「登録修正.xlsm」について</p>
+<p>現在のバージョンでは、ナレッジの<strong>新規登録・修正・削除の機能は「検索.xlsm」に統合</strong>されています。新しくセットアップする場合は「検索.xlsm」と「管理.xlsm」の 2 ブックだけで登録・検索・管理のすべてが使えます。「登録修正.xlsm」は、旧バージョンを引き続き使う方向けの参考として本ページに記載を残しています。</p>
+</div>
 <hr />
 <h2 id="_2">必要なもの<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <ul>
@@ -6251,48 +6294,350 @@
 </code></pre></div>
 <hr />
 <h2 id="step-6-vba">STEP 6: VBA モジュールフォルダを用意する<a class="headerlink" href="#step-6-vba" title="Permanent link">&para;</a></h2>
-<p><code>installer\vba_modules\</code> フォルダの直下に <code>common\</code> / <code>register\</code> / <code>search\</code> / <code>admin\</code> の 4 つのサブフォルダを作り、各サブフォルダに該当する <code>.bas</code> / <code>.cls</code> ファイル一式を配置します。</p>
+<p><code>installer\vba_modules\</code> フォルダの直下に <code>common\</code> / <code>search\</code> / <code>admin\</code> の 3 つのサブフォルダを作り、各サブフォルダに該当する <code>.bas</code> / <code>.cls</code> ファイル一式を配置します。</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>C:\KnowledgeMgr\
 <a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>  └─ installer\
 <a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>       └─ vba_modules\
-<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>            ├─ common\    ← 全ブック共通モジュール
-<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>            ├─ register\  ← 登録修正.xlsm 専用モジュール
-<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>            ├─ search\    ← 検索.xlsm 専用モジュール
-<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>            └─ admin\     ← 管理.xlsm 専用モジュール
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>            ├─ common\   ← 検索.xlsm / 管理.xlsm 共通モジュール（50 ファイル）
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>            ├─ search\   ← 検索.xlsm 専用モジュール（8 ファイル）
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>            └─ admin\    ← 管理.xlsm 専用モジュール（9 ファイル）
 </code></pre></div>
-<p>各フォルダの中身（モジュールごとのソースコード）は <strong><a href="../modules/">モジュール一覧</a></strong> ページに 1 ファイル 1 ページで全文掲載しています。1 モジュールずつメモ帳に貼り付け、フォルダ名どおりのファイル名（例: <code>modCommon.bas</code>、<code>clsKnowledgeManager.cls</code> 等）で保存してください。</p>
+<p>各フォルダの中身（モジュールごとのソースコード）は <strong><a href="../modules/">モジュール一覧</a></strong> ページに 1 ファイル 1 ページで全文掲載しています。1 モジュールずつメモ帳に貼り付け、下記の表のとおりのファイル名（例: <code>modCommon.bas</code>、<code>clsKnowledgeManager.cls</code> 等）で保存してください。</p>
 <table>
 <thead>
 <tr>
 <th>配置先サブフォルダ</th>
 <th>ファイル数</th>
-<th>一覧</th>
+<th>ファイル名一覧</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>vba_modules\admin\</code></td>
-<td>10</td>
-<td><a href="../modules/#xlsm-installervba_modulesadmin">管理.xlsm 用モジュール一覧</a></td>
-</tr>
-<tr>
-<td><code>vba_modules\register\</code></td>
-<td>5</td>
-<td><a href="../modules/#xlsm-installervba_modulesregister">登録修正.xlsm 用モジュール一覧</a></td>
+<td><code>vba_modules\common\</code></td>
+<td>50</td>
+<td>下記 6.1</td>
 </tr>
 <tr>
 <td><code>vba_modules\search\</code></td>
-<td>4</td>
-<td><a href="../modules/#xlsm-installervba_modulessearch">検索.xlsm 用モジュール一覧</a></td>
+<td>8</td>
+<td>下記 6.2</td>
 </tr>
 <tr>
-<td><code>vba_modules\common\</code></td>
-<td>64</td>
-<td><a href="../modules/#installervba_modulescommon">共通モジュール一覧</a></td>
+<td><code>vba_modules\admin\</code></td>
+<td>9</td>
+<td>下記 6.3</td>
 </tr>
 </tbody>
 </table>
-<p>合計 <strong>83 ファイル</strong> あります。すべて保存し終わったら STEP 7 に進んでください。</p>
+<p>現在のバージョンでは <strong>合計 67 ファイル</strong> です。すべて保存し終わったら STEP 7 に進んでください。</p>
+<div class="admonition note">
+<p class="admonition-title">「登録修正.xlsm」用フォルダについて</p>
+<p>以前のバージョンには「登録修正.xlsm」専用の <code>register\</code> フォルダ（5 ファイル）がありましたが、<strong>現在のバージョンでは、ナレッジの新規登録・修正・削除の機能は「検索.xlsm」に統合されています</strong>。新しくセットアップする場合、上記 3 フォルダ（<code>common\</code> / <code>search\</code> / <code>admin\</code>）だけ用意すれば登録・検索・管理のすべてが使えます。「登録修正.xlsm」と <code>register\</code> フォルダは、旧バージョンを引き続き使う方向けの参考情報です。</p>
+</div>
+<h3 id="61-common-50">6.1 common\ フォルダ（50 ファイル）<a class="headerlink" href="#61-common-50" title="Permanent link">&para;</a></h3>
+<p>「検索.xlsm」と「管理.xlsm」が共通で使うモジュールです。基盤となる <code>clsSetupOrchestrator.cls</code> などを含む、下記 50 ファイルすべてを <code>vba_modules\common\</code> に保存してください。</p>
+<table>
+<thead>
+<tr>
+<th>ファイル名</th>
+<th>種類</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>clsButtonSpec.cls</code></td>
+<td>クラス</td>
+</tr>
+<tr>
+<td><code>clsCellAddrHelper.cls</code></td>
+<td>クラス</td>
+</tr>
+<tr>
+<td><code>clsCellBinding.cls</code></td>
+<td>クラス</td>
+</tr>
+<tr>
+<td><code>clsCellIO.cls</code></td>
+<td>クラス</td>
+</tr>
+<tr>
+<td><code>clsControlSpec.cls</code></td>
+<td>クラス</td>
+</tr>
+<tr>
+<td><code>clsFieldMigrator.cls</code></td>
+<td>クラス</td>
+</tr>
+<tr>
+<td><code>clsFieldSpec.cls</code></td>
+<td>クラス</td>
+</tr>
+<tr>
+<td><code>clsFormSpec.cls</code></td>
+<td>クラス</td>
+</tr>
+<tr>
+<td><code>clsFormatManager.cls</code></td>
+<td>クラス</td>
+</tr>
+<tr>
+<td><code>clsGridIO.cls</code></td>
+<td>クラス</td>
+</tr>
+<tr>
+<td><code>clsKnowledgeManager.cls</code></td>
+<td>クラス</td>
+</tr>
+<tr>
+<td><code>clsLogEntry.cls</code></td>
+<td>クラス</td>
+</tr>
+<tr>
+<td><code>clsLogger.cls</code></td>
+<td>クラス</td>
+</tr>
+<tr>
+<td><code>clsScreenSpec.cls</code></td>
+<td>クラス</td>
+</tr>
+<tr>
+<td><code>clsSearchEngine.cls</code></td>
+<td>クラス</td>
+</tr>
+<tr>
+<td><code>clsSectionSpec.cls</code></td>
+<td>クラス</td>
+</tr>
+<tr>
+<td><code>clsSetupOrchestrator.cls</code></td>
+<td>クラス</td>
+</tr>
+<tr>
+<td><code>clsSheetRenderer.cls</code></td>
+<td>クラス</td>
+</tr>
+<tr>
+<td><code>ClsStanzaSection.cls</code></td>
+<td>クラス</td>
+</tr>
+<tr>
+<td><code>ClsStanzaValidationIssue.cls</code></td>
+<td>クラス</td>
+</tr>
+<tr>
+<td><code>ClsStanzaValidationResult.cls</code></td>
+<td>クラス</td>
+</tr>
+<tr>
+<td><code>clsStorageResolver.cls</code></td>
+<td>クラス</td>
+</tr>
+<tr>
+<td><code>clsUserFormRenderer.cls</code></td>
+<td>クラス</td>
+</tr>
+<tr>
+<td><code>IScreenRenderer.cls</code></td>
+<td>クラス（インターフェース）</td>
+</tr>
+<tr>
+<td><code>modBtnGuard.bas</code></td>
+<td>標準</td>
+</tr>
+<tr>
+<td><code>modBtnMessages.bas</code></td>
+<td>標準</td>
+</tr>
+<tr>
+<td><code>modButtonWiring.bas</code></td>
+<td>標準</td>
+</tr>
+<tr>
+<td><code>modCommon.bas</code></td>
+<td>標準</td>
+</tr>
+<tr>
+<td><code>modConfigHolder.bas</code></td>
+<td>標準</td>
+</tr>
+<tr>
+<td><code>modConfigLoader.bas</code></td>
+<td>標準</td>
+</tr>
+<tr>
+<td><code>modDateUtil.bas</code></td>
+<td>標準</td>
+</tr>
+<tr>
+<td><code>modEntryUserForm.bas</code></td>
+<td>標準</td>
+</tr>
+<tr>
+<td><code>modFactory.bas</code></td>
+<td>標準</td>
+</tr>
+<tr>
+<td><code>modFileIO.bas</code></td>
+<td>標準</td>
+</tr>
+<tr>
+<td><code>modFormBuilder.bas</code></td>
+<td>標準</td>
+</tr>
+<tr>
+<td><code>modFormControlWiring.bas</code></td>
+<td>標準</td>
+</tr>
+<tr>
+<td><code>modFormatColumns.bas</code></td>
+<td>標準</td>
+</tr>
+<tr>
+<td><code>modFormatLoader.bas</code></td>
+<td>標準</td>
+</tr>
+<tr>
+<td><code>modKnowledgeFileIO.bas</code></td>
+<td>標準</td>
+</tr>
+<tr>
+<td><code>modLogIds.bas</code></td>
+<td>標準</td>
+</tr>
+<tr>
+<td><code>modPreviewForm.bas</code></td>
+<td>標準</td>
+</tr>
+<tr>
+<td><code>modRefresh.bas</code></td>
+<td>標準</td>
+</tr>
+<tr>
+<td><code>modScreenRender.bas</code></td>
+<td>標準</td>
+</tr>
+<tr>
+<td><code>modSetup.bas</code></td>
+<td>標準</td>
+</tr>
+<tr>
+<td><code>modSheetButtons.bas</code></td>
+<td>標準</td>
+</tr>
+<tr>
+<td><code>modSheetMap.bas</code></td>
+<td>標準</td>
+</tr>
+<tr>
+<td><code>modStanzaIO.bas</code></td>
+<td>標準</td>
+</tr>
+<tr>
+<td><code>modStringUtil.bas</code></td>
+<td>標準</td>
+</tr>
+<tr>
+<td><code>modUILoader.bas</code></td>
+<td>標準</td>
+</tr>
+<tr>
+<td><code>modUserFormCallback.bas</code></td>
+<td>標準</td>
+</tr>
+</tbody>
+</table>
+<h3 id="62-search-8">6.2 search\ フォルダ（8 ファイル）<a class="headerlink" href="#62-search-8" title="Permanent link">&para;</a></h3>
+<p>「検索.xlsm」専用のモジュールです。ナレッジの検索・表示に加え、新規登録・修正・削除の画面もこのフォルダに含まれます。下記 8 ファイルを <code>vba_modules\search\</code> に保存してください。</p>
+<table>
+<thead>
+<tr>
+<th>ファイル名</th>
+<th>種類</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ThisWorkbook.cls</code></td>
+<td>クラス</td>
+</tr>
+<tr>
+<td><code>clsKnowledgeEditScreen.cls</code></td>
+<td>クラス</td>
+</tr>
+<tr>
+<td><code>clsKnowledgeRegisterScreen.cls</code></td>
+<td>クラス</td>
+</tr>
+<tr>
+<td><code>clsKnowledgeViewScreen.cls</code></td>
+<td>クラス</td>
+</tr>
+<tr>
+<td><code>clsSearchScreen.cls</code></td>
+<td>クラス</td>
+</tr>
+<tr>
+<td><code>modEntryKnowledge.bas</code></td>
+<td>標準</td>
+</tr>
+<tr>
+<td><code>modEntrySearch.bas</code></td>
+<td>標準</td>
+</tr>
+<tr>
+<td><code>modKnowledgeEntryHelpers.bas</code></td>
+<td>標準</td>
+</tr>
+</tbody>
+</table>
+<h3 id="63-admin-9">6.3 admin\ フォルダ（9 ファイル）<a class="headerlink" href="#63-admin-9" title="Permanent link">&para;</a></h3>
+<p>「管理.xlsm」専用のモジュールです。下記 9 ファイルを <code>vba_modules\admin\</code> に保存してください。</p>
+<table>
+<thead>
+<tr>
+<th>ファイル名</th>
+<th>種類</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ThisWorkbook.cls</code></td>
+<td>クラス</td>
+</tr>
+<tr>
+<td><code>clsFormatDesignScreen.cls</code></td>
+<td>クラス</td>
+</tr>
+<tr>
+<td><code>clsFormatListScreen.cls</code></td>
+<td>クラス</td>
+</tr>
+<tr>
+<td><code>clsFormatPreviewScreen.cls</code></td>
+<td>クラス</td>
+</tr>
+<tr>
+<td><code>clsMigrationScreen.cls</code></td>
+<td>クラス</td>
+</tr>
+<tr>
+<td><code>clsStorageScreen.cls</code></td>
+<td>クラス</td>
+</tr>
+<tr>
+<td><code>clsSystemSettingsScreen.cls</code></td>
+<td>クラス</td>
+</tr>
+<tr>
+<td><code>modEntryFormat.bas</code></td>
+<td>標準</td>
+</tr>
+<tr>
+<td><code>modEntrySettings.bas</code></td>
+<td>標準</td>
+</tr>
+</tbody>
+</table>
 <div class="admonition warning">
 <p class="admonition-title">モジュールファイルの保存形式</p>
 <p><code>.bas</code> / <code>.cls</code> の文字コードは <strong>ANSI（Shift-JIS）</strong> で保存してください。本インストーラは UTF-8 (BOM 有無いずれも) でも自動変換しますが、CP932（ANSI）が確実です。改行コードは <strong>CRLF</strong> にしてください。</p>
