@@ -5,9 +5,9 @@ description: modKnowledgeFileIO.bas のソースコード（コピペ用）
 
 # modKnowledgeFileIO.bas
 
-**配置先**: 共通モジュール（3 ブック共通）
+**配置先**: 共通モジュール（検索.xlsm / 管理.xlsm 共通）
 **種類**: 標準モジュール
-**更新日**: 2026-06-11 15:52
+**更新日**: 2026-06-11 15:52 JST
 
 ---
 
