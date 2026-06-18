@@ -15,6 +15,9 @@ knowledgevba は次の 3 つの Excel ブックで構成されます。
 
 各ブックを 1 つずつ「インストール」することで、ボタン・シート・自動処理がブック内に展開されます。本ページの手順を上から順に行ってください。
 
+!!! note "「登録修正.xlsm」について"
+    現在のバージョンでは、ナレッジの**新規登録・修正・削除の機能は「検索.xlsm」に統合**されています。新しくセットアップする場合は「検索.xlsm」と「管理.xlsm」の 2 ブックだけで登録・検索・管理のすべてが使えます。「登録修正.xlsm」は、旧バージョンを引き続き使う方向けの参考として本ページに記載を残しています。
+
 ---
 
 ## 必要なもの
@@ -742,28 +745,117 @@ exit 0
 
 ## STEP 6: VBA モジュールフォルダを用意する
 
-`installer\vba_modules\` フォルダの直下に `common\` / `register\` / `search\` / `admin\` の 4 つのサブフォルダを作り、各サブフォルダに該当する `.bas` / `.cls` ファイル一式を配置します。
+`installer\vba_modules\` フォルダの直下に `common\` / `search\` / `admin\` の 3 つのサブフォルダを作り、各サブフォルダに該当する `.bas` / `.cls` ファイル一式を配置します。
 
 ```
 C:\KnowledgeMgr\
   └─ installer\
        └─ vba_modules\
-            ├─ common\    ← 全ブック共通モジュール
-            ├─ register\  ← 登録修正.xlsm 専用モジュール
-            ├─ search\    ← 検索.xlsm 専用モジュール
-            └─ admin\     ← 管理.xlsm 専用モジュール
+            ├─ common\   ← 検索.xlsm / 管理.xlsm 共通モジュール（50 ファイル）
+            ├─ search\   ← 検索.xlsm 専用モジュール（8 ファイル）
+            └─ admin\    ← 管理.xlsm 専用モジュール（9 ファイル）
 ```
 
-各フォルダの中身（モジュールごとのソースコード）は **[モジュール一覧](modules/index.md)** ページに 1 ファイル 1 ページで全文掲載しています。1 モジュールずつメモ帳に貼り付け、フォルダ名どおりのファイル名（例: `modCommon.bas`、`clsKnowledgeManager.cls` 等）で保存してください。
+各フォルダの中身（モジュールごとのソースコード）は **[モジュール一覧](modules/index.md)** ページに 1 ファイル 1 ページで全文掲載しています。1 モジュールずつメモ帳に貼り付け、下記の表のとおりのファイル名（例: `modCommon.bas`、`clsKnowledgeManager.cls` 等）で保存してください。
 
-| 配置先サブフォルダ | ファイル数 | 一覧 |
+| 配置先サブフォルダ | ファイル数 | ファイル名一覧 |
 |---|---|---|
-| `vba_modules\admin\` | 10 | [管理.xlsm 用モジュール一覧](modules/index.md#xlsm-installervba_modulesadmin) |
-| `vba_modules\register\` | 5 | [登録修正.xlsm 用モジュール一覧](modules/index.md#xlsm-installervba_modulesregister) |
-| `vba_modules\search\` | 4 | [検索.xlsm 用モジュール一覧](modules/index.md#xlsm-installervba_modulessearch) |
-| `vba_modules\common\` | 64 | [共通モジュール一覧](modules/index.md#installervba_modulescommon) |
+| `vba_modules\common\` | 50 | 下記 6.1 |
+| `vba_modules\search\` | 8 | 下記 6.2 |
+| `vba_modules\admin\` | 9 | 下記 6.3 |
 
-合計 **83 ファイル** あります。すべて保存し終わったら STEP 7 に進んでください。
+現在のバージョンでは **合計 67 ファイル** です。すべて保存し終わったら STEP 7 に進んでください。
+
+!!! note "「登録修正.xlsm」用フォルダについて"
+    以前のバージョンには「登録修正.xlsm」専用の `register\` フォルダ（5 ファイル）がありましたが、**現在のバージョンでは、ナレッジの新規登録・修正・削除の機能は「検索.xlsm」に統合されています**。新しくセットアップする場合、上記 3 フォルダ（`common\` / `search\` / `admin\`）だけ用意すれば登録・検索・管理のすべてが使えます。「登録修正.xlsm」と `register\` フォルダは、旧バージョンを引き続き使う方向けの参考情報です。
+
+### 6.1 common\ フォルダ（50 ファイル）
+
+「検索.xlsm」と「管理.xlsm」が共通で使うモジュールです。基盤となる `clsSetupOrchestrator.cls` などを含む、下記 50 ファイルすべてを `vba_modules\common\` に保存してください。
+
+| ファイル名 | 種類 |
+|---|---|
+| `clsButtonSpec.cls` | クラス |
+| `clsCellAddrHelper.cls` | クラス |
+| `clsCellBinding.cls` | クラス |
+| `clsCellIO.cls` | クラス |
+| `clsControlSpec.cls` | クラス |
+| `clsFieldMigrator.cls` | クラス |
+| `clsFieldSpec.cls` | クラス |
+| `clsFormSpec.cls` | クラス |
+| `clsFormatManager.cls` | クラス |
+| `clsGridIO.cls` | クラス |
+| `clsKnowledgeManager.cls` | クラス |
+| `clsLogEntry.cls` | クラス |
+| `clsLogger.cls` | クラス |
+| `clsScreenSpec.cls` | クラス |
+| `clsSearchEngine.cls` | クラス |
+| `clsSectionSpec.cls` | クラス |
+| `clsSetupOrchestrator.cls` | クラス |
+| `clsSheetRenderer.cls` | クラス |
+| `ClsStanzaSection.cls` | クラス |
+| `ClsStanzaValidationIssue.cls` | クラス |
+| `ClsStanzaValidationResult.cls` | クラス |
+| `clsStorageResolver.cls` | クラス |
+| `clsUserFormRenderer.cls` | クラス |
+| `IScreenRenderer.cls` | クラス（インターフェース） |
+| `modBtnGuard.bas` | 標準 |
+| `modBtnMessages.bas` | 標準 |
+| `modButtonWiring.bas` | 標準 |
+| `modCommon.bas` | 標準 |
+| `modConfigHolder.bas` | 標準 |
+| `modConfigLoader.bas` | 標準 |
+| `modDateUtil.bas` | 標準 |
+| `modEntryUserForm.bas` | 標準 |
+| `modFactory.bas` | 標準 |
+| `modFileIO.bas` | 標準 |
+| `modFormBuilder.bas` | 標準 |
+| `modFormControlWiring.bas` | 標準 |
+| `modFormatColumns.bas` | 標準 |
+| `modFormatLoader.bas` | 標準 |
+| `modKnowledgeFileIO.bas` | 標準 |
+| `modLogIds.bas` | 標準 |
+| `modPreviewForm.bas` | 標準 |
+| `modRefresh.bas` | 標準 |
+| `modScreenRender.bas` | 標準 |
+| `modSetup.bas` | 標準 |
+| `modSheetButtons.bas` | 標準 |
+| `modSheetMap.bas` | 標準 |
+| `modStanzaIO.bas` | 標準 |
+| `modStringUtil.bas` | 標準 |
+| `modUILoader.bas` | 標準 |
+| `modUserFormCallback.bas` | 標準 |
+
+### 6.2 search\ フォルダ（8 ファイル）
+
+「検索.xlsm」専用のモジュールです。ナレッジの検索・表示に加え、新規登録・修正・削除の画面もこのフォルダに含まれます。下記 8 ファイルを `vba_modules\search\` に保存してください。
+
+| ファイル名 | 種類 |
+|---|---|
+| `ThisWorkbook.cls` | クラス |
+| `clsKnowledgeEditScreen.cls` | クラス |
+| `clsKnowledgeRegisterScreen.cls` | クラス |
+| `clsKnowledgeViewScreen.cls` | クラス |
+| `clsSearchScreen.cls` | クラス |
+| `modEntryKnowledge.bas` | 標準 |
+| `modEntrySearch.bas` | 標準 |
+| `modKnowledgeEntryHelpers.bas` | 標準 |
+
+### 6.3 admin\ フォルダ（9 ファイル）
+
+「管理.xlsm」専用のモジュールです。下記 9 ファイルを `vba_modules\admin\` に保存してください。
+
+| ファイル名 | 種類 |
+|---|---|
+| `ThisWorkbook.cls` | クラス |
+| `clsFormatDesignScreen.cls` | クラス |
+| `clsFormatListScreen.cls` | クラス |
+| `clsFormatPreviewScreen.cls` | クラス |
+| `clsMigrationScreen.cls` | クラス |
+| `clsStorageScreen.cls` | クラス |
+| `clsSystemSettingsScreen.cls` | クラス |
+| `modEntryFormat.bas` | 標準 |
+| `modEntrySettings.bas` | 標準 |
 
 !!! warning "モジュールファイルの保存形式"
     `.bas` / `.cls` の文字コードは **ANSI（Shift-JIS）** で保存してください。本インストーラは UTF-8 (BOM 有無いずれも) でも自動変換しますが、CP932（ANSI）が確実です。改行コードは **CRLF** にしてください。
