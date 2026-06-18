@@ -5,9 +5,9 @@ description: clsUserFormRenderer.cls のソースコード（コピペ用）
 
 # clsUserFormRenderer.cls
 
-**配置先**: 共通モジュール（3 ブック共通）
+**配置先**: 共通モジュール（検索.xlsm / 管理.xlsm 共通）
 **種類**: クラスモジュール
-**更新日**: 2026-06-12 08:51
+**更新日**: 2026-06-12 08:51 JST
 
 ---
 

@@ -5,9 +5,9 @@ description: clsSetupOrchestrator.cls のソースコード（コピペ用）
 
 # clsSetupOrchestrator.cls
 
-**配置先**: 共通モジュール（3 ブック共通）
+**配置先**: 共通モジュール（検索.xlsm / 管理.xlsm 共通）
 **種類**: クラスモジュール
-**更新日**: 2026-06-17 17:29
+**更新日**: 2026-06-17 17:29 JST
 
 ---
 

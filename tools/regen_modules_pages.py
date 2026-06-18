@@ -18,10 +18,9 @@ from __future__ import annotations
 import os
 import sys
 
-ROLES = ["admin", "register", "search", "common"]
+ROLES = ["admin", "search", "common"]
 ROLE_JP = {
     "admin": "管理.xlsm",
-    "register": "登録修正.xlsm",
     "search": "検索.xlsm",
     "common": "共通モジュール",
 }
@@ -58,7 +57,7 @@ def render_md(role, src_name, src_text, mtime_str):
     kind_label = "標準モジュール" if ext == ".bas" else "クラスモジュール"
     if role == "common":
         save_dir = r"C:\KnowledgeMgr\installer\vba_modules\common\\"
-        target_book = "共通モジュール（3 ブック共通）"
+        target_book = "共通モジュール（検索.xlsm / 管理.xlsm 共通）"
     else:
         book = ROLE_JP[role]
         save_dir = "C:\\KnowledgeMgr\\installer\\vba_modules\\" + role + "\\"
@@ -132,7 +131,6 @@ def gen_index(collected):
     )
     body = intro
     heads = {"admin": "## 管理.xlsm 用 (`installer\\vba_modules\\admin\\`)",
-             "register": "## 登録修正.xlsm 用 (`installer\\vba_modules\\register\\`) ※v2.3 では廃止ブック（参考掲載）",
              "search": "## 検索.xlsm 用 (`installer\\vba_modules\\search\\`)",
              "common": "## 共通モジュール (`installer\\vba_modules\\common\\`)"}
     for role in ROLES:
@@ -163,7 +161,7 @@ def main():
         collected[role] = []
         for fname in files:
             src_path = os.path.join(src_dir, fname)
-            mtime_str = datetime.datetime.fromtimestamp(os.path.getmtime(src_path), datetime.timezone(datetime.timedelta(hours=9))).strftime("%Y-%m-%d %H:%M")
+            mtime_str = datetime.datetime.fromtimestamp(os.path.getmtime(src_path), datetime.timezone(datetime.timedelta(hours=9))).strftime("%Y-%m-%d %H:%M JST")
             collected[role].append((fname, mtime_str))
             with open(src_path, "rb") as f:
                 raw = f.read()

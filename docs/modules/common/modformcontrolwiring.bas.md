@@ -5,9 +5,9 @@ description: modFormControlWiring.bas のソースコード（コピペ用）
 
 # modFormControlWiring.bas
 
-**配置先**: 共通モジュール（3 ブック共通）
+**配置先**: 共通モジュール（検索.xlsm / 管理.xlsm 共通）
 **種類**: 標準モジュール
-**更新日**: 2026-06-04 12:30
+**更新日**: 2026-06-04 12:30 JST
 
 ---
 
