@@ -98,6 +98,7 @@ nav:
       - 検索:
           - M-05 ナレッジ登録: stanza/検索/M-05.txt.md
           - M-08 ナレッジ検索: stanza/検索/M-08.txt.md
+          - M-10 格納先設定: stanza/検索/M-10.txt.md
   - サンプルデータ:
       - 一覧: sample_data/index.md
       - フォーマット定義:
