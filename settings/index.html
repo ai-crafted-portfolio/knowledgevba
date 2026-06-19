@@ -1425,8 +1425,6 @@
       
         
       
-        
-      
     
     
     
@@ -1571,34 +1569,6 @@
     
   
     M-10 格納先設定
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../stanza/%E7%AE%A1%E7%90%86/M-11.txt/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    M-11 設定
   
 
     
@@ -5149,7 +5119,7 @@
 <ol>
 <li><strong>管理.xlsm の M-10「格納先設定」画面</strong> を開きます（検索.xlsm も同じ「格納先設定」シートを持ちます）。</li>
 <li>値の列のセルを書き換えます。<code>debugLevel</code> と <code>uiSchemaFailMode</code> はドロップダウンから選べます。</li>
-<li><strong>[保存]</strong> ボタンを押します。ブックが上書き保存され、設定がブックに保持されます。</li>
+<li><strong>Ctrl+S</strong> でブックを上書き保存します（専用の保存ボタンは廃止しました）。設定はブックに保持されます。</li>
 <li>変更は次回起動時から有効になります。保存先フォルダを変えたときは、ブックを開き直してください。</li>
 </ol>
 <div class="admonition note">
@@ -5192,7 +5162,7 @@
 </tr>
 </tbody>
 </table>
-<p>格納先フォルダは、管理.xlsm の <strong>M-10 格納先設定</strong> 画面で変更し、<strong>[保存]</strong> ボタンで保存します。フォルダを別の場所へ移したときは、ファイルを移動したうえでこれらのパスを合わせてください。</p>
+<p>格納先フォルダは、管理.xlsm の <strong>M-10 格納先設定</strong> 画面で変更し、<strong>Ctrl+S</strong> で保存します。フォルダを別の場所へ移したときは、ファイルを移動したうえでこれらのパスを合わせてください。</p>
 <h2 id="3-debuglevel">3. ログの詳細度（debugLevel）<a class="headerlink" href="#3-debuglevel" title="Permanent link">&para;</a></h2>
 <p><code>debugLevel</code> は、LOG シートに残す操作ログの詳しさを決めます。値は次の 6 段階です。上にいくほど記録量が少なく、下にいくほど詳しくなります。</p>
 <table>
@@ -5230,7 +5200,7 @@
 </tbody>
 </table>
 <p><code>debugLevel</code> の初期値は <code>INFO</code> です。通常の運用では <code>INFO</code> のままで十分です。不具合を調べたいときだけ一時的に <code>DEBUG</code> や <code>TRACE</code> に上げ、調査が終わったら戻すと、LOG シートが余計に大きくなりません。</p>
-<p><code>debugLevel</code> は、管理.xlsm の <strong>M-11 設定</strong>画面からも変更できます。</p>
+<p><code>debugLevel</code> は、管理.xlsm の <strong>M-10「格納先設定」画面</strong> の <code>debugLevel</code> 欄（ドロップダウン）で変更します（旧 M-11「設定」画面は廃止し、設定は M-10 に一本化しました）。</p>
 <p>関連する設定として、<code>logRotationRows</code> は LOG シートに保持するログ行数の上限です（既定 10000 行）。上限に達すると古い行から自動で削除されます。</p>
 <h2 id="4">4. その他の動作設定<a class="headerlink" href="#4" title="Permanent link">&para;</a></h2>
 <table>
