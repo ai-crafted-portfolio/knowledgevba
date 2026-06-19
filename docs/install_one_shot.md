@@ -53,13 +53,13 @@ Excel → ファイル → オプション → トラスト センター → ト
 
 ### STEP1 ファイル全文
 
-下のコードを **すべて** コピーしてください (1.5 MB / sha256 `6bf39d09d5c1fa63d1e201020587f15b91a94b0b66368712ce8565970c1b3c6e` / generated 2026-06-19 12:06)。
+下のコードを **すべて** コピーしてください (1.5 MB / sha256 `d6cc0fc3ba61913c5cef84ae4385e375e8d58ff648b42ce4f982006f198793d9` / generated 2026-06-19 13:35)。
 
 ```powershell
 # ============================================================
 # knowledgevba v2.3.2 installer STEP 1/2 : file & module generation
 # (generated file - DO NOT EDIT)
-# built: 2026-06-19 12:06:24  by build_knowledgevba_install.py
+# built: 2026-06-19 13:35:24  by build_knowledgevba_install.py
 # payloads: 78  manifest-sha256: 2e2ad6ade8ed179f78a36db88a094564d78f7a3a1bf5813fb3ab42829bfdd472
 # This file is pure ASCII. Japanese paths are base64(UTF-8)-encoded.
 # Run STEP 1 first, then run kvba_2_import.ps1 (STEP 2/2).
@@ -20275,13 +20275,13 @@ exit 0
 
 ### STEP2 ファイル全文
 
-下のコードを **すべて** コピーしてください (5 KB / sha256 `59e6a9f79c17f35d1960935768d667e519ab8468e5780f5e6d42d0f1223f1267` / generated 2026-06-19 12:06)。
+下のコードを **すべて** コピーしてください (7 KB / sha256 `5eb09167ca13b8613ba4f010884cb9ca3c408e11a471e6ca9e82ac6cbea9272f` / generated 2026-06-19 13:35)。
 
 ```powershell
 # ============================================================
 # knowledgevba v2.3.2 installer STEP 2/2 : module import + setup
 # (generated file - DO NOT EDIT)
-# built: 2026-06-19 12:06:24  by build_knowledgevba_install.py
+# built: 2026-06-19 13:35:24  by build_knowledgevba_install.py
 # This file is pure ASCII. Japanese paths are base64(UTF-8)-encoded.
 # PRECONDITION: run kvba_1_files.ps1 (STEP 1/2) first.
 # ============================================================
@@ -20367,13 +20367,32 @@ if ($missing.Count -gt 0) {
 Log '[OK] STEP 1 outputs present.'
 
 # ---- import + setup (admin, then search) ----
-Log 'import: install_admin / install_search'
+# v2.3.2 fix (line-95 crash): call _auto_install.ps1 DIRECTLY in PowerShell
+# instead of shelling through the CP932 install_*.bat via cmd.exe.
+#   root cause 1: on UTF-8 systems (console codepage 65001 - Win11 "Beta: Unicode
+#     UTF-8" mode) cmd.exe misreads the CP932 batch; multibyte trail bytes break
+#     the (...) blocks and cmd tries to run Japanese fragments as commands -> stderr.
+#   root cause 2: `... 2>&1` under $ErrorActionPreference='Stop' promoted that first
+#     stderr line to a terminating NativeCommandError, reported at the call operator
+#     (the "line 95 char 5" abort).
+# PowerShell passes the Japanese .xlsm path as a native Unicode string, so there is
+# no codepage dependency at all. EAP is relaxed around the native call so a stray
+# stderr line is captured into the log, never thrown.
+Log 'import: _auto_install.ps1 (admin, then search)'
+$KM = 'C:\KnowledgeMgr'
+$autoPs1 = Join-Path $InstallDir 'installer\_auto_install.ps1'
+$roleXlsm = @{ 'admin' = (DecodeName '566h55CG'); 'search' = (DecodeName '5qSc57Si') }
 $rcTotal = 0
 foreach ($role in @('admin', 'search')) {
-    $bat = Join-Path $InstallDir ('installer\install_' + $role + '.bat')
-    Log ('[..] running ' + $bat)
-    & cmd.exe /c "`"$bat`"" 2>&1 | ForEach-Object { Add-Content -LiteralPath $LogPath -Value $_; Write-Host $_ }
+    $xlsm = Join-Path $InstallDir ($roleXlsm[$role] + '.xlsm')
+    Log ('[..] install ' + $role + ' -> ' + $xlsm)
+    Get-Process -Name EXCEL -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
+    Start-Sleep -Seconds 2
+    $prevEAP = $ErrorActionPreference
+    $ErrorActionPreference = 'Continue'
+    & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $autoPs1 -XlsmPath $xlsm -Role $role -DataDir (Join-Path $KM 'data') -FormatDir (Join-Path $KM 'formats') -UiDir (Join-Path $KM 'ui') -BackupDir (Join-Path $KM 'backup') -LogDir (Join-Path $KM 'log') -ConfigDir $KM 2>&1 | ForEach-Object { Add-Content -LiteralPath $LogPath -Value ([string]$_); Write-Host $_ }
     $rc = $LASTEXITCODE
+    $ErrorActionPreference = $prevEAP
     Log ('[..] install_' + $role + ' rc=' + $rc)
     if ($rc -ne 0) { $rcTotal = 1 }
     Get-Process -Name EXCEL -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
