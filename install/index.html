@@ -1115,10 +1115,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#63-admin-9" class="md-nav__link">
+  <a href="#63-admin-8" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6.3 admin\ フォルダ（9 ファイル）
+        6.3 admin\ フォルダ（8 ファイル）
       
     </span>
   </a>
@@ -5434,7 +5434,43 @@
 </code></pre></div>
 <p><code>BASE_DIR</code> を変えると、その下の <code>data</code> / <code>formats</code> / <code>ui</code> / <code>log</code> / <code>backup</code> がまとめて新しい場所を指します。</p>
 <h3 id="453">4.5.3 あとから設定を変えるとき<a class="headerlink" href="#453" title="Permanent link">&para;</a></h3>
-<p>インストール後に保存先や動作設定を変えたいときは、<strong>管理.xlsm の M-10「格納先設定」画面</strong>で値を直し、<strong>[保存]</strong> ボタンを押します（ブックが上書き保存されます）。各設定値の意味は<a href="../settings/">設定値の変更</a>を参照してください。</p>
+<p>インストール後に保存先や動作設定を変えたいときは、<strong>管理.xlsm の M-10「格納先設定」シート</strong>でセルの値を直し、<strong>[Ctrl]+[S]</strong> でブックを上書き保存します。専用の保存ボタンはありません（セルに直接入力 → 通常の保存、という流れです）。</p>
+<p>M-10 シートは次の 9 項目を 1 枚にまとめています。</p>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>data_dir</code> / <code>format_dir</code> / <code>ui_dir</code> / <code>log_dir</code> / <code>backup_dir</code> / <code>config_dir</code></td>
+<td>6 つの保存先フォルダ</td>
+</tr>
+<tr>
+<td><code>debugLevel</code></td>
+<td>ログ出力の詳細度（<code>INFO</code> / <code>DEBUG</code> / <code>TRACE</code>）</td>
+</tr>
+<tr>
+<td><code>logRotationRows</code></td>
+<td>ログのローテーション行数（既定 <code>10000</code>）</td>
+</tr>
+<tr>
+<td><code>uiSchemaFailMode</code></td>
+<td>画面定義の読込失敗時の挙動（既定 <code>safeDefault</code>）</td>
+</tr>
+</tbody>
+</table>
+<p><code>debugLevel</code> の各値（<code>INFO</code> / <code>DEBUG</code> / <code>TRACE</code>）の意味は、M-10 シート上の NOTE 欄に記載しています。各設定値の詳細は<a href="../settings/">設定値の変更</a>を参照してください。</p>
+<div class="admonition note">
+<p class="admonition-title">「設定」シート（旧 M-11）は廃止しました</p>
+<p>以前は <code>debugLevel</code> 等の動作設定を専用の「設定」シート（M-11）で管理していましたが、v2.3 で M-11 を廃止し、上記のとおり <strong>M-10「格納先設定」シートに統合</strong>しました。設定値は M-10 のセルに入り、ブックと一緒に保存されます。</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">画面更新ボタンを押しても設定値は保持されます</p>
+<p>各シートの <strong>[画面更新]</strong> ボタンは全シートを再描画しますが、M-10 に入力した 9 項目の値はそのまま保持されます（再描画で消えることはありません）。</p>
+</div>
 <hr />
 <h2 id="step-5-installer">STEP 5: installer フォルダを作る<a class="headerlink" href="#step-5-installer" title="Permanent link">&para;</a></h2>
 <p>作業フォルダの直下に <code>installer\</code> フォルダを作り、次の 3 ファイルを保存します。</p>
@@ -5548,8 +5584,8 @@
 <a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="c1">REM  - 管理.xlsm に common\ + admin\ の VBA モジュールを自動 Import し、</span>
 <a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="c1">REM    Setup_admin を実行する。</span>
 <a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="c1">REM  - v2.3 注: M-13 ファイル形式設定は廃止 (ADR-0072 §2.1)。</span>
-<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="c1">REM    2026-06-07: M-04 / M-14 retire 済み。シート構成は</span>
-<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="c1">REM    M-02 / M-03 / M-12 / M-10 / M-11 / LOG の 6 シート</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="c1">REM    2026-06-07: M-04 / M-14 retire 済み。2026-06-19: M-11 設定シート retire。</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="c1">REM    シート構成は M-02 / M-03 / M-12 / M-10 / LOG の 5 シート</span>
 <a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="c1">REM    (SSOT: clsSetupOrchestrator.cls SHEETS_KANRI)。</span>
 <a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="c1">REM ====================================================================</span>
 <a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a>
@@ -5940,12 +5976,12 @@
 </tr>
 <tr>
 <td><code>vba_modules\admin\</code></td>
-<td>9</td>
+<td>8</td>
 <td>下記 6.3</td>
 </tr>
 </tbody>
 </table>
-<p>現在のバージョンでは <strong>合計 67 ファイル</strong> です。すべて保存し終わったら STEP 7 に進んでください。</p>
+<p>現在のバージョンでは <strong>合計 66 ファイル</strong> です。すべて保存し終わったら STEP 7 に進んでください。</p>
 <h3 id="61-common-50">6.1 common\ フォルダ（50 ファイル）<a class="headerlink" href="#61-common-50" title="Permanent link">&para;</a></h3>
 <p>「検索.xlsm」と「管理.xlsm」が共通で使うモジュールです。基盤となる <code>clsSetupOrchestrator.cls</code> などを含む、下記 50 ファイルすべてを <code>vba_modules\common\</code> に保存してください。</p>
 <table>
@@ -6202,8 +6238,8 @@
 </tr>
 </tbody>
 </table>
-<h3 id="63-admin-9">6.3 admin\ フォルダ（9 ファイル）<a class="headerlink" href="#63-admin-9" title="Permanent link">&para;</a></h3>
-<p>「管理.xlsm」専用のモジュールです。下記 9 ファイルを <code>vba_modules\admin\</code> に保存してください。</p>
+<h3 id="63-admin-8">6.3 admin\ フォルダ（8 ファイル）<a class="headerlink" href="#63-admin-8" title="Permanent link">&para;</a></h3>
+<p>「管理.xlsm」専用のモジュールです。下記 8 ファイルを <code>vba_modules\admin\</code> に保存してください。</p>
 <table>
 <thead>
 <tr>
@@ -6234,10 +6270,6 @@
 </tr>
 <tr>
 <td><code>clsStorageScreen.cls</code></td>
-<td>クラス</td>
-</tr>
-<tr>
-<td><code>clsSystemSettingsScreen.cls</code></td>
 <td>クラス</td>
 </tr>
 <tr>
@@ -6286,7 +6318,7 @@
 <li><code>C:\KnowledgeMgr\管理.xlsm</code> をダブルクリックで開く</li>
 <li><strong>[コンテンツの有効化]</strong> をクリック</li>
 <li>起動シート <strong>M-02</strong> が表示されればインストール成功です</li>
-<li>シートタブで <strong>M-10 格納先設定</strong> を開き、保存先フォルダのパスが入っていることを確認します。値を変えたときは <strong>[保存]</strong> ボタンを押すとブックに保存されます</li>
+<li>シートタブで <strong>M-10 格納先設定</strong> を開き、6 つの保存先フォルダのパスと動作設定（<code>debugLevel</code> ほか）が入っていることを確認します。値を変えたときはセルを直して <strong>[Ctrl]+[S]</strong> で上書き保存します（専用の保存ボタンはありません）。なお「設定」シート（旧 M-11）は v2.3 で廃止し、<code>debugLevel</code> は M-10 に統合しました</li>
 </ol>
 <h3 id="83">8.3 うまく動かないとき<a class="headerlink" href="#83" title="Permanent link">&para;</a></h3>
 <p>次の点を順に確認してください。</p>
@@ -6299,6 +6331,8 @@
 <hr />
 <h2 id="_4">データの引き継ぎ<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <p>以前のバージョンや別の PC からナレッジを引き継ぐ場合は、<code>data\</code> フォルダのナレッジファイルと <code>formats\</code> フォルダのフォーマット定義ファイルを、新しい環境の同じフォルダにコピーします。コピー前には元のフォルダのバックアップを取ってください。</p>
+<hr />
+<p><strong>更新日</strong>: 2026-06-19 JST</p>
 
 
 
