@@ -7,7 +7,7 @@ description: modEntryUserForm.bas のソースコード（コピペ用）
 
 **配置先**: 共通モジュール（検索.xlsm / 管理.xlsm 共通）
 **種類**: 標準モジュール
-**更新日**: 2026-06-17 01:05 JST
+**更新日**: 2026-06-23 08:48 JST
 
 ---
 
@@ -248,7 +248,7 @@ Public Function TestBuildOnly_ShowForm( _
     Next k
 
     Dim filePath As String
-    filePath = modConfigHolder.GetDataDir() & id & ".txt"
+    filePath = modKnowledgeFileIO.DataFilePathForSave(id, formatId)
     Dim adoStream As Object
     Set adoStream = CreateObject("ADODB.Stream")
     adoStream.Type = 2

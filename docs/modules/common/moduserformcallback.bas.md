@@ -7,7 +7,7 @@ description: modUserFormCallback.bas のソースコード（コピペ用）
 
 **配置先**: 共通モジュール（検索.xlsm / 管理.xlsm 共通）
 **種類**: 標準モジュール
-**更新日**: 2026-06-12 08:51 JST
+**更新日**: 2026-06-23 08:48 JST
 
 ---
 
@@ -453,7 +453,7 @@ Private Function PersistFromActiveForm(ByVal mode As String) As String
 
     ' Write to data_dir using FileSystemObject so we control encoding.
     Dim filePath As String
-    filePath = modConfigHolder.GetDataDir() & knowledgeId & ".txt"
+    filePath = modKnowledgeFileIO.DataFilePathForSave(knowledgeId, fmtId)
     Dim adoStream As Object
     Set adoStream = CreateObject("ADODB.Stream")
     adoStream.Type = 2
@@ -491,7 +491,7 @@ Private Function GenerateKnowledgeId(ByVal formatId As String) As String
     Dim fso As Object
     Set fso = CreateObject("Scripting.FileSystemObject")
     Dim dir As String
-    dir = modConfigHolder.GetDataDir()
+    dir = modKnowledgeFileIO.DataFolderForFormat(formatId)
     If Not fso.FolderExists(dir) Then
         GenerateKnowledgeId = prefix & "0001"
         If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1612] modUserFormCallback.GenerateKnowledgeId EXIT-OK"  ' [ADR-0100]

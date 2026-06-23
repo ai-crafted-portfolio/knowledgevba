@@ -7,7 +7,7 @@ description: ThisWorkbook.cls のソースコード（コピペ用）
 
 **配置先**: `検索.xlsm` 用の VBA モジュール
 **種類**: クラスモジュール
-**更新日**: 2026-06-11 16:37 JST
+**更新日**: 2026-06-23 09:13 JST
 
 ---
 
@@ -83,7 +83,21 @@ Private Sub Workbook_Open()
     Dim orch As clsSetupOrchestrator
     Set orch = New clsSetupOrchestrator
     If modCommon.gDebugLevel >= DEBUG_LEVEL_DEBUG Then Debug.Print "[D-1776] ThisWorkbook.Workbook_Open STEP-2 pre orch.RunFullSetup"  ' [ADR-0100]
-    Call orch.RunFullSetup(XLSM_NAME)
+    ' [Change-3] storage-access fallback: when interactive and a configured
+    ' storage folder is unreachable, keep the previous screen (skip the full
+    ' re-render) and notify; a headless install always proceeds.
+    Dim badDir As String
+    badDir = modConfigHolder.EnsureStorageAccessible(XLSM_NAME)
+    If Len(badDir) > 0 And Not modCommon.IsHeadless() Then
+        modConfigHolder.NotifyStorageInaccessible badDir
+    Else
+        Call orch.RunFullSetup(XLSM_NAME)
+    End If
+    ' [Change-5] one-time idempotent migration of any flat data\*.txt into
+    ' data\<formatId>\ (no-op once migrated / when storage is unreachable).
+    On Error Resume Next
+    modKnowledgeFileIO.MigrateFlatDataToSubfolders
+    On Error GoTo ErrHandler
     ' 2026-06-06: delayed re-render (skip install COM)
     On Error Resume Next
     If Application.UserControl Then

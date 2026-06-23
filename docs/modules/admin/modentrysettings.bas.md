@@ -7,7 +7,7 @@ description: modEntrySettings.bas のソースコード（コピペ用）
 
 **配置先**: `管理.xlsm` 用の VBA モジュール
 **種類**: 標準モジュール
-**更新日**: 2026-06-18 18:14 JST
+**更新日**: 2026-06-22 23:02 JST
 
 ---
 
@@ -49,11 +49,6 @@ Attribute VB_Name = "modEntrySettings"
 '     - Added Btn_DeleteAllLog (M-14 destructive clear).
 '     - Added Btn_CheckFormat (M-12 read-only format check).
 ' Naming (after v2.3):
-'   M-11 settings (debugLevel):
-'     Btn_OpenSettings_v21   -- open (holder -> sheet)
-'     Btn_SaveSettings_v21   -- validate -> SaveConfigKeys -> SetConfigKeys
-'   M-10 storage (6 dirs + 3 behaviour):
-'     Btn_SaveWorkbook       -- Fix-6 (ADR-0133): persist workbook (ThisWorkbook.Save)
 '   M-12 read-only check:
 '     Btn_CheckFormat        -- read-only consistency check, results to grid
 '   M-14 log admin:
@@ -100,9 +95,7 @@ Private Const ADDR_DEBUG_LEVEL As String = "D13"
 Private Const ADDR_DATA_DIR    As String = "D11"
 Private Const ADDR_FORMAT_DIR  As String = "D12"
 Private Const ADDR_UI_DIR      As String = "D13"
-Private Const ADDR_LOG_DIR     As String = "D14"
-Private Const ADDR_BACKUP_DIR  As String = "D15"
-Private Const ADDR_CONFIG_DIR  As String = "D16"
+Private Const ADDR_BACKUP_DIR  As String = "D14"
 
 ' --- M-12 cell layout (format check) ---
 ' C8 = target format id (matches ui_seed M-12.txt [INPUT] Cell=C8:E8
@@ -124,7 +117,7 @@ Private Const LOG_DATA_START_ROW As Long = 9
 
 ' --- config.txt default fallbacks (used only when holder is empty) ---
 ' Fix-6 (ADR-0133): path defaults removed; the 9-cell settings sheet
-' (modConfigLoader) is the SSOT. No hard-coded path here.
+' (modConfigLoader) is the SSOT (7-cell after Change-2). No hard-coded path here.
 Private Const DEF_DEBUG_LEVEL As String = "INFO"
 ' Phase FC (2026-06-03, ADR-0096): M-11 [VALIDATION] / [CHECKBOX] layout.
 '   B5     debugLevel selection (data validation list)
@@ -137,251 +130,6 @@ Private Const ADDR_DEBUG_LEVEL_FC As String = "D10"   ' 2026-06-07: new M-11 lay
 
 
 ' ============================================================
-' ===== M-11 settings (debugLevel) entry =====================
-' ============================================================
-
-' ============================================================
-' Public Sub: Btn_OpenSettings_v21
-' Role: open M-11 settings sheet; mirror debugLevel from holder.
-'       Assumes config holder is already initialized at workbook
-'       startup.
-' ============================================================
-Public Sub Btn_OpenSettings_v21()
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0252] modEntrySettings.Btn_OpenSettings_v21 ENTER"  ' [ADR-0100]
-    On Error GoTo ErrHandler
-    ' [BTN-GUARD-PRELUDE-BEGIN] auto-injected by inject_btn_template.py
-    Const BTN As String = "Btn_OpenSettings_v21"
-    Dim XLSM As String
-    XLSM = ChrW(&H7BA1) & ChrW(&H7406)
-    modBtnGuard.LogEnter BTN, XLSM
-    If Not modBtnGuard.CheckPrereq(BTN, "config", XLSM) Then
-        modBtnGuard.LogExit BTN, XLSM, False
-        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0253] modEntrySettings.Btn_OpenSettings_v21 EXIT-OK"  ' [ADR-0100]
-        Exit Sub
-    End If
-    ' [BTN-GUARD-PRELUDE-END]
-    Dim ws As Worksheet
-    Set ws = ThisWorkbook.Worksheets(SHEET_SETTINGS)
-    ws.Activate
-    LoadSettingsToSheet ws
-    LogInfoSafe "Btn_OpenSettings_v21", _
-        "Settings opened", "SAVE-EXIT-OK-II-010"
-    ' [BTN-GUARD-EXIT-OK] auto-injected
-    modBtnGuard.LogExit BTN, XLSM, True
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0254] modEntrySettings.Btn_OpenSettings_v21 EXIT-OK"  ' [ADR-0100]
-    Exit Sub
-ErrHandler:
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-0255] modEntrySettings.Btn_OpenSettings_v21 EXIT-ERR " & "errNum=" & Err.Number & " desc=" & Err.Description  ' [ADR-0100]
-    ' [BTN-GUARD-ERR-LOG] auto-injected
-    modBtnGuard.LogExit BTN, XLSM, False
-    Debug.Print "[ERR] Btn_OpenSettings_v21: " & Err.Number & " " & Err.Description
-End Sub
-
-' ============================================================
-' Public Sub: Btn_SaveSettings_v21
-' Role: M-11 sheet -> validate -> persist via SaveConfigKeys ->
-'       sync in-memory via SetConfigKeys. Only debugLevel is
-'       owned by M-11; the path keys remain unchanged on disk
-'       (SaveConfigKeys keeps non-listed keys as-is).
-' ============================================================
-Public Sub Btn_SaveSettings_v21()
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0256] modEntrySettings.Btn_SaveSettings_v21 ENTER"  ' [ADR-0100]
-    On Error GoTo ErrHandler
-    ' [BTN-GUARD-PRELUDE-BEGIN] auto-injected by inject_btn_template.py
-    Const BTN As String = "Btn_SaveSettings_v21"
-    Dim XLSM As String
-    XLSM = ChrW(&H7BA1) & ChrW(&H7406)
-    modBtnGuard.LogEnter BTN, XLSM
-    If Not modBtnGuard.CheckPrereq(BTN, "config", XLSM) Then
-        modBtnGuard.LogExit BTN, XLSM, False
-        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0257] modEntrySettings.Btn_SaveSettings_v21 EXIT-OK"  ' [ADR-0100]
-        Exit Sub
-    End If
-    ' [BTN-GUARD-PRELUDE-END]
-    Dim ws As Worksheet
-    Set ws = ThisWorkbook.Worksheets(SHEET_SETTINGS)
-
-    Dim ngLabel As String
-    Dim ngAddr As String
-    If Not ValidateSettingsSheet(ws, ngLabel, ngAddr) Then
-        LogWarnSafe "Btn_SaveSettings_v21", _
-            "Validation failed at " & ngAddr & " (" & ngLabel & ")", _
-            "VALIDATE-WARN-WW-033"
-        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0258] modEntrySettings.Btn_SaveSettings_v21 EXIT-OK"  ' [ADR-0100]
-        Exit Sub
-    End If
-
-    ApplySettingsToHolder ws
-
-    LogInfoSafe "Btn_SaveSettings_v21", _
-        "Settings applied (config.txt + holder)", "SAVE-EXIT-OK-II-011"
-    ' [BTN-GUARD-EXIT-OK] auto-injected
-    modBtnGuard.LogExit BTN, XLSM, True
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0259] modEntrySettings.Btn_SaveSettings_v21 EXIT-OK"  ' [ADR-0100]
-    Exit Sub
-ErrHandler:
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-0260] modEntrySettings.Btn_SaveSettings_v21 EXIT-ERR " & "errNum=" & Err.Number & " desc=" & Err.Description  ' [ADR-0100]
-    ' [BTN-GUARD-ERR-LOG] auto-injected
-    modBtnGuard.LogExit BTN, XLSM, False
-    LogErrorSafe "Btn_SaveSettings_v21", _
-        "Apply failed: " & Err.Number & " " & Err.Description, _
-        "BACKTOMAIN-ERR-EE-034"
-    Debug.Print "[ERR] Btn_SaveSettings_v21: " & Err.Number & " " & Err.Description
-End Sub
-
-
-' ============================================================
-' ===== M-10 storage (4 dirs) entry ==========================
-' ============================================================
-
-
-' ============================================================
-' Public Sub: Btn_SaveWorkbook
-' Role: Fix-6 (ADR-0133): the 9-cell settings sheet is the SSOT, so
-'       "save" simply persists the workbook (ThisWorkbook.Save).
-'       The cell values are validated at load time by modConfigLoader;
-'       this button no longer writes config.txt or touches the holder.
-' ============================================================
-Public Sub Btn_SaveWorkbook()
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0268] modEntrySettings.Btn_SaveWorkbook ENTER"  ' [ADR-0100]
-    On Error Resume Next
-    ThisWorkbook.Save
-    If Err.Number = 0 Then
-        If Not modCommon.IsHeadless() Then
-            MsgBox ChrW(&H30EF) & ChrW(&H30FC) & ChrW(&H30AF) & ChrW(&H30D6) & ChrW(&H30C3) & ChrW(&H30AF) & ChrW(&H3092) & ChrW(&H4FDD) & ChrW(&H5B58) & ChrW(&H3057) & ChrW(&H307E) & ChrW(&H3057) & ChrW(&H305F) & ChrW(&H3002), vbInformation, ChrW(&H4FDD) & ChrW(&H5B58) & ChrW(&H5B8C) & ChrW(&H4E86)
-        End If
-        LogInfoSafe "Btn_SaveWorkbook", "workbook saved", "SAVE-EXIT-OK-II-014"
-    Else
-        If Not modCommon.IsHeadless() Then
-            MsgBox ChrW(&H4FDD) & ChrW(&H5B58) & ChrW(&H306B) & ChrW(&H5931) & ChrW(&H6557) & ChrW(&H3057) & ChrW(&H307E) & ChrW(&H3057) & ChrW(&H305F) & ChrW(&H003A) & ChrW(&H0020) & Err.Description, vbExclamation, ChrW(&H4FDD) & ChrW(&H5B58) & ChrW(&H30A8) & ChrW(&H30E9) & ChrW(&H30FC)
-        End If
-        LogErrorSafe "Btn_SaveWorkbook", "save failed: " & Err.Number & " " & Err.Description, "BACKTOMAIN-ERR-EE-036"
-    End If
-    On Error GoTo 0
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0271] modEntrySettings.Btn_SaveWorkbook EXIT-OK"  ' [ADR-0100]
-End Sub
-
-
-' ============================================================
-' ===== M-11 private helpers (debugLevel) ====================
-' ============================================================
-
-' ============================================================
-' Private Sub: LoadSettingsToSheet
-' Role: holder -> M-11 sheet (debugLevel).
-' ============================================================
-Private Sub LoadSettingsToSheet(ByVal ws As Worksheet)
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0273] modEntrySettings.LoadSettingsToSheet ENTER"  ' [ADR-0100]
-    ' Legacy [INPUT] at D13 (kept for backwards compatibility).
-    ws.Range(ADDR_DEBUG_LEVEL).Value = SafeGetCfg("debugLevel", DEF_DEBUG_LEVEL)
-    ' Phase FC: also mirror to the new [VALIDATION] cell B5.
-    On Error Resume Next
-    ws.Range(ADDR_DEBUG_LEVEL_FC).Value = SafeGetCfg("debugLevel", DEF_DEBUG_LEVEL)
-    ' Phase FC: pre-fill the CheckBox LinkedCells in column H.
-    ' 2026-06-07: checkbox cells retired; no read-from-config needed.
-    ' Sync CheckBox shape values to LinkedCell state (paranoia: some
-    ' Excel COM hosts skip the shape->cell mirror on initial open).
-    On Error GoTo 0
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0274] modEntrySettings.LoadSettingsToSheet EXIT-OK"  ' [ADR-0100]
-End Sub
-
-' ============================================================
-' Public Sub: EnsureSettingsCellsEditable
-' Role: [BUGFIX 2026-06-06] Make M-11 settings input cells (B5
-'       debugLevel dropdown, H7/H8/H9 CheckBox LinkedCells) user-
-'       editable by setting Locked=False. clsSheetRenderer protects
-'       the sheet with all cells Locked=True by default; without
-'       these unlocks the user gets "the cell is on a protected
-'       sheet" dialog when clicking a CheckBox (the LinkedCell
-'       update happens as user write, not as a macro write, so
-'       UserInterfaceOnly=True does not exempt it). Called from
-'       ThisWorkbook OnTime startup hook after Btn_RefreshAllSheets.
-' ============================================================
-Public Sub EnsureSettingsCellsEditable()
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-EU01] modEntrySettings.EnsureSettingsCellsEditable ENTER"
-    On Error GoTo ErrHandler
-    Dim ws As Worksheet
-    Set ws = ThisWorkbook.Worksheets(SHEET_SETTINGS)
-    ' [BUG-B14 2026-06-11] setting Locked on a protected sheet raises 1004;
-    ' toggle protection around the change (same pattern as modEntryFormat).
-    Dim wasProtected As Boolean
-    wasProtected = ws.ProtectContents
-    If wasProtected Then ws.Unprotect Password:=""
-    ws.Range(ADDR_DEBUG_LEVEL_FC).Locked = False
-    If wasProtected Then ws.Protect Password:="", UserInterfaceOnly:=True
-    ' 2026-06-07: checkbox cells retired; no Locked-toggle needed.
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-EU02] modEntrySettings.EnsureSettingsCellsEditable EXIT-OK"
-    Exit Sub
-ErrHandler:
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-EU03] modEntrySettings.EnsureSettingsCellsEditable EXIT-ERR " & "errNum=" & Err.Number & " desc=" & Err.Description
-End Sub
-
-' ============================================================
-' Private Sub: ApplySettingsToHolder
-' Role: M-11 sheet -> config.txt + holder, via the v2.3
-'       SaveConfigKeys + SetConfigKeys pair (single-key dict).
-'       SaveConfigKeys leaves other keys in config.txt untouched.
-' ============================================================
-Private Sub ApplySettingsToHolder(ByVal ws As Worksheet)
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0275] modEntrySettings.ApplySettingsToHolder ENTER"  ' [ADR-0100]
-    Dim d As Object
-    Set d = CreateObject("Scripting.Dictionary")
-    Dim dl As String
-    ' B5 (new) wins over D13 (legacy) when both are non-empty.
-    dl = CStr(ws.Range(ADDR_DEBUG_LEVEL_FC).Value)
-    If Len(Trim$(dl)) = 0 Then
-        dl = CStr(ws.Range(ADDR_DEBUG_LEVEL).Value)
-    End If
-    If Len(Trim$(dl)) = 0 Then dl = DEF_DEBUG_LEVEL
-    d("debugLevel") = dl
-    ' CheckBox states via LinkedCell (TRUE / FALSE).
-    ' 2026-06-07: checkbox UI retired; not writing 3 booleans to dict.
-    PersistConfigKeys d
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0276] modEntrySettings.ApplySettingsToHolder EXIT-OK"  ' [ADR-0100]
-End Sub
-
-' Convert a VBA Boolean into the canonical TRUE/FALSE string token used
-' in config.txt (matches the v2.3 admin / settei convention).
-Private Function BoolToToken(ByVal b As Boolean) As String
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0277] modEntrySettings.BoolToToken ENTER"  ' [ADR-0100]
-    If b Then
-        BoolToToken = "TRUE"
-    Else
-        BoolToToken = "FALSE"
-    End If
-End Function
-
-' ============================================================
-' Private Function: ValidateSettingsSheet
-' Role: debugLevel must be non-empty.
-' Return: True = OK, False = NG (outLabel / outAddr carry the NG)
-' ============================================================
-Private Function ValidateSettingsSheet(ByVal ws As Worksheet, _
-                                       ByRef outLabel As String, _
-                                       ByRef outAddr As String) As Boolean
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0278] modEntrySettings.ValidateSettingsSheet ENTER"  ' [ADR-0100]
-    ' [BUGFIX 2026-06-06] FAIL T-M11-CLICK-01: original code only checked D13
-    ' (ADDR_DEBUG_LEVEL legacy), but the UI dropdown is at B5
-    ' (ADDR_DEBUG_LEVEL_FC). D13 stays empty after Setup_admin (only B5 gets
-    ' the data validation default INFO via stanza), so validation always
-    ' failed and save silently aborted. Check B5 first, fall back to D13.
-    Dim dl As String
-    dl = CStr(ws.Range(ADDR_DEBUG_LEVEL_FC).Value)
-    If Len(Trim$(dl)) = 0 Then
-        dl = CStr(ws.Range(ADDR_DEBUG_LEVEL).Value)
-    End If
-    If Len(Trim$(dl)) = 0 Then
-        outAddr = ADDR_DEBUG_LEVEL_FC
-        outLabel = "debugLevel"
-        ValidateSettingsSheet = False
-        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0279] modEntrySettings.ValidateSettingsSheet EXIT-OK"  ' [ADR-0100]
-        Exit Function
-    End If
-    ValidateSettingsSheet = True
-End Function
-
-
-' ============================================================
 ' ===== M-10 private helpers (4 dirs) ========================
 ' ============================================================
 
@@ -391,10 +139,40 @@ End Function
 ' ============================================================
 Public Sub LoadStorageToSheet(ByVal ws As Worksheet)   ' 2026-06-07: Public to allow ThisWorkbook hook
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0280] modEntrySettings.LoadStorageToSheet ENTER"  ' [ADR-0100]
-    ' Fix-6 (ADR-0133): settings sheet is the SSOT; restore the 9 cells
+    ' Fix-6 (ADR-0133): settings sheet is the SSOT; restore the 7 cells
     ' from the holder (ApplyUiStanzas Cells.Clear wiped them on re-render).
     modConfigLoader.RestoreSheetFromHolder
+    ' [Change-1] show the role-resolved effective UI-definition path. The
+    ' stored ui_dir is the role-agnostic base (...\ui\); modUILoader appends
+    ' the role at load time, so the effective path is GetUiDir() & role & "\".
+    WriteEffectiveUiPath ws
 End Sub
+
+' ============================================================
+' Private Sub: WriteEffectiveUiPath  [Change-1, display-only]
+' Role: write a read-only indicator at B18/D18 of the M-10 storage
+'       sheet showing the per-role UI folder the loader actually reads
+'       so the displayed UI Dir matches ui\<role>\. Row 18 is free
+'       (SSOT keys occupy rows 11..17), so it never collides with the
+'       worksheet SSOT round-trip.
+' ============================================================
+Private Sub WriteEffectiveUiPath(ByVal ws As Worksheet)
+    On Error Resume Next
+    Dim eff As String
+    eff = modConfigHolder.GetUiDir() & XLSM_KEY() & "\"
+    Dim wasP As Boolean
+    wasP = ws.ProtectContents
+    If wasP Then ws.Unprotect Password:=""
+    ws.Range("B18").Value = UiEffLabel()
+    ws.Range("D18").Value = eff
+    If wasP Then ws.Protect Password:="", UserInterfaceOnly:=True
+    On Error GoTo 0
+End Sub
+
+' "UI(jikkou) path" label via ChrW: UI + teigi + pasu + (jikkou)
+Private Function UiEffLabel() As String
+    UiEffLabel = "UI" & ChrW(&H5B9A) & ChrW(&H7FA9) & ChrW(&H30D1) & ChrW(&H30B9) & "(" & ChrW(&H5B9F) & ChrW(&H52B9) & ")"
+End Function
 
 
 ' ============================================================
@@ -802,35 +580,6 @@ End Sub
 ' ===== common helpers =======================================
 ' ============================================================
 
-' ============================================================
-' Private Sub: PersistConfigKeys
-' Role: shared backend for the M-10 / M-11 Save buttons.
-'       Fix-6 (ADR-0133): persists the supplied keys into the 9-cell
-'       settings sheet (the SSOT) and refreshes the holder, via
-'       modConfigLoader.WriteSettingsFromDict. Exception-guarded.
-' ============================================================
-Private Sub PersistConfigKeys(ByVal keyValues As Object)
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0321] modEntrySettings.PersistConfigKeys ENTER"  ' [ADR-0100]
-    On Error Resume Next
-    modConfigLoader.WriteSettingsFromDict keyValues
-    On Error GoTo 0
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0322] modEntrySettings.PersistConfigKeys EXIT-OK"  ' [ADR-0100]
-End Sub
-
-' ============================================================
-' Private Function: SafeGetCfg
-' Role: exception-safe wrapper around modConfigHolder.GetValueOrDefault.
-' ============================================================
-Private Function SafeGetCfg(ByVal key As String, ByVal defaultValue As String) As String
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0323] modEntrySettings.SafeGetCfg ENTER"  ' [ADR-0100]
-    On Error Resume Next
-    Dim v As String
-    v = modConfigHolder.GetValueOrDefault(key, defaultValue)
-    If Len(v) = 0 Then v = defaultValue
-    SafeGetCfg = v
-    On Error GoTo 0
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0324] modEntrySettings.SafeGetCfg EXIT-OK"  ' [ADR-0100]
-End Function
 
 ' ============================================================
 ' Private Function: NewLogger
@@ -944,7 +693,7 @@ End Function
 
 
 ' [USER-REQ 2026-06-09] Btn_DeleteOrphans
-' Walk all 5 storage folders (data/format/ui/backup/config) and delete
+' Walk all 4 storage folders (data/format/ui/backup) and delete
 ' files matching "unnecessary" naming patterns:
 '   __*  (double-underscore tmp files)
 '   *.bak.*, *.bak_*  (backup-of-edit artifacts)
@@ -958,7 +707,6 @@ Public Sub Btn_DeleteOrphans()
     dirs.Add modConfigHolder.GetFormatDir()
     dirs.Add modConfigHolder.GetUiDir()
     dirs.Add modConfigHolder.GetBackupDir()
-    dirs.Add modConfigHolder.GetConfigDir()
 
     Dim fso As Object
     Set fso = CreateObject("Scripting.FileSystemObject")

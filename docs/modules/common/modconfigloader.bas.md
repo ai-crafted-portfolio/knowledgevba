@@ -7,7 +7,7 @@ description: modConfigLoader.bas のソースコード（コピペ用）
 
 **配置先**: 共通モジュール（検索.xlsm / 管理.xlsm 共通）
 **種類**: 標準モジュール
-**更新日**: 2026-06-18 18:14 JST
+**更新日**: 2026-06-22 22:33 JST
 
 ---
 
@@ -37,8 +37,8 @@ Attribute VB_Name = "modConfigLoader"
 '          Replaces the retired text-file loader. ADR-0133
 '          supersedes ADR-0132 (install-injected path constants).
 '          Layout: column B = label, column D = value (ui_seed
-'          input convention), rows 11..19 (6 paths + 3 behaviour).
-'          First run (all 6 path cells empty): InputBox for BASE_DIR
+'          input convention), rows 11..17 (4 paths + 3 behaviour).
+'          First run (all 4 path cells empty): InputBox for BASE_DIR
 '          interactive / default base headless, derive 6 dirs, seed
 '          3 behaviour defaults, write back, save the workbook.
 '          Partial-missing path: explicit error + abort (interactive)
@@ -57,7 +57,7 @@ Private Const DEFAULT_UI_SCHEMA_FAIL_MODE As String = "safeDefault"
 Private Const FIRST_DATA_ROW As Long = 11    ' worksheet row of first key (data_dir)
 Private Const KEY_COL As Long = 2            ' column B = key label
 Private Const VALUE_COL As Long = 4          ' column D = value (ui_seed input cell)
-Private Const PATH_KEY_COUNT As Long = 6     ' first 6 keys are paths
+Private Const PATH_KEY_COUNT As Long = 4     ' first 4 keys are paths
 
 ' ----------------------------------------------------------------
 ' Public API
@@ -112,6 +112,27 @@ Public Function LoadConfig(ByVal xlsmName As String) As Boolean
 
     If emptyPaths > 0 Then
         ' Partial-missing path cells.
+        ' [Fix-6 / ADR-0133-followup 2026-06-19] Auto-heal instead of the old
+        ' interactive hard-abort. The common real case is a config migrated
+        ' from a pre-Fix-6 config that had no base-dir line: the sub-dir
+        ' cells are filled but the base cell is empty, so emptyPaths is partial
+        ' and the first-run InputBox never fires. The user then sees an opaque
+        ' "base dir is empty or invalid" abort with no idea what to enter.
+        ' Instead, infer BASE_DIR from an existing path and derive only the
+        ' missing cells, then continue. Only when no base can be inferred do we
+        ' fall back to the previous default-fill (headless) / notify (interactive).
+        Dim base As String
+        base = InferBaseDir(d)
+        If Len(base) > 0 Then
+            FillMissingPathsFromBase d, base
+            ApplyBehaviorDefaults d
+            WriteDictToSheet ws, d
+            SaveBookQuiet
+            modConfigHolder.SetConfig d
+            LoadConfig = True
+            If modCommon.gDebugLevel >= DEBUG_LEVEL_DEBUG Then Debug.Print "[D-0962b] modConfigLoader.LoadConfig EXIT-OK partial-autoheal base=" & base  ' [ADR-0100]
+            Exit Function
+        End If
         If modCommon.IsHeadless() Then
             FillMissingPathsFromDefault d
             ApplyBehaviorDefaults d
@@ -241,12 +262,64 @@ ErrHandler:
     If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-0970] modConfigLoader.WriteSettingsFromDict EXIT-ERR errNum=" & Err.Number  ' [ADR-0100]
 End Sub
 
+' ================================================================
+' Function: SnapshotSettings
+' Summary:  Fix-6 followup. Capture the 9 settings cells from the
+'           settings sheet into a fresh Dictionary so a re-render
+'           (Cells.Clear) cannot lose user-entered values. Never
+'           fails: a missing sheet yields empty-string values.
+' ================================================================
+Public Function SnapshotSettings() As Object
+    On Error GoTo ErrHandler
+    Dim ws As Worksheet
+    Set ws = GetSettingsSheet()
+    If ws Is Nothing Then
+        Set SnapshotSettings = NewEmptyKeyDict()
+        Exit Function
+    End If
+    Set SnapshotSettings = ReadSheetToDict(ws)
+    Exit Function
+ErrHandler:
+    Set SnapshotSettings = NewEmptyKeyDict()
+End Function
+
+' ================================================================
+' Sub: RestoreSettings
+' Summary:  Fix-6 followup. Write a snapshot Dictionary back into the
+'           9 settings cells after a re-render. Creates the settings
+'           sheet when absent. Never raises.
+' ================================================================
+Public Sub RestoreSettings(ByVal d As Object)
+    On Error GoTo ErrHandler
+    If d Is Nothing Then Exit Sub
+    Dim ws As Worksheet
+    Set ws = EnsureSettingsSheet()
+    If ws Is Nothing Then Exit Sub
+    WriteDictToSheet ws, d
+    Exit Sub
+ErrHandler:
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-0971] modConfigLoader.RestoreSettings EXIT-ERR errNum=" & Err.Number  ' [ADR-0100]
+End Sub
+
 ' ----------------------------------------------------------------
 ' Private helpers
 ' ----------------------------------------------------------------
 
 Private Function AllKeys() As Variant
-    AllKeys = Array("data_dir", "format_dir", "ui_dir", "log_dir", "backup_dir", "config_dir", "debugLevel", "logRotationRows", "uiSchemaFailMode")
+    AllKeys = Array("data_dir", "format_dir", "ui_dir", "backup_dir", "debugLevel", "logRotationRows", "uiSchemaFailMode")
+End Function
+
+' Fix-6 followup: a Dictionary pre-populated with all 9 keys set to "".
+Private Function NewEmptyKeyDict() As Object
+    Dim d As Object
+    Set d = CreateObject("Scripting.Dictionary")
+    Dim keys As Variant
+    keys = AllKeys()
+    Dim i As Long
+    For i = 0 To UBound(keys)
+        d(keys(i)) = ""
+    Next i
+    Set NewEmptyKeyDict = d
 End Function
 
 Private Function GetSettingsSheet() As Worksheet
@@ -297,8 +370,8 @@ Private Sub SeedSheetFrame(ByVal ws As Object)
     For i = 0 To UBound(keys)
         ws.Cells(FIRST_DATA_ROW + i, KEY_COL).Value = keys(i)
     Next i
-    AddListValidation ws.Cells(FIRST_DATA_ROW + 6, VALUE_COL), "DEBUG,INFO,WARN,ERROR,OFF,TRACE"
-    AddListValidation ws.Cells(FIRST_DATA_ROW + 8, VALUE_COL), "safeDefault,warn,abort"
+    AddListValidation ws.Cells(FIRST_DATA_ROW + 4, VALUE_COL), "DEBUG,INFO,WARN,ERROR,OFF,TRACE"
+    AddListValidation ws.Cells(FIRST_DATA_ROW + 6, VALUE_COL), "safeDefault,warn,abort"
     On Error Resume Next
     ws.Columns(KEY_COL).ColumnWidth = 18
     ws.Columns(VALUE_COL).ColumnWidth = 34
@@ -346,9 +419,7 @@ Private Sub DeriveDirs(ByVal base As String, ByVal d As Object)
     d("data_dir") = b & "\data\"
     d("format_dir") = b & "\formats\"
     d("ui_dir") = b & "\ui\"
-    d("log_dir") = b & "\log\"
     d("backup_dir") = b & "\backup\"
-    d("config_dir") = b & "\"
 End Sub
 
 Private Sub FillMissingPathsFromDefault(ByVal d As Object)
@@ -362,6 +433,62 @@ Private Sub FillMissingPathsFromDefault(ByVal d As Object)
         If Len(Trim(CStr(d(keys(i))))) = 0 Then d(keys(i)) = def(keys(i))
     Next i
 End Sub
+
+' [Fix-6 / ADR-0133-followup] Infer BASE_DIR from whatever path cells are
+' already filled, so a partially-migrated config can self-heal without an
+' InputBox. The parent of the first filled sub-path is used as the base.
+' Returns "" when nothing can be inferred.
+Private Function InferBaseDir(ByVal d As Object) As String
+    Dim subKeys As Variant
+    subKeys = Array("data_dir", "format_dir", "ui_dir", "backup_dir")
+    Dim i As Long
+    Dim v As String
+    For i = 0 To UBound(subKeys)
+        v = Trim(CStr(d(subKeys(i))))
+        If Len(v) > 0 Then
+            InferBaseDir = ParentDir(v)
+            If Len(InferBaseDir) > 0 Then Exit Function
+        End If
+    Next i
+    InferBaseDir = ""
+End Function
+
+' Derive every still-empty path cell from an inferred base (same layout as
+' DeriveDirs). Filled cells are left untouched so user customisations survive.
+Private Sub FillMissingPathsFromBase(ByVal d As Object, ByVal base As String)
+    Dim derived As Object
+    Set derived = CreateObject("Scripting.Dictionary")
+    DeriveDirs base, derived
+    Dim keys As Variant
+    keys = AllKeys()
+    Dim i As Long
+    For i = 0 To PATH_KEY_COUNT - 1
+        If Len(Trim(CStr(d(keys(i))))) = 0 Then d(keys(i)) = derived(keys(i))
+    Next i
+End Sub
+
+' Strip every trailing path separator ("C:\KnowledgeMgr\" -> "C:\KnowledgeMgr").
+Private Function StripTrailingSep(ByVal p As String) As String
+    Dim s As String
+    s = p
+    Do While Len(s) > 0 And Right(s, 1) = "\"
+        s = Left(s, Len(s) - 1)
+    Loop
+    StripTrailingSep = s
+End Function
+
+' Parent directory of a path ("C:\KnowledgeMgr\data\" -> "C:\KnowledgeMgr").
+Private Function ParentDir(ByVal p As String) As String
+    Dim s As String
+    s = StripTrailingSep(p)
+    Dim pos As Long
+    pos = InStrRev(s, "\")
+    If pos > 1 Then
+        ParentDir = Left(s, pos - 1)
+    Else
+        ParentDir = ""
+    End If
+End Function
 
 Private Sub ApplyBehaviorDefaults(ByVal d As Object)
     If Len(Trim(CStr(d("debugLevel")))) = 0 Then d("debugLevel") = DEFAULT_DEBUG_LEVEL
