@@ -5063,7 +5063,7 @@
 <h1 id="modconfigloaderbas">modConfigLoader.bas<a class="headerlink" href="#modconfigloaderbas" title="Permanent link">&para;</a></h1>
 <p><strong>配置先</strong>: 共通モジュール（検索.xlsm / 管理.xlsm 共通）
 <strong>種類</strong>: 標準モジュール
-<strong>更新日</strong>: 2026-06-18 18:14 JST</p>
+<strong>更新日</strong>: 2026-06-22 22:33 JST</p>
 <hr />
 <h2 id="_1">保存方法<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <p>下のコードをメモ帳に貼り付け、<strong>[名前を付けて保存]</strong> で次のように保存してください。</p>
@@ -5088,8 +5088,8 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>&#39;          Replaces the retired text-file loader. ADR-0133
 <a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>&#39;          supersedes ADR-0132 (install-injected path constants).
 <a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>&#39;          Layout: column B = label, column D = value (ui_seed
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>&#39;          input convention), rows 11..19 (6 paths + 3 behaviour).
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>&#39;          First run (all 6 path cells empty): InputBox for BASE_DIR
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>&#39;          input convention), rows 11..17 (4 paths + 3 behaviour).
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>&#39;          First run (all 4 path cells empty): InputBox for BASE_DIR
 <a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>&#39;          interactive / default base headless, derive 6 dirs, seed
 <a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>&#39;          3 behaviour defaults, write back, save the workbook.
 <a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>&#39;          Partial-missing path: explicit error + abort (interactive)
@@ -5108,7 +5108,7 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>Private Const FIRST_DATA_ROW As Long = 11    &#39; worksheet row of first key (data_dir)
 <a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>Private Const KEY_COL As Long = 2            &#39; column B = key label
 <a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>Private Const VALUE_COL As Long = 4          &#39; column D = value (ui_seed input cell)
-<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>Private Const PATH_KEY_COUNT As Long = 6     &#39; first 6 keys are paths
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>Private Const PATH_KEY_COUNT As Long = 4     &#39; first 4 keys are paths
 <a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>
 <a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>&#39; ----------------------------------------------------------------
 <a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>&#39; Public API
@@ -5163,307 +5163,434 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-81" name="__codelineno-0-81" href="#__codelineno-0-81"></a>
 <a id="__codelineno-0-82" name="__codelineno-0-82" href="#__codelineno-0-82"></a>    If emptyPaths &gt; 0 Then
 <a id="__codelineno-0-83" name="__codelineno-0-83" href="#__codelineno-0-83"></a>        &#39; Partial-missing path cells.
-<a id="__codelineno-0-84" name="__codelineno-0-84" href="#__codelineno-0-84"></a>        If modCommon.IsHeadless() Then
-<a id="__codelineno-0-85" name="__codelineno-0-85" href="#__codelineno-0-85"></a>            FillMissingPathsFromDefault d
-<a id="__codelineno-0-86" name="__codelineno-0-86" href="#__codelineno-0-86"></a>            ApplyBehaviorDefaults d
-<a id="__codelineno-0-87" name="__codelineno-0-87" href="#__codelineno-0-87"></a>            WriteDictToSheet ws, d
-<a id="__codelineno-0-88" name="__codelineno-0-88" href="#__codelineno-0-88"></a>            SaveBookQuiet
-<a id="__codelineno-0-89" name="__codelineno-0-89" href="#__codelineno-0-89"></a>            modConfigHolder.SetConfig d
-<a id="__codelineno-0-90" name="__codelineno-0-90" href="#__codelineno-0-90"></a>            LoadConfig = True
-<a id="__codelineno-0-91" name="__codelineno-0-91" href="#__codelineno-0-91"></a>            Exit Function
-<a id="__codelineno-0-92" name="__codelineno-0-92" href="#__codelineno-0-92"></a>        Else
-<a id="__codelineno-0-93" name="__codelineno-0-93" href="#__codelineno-0-93"></a>            NotifyMissingKey FirstEmptyPathKey(d)
-<a id="__codelineno-0-94" name="__codelineno-0-94" href="#__codelineno-0-94"></a>            LoadConfig = False
-<a id="__codelineno-0-95" name="__codelineno-0-95" href="#__codelineno-0-95"></a>            If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print &quot;[D-0962] modConfigLoader.LoadConfig EXIT abort partial-missing&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-96" name="__codelineno-0-96" href="#__codelineno-0-96"></a>            Exit Function
-<a id="__codelineno-0-97" name="__codelineno-0-97" href="#__codelineno-0-97"></a>        End If
-<a id="__codelineno-0-98" name="__codelineno-0-98" href="#__codelineno-0-98"></a>    End If
-<a id="__codelineno-0-99" name="__codelineno-0-99" href="#__codelineno-0-99"></a>
-<a id="__codelineno-0-100" name="__codelineno-0-100" href="#__codelineno-0-100"></a>    &#39; All path cells present.
-<a id="__codelineno-0-101" name="__codelineno-0-101" href="#__codelineno-0-101"></a>    ApplyBehaviorDefaults d
-<a id="__codelineno-0-102" name="__codelineno-0-102" href="#__codelineno-0-102"></a>    modConfigHolder.SetConfig d
-<a id="__codelineno-0-103" name="__codelineno-0-103" href="#__codelineno-0-103"></a>    LoadConfig = True
-<a id="__codelineno-0-104" name="__codelineno-0-104" href="#__codelineno-0-104"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0963] modConfigLoader.LoadConfig EXIT-OK&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-105" name="__codelineno-0-105" href="#__codelineno-0-105"></a>    Exit Function
-<a id="__codelineno-0-106" name="__codelineno-0-106" href="#__codelineno-0-106"></a>
-<a id="__codelineno-0-107" name="__codelineno-0-107" href="#__codelineno-0-107"></a>ErrHandler:
-<a id="__codelineno-0-108" name="__codelineno-0-108" href="#__codelineno-0-108"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print &quot;[D-0964] modConfigLoader.LoadConfig EXIT-ERR errNum=&quot; &amp; Err.Number &amp; &quot; desc=&quot; &amp; Err.Description  &#39; [ADR-0100]
-<a id="__codelineno-0-109" name="__codelineno-0-109" href="#__codelineno-0-109"></a>    LoadConfig = False
-<a id="__codelineno-0-110" name="__codelineno-0-110" href="#__codelineno-0-110"></a>End Function
-<a id="__codelineno-0-111" name="__codelineno-0-111" href="#__codelineno-0-111"></a>
-<a id="__codelineno-0-112" name="__codelineno-0-112" href="#__codelineno-0-112"></a>&#39; ================================================================
-<a id="__codelineno-0-113" name="__codelineno-0-113" href="#__codelineno-0-113"></a>&#39; Function: Reload
-<a id="__codelineno-0-114" name="__codelineno-0-114" href="#__codelineno-0-114"></a>&#39; Summary:  Re-read the 9 cells into the holder (clsLogger polling /
-<a id="__codelineno-0-115" name="__codelineno-0-115" href="#__codelineno-0-115"></a>&#39;           dynamic debugLevel). No seeding, no abort.
-<a id="__codelineno-0-116" name="__codelineno-0-116" href="#__codelineno-0-116"></a>&#39; ================================================================
-<a id="__codelineno-0-117" name="__codelineno-0-117" href="#__codelineno-0-117"></a>Public Function Reload() As Boolean
-<a id="__codelineno-0-118" name="__codelineno-0-118" href="#__codelineno-0-118"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0965] modConfigLoader.Reload ENTER&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-119" name="__codelineno-0-119" href="#__codelineno-0-119"></a>    On Error GoTo ErrHandler
-<a id="__codelineno-0-120" name="__codelineno-0-120" href="#__codelineno-0-120"></a>    Dim ws As Worksheet
-<a id="__codelineno-0-121" name="__codelineno-0-121" href="#__codelineno-0-121"></a>    Set ws = GetSettingsSheet()
-<a id="__codelineno-0-122" name="__codelineno-0-122" href="#__codelineno-0-122"></a>    If ws Is Nothing Then
-<a id="__codelineno-0-123" name="__codelineno-0-123" href="#__codelineno-0-123"></a>        Reload = False
-<a id="__codelineno-0-124" name="__codelineno-0-124" href="#__codelineno-0-124"></a>        Exit Function
-<a id="__codelineno-0-125" name="__codelineno-0-125" href="#__codelineno-0-125"></a>    End If
-<a id="__codelineno-0-126" name="__codelineno-0-126" href="#__codelineno-0-126"></a>    Dim d As Object
-<a id="__codelineno-0-127" name="__codelineno-0-127" href="#__codelineno-0-127"></a>    Set d = ReadSheetToDict(ws)
-<a id="__codelineno-0-128" name="__codelineno-0-128" href="#__codelineno-0-128"></a>    ApplyBehaviorDefaults d
-<a id="__codelineno-0-129" name="__codelineno-0-129" href="#__codelineno-0-129"></a>    modConfigHolder.SetConfig d
-<a id="__codelineno-0-130" name="__codelineno-0-130" href="#__codelineno-0-130"></a>    Reload = True
-<a id="__codelineno-0-131" name="__codelineno-0-131" href="#__codelineno-0-131"></a>    Exit Function
-<a id="__codelineno-0-132" name="__codelineno-0-132" href="#__codelineno-0-132"></a>ErrHandler:
-<a id="__codelineno-0-133" name="__codelineno-0-133" href="#__codelineno-0-133"></a>    Reload = False
-<a id="__codelineno-0-134" name="__codelineno-0-134" href="#__codelineno-0-134"></a>End Function
-<a id="__codelineno-0-135" name="__codelineno-0-135" href="#__codelineno-0-135"></a>
-<a id="__codelineno-0-136" name="__codelineno-0-136" href="#__codelineno-0-136"></a>&#39; ================================================================
-<a id="__codelineno-0-137" name="__codelineno-0-137" href="#__codelineno-0-137"></a>&#39; Function: EnsureSettingsSheet
-<a id="__codelineno-0-138" name="__codelineno-0-138" href="#__codelineno-0-138"></a>&#39; Summary:  Return the settings sheet, creating + seeding the frame
-<a id="__codelineno-0-139" name="__codelineno-0-139" href="#__codelineno-0-139"></a>&#39;           (labels + validation) when it does not exist yet. Public
-<a id="__codelineno-0-140" name="__codelineno-0-140" href="#__codelineno-0-140"></a>&#39;           so M-10 / the orchestrator can guarantee it exists.
-<a id="__codelineno-0-141" name="__codelineno-0-141" href="#__codelineno-0-141"></a>&#39; ================================================================
-<a id="__codelineno-0-142" name="__codelineno-0-142" href="#__codelineno-0-142"></a>Public Function EnsureSettingsSheet() As Worksheet
-<a id="__codelineno-0-143" name="__codelineno-0-143" href="#__codelineno-0-143"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0966] modConfigLoader.EnsureSettingsSheet ENTER&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-144" name="__codelineno-0-144" href="#__codelineno-0-144"></a>    Dim ws As Worksheet
-<a id="__codelineno-0-145" name="__codelineno-0-145" href="#__codelineno-0-145"></a>    Set ws = GetSettingsSheet()
-<a id="__codelineno-0-146" name="__codelineno-0-146" href="#__codelineno-0-146"></a>    If ws Is Nothing Then
-<a id="__codelineno-0-147" name="__codelineno-0-147" href="#__codelineno-0-147"></a>        On Error Resume Next
-<a id="__codelineno-0-148" name="__codelineno-0-148" href="#__codelineno-0-148"></a>        Set ws = ThisWorkbook.Worksheets.Add(After:=ThisWorkbook.Worksheets(ThisWorkbook.Worksheets.Count))
-<a id="__codelineno-0-149" name="__codelineno-0-149" href="#__codelineno-0-149"></a>        If Not ws Is Nothing Then ws.Name = SettingsSheetName()
-<a id="__codelineno-0-150" name="__codelineno-0-150" href="#__codelineno-0-150"></a>        On Error GoTo 0
-<a id="__codelineno-0-151" name="__codelineno-0-151" href="#__codelineno-0-151"></a>        If Not ws Is Nothing Then SeedSheetFrame ws
-<a id="__codelineno-0-152" name="__codelineno-0-152" href="#__codelineno-0-152"></a>    End If
-<a id="__codelineno-0-153" name="__codelineno-0-153" href="#__codelineno-0-153"></a>    Set EnsureSettingsSheet = ws
-<a id="__codelineno-0-154" name="__codelineno-0-154" href="#__codelineno-0-154"></a>End Function
-<a id="__codelineno-0-155" name="__codelineno-0-155" href="#__codelineno-0-155"></a>
-<a id="__codelineno-0-156" name="__codelineno-0-156" href="#__codelineno-0-156"></a>&#39; ================================================================
-<a id="__codelineno-0-157" name="__codelineno-0-157" href="#__codelineno-0-157"></a>&#39; Sub: RestoreSheetFromHolder
-<a id="__codelineno-0-158" name="__codelineno-0-158" href="#__codelineno-0-158"></a>&#39; Summary:  Post-render hook. ApplyUiStanzas does Cells.Clear on the
-<a id="__codelineno-0-159" name="__codelineno-0-159" href="#__codelineno-0-159"></a>&#39;           admin M-10 sheet (== settings sheet); after the re-render
-<a id="__codelineno-0-160" name="__codelineno-0-160" href="#__codelineno-0-160"></a>&#39;           we write the holder values back into B2..B10 so the SSOT
-<a id="__codelineno-0-161" name="__codelineno-0-161" href="#__codelineno-0-161"></a>&#39;           round-trips across every Workbook_Open. No-op when the
-<a id="__codelineno-0-162" name="__codelineno-0-162" href="#__codelineno-0-162"></a>&#39;           holder is empty or the sheet is absent.
-<a id="__codelineno-0-163" name="__codelineno-0-163" href="#__codelineno-0-163"></a>&#39; ================================================================
-<a id="__codelineno-0-164" name="__codelineno-0-164" href="#__codelineno-0-164"></a>Public Sub RestoreSheetFromHolder()
-<a id="__codelineno-0-165" name="__codelineno-0-165" href="#__codelineno-0-165"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0967] modConfigLoader.RestoreSheetFromHolder ENTER&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-166" name="__codelineno-0-166" href="#__codelineno-0-166"></a>    On Error GoTo ErrHandler
-<a id="__codelineno-0-167" name="__codelineno-0-167" href="#__codelineno-0-167"></a>    If Not modConfigHolder.IsInitialized() Then Exit Sub
-<a id="__codelineno-0-168" name="__codelineno-0-168" href="#__codelineno-0-168"></a>    Dim ws As Worksheet
-<a id="__codelineno-0-169" name="__codelineno-0-169" href="#__codelineno-0-169"></a>    Set ws = GetSettingsSheet()
-<a id="__codelineno-0-170" name="__codelineno-0-170" href="#__codelineno-0-170"></a>    If ws Is Nothing Then Exit Sub
-<a id="__codelineno-0-171" name="__codelineno-0-171" href="#__codelineno-0-171"></a>    Dim d As Object
-<a id="__codelineno-0-172" name="__codelineno-0-172" href="#__codelineno-0-172"></a>    Set d = CreateObject(&quot;Scripting.Dictionary&quot;)
-<a id="__codelineno-0-173" name="__codelineno-0-173" href="#__codelineno-0-173"></a>    Dim keys As Variant
-<a id="__codelineno-0-174" name="__codelineno-0-174" href="#__codelineno-0-174"></a>    keys = AllKeys()
-<a id="__codelineno-0-175" name="__codelineno-0-175" href="#__codelineno-0-175"></a>    Dim i As Long
-<a id="__codelineno-0-176" name="__codelineno-0-176" href="#__codelineno-0-176"></a>    For i = 0 To UBound(keys)
-<a id="__codelineno-0-177" name="__codelineno-0-177" href="#__codelineno-0-177"></a>        d(keys(i)) = modConfigHolder.GetValue(CStr(keys(i)))
-<a id="__codelineno-0-178" name="__codelineno-0-178" href="#__codelineno-0-178"></a>    Next i
-<a id="__codelineno-0-179" name="__codelineno-0-179" href="#__codelineno-0-179"></a>    WriteDictToSheet ws, d
-<a id="__codelineno-0-180" name="__codelineno-0-180" href="#__codelineno-0-180"></a>    Exit Sub
-<a id="__codelineno-0-181" name="__codelineno-0-181" href="#__codelineno-0-181"></a>ErrHandler:
-<a id="__codelineno-0-182" name="__codelineno-0-182" href="#__codelineno-0-182"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print &quot;[D-0968] modConfigLoader.RestoreSheetFromHolder EXIT-ERR errNum=&quot; &amp; Err.Number  &#39; [ADR-0100]
-<a id="__codelineno-0-183" name="__codelineno-0-183" href="#__codelineno-0-183"></a>End Sub
-<a id="__codelineno-0-184" name="__codelineno-0-184" href="#__codelineno-0-184"></a>
-<a id="__codelineno-0-185" name="__codelineno-0-185" href="#__codelineno-0-185"></a>&#39; ================================================================
-<a id="__codelineno-0-186" name="__codelineno-0-186" href="#__codelineno-0-186"></a>&#39; Sub: WriteSettingsFromDict
-<a id="__codelineno-0-187" name="__codelineno-0-187" href="#__codelineno-0-187"></a>&#39; Summary:  Persist edited keys (M-10 save). Merge keyValues over the
-<a id="__codelineno-0-188" name="__codelineno-0-188" href="#__codelineno-0-188"></a>&#39;           current sheet values, write B2..B10, save the workbook,
-<a id="__codelineno-0-189" name="__codelineno-0-189" href="#__codelineno-0-189"></a>&#39;           and refresh the holder. Replaces the retired text-file
-<a id="__codelineno-0-190" name="__codelineno-0-190" href="#__codelineno-0-190"></a>&#39;           writeback pair.
-<a id="__codelineno-0-191" name="__codelineno-0-191" href="#__codelineno-0-191"></a>&#39; ================================================================
-<a id="__codelineno-0-192" name="__codelineno-0-192" href="#__codelineno-0-192"></a>Public Sub WriteSettingsFromDict(ByVal keyValues As Object)
-<a id="__codelineno-0-193" name="__codelineno-0-193" href="#__codelineno-0-193"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0969] modConfigLoader.WriteSettingsFromDict ENTER&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-194" name="__codelineno-0-194" href="#__codelineno-0-194"></a>    On Error GoTo ErrHandler
-<a id="__codelineno-0-195" name="__codelineno-0-195" href="#__codelineno-0-195"></a>    If keyValues Is Nothing Then Exit Sub
-<a id="__codelineno-0-196" name="__codelineno-0-196" href="#__codelineno-0-196"></a>    Dim ws As Worksheet
-<a id="__codelineno-0-197" name="__codelineno-0-197" href="#__codelineno-0-197"></a>    Set ws = EnsureSettingsSheet()
-<a id="__codelineno-0-198" name="__codelineno-0-198" href="#__codelineno-0-198"></a>    If ws Is Nothing Then Exit Sub
-<a id="__codelineno-0-199" name="__codelineno-0-199" href="#__codelineno-0-199"></a>    Dim d As Object
-<a id="__codelineno-0-200" name="__codelineno-0-200" href="#__codelineno-0-200"></a>    Set d = ReadSheetToDict(ws)
-<a id="__codelineno-0-201" name="__codelineno-0-201" href="#__codelineno-0-201"></a>    Dim k As Variant
-<a id="__codelineno-0-202" name="__codelineno-0-202" href="#__codelineno-0-202"></a>    For Each k In keyValues.Keys
-<a id="__codelineno-0-203" name="__codelineno-0-203" href="#__codelineno-0-203"></a>        d(CStr(k)) = CStr(keyValues(k))
-<a id="__codelineno-0-204" name="__codelineno-0-204" href="#__codelineno-0-204"></a>    Next k
-<a id="__codelineno-0-205" name="__codelineno-0-205" href="#__codelineno-0-205"></a>    WriteDictToSheet ws, d
-<a id="__codelineno-0-206" name="__codelineno-0-206" href="#__codelineno-0-206"></a>    SaveBookQuiet
-<a id="__codelineno-0-207" name="__codelineno-0-207" href="#__codelineno-0-207"></a>    modConfigHolder.SetConfig d
-<a id="__codelineno-0-208" name="__codelineno-0-208" href="#__codelineno-0-208"></a>    Exit Sub
-<a id="__codelineno-0-209" name="__codelineno-0-209" href="#__codelineno-0-209"></a>ErrHandler:
-<a id="__codelineno-0-210" name="__codelineno-0-210" href="#__codelineno-0-210"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print &quot;[D-0970] modConfigLoader.WriteSettingsFromDict EXIT-ERR errNum=&quot; &amp; Err.Number  &#39; [ADR-0100]
-<a id="__codelineno-0-211" name="__codelineno-0-211" href="#__codelineno-0-211"></a>End Sub
-<a id="__codelineno-0-212" name="__codelineno-0-212" href="#__codelineno-0-212"></a>
-<a id="__codelineno-0-213" name="__codelineno-0-213" href="#__codelineno-0-213"></a>&#39; ----------------------------------------------------------------
-<a id="__codelineno-0-214" name="__codelineno-0-214" href="#__codelineno-0-214"></a>&#39; Private helpers
-<a id="__codelineno-0-215" name="__codelineno-0-215" href="#__codelineno-0-215"></a>&#39; ----------------------------------------------------------------
-<a id="__codelineno-0-216" name="__codelineno-0-216" href="#__codelineno-0-216"></a>
-<a id="__codelineno-0-217" name="__codelineno-0-217" href="#__codelineno-0-217"></a>Private Function AllKeys() As Variant
-<a id="__codelineno-0-218" name="__codelineno-0-218" href="#__codelineno-0-218"></a>    AllKeys = Array(&quot;data_dir&quot;, &quot;format_dir&quot;, &quot;ui_dir&quot;, &quot;log_dir&quot;, &quot;backup_dir&quot;, &quot;config_dir&quot;, &quot;debugLevel&quot;, &quot;logRotationRows&quot;, &quot;uiSchemaFailMode&quot;)
-<a id="__codelineno-0-219" name="__codelineno-0-219" href="#__codelineno-0-219"></a>End Function
-<a id="__codelineno-0-220" name="__codelineno-0-220" href="#__codelineno-0-220"></a>
-<a id="__codelineno-0-221" name="__codelineno-0-221" href="#__codelineno-0-221"></a>Private Function GetSettingsSheet() As Worksheet
-<a id="__codelineno-0-222" name="__codelineno-0-222" href="#__codelineno-0-222"></a>    On Error Resume Next
-<a id="__codelineno-0-223" name="__codelineno-0-223" href="#__codelineno-0-223"></a>    Set GetSettingsSheet = ThisWorkbook.Worksheets(SettingsSheetName())
-<a id="__codelineno-0-224" name="__codelineno-0-224" href="#__codelineno-0-224"></a>    On Error GoTo 0
-<a id="__codelineno-0-225" name="__codelineno-0-225" href="#__codelineno-0-225"></a>End Function
-<a id="__codelineno-0-226" name="__codelineno-0-226" href="#__codelineno-0-226"></a>
-<a id="__codelineno-0-227" name="__codelineno-0-227" href="#__codelineno-0-227"></a>Private Function ReadSheetToDict(ByVal ws As Object) As Object
-<a id="__codelineno-0-228" name="__codelineno-0-228" href="#__codelineno-0-228"></a>    Dim d As Object
-<a id="__codelineno-0-229" name="__codelineno-0-229" href="#__codelineno-0-229"></a>    Set d = CreateObject(&quot;Scripting.Dictionary&quot;)
-<a id="__codelineno-0-230" name="__codelineno-0-230" href="#__codelineno-0-230"></a>    Dim keys As Variant
-<a id="__codelineno-0-231" name="__codelineno-0-231" href="#__codelineno-0-231"></a>    keys = AllKeys()
-<a id="__codelineno-0-232" name="__codelineno-0-232" href="#__codelineno-0-232"></a>    Dim i As Long
-<a id="__codelineno-0-233" name="__codelineno-0-233" href="#__codelineno-0-233"></a>    For i = 0 To UBound(keys)
-<a id="__codelineno-0-234" name="__codelineno-0-234" href="#__codelineno-0-234"></a>        d(keys(i)) = Trim(CStr(ws.Cells(FIRST_DATA_ROW + i, VALUE_COL).Value))
-<a id="__codelineno-0-235" name="__codelineno-0-235" href="#__codelineno-0-235"></a>    Next i
-<a id="__codelineno-0-236" name="__codelineno-0-236" href="#__codelineno-0-236"></a>    Set ReadSheetToDict = d
-<a id="__codelineno-0-237" name="__codelineno-0-237" href="#__codelineno-0-237"></a>End Function
-<a id="__codelineno-0-238" name="__codelineno-0-238" href="#__codelineno-0-238"></a>
-<a id="__codelineno-0-239" name="__codelineno-0-239" href="#__codelineno-0-239"></a>Private Sub WriteDictToSheet(ByVal ws As Object, ByVal d As Object)
-<a id="__codelineno-0-240" name="__codelineno-0-240" href="#__codelineno-0-240"></a>    Dim wasP As Boolean
-<a id="__codelineno-0-241" name="__codelineno-0-241" href="#__codelineno-0-241"></a>    On Error Resume Next
-<a id="__codelineno-0-242" name="__codelineno-0-242" href="#__codelineno-0-242"></a>    wasP = ws.ProtectContents
-<a id="__codelineno-0-243" name="__codelineno-0-243" href="#__codelineno-0-243"></a>    If wasP Then ws.Unprotect Password:=&quot;&quot;
-<a id="__codelineno-0-244" name="__codelineno-0-244" href="#__codelineno-0-244"></a>    On Error GoTo 0
-<a id="__codelineno-0-245" name="__codelineno-0-245" href="#__codelineno-0-245"></a>    Dim keys As Variant
-<a id="__codelineno-0-246" name="__codelineno-0-246" href="#__codelineno-0-246"></a>    keys = AllKeys()
-<a id="__codelineno-0-247" name="__codelineno-0-247" href="#__codelineno-0-247"></a>    Dim i As Long
-<a id="__codelineno-0-248" name="__codelineno-0-248" href="#__codelineno-0-248"></a>    For i = 0 To UBound(keys)
-<a id="__codelineno-0-249" name="__codelineno-0-249" href="#__codelineno-0-249"></a>        ws.Cells(FIRST_DATA_ROW + i, VALUE_COL).Value = CStr(d(keys(i)))
-<a id="__codelineno-0-250" name="__codelineno-0-250" href="#__codelineno-0-250"></a>    Next i
-<a id="__codelineno-0-251" name="__codelineno-0-251" href="#__codelineno-0-251"></a>    On Error Resume Next
-<a id="__codelineno-0-252" name="__codelineno-0-252" href="#__codelineno-0-252"></a>    If wasP Then ws.Protect Password:=&quot;&quot;, UserInterfaceOnly:=True
-<a id="__codelineno-0-253" name="__codelineno-0-253" href="#__codelineno-0-253"></a>    On Error GoTo 0
-<a id="__codelineno-0-254" name="__codelineno-0-254" href="#__codelineno-0-254"></a>End Sub
-<a id="__codelineno-0-255" name="__codelineno-0-255" href="#__codelineno-0-255"></a>
-<a id="__codelineno-0-256" name="__codelineno-0-256" href="#__codelineno-0-256"></a>Private Sub SeedSheetFrame(ByVal ws As Object)
-<a id="__codelineno-0-257" name="__codelineno-0-257" href="#__codelineno-0-257"></a>    Dim wasP As Boolean
-<a id="__codelineno-0-258" name="__codelineno-0-258" href="#__codelineno-0-258"></a>    On Error Resume Next
-<a id="__codelineno-0-259" name="__codelineno-0-259" href="#__codelineno-0-259"></a>    wasP = ws.ProtectContents
-<a id="__codelineno-0-260" name="__codelineno-0-260" href="#__codelineno-0-260"></a>    If wasP Then ws.Unprotect Password:=&quot;&quot;
-<a id="__codelineno-0-261" name="__codelineno-0-261" href="#__codelineno-0-261"></a>    On Error GoTo 0
-<a id="__codelineno-0-262" name="__codelineno-0-262" href="#__codelineno-0-262"></a>    ws.Cells(1, KEY_COL).Value = SettingsSheetName()
-<a id="__codelineno-0-263" name="__codelineno-0-263" href="#__codelineno-0-263"></a>    Dim keys As Variant
-<a id="__codelineno-0-264" name="__codelineno-0-264" href="#__codelineno-0-264"></a>    keys = AllKeys()
-<a id="__codelineno-0-265" name="__codelineno-0-265" href="#__codelineno-0-265"></a>    Dim i As Long
-<a id="__codelineno-0-266" name="__codelineno-0-266" href="#__codelineno-0-266"></a>    For i = 0 To UBound(keys)
-<a id="__codelineno-0-267" name="__codelineno-0-267" href="#__codelineno-0-267"></a>        ws.Cells(FIRST_DATA_ROW + i, KEY_COL).Value = keys(i)
-<a id="__codelineno-0-268" name="__codelineno-0-268" href="#__codelineno-0-268"></a>    Next i
-<a id="__codelineno-0-269" name="__codelineno-0-269" href="#__codelineno-0-269"></a>    AddListValidation ws.Cells(FIRST_DATA_ROW + 6, VALUE_COL), &quot;DEBUG,INFO,WARN,ERROR,OFF,TRACE&quot;
-<a id="__codelineno-0-270" name="__codelineno-0-270" href="#__codelineno-0-270"></a>    AddListValidation ws.Cells(FIRST_DATA_ROW + 8, VALUE_COL), &quot;safeDefault,warn,abort&quot;
-<a id="__codelineno-0-271" name="__codelineno-0-271" href="#__codelineno-0-271"></a>    On Error Resume Next
-<a id="__codelineno-0-272" name="__codelineno-0-272" href="#__codelineno-0-272"></a>    ws.Columns(KEY_COL).ColumnWidth = 18
-<a id="__codelineno-0-273" name="__codelineno-0-273" href="#__codelineno-0-273"></a>    ws.Columns(VALUE_COL).ColumnWidth = 34
-<a id="__codelineno-0-274" name="__codelineno-0-274" href="#__codelineno-0-274"></a>    If wasP Then ws.Protect Password:=&quot;&quot;, UserInterfaceOnly:=True
-<a id="__codelineno-0-275" name="__codelineno-0-275" href="#__codelineno-0-275"></a>    On Error GoTo 0
-<a id="__codelineno-0-276" name="__codelineno-0-276" href="#__codelineno-0-276"></a>End Sub
-<a id="__codelineno-0-277" name="__codelineno-0-277" href="#__codelineno-0-277"></a>
-<a id="__codelineno-0-278" name="__codelineno-0-278" href="#__codelineno-0-278"></a>Private Sub AddListValidation(ByVal rng As Object, ByVal listCsv As String)
-<a id="__codelineno-0-279" name="__codelineno-0-279" href="#__codelineno-0-279"></a>    On Error Resume Next
-<a id="__codelineno-0-280" name="__codelineno-0-280" href="#__codelineno-0-280"></a>    rng.Validation.Delete
-<a id="__codelineno-0-281" name="__codelineno-0-281" href="#__codelineno-0-281"></a>    rng.Validation.Add Type:=xlValidateList, AlertStyle:=xlValidAlertStop, Operator:=xlBetween, Formula1:=listCsv
-<a id="__codelineno-0-282" name="__codelineno-0-282" href="#__codelineno-0-282"></a>    On Error GoTo 0
-<a id="__codelineno-0-283" name="__codelineno-0-283" href="#__codelineno-0-283"></a>End Sub
-<a id="__codelineno-0-284" name="__codelineno-0-284" href="#__codelineno-0-284"></a>
-<a id="__codelineno-0-285" name="__codelineno-0-285" href="#__codelineno-0-285"></a>Private Function CountEmptyPaths(ByVal d As Object) As Long
-<a id="__codelineno-0-286" name="__codelineno-0-286" href="#__codelineno-0-286"></a>    Dim keys As Variant
-<a id="__codelineno-0-287" name="__codelineno-0-287" href="#__codelineno-0-287"></a>    keys = AllKeys()
-<a id="__codelineno-0-288" name="__codelineno-0-288" href="#__codelineno-0-288"></a>    Dim i As Long
-<a id="__codelineno-0-289" name="__codelineno-0-289" href="#__codelineno-0-289"></a>    Dim c As Long
-<a id="__codelineno-0-290" name="__codelineno-0-290" href="#__codelineno-0-290"></a>    For i = 0 To PATH_KEY_COUNT - 1
-<a id="__codelineno-0-291" name="__codelineno-0-291" href="#__codelineno-0-291"></a>        If Len(Trim(CStr(d(keys(i))))) = 0 Then c = c + 1
-<a id="__codelineno-0-292" name="__codelineno-0-292" href="#__codelineno-0-292"></a>    Next i
-<a id="__codelineno-0-293" name="__codelineno-0-293" href="#__codelineno-0-293"></a>    CountEmptyPaths = c
-<a id="__codelineno-0-294" name="__codelineno-0-294" href="#__codelineno-0-294"></a>End Function
-<a id="__codelineno-0-295" name="__codelineno-0-295" href="#__codelineno-0-295"></a>
-<a id="__codelineno-0-296" name="__codelineno-0-296" href="#__codelineno-0-296"></a>Private Function FirstEmptyPathKey(ByVal d As Object) As String
-<a id="__codelineno-0-297" name="__codelineno-0-297" href="#__codelineno-0-297"></a>    Dim keys As Variant
-<a id="__codelineno-0-298" name="__codelineno-0-298" href="#__codelineno-0-298"></a>    keys = AllKeys()
-<a id="__codelineno-0-299" name="__codelineno-0-299" href="#__codelineno-0-299"></a>    Dim i As Long
-<a id="__codelineno-0-300" name="__codelineno-0-300" href="#__codelineno-0-300"></a>    For i = 0 To PATH_KEY_COUNT - 1
-<a id="__codelineno-0-301" name="__codelineno-0-301" href="#__codelineno-0-301"></a>        If Len(Trim(CStr(d(keys(i))))) = 0 Then
-<a id="__codelineno-0-302" name="__codelineno-0-302" href="#__codelineno-0-302"></a>            FirstEmptyPathKey = CStr(keys(i))
-<a id="__codelineno-0-303" name="__codelineno-0-303" href="#__codelineno-0-303"></a>            Exit Function
-<a id="__codelineno-0-304" name="__codelineno-0-304" href="#__codelineno-0-304"></a>        End If
-<a id="__codelineno-0-305" name="__codelineno-0-305" href="#__codelineno-0-305"></a>    Next i
-<a id="__codelineno-0-306" name="__codelineno-0-306" href="#__codelineno-0-306"></a>    FirstEmptyPathKey = &quot;&quot;
-<a id="__codelineno-0-307" name="__codelineno-0-307" href="#__codelineno-0-307"></a>End Function
-<a id="__codelineno-0-308" name="__codelineno-0-308" href="#__codelineno-0-308"></a>
-<a id="__codelineno-0-309" name="__codelineno-0-309" href="#__codelineno-0-309"></a>Private Sub DeriveDirs(ByVal base As String, ByVal d As Object)
-<a id="__codelineno-0-310" name="__codelineno-0-310" href="#__codelineno-0-310"></a>    Dim b As String
-<a id="__codelineno-0-311" name="__codelineno-0-311" href="#__codelineno-0-311"></a>    b = base
-<a id="__codelineno-0-312" name="__codelineno-0-312" href="#__codelineno-0-312"></a>    Do While Right(b, 1) = &quot;\&quot;
-<a id="__codelineno-0-313" name="__codelineno-0-313" href="#__codelineno-0-313"></a>        b = Left(b, Len(b) - 1)
-<a id="__codelineno-0-314" name="__codelineno-0-314" href="#__codelineno-0-314"></a>    Loop
-<a id="__codelineno-0-315" name="__codelineno-0-315" href="#__codelineno-0-315"></a>    d(&quot;data_dir&quot;) = b &amp; &quot;\data\&quot;
-<a id="__codelineno-0-316" name="__codelineno-0-316" href="#__codelineno-0-316"></a>    d(&quot;format_dir&quot;) = b &amp; &quot;\formats\&quot;
-<a id="__codelineno-0-317" name="__codelineno-0-317" href="#__codelineno-0-317"></a>    d(&quot;ui_dir&quot;) = b &amp; &quot;\ui\&quot;
-<a id="__codelineno-0-318" name="__codelineno-0-318" href="#__codelineno-0-318"></a>    d(&quot;log_dir&quot;) = b &amp; &quot;\log\&quot;
-<a id="__codelineno-0-319" name="__codelineno-0-319" href="#__codelineno-0-319"></a>    d(&quot;backup_dir&quot;) = b &amp; &quot;\backup\&quot;
-<a id="__codelineno-0-320" name="__codelineno-0-320" href="#__codelineno-0-320"></a>    d(&quot;config_dir&quot;) = b &amp; &quot;\&quot;
-<a id="__codelineno-0-321" name="__codelineno-0-321" href="#__codelineno-0-321"></a>End Sub
-<a id="__codelineno-0-322" name="__codelineno-0-322" href="#__codelineno-0-322"></a>
-<a id="__codelineno-0-323" name="__codelineno-0-323" href="#__codelineno-0-323"></a>Private Sub FillMissingPathsFromDefault(ByVal d As Object)
-<a id="__codelineno-0-324" name="__codelineno-0-324" href="#__codelineno-0-324"></a>    Dim def As Object
-<a id="__codelineno-0-325" name="__codelineno-0-325" href="#__codelineno-0-325"></a>    Set def = CreateObject(&quot;Scripting.Dictionary&quot;)
-<a id="__codelineno-0-326" name="__codelineno-0-326" href="#__codelineno-0-326"></a>    DeriveDirs DEFAULT_BASE, def
-<a id="__codelineno-0-327" name="__codelineno-0-327" href="#__codelineno-0-327"></a>    Dim keys As Variant
-<a id="__codelineno-0-328" name="__codelineno-0-328" href="#__codelineno-0-328"></a>    keys = AllKeys()
-<a id="__codelineno-0-329" name="__codelineno-0-329" href="#__codelineno-0-329"></a>    Dim i As Long
-<a id="__codelineno-0-330" name="__codelineno-0-330" href="#__codelineno-0-330"></a>    For i = 0 To PATH_KEY_COUNT - 1
-<a id="__codelineno-0-331" name="__codelineno-0-331" href="#__codelineno-0-331"></a>        If Len(Trim(CStr(d(keys(i))))) = 0 Then d(keys(i)) = def(keys(i))
-<a id="__codelineno-0-332" name="__codelineno-0-332" href="#__codelineno-0-332"></a>    Next i
-<a id="__codelineno-0-333" name="__codelineno-0-333" href="#__codelineno-0-333"></a>End Sub
-<a id="__codelineno-0-334" name="__codelineno-0-334" href="#__codelineno-0-334"></a>
-<a id="__codelineno-0-335" name="__codelineno-0-335" href="#__codelineno-0-335"></a>Private Sub ApplyBehaviorDefaults(ByVal d As Object)
-<a id="__codelineno-0-336" name="__codelineno-0-336" href="#__codelineno-0-336"></a>    If Len(Trim(CStr(d(&quot;debugLevel&quot;)))) = 0 Then d(&quot;debugLevel&quot;) = DEFAULT_DEBUG_LEVEL
-<a id="__codelineno-0-337" name="__codelineno-0-337" href="#__codelineno-0-337"></a>    If Len(Trim(CStr(d(&quot;logRotationRows&quot;)))) = 0 Then d(&quot;logRotationRows&quot;) = DEFAULT_LOG_ROTATION_ROWS
-<a id="__codelineno-0-338" name="__codelineno-0-338" href="#__codelineno-0-338"></a>    If Len(Trim(CStr(d(&quot;uiSchemaFailMode&quot;)))) = 0 Then d(&quot;uiSchemaFailMode&quot;) = DEFAULT_UI_SCHEMA_FAIL_MODE
-<a id="__codelineno-0-339" name="__codelineno-0-339" href="#__codelineno-0-339"></a>End Sub
-<a id="__codelineno-0-340" name="__codelineno-0-340" href="#__codelineno-0-340"></a>
-<a id="__codelineno-0-341" name="__codelineno-0-341" href="#__codelineno-0-341"></a>Private Function AskBaseDir() As String
-<a id="__codelineno-0-342" name="__codelineno-0-342" href="#__codelineno-0-342"></a>    If modCommon.IsHeadless() Then
-<a id="__codelineno-0-343" name="__codelineno-0-343" href="#__codelineno-0-343"></a>        AskBaseDir = DEFAULT_BASE
-<a id="__codelineno-0-344" name="__codelineno-0-344" href="#__codelineno-0-344"></a>        Exit Function
-<a id="__codelineno-0-345" name="__codelineno-0-345" href="#__codelineno-0-345"></a>    End If
-<a id="__codelineno-0-346" name="__codelineno-0-346" href="#__codelineno-0-346"></a>    Dim r As String
-<a id="__codelineno-0-347" name="__codelineno-0-347" href="#__codelineno-0-347"></a>    r = InputBox(InputPrompt(), SettingsSheetName(), DEFAULT_BASE)
-<a id="__codelineno-0-348" name="__codelineno-0-348" href="#__codelineno-0-348"></a>    If Len(Trim(r)) = 0 Then
-<a id="__codelineno-0-349" name="__codelineno-0-349" href="#__codelineno-0-349"></a>        AskBaseDir = DEFAULT_BASE
-<a id="__codelineno-0-350" name="__codelineno-0-350" href="#__codelineno-0-350"></a>    Else
-<a id="__codelineno-0-351" name="__codelineno-0-351" href="#__codelineno-0-351"></a>        AskBaseDir = r
-<a id="__codelineno-0-352" name="__codelineno-0-352" href="#__codelineno-0-352"></a>    End If
-<a id="__codelineno-0-353" name="__codelineno-0-353" href="#__codelineno-0-353"></a>End Function
-<a id="__codelineno-0-354" name="__codelineno-0-354" href="#__codelineno-0-354"></a>
-<a id="__codelineno-0-355" name="__codelineno-0-355" href="#__codelineno-0-355"></a>Private Sub NotifyMissingKey(ByVal key As String)
-<a id="__codelineno-0-356" name="__codelineno-0-356" href="#__codelineno-0-356"></a>    If modCommon.IsHeadless() Then Exit Sub
-<a id="__codelineno-0-357" name="__codelineno-0-357" href="#__codelineno-0-357"></a>    MsgBox MsgMissingA() &amp; key &amp; MsgMissingB(), vbExclamation, MsgErrTitle()
-<a id="__codelineno-0-358" name="__codelineno-0-358" href="#__codelineno-0-358"></a>End Sub
-<a id="__codelineno-0-359" name="__codelineno-0-359" href="#__codelineno-0-359"></a>
-<a id="__codelineno-0-360" name="__codelineno-0-360" href="#__codelineno-0-360"></a>Private Sub SaveBookQuiet()
-<a id="__codelineno-0-361" name="__codelineno-0-361" href="#__codelineno-0-361"></a>    On Error Resume Next
-<a id="__codelineno-0-362" name="__codelineno-0-362" href="#__codelineno-0-362"></a>    Application.DisplayAlerts = False
-<a id="__codelineno-0-363" name="__codelineno-0-363" href="#__codelineno-0-363"></a>    ThisWorkbook.Save
-<a id="__codelineno-0-364" name="__codelineno-0-364" href="#__codelineno-0-364"></a>    Application.DisplayAlerts = True
-<a id="__codelineno-0-365" name="__codelineno-0-365" href="#__codelineno-0-365"></a>    On Error GoTo 0
-<a id="__codelineno-0-366" name="__codelineno-0-366" href="#__codelineno-0-366"></a>End Sub
-<a id="__codelineno-0-367" name="__codelineno-0-367" href="#__codelineno-0-367"></a>
-<a id="__codelineno-0-368" name="__codelineno-0-368" href="#__codelineno-0-368"></a>&#39; ---- JP user-facing strings (ChrW so the source is installer-safe) ----
-<a id="__codelineno-0-369" name="__codelineno-0-369" href="#__codelineno-0-369"></a>
-<a id="__codelineno-0-370" name="__codelineno-0-370" href="#__codelineno-0-370"></a>Private Function InputPrompt() As String
-<a id="__codelineno-0-371" name="__codelineno-0-371" href="#__codelineno-0-371"></a>    InputPrompt = ChrW(&amp;H683C) &amp; ChrW(&amp;H7D0D) &amp; ChrW(&amp;H5148) &amp; ChrW(&amp;H306E) &amp; ChrW(&amp;H30D9) &amp; ChrW(&amp;H30FC) &amp; ChrW(&amp;H30B9) &amp; ChrW(&amp;H30D5) &amp; ChrW(&amp;H30A9) &amp; ChrW(&amp;H30EB) &amp; ChrW(&amp;H30C0) &amp; ChrW(&amp;H3092) &amp; ChrW(&amp;H5165) &amp; ChrW(&amp;H529B) &amp; ChrW(&amp;H3057) &amp; ChrW(&amp;H3066) &amp; ChrW(&amp;H304F) &amp; ChrW(&amp;H3060) &amp; ChrW(&amp;H3055) &amp; ChrW(&amp;H3044) &amp; vbCrLf &amp; DEFAULT_BASE
-<a id="__codelineno-0-372" name="__codelineno-0-372" href="#__codelineno-0-372"></a>End Function
-<a id="__codelineno-0-373" name="__codelineno-0-373" href="#__codelineno-0-373"></a>
-<a id="__codelineno-0-374" name="__codelineno-0-374" href="#__codelineno-0-374"></a>Private Function MsgMissingA() As String
-<a id="__codelineno-0-375" name="__codelineno-0-375" href="#__codelineno-0-375"></a>    MsgMissingA = ChrW(&amp;H8A2D) &amp; ChrW(&amp;H5B9A) &amp; ChrW(&amp;H30B7) &amp; ChrW(&amp;H30FC) &amp; ChrW(&amp;H30C8) &amp; ChrW(&amp;H306E) &amp; ChrW(&amp;H20)
-<a id="__codelineno-0-376" name="__codelineno-0-376" href="#__codelineno-0-376"></a>End Function
-<a id="__codelineno-0-377" name="__codelineno-0-377" href="#__codelineno-0-377"></a>
-<a id="__codelineno-0-378" name="__codelineno-0-378" href="#__codelineno-0-378"></a>Private Function MsgMissingB() As String
-<a id="__codelineno-0-379" name="__codelineno-0-379" href="#__codelineno-0-379"></a>    MsgMissingB = ChrW(&amp;H20) &amp; ChrW(&amp;H304C) &amp; ChrW(&amp;H7A7A) &amp; ChrW(&amp;H307E) &amp; ChrW(&amp;H305F) &amp; ChrW(&amp;H306F) &amp; ChrW(&amp;H4E0D) &amp; ChrW(&amp;H6B63) &amp; ChrW(&amp;H3067) &amp; ChrW(&amp;H3059) &amp; ChrW(&amp;H3002) &amp; ChrW(&amp;H8A2D) &amp; ChrW(&amp;H5B9A) &amp; ChrW(&amp;H30B7) &amp; ChrW(&amp;H30FC) &amp; ChrW(&amp;H30C8) &amp; ChrW(&amp;H3067) &amp; ChrW(&amp;H6307) &amp; ChrW(&amp;H5B9A) &amp; ChrW(&amp;H3057) &amp; ChrW(&amp;H3066) &amp; ChrW(&amp;H304F) &amp; ChrW(&amp;H3060) &amp; ChrW(&amp;H3055) &amp; ChrW(&amp;H3044) &amp; ChrW(&amp;H3002)
+<a id="__codelineno-0-84" name="__codelineno-0-84" href="#__codelineno-0-84"></a>        &#39; [Fix-6 / ADR-0133-followup 2026-06-19] Auto-heal instead of the old
+<a id="__codelineno-0-85" name="__codelineno-0-85" href="#__codelineno-0-85"></a>        &#39; interactive hard-abort. The common real case is a config migrated
+<a id="__codelineno-0-86" name="__codelineno-0-86" href="#__codelineno-0-86"></a>        &#39; from a pre-Fix-6 config that had no base-dir line: the sub-dir
+<a id="__codelineno-0-87" name="__codelineno-0-87" href="#__codelineno-0-87"></a>        &#39; cells are filled but the base cell is empty, so emptyPaths is partial
+<a id="__codelineno-0-88" name="__codelineno-0-88" href="#__codelineno-0-88"></a>        &#39; and the first-run InputBox never fires. The user then sees an opaque
+<a id="__codelineno-0-89" name="__codelineno-0-89" href="#__codelineno-0-89"></a>        &#39; &quot;base dir is empty or invalid&quot; abort with no idea what to enter.
+<a id="__codelineno-0-90" name="__codelineno-0-90" href="#__codelineno-0-90"></a>        &#39; Instead, infer BASE_DIR from an existing path and derive only the
+<a id="__codelineno-0-91" name="__codelineno-0-91" href="#__codelineno-0-91"></a>        &#39; missing cells, then continue. Only when no base can be inferred do we
+<a id="__codelineno-0-92" name="__codelineno-0-92" href="#__codelineno-0-92"></a>        &#39; fall back to the previous default-fill (headless) / notify (interactive).
+<a id="__codelineno-0-93" name="__codelineno-0-93" href="#__codelineno-0-93"></a>        Dim base As String
+<a id="__codelineno-0-94" name="__codelineno-0-94" href="#__codelineno-0-94"></a>        base = InferBaseDir(d)
+<a id="__codelineno-0-95" name="__codelineno-0-95" href="#__codelineno-0-95"></a>        If Len(base) &gt; 0 Then
+<a id="__codelineno-0-96" name="__codelineno-0-96" href="#__codelineno-0-96"></a>            FillMissingPathsFromBase d, base
+<a id="__codelineno-0-97" name="__codelineno-0-97" href="#__codelineno-0-97"></a>            ApplyBehaviorDefaults d
+<a id="__codelineno-0-98" name="__codelineno-0-98" href="#__codelineno-0-98"></a>            WriteDictToSheet ws, d
+<a id="__codelineno-0-99" name="__codelineno-0-99" href="#__codelineno-0-99"></a>            SaveBookQuiet
+<a id="__codelineno-0-100" name="__codelineno-0-100" href="#__codelineno-0-100"></a>            modConfigHolder.SetConfig d
+<a id="__codelineno-0-101" name="__codelineno-0-101" href="#__codelineno-0-101"></a>            LoadConfig = True
+<a id="__codelineno-0-102" name="__codelineno-0-102" href="#__codelineno-0-102"></a>            If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_DEBUG Then Debug.Print &quot;[D-0962b] modConfigLoader.LoadConfig EXIT-OK partial-autoheal base=&quot; &amp; base  &#39; [ADR-0100]
+<a id="__codelineno-0-103" name="__codelineno-0-103" href="#__codelineno-0-103"></a>            Exit Function
+<a id="__codelineno-0-104" name="__codelineno-0-104" href="#__codelineno-0-104"></a>        End If
+<a id="__codelineno-0-105" name="__codelineno-0-105" href="#__codelineno-0-105"></a>        If modCommon.IsHeadless() Then
+<a id="__codelineno-0-106" name="__codelineno-0-106" href="#__codelineno-0-106"></a>            FillMissingPathsFromDefault d
+<a id="__codelineno-0-107" name="__codelineno-0-107" href="#__codelineno-0-107"></a>            ApplyBehaviorDefaults d
+<a id="__codelineno-0-108" name="__codelineno-0-108" href="#__codelineno-0-108"></a>            WriteDictToSheet ws, d
+<a id="__codelineno-0-109" name="__codelineno-0-109" href="#__codelineno-0-109"></a>            SaveBookQuiet
+<a id="__codelineno-0-110" name="__codelineno-0-110" href="#__codelineno-0-110"></a>            modConfigHolder.SetConfig d
+<a id="__codelineno-0-111" name="__codelineno-0-111" href="#__codelineno-0-111"></a>            LoadConfig = True
+<a id="__codelineno-0-112" name="__codelineno-0-112" href="#__codelineno-0-112"></a>            Exit Function
+<a id="__codelineno-0-113" name="__codelineno-0-113" href="#__codelineno-0-113"></a>        Else
+<a id="__codelineno-0-114" name="__codelineno-0-114" href="#__codelineno-0-114"></a>            NotifyMissingKey FirstEmptyPathKey(d)
+<a id="__codelineno-0-115" name="__codelineno-0-115" href="#__codelineno-0-115"></a>            LoadConfig = False
+<a id="__codelineno-0-116" name="__codelineno-0-116" href="#__codelineno-0-116"></a>            If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print &quot;[D-0962] modConfigLoader.LoadConfig EXIT abort partial-missing&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-117" name="__codelineno-0-117" href="#__codelineno-0-117"></a>            Exit Function
+<a id="__codelineno-0-118" name="__codelineno-0-118" href="#__codelineno-0-118"></a>        End If
+<a id="__codelineno-0-119" name="__codelineno-0-119" href="#__codelineno-0-119"></a>    End If
+<a id="__codelineno-0-120" name="__codelineno-0-120" href="#__codelineno-0-120"></a>
+<a id="__codelineno-0-121" name="__codelineno-0-121" href="#__codelineno-0-121"></a>    &#39; All path cells present.
+<a id="__codelineno-0-122" name="__codelineno-0-122" href="#__codelineno-0-122"></a>    ApplyBehaviorDefaults d
+<a id="__codelineno-0-123" name="__codelineno-0-123" href="#__codelineno-0-123"></a>    modConfigHolder.SetConfig d
+<a id="__codelineno-0-124" name="__codelineno-0-124" href="#__codelineno-0-124"></a>    LoadConfig = True
+<a id="__codelineno-0-125" name="__codelineno-0-125" href="#__codelineno-0-125"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0963] modConfigLoader.LoadConfig EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-126" name="__codelineno-0-126" href="#__codelineno-0-126"></a>    Exit Function
+<a id="__codelineno-0-127" name="__codelineno-0-127" href="#__codelineno-0-127"></a>
+<a id="__codelineno-0-128" name="__codelineno-0-128" href="#__codelineno-0-128"></a>ErrHandler:
+<a id="__codelineno-0-129" name="__codelineno-0-129" href="#__codelineno-0-129"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print &quot;[D-0964] modConfigLoader.LoadConfig EXIT-ERR errNum=&quot; &amp; Err.Number &amp; &quot; desc=&quot; &amp; Err.Description  &#39; [ADR-0100]
+<a id="__codelineno-0-130" name="__codelineno-0-130" href="#__codelineno-0-130"></a>    LoadConfig = False
+<a id="__codelineno-0-131" name="__codelineno-0-131" href="#__codelineno-0-131"></a>End Function
+<a id="__codelineno-0-132" name="__codelineno-0-132" href="#__codelineno-0-132"></a>
+<a id="__codelineno-0-133" name="__codelineno-0-133" href="#__codelineno-0-133"></a>&#39; ================================================================
+<a id="__codelineno-0-134" name="__codelineno-0-134" href="#__codelineno-0-134"></a>&#39; Function: Reload
+<a id="__codelineno-0-135" name="__codelineno-0-135" href="#__codelineno-0-135"></a>&#39; Summary:  Re-read the 9 cells into the holder (clsLogger polling /
+<a id="__codelineno-0-136" name="__codelineno-0-136" href="#__codelineno-0-136"></a>&#39;           dynamic debugLevel). No seeding, no abort.
+<a id="__codelineno-0-137" name="__codelineno-0-137" href="#__codelineno-0-137"></a>&#39; ================================================================
+<a id="__codelineno-0-138" name="__codelineno-0-138" href="#__codelineno-0-138"></a>Public Function Reload() As Boolean
+<a id="__codelineno-0-139" name="__codelineno-0-139" href="#__codelineno-0-139"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0965] modConfigLoader.Reload ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-140" name="__codelineno-0-140" href="#__codelineno-0-140"></a>    On Error GoTo ErrHandler
+<a id="__codelineno-0-141" name="__codelineno-0-141" href="#__codelineno-0-141"></a>    Dim ws As Worksheet
+<a id="__codelineno-0-142" name="__codelineno-0-142" href="#__codelineno-0-142"></a>    Set ws = GetSettingsSheet()
+<a id="__codelineno-0-143" name="__codelineno-0-143" href="#__codelineno-0-143"></a>    If ws Is Nothing Then
+<a id="__codelineno-0-144" name="__codelineno-0-144" href="#__codelineno-0-144"></a>        Reload = False
+<a id="__codelineno-0-145" name="__codelineno-0-145" href="#__codelineno-0-145"></a>        Exit Function
+<a id="__codelineno-0-146" name="__codelineno-0-146" href="#__codelineno-0-146"></a>    End If
+<a id="__codelineno-0-147" name="__codelineno-0-147" href="#__codelineno-0-147"></a>    Dim d As Object
+<a id="__codelineno-0-148" name="__codelineno-0-148" href="#__codelineno-0-148"></a>    Set d = ReadSheetToDict(ws)
+<a id="__codelineno-0-149" name="__codelineno-0-149" href="#__codelineno-0-149"></a>    ApplyBehaviorDefaults d
+<a id="__codelineno-0-150" name="__codelineno-0-150" href="#__codelineno-0-150"></a>    modConfigHolder.SetConfig d
+<a id="__codelineno-0-151" name="__codelineno-0-151" href="#__codelineno-0-151"></a>    Reload = True
+<a id="__codelineno-0-152" name="__codelineno-0-152" href="#__codelineno-0-152"></a>    Exit Function
+<a id="__codelineno-0-153" name="__codelineno-0-153" href="#__codelineno-0-153"></a>ErrHandler:
+<a id="__codelineno-0-154" name="__codelineno-0-154" href="#__codelineno-0-154"></a>    Reload = False
+<a id="__codelineno-0-155" name="__codelineno-0-155" href="#__codelineno-0-155"></a>End Function
+<a id="__codelineno-0-156" name="__codelineno-0-156" href="#__codelineno-0-156"></a>
+<a id="__codelineno-0-157" name="__codelineno-0-157" href="#__codelineno-0-157"></a>&#39; ================================================================
+<a id="__codelineno-0-158" name="__codelineno-0-158" href="#__codelineno-0-158"></a>&#39; Function: EnsureSettingsSheet
+<a id="__codelineno-0-159" name="__codelineno-0-159" href="#__codelineno-0-159"></a>&#39; Summary:  Return the settings sheet, creating + seeding the frame
+<a id="__codelineno-0-160" name="__codelineno-0-160" href="#__codelineno-0-160"></a>&#39;           (labels + validation) when it does not exist yet. Public
+<a id="__codelineno-0-161" name="__codelineno-0-161" href="#__codelineno-0-161"></a>&#39;           so M-10 / the orchestrator can guarantee it exists.
+<a id="__codelineno-0-162" name="__codelineno-0-162" href="#__codelineno-0-162"></a>&#39; ================================================================
+<a id="__codelineno-0-163" name="__codelineno-0-163" href="#__codelineno-0-163"></a>Public Function EnsureSettingsSheet() As Worksheet
+<a id="__codelineno-0-164" name="__codelineno-0-164" href="#__codelineno-0-164"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0966] modConfigLoader.EnsureSettingsSheet ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-165" name="__codelineno-0-165" href="#__codelineno-0-165"></a>    Dim ws As Worksheet
+<a id="__codelineno-0-166" name="__codelineno-0-166" href="#__codelineno-0-166"></a>    Set ws = GetSettingsSheet()
+<a id="__codelineno-0-167" name="__codelineno-0-167" href="#__codelineno-0-167"></a>    If ws Is Nothing Then
+<a id="__codelineno-0-168" name="__codelineno-0-168" href="#__codelineno-0-168"></a>        On Error Resume Next
+<a id="__codelineno-0-169" name="__codelineno-0-169" href="#__codelineno-0-169"></a>        Set ws = ThisWorkbook.Worksheets.Add(After:=ThisWorkbook.Worksheets(ThisWorkbook.Worksheets.Count))
+<a id="__codelineno-0-170" name="__codelineno-0-170" href="#__codelineno-0-170"></a>        If Not ws Is Nothing Then ws.Name = SettingsSheetName()
+<a id="__codelineno-0-171" name="__codelineno-0-171" href="#__codelineno-0-171"></a>        On Error GoTo 0
+<a id="__codelineno-0-172" name="__codelineno-0-172" href="#__codelineno-0-172"></a>        If Not ws Is Nothing Then SeedSheetFrame ws
+<a id="__codelineno-0-173" name="__codelineno-0-173" href="#__codelineno-0-173"></a>    End If
+<a id="__codelineno-0-174" name="__codelineno-0-174" href="#__codelineno-0-174"></a>    Set EnsureSettingsSheet = ws
+<a id="__codelineno-0-175" name="__codelineno-0-175" href="#__codelineno-0-175"></a>End Function
+<a id="__codelineno-0-176" name="__codelineno-0-176" href="#__codelineno-0-176"></a>
+<a id="__codelineno-0-177" name="__codelineno-0-177" href="#__codelineno-0-177"></a>&#39; ================================================================
+<a id="__codelineno-0-178" name="__codelineno-0-178" href="#__codelineno-0-178"></a>&#39; Sub: RestoreSheetFromHolder
+<a id="__codelineno-0-179" name="__codelineno-0-179" href="#__codelineno-0-179"></a>&#39; Summary:  Post-render hook. ApplyUiStanzas does Cells.Clear on the
+<a id="__codelineno-0-180" name="__codelineno-0-180" href="#__codelineno-0-180"></a>&#39;           admin M-10 sheet (== settings sheet); after the re-render
+<a id="__codelineno-0-181" name="__codelineno-0-181" href="#__codelineno-0-181"></a>&#39;           we write the holder values back into B2..B10 so the SSOT
+<a id="__codelineno-0-182" name="__codelineno-0-182" href="#__codelineno-0-182"></a>&#39;           round-trips across every Workbook_Open. No-op when the
+<a id="__codelineno-0-183" name="__codelineno-0-183" href="#__codelineno-0-183"></a>&#39;           holder is empty or the sheet is absent.
+<a id="__codelineno-0-184" name="__codelineno-0-184" href="#__codelineno-0-184"></a>&#39; ================================================================
+<a id="__codelineno-0-185" name="__codelineno-0-185" href="#__codelineno-0-185"></a>Public Sub RestoreSheetFromHolder()
+<a id="__codelineno-0-186" name="__codelineno-0-186" href="#__codelineno-0-186"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0967] modConfigLoader.RestoreSheetFromHolder ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-187" name="__codelineno-0-187" href="#__codelineno-0-187"></a>    On Error GoTo ErrHandler
+<a id="__codelineno-0-188" name="__codelineno-0-188" href="#__codelineno-0-188"></a>    If Not modConfigHolder.IsInitialized() Then Exit Sub
+<a id="__codelineno-0-189" name="__codelineno-0-189" href="#__codelineno-0-189"></a>    Dim ws As Worksheet
+<a id="__codelineno-0-190" name="__codelineno-0-190" href="#__codelineno-0-190"></a>    Set ws = GetSettingsSheet()
+<a id="__codelineno-0-191" name="__codelineno-0-191" href="#__codelineno-0-191"></a>    If ws Is Nothing Then Exit Sub
+<a id="__codelineno-0-192" name="__codelineno-0-192" href="#__codelineno-0-192"></a>    Dim d As Object
+<a id="__codelineno-0-193" name="__codelineno-0-193" href="#__codelineno-0-193"></a>    Set d = CreateObject(&quot;Scripting.Dictionary&quot;)
+<a id="__codelineno-0-194" name="__codelineno-0-194" href="#__codelineno-0-194"></a>    Dim keys As Variant
+<a id="__codelineno-0-195" name="__codelineno-0-195" href="#__codelineno-0-195"></a>    keys = AllKeys()
+<a id="__codelineno-0-196" name="__codelineno-0-196" href="#__codelineno-0-196"></a>    Dim i As Long
+<a id="__codelineno-0-197" name="__codelineno-0-197" href="#__codelineno-0-197"></a>    For i = 0 To UBound(keys)
+<a id="__codelineno-0-198" name="__codelineno-0-198" href="#__codelineno-0-198"></a>        d(keys(i)) = modConfigHolder.GetValue(CStr(keys(i)))
+<a id="__codelineno-0-199" name="__codelineno-0-199" href="#__codelineno-0-199"></a>    Next i
+<a id="__codelineno-0-200" name="__codelineno-0-200" href="#__codelineno-0-200"></a>    WriteDictToSheet ws, d
+<a id="__codelineno-0-201" name="__codelineno-0-201" href="#__codelineno-0-201"></a>    Exit Sub
+<a id="__codelineno-0-202" name="__codelineno-0-202" href="#__codelineno-0-202"></a>ErrHandler:
+<a id="__codelineno-0-203" name="__codelineno-0-203" href="#__codelineno-0-203"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print &quot;[D-0968] modConfigLoader.RestoreSheetFromHolder EXIT-ERR errNum=&quot; &amp; Err.Number  &#39; [ADR-0100]
+<a id="__codelineno-0-204" name="__codelineno-0-204" href="#__codelineno-0-204"></a>End Sub
+<a id="__codelineno-0-205" name="__codelineno-0-205" href="#__codelineno-0-205"></a>
+<a id="__codelineno-0-206" name="__codelineno-0-206" href="#__codelineno-0-206"></a>&#39; ================================================================
+<a id="__codelineno-0-207" name="__codelineno-0-207" href="#__codelineno-0-207"></a>&#39; Sub: WriteSettingsFromDict
+<a id="__codelineno-0-208" name="__codelineno-0-208" href="#__codelineno-0-208"></a>&#39; Summary:  Persist edited keys (M-10 save). Merge keyValues over the
+<a id="__codelineno-0-209" name="__codelineno-0-209" href="#__codelineno-0-209"></a>&#39;           current sheet values, write B2..B10, save the workbook,
+<a id="__codelineno-0-210" name="__codelineno-0-210" href="#__codelineno-0-210"></a>&#39;           and refresh the holder. Replaces the retired text-file
+<a id="__codelineno-0-211" name="__codelineno-0-211" href="#__codelineno-0-211"></a>&#39;           writeback pair.
+<a id="__codelineno-0-212" name="__codelineno-0-212" href="#__codelineno-0-212"></a>&#39; ================================================================
+<a id="__codelineno-0-213" name="__codelineno-0-213" href="#__codelineno-0-213"></a>Public Sub WriteSettingsFromDict(ByVal keyValues As Object)
+<a id="__codelineno-0-214" name="__codelineno-0-214" href="#__codelineno-0-214"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0969] modConfigLoader.WriteSettingsFromDict ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-215" name="__codelineno-0-215" href="#__codelineno-0-215"></a>    On Error GoTo ErrHandler
+<a id="__codelineno-0-216" name="__codelineno-0-216" href="#__codelineno-0-216"></a>    If keyValues Is Nothing Then Exit Sub
+<a id="__codelineno-0-217" name="__codelineno-0-217" href="#__codelineno-0-217"></a>    Dim ws As Worksheet
+<a id="__codelineno-0-218" name="__codelineno-0-218" href="#__codelineno-0-218"></a>    Set ws = EnsureSettingsSheet()
+<a id="__codelineno-0-219" name="__codelineno-0-219" href="#__codelineno-0-219"></a>    If ws Is Nothing Then Exit Sub
+<a id="__codelineno-0-220" name="__codelineno-0-220" href="#__codelineno-0-220"></a>    Dim d As Object
+<a id="__codelineno-0-221" name="__codelineno-0-221" href="#__codelineno-0-221"></a>    Set d = ReadSheetToDict(ws)
+<a id="__codelineno-0-222" name="__codelineno-0-222" href="#__codelineno-0-222"></a>    Dim k As Variant
+<a id="__codelineno-0-223" name="__codelineno-0-223" href="#__codelineno-0-223"></a>    For Each k In keyValues.Keys
+<a id="__codelineno-0-224" name="__codelineno-0-224" href="#__codelineno-0-224"></a>        d(CStr(k)) = CStr(keyValues(k))
+<a id="__codelineno-0-225" name="__codelineno-0-225" href="#__codelineno-0-225"></a>    Next k
+<a id="__codelineno-0-226" name="__codelineno-0-226" href="#__codelineno-0-226"></a>    WriteDictToSheet ws, d
+<a id="__codelineno-0-227" name="__codelineno-0-227" href="#__codelineno-0-227"></a>    SaveBookQuiet
+<a id="__codelineno-0-228" name="__codelineno-0-228" href="#__codelineno-0-228"></a>    modConfigHolder.SetConfig d
+<a id="__codelineno-0-229" name="__codelineno-0-229" href="#__codelineno-0-229"></a>    Exit Sub
+<a id="__codelineno-0-230" name="__codelineno-0-230" href="#__codelineno-0-230"></a>ErrHandler:
+<a id="__codelineno-0-231" name="__codelineno-0-231" href="#__codelineno-0-231"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print &quot;[D-0970] modConfigLoader.WriteSettingsFromDict EXIT-ERR errNum=&quot; &amp; Err.Number  &#39; [ADR-0100]
+<a id="__codelineno-0-232" name="__codelineno-0-232" href="#__codelineno-0-232"></a>End Sub
+<a id="__codelineno-0-233" name="__codelineno-0-233" href="#__codelineno-0-233"></a>
+<a id="__codelineno-0-234" name="__codelineno-0-234" href="#__codelineno-0-234"></a>&#39; ================================================================
+<a id="__codelineno-0-235" name="__codelineno-0-235" href="#__codelineno-0-235"></a>&#39; Function: SnapshotSettings
+<a id="__codelineno-0-236" name="__codelineno-0-236" href="#__codelineno-0-236"></a>&#39; Summary:  Fix-6 followup. Capture the 9 settings cells from the
+<a id="__codelineno-0-237" name="__codelineno-0-237" href="#__codelineno-0-237"></a>&#39;           settings sheet into a fresh Dictionary so a re-render
+<a id="__codelineno-0-238" name="__codelineno-0-238" href="#__codelineno-0-238"></a>&#39;           (Cells.Clear) cannot lose user-entered values. Never
+<a id="__codelineno-0-239" name="__codelineno-0-239" href="#__codelineno-0-239"></a>&#39;           fails: a missing sheet yields empty-string values.
+<a id="__codelineno-0-240" name="__codelineno-0-240" href="#__codelineno-0-240"></a>&#39; ================================================================
+<a id="__codelineno-0-241" name="__codelineno-0-241" href="#__codelineno-0-241"></a>Public Function SnapshotSettings() As Object
+<a id="__codelineno-0-242" name="__codelineno-0-242" href="#__codelineno-0-242"></a>    On Error GoTo ErrHandler
+<a id="__codelineno-0-243" name="__codelineno-0-243" href="#__codelineno-0-243"></a>    Dim ws As Worksheet
+<a id="__codelineno-0-244" name="__codelineno-0-244" href="#__codelineno-0-244"></a>    Set ws = GetSettingsSheet()
+<a id="__codelineno-0-245" name="__codelineno-0-245" href="#__codelineno-0-245"></a>    If ws Is Nothing Then
+<a id="__codelineno-0-246" name="__codelineno-0-246" href="#__codelineno-0-246"></a>        Set SnapshotSettings = NewEmptyKeyDict()
+<a id="__codelineno-0-247" name="__codelineno-0-247" href="#__codelineno-0-247"></a>        Exit Function
+<a id="__codelineno-0-248" name="__codelineno-0-248" href="#__codelineno-0-248"></a>    End If
+<a id="__codelineno-0-249" name="__codelineno-0-249" href="#__codelineno-0-249"></a>    Set SnapshotSettings = ReadSheetToDict(ws)
+<a id="__codelineno-0-250" name="__codelineno-0-250" href="#__codelineno-0-250"></a>    Exit Function
+<a id="__codelineno-0-251" name="__codelineno-0-251" href="#__codelineno-0-251"></a>ErrHandler:
+<a id="__codelineno-0-252" name="__codelineno-0-252" href="#__codelineno-0-252"></a>    Set SnapshotSettings = NewEmptyKeyDict()
+<a id="__codelineno-0-253" name="__codelineno-0-253" href="#__codelineno-0-253"></a>End Function
+<a id="__codelineno-0-254" name="__codelineno-0-254" href="#__codelineno-0-254"></a>
+<a id="__codelineno-0-255" name="__codelineno-0-255" href="#__codelineno-0-255"></a>&#39; ================================================================
+<a id="__codelineno-0-256" name="__codelineno-0-256" href="#__codelineno-0-256"></a>&#39; Sub: RestoreSettings
+<a id="__codelineno-0-257" name="__codelineno-0-257" href="#__codelineno-0-257"></a>&#39; Summary:  Fix-6 followup. Write a snapshot Dictionary back into the
+<a id="__codelineno-0-258" name="__codelineno-0-258" href="#__codelineno-0-258"></a>&#39;           9 settings cells after a re-render. Creates the settings
+<a id="__codelineno-0-259" name="__codelineno-0-259" href="#__codelineno-0-259"></a>&#39;           sheet when absent. Never raises.
+<a id="__codelineno-0-260" name="__codelineno-0-260" href="#__codelineno-0-260"></a>&#39; ================================================================
+<a id="__codelineno-0-261" name="__codelineno-0-261" href="#__codelineno-0-261"></a>Public Sub RestoreSettings(ByVal d As Object)
+<a id="__codelineno-0-262" name="__codelineno-0-262" href="#__codelineno-0-262"></a>    On Error GoTo ErrHandler
+<a id="__codelineno-0-263" name="__codelineno-0-263" href="#__codelineno-0-263"></a>    If d Is Nothing Then Exit Sub
+<a id="__codelineno-0-264" name="__codelineno-0-264" href="#__codelineno-0-264"></a>    Dim ws As Worksheet
+<a id="__codelineno-0-265" name="__codelineno-0-265" href="#__codelineno-0-265"></a>    Set ws = EnsureSettingsSheet()
+<a id="__codelineno-0-266" name="__codelineno-0-266" href="#__codelineno-0-266"></a>    If ws Is Nothing Then Exit Sub
+<a id="__codelineno-0-267" name="__codelineno-0-267" href="#__codelineno-0-267"></a>    WriteDictToSheet ws, d
+<a id="__codelineno-0-268" name="__codelineno-0-268" href="#__codelineno-0-268"></a>    Exit Sub
+<a id="__codelineno-0-269" name="__codelineno-0-269" href="#__codelineno-0-269"></a>ErrHandler:
+<a id="__codelineno-0-270" name="__codelineno-0-270" href="#__codelineno-0-270"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print &quot;[D-0971] modConfigLoader.RestoreSettings EXIT-ERR errNum=&quot; &amp; Err.Number  &#39; [ADR-0100]
+<a id="__codelineno-0-271" name="__codelineno-0-271" href="#__codelineno-0-271"></a>End Sub
+<a id="__codelineno-0-272" name="__codelineno-0-272" href="#__codelineno-0-272"></a>
+<a id="__codelineno-0-273" name="__codelineno-0-273" href="#__codelineno-0-273"></a>&#39; ----------------------------------------------------------------
+<a id="__codelineno-0-274" name="__codelineno-0-274" href="#__codelineno-0-274"></a>&#39; Private helpers
+<a id="__codelineno-0-275" name="__codelineno-0-275" href="#__codelineno-0-275"></a>&#39; ----------------------------------------------------------------
+<a id="__codelineno-0-276" name="__codelineno-0-276" href="#__codelineno-0-276"></a>
+<a id="__codelineno-0-277" name="__codelineno-0-277" href="#__codelineno-0-277"></a>Private Function AllKeys() As Variant
+<a id="__codelineno-0-278" name="__codelineno-0-278" href="#__codelineno-0-278"></a>    AllKeys = Array(&quot;data_dir&quot;, &quot;format_dir&quot;, &quot;ui_dir&quot;, &quot;backup_dir&quot;, &quot;debugLevel&quot;, &quot;logRotationRows&quot;, &quot;uiSchemaFailMode&quot;)
+<a id="__codelineno-0-279" name="__codelineno-0-279" href="#__codelineno-0-279"></a>End Function
+<a id="__codelineno-0-280" name="__codelineno-0-280" href="#__codelineno-0-280"></a>
+<a id="__codelineno-0-281" name="__codelineno-0-281" href="#__codelineno-0-281"></a>&#39; Fix-6 followup: a Dictionary pre-populated with all 9 keys set to &quot;&quot;.
+<a id="__codelineno-0-282" name="__codelineno-0-282" href="#__codelineno-0-282"></a>Private Function NewEmptyKeyDict() As Object
+<a id="__codelineno-0-283" name="__codelineno-0-283" href="#__codelineno-0-283"></a>    Dim d As Object
+<a id="__codelineno-0-284" name="__codelineno-0-284" href="#__codelineno-0-284"></a>    Set d = CreateObject(&quot;Scripting.Dictionary&quot;)
+<a id="__codelineno-0-285" name="__codelineno-0-285" href="#__codelineno-0-285"></a>    Dim keys As Variant
+<a id="__codelineno-0-286" name="__codelineno-0-286" href="#__codelineno-0-286"></a>    keys = AllKeys()
+<a id="__codelineno-0-287" name="__codelineno-0-287" href="#__codelineno-0-287"></a>    Dim i As Long
+<a id="__codelineno-0-288" name="__codelineno-0-288" href="#__codelineno-0-288"></a>    For i = 0 To UBound(keys)
+<a id="__codelineno-0-289" name="__codelineno-0-289" href="#__codelineno-0-289"></a>        d(keys(i)) = &quot;&quot;
+<a id="__codelineno-0-290" name="__codelineno-0-290" href="#__codelineno-0-290"></a>    Next i
+<a id="__codelineno-0-291" name="__codelineno-0-291" href="#__codelineno-0-291"></a>    Set NewEmptyKeyDict = d
+<a id="__codelineno-0-292" name="__codelineno-0-292" href="#__codelineno-0-292"></a>End Function
+<a id="__codelineno-0-293" name="__codelineno-0-293" href="#__codelineno-0-293"></a>
+<a id="__codelineno-0-294" name="__codelineno-0-294" href="#__codelineno-0-294"></a>Private Function GetSettingsSheet() As Worksheet
+<a id="__codelineno-0-295" name="__codelineno-0-295" href="#__codelineno-0-295"></a>    On Error Resume Next
+<a id="__codelineno-0-296" name="__codelineno-0-296" href="#__codelineno-0-296"></a>    Set GetSettingsSheet = ThisWorkbook.Worksheets(SettingsSheetName())
+<a id="__codelineno-0-297" name="__codelineno-0-297" href="#__codelineno-0-297"></a>    On Error GoTo 0
+<a id="__codelineno-0-298" name="__codelineno-0-298" href="#__codelineno-0-298"></a>End Function
+<a id="__codelineno-0-299" name="__codelineno-0-299" href="#__codelineno-0-299"></a>
+<a id="__codelineno-0-300" name="__codelineno-0-300" href="#__codelineno-0-300"></a>Private Function ReadSheetToDict(ByVal ws As Object) As Object
+<a id="__codelineno-0-301" name="__codelineno-0-301" href="#__codelineno-0-301"></a>    Dim d As Object
+<a id="__codelineno-0-302" name="__codelineno-0-302" href="#__codelineno-0-302"></a>    Set d = CreateObject(&quot;Scripting.Dictionary&quot;)
+<a id="__codelineno-0-303" name="__codelineno-0-303" href="#__codelineno-0-303"></a>    Dim keys As Variant
+<a id="__codelineno-0-304" name="__codelineno-0-304" href="#__codelineno-0-304"></a>    keys = AllKeys()
+<a id="__codelineno-0-305" name="__codelineno-0-305" href="#__codelineno-0-305"></a>    Dim i As Long
+<a id="__codelineno-0-306" name="__codelineno-0-306" href="#__codelineno-0-306"></a>    For i = 0 To UBound(keys)
+<a id="__codelineno-0-307" name="__codelineno-0-307" href="#__codelineno-0-307"></a>        d(keys(i)) = Trim(CStr(ws.Cells(FIRST_DATA_ROW + i, VALUE_COL).Value))
+<a id="__codelineno-0-308" name="__codelineno-0-308" href="#__codelineno-0-308"></a>    Next i
+<a id="__codelineno-0-309" name="__codelineno-0-309" href="#__codelineno-0-309"></a>    Set ReadSheetToDict = d
+<a id="__codelineno-0-310" name="__codelineno-0-310" href="#__codelineno-0-310"></a>End Function
+<a id="__codelineno-0-311" name="__codelineno-0-311" href="#__codelineno-0-311"></a>
+<a id="__codelineno-0-312" name="__codelineno-0-312" href="#__codelineno-0-312"></a>Private Sub WriteDictToSheet(ByVal ws As Object, ByVal d As Object)
+<a id="__codelineno-0-313" name="__codelineno-0-313" href="#__codelineno-0-313"></a>    Dim wasP As Boolean
+<a id="__codelineno-0-314" name="__codelineno-0-314" href="#__codelineno-0-314"></a>    On Error Resume Next
+<a id="__codelineno-0-315" name="__codelineno-0-315" href="#__codelineno-0-315"></a>    wasP = ws.ProtectContents
+<a id="__codelineno-0-316" name="__codelineno-0-316" href="#__codelineno-0-316"></a>    If wasP Then ws.Unprotect Password:=&quot;&quot;
+<a id="__codelineno-0-317" name="__codelineno-0-317" href="#__codelineno-0-317"></a>    On Error GoTo 0
+<a id="__codelineno-0-318" name="__codelineno-0-318" href="#__codelineno-0-318"></a>    Dim keys As Variant
+<a id="__codelineno-0-319" name="__codelineno-0-319" href="#__codelineno-0-319"></a>    keys = AllKeys()
+<a id="__codelineno-0-320" name="__codelineno-0-320" href="#__codelineno-0-320"></a>    Dim i As Long
+<a id="__codelineno-0-321" name="__codelineno-0-321" href="#__codelineno-0-321"></a>    For i = 0 To UBound(keys)
+<a id="__codelineno-0-322" name="__codelineno-0-322" href="#__codelineno-0-322"></a>        ws.Cells(FIRST_DATA_ROW + i, VALUE_COL).Value = CStr(d(keys(i)))
+<a id="__codelineno-0-323" name="__codelineno-0-323" href="#__codelineno-0-323"></a>    Next i
+<a id="__codelineno-0-324" name="__codelineno-0-324" href="#__codelineno-0-324"></a>    On Error Resume Next
+<a id="__codelineno-0-325" name="__codelineno-0-325" href="#__codelineno-0-325"></a>    If wasP Then ws.Protect Password:=&quot;&quot;, UserInterfaceOnly:=True
+<a id="__codelineno-0-326" name="__codelineno-0-326" href="#__codelineno-0-326"></a>    On Error GoTo 0
+<a id="__codelineno-0-327" name="__codelineno-0-327" href="#__codelineno-0-327"></a>End Sub
+<a id="__codelineno-0-328" name="__codelineno-0-328" href="#__codelineno-0-328"></a>
+<a id="__codelineno-0-329" name="__codelineno-0-329" href="#__codelineno-0-329"></a>Private Sub SeedSheetFrame(ByVal ws As Object)
+<a id="__codelineno-0-330" name="__codelineno-0-330" href="#__codelineno-0-330"></a>    Dim wasP As Boolean
+<a id="__codelineno-0-331" name="__codelineno-0-331" href="#__codelineno-0-331"></a>    On Error Resume Next
+<a id="__codelineno-0-332" name="__codelineno-0-332" href="#__codelineno-0-332"></a>    wasP = ws.ProtectContents
+<a id="__codelineno-0-333" name="__codelineno-0-333" href="#__codelineno-0-333"></a>    If wasP Then ws.Unprotect Password:=&quot;&quot;
+<a id="__codelineno-0-334" name="__codelineno-0-334" href="#__codelineno-0-334"></a>    On Error GoTo 0
+<a id="__codelineno-0-335" name="__codelineno-0-335" href="#__codelineno-0-335"></a>    ws.Cells(1, KEY_COL).Value = SettingsSheetName()
+<a id="__codelineno-0-336" name="__codelineno-0-336" href="#__codelineno-0-336"></a>    Dim keys As Variant
+<a id="__codelineno-0-337" name="__codelineno-0-337" href="#__codelineno-0-337"></a>    keys = AllKeys()
+<a id="__codelineno-0-338" name="__codelineno-0-338" href="#__codelineno-0-338"></a>    Dim i As Long
+<a id="__codelineno-0-339" name="__codelineno-0-339" href="#__codelineno-0-339"></a>    For i = 0 To UBound(keys)
+<a id="__codelineno-0-340" name="__codelineno-0-340" href="#__codelineno-0-340"></a>        ws.Cells(FIRST_DATA_ROW + i, KEY_COL).Value = keys(i)
+<a id="__codelineno-0-341" name="__codelineno-0-341" href="#__codelineno-0-341"></a>    Next i
+<a id="__codelineno-0-342" name="__codelineno-0-342" href="#__codelineno-0-342"></a>    AddListValidation ws.Cells(FIRST_DATA_ROW + 4, VALUE_COL), &quot;DEBUG,INFO,WARN,ERROR,OFF,TRACE&quot;
+<a id="__codelineno-0-343" name="__codelineno-0-343" href="#__codelineno-0-343"></a>    AddListValidation ws.Cells(FIRST_DATA_ROW + 6, VALUE_COL), &quot;safeDefault,warn,abort&quot;
+<a id="__codelineno-0-344" name="__codelineno-0-344" href="#__codelineno-0-344"></a>    On Error Resume Next
+<a id="__codelineno-0-345" name="__codelineno-0-345" href="#__codelineno-0-345"></a>    ws.Columns(KEY_COL).ColumnWidth = 18
+<a id="__codelineno-0-346" name="__codelineno-0-346" href="#__codelineno-0-346"></a>    ws.Columns(VALUE_COL).ColumnWidth = 34
+<a id="__codelineno-0-347" name="__codelineno-0-347" href="#__codelineno-0-347"></a>    If wasP Then ws.Protect Password:=&quot;&quot;, UserInterfaceOnly:=True
+<a id="__codelineno-0-348" name="__codelineno-0-348" href="#__codelineno-0-348"></a>    On Error GoTo 0
+<a id="__codelineno-0-349" name="__codelineno-0-349" href="#__codelineno-0-349"></a>End Sub
+<a id="__codelineno-0-350" name="__codelineno-0-350" href="#__codelineno-0-350"></a>
+<a id="__codelineno-0-351" name="__codelineno-0-351" href="#__codelineno-0-351"></a>Private Sub AddListValidation(ByVal rng As Object, ByVal listCsv As String)
+<a id="__codelineno-0-352" name="__codelineno-0-352" href="#__codelineno-0-352"></a>    On Error Resume Next
+<a id="__codelineno-0-353" name="__codelineno-0-353" href="#__codelineno-0-353"></a>    rng.Validation.Delete
+<a id="__codelineno-0-354" name="__codelineno-0-354" href="#__codelineno-0-354"></a>    rng.Validation.Add Type:=xlValidateList, AlertStyle:=xlValidAlertStop, Operator:=xlBetween, Formula1:=listCsv
+<a id="__codelineno-0-355" name="__codelineno-0-355" href="#__codelineno-0-355"></a>    On Error GoTo 0
+<a id="__codelineno-0-356" name="__codelineno-0-356" href="#__codelineno-0-356"></a>End Sub
+<a id="__codelineno-0-357" name="__codelineno-0-357" href="#__codelineno-0-357"></a>
+<a id="__codelineno-0-358" name="__codelineno-0-358" href="#__codelineno-0-358"></a>Private Function CountEmptyPaths(ByVal d As Object) As Long
+<a id="__codelineno-0-359" name="__codelineno-0-359" href="#__codelineno-0-359"></a>    Dim keys As Variant
+<a id="__codelineno-0-360" name="__codelineno-0-360" href="#__codelineno-0-360"></a>    keys = AllKeys()
+<a id="__codelineno-0-361" name="__codelineno-0-361" href="#__codelineno-0-361"></a>    Dim i As Long
+<a id="__codelineno-0-362" name="__codelineno-0-362" href="#__codelineno-0-362"></a>    Dim c As Long
+<a id="__codelineno-0-363" name="__codelineno-0-363" href="#__codelineno-0-363"></a>    For i = 0 To PATH_KEY_COUNT - 1
+<a id="__codelineno-0-364" name="__codelineno-0-364" href="#__codelineno-0-364"></a>        If Len(Trim(CStr(d(keys(i))))) = 0 Then c = c + 1
+<a id="__codelineno-0-365" name="__codelineno-0-365" href="#__codelineno-0-365"></a>    Next i
+<a id="__codelineno-0-366" name="__codelineno-0-366" href="#__codelineno-0-366"></a>    CountEmptyPaths = c
+<a id="__codelineno-0-367" name="__codelineno-0-367" href="#__codelineno-0-367"></a>End Function
+<a id="__codelineno-0-368" name="__codelineno-0-368" href="#__codelineno-0-368"></a>
+<a id="__codelineno-0-369" name="__codelineno-0-369" href="#__codelineno-0-369"></a>Private Function FirstEmptyPathKey(ByVal d As Object) As String
+<a id="__codelineno-0-370" name="__codelineno-0-370" href="#__codelineno-0-370"></a>    Dim keys As Variant
+<a id="__codelineno-0-371" name="__codelineno-0-371" href="#__codelineno-0-371"></a>    keys = AllKeys()
+<a id="__codelineno-0-372" name="__codelineno-0-372" href="#__codelineno-0-372"></a>    Dim i As Long
+<a id="__codelineno-0-373" name="__codelineno-0-373" href="#__codelineno-0-373"></a>    For i = 0 To PATH_KEY_COUNT - 1
+<a id="__codelineno-0-374" name="__codelineno-0-374" href="#__codelineno-0-374"></a>        If Len(Trim(CStr(d(keys(i))))) = 0 Then
+<a id="__codelineno-0-375" name="__codelineno-0-375" href="#__codelineno-0-375"></a>            FirstEmptyPathKey = CStr(keys(i))
+<a id="__codelineno-0-376" name="__codelineno-0-376" href="#__codelineno-0-376"></a>            Exit Function
+<a id="__codelineno-0-377" name="__codelineno-0-377" href="#__codelineno-0-377"></a>        End If
+<a id="__codelineno-0-378" name="__codelineno-0-378" href="#__codelineno-0-378"></a>    Next i
+<a id="__codelineno-0-379" name="__codelineno-0-379" href="#__codelineno-0-379"></a>    FirstEmptyPathKey = &quot;&quot;
 <a id="__codelineno-0-380" name="__codelineno-0-380" href="#__codelineno-0-380"></a>End Function
 <a id="__codelineno-0-381" name="__codelineno-0-381" href="#__codelineno-0-381"></a>
-<a id="__codelineno-0-382" name="__codelineno-0-382" href="#__codelineno-0-382"></a>Private Function MsgErrTitle() As String
-<a id="__codelineno-0-383" name="__codelineno-0-383" href="#__codelineno-0-383"></a>    MsgErrTitle = ChrW(&amp;H8A2D) &amp; ChrW(&amp;H5B9A) &amp; ChrW(&amp;H30A8) &amp; ChrW(&amp;H30E9) &amp; ChrW(&amp;H30FC)
-<a id="__codelineno-0-384" name="__codelineno-0-384" href="#__codelineno-0-384"></a>End Function
+<a id="__codelineno-0-382" name="__codelineno-0-382" href="#__codelineno-0-382"></a>Private Sub DeriveDirs(ByVal base As String, ByVal d As Object)
+<a id="__codelineno-0-383" name="__codelineno-0-383" href="#__codelineno-0-383"></a>    Dim b As String
+<a id="__codelineno-0-384" name="__codelineno-0-384" href="#__codelineno-0-384"></a>    b = base
+<a id="__codelineno-0-385" name="__codelineno-0-385" href="#__codelineno-0-385"></a>    Do While Right(b, 1) = &quot;\&quot;
+<a id="__codelineno-0-386" name="__codelineno-0-386" href="#__codelineno-0-386"></a>        b = Left(b, Len(b) - 1)
+<a id="__codelineno-0-387" name="__codelineno-0-387" href="#__codelineno-0-387"></a>    Loop
+<a id="__codelineno-0-388" name="__codelineno-0-388" href="#__codelineno-0-388"></a>    d(&quot;data_dir&quot;) = b &amp; &quot;\data\&quot;
+<a id="__codelineno-0-389" name="__codelineno-0-389" href="#__codelineno-0-389"></a>    d(&quot;format_dir&quot;) = b &amp; &quot;\formats\&quot;
+<a id="__codelineno-0-390" name="__codelineno-0-390" href="#__codelineno-0-390"></a>    d(&quot;ui_dir&quot;) = b &amp; &quot;\ui\&quot;
+<a id="__codelineno-0-391" name="__codelineno-0-391" href="#__codelineno-0-391"></a>    d(&quot;backup_dir&quot;) = b &amp; &quot;\backup\&quot;
+<a id="__codelineno-0-392" name="__codelineno-0-392" href="#__codelineno-0-392"></a>End Sub
+<a id="__codelineno-0-393" name="__codelineno-0-393" href="#__codelineno-0-393"></a>
+<a id="__codelineno-0-394" name="__codelineno-0-394" href="#__codelineno-0-394"></a>Private Sub FillMissingPathsFromDefault(ByVal d As Object)
+<a id="__codelineno-0-395" name="__codelineno-0-395" href="#__codelineno-0-395"></a>    Dim def As Object
+<a id="__codelineno-0-396" name="__codelineno-0-396" href="#__codelineno-0-396"></a>    Set def = CreateObject(&quot;Scripting.Dictionary&quot;)
+<a id="__codelineno-0-397" name="__codelineno-0-397" href="#__codelineno-0-397"></a>    DeriveDirs DEFAULT_BASE, def
+<a id="__codelineno-0-398" name="__codelineno-0-398" href="#__codelineno-0-398"></a>    Dim keys As Variant
+<a id="__codelineno-0-399" name="__codelineno-0-399" href="#__codelineno-0-399"></a>    keys = AllKeys()
+<a id="__codelineno-0-400" name="__codelineno-0-400" href="#__codelineno-0-400"></a>    Dim i As Long
+<a id="__codelineno-0-401" name="__codelineno-0-401" href="#__codelineno-0-401"></a>    For i = 0 To PATH_KEY_COUNT - 1
+<a id="__codelineno-0-402" name="__codelineno-0-402" href="#__codelineno-0-402"></a>        If Len(Trim(CStr(d(keys(i))))) = 0 Then d(keys(i)) = def(keys(i))
+<a id="__codelineno-0-403" name="__codelineno-0-403" href="#__codelineno-0-403"></a>    Next i
+<a id="__codelineno-0-404" name="__codelineno-0-404" href="#__codelineno-0-404"></a>End Sub
+<a id="__codelineno-0-405" name="__codelineno-0-405" href="#__codelineno-0-405"></a>
+<a id="__codelineno-0-406" name="__codelineno-0-406" href="#__codelineno-0-406"></a>&#39; [Fix-6 / ADR-0133-followup] Infer BASE_DIR from whatever path cells are
+<a id="__codelineno-0-407" name="__codelineno-0-407" href="#__codelineno-0-407"></a>&#39; already filled, so a partially-migrated config can self-heal without an
+<a id="__codelineno-0-408" name="__codelineno-0-408" href="#__codelineno-0-408"></a>&#39; InputBox. The parent of the first filled sub-path is used as the base.
+<a id="__codelineno-0-409" name="__codelineno-0-409" href="#__codelineno-0-409"></a>&#39; Returns &quot;&quot; when nothing can be inferred.
+<a id="__codelineno-0-410" name="__codelineno-0-410" href="#__codelineno-0-410"></a>Private Function InferBaseDir(ByVal d As Object) As String
+<a id="__codelineno-0-411" name="__codelineno-0-411" href="#__codelineno-0-411"></a>    Dim subKeys As Variant
+<a id="__codelineno-0-412" name="__codelineno-0-412" href="#__codelineno-0-412"></a>    subKeys = Array(&quot;data_dir&quot;, &quot;format_dir&quot;, &quot;ui_dir&quot;, &quot;backup_dir&quot;)
+<a id="__codelineno-0-413" name="__codelineno-0-413" href="#__codelineno-0-413"></a>    Dim i As Long
+<a id="__codelineno-0-414" name="__codelineno-0-414" href="#__codelineno-0-414"></a>    Dim v As String
+<a id="__codelineno-0-415" name="__codelineno-0-415" href="#__codelineno-0-415"></a>    For i = 0 To UBound(subKeys)
+<a id="__codelineno-0-416" name="__codelineno-0-416" href="#__codelineno-0-416"></a>        v = Trim(CStr(d(subKeys(i))))
+<a id="__codelineno-0-417" name="__codelineno-0-417" href="#__codelineno-0-417"></a>        If Len(v) &gt; 0 Then
+<a id="__codelineno-0-418" name="__codelineno-0-418" href="#__codelineno-0-418"></a>            InferBaseDir = ParentDir(v)
+<a id="__codelineno-0-419" name="__codelineno-0-419" href="#__codelineno-0-419"></a>            If Len(InferBaseDir) &gt; 0 Then Exit Function
+<a id="__codelineno-0-420" name="__codelineno-0-420" href="#__codelineno-0-420"></a>        End If
+<a id="__codelineno-0-421" name="__codelineno-0-421" href="#__codelineno-0-421"></a>    Next i
+<a id="__codelineno-0-422" name="__codelineno-0-422" href="#__codelineno-0-422"></a>    InferBaseDir = &quot;&quot;
+<a id="__codelineno-0-423" name="__codelineno-0-423" href="#__codelineno-0-423"></a>End Function
+<a id="__codelineno-0-424" name="__codelineno-0-424" href="#__codelineno-0-424"></a>
+<a id="__codelineno-0-425" name="__codelineno-0-425" href="#__codelineno-0-425"></a>&#39; Derive every still-empty path cell from an inferred base (same layout as
+<a id="__codelineno-0-426" name="__codelineno-0-426" href="#__codelineno-0-426"></a>&#39; DeriveDirs). Filled cells are left untouched so user customisations survive.
+<a id="__codelineno-0-427" name="__codelineno-0-427" href="#__codelineno-0-427"></a>Private Sub FillMissingPathsFromBase(ByVal d As Object, ByVal base As String)
+<a id="__codelineno-0-428" name="__codelineno-0-428" href="#__codelineno-0-428"></a>    Dim derived As Object
+<a id="__codelineno-0-429" name="__codelineno-0-429" href="#__codelineno-0-429"></a>    Set derived = CreateObject(&quot;Scripting.Dictionary&quot;)
+<a id="__codelineno-0-430" name="__codelineno-0-430" href="#__codelineno-0-430"></a>    DeriveDirs base, derived
+<a id="__codelineno-0-431" name="__codelineno-0-431" href="#__codelineno-0-431"></a>    Dim keys As Variant
+<a id="__codelineno-0-432" name="__codelineno-0-432" href="#__codelineno-0-432"></a>    keys = AllKeys()
+<a id="__codelineno-0-433" name="__codelineno-0-433" href="#__codelineno-0-433"></a>    Dim i As Long
+<a id="__codelineno-0-434" name="__codelineno-0-434" href="#__codelineno-0-434"></a>    For i = 0 To PATH_KEY_COUNT - 1
+<a id="__codelineno-0-435" name="__codelineno-0-435" href="#__codelineno-0-435"></a>        If Len(Trim(CStr(d(keys(i))))) = 0 Then d(keys(i)) = derived(keys(i))
+<a id="__codelineno-0-436" name="__codelineno-0-436" href="#__codelineno-0-436"></a>    Next i
+<a id="__codelineno-0-437" name="__codelineno-0-437" href="#__codelineno-0-437"></a>End Sub
+<a id="__codelineno-0-438" name="__codelineno-0-438" href="#__codelineno-0-438"></a>
+<a id="__codelineno-0-439" name="__codelineno-0-439" href="#__codelineno-0-439"></a>&#39; Strip every trailing path separator (&quot;C:\KnowledgeMgr\&quot; -&gt; &quot;C:\KnowledgeMgr&quot;).
+<a id="__codelineno-0-440" name="__codelineno-0-440" href="#__codelineno-0-440"></a>Private Function StripTrailingSep(ByVal p As String) As String
+<a id="__codelineno-0-441" name="__codelineno-0-441" href="#__codelineno-0-441"></a>    Dim s As String
+<a id="__codelineno-0-442" name="__codelineno-0-442" href="#__codelineno-0-442"></a>    s = p
+<a id="__codelineno-0-443" name="__codelineno-0-443" href="#__codelineno-0-443"></a>    Do While Len(s) &gt; 0 And Right(s, 1) = &quot;\&quot;
+<a id="__codelineno-0-444" name="__codelineno-0-444" href="#__codelineno-0-444"></a>        s = Left(s, Len(s) - 1)
+<a id="__codelineno-0-445" name="__codelineno-0-445" href="#__codelineno-0-445"></a>    Loop
+<a id="__codelineno-0-446" name="__codelineno-0-446" href="#__codelineno-0-446"></a>    StripTrailingSep = s
+<a id="__codelineno-0-447" name="__codelineno-0-447" href="#__codelineno-0-447"></a>End Function
+<a id="__codelineno-0-448" name="__codelineno-0-448" href="#__codelineno-0-448"></a>
+<a id="__codelineno-0-449" name="__codelineno-0-449" href="#__codelineno-0-449"></a>&#39; Parent directory of a path (&quot;C:\KnowledgeMgr\data\&quot; -&gt; &quot;C:\KnowledgeMgr&quot;).
+<a id="__codelineno-0-450" name="__codelineno-0-450" href="#__codelineno-0-450"></a>Private Function ParentDir(ByVal p As String) As String
+<a id="__codelineno-0-451" name="__codelineno-0-451" href="#__codelineno-0-451"></a>    Dim s As String
+<a id="__codelineno-0-452" name="__codelineno-0-452" href="#__codelineno-0-452"></a>    s = StripTrailingSep(p)
+<a id="__codelineno-0-453" name="__codelineno-0-453" href="#__codelineno-0-453"></a>    Dim pos As Long
+<a id="__codelineno-0-454" name="__codelineno-0-454" href="#__codelineno-0-454"></a>    pos = InStrRev(s, &quot;\&quot;)
+<a id="__codelineno-0-455" name="__codelineno-0-455" href="#__codelineno-0-455"></a>    If pos &gt; 1 Then
+<a id="__codelineno-0-456" name="__codelineno-0-456" href="#__codelineno-0-456"></a>        ParentDir = Left(s, pos - 1)
+<a id="__codelineno-0-457" name="__codelineno-0-457" href="#__codelineno-0-457"></a>    Else
+<a id="__codelineno-0-458" name="__codelineno-0-458" href="#__codelineno-0-458"></a>        ParentDir = &quot;&quot;
+<a id="__codelineno-0-459" name="__codelineno-0-459" href="#__codelineno-0-459"></a>    End If
+<a id="__codelineno-0-460" name="__codelineno-0-460" href="#__codelineno-0-460"></a>End Function
+<a id="__codelineno-0-461" name="__codelineno-0-461" href="#__codelineno-0-461"></a>
+<a id="__codelineno-0-462" name="__codelineno-0-462" href="#__codelineno-0-462"></a>Private Sub ApplyBehaviorDefaults(ByVal d As Object)
+<a id="__codelineno-0-463" name="__codelineno-0-463" href="#__codelineno-0-463"></a>    If Len(Trim(CStr(d(&quot;debugLevel&quot;)))) = 0 Then d(&quot;debugLevel&quot;) = DEFAULT_DEBUG_LEVEL
+<a id="__codelineno-0-464" name="__codelineno-0-464" href="#__codelineno-0-464"></a>    If Len(Trim(CStr(d(&quot;logRotationRows&quot;)))) = 0 Then d(&quot;logRotationRows&quot;) = DEFAULT_LOG_ROTATION_ROWS
+<a id="__codelineno-0-465" name="__codelineno-0-465" href="#__codelineno-0-465"></a>    If Len(Trim(CStr(d(&quot;uiSchemaFailMode&quot;)))) = 0 Then d(&quot;uiSchemaFailMode&quot;) = DEFAULT_UI_SCHEMA_FAIL_MODE
+<a id="__codelineno-0-466" name="__codelineno-0-466" href="#__codelineno-0-466"></a>End Sub
+<a id="__codelineno-0-467" name="__codelineno-0-467" href="#__codelineno-0-467"></a>
+<a id="__codelineno-0-468" name="__codelineno-0-468" href="#__codelineno-0-468"></a>Private Function AskBaseDir() As String
+<a id="__codelineno-0-469" name="__codelineno-0-469" href="#__codelineno-0-469"></a>    If modCommon.IsHeadless() Then
+<a id="__codelineno-0-470" name="__codelineno-0-470" href="#__codelineno-0-470"></a>        AskBaseDir = DEFAULT_BASE
+<a id="__codelineno-0-471" name="__codelineno-0-471" href="#__codelineno-0-471"></a>        Exit Function
+<a id="__codelineno-0-472" name="__codelineno-0-472" href="#__codelineno-0-472"></a>    End If
+<a id="__codelineno-0-473" name="__codelineno-0-473" href="#__codelineno-0-473"></a>    Dim r As String
+<a id="__codelineno-0-474" name="__codelineno-0-474" href="#__codelineno-0-474"></a>    r = InputBox(InputPrompt(), SettingsSheetName(), DEFAULT_BASE)
+<a id="__codelineno-0-475" name="__codelineno-0-475" href="#__codelineno-0-475"></a>    If Len(Trim(r)) = 0 Then
+<a id="__codelineno-0-476" name="__codelineno-0-476" href="#__codelineno-0-476"></a>        AskBaseDir = DEFAULT_BASE
+<a id="__codelineno-0-477" name="__codelineno-0-477" href="#__codelineno-0-477"></a>    Else
+<a id="__codelineno-0-478" name="__codelineno-0-478" href="#__codelineno-0-478"></a>        AskBaseDir = r
+<a id="__codelineno-0-479" name="__codelineno-0-479" href="#__codelineno-0-479"></a>    End If
+<a id="__codelineno-0-480" name="__codelineno-0-480" href="#__codelineno-0-480"></a>End Function
+<a id="__codelineno-0-481" name="__codelineno-0-481" href="#__codelineno-0-481"></a>
+<a id="__codelineno-0-482" name="__codelineno-0-482" href="#__codelineno-0-482"></a>Private Sub NotifyMissingKey(ByVal key As String)
+<a id="__codelineno-0-483" name="__codelineno-0-483" href="#__codelineno-0-483"></a>    If modCommon.IsHeadless() Then Exit Sub
+<a id="__codelineno-0-484" name="__codelineno-0-484" href="#__codelineno-0-484"></a>    MsgBox MsgMissingA() &amp; key &amp; MsgMissingB(), vbExclamation, MsgErrTitle()
+<a id="__codelineno-0-485" name="__codelineno-0-485" href="#__codelineno-0-485"></a>End Sub
+<a id="__codelineno-0-486" name="__codelineno-0-486" href="#__codelineno-0-486"></a>
+<a id="__codelineno-0-487" name="__codelineno-0-487" href="#__codelineno-0-487"></a>Private Sub SaveBookQuiet()
+<a id="__codelineno-0-488" name="__codelineno-0-488" href="#__codelineno-0-488"></a>    On Error Resume Next
+<a id="__codelineno-0-489" name="__codelineno-0-489" href="#__codelineno-0-489"></a>    Application.DisplayAlerts = False
+<a id="__codelineno-0-490" name="__codelineno-0-490" href="#__codelineno-0-490"></a>    ThisWorkbook.Save
+<a id="__codelineno-0-491" name="__codelineno-0-491" href="#__codelineno-0-491"></a>    Application.DisplayAlerts = True
+<a id="__codelineno-0-492" name="__codelineno-0-492" href="#__codelineno-0-492"></a>    On Error GoTo 0
+<a id="__codelineno-0-493" name="__codelineno-0-493" href="#__codelineno-0-493"></a>End Sub
+<a id="__codelineno-0-494" name="__codelineno-0-494" href="#__codelineno-0-494"></a>
+<a id="__codelineno-0-495" name="__codelineno-0-495" href="#__codelineno-0-495"></a>&#39; ---- JP user-facing strings (ChrW so the source is installer-safe) ----
+<a id="__codelineno-0-496" name="__codelineno-0-496" href="#__codelineno-0-496"></a>
+<a id="__codelineno-0-497" name="__codelineno-0-497" href="#__codelineno-0-497"></a>Private Function InputPrompt() As String
+<a id="__codelineno-0-498" name="__codelineno-0-498" href="#__codelineno-0-498"></a>    InputPrompt = ChrW(&amp;H683C) &amp; ChrW(&amp;H7D0D) &amp; ChrW(&amp;H5148) &amp; ChrW(&amp;H306E) &amp; ChrW(&amp;H30D9) &amp; ChrW(&amp;H30FC) &amp; ChrW(&amp;H30B9) &amp; ChrW(&amp;H30D5) &amp; ChrW(&amp;H30A9) &amp; ChrW(&amp;H30EB) &amp; ChrW(&amp;H30C0) &amp; ChrW(&amp;H3092) &amp; ChrW(&amp;H5165) &amp; ChrW(&amp;H529B) &amp; ChrW(&amp;H3057) &amp; ChrW(&amp;H3066) &amp; ChrW(&amp;H304F) &amp; ChrW(&amp;H3060) &amp; ChrW(&amp;H3055) &amp; ChrW(&amp;H3044) &amp; vbCrLf &amp; DEFAULT_BASE
+<a id="__codelineno-0-499" name="__codelineno-0-499" href="#__codelineno-0-499"></a>End Function
+<a id="__codelineno-0-500" name="__codelineno-0-500" href="#__codelineno-0-500"></a>
+<a id="__codelineno-0-501" name="__codelineno-0-501" href="#__codelineno-0-501"></a>Private Function MsgMissingA() As String
+<a id="__codelineno-0-502" name="__codelineno-0-502" href="#__codelineno-0-502"></a>    MsgMissingA = ChrW(&amp;H8A2D) &amp; ChrW(&amp;H5B9A) &amp; ChrW(&amp;H30B7) &amp; ChrW(&amp;H30FC) &amp; ChrW(&amp;H30C8) &amp; ChrW(&amp;H306E) &amp; ChrW(&amp;H20)
+<a id="__codelineno-0-503" name="__codelineno-0-503" href="#__codelineno-0-503"></a>End Function
+<a id="__codelineno-0-504" name="__codelineno-0-504" href="#__codelineno-0-504"></a>
+<a id="__codelineno-0-505" name="__codelineno-0-505" href="#__codelineno-0-505"></a>Private Function MsgMissingB() As String
+<a id="__codelineno-0-506" name="__codelineno-0-506" href="#__codelineno-0-506"></a>    MsgMissingB = ChrW(&amp;H20) &amp; ChrW(&amp;H304C) &amp; ChrW(&amp;H7A7A) &amp; ChrW(&amp;H307E) &amp; ChrW(&amp;H305F) &amp; ChrW(&amp;H306F) &amp; ChrW(&amp;H4E0D) &amp; ChrW(&amp;H6B63) &amp; ChrW(&amp;H3067) &amp; ChrW(&amp;H3059) &amp; ChrW(&amp;H3002) &amp; ChrW(&amp;H8A2D) &amp; ChrW(&amp;H5B9A) &amp; ChrW(&amp;H30B7) &amp; ChrW(&amp;H30FC) &amp; ChrW(&amp;H30C8) &amp; ChrW(&amp;H3067) &amp; ChrW(&amp;H6307) &amp; ChrW(&amp;H5B9A) &amp; ChrW(&amp;H3057) &amp; ChrW(&amp;H3066) &amp; ChrW(&amp;H304F) &amp; ChrW(&amp;H3060) &amp; ChrW(&amp;H3055) &amp; ChrW(&amp;H3044) &amp; ChrW(&amp;H3002)
+<a id="__codelineno-0-507" name="__codelineno-0-507" href="#__codelineno-0-507"></a>End Function
+<a id="__codelineno-0-508" name="__codelineno-0-508" href="#__codelineno-0-508"></a>
+<a id="__codelineno-0-509" name="__codelineno-0-509" href="#__codelineno-0-509"></a>Private Function MsgErrTitle() As String
+<a id="__codelineno-0-510" name="__codelineno-0-510" href="#__codelineno-0-510"></a>    MsgErrTitle = ChrW(&amp;H8A2D) &amp; ChrW(&amp;H5B9A) &amp; ChrW(&amp;H30A8) &amp; ChrW(&amp;H30E9) &amp; ChrW(&amp;H30FC)
+<a id="__codelineno-0-511" name="__codelineno-0-511" href="#__codelineno-0-511"></a>End Function
 </code></pre></div>
 
 
