@@ -7,7 +7,7 @@ description: modKnowledgeFileIO.bas のソースコード（コピペ用）
 
 **配置先**: 共通モジュール（検索.xlsm / 管理.xlsm 共通）
 **種類**: 標準モジュール
-**更新日**: 2026-06-23 08:48 JST
+**更新日**: 2026-06-11 15:52 JST
 
 ---
 
@@ -54,12 +54,14 @@ Public Function LoadKnowledge(ByVal knowledgeNo As String) As Object
     On Error GoTo ErrHandler
 
     Dim filePath As String
-    filePath = ResolveKnowledgePath(knowledgeNo)
+    filePath = modConfigHolder.GetDataDir() & knowledgeNo & ".txt"
 
     Dim result As Object
     Set result = CreateObject("Scripting.Dictionary")
 
-    If Len(filePath) = 0 Then
+    Dim fso As Object
+    Set fso = CreateObject("Scripting.FileSystemObject")
+    If Not fso.FileExists(filePath) Then
         Set LoadKnowledge = result
         If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1263] modKnowledgeFileIO.LoadKnowledge EXIT-OK"  ' [ADR-0100]
         Exit Function
@@ -86,9 +88,9 @@ Public Function GetKnowledgeTimestamp(ByVal knowledgeNo As String) As Date
     On Error GoTo ErrHandler
 
     Dim filePath As String
-    filePath = ResolveKnowledgePath(knowledgeNo)
+    filePath = modConfigHolder.GetDataDir() & knowledgeNo & ".txt"
 
-    If Len(filePath) > 0 Then
+    If Len(Dir(filePath)) > 0 Then
         GetKnowledgeTimestamp = FileDateTime(filePath)
     Else
         GetKnowledgeTimestamp = 0
@@ -121,20 +123,19 @@ Public Function SaveKnowledge( _
         Exit Function
     End If
 
-    ' [Change-5] route the save into data\<formatId>\ . formatId comes
-    ' from the dict when present, else resolved from the format list.
-    Dim fmtId As String
-    fmtId = ""
-    If knowledgeDict.Exists("FormatID") Then fmtId = Trim(CStr(knowledgeDict("FormatID")))
-    Dim oldPath As String
-    oldPath = ResolveKnowledgePath(knowledgeNo)
     Dim filePath As String
-    filePath = EnsureDataFolderForKnowledge(knowledgeNo, fmtId) & knowledgeNo & ".txt"
+    filePath = modConfigHolder.GetDataDir() & knowledgeNo & ".txt"
+
+    Dim fso As Object
+    Set fso = CreateObject("Scripting.FileSystemObject")
+    If Not fso.FolderExists(modConfigHolder.GetDataDir()) Then
+        fso.CreateFolder modConfigHolder.GetDataDir()
+    End If
 
     If originalTimestamp <> 0 Then
-        If Len(oldPath) > 0 Then
+        If fso.FileExists(filePath) Then
             Dim currentTs As Date
-            currentTs = FileDateTime(oldPath)
+            currentTs = FileDateTime(filePath)
             If Abs(DateDiff("s", originalTimestamp, currentTs)) > 2 Then
                 SaveKnowledge = 1  ' conflict
                 If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1271] modKnowledgeFileIO.SaveKnowledge EXIT-OK"  ' [ADR-0100]
@@ -159,12 +160,6 @@ Public Function SaveKnowledge( _
     End If
 
     WriteAllTextShiftJIS filePath, content
-    ' [Change-5] drop a pre-existing copy at a different (legacy/flat) path
-    If Len(oldPath) > 0 And LCase(oldPath) <> LCase(filePath) Then
-        On Error Resume Next
-        CreateObject("Scripting.FileSystemObject").DeleteFile oldPath, True
-        On Error GoTo ErrHandler
-    End If
     SaveKnowledge = 0
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1273] modKnowledgeFileIO.SaveKnowledge EXIT-OK"  ' [ADR-0100]
     Exit Function
@@ -338,22 +333,11 @@ Public Function ListAllKnowledges() As Collection
     Dim folder As Object
     Set folder = fso.GetFolder(dir)
     Dim f As Object
-    ' [Change-5] flat root files (legacy / un-migrated)
     For Each f In folder.Files
         If LCase(fso.GetExtensionName(f.Name)) = "txt" Then
             result.Add fso.GetBaseName(f.Name)
         End If
     Next f
-    ' [Change-5] plus every per-format data\<fmt>\ subfolder
-    Dim sub_ As Object
-    For Each sub_ In folder.SubFolders
-        Dim sf As Object
-        For Each sf In sub_.Files
-            If LCase(fso.GetExtensionName(sf.Name)) = "txt" Then
-                result.Add fso.GetBaseName(sf.Name)
-            End If
-        Next sf
-    Next sub_
     Set ListAllKnowledges = result
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1291] modKnowledgeFileIO.ListAllKnowledges EXIT-OK"  ' [ADR-0100]
     Exit Function
@@ -401,8 +385,8 @@ Public Function DeleteKnowledge(ByVal knowledgeNo As String) As Boolean
     Dim fso As Object
     Set fso = CreateObject("Scripting.FileSystemObject")
     Dim filePath As String
-    filePath = ResolveKnowledgePath(knowledgeNo)
-    If Len(filePath) > 0 And fso.FileExists(filePath) Then
+    filePath = modConfigHolder.GetDataDir() & knowledgeNo & ".txt"
+    If fso.FileExists(filePath) Then
         fso.DeleteFile filePath
         DeleteKnowledge = True
     Else
@@ -422,8 +406,8 @@ Public Function BackupKnowledgeFile(ByVal knowledgeNo As String, ByVal ts As Str
     Dim fso As Object
     Set fso = CreateObject("Scripting.FileSystemObject")
     Dim srcPath As String
-    srcPath = ResolveKnowledgePath(knowledgeNo)
-    If Len(srcPath) = 0 Or Not fso.FileExists(srcPath) Then
+    srcPath = modConfigHolder.GetDataDir() & knowledgeNo & ".txt"
+    If Not fso.FileExists(srcPath) Then
         BackupKnowledgeFile = False
         If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1300] modKnowledgeFileIO.BackupKnowledgeFile EXIT-OK"  ' [ADR-0100]
         Exit Function
@@ -503,8 +487,8 @@ Public Function BackupKnowledgeToReflect(ByVal knowledgeNo As String, _
     Dim fso As Object
     Set fso = CreateObject("Scripting.FileSystemObject")
     Dim srcPath As String
-    srcPath = ResolveKnowledgePath(knowledgeNo)
-    If Len(srcPath) = 0 Or Not fso.FileExists(srcPath) Then
+    srcPath = modConfigHolder.GetDataDir() & knowledgeNo & ".txt"
+    If Not fso.FileExists(srcPath) Then
         BackupKnowledgeToReflect = False
         If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1308] modKnowledgeFileIO.BackupKnowledgeToReflect EXIT-OK"  ' [ADR-0100]
         Exit Function
@@ -567,15 +551,15 @@ Public Function RestoreKnowledgeFromReflect(ByVal reflectDir As String) As Long
         If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1315] modKnowledgeFileIO.RestoreKnowledgeFromReflect EXIT-OK"  ' [ADR-0100]
         Exit Function
     End If
+    Dim ddir As String
+    ddir = modConfigHolder.GetDataDir()
+    If Not fso.FolderExists(ddir) Then fso.CreateFolder ddir
     Dim restored As Long
     restored = 0
     Dim f As Object
     For Each f In fso.GetFolder(rdir).Files
         If LCase(fso.GetExtensionName(f.Name)) = "txt" Then
-            ' [Change-5] restore into the per-format subfolder
-            Dim dstFolder As String
-            dstFolder = EnsureDataFolderForKnowledge(fso.GetBaseName(f.Name), "")
-            fso.CopyFile f.Path, dstFolder & f.Name, True
+            fso.CopyFile f.Path, ddir & f.Name, True
             restored = restored + 1
         End If
     Next f
@@ -585,165 +569,6 @@ Public Function RestoreKnowledgeFromReflect(ByVal reflectDir As String) As Long
 ErrHandler:
     If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-1317] modKnowledgeFileIO.RestoreKnowledgeFromReflect EXIT-ERR " & "errNum=" & Err.Number & " desc=" & Err.Description  ' [ADR-0100]
     RestoreKnowledgeFromReflect = -1
-End Function
-
-' ================================================================
-' [Change-5] per-format data subfolder helpers (ADR-0134)
-' Files live in data\<formatId>\ . formatId is resolved reliably
-' from the format list (longest "<fmt>-" prefix of the id) so the two
-' id schemes (<fmt>-<seq> and <fmt>-<year>-<seq>) both map correctly;
-' positional parsing of the id is intentionally avoided.
-' ================================================================
-Private Function FormatIdForKnowledge(ByVal knowledgeNo As String) As String
-    On Error GoTo Done
-    Dim fso As Object
-    Set fso = CreateObject("Scripting.FileSystemObject")
-    Dim fdir As String
-    fdir = modConfigHolder.GetFormatDir()
-    If Len(fdir) = 0 Or Not fso.FolderExists(fdir) Then GoTo Done
-    Dim best As String
-    best = ""
-    Dim f As Object
-    For Each f In fso.GetFolder(fdir).Files
-        If LCase(fso.GetExtensionName(f.Name)) = "txt" Then
-            Dim fid As String
-            fid = fso.GetBaseName(f.Name)
-            If knowledgeNo = fid Or (Len(knowledgeNo) > Len(fid) And Left$(knowledgeNo, Len(fid) + 1) = fid & "-") Then
-                If Len(fid) > Len(best) Then best = fid
-            End If
-        End If
-    Next f
-    FormatIdForKnowledge = best
-    Exit Function
-Done:
-    FormatIdForKnowledge = ""
-End Function
-
-Private Function DataFolderForKnowledge(ByVal knowledgeNo As String, ByVal formatId As String) As String
-    Dim fid As String
-    fid = formatId
-    If Len(fid) = 0 Then fid = FormatIdForKnowledge(knowledgeNo)
-    If Len(fid) = 0 Then
-        DataFolderForKnowledge = modConfigHolder.GetDataDir()
-    Else
-        DataFolderForKnowledge = modConfigHolder.GetDataDir() & fid & "\"
-    End If
-End Function
-
-' Locate an existing knowledge file: format subfolder, then flat root,
-' then any data\*\ subfolder. "" when not found anywhere.
-Private Function ResolveKnowledgePath(ByVal knowledgeNo As String) As String
-    On Error GoTo Done
-    Dim fso As Object
-    Set fso = CreateObject("Scripting.FileSystemObject")
-    Dim cand As String
-    cand = DataFolderForKnowledge(knowledgeNo, "") & knowledgeNo & ".txt"
-    If fso.FileExists(cand) Then ResolveKnowledgePath = cand: Exit Function
-    cand = modConfigHolder.GetDataDir() & knowledgeNo & ".txt"
-    If fso.FileExists(cand) Then ResolveKnowledgePath = cand: Exit Function
-    Dim root As String
-    root = modConfigHolder.GetDataDir()
-    If fso.FolderExists(root) Then
-        Dim sub_ As Object
-        For Each sub_ In fso.GetFolder(root).SubFolders
-            cand = sub_.Path & "\" & knowledgeNo & ".txt"
-            If fso.FileExists(cand) Then ResolveKnowledgePath = cand: Exit Function
-        Next sub_
-    End If
-Done:
-    ResolveKnowledgePath = ""
-End Function
-
-' Ensure data\<fmt>\ exists (creating data root first); return it.
-Private Function EnsureDataFolderForKnowledge(ByVal knowledgeNo As String, ByVal formatId As String) As String
-    On Error Resume Next
-    Dim fso As Object
-    Set fso = CreateObject("Scripting.FileSystemObject")
-    Dim root As String
-    root = modConfigHolder.GetDataDir()
-    If Not fso.FolderExists(root) Then fso.CreateFolder root
-    Dim folder As String
-    folder = DataFolderForKnowledge(knowledgeNo, formatId)
-    If LCase(folder) <> LCase(root) And Not fso.FolderExists(folder) Then fso.CreateFolder folder
-    EnsureDataFolderForKnowledge = folder
-End Function
-
-' ================================================================
-' [Change-5] public path wrappers for direct writers (modUserFormCallback /
-' modEntryUserForm) so every saver lands knowledge in data\<formatId>\ .
-' ================================================================
-Public Function DataFilePathForSave(ByVal knowledgeNo As String, ByVal formatId As String) As String
-    DataFilePathForSave = EnsureDataFolderForKnowledge(knowledgeNo, formatId) & knowledgeNo & ".txt"
-End Function
-
-Public Function DataFolderForFormat(ByVal formatId As String) As String
-    If Len(formatId) = 0 Then
-        DataFolderForFormat = modConfigHolder.GetDataDir()
-    Else
-        DataFolderForFormat = modConfigHolder.GetDataDir() & formatId & "\"
-    End If
-End Function
-
-' ================================================================
-' [Change-5] MigrateFlatDataToSubfolders
-' One-time idempotent migration: move any *.txt sitting directly in
-' the data root into data\<formatId>\ . formatId is resolved from
-' the format list, else from the file's ###FormatID### header. Files
-' whose format cannot be resolved are left in place. Returns moved count.
-' ================================================================
-Public Function MigrateFlatDataToSubfolders() As Long
-    On Error GoTo Done
-    Dim fso As Object
-    Set fso = CreateObject("Scripting.FileSystemObject")
-    Dim root As String
-    root = modConfigHolder.GetDataDir()
-    If Len(root) = 0 Or Not fso.FolderExists(root) Then
-        MigrateFlatDataToSubfolders = 0
-        Exit Function
-    End If
-    Dim paths As Collection
-    Set paths = New Collection
-    Dim f As Object
-    For Each f In fso.GetFolder(root).Files
-        If LCase(fso.GetExtensionName(f.Name)) = "txt" Then paths.Add f.Path
-    Next f
-    Dim moved As Long
-    moved = 0
-    Dim p As Variant
-    For Each p In paths
-        Dim base As String
-        base = fso.GetBaseName(CStr(p))
-        Dim fmt As String
-        fmt = FormatIdForKnowledge(base)
-        If Len(fmt) = 0 Then fmt = FormatIdFromFileHeader(CStr(p))
-        If Len(fmt) > 0 Then
-            Dim folder As String
-            folder = EnsureDataFolderForKnowledge(base, fmt)
-            Dim dst As String
-            dst = folder & base & ".txt"
-            If LCase(dst) <> LCase(CStr(p)) And Not fso.FileExists(dst) Then
-                On Error Resume Next
-                fso.MoveFile CStr(p), dst
-                If Err.Number = 0 Then moved = moved + 1
-                Err.Clear
-                On Error GoTo Done
-            End If
-        End If
-    Next p
-    MigrateFlatDataToSubfolders = moved
-    Exit Function
-Done:
-    MigrateFlatDataToSubfolders = moved
-End Function
-
-Private Function FormatIdFromFileHeader(ByVal filePath As String) As String
-    On Error GoTo Bad
-    Dim d As Object
-    Set d = ParseKnowledgeStanza(ReadAllTextShiftJIS(filePath))
-    If d.Exists("FormatID") Then FormatIdFromFileHeader = Trim(CStr(d("FormatID"))) Else FormatIdFromFileHeader = ""
-    Exit Function
-Bad:
-    FormatIdFromFileHeader = ""
 End Function
 
 ' ADR-0006/0090/0094 JP literal removal:

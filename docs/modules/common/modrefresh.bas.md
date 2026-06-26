@@ -7,7 +7,7 @@ description: modRefresh.bas のソースコード（コピペ用）
 
 **配置先**: 共通モジュール（検索.xlsm / 管理.xlsm 共通）
 **種類**: 標準モジュール
-**更新日**: 2026-06-22 22:53 JST
+**更新日**: 2026-06-12 22:33 JST
 
 ---
 
@@ -32,16 +32,16 @@ description: modRefresh.bas のソースコード（コピペ用）
 Attribute VB_Name = "modRefresh"
 ' ============================================================
 ' modRefresh (Phase R-3-psi-Refresh, 2026-05-29)
-'   ui_seed/<role>/M-NN.txt �� edit �������ƁA�� install ������ sheet ��
-'   �ĕ`�悷�邽�߂� entry point�Bbutton OnClick / Alt+F8 macro ����ĂԁB
-'   ���̂� clsSetupOrchestrator.Reapply* (RunFullSetup step6 ApplyUiStanzas
-'   �Ɠ��� pipeline: BindSheet -> ClearScreen -> ApplyFromStanza -> ProtectSheet)�B
-'   �{���W���[���� ScreenUpdating/EnableEvents �}�~ + ActiveSheet ������
-'   �������b�p�̂݁BASCII-only (CP932/UTF-8 round-trip ���S, ADR-0006)�B
+'   ui_seed/<role>/M-NN.txt を edit したあと、再 install せずに sheet を
+'   再描画するための entry point。button OnClick / Alt+F8 macro から呼ぶ。
+'   実体は clsSetupOrchestrator.Reapply* (RunFullSetup step6 ApplyUiStanzas
+'   と同一 pipeline: BindSheet -> ClearScreen -> ApplyFromStanza -> ProtectSheet)。
+'   本モジュールは ScreenUpdating/EnableEvents 抑止 + ActiveSheet 復元の
+'   薄いラッパのみ。ASCII-only (CP932/UTF-8 round-trip 安全, ADR-0006)。
 ' ============================================================
 Option Explicit
 
-' �S sheet (LOG �ȊO) �� ui_seed ����ĕ`��Bbutton / Alt+F8 �p�B
+' 全 sheet (LOG 以外) を ui_seed から再描画。button / Alt+F8 用。
 Public Sub Btn_RefreshAllSheets()
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1318] modRefresh.Btn_RefreshAllSheets ENTER"  ' [ADR-0100]
     On Error GoTo ErrHandler
@@ -51,32 +51,13 @@ Public Sub Btn_RefreshAllSheets()
     XLSM = Replace$(ThisWorkbook.Name, ".xlsm", "")
     modBtnGuard.LogEnter BTN, XLSM
     modCommon.AppendProgressLog "[BTN-REFRESH-ENTER] " & Now
-    ' [Fix-6 / ADR-0133-followup 2026-06-19] Refresh is a pure seed re-render
-    ' (RunFullSetup loads + auto-heals config itself). It MUST NOT require
-    ' "config" as a prerequisite: a migrated workbook with an empty settings
-    ' cell used to abort here, which also blocked the Workbook_Open auto-
-    ' re-render that recreates orphaned button shapes. Empty requirement = OK.
-    If Not modBtnGuard.CheckPrereq(BTN, "", XLSM) Then
+    If Not modBtnGuard.CheckPrereq(BTN, "config", XLSM) Then
         modBtnGuard.LogExit BTN, XLSM, False
         If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1319] modRefresh.Btn_RefreshAllSheets EXIT-OK"  ' [ADR-0100]
         Exit Sub
     End If
     ' [BTN-GUARD-PRELUDE-END]
-    ' [Change-3] storage-access fallback: keep the previous screen and
-    ' skip this re-render when a configured storage folder is unreachable.
-    Dim badDir As String
-    badDir = modConfigHolder.EnsureStorageAccessible(XLSM)
-    If Len(badDir) > 0 Then
-        modConfigHolder.NotifyStorageInaccessible badDir
-        modBtnGuard.LogExit BTN, XLSM, False
-        Exit Sub
-    End If
-    ' [P5d fix 2026-06-04] ScreenUpdating=False �폜 (shape �`�� silent fail ���)
-    ' [Fix-6 followup 2026-06-19] Snapshot the 9 settings cells before the
-    ' re-render so ApplyUiStanzas' Cells.Clear cannot lose user-entered
-    ' values; written back verbatim after the pipeline (RestoreSettings).
-    Dim settingsBackup As Object
-    Set settingsBackup = modConfigLoader.SnapshotSettings()
+    ' [P5d fix 2026-06-04] ScreenUpdating=False 削除 (shape 描画 silent fail 回避)
     Dim prevEv As Boolean
     Dim activeWs As Object
     On Error Resume Next
@@ -86,7 +67,7 @@ Public Sub Btn_RefreshAllSheets()
     On Error GoTo 0
 
     modCommon.AppendProgressLog "[BTN-REFRESH-PASS-CHECKPREREQ]"
-    ' [P5e fix 2026-06-04] install �Ɠ��� RunFullSetup �� invoke (ReapplyAllSheets �ɂ���ʔj����)
+    ' [P5e fix 2026-06-04] install と同じ RunFullSetup を invoke (ReapplyAllSheets による画面破壊回避)
     Dim orch As clsSetupOrchestrator
     Set orch = New clsSetupOrchestrator
     Dim baseName As String
@@ -122,11 +103,6 @@ Public Sub Btn_RefreshAllSheets()
         Application.Run ThisWorkbook.Name & "!modEntrySettings.LoadStorageToSheet", wsStor
         On Error GoTo 0
     End If
-    ' [Fix-6 followup 2026-06-19] Write the snapshot back so the 9 M-10
-    ' cells survive the re-render regardless of holder/config state.
-    On Error Resume Next
-    modConfigLoader.RestoreSettings settingsBackup
-    On Error GoTo 0
     ' [BTN-GUARD-EXIT-OK] auto-injected
     modBtnGuard.LogExit BTN, XLSM, True
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1320] modRefresh.Btn_RefreshAllSheets EXIT-OK"  ' [ADR-0100]
@@ -143,7 +119,7 @@ ErrHandler:
     modBtnGuard.LogExit BTN, XLSM, False
 End Sub
 
-' ActiveSheet 1 �������ĕ`��BAlt+F8 / button �p�B
+' ActiveSheet 1 枚だけ再描画。Alt+F8 / button 用。
 Public Sub Btn_RefreshSheet_Active()
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1322] modRefresh.Btn_RefreshSheet_Active ENTER"  ' [ADR-0100]
     On Error GoTo ErrHandler
@@ -152,26 +128,12 @@ Public Sub Btn_RefreshSheet_Active()
     Dim XLSM As String
     XLSM = Replace$(ThisWorkbook.Name, ".xlsm", "")
     modBtnGuard.LogEnter BTN, XLSM
-    ' [Fix-6 / ADR-0133-followup 2026-06-19] Refresh is a pure seed re-render
-    ' (RunFullSetup loads + auto-heals config itself). It MUST NOT require
-    ' "config" as a prerequisite: a migrated workbook with an empty settings
-    ' cell used to abort here, which also blocked the Workbook_Open auto-
-    ' re-render that recreates orphaned button shapes. Empty requirement = OK.
-    If Not modBtnGuard.CheckPrereq(BTN, "", XLSM) Then
+    If Not modBtnGuard.CheckPrereq(BTN, "config", XLSM) Then
         modBtnGuard.LogExit BTN, XLSM, False
         If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1323] modRefresh.Btn_RefreshSheet_Active EXIT-OK"  ' [ADR-0100]
         Exit Sub
     End If
     ' [BTN-GUARD-PRELUDE-END]
-    ' [Change-3] storage-access fallback: keep the previous screen and
-    ' skip this re-render when a configured storage folder is unreachable.
-    Dim badDir As String
-    badDir = modConfigHolder.EnsureStorageAccessible(XLSM)
-    If Len(badDir) > 0 Then
-        modConfigHolder.NotifyStorageInaccessible badDir
-        modBtnGuard.LogExit BTN, XLSM, False
-        Exit Sub
-    End If
     Dim prevSU As Boolean, prevEv As Boolean
     Dim activeWs As Object
     On Error Resume Next
@@ -182,7 +144,7 @@ Public Sub Btn_RefreshSheet_Active()
     Application.EnableEvents = False
     On Error GoTo 0
 
-    ' [P5e horizontal expand 2026-06-04] install �Ɠ��� RunFullSetup �o�H (��ʔj����)
+    ' [P5e horizontal expand 2026-06-04] install と同じ RunFullSetup 経路 (画面破壊回避)
     Dim orch As clsSetupOrchestrator
     Set orch = New clsSetupOrchestrator
     Dim baseName As String
@@ -212,7 +174,7 @@ ErrHandler:
     modBtnGuard.LogExit BTN, XLSM, False
 End Sub
 
-' �w�� screenId (M-NN) 1 �����ĕ`��Bprogrammatic �p (button OnAction ��Ώ�)�B
+' 指定 screenId (M-NN) 1 枚を再描画。programmatic 用 (button OnAction 非対象)。
 Public Sub Btn_RefreshSheet(ByVal screenId As String)
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1326] modRefresh.Btn_RefreshSheet ENTER"  ' [ADR-0100]
     On Error GoTo ErrHandler
@@ -221,26 +183,12 @@ Public Sub Btn_RefreshSheet(ByVal screenId As String)
     Dim XLSM As String
     XLSM = Replace$(ThisWorkbook.Name, ".xlsm", "")
     modBtnGuard.LogEnter BTN, XLSM
-    ' [Fix-6 / ADR-0133-followup 2026-06-19] Refresh is a pure seed re-render
-    ' (RunFullSetup loads + auto-heals config itself). It MUST NOT require
-    ' "config" as a prerequisite: a migrated workbook with an empty settings
-    ' cell used to abort here, which also blocked the Workbook_Open auto-
-    ' re-render that recreates orphaned button shapes. Empty requirement = OK.
-    If Not modBtnGuard.CheckPrereq(BTN, "", XLSM) Then
+    If Not modBtnGuard.CheckPrereq(BTN, "config", XLSM) Then
         modBtnGuard.LogExit BTN, XLSM, False
         If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1327] modRefresh.Btn_RefreshSheet EXIT-OK"  ' [ADR-0100]
         Exit Sub
     End If
     ' [BTN-GUARD-PRELUDE-END]
-    ' [Change-3] storage-access fallback: keep the previous screen and
-    ' skip this re-render when a configured storage folder is unreachable.
-    Dim badDir As String
-    badDir = modConfigHolder.EnsureStorageAccessible(XLSM)
-    If Len(badDir) > 0 Then
-        modConfigHolder.NotifyStorageInaccessible badDir
-        modBtnGuard.LogExit BTN, XLSM, False
-        Exit Sub
-    End If
     Dim orch As clsSetupOrchestrator
     Set orch = New clsSetupOrchestrator
     orch.ReapplySheet screenId
@@ -255,7 +203,7 @@ ErrHandler:
     modBtnGuard.LogExit BTN, XLSM, False
 End Sub
 
-' "�X�V����" �� ChrW �ō\�z (�{ .bas �� ASCII-only �ɕۂ�)�B
+' "更新完了" を ChrW で構築 (本 .bas を ASCII-only に保つ)。
 Private Function RefreshedMsg() As String
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1330] modRefresh.RefreshedMsg ENTER"  ' [ADR-0100]
     RefreshedMsg = ChrW(&H66F4) & ChrW(&H65B0) & ChrW(&H5B8C) & ChrW(&H4E86)

@@ -7,7 +7,7 @@ description: modEntryUserForm.bas のソースコード（コピペ用）
 
 **配置先**: 共通モジュール（検索.xlsm / 管理.xlsm 共通）
 **種類**: 標準モジュール
-**更新日**: 2026-06-23 08:48 JST
+**更新日**: 2026-06-04 12:30 JST
 
 ---
 
@@ -81,7 +81,7 @@ Public Sub Btn_OpenRegisterForm()
     Dim r As clsUserFormRenderer
     Set r = New clsUserFormRenderer
     Dim ret As String
-    ret = r.ShowForm(NM_KENSAKU(), "register", "")
+    ret = r.ShowForm(NM_TOUROKU(), "register", "")
     LogShowFormResult "Btn_OpenRegisterForm", ret
     ' [BTN-GUARD-EXIT-OK] auto-injected
     modBtnGuard.LogExit BTN, XLSM, True
@@ -248,7 +248,7 @@ Public Function TestBuildOnly_ShowForm( _
     Next k
 
     Dim filePath As String
-    filePath = modKnowledgeFileIO.DataFilePathForSave(id, formatId)
+    filePath = modConfigHolder.GetDataDir() & id & ".txt"
     Dim adoStream As Object
     Set adoStream = CreateObject("ADODB.Stream")
     adoStream.Type = 2

@@ -7,7 +7,7 @@ description: modFormatLoader.bas のソースコード（コピペ用）
 
 **配置先**: 共通モジュール（検索.xlsm / 管理.xlsm 共通）
 **種類**: 標準モジュール
-**更新日**: 2026-06-23 09:12 JST
+**更新日**: 2026-06-09 22:38 JST
 
 ---
 
@@ -218,11 +218,6 @@ Public Function SaveFormat(ByVal formatId As String, ByVal sections As Collectio
         fso.CreateFolder modConfigHolder.GetFormatDir()
     End If
     modStanzaIO.WriteStanzaFile filePath, sections
-    ' [Change-5] ensure the per-format data folder exists alongside the format
-    If Not fso.FolderExists(modConfigHolder.GetDataDir()) Then fso.CreateFolder modConfigHolder.GetDataDir()
-    Dim ddir As String
-    ddir = modConfigHolder.GetDataDir() & formatId & "\"
-    If Not fso.FolderExists(ddir) Then fso.CreateFolder ddir
     SaveFormat = 0
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1255] modFormatLoader.SaveFormat EXIT-OK"  ' [ADR-0100]
     Exit Function
@@ -251,15 +246,6 @@ Public Function DeleteFormat(ByVal formatId As String) As Long
     Dim filePath As String
     filePath = modConfigHolder.GetFormatDir() & formatId & ".txt"
     If fso.FileExists(filePath) Then fso.DeleteFile filePath
-    ' [Change-5] remove the now-orphan per-format data folder when empty
-    ' (Q55 above already guarantees no knowledge of this format remains).
-    Dim ddir As String
-    ddir = modConfigHolder.GetDataDir() & formatId & "\"
-    If fso.FolderExists(ddir) Then
-        Dim df As Object
-        Set df = fso.GetFolder(ddir)
-        If df.Files.Count = 0 And df.SubFolders.Count = 0 Then df.Delete True
-    End If
     DeleteFormat = 0
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1259] modFormatLoader.DeleteFormat EXIT-OK"  ' [ADR-0100]
     Exit Function

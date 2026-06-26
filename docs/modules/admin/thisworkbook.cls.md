@@ -7,7 +7,7 @@ description: ThisWorkbook.cls のソースコード（コピペ用）
 
 **配置先**: `管理.xlsm` 用の VBA モジュール
 **種類**: クラスモジュール
-**更新日**: 2026-06-23 09:13 JST
+**更新日**: 2026-06-11 19:15 JST
 
 ---
 
@@ -83,21 +83,7 @@ Private Sub Workbook_Open()
     Dim orch As clsSetupOrchestrator
     Set orch = New clsSetupOrchestrator
     If modCommon.gDebugLevel >= DEBUG_LEVEL_DEBUG Then Debug.Print "[D-0005] ThisWorkbook.Workbook_Open STEP-2 pre orch.RunFullSetup"  ' [ADR-0100]
-    ' [Change-3] storage-access fallback: when interactive and a configured
-    ' storage folder is unreachable, keep the previous screen (skip the full
-    ' re-render) and notify; a headless install always proceeds.
-    Dim badDir As String
-    badDir = modConfigHolder.EnsureStorageAccessible(XLSM_NAME)
-    If Len(badDir) > 0 And Not modCommon.IsHeadless() Then
-        modConfigHolder.NotifyStorageInaccessible badDir
-    Else
-        Call orch.RunFullSetup(XLSM_NAME)
-    End If
-    ' [Change-5] one-time idempotent migration of any flat data\*.txt into
-    ' data\<formatId>\ (no-op once migrated / when storage is unreachable).
-    On Error Resume Next
-    modKnowledgeFileIO.MigrateFlatDataToSubfolders
-    On Error GoTo ErrHandler
+    Call orch.RunFullSetup(XLSM_NAME)
     ' 2026-06-07: Seed C4 with next FmtId after RunFullSetup so first-open shows FMT-NNN.
     On Error Resume Next
     modEntryFormat.SeedM03FormatIdIfEmpty
@@ -108,6 +94,10 @@ Private Sub Workbook_Open()
     On Error Resume Next
     If Application.UserControl Then
         Application.OnTime Now + TimeValue("0:00:01"), "modRefresh.Btn_RefreshAllSheets"
+        ' [BUGFIX 2026-06-06] After re-render finishes, unlock B5/H7/H8/H9
+        ' on M-11 so user can toggle CheckBoxes and change debugLevel
+        ' dropdown without hitting the sheet-protection dialog.
+        Application.OnTime Now + TimeValue("0:00:02"), "modEntrySettings.EnsureSettingsCellsEditable"
     End If
     Err.Clear
     On Error GoTo ErrHandler
@@ -185,9 +175,11 @@ End Sub
 
 ' ================================================================
 ' Workbook_SheetBeforeDoubleClick (B19 restore, 2026-06-11)
-' Role:   M-02 row-select UX. Double-click on column A toggles
+' Role:   M-02 / M-10 row-select UX. Double-click on column A toggles
 '         the selection mark.
 '         - M-02 (format list)  rows 17..60: check ChrW(2713) <-> empty
+'         - M-10 (storage)      rows 11..15: single-select radio
+'           ChrW(25CF)=selected / ChrW(25CB)=not selected
 ' Why:    The 2026-06-08 build had this handler (see
 '         evidence_summary_2026-06-08.md sec 2.1) but it was never
 '         backported to canonical, so every reinstall (ThisWorkbook
@@ -199,11 +191,15 @@ End Sub
 Private Sub Workbook_SheetBeforeDoubleClick(ByVal Sh As Object, ByVal Target As Range, Cancel As Boolean)
     On Error GoTo ErrHandler
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0008] ThisWorkbook.Workbook_SheetBeforeDoubleClick ENTER"  ' [ADR-0100]
-    ' Sheet names via ChrW (CP932-safe): M-02
+    ' Sheet names via ChrW (CP932-safe): M-02 / M-10
     Dim nmM02 As String
     nmM02 = ChrW(&H30D5) & ChrW(&H30A9) & ChrW(&H30FC) & ChrW(&H30DE) & ChrW(&H30C3) & ChrW(&H30C8) & ChrW(&H4E00) & ChrW(&H89A7)
+    Dim nmM10 As String
+    nmM10 = ChrW(&H683C) & ChrW(&H7D0D) & ChrW(&H5148) & ChrW(&H8A2D) & ChrW(&H5B9A)
     If Sh.Name = nmM02 Then
         Call ToggleM02RowCheck(Sh, Target, Cancel)
+    ElseIf Sh.Name = nmM10 Then
+        Call ToggleM10Radio(Sh, Target, Cancel)
     End If
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0009] ThisWorkbook.Workbook_SheetBeforeDoubleClick EXIT-OK"  ' [ADR-0100]
     Exit Sub
@@ -228,6 +224,35 @@ Private Sub ToggleM02RowCheck(ByVal Sh As Object, ByVal Target As Range, ByRef o
         Target.Value = ""
     Else
         Target.Value = ChrW(&H2713)
+    End If
+    Sh.Protect Password:="", UserInterfaceOnly:=True
+    On Error GoTo 0
+End Sub
+
+' ================================================================
+' ToggleM10Radio (B19)
+' Role: M-10 col A rows 11..15 - single-select radio on double-click.
+'       Selected row -> deselect; other row -> clear all + select it.
+'       2026-06-11: rows 11..15 (5th row = config_dir was added after
+'       the original 06-08 handler which covered 11..14 only).
+' ================================================================
+Private Sub ToggleM10Radio(ByVal Sh As Object, ByVal Target As Range, ByRef outCancel As Boolean)
+    Const COL_CHECK As Long = 1
+    Const FIRST_ROW As Long = 11
+    Const LAST_ROW As Long = 15
+    If Target.Column <> COL_CHECK Then Exit Sub
+    If Target.Row < FIRST_ROW Or Target.Row > LAST_ROW Then Exit Sub
+    outCancel = True
+    On Error Resume Next
+    Sh.Unprotect
+    Dim ri As Long
+    If CStr(Target.Value) = ChrW(&H25CF) Then
+        Target.Value = ChrW(&H25CB)
+    Else
+        For ri = FIRST_ROW To LAST_ROW
+            Sh.Cells(ri, COL_CHECK).Value = ChrW(&H25CB)
+        Next ri
+        Target.Value = ChrW(&H25CF)
     End If
     Sh.Protect Password:="", UserInterfaceOnly:=True
     On Error GoTo 0

@@ -7,7 +7,7 @@ description: modConfigHolder.bas のソースコード（コピペ用）
 
 **配置先**: 共通モジュール（検索.xlsm / 管理.xlsm 共通）
 **種類**: 標準モジュール
-**更新日**: 2026-06-22 22:53 JST
+**更新日**: 2026-06-03 23:22 JST
 
 ---
 
@@ -40,11 +40,11 @@ Attribute VB_Name = "modConfigHolder"
 '          v2.3 Phase A: added SetConfigKeys (partial merge API)
 '          to mirror modConfigLoader.SaveConfigKeys behavior in
 '          memory.
-' Depends: modCommon / modFileIO. Fix-6 ADR-0133: path defaults removed; the 7-cell
+' Depends: nothing
 ' Related: ADR-0053 section 5.2 / 7.3 N6
 '          Q7  (debugLevel default ERROR)
 '          Q17 (GetDebugLevel As Long, enum return)
-'          Fix-6 ADR-0133: getters return the worksheet SSOT value
+'          Q22 (path default root C:\KnowledgeMgr\)
 ' Note:    Japanese block comments were lost in an earlier accident
 '          and restored here in ASCII to avoid encoding fragility.
 '          Logic unchanged; original public API surface preserved.
@@ -170,96 +170,37 @@ End Function
 ' ================================================================
 Public Function GetDataDir() As String
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0950] modConfigHolder.GetDataDir ENTER"  ' [ADR-0100]
-    GetDataDir = GetValueOrDefault("data_dir", vbNullString)
+    GetDataDir = GetValueOrDefault("data_dir", "C:\KnowledgeMgr\data\")
 End Function
 
 Public Function GetBackupDir() As String
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0951] modConfigHolder.GetBackupDir ENTER"  ' [ADR-0100]
-    GetBackupDir = GetValueOrDefault("backup_dir", vbNullString)
+    GetBackupDir = GetValueOrDefault("backup_dir", "C:\KnowledgeMgr\backup\")
 End Function
 
 Public Function GetFormatDir() As String
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0952] modConfigHolder.GetFormatDir ENTER"  ' [ADR-0100]
-    GetFormatDir = GetValueOrDefault("format_dir", vbNullString)
+    GetFormatDir = GetValueOrDefault("format_dir", "C:\KnowledgeMgr\formats\")
 End Function
 
 Public Function GetUiDir() As String
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0953] modConfigHolder.GetUiDir ENTER"  ' [ADR-0100]
-    GetUiDir = GetValueOrDefault("ui_dir", vbNullString)
+    GetUiDir = GetValueOrDefault("ui_dir", "C:\KnowledgeMgr\ui\")
+End Function
+
+Public Function GetLogDir() As String
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0954] modConfigHolder.GetLogDir ENTER"  ' [ADR-0100]
+    GetLogDir = GetValueOrDefault("log_dir", "C:\KnowledgeMgr\log\")
+End Function
+
+Public Function GetConfigDir() As String
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0955] modConfigHolder.GetConfigDir ENTER"  ' [ADR-0100]
+    GetConfigDir = GetValueOrDefault("config_dir", "C:\KnowledgeMgr\config\")
 End Function
 
 Public Function GetDebugLevelStr() As String
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0956] modConfigHolder.GetDebugLevelStr ENTER"  ' [ADR-0100]
     GetDebugLevelStr = GetValueOrDefault("debugLevel", "ERROR")
-End Function
-
-' ================================================================
-' Change-3: storage-access fallback (ADR-0134)
-' EnsureStorageAccessible returns "" when every configured storage
-' folder (data / format / ui<role> / backup) is reachable, else the
-' first failing path. "Reachable" = the folder exists OR its parent
-' does (leaf folders are created lazily, so a not-yet-created leaf
-' under a live base must NOT be treated as inaccessible). Fail-open.
-' ================================================================
-Public Function EnsureStorageAccessible(ByVal xlsmName As String) As String
-    On Error GoTo EH
-    Dim p As String
-    p = GetDataDir()
-    If Not DirAccessible(p) Then EnsureStorageAccessible = p: Exit Function
-    p = GetFormatDir()
-    If Not DirAccessible(p) Then EnsureStorageAccessible = p: Exit Function
-    p = GetUiDir() & xlsmName & "\"
-    If Not DirAccessible(p) Then EnsureStorageAccessible = p: Exit Function
-    p = GetBackupDir()
-    If Not DirAccessible(p) Then EnsureStorageAccessible = p: Exit Function
-    EnsureStorageAccessible = ""
-    Exit Function
-EH:
-    EnsureStorageAccessible = ""
-End Function
-
-Private Function DirAccessible(ByVal p As String) As Boolean
-    If Len(Trim(p)) = 0 Then DirAccessible = True: Exit Function
-    If modFileIO.FolderExists(p) Then DirAccessible = True: Exit Function
-    DirAccessible = modFileIO.FolderExists(ParentOf(p))
-End Function
-
-Private Function ParentOf(ByVal p As String) As String
-    Dim s As String
-    s = p
-    Do While Len(s) > 0 And Right(s, 1) = "\"
-        s = Left(s, Len(s) - 1)
-    Loop
-    Dim pos As Long
-    pos = InStrRev(s, "\")
-    If pos > 1 Then
-        ParentOf = Left(s, pos - 1)
-    Else
-        ParentOf = s
-    End If
-End Function
-
-' Notify that a storage folder is unreachable and the previous screen
-' is being kept. Headless: progress-log only (no modal dialog).
-Public Sub NotifyStorageInaccessible(ByVal p As String)
-    On Error Resume Next
-    If modCommon.IsHeadless() Then
-        modCommon.AppendProgressLog "[STORAGE-INACCESSIBLE] skip re-render keep-prior path=" & p
-        Exit Sub
-    End If
-    MsgBox MsgStorageA() & p & MsgStorageB(), vbExclamation, MsgStorageTitle()
-End Sub
-
-Private Function MsgStorageA() As String
-    MsgStorageA = ChrW(&H683C) & ChrW(&H7D0D) & ChrW(&H5148) & ChrW(&H30D5) & ChrW(&H30A9) & ChrW(&H30EB) & ChrW(&H30C0) & ChrW(&H306B) & ChrW(&H30A2) & ChrW(&H30AF) & ChrW(&H30BB) & ChrW(&H30B9) & ChrW(&H3067) & ChrW(&H304D) & ChrW(&H307E) & ChrW(&H305B) & ChrW(&H3093) & ChrW(&H3A) & ChrW(&H20)
-End Function
-
-Private Function MsgStorageB() As String
-    MsgStorageB = ChrW(&H3002) & ChrW(&H524D) & ChrW(&H56DE) & ChrW(&H8868) & ChrW(&H793A) & ChrW(&H306E) & ChrW(&H307E) & ChrW(&H307E) & ChrW(&H3067) & ChrW(&H7D99) & ChrW(&H7D9A) & ChrW(&H3057) & ChrW(&H307E) & ChrW(&H3059) & ChrW(&H3002)
-End Function
-
-Private Function MsgStorageTitle() As String
-    MsgStorageTitle = ChrW(&H683C) & ChrW(&H7D0D) & ChrW(&H5148) & ChrW(&H30A8) & ChrW(&H30E9) & ChrW(&H30FC)
 End Function
 
 Public Sub Reset()

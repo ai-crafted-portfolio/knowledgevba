@@ -7,7 +7,7 @@ description: modBtnMessages.bas のソースコード（コピペ用）
 
 **配置先**: 共通モジュール（検索.xlsm / 管理.xlsm 共通）
 **種類**: 標準モジュール
-**更新日**: 2026-06-18 18:14 JST
+**更新日**: 2026-06-05 01:27 JST
 
 ---
 
@@ -48,7 +48,7 @@ Public Function GetMessage(ByVal msgId As String, ParamArray args() As Variant) 
     Dim ph As String
     Select Case msgId
         Case "MSG-BTN-PRE-001"
-            tmpl = ChrW(&H8A2D) & ChrW(&H5B9A) & ChrW(&H30D5) & ChrW(&H30A1) & ChrW(&H30A4) & ChrW(&H30EB) & ChrW(&H672A) & ChrW(&H8AAD) & ChrW(&H8FBC) & ": " & ChrW(&H683C) & ChrW(&H7D0D) & ChrW(&H5148) & ChrW(&H8A2D) & ChrW(&H5B9A) & ChrW(&H30B7) & ChrW(&H30FC) & ChrW(&H30C8) & " " & ChrW(&H304C) & ChrW(&H8AAD) & ChrW(&H307F) & ChrW(&H8FBC) & ChrW(&H307E) & ChrW(&H308C) & ChrW(&H3066) & ChrW(&H3044) & ChrW(&H307E) & ChrW(&H305B) & ChrW(&H3093) & ChrW(&H3002) & ChrW(&H30D6) & ChrW(&H30C3) & ChrW(&H30AF) & ChrW(&H3092) & ChrW(&H958B) & ChrW(&H304D) & ChrW(&H76F4) & ChrW(&H3057) & ChrW(&H3066) & ChrW(&H304F) & ChrW(&H3060) & ChrW(&H3055) & ChrW(&H3044) & ChrW(&H3002)
+            tmpl = ChrW(&H8A2D) & ChrW(&H5B9A) & ChrW(&H30D5) & ChrW(&H30A1) & ChrW(&H30A4) & ChrW(&H30EB) & ChrW(&H672A) & ChrW(&H8AAD) & ChrW(&H8FBC) & ": config.txt " & ChrW(&H304C) & ChrW(&H8AAD) & ChrW(&H307F) & ChrW(&H8FBC) & ChrW(&H307E) & ChrW(&H308C) & ChrW(&H3066) & ChrW(&H3044) & ChrW(&H307E) & ChrW(&H305B) & ChrW(&H3093) & ChrW(&H3002) & ChrW(&H30D6) & ChrW(&H30C3) & ChrW(&H30AF) & ChrW(&H3092) & ChrW(&H958B) & ChrW(&H304D) & ChrW(&H76F4) & ChrW(&H3057) & ChrW(&H3066) & ChrW(&H304F) & ChrW(&H3060) & ChrW(&H3055) & ChrW(&H3044) & ChrW(&H3002)
         Case "MSG-BTN-PRE-002"
             tmpl = ChrW(&H30B7) & ChrW(&H30FC) & ChrW(&H30C8) & ChrW(&H4E0D) & ChrW(&H5B58) & ChrW(&H5728) & ": " & ChrW(&H30B7) & ChrW(&H30FC) & ChrW(&H30C8) & " ""{0}"" " & ChrW(&H304C) & ChrW(&H898B) & ChrW(&H3064) & ChrW(&H304B) & ChrW(&H308A) & ChrW(&H307E) & ChrW(&H305B) & ChrW(&H3093) & ChrW(&H3002) & "Setup " & ChrW(&H30DE) & ChrW(&H30AF) & ChrW(&H30ED) & ChrW(&H3092) & ChrW(&H5B9F) & ChrW(&H884C) & ChrW(&H3057) & ChrW(&H3066) & ChrW(&H30B7) & ChrW(&H30FC) & ChrW(&H30C8) & ChrW(&H3092) & ChrW(&H518D) & ChrW(&H751F) & ChrW(&H6210) & ChrW(&H3057) & ChrW(&H3066) & ChrW(&H304F) & ChrW(&H3060) & ChrW(&H3055) & ChrW(&H3044) & ChrW(&H3002)
         Case "MSG-BTN-PRE-003"
@@ -56,9 +56,9 @@ Public Function GetMessage(ByVal msgId As String, ParamArray args() As Variant) 
         Case "MSG-BTN-PRE-004"
             tmpl = ChrW(&H5165) & ChrW(&H529B) & ChrW(&H6B04) & ChrW(&H7A7A) & ": ""{0}"" " & ChrW(&H3092) & ChrW(&H5165) & ChrW(&H529B) & ChrW(&H3057) & ChrW(&H3066) & ChrW(&H304F) & ChrW(&H3060) & ChrW(&H3055) & ChrW(&H3044) & ChrW(&H3002)
         Case "MSG-BTN-PRE-005"
-            tmpl = ChrW(&H30C7) & ChrW(&H30FC) & ChrW(&H30BF) & ChrW(&H30D5) & ChrW(&H30A9) & ChrW(&H30EB) & ChrW(&H30C0) & ChrW(&H4E0D) & ChrW(&H5B58) & ChrW(&H5728) & ": ""{0}"" " & ChrW(&H30D5) & ChrW(&H30A9) & ChrW(&H30EB) & ChrW(&H30C0) & ChrW(&H304C) & ChrW(&H5B58) & ChrW(&H5728) & ChrW(&H3057) & ChrW(&H307E) & ChrW(&H305B) & ChrW(&H3093) & ChrW(&H3002) & ChrW(&H683C) & ChrW(&H7D0D) & ChrW(&H5148) & ChrW(&H8A2D) & ChrW(&H5B9A) & ChrW(&H30B7) & ChrW(&H30FC) & ChrW(&H30C8) & ChrW(&H306E) & " data_dir " & ChrW(&H3092) & ChrW(&H78BA) & ChrW(&H8A8D) & ChrW(&H3057) & ChrW(&H3066) & ChrW(&H304F) & ChrW(&H3060) & ChrW(&H3055) & ChrW(&H3044) & ChrW(&H3002)
+            tmpl = ChrW(&H30C7) & ChrW(&H30FC) & ChrW(&H30BF) & ChrW(&H30D5) & ChrW(&H30A9) & ChrW(&H30EB) & ChrW(&H30C0) & ChrW(&H4E0D) & ChrW(&H5B58) & ChrW(&H5728) & ": ""{0}"" " & ChrW(&H30D5) & ChrW(&H30A9) & ChrW(&H30EB) & ChrW(&H30C0) & ChrW(&H304C) & ChrW(&H5B58) & ChrW(&H5728) & ChrW(&H3057) & ChrW(&H307E) & ChrW(&H305B) & ChrW(&H3093) & ChrW(&H3002) & "config.txt " & ChrW(&H306E) & " data_dir " & ChrW(&H3092) & ChrW(&H78BA) & ChrW(&H8A8D) & ChrW(&H3057) & ChrW(&H3066) & ChrW(&H304F) & ChrW(&H3060) & ChrW(&H3055) & ChrW(&H3044) & ChrW(&H3002)
         Case "MSG-BTN-PRE-006"
-            tmpl = ChrW(&H30D5) & ChrW(&H30A9) & ChrW(&H30FC) & ChrW(&H30DE) & ChrW(&H30C3) & ChrW(&H30C8) & ChrW(&H30D5) & ChrW(&H30A9) & ChrW(&H30EB) & ChrW(&H30C0) & ChrW(&H4E0D) & ChrW(&H5B58) & ChrW(&H5728) & ": ""{0}"" " & ChrW(&H30D5) & ChrW(&H30A9) & ChrW(&H30EB) & ChrW(&H30C0) & ChrW(&H304C) & ChrW(&H5B58) & ChrW(&H5728) & ChrW(&H3057) & ChrW(&H307E) & ChrW(&H305B) & ChrW(&H3093) & ChrW(&H3002) & ChrW(&H683C) & ChrW(&H7D0D) & ChrW(&H5148) & ChrW(&H8A2D) & ChrW(&H5B9A) & ChrW(&H30B7) & ChrW(&H30FC) & ChrW(&H30C8) & ChrW(&H306E) & " format_dir " & ChrW(&H3092) & ChrW(&H78BA) & ChrW(&H8A8D) & ChrW(&H3057) & ChrW(&H3066) & ChrW(&H304F) & ChrW(&H3060) & ChrW(&H3055) & ChrW(&H3044) & ChrW(&H3002)
+            tmpl = ChrW(&H30D5) & ChrW(&H30A9) & ChrW(&H30FC) & ChrW(&H30DE) & ChrW(&H30C3) & ChrW(&H30C8) & ChrW(&H30D5) & ChrW(&H30A9) & ChrW(&H30EB) & ChrW(&H30C0) & ChrW(&H4E0D) & ChrW(&H5B58) & ChrW(&H5728) & ": ""{0}"" " & ChrW(&H30D5) & ChrW(&H30A9) & ChrW(&H30EB) & ChrW(&H30C0) & ChrW(&H304C) & ChrW(&H5B58) & ChrW(&H5728) & ChrW(&H3057) & ChrW(&H307E) & ChrW(&H305B) & ChrW(&H3093) & ChrW(&H3002) & "config.txt " & ChrW(&H306E) & " format_dir " & ChrW(&H3092) & ChrW(&H78BA) & ChrW(&H8A8D) & ChrW(&H3057) & ChrW(&H3066) & ChrW(&H304F) & ChrW(&H3060) & ChrW(&H3055) & ChrW(&H3044) & ChrW(&H3002)
         Case Else
             tmpl = ChrW(&H672A) & ChrW(&H5B9A) & ChrW(&H7FA9) & ChrW(&H30E1) & ChrW(&H30C3) & ChrW(&H30BB) & ChrW(&H30FC) & ChrW(&H30B8) & " ID: " & msgId
     End Select

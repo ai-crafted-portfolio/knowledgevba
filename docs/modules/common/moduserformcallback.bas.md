@@ -7,7 +7,7 @@ description: modUserFormCallback.bas のソースコード（コピペ用）
 
 **配置先**: 共通モジュール（検索.xlsm / 管理.xlsm 共通）
 **種類**: 標準モジュール
-**更新日**: 2026-06-23 08:48 JST
+**更新日**: 2026-06-25 18:04 JST
 
 ---
 
@@ -357,6 +357,15 @@ Private Function AllFormControls(ByVal frm As Object) As Collection
                 If Not seen.Exists(cc.Name) Then
                     col.Add cc
                     seen(cc.Name) = True
+                End If
+                If TypeName(cc) = "Frame" Then
+                    Dim ccc As Object
+                    For Each ccc In cc.Controls
+                        If Not seen.Exists(ccc.Name) Then
+                            col.Add ccc
+                            seen(ccc.Name) = True
+                        End If
+                    Next ccc
                 End If
             Next cc
         End If

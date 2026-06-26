@@ -7,7 +7,7 @@ description: clsUserFormRenderer.cls のソースコード（コピペ用）
 
 **配置先**: 共通モジュール（検索.xlsm / 管理.xlsm 共通）
 **種類**: クラスモジュール
-**更新日**: 2026-06-12 08:51 JST
+**更新日**: 2026-06-25 18:20 JST
 
 ---
 
@@ -212,6 +212,7 @@ Private m_modelessVbc As Object
 ' names like  / cannot collide, and the persistence layer
 ' looks up the fieldName via this dictionary.
 Private m_fieldNamesByIdx As Object       ' Dictionary: ctlName -> fieldName
+Private m_wrapFrameByCtl As Object         ' ctlName -> wrapper Frame name (Scroll=TRUE multiline)
 Private m_fieldRequiredByCtl As Object     ' [BUG-B16] Dictionary: ctlName -> Boolean (required)
 Private m_dateFieldIndices As Object       ' Dictionary: idxStr -> True for ???? fields
 ' Phase P fix (2026-05-27): ComboBox items added on Designer.Controls.Add
@@ -547,6 +548,7 @@ Private Sub BuildAndShow(ByVal knowledgeData As Object)
 
     ' Phase O-2: reset per-form maps (control-name -> field-name; ???? set)
     Set m_fieldNamesByIdx = CreateObject("Scripting.Dictionary")
+    Set m_wrapFrameByCtl = CreateObject("Scripting.Dictionary")
     Set m_fieldRequiredByCtl = CreateObject("Scripting.Dictionary")
     Set m_dateFieldIndices = CreateObject("Scripting.Dictionary")
     Set m_comboItemsByCtl = CreateObject("Scripting.Dictionary")
@@ -764,6 +766,18 @@ Private Function FindCtlOnForm(ByVal uf As Object, ByVal ctlName As String) As O
                 If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0794] clsUserFormRenderer.FindCtlOnForm EXIT-OK"  ' [ADR-0100]
                 Exit Function
             End If
+            Dim g As Object
+            For Each g In f.Controls
+                If TypeName(g) = "Frame" Then
+                    Dim ccc As Object
+                    Set ccc = Nothing
+                    Set ccc = g.Controls(ctlName)
+                    If Not ccc Is Nothing Then
+                        Set FindCtlOnForm = ccc
+                        Exit Function
+                    End If
+                End If
+            Next g
         End If
     Next f
 End Function
@@ -1347,28 +1361,43 @@ Private Function AddFieldRow(ByVal designer As Object, _
             ctl.MultiLine = False
             ctl.Text = curVal
         Case ChrW(&H8907) & ChrW(&H6570) & ChrW(&H884C)  ' ?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E?s
-            Set ctl = designer.Controls.Add(PROGID_TEXTBOX, ctlName, True)
-            ctl.MultiLine = True
-            ctl.WordWrap = True
-            ctl.EnterKeyBehavior = True
             ' [USERINPUT 2026-06-06] per-field Scroll value from format stanza
             Dim scrollVal As String
             scrollVal = LCase(Trim(sec.GetValue("Scroll")))
+            Dim wantScroll As Boolean
             If scrollVal = "true" Or scrollVal = "1" Or scrollVal = "yes" Then
-                ctl.ScrollBars = 2   ' vertical
+                wantScroll = True
             ElseIf scrollVal = "false" Or scrollVal = "0" Or scrollVal = "no" Then
-                ctl.ScrollBars = 0   ' none
+                wantScroll = False
             Else
-                ' fallback: global stanza setting
-                Select Case LCase(m_multiLineScrollBars)
-                    Case "vertical": ctl.ScrollBars = 2
-                    Case "horizontal": ctl.ScrollBars = 1
-                    Case "both": ctl.ScrollBars = 3
-                    Case "none": ctl.ScrollBars = 0
-                    Case Else: ctl.ScrollBars = 2
-                End Select
+                wantScroll = (LCase(m_multiLineScrollBars) <> "none")
             End If
-            ctl.Text = curVal
+            If wantScroll Then
+                ' [Change 2026-06-25 B] Frame wrapper = always-visible FUNCTIONAL
+                ' vertical scrollbar; the injected <ctl>_Change grows the TextBox
+                ' + Frame.ScrollHeight with content and follows the cursor.
+                Dim wr As Object
+                Set wr = designer.Controls.Add(PROGID_FRAME, "wr_" & idxStr, True)
+                wr.Caption = ""
+                wr.SpecialEffect = 0
+                wr.BorderStyle = 0
+                wr.ScrollBars = 2
+                wr.KeepScrollBarsVisible = 2
+                Set ctl = wr.Controls.Add(PROGID_TEXTBOX, ctlName, True)
+                ctl.MultiLine = True
+                ctl.WordWrap = True
+                ctl.EnterKeyBehavior = True
+                ctl.ScrollBars = 0
+                ctl.Text = curVal
+                m_wrapFrameByCtl(ctlName) = "wr_" & idxStr
+            Else
+                Set ctl = designer.Controls.Add(PROGID_TEXTBOX, ctlName, True)
+                ctl.MultiLine = True
+                ctl.WordWrap = True
+                ctl.EnterKeyBehavior = True
+                ctl.ScrollBars = 0
+                ctl.Text = curVal
+            End If
             ' Long multi-line for ?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??菇/?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E?/?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E?/?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E???/?E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E??E?E?E?E?E?E?E?E?E?E?E?E?E?E?E?e; others short
             ' [USER-REQ 2026-06-09] No hardcoded fake defaults. Read Rows from
             ' the format file as-is. If the format does not specify Rows, render
@@ -1422,10 +1451,24 @@ Private Function AddFieldRow(ByVal designer As Object, _
     Dim dataTop As Long, dataH As Long
     dataTop = y + VLABEL_H + VLABEL_GAP
     dataH = rowH - VLABEL_H - VLABEL_GAP - VROW_SPACING
-    ctl.top = dataTop
-    ctl.left = m_margin
-    ctl.Width = m_formWidth - m_margin * 2
-    ctl.Height = dataH
+    If m_wrapFrameByCtl.Exists(ctlName) Then
+        Dim wrp As Object
+        Set wrp = designer.Controls(m_wrapFrameByCtl(ctlName))
+        wrp.Top = dataTop
+        wrp.Left = m_margin
+        wrp.Width = m_formWidth - m_margin * 2
+        wrp.Height = dataH
+        ctl.Top = 0
+        ctl.Left = 0
+        ctl.Width = wrp.Width - 16
+        ctl.Height = dataH
+        wrp.ScrollHeight = dataH
+    Else
+        ctl.top = dataTop
+        ctl.left = m_margin
+        ctl.Width = m_formWidth - m_margin * 2
+        ctl.Height = dataH
+    End If
     ApplyBaseFont ctl
 
     ' Apply mode-based locking (view と preview は表示専用 = readonly)
@@ -1441,7 +1484,7 @@ Private Function AddFieldRow(ByVal designer As Object, _
     ' the persistence layer can treat a still-placeholder field as empty.
     ' Phase R-3-χ-2: preview (M-04) は実データを持たず placeholder(記入例)のみ表示。
     ' readonly のため focus-clear ハンドラは生成せず static に出す。
-    If TypeName(ctl) = "TextBox" And m_mode <> "view" And Len(curVal) = 0 Then
+    If TypeName(ctl) = "TextBox" And m_mode <> "view" And Len(curVal) = 0 And Not m_wrapFrameByCtl.Exists(ctlName) Then
         Dim ph As String
         ph = Trim(sec.GetValue("fieldPlaceholder"))
         If Len(ph) > 0 Then
@@ -1833,6 +1876,38 @@ Private Sub InjectFormCode(ByVal vbc As Object)
             s = s & "    End If" & vbCrLf
             s = s & "End Sub" & vbCrLf
         Next pk
+    End If
+    ' [Change 2026-06-25 B] per-wrapped-field Change handler: grow the TextBox
+    ' + Frame.ScrollHeight with content and keep the cursor line in view so the
+    ' always-visible Frame scrollbar stays functional.
+    If Not (m_wrapFrameByCtl Is Nothing) Then
+        Dim wk As Variant
+        For Each wk In m_wrapFrameByCtl.Keys
+            Dim wcn As String, wfn As String
+            wcn = CStr(wk)
+            wfn = CStr(m_wrapFrameByCtl(wcn))
+            s = s & vbCrLf
+            s = s & "Private Sub " & wcn & "_Change()" & vbCrLf
+            s = s & "    On Error Resume Next" & vbCrLf
+            s = s & "    Dim lh As Single" & vbCrLf
+            s = s & "    lh = Me." & wcn & ".Font.Size * 1.4 + 2" & vbCrLf
+            s = s & "    Dim lc As Long" & vbCrLf
+            s = s & "    lc = Me." & wcn & ".LineCount" & vbCrLf
+            s = s & "    If lc < 1 Then lc = 1" & vbCrLf
+            s = s & "    Dim needH As Single" & vbCrLf
+            s = s & "    needH = lc * lh + 4" & vbCrLf
+            s = s & "    If needH < Me." & wfn & ".Height Then needH = Me." & wfn & ".Height" & vbCrLf
+            s = s & "    Me." & wcn & ".Height = needH" & vbCrLf
+            s = s & "    Me." & wfn & ".ScrollHeight = needH" & vbCrLf
+            s = s & "    Dim curY As Single" & vbCrLf
+            s = s & "    curY = Me." & wcn & ".CurLine * lh" & vbCrLf
+            s = s & "    If curY < Me." & wfn & ".ScrollTop Then" & vbCrLf
+            s = s & "        Me." & wfn & ".ScrollTop = curY" & vbCrLf
+            s = s & "    ElseIf curY + lh > Me." & wfn & ".ScrollTop + Me." & wfn & ".Height Then" & vbCrLf
+            s = s & "        Me." & wfn & ".ScrollTop = curY + lh - Me." & wfn & ".Height + 4" & vbCrLf
+            s = s & "    End If" & vbCrLf
+            s = s & "End Sub" & vbCrLf
+        Next wk
     End If
     cm.AddFromString s
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0839] clsUserFormRenderer.InjectFormCode EXIT-OK"  ' [ADR-0100]
