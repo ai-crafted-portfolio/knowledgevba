@@ -5291,6 +5291,15 @@
 </tbody>
 </table>
 <p>各型の意味や選び方は、<a href="../types/">フィールド型の説明</a>のページを参照してください。</p>
+<div class="admonition note">
+<p class="admonition-title"><code>Scroll</code> の挙動（2026-06-25 改善）</p>
+<p>複数行フィールドの <code>Scroll</code> を見直しました。</p>
+<ul>
+<li><strong><code>Scroll=TRUE</code></strong>：入力欄をスクロール用の枠（Frame）で包み、<strong>垂直スクロールバーを常時表示</strong>します（内部的には <code>ScrollBars=2</code> + <code>KeepScrollBarsVisible=2</code>）。欄が空でもバーが表示され、入力に応じて欄が伸び、カーソルへ追従します。</li>
+<li><strong><code>Scroll=FALSE</code></strong>：<strong>スクロールバーを表示しません</strong>（<code>ScrollBars=0</code>）。<code>Rows</code> で指定した高さの固定欄になります。</li>
+</ul>
+<p>既定は <code>FALSE</code> です。</p>
+</div>
 <h2 id="_6">画面設定ファイル<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
 <p>画面の見た目（シート名・列幅・色・項目名など）を決めるファイルです。
 <code>ui_dir</code>（既定では <code>C:\KnowledgeMgr\ui\</code>）の、役ごとのフォルダに置きます。</p>

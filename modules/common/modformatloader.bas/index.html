@@ -5063,7 +5063,7 @@
 <h1 id="modformatloaderbas">modFormatLoader.bas<a class="headerlink" href="#modformatloaderbas" title="Permanent link">&para;</a></h1>
 <p><strong>配置先</strong>: 共通モジュール（検索.xlsm / 管理.xlsm 共通）
 <strong>種類</strong>: 標準モジュール
-<strong>更新日</strong>: 2026-06-23 09:12 JST</p>
+<strong>更新日</strong>: 2026-06-09 22:38 JST</p>
 <hr />
 <h2 id="_1">保存方法<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <p>下のコードをメモ帳に貼り付け、<strong>[名前を付けて保存]</strong> で次のように保存してください。</p>
@@ -5269,86 +5269,72 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-187" name="__codelineno-0-187" href="#__codelineno-0-187"></a>        fso.CreateFolder modConfigHolder.GetFormatDir()
 <a id="__codelineno-0-188" name="__codelineno-0-188" href="#__codelineno-0-188"></a>    End If
 <a id="__codelineno-0-189" name="__codelineno-0-189" href="#__codelineno-0-189"></a>    modStanzaIO.WriteStanzaFile filePath, sections
-<a id="__codelineno-0-190" name="__codelineno-0-190" href="#__codelineno-0-190"></a>    &#39; [Change-5] ensure the per-format data folder exists alongside the format
-<a id="__codelineno-0-191" name="__codelineno-0-191" href="#__codelineno-0-191"></a>    If Not fso.FolderExists(modConfigHolder.GetDataDir()) Then fso.CreateFolder modConfigHolder.GetDataDir()
-<a id="__codelineno-0-192" name="__codelineno-0-192" href="#__codelineno-0-192"></a>    Dim ddir As String
-<a id="__codelineno-0-193" name="__codelineno-0-193" href="#__codelineno-0-193"></a>    ddir = modConfigHolder.GetDataDir() &amp; formatId &amp; &quot;\&quot;
-<a id="__codelineno-0-194" name="__codelineno-0-194" href="#__codelineno-0-194"></a>    If Not fso.FolderExists(ddir) Then fso.CreateFolder ddir
-<a id="__codelineno-0-195" name="__codelineno-0-195" href="#__codelineno-0-195"></a>    SaveFormat = 0
-<a id="__codelineno-0-196" name="__codelineno-0-196" href="#__codelineno-0-196"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1255] modFormatLoader.SaveFormat EXIT-OK&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-197" name="__codelineno-0-197" href="#__codelineno-0-197"></a>    Exit Function
-<a id="__codelineno-0-198" name="__codelineno-0-198" href="#__codelineno-0-198"></a>ErrHandler:
-<a id="__codelineno-0-199" name="__codelineno-0-199" href="#__codelineno-0-199"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print &quot;[D-1256] modFormatLoader.SaveFormat EXIT-ERR &quot; &amp; &quot;errNum=&quot; &amp; Err.Number &amp; &quot; desc=&quot; &amp; Err.Description  &#39; [ADR-0100]
-<a id="__codelineno-0-200" name="__codelineno-0-200" href="#__codelineno-0-200"></a>    SaveFormat = 3
-<a id="__codelineno-0-201" name="__codelineno-0-201" href="#__codelineno-0-201"></a>End Function
-<a id="__codelineno-0-202" name="__codelineno-0-202" href="#__codelineno-0-202"></a>
-<a id="__codelineno-0-203" name="__codelineno-0-203" href="#__codelineno-0-203"></a>&#39; DeleteFormat: enforce + delete file
-<a id="__codelineno-0-204" name="__codelineno-0-204" href="#__codelineno-0-204"></a>&#39; Q55: reject (ret=2) if any knowledge of this format still exists.
-<a id="__codelineno-0-205" name="__codelineno-0-205" href="#__codelineno-0-205"></a>&#39; Return codes: 0=success / 1=error / 2=rejected by Q55
-<a id="__codelineno-0-206" name="__codelineno-0-206" href="#__codelineno-0-206"></a>Public Function DeleteFormat(ByVal formatId As String) As Long
-<a id="__codelineno-0-207" name="__codelineno-0-207" href="#__codelineno-0-207"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1257] modFormatLoader.DeleteFormat ENTER&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-208" name="__codelineno-0-208" href="#__codelineno-0-208"></a>    On Error GoTo ErrHandler
-<a id="__codelineno-0-209" name="__codelineno-0-209" href="#__codelineno-0-209"></a>    &#39; Q55 check: any knowledge using this format?
-<a id="__codelineno-0-210" name="__codelineno-0-210" href="#__codelineno-0-210"></a>    Dim usingKnw As Collection
-<a id="__codelineno-0-211" name="__codelineno-0-211" href="#__codelineno-0-211"></a>    Set usingKnw = modKnowledgeFileIO.ListKnowledgesByFormat(formatId)
-<a id="__codelineno-0-212" name="__codelineno-0-212" href="#__codelineno-0-212"></a>    If Not usingKnw Is Nothing Then
-<a id="__codelineno-0-213" name="__codelineno-0-213" href="#__codelineno-0-213"></a>        If usingKnw.Count &gt; 0 Then
-<a id="__codelineno-0-214" name="__codelineno-0-214" href="#__codelineno-0-214"></a>            DeleteFormat = 2  &#39; Q55 reject
-<a id="__codelineno-0-215" name="__codelineno-0-215" href="#__codelineno-0-215"></a>            If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1258] modFormatLoader.DeleteFormat EXIT-OK&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-216" name="__codelineno-0-216" href="#__codelineno-0-216"></a>            Exit Function
-<a id="__codelineno-0-217" name="__codelineno-0-217" href="#__codelineno-0-217"></a>        End If
-<a id="__codelineno-0-218" name="__codelineno-0-218" href="#__codelineno-0-218"></a>    End If
-<a id="__codelineno-0-219" name="__codelineno-0-219" href="#__codelineno-0-219"></a>    Dim fso As Object: Set fso = CreateObject(&quot;Scripting.FileSystemObject&quot;)
-<a id="__codelineno-0-220" name="__codelineno-0-220" href="#__codelineno-0-220"></a>    Dim filePath As String
-<a id="__codelineno-0-221" name="__codelineno-0-221" href="#__codelineno-0-221"></a>    filePath = modConfigHolder.GetFormatDir() &amp; formatId &amp; &quot;.txt&quot;
-<a id="__codelineno-0-222" name="__codelineno-0-222" href="#__codelineno-0-222"></a>    If fso.FileExists(filePath) Then fso.DeleteFile filePath
-<a id="__codelineno-0-223" name="__codelineno-0-223" href="#__codelineno-0-223"></a>    &#39; [Change-5] remove the now-orphan per-format data folder when empty
-<a id="__codelineno-0-224" name="__codelineno-0-224" href="#__codelineno-0-224"></a>    &#39; (Q55 above already guarantees no knowledge of this format remains).
-<a id="__codelineno-0-225" name="__codelineno-0-225" href="#__codelineno-0-225"></a>    Dim ddir As String
-<a id="__codelineno-0-226" name="__codelineno-0-226" href="#__codelineno-0-226"></a>    ddir = modConfigHolder.GetDataDir() &amp; formatId &amp; &quot;\&quot;
-<a id="__codelineno-0-227" name="__codelineno-0-227" href="#__codelineno-0-227"></a>    If fso.FolderExists(ddir) Then
-<a id="__codelineno-0-228" name="__codelineno-0-228" href="#__codelineno-0-228"></a>        Dim df As Object
-<a id="__codelineno-0-229" name="__codelineno-0-229" href="#__codelineno-0-229"></a>        Set df = fso.GetFolder(ddir)
-<a id="__codelineno-0-230" name="__codelineno-0-230" href="#__codelineno-0-230"></a>        If df.Files.Count = 0 And df.SubFolders.Count = 0 Then df.Delete True
-<a id="__codelineno-0-231" name="__codelineno-0-231" href="#__codelineno-0-231"></a>    End If
-<a id="__codelineno-0-232" name="__codelineno-0-232" href="#__codelineno-0-232"></a>    DeleteFormat = 0
-<a id="__codelineno-0-233" name="__codelineno-0-233" href="#__codelineno-0-233"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1259] modFormatLoader.DeleteFormat EXIT-OK&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-234" name="__codelineno-0-234" href="#__codelineno-0-234"></a>    Exit Function
-<a id="__codelineno-0-235" name="__codelineno-0-235" href="#__codelineno-0-235"></a>ErrHandler:
-<a id="__codelineno-0-236" name="__codelineno-0-236" href="#__codelineno-0-236"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print &quot;[D-1260] modFormatLoader.DeleteFormat EXIT-ERR &quot; &amp; &quot;errNum=&quot; &amp; Err.Number &amp; &quot; desc=&quot; &amp; Err.Description  &#39; [ADR-0100]
-<a id="__codelineno-0-237" name="__codelineno-0-237" href="#__codelineno-0-237"></a>    DeleteFormat = 1
-<a id="__codelineno-0-238" name="__codelineno-0-238" href="#__codelineno-0-238"></a>End Function
-<a id="__codelineno-0-239" name="__codelineno-0-239" href="#__codelineno-0-239"></a>
-<a id="__codelineno-0-240" name="__codelineno-0-240" href="#__codelineno-0-240"></a>&#39; Private LogError stub
-<a id="__codelineno-0-241" name="__codelineno-0-241" href="#__codelineno-0-241"></a>Private Sub LogError(ByVal moduleName As String, ByVal funcName As String, ByVal msg As String)
-<a id="__codelineno-0-242" name="__codelineno-0-242" href="#__codelineno-0-242"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1261] modFormatLoader.LogError ENTER&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-243" name="__codelineno-0-243" href="#__codelineno-0-243"></a>    Debug.Print &quot;[ERR] &quot; &amp; moduleName &amp; &quot;.&quot; &amp; funcName &amp; &quot;: &quot; &amp; msg
-<a id="__codelineno-0-244" name="__codelineno-0-244" href="#__codelineno-0-244"></a>End Sub
-<a id="__codelineno-0-245" name="__codelineno-0-245" href="#__codelineno-0-245"></a>
-<a id="__codelineno-0-246" name="__codelineno-0-246" href="#__codelineno-0-246"></a>&#39; [USER-REQ 2026-06-09] Returns True when the [FORMAT].Status value matches
-<a id="__codelineno-0-247" name="__codelineno-0-247" href="#__codelineno-0-247"></a>&#39; the disabled marker (CP932 &quot;????&quot; = 無効, or the JP literal directly).
-<a id="__codelineno-0-248" name="__codelineno-0-248" href="#__codelineno-0-248"></a>Private Function IsFormatDisabled(ByVal sections As Collection) As Boolean
-<a id="__codelineno-0-249" name="__codelineno-0-249" href="#__codelineno-0-249"></a>    On Error Resume Next
-<a id="__codelineno-0-250" name="__codelineno-0-250" href="#__codelineno-0-250"></a>    If sections Is Nothing Then Exit Function
-<a id="__codelineno-0-251" name="__codelineno-0-251" href="#__codelineno-0-251"></a>    Dim sec As ClsStanzaSection
-<a id="__codelineno-0-252" name="__codelineno-0-252" href="#__codelineno-0-252"></a>    Dim i As Long
-<a id="__codelineno-0-253" name="__codelineno-0-253" href="#__codelineno-0-253"></a>    Dim s As String
-<a id="__codelineno-0-254" name="__codelineno-0-254" href="#__codelineno-0-254"></a>    Dim disabled As String
-<a id="__codelineno-0-255" name="__codelineno-0-255" href="#__codelineno-0-255"></a>    disabled = ChrW(&amp;H7121) &amp; ChrW(&amp;H52B9)
-<a id="__codelineno-0-256" name="__codelineno-0-256" href="#__codelineno-0-256"></a>    For i = 1 To sections.Count
-<a id="__codelineno-0-257" name="__codelineno-0-257" href="#__codelineno-0-257"></a>        Set sec = sections.Item(i)
-<a id="__codelineno-0-258" name="__codelineno-0-258" href="#__codelineno-0-258"></a>        If sec.SectionName = &quot;FORMAT&quot; Then
-<a id="__codelineno-0-259" name="__codelineno-0-259" href="#__codelineno-0-259"></a>            If sec.HasKey(&quot;Status&quot;) Then
-<a id="__codelineno-0-260" name="__codelineno-0-260" href="#__codelineno-0-260"></a>                s = sec.GetValue(&quot;Status&quot;)
-<a id="__codelineno-0-261" name="__codelineno-0-261" href="#__codelineno-0-261"></a>                If s = disabled Or s = &quot;????&quot; Then
-<a id="__codelineno-0-262" name="__codelineno-0-262" href="#__codelineno-0-262"></a>                    IsFormatDisabled = True
-<a id="__codelineno-0-263" name="__codelineno-0-263" href="#__codelineno-0-263"></a>                    Exit Function
-<a id="__codelineno-0-264" name="__codelineno-0-264" href="#__codelineno-0-264"></a>                End If
-<a id="__codelineno-0-265" name="__codelineno-0-265" href="#__codelineno-0-265"></a>            End If
-<a id="__codelineno-0-266" name="__codelineno-0-266" href="#__codelineno-0-266"></a>            Exit For
-<a id="__codelineno-0-267" name="__codelineno-0-267" href="#__codelineno-0-267"></a>        End If
-<a id="__codelineno-0-268" name="__codelineno-0-268" href="#__codelineno-0-268"></a>    Next i
-<a id="__codelineno-0-269" name="__codelineno-0-269" href="#__codelineno-0-269"></a>End Function
+<a id="__codelineno-0-190" name="__codelineno-0-190" href="#__codelineno-0-190"></a>    SaveFormat = 0
+<a id="__codelineno-0-191" name="__codelineno-0-191" href="#__codelineno-0-191"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1255] modFormatLoader.SaveFormat EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-192" name="__codelineno-0-192" href="#__codelineno-0-192"></a>    Exit Function
+<a id="__codelineno-0-193" name="__codelineno-0-193" href="#__codelineno-0-193"></a>ErrHandler:
+<a id="__codelineno-0-194" name="__codelineno-0-194" href="#__codelineno-0-194"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print &quot;[D-1256] modFormatLoader.SaveFormat EXIT-ERR &quot; &amp; &quot;errNum=&quot; &amp; Err.Number &amp; &quot; desc=&quot; &amp; Err.Description  &#39; [ADR-0100]
+<a id="__codelineno-0-195" name="__codelineno-0-195" href="#__codelineno-0-195"></a>    SaveFormat = 3
+<a id="__codelineno-0-196" name="__codelineno-0-196" href="#__codelineno-0-196"></a>End Function
+<a id="__codelineno-0-197" name="__codelineno-0-197" href="#__codelineno-0-197"></a>
+<a id="__codelineno-0-198" name="__codelineno-0-198" href="#__codelineno-0-198"></a>&#39; DeleteFormat: enforce + delete file
+<a id="__codelineno-0-199" name="__codelineno-0-199" href="#__codelineno-0-199"></a>&#39; Q55: reject (ret=2) if any knowledge of this format still exists.
+<a id="__codelineno-0-200" name="__codelineno-0-200" href="#__codelineno-0-200"></a>&#39; Return codes: 0=success / 1=error / 2=rejected by Q55
+<a id="__codelineno-0-201" name="__codelineno-0-201" href="#__codelineno-0-201"></a>Public Function DeleteFormat(ByVal formatId As String) As Long
+<a id="__codelineno-0-202" name="__codelineno-0-202" href="#__codelineno-0-202"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1257] modFormatLoader.DeleteFormat ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-203" name="__codelineno-0-203" href="#__codelineno-0-203"></a>    On Error GoTo ErrHandler
+<a id="__codelineno-0-204" name="__codelineno-0-204" href="#__codelineno-0-204"></a>    &#39; Q55 check: any knowledge using this format?
+<a id="__codelineno-0-205" name="__codelineno-0-205" href="#__codelineno-0-205"></a>    Dim usingKnw As Collection
+<a id="__codelineno-0-206" name="__codelineno-0-206" href="#__codelineno-0-206"></a>    Set usingKnw = modKnowledgeFileIO.ListKnowledgesByFormat(formatId)
+<a id="__codelineno-0-207" name="__codelineno-0-207" href="#__codelineno-0-207"></a>    If Not usingKnw Is Nothing Then
+<a id="__codelineno-0-208" name="__codelineno-0-208" href="#__codelineno-0-208"></a>        If usingKnw.Count &gt; 0 Then
+<a id="__codelineno-0-209" name="__codelineno-0-209" href="#__codelineno-0-209"></a>            DeleteFormat = 2  &#39; Q55 reject
+<a id="__codelineno-0-210" name="__codelineno-0-210" href="#__codelineno-0-210"></a>            If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1258] modFormatLoader.DeleteFormat EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-211" name="__codelineno-0-211" href="#__codelineno-0-211"></a>            Exit Function
+<a id="__codelineno-0-212" name="__codelineno-0-212" href="#__codelineno-0-212"></a>        End If
+<a id="__codelineno-0-213" name="__codelineno-0-213" href="#__codelineno-0-213"></a>    End If
+<a id="__codelineno-0-214" name="__codelineno-0-214" href="#__codelineno-0-214"></a>    Dim fso As Object: Set fso = CreateObject(&quot;Scripting.FileSystemObject&quot;)
+<a id="__codelineno-0-215" name="__codelineno-0-215" href="#__codelineno-0-215"></a>    Dim filePath As String
+<a id="__codelineno-0-216" name="__codelineno-0-216" href="#__codelineno-0-216"></a>    filePath = modConfigHolder.GetFormatDir() &amp; formatId &amp; &quot;.txt&quot;
+<a id="__codelineno-0-217" name="__codelineno-0-217" href="#__codelineno-0-217"></a>    If fso.FileExists(filePath) Then fso.DeleteFile filePath
+<a id="__codelineno-0-218" name="__codelineno-0-218" href="#__codelineno-0-218"></a>    DeleteFormat = 0
+<a id="__codelineno-0-219" name="__codelineno-0-219" href="#__codelineno-0-219"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1259] modFormatLoader.DeleteFormat EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-220" name="__codelineno-0-220" href="#__codelineno-0-220"></a>    Exit Function
+<a id="__codelineno-0-221" name="__codelineno-0-221" href="#__codelineno-0-221"></a>ErrHandler:
+<a id="__codelineno-0-222" name="__codelineno-0-222" href="#__codelineno-0-222"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print &quot;[D-1260] modFormatLoader.DeleteFormat EXIT-ERR &quot; &amp; &quot;errNum=&quot; &amp; Err.Number &amp; &quot; desc=&quot; &amp; Err.Description  &#39; [ADR-0100]
+<a id="__codelineno-0-223" name="__codelineno-0-223" href="#__codelineno-0-223"></a>    DeleteFormat = 1
+<a id="__codelineno-0-224" name="__codelineno-0-224" href="#__codelineno-0-224"></a>End Function
+<a id="__codelineno-0-225" name="__codelineno-0-225" href="#__codelineno-0-225"></a>
+<a id="__codelineno-0-226" name="__codelineno-0-226" href="#__codelineno-0-226"></a>&#39; Private LogError stub
+<a id="__codelineno-0-227" name="__codelineno-0-227" href="#__codelineno-0-227"></a>Private Sub LogError(ByVal moduleName As String, ByVal funcName As String, ByVal msg As String)
+<a id="__codelineno-0-228" name="__codelineno-0-228" href="#__codelineno-0-228"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1261] modFormatLoader.LogError ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-229" name="__codelineno-0-229" href="#__codelineno-0-229"></a>    Debug.Print &quot;[ERR] &quot; &amp; moduleName &amp; &quot;.&quot; &amp; funcName &amp; &quot;: &quot; &amp; msg
+<a id="__codelineno-0-230" name="__codelineno-0-230" href="#__codelineno-0-230"></a>End Sub
+<a id="__codelineno-0-231" name="__codelineno-0-231" href="#__codelineno-0-231"></a>
+<a id="__codelineno-0-232" name="__codelineno-0-232" href="#__codelineno-0-232"></a>&#39; [USER-REQ 2026-06-09] Returns True when the [FORMAT].Status value matches
+<a id="__codelineno-0-233" name="__codelineno-0-233" href="#__codelineno-0-233"></a>&#39; the disabled marker (CP932 &quot;????&quot; = 無効, or the JP literal directly).
+<a id="__codelineno-0-234" name="__codelineno-0-234" href="#__codelineno-0-234"></a>Private Function IsFormatDisabled(ByVal sections As Collection) As Boolean
+<a id="__codelineno-0-235" name="__codelineno-0-235" href="#__codelineno-0-235"></a>    On Error Resume Next
+<a id="__codelineno-0-236" name="__codelineno-0-236" href="#__codelineno-0-236"></a>    If sections Is Nothing Then Exit Function
+<a id="__codelineno-0-237" name="__codelineno-0-237" href="#__codelineno-0-237"></a>    Dim sec As ClsStanzaSection
+<a id="__codelineno-0-238" name="__codelineno-0-238" href="#__codelineno-0-238"></a>    Dim i As Long
+<a id="__codelineno-0-239" name="__codelineno-0-239" href="#__codelineno-0-239"></a>    Dim s As String
+<a id="__codelineno-0-240" name="__codelineno-0-240" href="#__codelineno-0-240"></a>    Dim disabled As String
+<a id="__codelineno-0-241" name="__codelineno-0-241" href="#__codelineno-0-241"></a>    disabled = ChrW(&amp;H7121) &amp; ChrW(&amp;H52B9)
+<a id="__codelineno-0-242" name="__codelineno-0-242" href="#__codelineno-0-242"></a>    For i = 1 To sections.Count
+<a id="__codelineno-0-243" name="__codelineno-0-243" href="#__codelineno-0-243"></a>        Set sec = sections.Item(i)
+<a id="__codelineno-0-244" name="__codelineno-0-244" href="#__codelineno-0-244"></a>        If sec.SectionName = &quot;FORMAT&quot; Then
+<a id="__codelineno-0-245" name="__codelineno-0-245" href="#__codelineno-0-245"></a>            If sec.HasKey(&quot;Status&quot;) Then
+<a id="__codelineno-0-246" name="__codelineno-0-246" href="#__codelineno-0-246"></a>                s = sec.GetValue(&quot;Status&quot;)
+<a id="__codelineno-0-247" name="__codelineno-0-247" href="#__codelineno-0-247"></a>                If s = disabled Or s = &quot;????&quot; Then
+<a id="__codelineno-0-248" name="__codelineno-0-248" href="#__codelineno-0-248"></a>                    IsFormatDisabled = True
+<a id="__codelineno-0-249" name="__codelineno-0-249" href="#__codelineno-0-249"></a>                    Exit Function
+<a id="__codelineno-0-250" name="__codelineno-0-250" href="#__codelineno-0-250"></a>                End If
+<a id="__codelineno-0-251" name="__codelineno-0-251" href="#__codelineno-0-251"></a>            End If
+<a id="__codelineno-0-252" name="__codelineno-0-252" href="#__codelineno-0-252"></a>            Exit For
+<a id="__codelineno-0-253" name="__codelineno-0-253" href="#__codelineno-0-253"></a>        End If
+<a id="__codelineno-0-254" name="__codelineno-0-254" href="#__codelineno-0-254"></a>    Next i
+<a id="__codelineno-0-255" name="__codelineno-0-255" href="#__codelineno-0-255"></a>End Function
 </code></pre></div>
 
 

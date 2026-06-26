@@ -5063,7 +5063,7 @@
 <h1 id="modrefreshbas">modRefresh.bas<a class="headerlink" href="#modrefreshbas" title="Permanent link">&para;</a></h1>
 <p><strong>配置先</strong>: 共通モジュール（検索.xlsm / 管理.xlsm 共通）
 <strong>種類</strong>: 標準モジュール
-<strong>更新日</strong>: 2026-06-22 22:53 JST</p>
+<strong>更新日</strong>: 2026-06-12 22:33 JST</p>
 <hr />
 <h2 id="_1">保存方法<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <p>下のコードをメモ帳に貼り付け、<strong>[名前を付けて保存]</strong> で次のように保存してください。</p>
@@ -5083,16 +5083,16 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Attribute VB_Name = &quot;modRefresh&quot;
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>&#39; ============================================================
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>&#39; modRefresh (Phase R-3-psi-Refresh, 2026-05-29)
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>&#39;   ui_seed/&lt;role&gt;/M-NN.txt �� edit �������ƁA�� install ������ sheet ��
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>&#39;   �ĕ`�悷�邽�߂� entry point�Bbutton OnClick / Alt+F8 macro ����ĂԁB
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>&#39;   ���̂� clsSetupOrchestrator.Reapply* (RunFullSetup step6 ApplyUiStanzas
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>&#39;   �Ɠ��� pipeline: BindSheet -&gt; ClearScreen -&gt; ApplyFromStanza -&gt; ProtectSheet)�B
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>&#39;   �{���W���[���� ScreenUpdating/EnableEvents �}�~ + ActiveSheet ������
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>&#39;   �������b�p�̂݁BASCII-only (CP932/UTF-8 round-trip ���S, ADR-0006)�B
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>&#39;   ui_seed/&lt;role&gt;/M-NN.txt を edit したあと、再 install せずに sheet を
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>&#39;   再描画するための entry point。button OnClick / Alt+F8 macro から呼ぶ。
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>&#39;   実体は clsSetupOrchestrator.Reapply* (RunFullSetup step6 ApplyUiStanzas
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>&#39;   と同一 pipeline: BindSheet -&gt; ClearScreen -&gt; ApplyFromStanza -&gt; ProtectSheet)。
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>&#39;   本モジュールは ScreenUpdating/EnableEvents 抑止 + ActiveSheet 復元の
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>&#39;   薄いラッパのみ。ASCII-only (CP932/UTF-8 round-trip 安全, ADR-0006)。
 <a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>&#39; ============================================================
 <a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>Option Explicit
 <a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>&#39; �S sheet (LOG �ȊO) �� ui_seed ����ĕ`��Bbutton / Alt+F8 �p�B
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>&#39; 全 sheet (LOG 以外) を ui_seed から再描画。button / Alt+F8 用。
 <a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>Public Sub Btn_RefreshAllSheets()
 <a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1318] modRefresh.Btn_RefreshAllSheets ENTER&quot;  &#39; [ADR-0100]
 <a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>    On Error GoTo ErrHandler
@@ -5102,215 +5102,163 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>    XLSM = Replace$(ThisWorkbook.Name, &quot;.xlsm&quot;, &quot;&quot;)
 <a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>    modBtnGuard.LogEnter BTN, XLSM
 <a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>    modCommon.AppendProgressLog &quot;[BTN-REFRESH-ENTER] &quot; &amp; Now
-<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>    &#39; [Fix-6 / ADR-0133-followup 2026-06-19] Refresh is a pure seed re-render
-<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>    &#39; (RunFullSetup loads + auto-heals config itself). It MUST NOT require
-<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>    &#39; &quot;config&quot; as a prerequisite: a migrated workbook with an empty settings
-<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>    &#39; cell used to abort here, which also blocked the Workbook_Open auto-
-<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>    &#39; re-render that recreates orphaned button shapes. Empty requirement = OK.
-<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>    If Not modBtnGuard.CheckPrereq(BTN, &quot;&quot;, XLSM) Then
-<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>        modBtnGuard.LogExit BTN, XLSM, False
-<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>        If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1319] modRefresh.Btn_RefreshAllSheets EXIT-OK&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>        Exit Sub
-<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>    End If
-<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>    &#39; [BTN-GUARD-PRELUDE-END]
-<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>    &#39; [Change-3] storage-access fallback: keep the previous screen and
-<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>    &#39; skip this re-render when a configured storage folder is unreachable.
-<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>    Dim badDir As String
-<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>    badDir = modConfigHolder.EnsureStorageAccessible(XLSM)
-<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>    If Len(badDir) &gt; 0 Then
-<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>        modConfigHolder.NotifyStorageInaccessible badDir
-<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>        modBtnGuard.LogExit BTN, XLSM, False
-<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>        Exit Sub
-<a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>    End If
-<a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>    &#39; [P5d fix 2026-06-04] ScreenUpdating=False �폜 (shape �`�� silent fail ���)
-<a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>    &#39; [Fix-6 followup 2026-06-19] Snapshot the 9 settings cells before the
-<a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>    &#39; re-render so ApplyUiStanzas&#39; Cells.Clear cannot lose user-entered
-<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>    &#39; values; written back verbatim after the pipeline (RestoreSettings).
-<a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>    Dim settingsBackup As Object
-<a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>    Set settingsBackup = modConfigLoader.SnapshotSettings()
-<a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>    Dim prevEv As Boolean
-<a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>    Dim activeWs As Object
-<a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>    On Error Resume Next
-<a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a>    Set activeWs = ThisWorkbook.ActiveSheet
-<a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a>    prevEv = Application.EnableEvents
-<a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a>    Application.EnableEvents = False
-<a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a>    On Error GoTo 0
-<a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a>
-<a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>    modCommon.AppendProgressLog &quot;[BTN-REFRESH-PASS-CHECKPREREQ]&quot;
-<a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a>    &#39; [P5e fix 2026-06-04] install �Ɠ��� RunFullSetup �� invoke (ReapplyAllSheets �ɂ���ʔj����)
-<a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a>    Dim orch As clsSetupOrchestrator
-<a id="__codelineno-0-60" name="__codelineno-0-60" href="#__codelineno-0-60"></a>    Set orch = New clsSetupOrchestrator
-<a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a>    Dim baseName As String
-<a id="__codelineno-0-62" name="__codelineno-0-62" href="#__codelineno-0-62"></a>    baseName = Replace(ThisWorkbook.Name, &quot;.xlsm&quot;, &quot;&quot;)
-<a id="__codelineno-0-63" name="__codelineno-0-63" href="#__codelineno-0-63"></a>    modCommon.AppendProgressLog &quot;[BTN-REFRESH-DISPATCH] baseName=&quot; &amp; baseName
-<a id="__codelineno-0-64" name="__codelineno-0-64" href="#__codelineno-0-64"></a>    Select Case baseName
-<a id="__codelineno-0-65" name="__codelineno-0-65" href="#__codelineno-0-65"></a>        Case ChrW(&amp;H7BA1) &amp; ChrW(&amp;H7406): orch.RunForAdmin
-<a id="__codelineno-0-66" name="__codelineno-0-66" href="#__codelineno-0-66"></a>        Case ChrW(&amp;H767B) &amp; ChrW(&amp;H9332) &amp; ChrW(&amp;H4FEE) &amp; ChrW(&amp;H6B63): orch.RunForRegister
-<a id="__codelineno-0-67" name="__codelineno-0-67" href="#__codelineno-0-67"></a>        Case ChrW(&amp;H691C) &amp; ChrW(&amp;H7D22): orch.RunForSearch
-<a id="__codelineno-0-68" name="__codelineno-0-68" href="#__codelineno-0-68"></a>        Case Else: orch.RunForAdmin
-<a id="__codelineno-0-69" name="__codelineno-0-69" href="#__codelineno-0-69"></a>    End Select
-<a id="__codelineno-0-70" name="__codelineno-0-70" href="#__codelineno-0-70"></a>
-<a id="__codelineno-0-71" name="__codelineno-0-71" href="#__codelineno-0-71"></a>    On Error Resume Next
-<a id="__codelineno-0-72" name="__codelineno-0-72" href="#__codelineno-0-72"></a>    If Not activeWs Is Nothing Then activeWs.Activate
-<a id="__codelineno-0-73" name="__codelineno-0-73" href="#__codelineno-0-73"></a>    &#39; [B35 2026-06-12] after a full re-render the sheet can stay in a non-
-<a id="__codelineno-0-74" name="__codelineno-0-74" href="#__codelineno-0-74"></a>    &#39; interactive paint state: cells look frozen and dropdown arrows do not
-<a id="__codelineno-0-75" name="__codelineno-0-75" href="#__codelineno-0-75"></a>    &#39; appear until the user switches sheets. Force a screen + selection
-<a id="__codelineno-0-76" name="__codelineno-0-76" href="#__codelineno-0-76"></a>    &#39; refresh so the active sheet is immediately usable.
-<a id="__codelineno-0-77" name="__codelineno-0-77" href="#__codelineno-0-77"></a>    Application.ScreenUpdating = True
-<a id="__codelineno-0-78" name="__codelineno-0-78" href="#__codelineno-0-78"></a>    Application.Interactive = True
-<a id="__codelineno-0-79" name="__codelineno-0-79" href="#__codelineno-0-79"></a>    If Not activeWs Is Nothing Then
-<a id="__codelineno-0-80" name="__codelineno-0-80" href="#__codelineno-0-80"></a>        activeWs.Range(activeWs.Cells(1, 1), activeWs.Cells(1, 1)).Select
-<a id="__codelineno-0-81" name="__codelineno-0-81" href="#__codelineno-0-81"></a>    End If
-<a id="__codelineno-0-82" name="__codelineno-0-82" href="#__codelineno-0-82"></a>    Application.EnableEvents = prevEv
-<a id="__codelineno-0-83" name="__codelineno-0-83" href="#__codelineno-0-83"></a>    Application.StatusBar = RefreshedMsg()
-<a id="__codelineno-0-84" name="__codelineno-0-84" href="#__codelineno-0-84"></a>    On Error GoTo 0
-<a id="__codelineno-0-85" name="__codelineno-0-85" href="#__codelineno-0-85"></a>    &#39; 2026-06-07: Re-seed M-03 C4 + reload M-10 storage paths after refresh
-<a id="__codelineno-0-86" name="__codelineno-0-86" href="#__codelineno-0-86"></a>    If XLSM = ChrW(&amp;H7BA1) &amp; ChrW(&amp;H7406) Then
-<a id="__codelineno-0-87" name="__codelineno-0-87" href="#__codelineno-0-87"></a>        On Error Resume Next
-<a id="__codelineno-0-88" name="__codelineno-0-88" href="#__codelineno-0-88"></a>        Application.Run ThisWorkbook.Name &amp; &quot;!modEntryFormat.SeedM03FormatIdIfEmpty&quot;
-<a id="__codelineno-0-89" name="__codelineno-0-89" href="#__codelineno-0-89"></a>        Dim wsStor As Worksheet
-<a id="__codelineno-0-90" name="__codelineno-0-90" href="#__codelineno-0-90"></a>        Set wsStor = ThisWorkbook.Worksheets(ChrW(&amp;H683C) &amp; ChrW(&amp;H7D0D) &amp; ChrW(&amp;H5148) &amp; ChrW(&amp;H8A2D) &amp; ChrW(&amp;H5B9A))
-<a id="__codelineno-0-91" name="__codelineno-0-91" href="#__codelineno-0-91"></a>        Application.Run ThisWorkbook.Name &amp; &quot;!modEntrySettings.LoadStorageToSheet&quot;, wsStor
-<a id="__codelineno-0-92" name="__codelineno-0-92" href="#__codelineno-0-92"></a>        On Error GoTo 0
-<a id="__codelineno-0-93" name="__codelineno-0-93" href="#__codelineno-0-93"></a>    End If
-<a id="__codelineno-0-94" name="__codelineno-0-94" href="#__codelineno-0-94"></a>    &#39; [Fix-6 followup 2026-06-19] Write the snapshot back so the 9 M-10
-<a id="__codelineno-0-95" name="__codelineno-0-95" href="#__codelineno-0-95"></a>    &#39; cells survive the re-render regardless of holder/config state.
-<a id="__codelineno-0-96" name="__codelineno-0-96" href="#__codelineno-0-96"></a>    On Error Resume Next
-<a id="__codelineno-0-97" name="__codelineno-0-97" href="#__codelineno-0-97"></a>    modConfigLoader.RestoreSettings settingsBackup
-<a id="__codelineno-0-98" name="__codelineno-0-98" href="#__codelineno-0-98"></a>    On Error GoTo 0
-<a id="__codelineno-0-99" name="__codelineno-0-99" href="#__codelineno-0-99"></a>    &#39; [BTN-GUARD-EXIT-OK] auto-injected
-<a id="__codelineno-0-100" name="__codelineno-0-100" href="#__codelineno-0-100"></a>    modBtnGuard.LogExit BTN, XLSM, True
-<a id="__codelineno-0-101" name="__codelineno-0-101" href="#__codelineno-0-101"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1320] modRefresh.Btn_RefreshAllSheets EXIT-OK&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-102" name="__codelineno-0-102" href="#__codelineno-0-102"></a>    Exit Sub
-<a id="__codelineno-0-103" name="__codelineno-0-103" href="#__codelineno-0-103"></a>ErrHandler:
-<a id="__codelineno-0-104" name="__codelineno-0-104" href="#__codelineno-0-104"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print &quot;[D-1321] modRefresh.Btn_RefreshAllSheets EXIT-ERR &quot; &amp; &quot;errNum=&quot; &amp; Err.Number &amp; &quot; desc=&quot; &amp; Err.Description  &#39; [ADR-0100]
-<a id="__codelineno-0-105" name="__codelineno-0-105" href="#__codelineno-0-105"></a>    &#39; [BTN-GUARD-ERR-LOG] auto-injected
-<a id="__codelineno-0-106" name="__codelineno-0-106" href="#__codelineno-0-106"></a>    &#39; [P2 fix] ScreenUpdating/EnableEvents restore before HandleButtonError
-<a id="__codelineno-0-107" name="__codelineno-0-107" href="#__codelineno-0-107"></a>    On Error Resume Next
-<a id="__codelineno-0-108" name="__codelineno-0-108" href="#__codelineno-0-108"></a>    If Not activeWs Is Nothing Then activeWs.Activate
-<a id="__codelineno-0-109" name="__codelineno-0-109" href="#__codelineno-0-109"></a>    Application.EnableEvents = prevEv
-<a id="__codelineno-0-110" name="__codelineno-0-110" href="#__codelineno-0-110"></a>    On Error GoTo 0
-<a id="__codelineno-0-111" name="__codelineno-0-111" href="#__codelineno-0-111"></a>    modBtnGuard.HandleButtonError BTN, Err, XLSM
-<a id="__codelineno-0-112" name="__codelineno-0-112" href="#__codelineno-0-112"></a>    modBtnGuard.LogExit BTN, XLSM, False
-<a id="__codelineno-0-113" name="__codelineno-0-113" href="#__codelineno-0-113"></a>End Sub
-<a id="__codelineno-0-114" name="__codelineno-0-114" href="#__codelineno-0-114"></a>
-<a id="__codelineno-0-115" name="__codelineno-0-115" href="#__codelineno-0-115"></a>&#39; ActiveSheet 1 �������ĕ`��BAlt+F8 / button �p�B
-<a id="__codelineno-0-116" name="__codelineno-0-116" href="#__codelineno-0-116"></a>Public Sub Btn_RefreshSheet_Active()
-<a id="__codelineno-0-117" name="__codelineno-0-117" href="#__codelineno-0-117"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1322] modRefresh.Btn_RefreshSheet_Active ENTER&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-118" name="__codelineno-0-118" href="#__codelineno-0-118"></a>    On Error GoTo ErrHandler
-<a id="__codelineno-0-119" name="__codelineno-0-119" href="#__codelineno-0-119"></a>    &#39; [BTN-GUARD-PRELUDE-BEGIN] auto-injected by inject_btn_template.py
-<a id="__codelineno-0-120" name="__codelineno-0-120" href="#__codelineno-0-120"></a>    Const BTN As String = &quot;Btn_RefreshSheet_Active&quot;
-<a id="__codelineno-0-121" name="__codelineno-0-121" href="#__codelineno-0-121"></a>    Dim XLSM As String
-<a id="__codelineno-0-122" name="__codelineno-0-122" href="#__codelineno-0-122"></a>    XLSM = Replace$(ThisWorkbook.Name, &quot;.xlsm&quot;, &quot;&quot;)
-<a id="__codelineno-0-123" name="__codelineno-0-123" href="#__codelineno-0-123"></a>    modBtnGuard.LogEnter BTN, XLSM
-<a id="__codelineno-0-124" name="__codelineno-0-124" href="#__codelineno-0-124"></a>    &#39; [Fix-6 / ADR-0133-followup 2026-06-19] Refresh is a pure seed re-render
-<a id="__codelineno-0-125" name="__codelineno-0-125" href="#__codelineno-0-125"></a>    &#39; (RunFullSetup loads + auto-heals config itself). It MUST NOT require
-<a id="__codelineno-0-126" name="__codelineno-0-126" href="#__codelineno-0-126"></a>    &#39; &quot;config&quot; as a prerequisite: a migrated workbook with an empty settings
-<a id="__codelineno-0-127" name="__codelineno-0-127" href="#__codelineno-0-127"></a>    &#39; cell used to abort here, which also blocked the Workbook_Open auto-
-<a id="__codelineno-0-128" name="__codelineno-0-128" href="#__codelineno-0-128"></a>    &#39; re-render that recreates orphaned button shapes. Empty requirement = OK.
-<a id="__codelineno-0-129" name="__codelineno-0-129" href="#__codelineno-0-129"></a>    If Not modBtnGuard.CheckPrereq(BTN, &quot;&quot;, XLSM) Then
-<a id="__codelineno-0-130" name="__codelineno-0-130" href="#__codelineno-0-130"></a>        modBtnGuard.LogExit BTN, XLSM, False
-<a id="__codelineno-0-131" name="__codelineno-0-131" href="#__codelineno-0-131"></a>        If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1323] modRefresh.Btn_RefreshSheet_Active EXIT-OK&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-132" name="__codelineno-0-132" href="#__codelineno-0-132"></a>        Exit Sub
-<a id="__codelineno-0-133" name="__codelineno-0-133" href="#__codelineno-0-133"></a>    End If
-<a id="__codelineno-0-134" name="__codelineno-0-134" href="#__codelineno-0-134"></a>    &#39; [BTN-GUARD-PRELUDE-END]
-<a id="__codelineno-0-135" name="__codelineno-0-135" href="#__codelineno-0-135"></a>    &#39; [Change-3] storage-access fallback: keep the previous screen and
-<a id="__codelineno-0-136" name="__codelineno-0-136" href="#__codelineno-0-136"></a>    &#39; skip this re-render when a configured storage folder is unreachable.
-<a id="__codelineno-0-137" name="__codelineno-0-137" href="#__codelineno-0-137"></a>    Dim badDir As String
-<a id="__codelineno-0-138" name="__codelineno-0-138" href="#__codelineno-0-138"></a>    badDir = modConfigHolder.EnsureStorageAccessible(XLSM)
-<a id="__codelineno-0-139" name="__codelineno-0-139" href="#__codelineno-0-139"></a>    If Len(badDir) &gt; 0 Then
-<a id="__codelineno-0-140" name="__codelineno-0-140" href="#__codelineno-0-140"></a>        modConfigHolder.NotifyStorageInaccessible badDir
-<a id="__codelineno-0-141" name="__codelineno-0-141" href="#__codelineno-0-141"></a>        modBtnGuard.LogExit BTN, XLSM, False
-<a id="__codelineno-0-142" name="__codelineno-0-142" href="#__codelineno-0-142"></a>        Exit Sub
-<a id="__codelineno-0-143" name="__codelineno-0-143" href="#__codelineno-0-143"></a>    End If
-<a id="__codelineno-0-144" name="__codelineno-0-144" href="#__codelineno-0-144"></a>    Dim prevSU As Boolean, prevEv As Boolean
-<a id="__codelineno-0-145" name="__codelineno-0-145" href="#__codelineno-0-145"></a>    Dim activeWs As Object
-<a id="__codelineno-0-146" name="__codelineno-0-146" href="#__codelineno-0-146"></a>    On Error Resume Next
-<a id="__codelineno-0-147" name="__codelineno-0-147" href="#__codelineno-0-147"></a>    Set activeWs = ThisWorkbook.ActiveSheet
-<a id="__codelineno-0-148" name="__codelineno-0-148" href="#__codelineno-0-148"></a>    prevSU = Application.ScreenUpdating
-<a id="__codelineno-0-149" name="__codelineno-0-149" href="#__codelineno-0-149"></a>    prevEv = Application.EnableEvents
-<a id="__codelineno-0-150" name="__codelineno-0-150" href="#__codelineno-0-150"></a>    Application.ScreenUpdating = False
-<a id="__codelineno-0-151" name="__codelineno-0-151" href="#__codelineno-0-151"></a>    Application.EnableEvents = False
-<a id="__codelineno-0-152" name="__codelineno-0-152" href="#__codelineno-0-152"></a>    On Error GoTo 0
-<a id="__codelineno-0-153" name="__codelineno-0-153" href="#__codelineno-0-153"></a>
-<a id="__codelineno-0-154" name="__codelineno-0-154" href="#__codelineno-0-154"></a>    &#39; [P5e horizontal expand 2026-06-04] install �Ɠ��� RunFullSetup �o�H (��ʔj����)
-<a id="__codelineno-0-155" name="__codelineno-0-155" href="#__codelineno-0-155"></a>    Dim orch As clsSetupOrchestrator
-<a id="__codelineno-0-156" name="__codelineno-0-156" href="#__codelineno-0-156"></a>    Set orch = New clsSetupOrchestrator
-<a id="__codelineno-0-157" name="__codelineno-0-157" href="#__codelineno-0-157"></a>    Dim baseName As String
-<a id="__codelineno-0-158" name="__codelineno-0-158" href="#__codelineno-0-158"></a>    baseName = Replace(ThisWorkbook.Name, &quot;.xlsm&quot;, &quot;&quot;)
-<a id="__codelineno-0-159" name="__codelineno-0-159" href="#__codelineno-0-159"></a>    modCommon.AppendProgressLog &quot;[BTN-REFRESH-ACTIVE-DISPATCH] baseName=&quot; &amp; baseName
-<a id="__codelineno-0-160" name="__codelineno-0-160" href="#__codelineno-0-160"></a>    Select Case baseName
-<a id="__codelineno-0-161" name="__codelineno-0-161" href="#__codelineno-0-161"></a>        Case ChrW(&amp;H7BA1) &amp; ChrW(&amp;H7406): orch.RunForAdmin
-<a id="__codelineno-0-162" name="__codelineno-0-162" href="#__codelineno-0-162"></a>        Case ChrW(&amp;H767B) &amp; ChrW(&amp;H9332) &amp; ChrW(&amp;H4FEE) &amp; ChrW(&amp;H6B63): orch.RunForRegister
-<a id="__codelineno-0-163" name="__codelineno-0-163" href="#__codelineno-0-163"></a>        Case ChrW(&amp;H691C) &amp; ChrW(&amp;H7D22): orch.RunForSearch
-<a id="__codelineno-0-164" name="__codelineno-0-164" href="#__codelineno-0-164"></a>        Case Else: orch.RunForAdmin
-<a id="__codelineno-0-165" name="__codelineno-0-165" href="#__codelineno-0-165"></a>    End Select
-<a id="__codelineno-0-166" name="__codelineno-0-166" href="#__codelineno-0-166"></a>
-<a id="__codelineno-0-167" name="__codelineno-0-167" href="#__codelineno-0-167"></a>    On Error Resume Next
-<a id="__codelineno-0-168" name="__codelineno-0-168" href="#__codelineno-0-168"></a>    If Not activeWs Is Nothing Then activeWs.Activate
-<a id="__codelineno-0-169" name="__codelineno-0-169" href="#__codelineno-0-169"></a>    Application.EnableEvents = prevEv
-<a id="__codelineno-0-170" name="__codelineno-0-170" href="#__codelineno-0-170"></a>    Application.ScreenUpdating = prevSU
-<a id="__codelineno-0-171" name="__codelineno-0-171" href="#__codelineno-0-171"></a>    Application.StatusBar = RefreshedMsg()
-<a id="__codelineno-0-172" name="__codelineno-0-172" href="#__codelineno-0-172"></a>    On Error GoTo 0
-<a id="__codelineno-0-173" name="__codelineno-0-173" href="#__codelineno-0-173"></a>    &#39; [BTN-GUARD-EXIT-OK] auto-injected
-<a id="__codelineno-0-174" name="__codelineno-0-174" href="#__codelineno-0-174"></a>    modBtnGuard.LogExit BTN, XLSM, True
-<a id="__codelineno-0-175" name="__codelineno-0-175" href="#__codelineno-0-175"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1324] modRefresh.Btn_RefreshSheet_Active EXIT-OK&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-176" name="__codelineno-0-176" href="#__codelineno-0-176"></a>    Exit Sub
-<a id="__codelineno-0-177" name="__codelineno-0-177" href="#__codelineno-0-177"></a>ErrHandler:
-<a id="__codelineno-0-178" name="__codelineno-0-178" href="#__codelineno-0-178"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print &quot;[D-1325] modRefresh.Btn_RefreshSheet_Active EXIT-ERR &quot; &amp; &quot;errNum=&quot; &amp; Err.Number &amp; &quot; desc=&quot; &amp; Err.Description  &#39; [ADR-0100]
-<a id="__codelineno-0-179" name="__codelineno-0-179" href="#__codelineno-0-179"></a>    &#39; [BTN-GUARD-ERR-LOG] auto-injected
-<a id="__codelineno-0-180" name="__codelineno-0-180" href="#__codelineno-0-180"></a>    modBtnGuard.HandleButtonError BTN, Err, XLSM
-<a id="__codelineno-0-181" name="__codelineno-0-181" href="#__codelineno-0-181"></a>    modBtnGuard.LogExit BTN, XLSM, False
-<a id="__codelineno-0-182" name="__codelineno-0-182" href="#__codelineno-0-182"></a>End Sub
-<a id="__codelineno-0-183" name="__codelineno-0-183" href="#__codelineno-0-183"></a>
-<a id="__codelineno-0-184" name="__codelineno-0-184" href="#__codelineno-0-184"></a>&#39; �w�� screenId (M-NN) 1 �����ĕ`��Bprogrammatic �p (button OnAction ��Ώ�)�B
-<a id="__codelineno-0-185" name="__codelineno-0-185" href="#__codelineno-0-185"></a>Public Sub Btn_RefreshSheet(ByVal screenId As String)
-<a id="__codelineno-0-186" name="__codelineno-0-186" href="#__codelineno-0-186"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1326] modRefresh.Btn_RefreshSheet ENTER&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-187" name="__codelineno-0-187" href="#__codelineno-0-187"></a>    On Error GoTo ErrHandler
-<a id="__codelineno-0-188" name="__codelineno-0-188" href="#__codelineno-0-188"></a>    &#39; [BTN-GUARD-PRELUDE-BEGIN] auto-injected by inject_btn_template.py
-<a id="__codelineno-0-189" name="__codelineno-0-189" href="#__codelineno-0-189"></a>    Const BTN As String = &quot;Btn_RefreshSheet&quot;
-<a id="__codelineno-0-190" name="__codelineno-0-190" href="#__codelineno-0-190"></a>    Dim XLSM As String
-<a id="__codelineno-0-191" name="__codelineno-0-191" href="#__codelineno-0-191"></a>    XLSM = Replace$(ThisWorkbook.Name, &quot;.xlsm&quot;, &quot;&quot;)
-<a id="__codelineno-0-192" name="__codelineno-0-192" href="#__codelineno-0-192"></a>    modBtnGuard.LogEnter BTN, XLSM
-<a id="__codelineno-0-193" name="__codelineno-0-193" href="#__codelineno-0-193"></a>    &#39; [Fix-6 / ADR-0133-followup 2026-06-19] Refresh is a pure seed re-render
-<a id="__codelineno-0-194" name="__codelineno-0-194" href="#__codelineno-0-194"></a>    &#39; (RunFullSetup loads + auto-heals config itself). It MUST NOT require
-<a id="__codelineno-0-195" name="__codelineno-0-195" href="#__codelineno-0-195"></a>    &#39; &quot;config&quot; as a prerequisite: a migrated workbook with an empty settings
-<a id="__codelineno-0-196" name="__codelineno-0-196" href="#__codelineno-0-196"></a>    &#39; cell used to abort here, which also blocked the Workbook_Open auto-
-<a id="__codelineno-0-197" name="__codelineno-0-197" href="#__codelineno-0-197"></a>    &#39; re-render that recreates orphaned button shapes. Empty requirement = OK.
-<a id="__codelineno-0-198" name="__codelineno-0-198" href="#__codelineno-0-198"></a>    If Not modBtnGuard.CheckPrereq(BTN, &quot;&quot;, XLSM) Then
-<a id="__codelineno-0-199" name="__codelineno-0-199" href="#__codelineno-0-199"></a>        modBtnGuard.LogExit BTN, XLSM, False
-<a id="__codelineno-0-200" name="__codelineno-0-200" href="#__codelineno-0-200"></a>        If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1327] modRefresh.Btn_RefreshSheet EXIT-OK&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-201" name="__codelineno-0-201" href="#__codelineno-0-201"></a>        Exit Sub
-<a id="__codelineno-0-202" name="__codelineno-0-202" href="#__codelineno-0-202"></a>    End If
-<a id="__codelineno-0-203" name="__codelineno-0-203" href="#__codelineno-0-203"></a>    &#39; [BTN-GUARD-PRELUDE-END]
-<a id="__codelineno-0-204" name="__codelineno-0-204" href="#__codelineno-0-204"></a>    &#39; [Change-3] storage-access fallback: keep the previous screen and
-<a id="__codelineno-0-205" name="__codelineno-0-205" href="#__codelineno-0-205"></a>    &#39; skip this re-render when a configured storage folder is unreachable.
-<a id="__codelineno-0-206" name="__codelineno-0-206" href="#__codelineno-0-206"></a>    Dim badDir As String
-<a id="__codelineno-0-207" name="__codelineno-0-207" href="#__codelineno-0-207"></a>    badDir = modConfigHolder.EnsureStorageAccessible(XLSM)
-<a id="__codelineno-0-208" name="__codelineno-0-208" href="#__codelineno-0-208"></a>    If Len(badDir) &gt; 0 Then
-<a id="__codelineno-0-209" name="__codelineno-0-209" href="#__codelineno-0-209"></a>        modConfigHolder.NotifyStorageInaccessible badDir
-<a id="__codelineno-0-210" name="__codelineno-0-210" href="#__codelineno-0-210"></a>        modBtnGuard.LogExit BTN, XLSM, False
-<a id="__codelineno-0-211" name="__codelineno-0-211" href="#__codelineno-0-211"></a>        Exit Sub
-<a id="__codelineno-0-212" name="__codelineno-0-212" href="#__codelineno-0-212"></a>    End If
-<a id="__codelineno-0-213" name="__codelineno-0-213" href="#__codelineno-0-213"></a>    Dim orch As clsSetupOrchestrator
-<a id="__codelineno-0-214" name="__codelineno-0-214" href="#__codelineno-0-214"></a>    Set orch = New clsSetupOrchestrator
-<a id="__codelineno-0-215" name="__codelineno-0-215" href="#__codelineno-0-215"></a>    orch.ReapplySheet screenId
-<a id="__codelineno-0-216" name="__codelineno-0-216" href="#__codelineno-0-216"></a>    &#39; [BTN-GUARD-EXIT-OK] auto-injected
-<a id="__codelineno-0-217" name="__codelineno-0-217" href="#__codelineno-0-217"></a>    modBtnGuard.LogExit BTN, XLSM, True
-<a id="__codelineno-0-218" name="__codelineno-0-218" href="#__codelineno-0-218"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1328] modRefresh.Btn_RefreshSheet EXIT-OK&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-219" name="__codelineno-0-219" href="#__codelineno-0-219"></a>    Exit Sub
-<a id="__codelineno-0-220" name="__codelineno-0-220" href="#__codelineno-0-220"></a>ErrHandler:
-<a id="__codelineno-0-221" name="__codelineno-0-221" href="#__codelineno-0-221"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print &quot;[D-1329] modRefresh.Btn_RefreshSheet EXIT-ERR &quot; &amp; &quot;errNum=&quot; &amp; Err.Number &amp; &quot; desc=&quot; &amp; Err.Description  &#39; [ADR-0100]
-<a id="__codelineno-0-222" name="__codelineno-0-222" href="#__codelineno-0-222"></a>    &#39; [BTN-GUARD-ERR-LOG] auto-injected
-<a id="__codelineno-0-223" name="__codelineno-0-223" href="#__codelineno-0-223"></a>    modBtnGuard.HandleButtonError BTN, Err, XLSM
-<a id="__codelineno-0-224" name="__codelineno-0-224" href="#__codelineno-0-224"></a>    modBtnGuard.LogExit BTN, XLSM, False
-<a id="__codelineno-0-225" name="__codelineno-0-225" href="#__codelineno-0-225"></a>End Sub
-<a id="__codelineno-0-226" name="__codelineno-0-226" href="#__codelineno-0-226"></a>
-<a id="__codelineno-0-227" name="__codelineno-0-227" href="#__codelineno-0-227"></a>&#39; &quot;�X�V����&quot; �� ChrW �ō\�z (�{ .bas �� ASCII-only �ɕۂ�)�B
-<a id="__codelineno-0-228" name="__codelineno-0-228" href="#__codelineno-0-228"></a>Private Function RefreshedMsg() As String
-<a id="__codelineno-0-229" name="__codelineno-0-229" href="#__codelineno-0-229"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1330] modRefresh.RefreshedMsg ENTER&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-230" name="__codelineno-0-230" href="#__codelineno-0-230"></a>    RefreshedMsg = ChrW(&amp;H66F4) &amp; ChrW(&amp;H65B0) &amp; ChrW(&amp;H5B8C) &amp; ChrW(&amp;H4E86)
-<a id="__codelineno-0-231" name="__codelineno-0-231" href="#__codelineno-0-231"></a>End Function
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>    If Not modBtnGuard.CheckPrereq(BTN, &quot;config&quot;, XLSM) Then
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>        modBtnGuard.LogExit BTN, XLSM, False
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>        If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1319] modRefresh.Btn_RefreshAllSheets EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>        Exit Sub
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>    End If
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>    &#39; [BTN-GUARD-PRELUDE-END]
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>    &#39; [P5d fix 2026-06-04] ScreenUpdating=False 削除 (shape 描画 silent fail 回避)
+<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>    Dim prevEv As Boolean
+<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>    Dim activeWs As Object
+<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>    On Error Resume Next
+<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>    Set activeWs = ThisWorkbook.ActiveSheet
+<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>    prevEv = Application.EnableEvents
+<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>    Application.EnableEvents = False
+<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>    On Error GoTo 0
+<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>
+<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>    modCommon.AppendProgressLog &quot;[BTN-REFRESH-PASS-CHECKPREREQ]&quot;
+<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>    &#39; [P5e fix 2026-06-04] install と同じ RunFullSetup を invoke (ReapplyAllSheets による画面破壊回避)
+<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>    Dim orch As clsSetupOrchestrator
+<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>    Set orch = New clsSetupOrchestrator
+<a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>    Dim baseName As String
+<a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>    baseName = Replace(ThisWorkbook.Name, &quot;.xlsm&quot;, &quot;&quot;)
+<a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>    modCommon.AppendProgressLog &quot;[BTN-REFRESH-DISPATCH] baseName=&quot; &amp; baseName
+<a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>    Select Case baseName
+<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>        Case ChrW(&amp;H7BA1) &amp; ChrW(&amp;H7406): orch.RunForAdmin
+<a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>        Case ChrW(&amp;H767B) &amp; ChrW(&amp;H9332) &amp; ChrW(&amp;H4FEE) &amp; ChrW(&amp;H6B63): orch.RunForRegister
+<a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>        Case ChrW(&amp;H691C) &amp; ChrW(&amp;H7D22): orch.RunForSearch
+<a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>        Case Else: orch.RunForAdmin
+<a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>    End Select
+<a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>
+<a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a>    On Error Resume Next
+<a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a>    If Not activeWs Is Nothing Then activeWs.Activate
+<a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a>    &#39; [B35 2026-06-12] after a full re-render the sheet can stay in a non-
+<a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a>    &#39; interactive paint state: cells look frozen and dropdown arrows do not
+<a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a>    &#39; appear until the user switches sheets. Force a screen + selection
+<a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>    &#39; refresh so the active sheet is immediately usable.
+<a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a>    Application.ScreenUpdating = True
+<a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a>    Application.Interactive = True
+<a id="__codelineno-0-60" name="__codelineno-0-60" href="#__codelineno-0-60"></a>    If Not activeWs Is Nothing Then
+<a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a>        activeWs.Range(activeWs.Cells(1, 1), activeWs.Cells(1, 1)).Select
+<a id="__codelineno-0-62" name="__codelineno-0-62" href="#__codelineno-0-62"></a>    End If
+<a id="__codelineno-0-63" name="__codelineno-0-63" href="#__codelineno-0-63"></a>    Application.EnableEvents = prevEv
+<a id="__codelineno-0-64" name="__codelineno-0-64" href="#__codelineno-0-64"></a>    Application.StatusBar = RefreshedMsg()
+<a id="__codelineno-0-65" name="__codelineno-0-65" href="#__codelineno-0-65"></a>    On Error GoTo 0
+<a id="__codelineno-0-66" name="__codelineno-0-66" href="#__codelineno-0-66"></a>    &#39; 2026-06-07: Re-seed M-03 C4 + reload M-10 storage paths after refresh
+<a id="__codelineno-0-67" name="__codelineno-0-67" href="#__codelineno-0-67"></a>    If XLSM = ChrW(&amp;H7BA1) &amp; ChrW(&amp;H7406) Then
+<a id="__codelineno-0-68" name="__codelineno-0-68" href="#__codelineno-0-68"></a>        On Error Resume Next
+<a id="__codelineno-0-69" name="__codelineno-0-69" href="#__codelineno-0-69"></a>        Application.Run ThisWorkbook.Name &amp; &quot;!modEntryFormat.SeedM03FormatIdIfEmpty&quot;
+<a id="__codelineno-0-70" name="__codelineno-0-70" href="#__codelineno-0-70"></a>        Dim wsStor As Worksheet
+<a id="__codelineno-0-71" name="__codelineno-0-71" href="#__codelineno-0-71"></a>        Set wsStor = ThisWorkbook.Worksheets(ChrW(&amp;H683C) &amp; ChrW(&amp;H7D0D) &amp; ChrW(&amp;H5148) &amp; ChrW(&amp;H8A2D) &amp; ChrW(&amp;H5B9A))
+<a id="__codelineno-0-72" name="__codelineno-0-72" href="#__codelineno-0-72"></a>        Application.Run ThisWorkbook.Name &amp; &quot;!modEntrySettings.LoadStorageToSheet&quot;, wsStor
+<a id="__codelineno-0-73" name="__codelineno-0-73" href="#__codelineno-0-73"></a>        On Error GoTo 0
+<a id="__codelineno-0-74" name="__codelineno-0-74" href="#__codelineno-0-74"></a>    End If
+<a id="__codelineno-0-75" name="__codelineno-0-75" href="#__codelineno-0-75"></a>    &#39; [BTN-GUARD-EXIT-OK] auto-injected
+<a id="__codelineno-0-76" name="__codelineno-0-76" href="#__codelineno-0-76"></a>    modBtnGuard.LogExit BTN, XLSM, True
+<a id="__codelineno-0-77" name="__codelineno-0-77" href="#__codelineno-0-77"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1320] modRefresh.Btn_RefreshAllSheets EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-78" name="__codelineno-0-78" href="#__codelineno-0-78"></a>    Exit Sub
+<a id="__codelineno-0-79" name="__codelineno-0-79" href="#__codelineno-0-79"></a>ErrHandler:
+<a id="__codelineno-0-80" name="__codelineno-0-80" href="#__codelineno-0-80"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print &quot;[D-1321] modRefresh.Btn_RefreshAllSheets EXIT-ERR &quot; &amp; &quot;errNum=&quot; &amp; Err.Number &amp; &quot; desc=&quot; &amp; Err.Description  &#39; [ADR-0100]
+<a id="__codelineno-0-81" name="__codelineno-0-81" href="#__codelineno-0-81"></a>    &#39; [BTN-GUARD-ERR-LOG] auto-injected
+<a id="__codelineno-0-82" name="__codelineno-0-82" href="#__codelineno-0-82"></a>    &#39; [P2 fix] ScreenUpdating/EnableEvents restore before HandleButtonError
+<a id="__codelineno-0-83" name="__codelineno-0-83" href="#__codelineno-0-83"></a>    On Error Resume Next
+<a id="__codelineno-0-84" name="__codelineno-0-84" href="#__codelineno-0-84"></a>    If Not activeWs Is Nothing Then activeWs.Activate
+<a id="__codelineno-0-85" name="__codelineno-0-85" href="#__codelineno-0-85"></a>    Application.EnableEvents = prevEv
+<a id="__codelineno-0-86" name="__codelineno-0-86" href="#__codelineno-0-86"></a>    On Error GoTo 0
+<a id="__codelineno-0-87" name="__codelineno-0-87" href="#__codelineno-0-87"></a>    modBtnGuard.HandleButtonError BTN, Err, XLSM
+<a id="__codelineno-0-88" name="__codelineno-0-88" href="#__codelineno-0-88"></a>    modBtnGuard.LogExit BTN, XLSM, False
+<a id="__codelineno-0-89" name="__codelineno-0-89" href="#__codelineno-0-89"></a>End Sub
+<a id="__codelineno-0-90" name="__codelineno-0-90" href="#__codelineno-0-90"></a>
+<a id="__codelineno-0-91" name="__codelineno-0-91" href="#__codelineno-0-91"></a>&#39; ActiveSheet 1 枚だけ再描画。Alt+F8 / button 用。
+<a id="__codelineno-0-92" name="__codelineno-0-92" href="#__codelineno-0-92"></a>Public Sub Btn_RefreshSheet_Active()
+<a id="__codelineno-0-93" name="__codelineno-0-93" href="#__codelineno-0-93"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1322] modRefresh.Btn_RefreshSheet_Active ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-94" name="__codelineno-0-94" href="#__codelineno-0-94"></a>    On Error GoTo ErrHandler
+<a id="__codelineno-0-95" name="__codelineno-0-95" href="#__codelineno-0-95"></a>    &#39; [BTN-GUARD-PRELUDE-BEGIN] auto-injected by inject_btn_template.py
+<a id="__codelineno-0-96" name="__codelineno-0-96" href="#__codelineno-0-96"></a>    Const BTN As String = &quot;Btn_RefreshSheet_Active&quot;
+<a id="__codelineno-0-97" name="__codelineno-0-97" href="#__codelineno-0-97"></a>    Dim XLSM As String
+<a id="__codelineno-0-98" name="__codelineno-0-98" href="#__codelineno-0-98"></a>    XLSM = Replace$(ThisWorkbook.Name, &quot;.xlsm&quot;, &quot;&quot;)
+<a id="__codelineno-0-99" name="__codelineno-0-99" href="#__codelineno-0-99"></a>    modBtnGuard.LogEnter BTN, XLSM
+<a id="__codelineno-0-100" name="__codelineno-0-100" href="#__codelineno-0-100"></a>    If Not modBtnGuard.CheckPrereq(BTN, &quot;config&quot;, XLSM) Then
+<a id="__codelineno-0-101" name="__codelineno-0-101" href="#__codelineno-0-101"></a>        modBtnGuard.LogExit BTN, XLSM, False
+<a id="__codelineno-0-102" name="__codelineno-0-102" href="#__codelineno-0-102"></a>        If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1323] modRefresh.Btn_RefreshSheet_Active EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-103" name="__codelineno-0-103" href="#__codelineno-0-103"></a>        Exit Sub
+<a id="__codelineno-0-104" name="__codelineno-0-104" href="#__codelineno-0-104"></a>    End If
+<a id="__codelineno-0-105" name="__codelineno-0-105" href="#__codelineno-0-105"></a>    &#39; [BTN-GUARD-PRELUDE-END]
+<a id="__codelineno-0-106" name="__codelineno-0-106" href="#__codelineno-0-106"></a>    Dim prevSU As Boolean, prevEv As Boolean
+<a id="__codelineno-0-107" name="__codelineno-0-107" href="#__codelineno-0-107"></a>    Dim activeWs As Object
+<a id="__codelineno-0-108" name="__codelineno-0-108" href="#__codelineno-0-108"></a>    On Error Resume Next
+<a id="__codelineno-0-109" name="__codelineno-0-109" href="#__codelineno-0-109"></a>    Set activeWs = ThisWorkbook.ActiveSheet
+<a id="__codelineno-0-110" name="__codelineno-0-110" href="#__codelineno-0-110"></a>    prevSU = Application.ScreenUpdating
+<a id="__codelineno-0-111" name="__codelineno-0-111" href="#__codelineno-0-111"></a>    prevEv = Application.EnableEvents
+<a id="__codelineno-0-112" name="__codelineno-0-112" href="#__codelineno-0-112"></a>    Application.ScreenUpdating = False
+<a id="__codelineno-0-113" name="__codelineno-0-113" href="#__codelineno-0-113"></a>    Application.EnableEvents = False
+<a id="__codelineno-0-114" name="__codelineno-0-114" href="#__codelineno-0-114"></a>    On Error GoTo 0
+<a id="__codelineno-0-115" name="__codelineno-0-115" href="#__codelineno-0-115"></a>
+<a id="__codelineno-0-116" name="__codelineno-0-116" href="#__codelineno-0-116"></a>    &#39; [P5e horizontal expand 2026-06-04] install と同じ RunFullSetup 経路 (画面破壊回避)
+<a id="__codelineno-0-117" name="__codelineno-0-117" href="#__codelineno-0-117"></a>    Dim orch As clsSetupOrchestrator
+<a id="__codelineno-0-118" name="__codelineno-0-118" href="#__codelineno-0-118"></a>    Set orch = New clsSetupOrchestrator
+<a id="__codelineno-0-119" name="__codelineno-0-119" href="#__codelineno-0-119"></a>    Dim baseName As String
+<a id="__codelineno-0-120" name="__codelineno-0-120" href="#__codelineno-0-120"></a>    baseName = Replace(ThisWorkbook.Name, &quot;.xlsm&quot;, &quot;&quot;)
+<a id="__codelineno-0-121" name="__codelineno-0-121" href="#__codelineno-0-121"></a>    modCommon.AppendProgressLog &quot;[BTN-REFRESH-ACTIVE-DISPATCH] baseName=&quot; &amp; baseName
+<a id="__codelineno-0-122" name="__codelineno-0-122" href="#__codelineno-0-122"></a>    Select Case baseName
+<a id="__codelineno-0-123" name="__codelineno-0-123" href="#__codelineno-0-123"></a>        Case ChrW(&amp;H7BA1) &amp; ChrW(&amp;H7406): orch.RunForAdmin
+<a id="__codelineno-0-124" name="__codelineno-0-124" href="#__codelineno-0-124"></a>        Case ChrW(&amp;H767B) &amp; ChrW(&amp;H9332) &amp; ChrW(&amp;H4FEE) &amp; ChrW(&amp;H6B63): orch.RunForRegister
+<a id="__codelineno-0-125" name="__codelineno-0-125" href="#__codelineno-0-125"></a>        Case ChrW(&amp;H691C) &amp; ChrW(&amp;H7D22): orch.RunForSearch
+<a id="__codelineno-0-126" name="__codelineno-0-126" href="#__codelineno-0-126"></a>        Case Else: orch.RunForAdmin
+<a id="__codelineno-0-127" name="__codelineno-0-127" href="#__codelineno-0-127"></a>    End Select
+<a id="__codelineno-0-128" name="__codelineno-0-128" href="#__codelineno-0-128"></a>
+<a id="__codelineno-0-129" name="__codelineno-0-129" href="#__codelineno-0-129"></a>    On Error Resume Next
+<a id="__codelineno-0-130" name="__codelineno-0-130" href="#__codelineno-0-130"></a>    If Not activeWs Is Nothing Then activeWs.Activate
+<a id="__codelineno-0-131" name="__codelineno-0-131" href="#__codelineno-0-131"></a>    Application.EnableEvents = prevEv
+<a id="__codelineno-0-132" name="__codelineno-0-132" href="#__codelineno-0-132"></a>    Application.ScreenUpdating = prevSU
+<a id="__codelineno-0-133" name="__codelineno-0-133" href="#__codelineno-0-133"></a>    Application.StatusBar = RefreshedMsg()
+<a id="__codelineno-0-134" name="__codelineno-0-134" href="#__codelineno-0-134"></a>    On Error GoTo 0
+<a id="__codelineno-0-135" name="__codelineno-0-135" href="#__codelineno-0-135"></a>    &#39; [BTN-GUARD-EXIT-OK] auto-injected
+<a id="__codelineno-0-136" name="__codelineno-0-136" href="#__codelineno-0-136"></a>    modBtnGuard.LogExit BTN, XLSM, True
+<a id="__codelineno-0-137" name="__codelineno-0-137" href="#__codelineno-0-137"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1324] modRefresh.Btn_RefreshSheet_Active EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-138" name="__codelineno-0-138" href="#__codelineno-0-138"></a>    Exit Sub
+<a id="__codelineno-0-139" name="__codelineno-0-139" href="#__codelineno-0-139"></a>ErrHandler:
+<a id="__codelineno-0-140" name="__codelineno-0-140" href="#__codelineno-0-140"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print &quot;[D-1325] modRefresh.Btn_RefreshSheet_Active EXIT-ERR &quot; &amp; &quot;errNum=&quot; &amp; Err.Number &amp; &quot; desc=&quot; &amp; Err.Description  &#39; [ADR-0100]
+<a id="__codelineno-0-141" name="__codelineno-0-141" href="#__codelineno-0-141"></a>    &#39; [BTN-GUARD-ERR-LOG] auto-injected
+<a id="__codelineno-0-142" name="__codelineno-0-142" href="#__codelineno-0-142"></a>    modBtnGuard.HandleButtonError BTN, Err, XLSM
+<a id="__codelineno-0-143" name="__codelineno-0-143" href="#__codelineno-0-143"></a>    modBtnGuard.LogExit BTN, XLSM, False
+<a id="__codelineno-0-144" name="__codelineno-0-144" href="#__codelineno-0-144"></a>End Sub
+<a id="__codelineno-0-145" name="__codelineno-0-145" href="#__codelineno-0-145"></a>
+<a id="__codelineno-0-146" name="__codelineno-0-146" href="#__codelineno-0-146"></a>&#39; 指定 screenId (M-NN) 1 枚を再描画。programmatic 用 (button OnAction 非対象)。
+<a id="__codelineno-0-147" name="__codelineno-0-147" href="#__codelineno-0-147"></a>Public Sub Btn_RefreshSheet(ByVal screenId As String)
+<a id="__codelineno-0-148" name="__codelineno-0-148" href="#__codelineno-0-148"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1326] modRefresh.Btn_RefreshSheet ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-149" name="__codelineno-0-149" href="#__codelineno-0-149"></a>    On Error GoTo ErrHandler
+<a id="__codelineno-0-150" name="__codelineno-0-150" href="#__codelineno-0-150"></a>    &#39; [BTN-GUARD-PRELUDE-BEGIN] auto-injected by inject_btn_template.py
+<a id="__codelineno-0-151" name="__codelineno-0-151" href="#__codelineno-0-151"></a>    Const BTN As String = &quot;Btn_RefreshSheet&quot;
+<a id="__codelineno-0-152" name="__codelineno-0-152" href="#__codelineno-0-152"></a>    Dim XLSM As String
+<a id="__codelineno-0-153" name="__codelineno-0-153" href="#__codelineno-0-153"></a>    XLSM = Replace$(ThisWorkbook.Name, &quot;.xlsm&quot;, &quot;&quot;)
+<a id="__codelineno-0-154" name="__codelineno-0-154" href="#__codelineno-0-154"></a>    modBtnGuard.LogEnter BTN, XLSM
+<a id="__codelineno-0-155" name="__codelineno-0-155" href="#__codelineno-0-155"></a>    If Not modBtnGuard.CheckPrereq(BTN, &quot;config&quot;, XLSM) Then
+<a id="__codelineno-0-156" name="__codelineno-0-156" href="#__codelineno-0-156"></a>        modBtnGuard.LogExit BTN, XLSM, False
+<a id="__codelineno-0-157" name="__codelineno-0-157" href="#__codelineno-0-157"></a>        If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1327] modRefresh.Btn_RefreshSheet EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-158" name="__codelineno-0-158" href="#__codelineno-0-158"></a>        Exit Sub
+<a id="__codelineno-0-159" name="__codelineno-0-159" href="#__codelineno-0-159"></a>    End If
+<a id="__codelineno-0-160" name="__codelineno-0-160" href="#__codelineno-0-160"></a>    &#39; [BTN-GUARD-PRELUDE-END]
+<a id="__codelineno-0-161" name="__codelineno-0-161" href="#__codelineno-0-161"></a>    Dim orch As clsSetupOrchestrator
+<a id="__codelineno-0-162" name="__codelineno-0-162" href="#__codelineno-0-162"></a>    Set orch = New clsSetupOrchestrator
+<a id="__codelineno-0-163" name="__codelineno-0-163" href="#__codelineno-0-163"></a>    orch.ReapplySheet screenId
+<a id="__codelineno-0-164" name="__codelineno-0-164" href="#__codelineno-0-164"></a>    &#39; [BTN-GUARD-EXIT-OK] auto-injected
+<a id="__codelineno-0-165" name="__codelineno-0-165" href="#__codelineno-0-165"></a>    modBtnGuard.LogExit BTN, XLSM, True
+<a id="__codelineno-0-166" name="__codelineno-0-166" href="#__codelineno-0-166"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1328] modRefresh.Btn_RefreshSheet EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-167" name="__codelineno-0-167" href="#__codelineno-0-167"></a>    Exit Sub
+<a id="__codelineno-0-168" name="__codelineno-0-168" href="#__codelineno-0-168"></a>ErrHandler:
+<a id="__codelineno-0-169" name="__codelineno-0-169" href="#__codelineno-0-169"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print &quot;[D-1329] modRefresh.Btn_RefreshSheet EXIT-ERR &quot; &amp; &quot;errNum=&quot; &amp; Err.Number &amp; &quot; desc=&quot; &amp; Err.Description  &#39; [ADR-0100]
+<a id="__codelineno-0-170" name="__codelineno-0-170" href="#__codelineno-0-170"></a>    &#39; [BTN-GUARD-ERR-LOG] auto-injected
+<a id="__codelineno-0-171" name="__codelineno-0-171" href="#__codelineno-0-171"></a>    modBtnGuard.HandleButtonError BTN, Err, XLSM
+<a id="__codelineno-0-172" name="__codelineno-0-172" href="#__codelineno-0-172"></a>    modBtnGuard.LogExit BTN, XLSM, False
+<a id="__codelineno-0-173" name="__codelineno-0-173" href="#__codelineno-0-173"></a>End Sub
+<a id="__codelineno-0-174" name="__codelineno-0-174" href="#__codelineno-0-174"></a>
+<a id="__codelineno-0-175" name="__codelineno-0-175" href="#__codelineno-0-175"></a>&#39; &quot;更新完了&quot; を ChrW で構築 (本 .bas を ASCII-only に保つ)。
+<a id="__codelineno-0-176" name="__codelineno-0-176" href="#__codelineno-0-176"></a>Private Function RefreshedMsg() As String
+<a id="__codelineno-0-177" name="__codelineno-0-177" href="#__codelineno-0-177"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1330] modRefresh.RefreshedMsg ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-178" name="__codelineno-0-178" href="#__codelineno-0-178"></a>    RefreshedMsg = ChrW(&amp;H66F4) &amp; ChrW(&amp;H65B0) &amp; ChrW(&amp;H5B8C) &amp; ChrW(&amp;H4E86)
+<a id="__codelineno-0-179" name="__codelineno-0-179" href="#__codelineno-0-179"></a>End Function
 </code></pre></div>
 
 

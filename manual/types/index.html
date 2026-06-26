@@ -5257,6 +5257,15 @@
 <li><strong>行数</strong>：項目の「行数」で入力欄の高さを指定できます。</li>
 <li><strong>スクロール</strong>：項目の「スクロール」を有効にすると、行数を超える長文も欄内でスクロールして入力できます。</li>
 </ul>
+<div class="admonition note">
+<p class="admonition-title">スクロールバーの表示（2026-06-25 改善）</p>
+<p>複数行欄のスクロール挙動を見直しました。動作の違いは次のとおりです。</p>
+<ul>
+<li><strong><code>TRUE</code>（スクロールあり）</strong>：入力欄を専用の枠で包み、<strong>垂直スクロールバーを常時表示</strong>します。欄が空のときでもバーが見えるため、「ここはスクロールできる欄だ」と一目で分かります。文字を入力すると欄の内容が伸び、カーソル位置に追従してスクロールします。</li>
+<li><strong><code>FALSE</code>（スクロールなし）</strong>：<strong>スクロールバーは表示されません</strong>。行数で指定した高さの固定欄になります。</li>
+</ul>
+<p>既定は <code>FALSE</code>（バー無し）です。長文を入力する欄には <code>TRUE</code> を指定してください。</p>
+</div>
 <h3 id="_5">日付<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>入力欄</strong>：日付を入れる欄です。</li>

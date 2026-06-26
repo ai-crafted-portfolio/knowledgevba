@@ -5063,7 +5063,7 @@
 <h1 id="modentrysearchbas">modEntrySearch.bas<a class="headerlink" href="#modentrysearchbas" title="Permanent link">&para;</a></h1>
 <p><strong>配置先</strong>: <code>検索.xlsm</code> 用の VBA モジュール
 <strong>種類</strong>: 標準モジュール
-<strong>更新日</strong>: 2026-06-23 09:12 JST</p>
+<strong>更新日</strong>: 2026-06-12 22:19 JST</p>
 <hr />
 <h2 id="_1">保存方法<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <p>下のコードをメモ帳に貼り付け、<strong>[名前を付けて保存]</strong> で次のように保存してください。</p>
@@ -5176,684 +5176,665 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-94" name="__codelineno-0-94" href="#__codelineno-0-94"></a>    &#39; [USER-REQ 2026-06-09] Collect hits first so we can sort by UpdatedAt desc.
 <a id="__codelineno-0-95" name="__codelineno-0-95" href="#__codelineno-0-95"></a>    Dim hits As Collection
 <a id="__codelineno-0-96" name="__codelineno-0-96" href="#__codelineno-0-96"></a>    Set hits = New Collection
-<a id="__codelineno-0-97" name="__codelineno-0-97" href="#__codelineno-0-97"></a>    &#39; [Change-5] scope the scan to the selected format&#39;s data\&lt;fmt&gt;\ folder
-<a id="__codelineno-0-98" name="__codelineno-0-98" href="#__codelineno-0-98"></a>    &#39; (range separation: other formats&#39; data is never read); with no filter
-<a id="__codelineno-0-99" name="__codelineno-0-99" href="#__codelineno-0-99"></a>    &#39; scan every per-format subfolder plus the flat root.
-<a id="__codelineno-0-100" name="__codelineno-0-100" href="#__codelineno-0-100"></a>    Dim scanDirs As Collection
-<a id="__codelineno-0-101" name="__codelineno-0-101" href="#__codelineno-0-101"></a>    Set scanDirs = New Collection
-<a id="__codelineno-0-102" name="__codelineno-0-102" href="#__codelineno-0-102"></a>    If Len(fmtFilter) &gt; 0 Then
-<a id="__codelineno-0-103" name="__codelineno-0-103" href="#__codelineno-0-103"></a>        Dim oneDir As String
-<a id="__codelineno-0-104" name="__codelineno-0-104" href="#__codelineno-0-104"></a>        oneDir = dataDir &amp; fmtFilter &amp; &quot;\&quot;
-<a id="__codelineno-0-105" name="__codelineno-0-105" href="#__codelineno-0-105"></a>        If fso.FolderExists(oneDir) Then scanDirs.Add oneDir
-<a id="__codelineno-0-106" name="__codelineno-0-106" href="#__codelineno-0-106"></a>    Else
-<a id="__codelineno-0-107" name="__codelineno-0-107" href="#__codelineno-0-107"></a>        Dim sd As Object
-<a id="__codelineno-0-108" name="__codelineno-0-108" href="#__codelineno-0-108"></a>        For Each sd In fso.GetFolder(dataDir).SubFolders
-<a id="__codelineno-0-109" name="__codelineno-0-109" href="#__codelineno-0-109"></a>            scanDirs.Add sd.Path &amp; &quot;\&quot;
-<a id="__codelineno-0-110" name="__codelineno-0-110" href="#__codelineno-0-110"></a>        Next sd
-<a id="__codelineno-0-111" name="__codelineno-0-111" href="#__codelineno-0-111"></a>        scanDirs.Add dataDir
-<a id="__codelineno-0-112" name="__codelineno-0-112" href="#__codelineno-0-112"></a>    End If
-<a id="__codelineno-0-113" name="__codelineno-0-113" href="#__codelineno-0-113"></a>    Dim sdir As Variant
-<a id="__codelineno-0-114" name="__codelineno-0-114" href="#__codelineno-0-114"></a>    For Each sdir In scanDirs
-<a id="__codelineno-0-115" name="__codelineno-0-115" href="#__codelineno-0-115"></a>    Dim f As Object
-<a id="__codelineno-0-116" name="__codelineno-0-116" href="#__codelineno-0-116"></a>    For Each f In fso.GetFolder(CStr(sdir)).Files
-<a id="__codelineno-0-117" name="__codelineno-0-117" href="#__codelineno-0-117"></a>        If LCase(fso.GetExtensionName(f.Name)) = &quot;txt&quot; Then
-<a id="__codelineno-0-118" name="__codelineno-0-118" href="#__codelineno-0-118"></a>            Dim knwNo As String
-<a id="__codelineno-0-119" name="__codelineno-0-119" href="#__codelineno-0-119"></a>            knwNo = fso.GetBaseName(f.Name)
-<a id="__codelineno-0-120" name="__codelineno-0-120" href="#__codelineno-0-120"></a>            Dim data As Object
-<a id="__codelineno-0-121" name="__codelineno-0-121" href="#__codelineno-0-121"></a>            Set data = Nothing
-<a id="__codelineno-0-122" name="__codelineno-0-122" href="#__codelineno-0-122"></a>            &#39; [B34 2026-06-12] per-file guard: one unparsable knowledge file
-<a id="__codelineno-0-123" name="__codelineno-0-123" href="#__codelineno-0-123"></a>            &#39; must not poison the whole scan (was: error state leaked and
-<a id="__codelineno-0-124" name="__codelineno-0-124" href="#__codelineno-0-124"></a>            &#39; every later file evaluated false -&gt; all searches returned 0).
-<a id="__codelineno-0-125" name="__codelineno-0-125" href="#__codelineno-0-125"></a>            On Error Resume Next
-<a id="__codelineno-0-126" name="__codelineno-0-126" href="#__codelineno-0-126"></a>            Set data = modKnowledgeFileIO.LoadKnowledge(knwNo)
-<a id="__codelineno-0-127" name="__codelineno-0-127" href="#__codelineno-0-127"></a>            On Error GoTo ErrHandler
-<a id="__codelineno-0-128" name="__codelineno-0-128" href="#__codelineno-0-128"></a>            If Not data Is Nothing Then
-<a id="__codelineno-0-129" name="__codelineno-0-129" href="#__codelineno-0-129"></a>                Dim isHit As Boolean
-<a id="__codelineno-0-130" name="__codelineno-0-130" href="#__codelineno-0-130"></a>                isHit = False
-<a id="__codelineno-0-131" name="__codelineno-0-131" href="#__codelineno-0-131"></a>                On Error Resume Next
-<a id="__codelineno-0-132" name="__codelineno-0-132" href="#__codelineno-0-132"></a>                isHit = MatchesSearchV23(data, keyword, fmtFilter)
-<a id="__codelineno-0-133" name="__codelineno-0-133" href="#__codelineno-0-133"></a>                On Error GoTo ErrHandler
-<a id="__codelineno-0-134" name="__codelineno-0-134" href="#__codelineno-0-134"></a>                If isHit Then
-<a id="__codelineno-0-135" name="__codelineno-0-135" href="#__codelineno-0-135"></a>                    Dim hit As Object
-<a id="__codelineno-0-136" name="__codelineno-0-136" href="#__codelineno-0-136"></a>                    Set hit = CreateObject(&quot;Scripting.Dictionary&quot;)
-<a id="__codelineno-0-137" name="__codelineno-0-137" href="#__codelineno-0-137"></a>                    hit(&quot;knwNo&quot;) = knwNo
-<a id="__codelineno-0-138" name="__codelineno-0-138" href="#__codelineno-0-138"></a>                    Set hit(&quot;data&quot;) = data
-<a id="__codelineno-0-139" name="__codelineno-0-139" href="#__codelineno-0-139"></a>                    hit(&quot;updatedAt&quot;) = SafeStr(data, &quot;UpdatedAt&quot;)
-<a id="__codelineno-0-140" name="__codelineno-0-140" href="#__codelineno-0-140"></a>                    hits.Add hit
+<a id="__codelineno-0-97" name="__codelineno-0-97" href="#__codelineno-0-97"></a>    Dim f As Object
+<a id="__codelineno-0-98" name="__codelineno-0-98" href="#__codelineno-0-98"></a>    For Each f In fso.GetFolder(dataDir).Files
+<a id="__codelineno-0-99" name="__codelineno-0-99" href="#__codelineno-0-99"></a>        If LCase(fso.GetExtensionName(f.Name)) = &quot;txt&quot; Then
+<a id="__codelineno-0-100" name="__codelineno-0-100" href="#__codelineno-0-100"></a>            Dim knwNo As String
+<a id="__codelineno-0-101" name="__codelineno-0-101" href="#__codelineno-0-101"></a>            knwNo = fso.GetBaseName(f.Name)
+<a id="__codelineno-0-102" name="__codelineno-0-102" href="#__codelineno-0-102"></a>            Dim data As Object
+<a id="__codelineno-0-103" name="__codelineno-0-103" href="#__codelineno-0-103"></a>            Set data = Nothing
+<a id="__codelineno-0-104" name="__codelineno-0-104" href="#__codelineno-0-104"></a>            &#39; [B34 2026-06-12] per-file guard: one unparsable knowledge file
+<a id="__codelineno-0-105" name="__codelineno-0-105" href="#__codelineno-0-105"></a>            &#39; must not poison the whole scan (was: error state leaked and
+<a id="__codelineno-0-106" name="__codelineno-0-106" href="#__codelineno-0-106"></a>            &#39; every later file evaluated false -&gt; all searches returned 0).
+<a id="__codelineno-0-107" name="__codelineno-0-107" href="#__codelineno-0-107"></a>            On Error Resume Next
+<a id="__codelineno-0-108" name="__codelineno-0-108" href="#__codelineno-0-108"></a>            Set data = modKnowledgeFileIO.LoadKnowledge(knwNo)
+<a id="__codelineno-0-109" name="__codelineno-0-109" href="#__codelineno-0-109"></a>            On Error GoTo ErrHandler
+<a id="__codelineno-0-110" name="__codelineno-0-110" href="#__codelineno-0-110"></a>            If Not data Is Nothing Then
+<a id="__codelineno-0-111" name="__codelineno-0-111" href="#__codelineno-0-111"></a>                Dim isHit As Boolean
+<a id="__codelineno-0-112" name="__codelineno-0-112" href="#__codelineno-0-112"></a>                isHit = False
+<a id="__codelineno-0-113" name="__codelineno-0-113" href="#__codelineno-0-113"></a>                On Error Resume Next
+<a id="__codelineno-0-114" name="__codelineno-0-114" href="#__codelineno-0-114"></a>                isHit = MatchesSearchV23(data, keyword, fmtFilter)
+<a id="__codelineno-0-115" name="__codelineno-0-115" href="#__codelineno-0-115"></a>                On Error GoTo ErrHandler
+<a id="__codelineno-0-116" name="__codelineno-0-116" href="#__codelineno-0-116"></a>                If isHit Then
+<a id="__codelineno-0-117" name="__codelineno-0-117" href="#__codelineno-0-117"></a>                    Dim hit As Object
+<a id="__codelineno-0-118" name="__codelineno-0-118" href="#__codelineno-0-118"></a>                    Set hit = CreateObject(&quot;Scripting.Dictionary&quot;)
+<a id="__codelineno-0-119" name="__codelineno-0-119" href="#__codelineno-0-119"></a>                    hit(&quot;knwNo&quot;) = knwNo
+<a id="__codelineno-0-120" name="__codelineno-0-120" href="#__codelineno-0-120"></a>                    Set hit(&quot;data&quot;) = data
+<a id="__codelineno-0-121" name="__codelineno-0-121" href="#__codelineno-0-121"></a>                    hit(&quot;updatedAt&quot;) = SafeStr(data, &quot;UpdatedAt&quot;)
+<a id="__codelineno-0-122" name="__codelineno-0-122" href="#__codelineno-0-122"></a>                    hits.Add hit
+<a id="__codelineno-0-123" name="__codelineno-0-123" href="#__codelineno-0-123"></a>                End If
+<a id="__codelineno-0-124" name="__codelineno-0-124" href="#__codelineno-0-124"></a>            End If
+<a id="__codelineno-0-125" name="__codelineno-0-125" href="#__codelineno-0-125"></a>        End If
+<a id="__codelineno-0-126" name="__codelineno-0-126" href="#__codelineno-0-126"></a>    Next f
+<a id="__codelineno-0-127" name="__codelineno-0-127" href="#__codelineno-0-127"></a>
+<a id="__codelineno-0-128" name="__codelineno-0-128" href="#__codelineno-0-128"></a>    &#39; [USER-REQ 2026-06-09] Sort hits by UpdatedAt descending.
+<a id="__codelineno-0-129" name="__codelineno-0-129" href="#__codelineno-0-129"></a>    Dim ai As Long, bi As Long
+<a id="__codelineno-0-130" name="__codelineno-0-130" href="#__codelineno-0-130"></a>    For ai = 1 To hits.Count - 1
+<a id="__codelineno-0-131" name="__codelineno-0-131" href="#__codelineno-0-131"></a>        For bi = 1 To hits.Count - ai
+<a id="__codelineno-0-132" name="__codelineno-0-132" href="#__codelineno-0-132"></a>            Dim ha As Object, hb As Object
+<a id="__codelineno-0-133" name="__codelineno-0-133" href="#__codelineno-0-133"></a>            Set ha = hits.Item(bi)
+<a id="__codelineno-0-134" name="__codelineno-0-134" href="#__codelineno-0-134"></a>            Set hb = hits.Item(bi + 1)
+<a id="__codelineno-0-135" name="__codelineno-0-135" href="#__codelineno-0-135"></a>            If CStr(ha(&quot;updatedAt&quot;)) &lt; CStr(hb(&quot;updatedAt&quot;)) Then
+<a id="__codelineno-0-136" name="__codelineno-0-136" href="#__codelineno-0-136"></a>                hits.Remove bi + 1
+<a id="__codelineno-0-137" name="__codelineno-0-137" href="#__codelineno-0-137"></a>                If bi = 1 Then
+<a id="__codelineno-0-138" name="__codelineno-0-138" href="#__codelineno-0-138"></a>                    hits.Add hb, , 1
+<a id="__codelineno-0-139" name="__codelineno-0-139" href="#__codelineno-0-139"></a>                Else
+<a id="__codelineno-0-140" name="__codelineno-0-140" href="#__codelineno-0-140"></a>                    hits.Add hb, , bi
 <a id="__codelineno-0-141" name="__codelineno-0-141" href="#__codelineno-0-141"></a>                End If
 <a id="__codelineno-0-142" name="__codelineno-0-142" href="#__codelineno-0-142"></a>            End If
-<a id="__codelineno-0-143" name="__codelineno-0-143" href="#__codelineno-0-143"></a>        End If
-<a id="__codelineno-0-144" name="__codelineno-0-144" href="#__codelineno-0-144"></a>    Next f
-<a id="__codelineno-0-145" name="__codelineno-0-145" href="#__codelineno-0-145"></a>    Next sdir
-<a id="__codelineno-0-146" name="__codelineno-0-146" href="#__codelineno-0-146"></a>
-<a id="__codelineno-0-147" name="__codelineno-0-147" href="#__codelineno-0-147"></a>    &#39; [USER-REQ 2026-06-09] Sort hits by UpdatedAt descending.
-<a id="__codelineno-0-148" name="__codelineno-0-148" href="#__codelineno-0-148"></a>    Dim ai As Long, bi As Long
-<a id="__codelineno-0-149" name="__codelineno-0-149" href="#__codelineno-0-149"></a>    For ai = 1 To hits.Count - 1
-<a id="__codelineno-0-150" name="__codelineno-0-150" href="#__codelineno-0-150"></a>        For bi = 1 To hits.Count - ai
-<a id="__codelineno-0-151" name="__codelineno-0-151" href="#__codelineno-0-151"></a>            Dim ha As Object, hb As Object
-<a id="__codelineno-0-152" name="__codelineno-0-152" href="#__codelineno-0-152"></a>            Set ha = hits.Item(bi)
-<a id="__codelineno-0-153" name="__codelineno-0-153" href="#__codelineno-0-153"></a>            Set hb = hits.Item(bi + 1)
-<a id="__codelineno-0-154" name="__codelineno-0-154" href="#__codelineno-0-154"></a>            If CStr(ha(&quot;updatedAt&quot;)) &lt; CStr(hb(&quot;updatedAt&quot;)) Then
-<a id="__codelineno-0-155" name="__codelineno-0-155" href="#__codelineno-0-155"></a>                hits.Remove bi + 1
-<a id="__codelineno-0-156" name="__codelineno-0-156" href="#__codelineno-0-156"></a>                If bi = 1 Then
-<a id="__codelineno-0-157" name="__codelineno-0-157" href="#__codelineno-0-157"></a>                    hits.Add hb, , 1
-<a id="__codelineno-0-158" name="__codelineno-0-158" href="#__codelineno-0-158"></a>                Else
-<a id="__codelineno-0-159" name="__codelineno-0-159" href="#__codelineno-0-159"></a>                    hits.Add hb, , bi
-<a id="__codelineno-0-160" name="__codelineno-0-160" href="#__codelineno-0-160"></a>                End If
-<a id="__codelineno-0-161" name="__codelineno-0-161" href="#__codelineno-0-161"></a>            End If
-<a id="__codelineno-0-162" name="__codelineno-0-162" href="#__codelineno-0-162"></a>        Next bi
-<a id="__codelineno-0-163" name="__codelineno-0-163" href="#__codelineno-0-163"></a>    Next ai
-<a id="__codelineno-0-164" name="__codelineno-0-164" href="#__codelineno-0-164"></a>
-<a id="__codelineno-0-165" name="__codelineno-0-165" href="#__codelineno-0-165"></a>    Dim hi As Long
-<a id="__codelineno-0-166" name="__codelineno-0-166" href="#__codelineno-0-166"></a>    For hi = 1 To hits.Count
-<a id="__codelineno-0-167" name="__codelineno-0-167" href="#__codelineno-0-167"></a>        If outRow &gt; M08_RESULT_LAST_ROW Then Exit For
-<a id="__codelineno-0-168" name="__codelineno-0-168" href="#__codelineno-0-168"></a>        Dim hRec As Object
-<a id="__codelineno-0-169" name="__codelineno-0-169" href="#__codelineno-0-169"></a>        Set hRec = hits.Item(hi)
-<a id="__codelineno-0-170" name="__codelineno-0-170" href="#__codelineno-0-170"></a>        Dim hData As Object
-<a id="__codelineno-0-171" name="__codelineno-0-171" href="#__codelineno-0-171"></a>        Set hData = hRec(&quot;data&quot;)
-<a id="__codelineno-0-172" name="__codelineno-0-172" href="#__codelineno-0-172"></a>        Dim hKnwNo As String
-<a id="__codelineno-0-173" name="__codelineno-0-173" href="#__codelineno-0-173"></a>        hKnwNo = CStr(hRec(&quot;knwNo&quot;))
-<a id="__codelineno-0-174" name="__codelineno-0-174" href="#__codelineno-0-174"></a>
-<a id="__codelineno-0-175" name="__codelineno-0-175" href="#__codelineno-0-175"></a>        ws.Cells(outRow, 1).Value = hitCount + 1
-<a id="__codelineno-0-176" name="__codelineno-0-176" href="#__codelineno-0-176"></a>        &#39; [USER-REQ 2026-06-09] Reorder columns: A=No, B=FormatName, C-E=search fields, F=UpdatedAt, G=knwNo (hidden)
-<a id="__codelineno-0-177" name="__codelineno-0-177" href="#__codelineno-0-177"></a>        Dim fmtNm As String
-<a id="__codelineno-0-178" name="__codelineno-0-178" href="#__codelineno-0-178"></a>        fmtNm = ResolveFormatName(SafeStr(hData, &quot;FormatID&quot;))
-<a id="__codelineno-0-179" name="__codelineno-0-179" href="#__codelineno-0-179"></a>        ws.Cells(outRow, 2).Value = fmtNm
-<a id="__codelineno-0-180" name="__codelineno-0-180" href="#__codelineno-0-180"></a>        Dim sFields(1 To 3) As String
-<a id="__codelineno-0-181" name="__codelineno-0-181" href="#__codelineno-0-181"></a>        GetSearchTargetFieldValues hData, SafeStr(hData, &quot;FormatID&quot;), sFields
-<a id="__codelineno-0-182" name="__codelineno-0-182" href="#__codelineno-0-182"></a>        ws.Cells(outRow, 3).Value = TrimExcerpt(sFields(1))
-<a id="__codelineno-0-183" name="__codelineno-0-183" href="#__codelineno-0-183"></a>        ws.Cells(outRow, 4).Value = TrimExcerpt(sFields(2))
-<a id="__codelineno-0-184" name="__codelineno-0-184" href="#__codelineno-0-184"></a>        ws.Cells(outRow, 5).Value = TrimExcerpt(sFields(3))
-<a id="__codelineno-0-185" name="__codelineno-0-185" href="#__codelineno-0-185"></a>        ws.Cells(outRow, 6).Value = SafeStr(hData, &quot;UpdatedAt&quot;)
-<a id="__codelineno-0-186" name="__codelineno-0-186" href="#__codelineno-0-186"></a>        ws.Cells(outRow, 7).Value = hKnwNo
-<a id="__codelineno-0-187" name="__codelineno-0-187" href="#__codelineno-0-187"></a>        With ws.Cells(outRow, 1)
-<a id="__codelineno-0-188" name="__codelineno-0-188" href="#__codelineno-0-188"></a>            .Font.Color = RGB(0, 0, 255)
-<a id="__codelineno-0-189" name="__codelineno-0-189" href="#__codelineno-0-189"></a>            .Font.Underline = xlUnderlineStyleSingle
-<a id="__codelineno-0-190" name="__codelineno-0-190" href="#__codelineno-0-190"></a>        End With
-<a id="__codelineno-0-191" name="__codelineno-0-191" href="#__codelineno-0-191"></a>        outRow = outRow + 1
-<a id="__codelineno-0-192" name="__codelineno-0-192" href="#__codelineno-0-192"></a>        hitCount = hitCount + 1
-<a id="__codelineno-0-193" name="__codelineno-0-193" href="#__codelineno-0-193"></a>    Next hi
-<a id="__codelineno-0-194" name="__codelineno-0-194" href="#__codelineno-0-194"></a>
-<a id="__codelineno-0-195" name="__codelineno-0-195" href="#__codelineno-0-195"></a>    &#39; 2026-06-08 UX: extend grid borders/styling to all written rows so
-<a id="__codelineno-0-196" name="__codelineno-0-196" href="#__codelineno-0-196"></a>    &#39; result rows past the initial 10 don&#39;t appear as bare cells.
-<a id="__codelineno-0-197" name="__codelineno-0-197" href="#__codelineno-0-197"></a>    If hitCount &gt; 0 Then
-<a id="__codelineno-0-198" name="__codelineno-0-198" href="#__codelineno-0-198"></a>        Dim styRng As Range
-<a id="__codelineno-0-199" name="__codelineno-0-199" href="#__codelineno-0-199"></a>        Set styRng = ws.Range(ws.Cells(M08_RESULT_START_ROW, 1), ws.Cells(outRow - 1, 7))
-<a id="__codelineno-0-200" name="__codelineno-0-200" href="#__codelineno-0-200"></a>        styRng.Borders.LineStyle = xlContinuous
-<a id="__codelineno-0-201" name="__codelineno-0-201" href="#__codelineno-0-201"></a>        styRng.Borders.Weight = xlThin
-<a id="__codelineno-0-202" name="__codelineno-0-202" href="#__codelineno-0-202"></a>        styRng.Borders.Color = RGB(191, 191, 191)
-<a id="__codelineno-0-203" name="__codelineno-0-203" href="#__codelineno-0-203"></a>        &#39; [USER-REQ 2026-06-09] Cells must not overflow their column width.
-<a id="__codelineno-0-204" name="__codelineno-0-204" href="#__codelineno-0-204"></a>        &#39; WrapText off + IndentLevel 0; columns to right will hide spill via opaque fill.
-<a id="__codelineno-0-205" name="__codelineno-0-205" href="#__codelineno-0-205"></a>        styRng.WrapText = False
-<a id="__codelineno-0-206" name="__codelineno-0-206" href="#__codelineno-0-206"></a>        Dim rr As Long
-<a id="__codelineno-0-207" name="__codelineno-0-207" href="#__codelineno-0-207"></a>        For rr = M08_RESULT_START_ROW To outRow - 1
-<a id="__codelineno-0-208" name="__codelineno-0-208" href="#__codelineno-0-208"></a>            If (rr - M08_RESULT_START_ROW) Mod 2 = 1 Then
-<a id="__codelineno-0-209" name="__codelineno-0-209" href="#__codelineno-0-209"></a>                ws.Range(ws.Cells(rr, 1), ws.Cells(rr, 7)).Interior.Color = RGB(247, 247, 247)
-<a id="__codelineno-0-210" name="__codelineno-0-210" href="#__codelineno-0-210"></a>            Else
-<a id="__codelineno-0-211" name="__codelineno-0-211" href="#__codelineno-0-211"></a>                ws.Range(ws.Cells(rr, 1), ws.Cells(rr, 7)).Interior.ColorIndex = xlNone
-<a id="__codelineno-0-212" name="__codelineno-0-212" href="#__codelineno-0-212"></a>            End If
-<a id="__codelineno-0-213" name="__codelineno-0-213" href="#__codelineno-0-213"></a>        Next rr
-<a id="__codelineno-0-214" name="__codelineno-0-214" href="#__codelineno-0-214"></a>    End If
-<a id="__codelineno-0-215" name="__codelineno-0-215" href="#__codelineno-0-215"></a>
-<a id="__codelineno-0-216" name="__codelineno-0-216" href="#__codelineno-0-216"></a>    &#39; [USER-REQ 2026-06-09] Force column G (knowledgeNo) to be hidden after each search.
-<a id="__codelineno-0-217" name="__codelineno-0-217" href="#__codelineno-0-217"></a>    &#39; Setup_search applies HideColumnsFrom=G but Excel sometimes loses it on workbook reopen.
-<a id="__codelineno-0-218" name="__codelineno-0-218" href="#__codelineno-0-218"></a>    On Error Resume Next
-<a id="__codelineno-0-219" name="__codelineno-0-219" href="#__codelineno-0-219"></a>    ws.Columns(&quot;G:G&quot;).Hidden = True
-<a id="__codelineno-0-220" name="__codelineno-0-220" href="#__codelineno-0-220"></a>    On Error GoTo 0
-<a id="__codelineno-0-221" name="__codelineno-0-221" href="#__codelineno-0-221"></a>
-<a id="__codelineno-0-222" name="__codelineno-0-222" href="#__codelineno-0-222"></a>    &#39; [N1 2026-06-12] Unprotect was one-way - restore light protection
-<a id="__codelineno-0-223" name="__codelineno-0-223" href="#__codelineno-0-223"></a>    modCommon.ReProtectLight ws
+<a id="__codelineno-0-143" name="__codelineno-0-143" href="#__codelineno-0-143"></a>        Next bi
+<a id="__codelineno-0-144" name="__codelineno-0-144" href="#__codelineno-0-144"></a>    Next ai
+<a id="__codelineno-0-145" name="__codelineno-0-145" href="#__codelineno-0-145"></a>
+<a id="__codelineno-0-146" name="__codelineno-0-146" href="#__codelineno-0-146"></a>    Dim hi As Long
+<a id="__codelineno-0-147" name="__codelineno-0-147" href="#__codelineno-0-147"></a>    For hi = 1 To hits.Count
+<a id="__codelineno-0-148" name="__codelineno-0-148" href="#__codelineno-0-148"></a>        If outRow &gt; M08_RESULT_LAST_ROW Then Exit For
+<a id="__codelineno-0-149" name="__codelineno-0-149" href="#__codelineno-0-149"></a>        Dim hRec As Object
+<a id="__codelineno-0-150" name="__codelineno-0-150" href="#__codelineno-0-150"></a>        Set hRec = hits.Item(hi)
+<a id="__codelineno-0-151" name="__codelineno-0-151" href="#__codelineno-0-151"></a>        Dim hData As Object
+<a id="__codelineno-0-152" name="__codelineno-0-152" href="#__codelineno-0-152"></a>        Set hData = hRec(&quot;data&quot;)
+<a id="__codelineno-0-153" name="__codelineno-0-153" href="#__codelineno-0-153"></a>        Dim hKnwNo As String
+<a id="__codelineno-0-154" name="__codelineno-0-154" href="#__codelineno-0-154"></a>        hKnwNo = CStr(hRec(&quot;knwNo&quot;))
+<a id="__codelineno-0-155" name="__codelineno-0-155" href="#__codelineno-0-155"></a>
+<a id="__codelineno-0-156" name="__codelineno-0-156" href="#__codelineno-0-156"></a>        ws.Cells(outRow, 1).Value = hitCount + 1
+<a id="__codelineno-0-157" name="__codelineno-0-157" href="#__codelineno-0-157"></a>        &#39; [USER-REQ 2026-06-09] Reorder columns: A=No, B=FormatName, C-E=search fields, F=UpdatedAt, G=knwNo (hidden)
+<a id="__codelineno-0-158" name="__codelineno-0-158" href="#__codelineno-0-158"></a>        Dim fmtNm As String
+<a id="__codelineno-0-159" name="__codelineno-0-159" href="#__codelineno-0-159"></a>        fmtNm = ResolveFormatName(SafeStr(hData, &quot;FormatID&quot;))
+<a id="__codelineno-0-160" name="__codelineno-0-160" href="#__codelineno-0-160"></a>        ws.Cells(outRow, 2).Value = fmtNm
+<a id="__codelineno-0-161" name="__codelineno-0-161" href="#__codelineno-0-161"></a>        Dim sFields(1 To 3) As String
+<a id="__codelineno-0-162" name="__codelineno-0-162" href="#__codelineno-0-162"></a>        GetSearchTargetFieldValues hData, SafeStr(hData, &quot;FormatID&quot;), sFields
+<a id="__codelineno-0-163" name="__codelineno-0-163" href="#__codelineno-0-163"></a>        ws.Cells(outRow, 3).Value = TrimExcerpt(sFields(1))
+<a id="__codelineno-0-164" name="__codelineno-0-164" href="#__codelineno-0-164"></a>        ws.Cells(outRow, 4).Value = TrimExcerpt(sFields(2))
+<a id="__codelineno-0-165" name="__codelineno-0-165" href="#__codelineno-0-165"></a>        ws.Cells(outRow, 5).Value = TrimExcerpt(sFields(3))
+<a id="__codelineno-0-166" name="__codelineno-0-166" href="#__codelineno-0-166"></a>        ws.Cells(outRow, 6).Value = SafeStr(hData, &quot;UpdatedAt&quot;)
+<a id="__codelineno-0-167" name="__codelineno-0-167" href="#__codelineno-0-167"></a>        ws.Cells(outRow, 7).Value = hKnwNo
+<a id="__codelineno-0-168" name="__codelineno-0-168" href="#__codelineno-0-168"></a>        With ws.Cells(outRow, 1)
+<a id="__codelineno-0-169" name="__codelineno-0-169" href="#__codelineno-0-169"></a>            .Font.Color = RGB(0, 0, 255)
+<a id="__codelineno-0-170" name="__codelineno-0-170" href="#__codelineno-0-170"></a>            .Font.Underline = xlUnderlineStyleSingle
+<a id="__codelineno-0-171" name="__codelineno-0-171" href="#__codelineno-0-171"></a>        End With
+<a id="__codelineno-0-172" name="__codelineno-0-172" href="#__codelineno-0-172"></a>        outRow = outRow + 1
+<a id="__codelineno-0-173" name="__codelineno-0-173" href="#__codelineno-0-173"></a>        hitCount = hitCount + 1
+<a id="__codelineno-0-174" name="__codelineno-0-174" href="#__codelineno-0-174"></a>    Next hi
+<a id="__codelineno-0-175" name="__codelineno-0-175" href="#__codelineno-0-175"></a>
+<a id="__codelineno-0-176" name="__codelineno-0-176" href="#__codelineno-0-176"></a>    &#39; 2026-06-08 UX: extend grid borders/styling to all written rows so
+<a id="__codelineno-0-177" name="__codelineno-0-177" href="#__codelineno-0-177"></a>    &#39; result rows past the initial 10 don&#39;t appear as bare cells.
+<a id="__codelineno-0-178" name="__codelineno-0-178" href="#__codelineno-0-178"></a>    If hitCount &gt; 0 Then
+<a id="__codelineno-0-179" name="__codelineno-0-179" href="#__codelineno-0-179"></a>        Dim styRng As Range
+<a id="__codelineno-0-180" name="__codelineno-0-180" href="#__codelineno-0-180"></a>        Set styRng = ws.Range(ws.Cells(M08_RESULT_START_ROW, 1), ws.Cells(outRow - 1, 7))
+<a id="__codelineno-0-181" name="__codelineno-0-181" href="#__codelineno-0-181"></a>        styRng.Borders.LineStyle = xlContinuous
+<a id="__codelineno-0-182" name="__codelineno-0-182" href="#__codelineno-0-182"></a>        styRng.Borders.Weight = xlThin
+<a id="__codelineno-0-183" name="__codelineno-0-183" href="#__codelineno-0-183"></a>        styRng.Borders.Color = RGB(191, 191, 191)
+<a id="__codelineno-0-184" name="__codelineno-0-184" href="#__codelineno-0-184"></a>        &#39; [USER-REQ 2026-06-09] Cells must not overflow their column width.
+<a id="__codelineno-0-185" name="__codelineno-0-185" href="#__codelineno-0-185"></a>        &#39; WrapText off + IndentLevel 0; columns to right will hide spill via opaque fill.
+<a id="__codelineno-0-186" name="__codelineno-0-186" href="#__codelineno-0-186"></a>        styRng.WrapText = False
+<a id="__codelineno-0-187" name="__codelineno-0-187" href="#__codelineno-0-187"></a>        Dim rr As Long
+<a id="__codelineno-0-188" name="__codelineno-0-188" href="#__codelineno-0-188"></a>        For rr = M08_RESULT_START_ROW To outRow - 1
+<a id="__codelineno-0-189" name="__codelineno-0-189" href="#__codelineno-0-189"></a>            If (rr - M08_RESULT_START_ROW) Mod 2 = 1 Then
+<a id="__codelineno-0-190" name="__codelineno-0-190" href="#__codelineno-0-190"></a>                ws.Range(ws.Cells(rr, 1), ws.Cells(rr, 7)).Interior.Color = RGB(247, 247, 247)
+<a id="__codelineno-0-191" name="__codelineno-0-191" href="#__codelineno-0-191"></a>            Else
+<a id="__codelineno-0-192" name="__codelineno-0-192" href="#__codelineno-0-192"></a>                ws.Range(ws.Cells(rr, 1), ws.Cells(rr, 7)).Interior.ColorIndex = xlNone
+<a id="__codelineno-0-193" name="__codelineno-0-193" href="#__codelineno-0-193"></a>            End If
+<a id="__codelineno-0-194" name="__codelineno-0-194" href="#__codelineno-0-194"></a>        Next rr
+<a id="__codelineno-0-195" name="__codelineno-0-195" href="#__codelineno-0-195"></a>    End If
+<a id="__codelineno-0-196" name="__codelineno-0-196" href="#__codelineno-0-196"></a>
+<a id="__codelineno-0-197" name="__codelineno-0-197" href="#__codelineno-0-197"></a>    &#39; [USER-REQ 2026-06-09] Force column G (knowledgeNo) to be hidden after each search.
+<a id="__codelineno-0-198" name="__codelineno-0-198" href="#__codelineno-0-198"></a>    &#39; Setup_search applies HideColumnsFrom=G but Excel sometimes loses it on workbook reopen.
+<a id="__codelineno-0-199" name="__codelineno-0-199" href="#__codelineno-0-199"></a>    On Error Resume Next
+<a id="__codelineno-0-200" name="__codelineno-0-200" href="#__codelineno-0-200"></a>    ws.Columns(&quot;G:G&quot;).Hidden = True
+<a id="__codelineno-0-201" name="__codelineno-0-201" href="#__codelineno-0-201"></a>    On Error GoTo 0
+<a id="__codelineno-0-202" name="__codelineno-0-202" href="#__codelineno-0-202"></a>
+<a id="__codelineno-0-203" name="__codelineno-0-203" href="#__codelineno-0-203"></a>    &#39; [N1 2026-06-12] Unprotect was one-way - restore light protection
+<a id="__codelineno-0-204" name="__codelineno-0-204" href="#__codelineno-0-204"></a>    modCommon.ReProtectLight ws
+<a id="__codelineno-0-205" name="__codelineno-0-205" href="#__codelineno-0-205"></a>
+<a id="__codelineno-0-206" name="__codelineno-0-206" href="#__codelineno-0-206"></a>    &#39; [B33 2026-06-12] user request: always show the hit count after a search
+<a id="__codelineno-0-207" name="__codelineno-0-207" href="#__codelineno-0-207"></a>    &#39; (0 hits looked like &quot;blank data&quot; without any feedback).
+<a id="__codelineno-0-208" name="__codelineno-0-208" href="#__codelineno-0-208"></a>    If Not modCommon.IsHeadless() Then
+<a id="__codelineno-0-209" name="__codelineno-0-209" href="#__codelineno-0-209"></a>        MsgBox ChrW(&amp;H691C) &amp; ChrW(&amp;H7D22) &amp; ChrW(&amp;H7D50) &amp; ChrW(&amp;H679C) &amp; ChrW(&amp;H003A) &amp; ChrW(&amp;H0020) &amp; CStr(hitCount) &amp; ChrW(&amp;H0020) &amp; ChrW(&amp;H4EF6), vbInformation, ChrW(&amp;H30CA) &amp; ChrW(&amp;H30EC) &amp; ChrW(&amp;H30C3) &amp; ChrW(&amp;H30B8) &amp; ChrW(&amp;H691C) &amp; ChrW(&amp;H7D22)
+<a id="__codelineno-0-210" name="__codelineno-0-210" href="#__codelineno-0-210"></a>    End If
+<a id="__codelineno-0-211" name="__codelineno-0-211" href="#__codelineno-0-211"></a>
+<a id="__codelineno-0-212" name="__codelineno-0-212" href="#__codelineno-0-212"></a>    On Error Resume Next
+<a id="__codelineno-0-213" name="__codelineno-0-213" href="#__codelineno-0-213"></a>    Dim lg As clsLogger
+<a id="__codelineno-0-214" name="__codelineno-0-214" href="#__codelineno-0-214"></a>    Set lg = New clsLogger
+<a id="__codelineno-0-215" name="__codelineno-0-215" href="#__codelineno-0-215"></a>    lg.Init ThisWorkbook.Worksheets(&quot;LOG&quot;)
+<a id="__codelineno-0-216" name="__codelineno-0-216" href="#__codelineno-0-216"></a>    lg.LogInfo &quot;modEntrySearch&quot;, &quot;Btn_SearchV23&quot;, _
+<a id="__codelineno-0-217" name="__codelineno-0-217" href="#__codelineno-0-217"></a>        &quot;search done keyword=&quot; &amp; keyword &amp; &quot; fmt=&quot; &amp; fmtFilter &amp; &quot; hits=&quot; &amp; hitCount, _
+<a id="__codelineno-0-218" name="__codelineno-0-218" href="#__codelineno-0-218"></a>        &quot;&quot;, &quot;LOG-M08-SEARCH-OK&quot;
+<a id="__codelineno-0-219" name="__codelineno-0-219" href="#__codelineno-0-219"></a>    On Error GoTo 0
+<a id="__codelineno-0-220" name="__codelineno-0-220" href="#__codelineno-0-220"></a>    &#39; [BTN-GUARD-EXIT-OK] auto-injected
+<a id="__codelineno-0-221" name="__codelineno-0-221" href="#__codelineno-0-221"></a>    modBtnGuard.LogExit BTN, XLSM, True
+<a id="__codelineno-0-222" name="__codelineno-0-222" href="#__codelineno-0-222"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1795] modEntrySearch.Btn_SearchV23 EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-223" name="__codelineno-0-223" href="#__codelineno-0-223"></a>    Exit Sub
 <a id="__codelineno-0-224" name="__codelineno-0-224" href="#__codelineno-0-224"></a>
-<a id="__codelineno-0-225" name="__codelineno-0-225" href="#__codelineno-0-225"></a>    &#39; [B33 2026-06-12] user request: always show the hit count after a search
-<a id="__codelineno-0-226" name="__codelineno-0-226" href="#__codelineno-0-226"></a>    &#39; (0 hits looked like &quot;blank data&quot; without any feedback).
-<a id="__codelineno-0-227" name="__codelineno-0-227" href="#__codelineno-0-227"></a>    If Not modCommon.IsHeadless() Then
-<a id="__codelineno-0-228" name="__codelineno-0-228" href="#__codelineno-0-228"></a>        MsgBox ChrW(&amp;H691C) &amp; ChrW(&amp;H7D22) &amp; ChrW(&amp;H7D50) &amp; ChrW(&amp;H679C) &amp; ChrW(&amp;H003A) &amp; ChrW(&amp;H0020) &amp; CStr(hitCount) &amp; ChrW(&amp;H0020) &amp; ChrW(&amp;H4EF6), vbInformation, ChrW(&amp;H30CA) &amp; ChrW(&amp;H30EC) &amp; ChrW(&amp;H30C3) &amp; ChrW(&amp;H30B8) &amp; ChrW(&amp;H691C) &amp; ChrW(&amp;H7D22)
-<a id="__codelineno-0-229" name="__codelineno-0-229" href="#__codelineno-0-229"></a>    End If
-<a id="__codelineno-0-230" name="__codelineno-0-230" href="#__codelineno-0-230"></a>
-<a id="__codelineno-0-231" name="__codelineno-0-231" href="#__codelineno-0-231"></a>    On Error Resume Next
-<a id="__codelineno-0-232" name="__codelineno-0-232" href="#__codelineno-0-232"></a>    Dim lg As clsLogger
-<a id="__codelineno-0-233" name="__codelineno-0-233" href="#__codelineno-0-233"></a>    Set lg = New clsLogger
-<a id="__codelineno-0-234" name="__codelineno-0-234" href="#__codelineno-0-234"></a>    lg.Init ThisWorkbook.Worksheets(&quot;LOG&quot;)
-<a id="__codelineno-0-235" name="__codelineno-0-235" href="#__codelineno-0-235"></a>    lg.LogInfo &quot;modEntrySearch&quot;, &quot;Btn_SearchV23&quot;, _
-<a id="__codelineno-0-236" name="__codelineno-0-236" href="#__codelineno-0-236"></a>        &quot;search done keyword=&quot; &amp; keyword &amp; &quot; fmt=&quot; &amp; fmtFilter &amp; &quot; hits=&quot; &amp; hitCount, _
-<a id="__codelineno-0-237" name="__codelineno-0-237" href="#__codelineno-0-237"></a>        &quot;&quot;, &quot;LOG-M08-SEARCH-OK&quot;
-<a id="__codelineno-0-238" name="__codelineno-0-238" href="#__codelineno-0-238"></a>    On Error GoTo 0
-<a id="__codelineno-0-239" name="__codelineno-0-239" href="#__codelineno-0-239"></a>    &#39; [BTN-GUARD-EXIT-OK] auto-injected
-<a id="__codelineno-0-240" name="__codelineno-0-240" href="#__codelineno-0-240"></a>    modBtnGuard.LogExit BTN, XLSM, True
-<a id="__codelineno-0-241" name="__codelineno-0-241" href="#__codelineno-0-241"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1795] modEntrySearch.Btn_SearchV23 EXIT-OK&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-242" name="__codelineno-0-242" href="#__codelineno-0-242"></a>    Exit Sub
-<a id="__codelineno-0-243" name="__codelineno-0-243" href="#__codelineno-0-243"></a>
-<a id="__codelineno-0-244" name="__codelineno-0-244" href="#__codelineno-0-244"></a>ErrHandler:
-<a id="__codelineno-0-245" name="__codelineno-0-245" href="#__codelineno-0-245"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print &quot;[D-1796] modEntrySearch.Btn_SearchV23 EXIT-ERR &quot; &amp; &quot;errNum=&quot; &amp; Err.Number &amp; &quot; desc=&quot; &amp; Err.Description  &#39; [ADR-0100]
-<a id="__codelineno-0-246" name="__codelineno-0-246" href="#__codelineno-0-246"></a>    &#39; [BTN-GUARD-ERR-LOG] auto-injected
-<a id="__codelineno-0-247" name="__codelineno-0-247" href="#__codelineno-0-247"></a>    modBtnGuard.LogExit BTN, XLSM, False
-<a id="__codelineno-0-248" name="__codelineno-0-248" href="#__codelineno-0-248"></a>    Debug.Print &quot;[ERR] Btn_SearchV23: &quot; &amp; Err.Number &amp; &quot; &quot; &amp; Err.Description
-<a id="__codelineno-0-249" name="__codelineno-0-249" href="#__codelineno-0-249"></a>End Sub
-<a id="__codelineno-0-250" name="__codelineno-0-250" href="#__codelineno-0-250"></a>
-<a id="__codelineno-0-251" name="__codelineno-0-251" href="#__codelineno-0-251"></a>Public Sub Btn_SearchClearV23()
-<a id="__codelineno-0-252" name="__codelineno-0-252" href="#__codelineno-0-252"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1797] modEntrySearch.Btn_SearchClearV23 ENTER&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-253" name="__codelineno-0-253" href="#__codelineno-0-253"></a>    On Error GoTo ErrHandler
-<a id="__codelineno-0-254" name="__codelineno-0-254" href="#__codelineno-0-254"></a>    &#39; [BTN-GUARD-PRELUDE-BEGIN] auto-injected by inject_btn_template.py
-<a id="__codelineno-0-255" name="__codelineno-0-255" href="#__codelineno-0-255"></a>    Const BTN As String = &quot;Btn_SearchClearV23&quot;
-<a id="__codelineno-0-256" name="__codelineno-0-256" href="#__codelineno-0-256"></a>    Dim XLSM As String
-<a id="__codelineno-0-257" name="__codelineno-0-257" href="#__codelineno-0-257"></a>    XLSM = ChrW(&amp;H691C) &amp; ChrW(&amp;H7D22)
-<a id="__codelineno-0-258" name="__codelineno-0-258" href="#__codelineno-0-258"></a>    modBtnGuard.LogEnter BTN, XLSM
-<a id="__codelineno-0-259" name="__codelineno-0-259" href="#__codelineno-0-259"></a>    If Not modBtnGuard.CheckPrereq(BTN, &quot;config&quot;, XLSM) Then
-<a id="__codelineno-0-260" name="__codelineno-0-260" href="#__codelineno-0-260"></a>        modBtnGuard.LogExit BTN, XLSM, False
-<a id="__codelineno-0-261" name="__codelineno-0-261" href="#__codelineno-0-261"></a>        If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1798] modEntrySearch.Btn_SearchClearV23 EXIT-OK&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-262" name="__codelineno-0-262" href="#__codelineno-0-262"></a>        Exit Sub
-<a id="__codelineno-0-263" name="__codelineno-0-263" href="#__codelineno-0-263"></a>    End If
-<a id="__codelineno-0-264" name="__codelineno-0-264" href="#__codelineno-0-264"></a>    &#39; [BTN-GUARD-PRELUDE-END]
-<a id="__codelineno-0-265" name="__codelineno-0-265" href="#__codelineno-0-265"></a>    Dim ws As Worksheet
-<a id="__codelineno-0-266" name="__codelineno-0-266" href="#__codelineno-0-266"></a>    Set ws = ResolveSearchSheet()
-<a id="__codelineno-0-267" name="__codelineno-0-267" href="#__codelineno-0-267"></a>    If ws Is Nothing Then Exit Sub
-<a id="__codelineno-0-268" name="__codelineno-0-268" href="#__codelineno-0-268"></a>    On Error Resume Next
-<a id="__codelineno-0-269" name="__codelineno-0-269" href="#__codelineno-0-269"></a>    ws.Unprotect
-<a id="__codelineno-0-270" name="__codelineno-0-270" href="#__codelineno-0-270"></a>    On Error GoTo ErrHandler
-<a id="__codelineno-0-271" name="__codelineno-0-271" href="#__codelineno-0-271"></a>    ws.Range(M08_CELL_KEYWORD).Value = &quot;&quot;
-<a id="__codelineno-0-272" name="__codelineno-0-272" href="#__codelineno-0-272"></a>    ws.Range(M08_CELL_FORMAT).Value = &quot;&quot;
-<a id="__codelineno-0-273" name="__codelineno-0-273" href="#__codelineno-0-273"></a>    Dim clearRng As Range
-<a id="__codelineno-0-274" name="__codelineno-0-274" href="#__codelineno-0-274"></a>    Set clearRng = ws.Range(ws.Cells(M08_RESULT_START_ROW, 1), ws.Cells(M08_RESULT_LAST_ROW, 8))
-<a id="__codelineno-0-275" name="__codelineno-0-275" href="#__codelineno-0-275"></a>    clearRng.ClearContents
-<a id="__codelineno-0-276" name="__codelineno-0-276" href="#__codelineno-0-276"></a>    &#39; 2026-05-31 UX: also reset column A hyperlink-look font on clear.
-<a id="__codelineno-0-277" name="__codelineno-0-277" href="#__codelineno-0-277"></a>    Dim aColRng As Range
-<a id="__codelineno-0-278" name="__codelineno-0-278" href="#__codelineno-0-278"></a>    Set aColRng = ws.Range(ws.Cells(M08_RESULT_START_ROW, 1), ws.Cells(M08_RESULT_LAST_ROW, 1))
-<a id="__codelineno-0-279" name="__codelineno-0-279" href="#__codelineno-0-279"></a>    aColRng.Font.ColorIndex = xlAutomatic
-<a id="__codelineno-0-280" name="__codelineno-0-280" href="#__codelineno-0-280"></a>    aColRng.Font.Underline = xlUnderlineStyleNone
-<a id="__codelineno-0-281" name="__codelineno-0-281" href="#__codelineno-0-281"></a>    &#39; 2026-06-08 UX: also clear extended grid borders + alternating row tint
-<a id="__codelineno-0-282" name="__codelineno-0-282" href="#__codelineno-0-282"></a>    clearRng.Borders.LineStyle = xlNone
-<a id="__codelineno-0-283" name="__codelineno-0-283" href="#__codelineno-0-283"></a>    clearRng.Interior.ColorIndex = xlNone
-<a id="__codelineno-0-284" name="__codelineno-0-284" href="#__codelineno-0-284"></a>    &#39; [N3 2026-06-12] restore the seed look: thin border on the initial 10 rows
-<a id="__codelineno-0-285" name="__codelineno-0-285" href="#__codelineno-0-285"></a>    Dim seedRng As Range
-<a id="__codelineno-0-286" name="__codelineno-0-286" href="#__codelineno-0-286"></a>    Set seedRng = ws.Range(ws.Cells(M08_RESULT_START_ROW, 1), ws.Cells(M08_RESULT_START_ROW + 9, 7))
-<a id="__codelineno-0-287" name="__codelineno-0-287" href="#__codelineno-0-287"></a>    seedRng.Borders.LineStyle = xlContinuous
-<a id="__codelineno-0-288" name="__codelineno-0-288" href="#__codelineno-0-288"></a>    seedRng.Borders.Weight = xlThin
-<a id="__codelineno-0-289" name="__codelineno-0-289" href="#__codelineno-0-289"></a>    seedRng.Borders.Color = RGB(191, 191, 191)
-<a id="__codelineno-0-290" name="__codelineno-0-290" href="#__codelineno-0-290"></a>    &#39; [N2 2026-06-12] re-protect (Unprotect was one-way)
-<a id="__codelineno-0-291" name="__codelineno-0-291" href="#__codelineno-0-291"></a>    modCommon.ReProtectLight ws
-<a id="__codelineno-0-292" name="__codelineno-0-292" href="#__codelineno-0-292"></a>    &#39; [BTN-GUARD-EXIT-OK] auto-injected
-<a id="__codelineno-0-293" name="__codelineno-0-293" href="#__codelineno-0-293"></a>    modBtnGuard.LogExit BTN, XLSM, True
-<a id="__codelineno-0-294" name="__codelineno-0-294" href="#__codelineno-0-294"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1799] modEntrySearch.Btn_SearchClearV23 EXIT-OK&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-295" name="__codelineno-0-295" href="#__codelineno-0-295"></a>    Exit Sub
-<a id="__codelineno-0-296" name="__codelineno-0-296" href="#__codelineno-0-296"></a>ErrHandler:
-<a id="__codelineno-0-297" name="__codelineno-0-297" href="#__codelineno-0-297"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print &quot;[D-1800] modEntrySearch.Btn_SearchClearV23 EXIT-ERR &quot; &amp; &quot;errNum=&quot; &amp; Err.Number &amp; &quot; desc=&quot; &amp; Err.Description  &#39; [ADR-0100]
-<a id="__codelineno-0-298" name="__codelineno-0-298" href="#__codelineno-0-298"></a>    &#39; [BTN-GUARD-ERR-LOG] auto-injected
-<a id="__codelineno-0-299" name="__codelineno-0-299" href="#__codelineno-0-299"></a>    modBtnGuard.LogExit BTN, XLSM, False
-<a id="__codelineno-0-300" name="__codelineno-0-300" href="#__codelineno-0-300"></a>    Debug.Print &quot;[ERR] Btn_SearchClearV23: &quot; &amp; Err.Number &amp; &quot; &quot; &amp; Err.Description
-<a id="__codelineno-0-301" name="__codelineno-0-301" href="#__codelineno-0-301"></a>End Sub
-<a id="__codelineno-0-302" name="__codelineno-0-302" href="#__codelineno-0-302"></a>
-<a id="__codelineno-0-303" name="__codelineno-0-303" href="#__codelineno-0-303"></a>&#39; --- helpers ---
-<a id="__codelineno-0-304" name="__codelineno-0-304" href="#__codelineno-0-304"></a>
-<a id="__codelineno-0-305" name="__codelineno-0-305" href="#__codelineno-0-305"></a>Private Function ResolveSearchSheet() As Worksheet
-<a id="__codelineno-0-306" name="__codelineno-0-306" href="#__codelineno-0-306"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1801] modEntrySearch.ResolveSearchSheet ENTER&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-307" name="__codelineno-0-307" href="#__codelineno-0-307"></a>    On Error Resume Next
-<a id="__codelineno-0-308" name="__codelineno-0-308" href="#__codelineno-0-308"></a>    Dim jp As String
-<a id="__codelineno-0-309" name="__codelineno-0-309" href="#__codelineno-0-309"></a>    jp = ChrW(&amp;H30CA) &amp; ChrW(&amp;H30EC) &amp; ChrW(&amp;H30C3) &amp; ChrW(&amp;H30B8) &amp; ChrW(&amp;H691C) &amp; ChrW(&amp;H7D22)
-<a id="__codelineno-0-310" name="__codelineno-0-310" href="#__codelineno-0-310"></a>    Dim ws As Worksheet
-<a id="__codelineno-0-311" name="__codelineno-0-311" href="#__codelineno-0-311"></a>    Set ws = ThisWorkbook.Worksheets(jp)
-<a id="__codelineno-0-312" name="__codelineno-0-312" href="#__codelineno-0-312"></a>    If ws Is Nothing Then Set ws = ThisWorkbook.Worksheets(&quot;M-08&quot;)
-<a id="__codelineno-0-313" name="__codelineno-0-313" href="#__codelineno-0-313"></a>    Set ResolveSearchSheet = ws
-<a id="__codelineno-0-314" name="__codelineno-0-314" href="#__codelineno-0-314"></a>    On Error GoTo 0
-<a id="__codelineno-0-315" name="__codelineno-0-315" href="#__codelineno-0-315"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1802] modEntrySearch.ResolveSearchSheet EXIT-OK&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-316" name="__codelineno-0-316" href="#__codelineno-0-316"></a>End Function
-<a id="__codelineno-0-317" name="__codelineno-0-317" href="#__codelineno-0-317"></a>
-<a id="__codelineno-0-318" name="__codelineno-0-318" href="#__codelineno-0-318"></a>Private Function MatchesSearchV23(ByVal data As Object, ByVal keyword As String, ByVal fmtFilter As String) As Boolean
-<a id="__codelineno-0-319" name="__codelineno-0-319" href="#__codelineno-0-319"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1803] modEntrySearch.MatchesSearchV23 ENTER&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-320" name="__codelineno-0-320" href="#__codelineno-0-320"></a>    If Len(fmtFilter) &gt; 0 Then
-<a id="__codelineno-0-321" name="__codelineno-0-321" href="#__codelineno-0-321"></a>        Dim actual As String
-<a id="__codelineno-0-322" name="__codelineno-0-322" href="#__codelineno-0-322"></a>        actual = SafeStr(data, &quot;FormatID&quot;)
-<a id="__codelineno-0-323" name="__codelineno-0-323" href="#__codelineno-0-323"></a>        If actual &lt;&gt; fmtFilter Then
-<a id="__codelineno-0-324" name="__codelineno-0-324" href="#__codelineno-0-324"></a>            MatchesSearchV23 = False
-<a id="__codelineno-0-325" name="__codelineno-0-325" href="#__codelineno-0-325"></a>            If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1804] modEntrySearch.MatchesSearchV23 EXIT-OK&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-326" name="__codelineno-0-326" href="#__codelineno-0-326"></a>            Exit Function
-<a id="__codelineno-0-327" name="__codelineno-0-327" href="#__codelineno-0-327"></a>        End If
-<a id="__codelineno-0-328" name="__codelineno-0-328" href="#__codelineno-0-328"></a>    End If
-<a id="__codelineno-0-329" name="__codelineno-0-329" href="#__codelineno-0-329"></a>    If Len(keyword) = 0 Then
-<a id="__codelineno-0-330" name="__codelineno-0-330" href="#__codelineno-0-330"></a>        MatchesSearchV23 = True
-<a id="__codelineno-0-331" name="__codelineno-0-331" href="#__codelineno-0-331"></a>        If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1805] modEntrySearch.MatchesSearchV23 EXIT-OK&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-332" name="__codelineno-0-332" href="#__codelineno-0-332"></a>        Exit Function
-<a id="__codelineno-0-333" name="__codelineno-0-333" href="#__codelineno-0-333"></a>    End If
-<a id="__codelineno-0-334" name="__codelineno-0-334" href="#__codelineno-0-334"></a>    &#39; [USER-REQ 2026-06-09] Keyword matching restricted to searchTarget=TRUE fields.
-<a id="__codelineno-0-335" name="__codelineno-0-335" href="#__codelineno-0-335"></a>    &#39; [BUG-B9 2026-06-11] Space-separated keywords (half/full width) are AND
-<a id="__codelineno-0-336" name="__codelineno-0-336" href="#__codelineno-0-336"></a>    &#39; conditions over the combined searchTarget text, not one long literal.
-<a id="__codelineno-0-337" name="__codelineno-0-337" href="#__codelineno-0-337"></a>    Dim searchFields As Collection
-<a id="__codelineno-0-338" name="__codelineno-0-338" href="#__codelineno-0-338"></a>    Set searchFields = GetSearchTargetFieldNames(SafeStr(data, &quot;FormatID&quot;))
-<a id="__codelineno-0-339" name="__codelineno-0-339" href="#__codelineno-0-339"></a>    Dim combined As String
-<a id="__codelineno-0-340" name="__codelineno-0-340" href="#__codelineno-0-340"></a>    combined = &quot;&quot;
-<a id="__codelineno-0-341" name="__codelineno-0-341" href="#__codelineno-0-341"></a>    Dim sfi As Long
-<a id="__codelineno-0-342" name="__codelineno-0-342" href="#__codelineno-0-342"></a>    For sfi = 1 To searchFields.Count
-<a id="__codelineno-0-343" name="__codelineno-0-343" href="#__codelineno-0-343"></a>        Dim fname As String
-<a id="__codelineno-0-344" name="__codelineno-0-344" href="#__codelineno-0-344"></a>        fname = CStr(searchFields(sfi))
-<a id="__codelineno-0-345" name="__codelineno-0-345" href="#__codelineno-0-345"></a>        If data.Exists(fname) Then combined = combined &amp; &quot; &quot; &amp; CStr(data(fname))
-<a id="__codelineno-0-346" name="__codelineno-0-346" href="#__codelineno-0-346"></a>    Next sfi
-<a id="__codelineno-0-347" name="__codelineno-0-347" href="#__codelineno-0-347"></a>    MatchesSearchV23 = ContainsAllTerms(combined, keyword)
-<a id="__codelineno-0-348" name="__codelineno-0-348" href="#__codelineno-0-348"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1806] modEntrySearch.MatchesSearchV23 EXIT-OK&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-349" name="__codelineno-0-349" href="#__codelineno-0-349"></a>End Function
-<a id="__codelineno-0-350" name="__codelineno-0-350" href="#__codelineno-0-350"></a>
-<a id="__codelineno-0-351" name="__codelineno-0-351" href="#__codelineno-0-351"></a>&#39; [USER-REQ 2026-06-09] Returns all FIELD names where searchTarget=TRUE
-<a id="__codelineno-0-352" name="__codelineno-0-352" href="#__codelineno-0-352"></a>&#39; for the given format. Empty Collection if no format or no marked fields.
-<a id="__codelineno-0-353" name="__codelineno-0-353" href="#__codelineno-0-353"></a>Private Function GetSearchTargetFieldNames(ByVal fmtId As String) As Collection
-<a id="__codelineno-0-354" name="__codelineno-0-354" href="#__codelineno-0-354"></a>    Dim result As Collection
-<a id="__codelineno-0-355" name="__codelineno-0-355" href="#__codelineno-0-355"></a>    Set result = New Collection
-<a id="__codelineno-0-356" name="__codelineno-0-356" href="#__codelineno-0-356"></a>    On Error Resume Next
-<a id="__codelineno-0-357" name="__codelineno-0-357" href="#__codelineno-0-357"></a>    If Len(fmtId) = 0 Then
-<a id="__codelineno-0-358" name="__codelineno-0-358" href="#__codelineno-0-358"></a>        Set GetSearchTargetFieldNames = result
-<a id="__codelineno-0-359" name="__codelineno-0-359" href="#__codelineno-0-359"></a>        Exit Function
-<a id="__codelineno-0-360" name="__codelineno-0-360" href="#__codelineno-0-360"></a>    End If
-<a id="__codelineno-0-361" name="__codelineno-0-361" href="#__codelineno-0-361"></a>    Dim secs As Collection
-<a id="__codelineno-0-362" name="__codelineno-0-362" href="#__codelineno-0-362"></a>    Set secs = modFormatLoader.LoadFormat(fmtId)
-<a id="__codelineno-0-363" name="__codelineno-0-363" href="#__codelineno-0-363"></a>    If secs Is Nothing Then
-<a id="__codelineno-0-364" name="__codelineno-0-364" href="#__codelineno-0-364"></a>        Set GetSearchTargetFieldNames = result
-<a id="__codelineno-0-365" name="__codelineno-0-365" href="#__codelineno-0-365"></a>        Exit Function
-<a id="__codelineno-0-366" name="__codelineno-0-366" href="#__codelineno-0-366"></a>    End If
-<a id="__codelineno-0-367" name="__codelineno-0-367" href="#__codelineno-0-367"></a>    Dim sec As ClsStanzaSection
-<a id="__codelineno-0-368" name="__codelineno-0-368" href="#__codelineno-0-368"></a>    Dim i As Long
-<a id="__codelineno-0-369" name="__codelineno-0-369" href="#__codelineno-0-369"></a>    For i = 1 To secs.Count
-<a id="__codelineno-0-370" name="__codelineno-0-370" href="#__codelineno-0-370"></a>        Set sec = secs.Item(i)
-<a id="__codelineno-0-371" name="__codelineno-0-371" href="#__codelineno-0-371"></a>        If sec.SectionName = &quot;FIELD&quot; Then
-<a id="__codelineno-0-372" name="__codelineno-0-372" href="#__codelineno-0-372"></a>            Dim st As String
-<a id="__codelineno-0-373" name="__codelineno-0-373" href="#__codelineno-0-373"></a>            st = &quot;&quot;
-<a id="__codelineno-0-374" name="__codelineno-0-374" href="#__codelineno-0-374"></a>            If sec.HasKey(&quot;searchTarget&quot;) Then st = LCase(Trim(sec.GetValue(&quot;searchTarget&quot;)))
-<a id="__codelineno-0-375" name="__codelineno-0-375" href="#__codelineno-0-375"></a>            If st = &quot;true&quot; Or st = &quot;1&quot; Or st = &quot;yes&quot; Then
-<a id="__codelineno-0-376" name="__codelineno-0-376" href="#__codelineno-0-376"></a>                Dim fn As String
-<a id="__codelineno-0-377" name="__codelineno-0-377" href="#__codelineno-0-377"></a>                fn = &quot;&quot;
-<a id="__codelineno-0-378" name="__codelineno-0-378" href="#__codelineno-0-378"></a>                If sec.HasKey(&quot;FieldName&quot;) Then fn = sec.GetValue(&quot;FieldName&quot;)
-<a id="__codelineno-0-379" name="__codelineno-0-379" href="#__codelineno-0-379"></a>                If Len(fn) &gt; 0 Then result.Add fn
-<a id="__codelineno-0-380" name="__codelineno-0-380" href="#__codelineno-0-380"></a>            End If
-<a id="__codelineno-0-381" name="__codelineno-0-381" href="#__codelineno-0-381"></a>        End If
-<a id="__codelineno-0-382" name="__codelineno-0-382" href="#__codelineno-0-382"></a>    Next i
-<a id="__codelineno-0-383" name="__codelineno-0-383" href="#__codelineno-0-383"></a>    Set GetSearchTargetFieldNames = result
-<a id="__codelineno-0-384" name="__codelineno-0-384" href="#__codelineno-0-384"></a>End Function
-<a id="__codelineno-0-385" name="__codelineno-0-385" href="#__codelineno-0-385"></a>
-<a id="__codelineno-0-386" name="__codelineno-0-386" href="#__codelineno-0-386"></a>Private Function SafeStr(ByVal data As Object, ByVal key As String) As String
-<a id="__codelineno-0-387" name="__codelineno-0-387" href="#__codelineno-0-387"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1807] modEntrySearch.SafeStr ENTER&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-388" name="__codelineno-0-388" href="#__codelineno-0-388"></a>    If data Is Nothing Then Exit Function
-<a id="__codelineno-0-389" name="__codelineno-0-389" href="#__codelineno-0-389"></a>    If data.Exists(key) Then SafeStr = CStr(data(key))
-<a id="__codelineno-0-390" name="__codelineno-0-390" href="#__codelineno-0-390"></a>End Function
-<a id="__codelineno-0-391" name="__codelineno-0-391" href="#__codelineno-0-391"></a>
-<a id="__codelineno-0-392" name="__codelineno-0-392" href="#__codelineno-0-392"></a>&#39; Phase R-3-Omega legacy helper (kept for now).
-<a id="__codelineno-0-393" name="__codelineno-0-393" href="#__codelineno-0-393"></a>Private Function NthFieldValue(ByVal data As Object, ByVal n As Long) As String
-<a id="__codelineno-0-394" name="__codelineno-0-394" href="#__codelineno-0-394"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1808] modEntrySearch.NthFieldValue ENTER&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-395" name="__codelineno-0-395" href="#__codelineno-0-395"></a>    If data Is Nothing Then Exit Function
-<a id="__codelineno-0-396" name="__codelineno-0-396" href="#__codelineno-0-396"></a>    Dim meta As String
-<a id="__codelineno-0-397" name="__codelineno-0-397" href="#__codelineno-0-397"></a>    meta = &quot;|KnowledgeNo|FormatID|FormatId|FormatVersion|CreatedAt|UpdatedAt|&quot;
-<a id="__codelineno-0-398" name="__codelineno-0-398" href="#__codelineno-0-398"></a>    Dim cnt As Long
-<a id="__codelineno-0-399" name="__codelineno-0-399" href="#__codelineno-0-399"></a>    cnt = 0
+<a id="__codelineno-0-225" name="__codelineno-0-225" href="#__codelineno-0-225"></a>ErrHandler:
+<a id="__codelineno-0-226" name="__codelineno-0-226" href="#__codelineno-0-226"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print &quot;[D-1796] modEntrySearch.Btn_SearchV23 EXIT-ERR &quot; &amp; &quot;errNum=&quot; &amp; Err.Number &amp; &quot; desc=&quot; &amp; Err.Description  &#39; [ADR-0100]
+<a id="__codelineno-0-227" name="__codelineno-0-227" href="#__codelineno-0-227"></a>    &#39; [BTN-GUARD-ERR-LOG] auto-injected
+<a id="__codelineno-0-228" name="__codelineno-0-228" href="#__codelineno-0-228"></a>    modBtnGuard.LogExit BTN, XLSM, False
+<a id="__codelineno-0-229" name="__codelineno-0-229" href="#__codelineno-0-229"></a>    Debug.Print &quot;[ERR] Btn_SearchV23: &quot; &amp; Err.Number &amp; &quot; &quot; &amp; Err.Description
+<a id="__codelineno-0-230" name="__codelineno-0-230" href="#__codelineno-0-230"></a>End Sub
+<a id="__codelineno-0-231" name="__codelineno-0-231" href="#__codelineno-0-231"></a>
+<a id="__codelineno-0-232" name="__codelineno-0-232" href="#__codelineno-0-232"></a>Public Sub Btn_SearchClearV23()
+<a id="__codelineno-0-233" name="__codelineno-0-233" href="#__codelineno-0-233"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1797] modEntrySearch.Btn_SearchClearV23 ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-234" name="__codelineno-0-234" href="#__codelineno-0-234"></a>    On Error GoTo ErrHandler
+<a id="__codelineno-0-235" name="__codelineno-0-235" href="#__codelineno-0-235"></a>    &#39; [BTN-GUARD-PRELUDE-BEGIN] auto-injected by inject_btn_template.py
+<a id="__codelineno-0-236" name="__codelineno-0-236" href="#__codelineno-0-236"></a>    Const BTN As String = &quot;Btn_SearchClearV23&quot;
+<a id="__codelineno-0-237" name="__codelineno-0-237" href="#__codelineno-0-237"></a>    Dim XLSM As String
+<a id="__codelineno-0-238" name="__codelineno-0-238" href="#__codelineno-0-238"></a>    XLSM = ChrW(&amp;H691C) &amp; ChrW(&amp;H7D22)
+<a id="__codelineno-0-239" name="__codelineno-0-239" href="#__codelineno-0-239"></a>    modBtnGuard.LogEnter BTN, XLSM
+<a id="__codelineno-0-240" name="__codelineno-0-240" href="#__codelineno-0-240"></a>    If Not modBtnGuard.CheckPrereq(BTN, &quot;config&quot;, XLSM) Then
+<a id="__codelineno-0-241" name="__codelineno-0-241" href="#__codelineno-0-241"></a>        modBtnGuard.LogExit BTN, XLSM, False
+<a id="__codelineno-0-242" name="__codelineno-0-242" href="#__codelineno-0-242"></a>        If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1798] modEntrySearch.Btn_SearchClearV23 EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-243" name="__codelineno-0-243" href="#__codelineno-0-243"></a>        Exit Sub
+<a id="__codelineno-0-244" name="__codelineno-0-244" href="#__codelineno-0-244"></a>    End If
+<a id="__codelineno-0-245" name="__codelineno-0-245" href="#__codelineno-0-245"></a>    &#39; [BTN-GUARD-PRELUDE-END]
+<a id="__codelineno-0-246" name="__codelineno-0-246" href="#__codelineno-0-246"></a>    Dim ws As Worksheet
+<a id="__codelineno-0-247" name="__codelineno-0-247" href="#__codelineno-0-247"></a>    Set ws = ResolveSearchSheet()
+<a id="__codelineno-0-248" name="__codelineno-0-248" href="#__codelineno-0-248"></a>    If ws Is Nothing Then Exit Sub
+<a id="__codelineno-0-249" name="__codelineno-0-249" href="#__codelineno-0-249"></a>    On Error Resume Next
+<a id="__codelineno-0-250" name="__codelineno-0-250" href="#__codelineno-0-250"></a>    ws.Unprotect
+<a id="__codelineno-0-251" name="__codelineno-0-251" href="#__codelineno-0-251"></a>    On Error GoTo ErrHandler
+<a id="__codelineno-0-252" name="__codelineno-0-252" href="#__codelineno-0-252"></a>    ws.Range(M08_CELL_KEYWORD).Value = &quot;&quot;
+<a id="__codelineno-0-253" name="__codelineno-0-253" href="#__codelineno-0-253"></a>    ws.Range(M08_CELL_FORMAT).Value = &quot;&quot;
+<a id="__codelineno-0-254" name="__codelineno-0-254" href="#__codelineno-0-254"></a>    Dim clearRng As Range
+<a id="__codelineno-0-255" name="__codelineno-0-255" href="#__codelineno-0-255"></a>    Set clearRng = ws.Range(ws.Cells(M08_RESULT_START_ROW, 1), ws.Cells(M08_RESULT_LAST_ROW, 8))
+<a id="__codelineno-0-256" name="__codelineno-0-256" href="#__codelineno-0-256"></a>    clearRng.ClearContents
+<a id="__codelineno-0-257" name="__codelineno-0-257" href="#__codelineno-0-257"></a>    &#39; 2026-05-31 UX: also reset column A hyperlink-look font on clear.
+<a id="__codelineno-0-258" name="__codelineno-0-258" href="#__codelineno-0-258"></a>    Dim aColRng As Range
+<a id="__codelineno-0-259" name="__codelineno-0-259" href="#__codelineno-0-259"></a>    Set aColRng = ws.Range(ws.Cells(M08_RESULT_START_ROW, 1), ws.Cells(M08_RESULT_LAST_ROW, 1))
+<a id="__codelineno-0-260" name="__codelineno-0-260" href="#__codelineno-0-260"></a>    aColRng.Font.ColorIndex = xlAutomatic
+<a id="__codelineno-0-261" name="__codelineno-0-261" href="#__codelineno-0-261"></a>    aColRng.Font.Underline = xlUnderlineStyleNone
+<a id="__codelineno-0-262" name="__codelineno-0-262" href="#__codelineno-0-262"></a>    &#39; 2026-06-08 UX: also clear extended grid borders + alternating row tint
+<a id="__codelineno-0-263" name="__codelineno-0-263" href="#__codelineno-0-263"></a>    clearRng.Borders.LineStyle = xlNone
+<a id="__codelineno-0-264" name="__codelineno-0-264" href="#__codelineno-0-264"></a>    clearRng.Interior.ColorIndex = xlNone
+<a id="__codelineno-0-265" name="__codelineno-0-265" href="#__codelineno-0-265"></a>    &#39; [N3 2026-06-12] restore the seed look: thin border on the initial 10 rows
+<a id="__codelineno-0-266" name="__codelineno-0-266" href="#__codelineno-0-266"></a>    Dim seedRng As Range
+<a id="__codelineno-0-267" name="__codelineno-0-267" href="#__codelineno-0-267"></a>    Set seedRng = ws.Range(ws.Cells(M08_RESULT_START_ROW, 1), ws.Cells(M08_RESULT_START_ROW + 9, 7))
+<a id="__codelineno-0-268" name="__codelineno-0-268" href="#__codelineno-0-268"></a>    seedRng.Borders.LineStyle = xlContinuous
+<a id="__codelineno-0-269" name="__codelineno-0-269" href="#__codelineno-0-269"></a>    seedRng.Borders.Weight = xlThin
+<a id="__codelineno-0-270" name="__codelineno-0-270" href="#__codelineno-0-270"></a>    seedRng.Borders.Color = RGB(191, 191, 191)
+<a id="__codelineno-0-271" name="__codelineno-0-271" href="#__codelineno-0-271"></a>    &#39; [N2 2026-06-12] re-protect (Unprotect was one-way)
+<a id="__codelineno-0-272" name="__codelineno-0-272" href="#__codelineno-0-272"></a>    modCommon.ReProtectLight ws
+<a id="__codelineno-0-273" name="__codelineno-0-273" href="#__codelineno-0-273"></a>    &#39; [BTN-GUARD-EXIT-OK] auto-injected
+<a id="__codelineno-0-274" name="__codelineno-0-274" href="#__codelineno-0-274"></a>    modBtnGuard.LogExit BTN, XLSM, True
+<a id="__codelineno-0-275" name="__codelineno-0-275" href="#__codelineno-0-275"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1799] modEntrySearch.Btn_SearchClearV23 EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-276" name="__codelineno-0-276" href="#__codelineno-0-276"></a>    Exit Sub
+<a id="__codelineno-0-277" name="__codelineno-0-277" href="#__codelineno-0-277"></a>ErrHandler:
+<a id="__codelineno-0-278" name="__codelineno-0-278" href="#__codelineno-0-278"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print &quot;[D-1800] modEntrySearch.Btn_SearchClearV23 EXIT-ERR &quot; &amp; &quot;errNum=&quot; &amp; Err.Number &amp; &quot; desc=&quot; &amp; Err.Description  &#39; [ADR-0100]
+<a id="__codelineno-0-279" name="__codelineno-0-279" href="#__codelineno-0-279"></a>    &#39; [BTN-GUARD-ERR-LOG] auto-injected
+<a id="__codelineno-0-280" name="__codelineno-0-280" href="#__codelineno-0-280"></a>    modBtnGuard.LogExit BTN, XLSM, False
+<a id="__codelineno-0-281" name="__codelineno-0-281" href="#__codelineno-0-281"></a>    Debug.Print &quot;[ERR] Btn_SearchClearV23: &quot; &amp; Err.Number &amp; &quot; &quot; &amp; Err.Description
+<a id="__codelineno-0-282" name="__codelineno-0-282" href="#__codelineno-0-282"></a>End Sub
+<a id="__codelineno-0-283" name="__codelineno-0-283" href="#__codelineno-0-283"></a>
+<a id="__codelineno-0-284" name="__codelineno-0-284" href="#__codelineno-0-284"></a>&#39; --- helpers ---
+<a id="__codelineno-0-285" name="__codelineno-0-285" href="#__codelineno-0-285"></a>
+<a id="__codelineno-0-286" name="__codelineno-0-286" href="#__codelineno-0-286"></a>Private Function ResolveSearchSheet() As Worksheet
+<a id="__codelineno-0-287" name="__codelineno-0-287" href="#__codelineno-0-287"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1801] modEntrySearch.ResolveSearchSheet ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-288" name="__codelineno-0-288" href="#__codelineno-0-288"></a>    On Error Resume Next
+<a id="__codelineno-0-289" name="__codelineno-0-289" href="#__codelineno-0-289"></a>    Dim jp As String
+<a id="__codelineno-0-290" name="__codelineno-0-290" href="#__codelineno-0-290"></a>    jp = ChrW(&amp;H30CA) &amp; ChrW(&amp;H30EC) &amp; ChrW(&amp;H30C3) &amp; ChrW(&amp;H30B8) &amp; ChrW(&amp;H691C) &amp; ChrW(&amp;H7D22)
+<a id="__codelineno-0-291" name="__codelineno-0-291" href="#__codelineno-0-291"></a>    Dim ws As Worksheet
+<a id="__codelineno-0-292" name="__codelineno-0-292" href="#__codelineno-0-292"></a>    Set ws = ThisWorkbook.Worksheets(jp)
+<a id="__codelineno-0-293" name="__codelineno-0-293" href="#__codelineno-0-293"></a>    If ws Is Nothing Then Set ws = ThisWorkbook.Worksheets(&quot;M-08&quot;)
+<a id="__codelineno-0-294" name="__codelineno-0-294" href="#__codelineno-0-294"></a>    Set ResolveSearchSheet = ws
+<a id="__codelineno-0-295" name="__codelineno-0-295" href="#__codelineno-0-295"></a>    On Error GoTo 0
+<a id="__codelineno-0-296" name="__codelineno-0-296" href="#__codelineno-0-296"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1802] modEntrySearch.ResolveSearchSheet EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-297" name="__codelineno-0-297" href="#__codelineno-0-297"></a>End Function
+<a id="__codelineno-0-298" name="__codelineno-0-298" href="#__codelineno-0-298"></a>
+<a id="__codelineno-0-299" name="__codelineno-0-299" href="#__codelineno-0-299"></a>Private Function MatchesSearchV23(ByVal data As Object, ByVal keyword As String, ByVal fmtFilter As String) As Boolean
+<a id="__codelineno-0-300" name="__codelineno-0-300" href="#__codelineno-0-300"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1803] modEntrySearch.MatchesSearchV23 ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-301" name="__codelineno-0-301" href="#__codelineno-0-301"></a>    If Len(fmtFilter) &gt; 0 Then
+<a id="__codelineno-0-302" name="__codelineno-0-302" href="#__codelineno-0-302"></a>        Dim actual As String
+<a id="__codelineno-0-303" name="__codelineno-0-303" href="#__codelineno-0-303"></a>        actual = SafeStr(data, &quot;FormatID&quot;)
+<a id="__codelineno-0-304" name="__codelineno-0-304" href="#__codelineno-0-304"></a>        If actual &lt;&gt; fmtFilter Then
+<a id="__codelineno-0-305" name="__codelineno-0-305" href="#__codelineno-0-305"></a>            MatchesSearchV23 = False
+<a id="__codelineno-0-306" name="__codelineno-0-306" href="#__codelineno-0-306"></a>            If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1804] modEntrySearch.MatchesSearchV23 EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-307" name="__codelineno-0-307" href="#__codelineno-0-307"></a>            Exit Function
+<a id="__codelineno-0-308" name="__codelineno-0-308" href="#__codelineno-0-308"></a>        End If
+<a id="__codelineno-0-309" name="__codelineno-0-309" href="#__codelineno-0-309"></a>    End If
+<a id="__codelineno-0-310" name="__codelineno-0-310" href="#__codelineno-0-310"></a>    If Len(keyword) = 0 Then
+<a id="__codelineno-0-311" name="__codelineno-0-311" href="#__codelineno-0-311"></a>        MatchesSearchV23 = True
+<a id="__codelineno-0-312" name="__codelineno-0-312" href="#__codelineno-0-312"></a>        If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1805] modEntrySearch.MatchesSearchV23 EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-313" name="__codelineno-0-313" href="#__codelineno-0-313"></a>        Exit Function
+<a id="__codelineno-0-314" name="__codelineno-0-314" href="#__codelineno-0-314"></a>    End If
+<a id="__codelineno-0-315" name="__codelineno-0-315" href="#__codelineno-0-315"></a>    &#39; [USER-REQ 2026-06-09] Keyword matching restricted to searchTarget=TRUE fields.
+<a id="__codelineno-0-316" name="__codelineno-0-316" href="#__codelineno-0-316"></a>    &#39; [BUG-B9 2026-06-11] Space-separated keywords (half/full width) are AND
+<a id="__codelineno-0-317" name="__codelineno-0-317" href="#__codelineno-0-317"></a>    &#39; conditions over the combined searchTarget text, not one long literal.
+<a id="__codelineno-0-318" name="__codelineno-0-318" href="#__codelineno-0-318"></a>    Dim searchFields As Collection
+<a id="__codelineno-0-319" name="__codelineno-0-319" href="#__codelineno-0-319"></a>    Set searchFields = GetSearchTargetFieldNames(SafeStr(data, &quot;FormatID&quot;))
+<a id="__codelineno-0-320" name="__codelineno-0-320" href="#__codelineno-0-320"></a>    Dim combined As String
+<a id="__codelineno-0-321" name="__codelineno-0-321" href="#__codelineno-0-321"></a>    combined = &quot;&quot;
+<a id="__codelineno-0-322" name="__codelineno-0-322" href="#__codelineno-0-322"></a>    Dim sfi As Long
+<a id="__codelineno-0-323" name="__codelineno-0-323" href="#__codelineno-0-323"></a>    For sfi = 1 To searchFields.Count
+<a id="__codelineno-0-324" name="__codelineno-0-324" href="#__codelineno-0-324"></a>        Dim fname As String
+<a id="__codelineno-0-325" name="__codelineno-0-325" href="#__codelineno-0-325"></a>        fname = CStr(searchFields(sfi))
+<a id="__codelineno-0-326" name="__codelineno-0-326" href="#__codelineno-0-326"></a>        If data.Exists(fname) Then combined = combined &amp; &quot; &quot; &amp; CStr(data(fname))
+<a id="__codelineno-0-327" name="__codelineno-0-327" href="#__codelineno-0-327"></a>    Next sfi
+<a id="__codelineno-0-328" name="__codelineno-0-328" href="#__codelineno-0-328"></a>    MatchesSearchV23 = ContainsAllTerms(combined, keyword)
+<a id="__codelineno-0-329" name="__codelineno-0-329" href="#__codelineno-0-329"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1806] modEntrySearch.MatchesSearchV23 EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-330" name="__codelineno-0-330" href="#__codelineno-0-330"></a>End Function
+<a id="__codelineno-0-331" name="__codelineno-0-331" href="#__codelineno-0-331"></a>
+<a id="__codelineno-0-332" name="__codelineno-0-332" href="#__codelineno-0-332"></a>&#39; [USER-REQ 2026-06-09] Returns all FIELD names where searchTarget=TRUE
+<a id="__codelineno-0-333" name="__codelineno-0-333" href="#__codelineno-0-333"></a>&#39; for the given format. Empty Collection if no format or no marked fields.
+<a id="__codelineno-0-334" name="__codelineno-0-334" href="#__codelineno-0-334"></a>Private Function GetSearchTargetFieldNames(ByVal fmtId As String) As Collection
+<a id="__codelineno-0-335" name="__codelineno-0-335" href="#__codelineno-0-335"></a>    Dim result As Collection
+<a id="__codelineno-0-336" name="__codelineno-0-336" href="#__codelineno-0-336"></a>    Set result = New Collection
+<a id="__codelineno-0-337" name="__codelineno-0-337" href="#__codelineno-0-337"></a>    On Error Resume Next
+<a id="__codelineno-0-338" name="__codelineno-0-338" href="#__codelineno-0-338"></a>    If Len(fmtId) = 0 Then
+<a id="__codelineno-0-339" name="__codelineno-0-339" href="#__codelineno-0-339"></a>        Set GetSearchTargetFieldNames = result
+<a id="__codelineno-0-340" name="__codelineno-0-340" href="#__codelineno-0-340"></a>        Exit Function
+<a id="__codelineno-0-341" name="__codelineno-0-341" href="#__codelineno-0-341"></a>    End If
+<a id="__codelineno-0-342" name="__codelineno-0-342" href="#__codelineno-0-342"></a>    Dim secs As Collection
+<a id="__codelineno-0-343" name="__codelineno-0-343" href="#__codelineno-0-343"></a>    Set secs = modFormatLoader.LoadFormat(fmtId)
+<a id="__codelineno-0-344" name="__codelineno-0-344" href="#__codelineno-0-344"></a>    If secs Is Nothing Then
+<a id="__codelineno-0-345" name="__codelineno-0-345" href="#__codelineno-0-345"></a>        Set GetSearchTargetFieldNames = result
+<a id="__codelineno-0-346" name="__codelineno-0-346" href="#__codelineno-0-346"></a>        Exit Function
+<a id="__codelineno-0-347" name="__codelineno-0-347" href="#__codelineno-0-347"></a>    End If
+<a id="__codelineno-0-348" name="__codelineno-0-348" href="#__codelineno-0-348"></a>    Dim sec As ClsStanzaSection
+<a id="__codelineno-0-349" name="__codelineno-0-349" href="#__codelineno-0-349"></a>    Dim i As Long
+<a id="__codelineno-0-350" name="__codelineno-0-350" href="#__codelineno-0-350"></a>    For i = 1 To secs.Count
+<a id="__codelineno-0-351" name="__codelineno-0-351" href="#__codelineno-0-351"></a>        Set sec = secs.Item(i)
+<a id="__codelineno-0-352" name="__codelineno-0-352" href="#__codelineno-0-352"></a>        If sec.SectionName = &quot;FIELD&quot; Then
+<a id="__codelineno-0-353" name="__codelineno-0-353" href="#__codelineno-0-353"></a>            Dim st As String
+<a id="__codelineno-0-354" name="__codelineno-0-354" href="#__codelineno-0-354"></a>            st = &quot;&quot;
+<a id="__codelineno-0-355" name="__codelineno-0-355" href="#__codelineno-0-355"></a>            If sec.HasKey(&quot;searchTarget&quot;) Then st = LCase(Trim(sec.GetValue(&quot;searchTarget&quot;)))
+<a id="__codelineno-0-356" name="__codelineno-0-356" href="#__codelineno-0-356"></a>            If st = &quot;true&quot; Or st = &quot;1&quot; Or st = &quot;yes&quot; Then
+<a id="__codelineno-0-357" name="__codelineno-0-357" href="#__codelineno-0-357"></a>                Dim fn As String
+<a id="__codelineno-0-358" name="__codelineno-0-358" href="#__codelineno-0-358"></a>                fn = &quot;&quot;
+<a id="__codelineno-0-359" name="__codelineno-0-359" href="#__codelineno-0-359"></a>                If sec.HasKey(&quot;FieldName&quot;) Then fn = sec.GetValue(&quot;FieldName&quot;)
+<a id="__codelineno-0-360" name="__codelineno-0-360" href="#__codelineno-0-360"></a>                If Len(fn) &gt; 0 Then result.Add fn
+<a id="__codelineno-0-361" name="__codelineno-0-361" href="#__codelineno-0-361"></a>            End If
+<a id="__codelineno-0-362" name="__codelineno-0-362" href="#__codelineno-0-362"></a>        End If
+<a id="__codelineno-0-363" name="__codelineno-0-363" href="#__codelineno-0-363"></a>    Next i
+<a id="__codelineno-0-364" name="__codelineno-0-364" href="#__codelineno-0-364"></a>    Set GetSearchTargetFieldNames = result
+<a id="__codelineno-0-365" name="__codelineno-0-365" href="#__codelineno-0-365"></a>End Function
+<a id="__codelineno-0-366" name="__codelineno-0-366" href="#__codelineno-0-366"></a>
+<a id="__codelineno-0-367" name="__codelineno-0-367" href="#__codelineno-0-367"></a>Private Function SafeStr(ByVal data As Object, ByVal key As String) As String
+<a id="__codelineno-0-368" name="__codelineno-0-368" href="#__codelineno-0-368"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1807] modEntrySearch.SafeStr ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-369" name="__codelineno-0-369" href="#__codelineno-0-369"></a>    If data Is Nothing Then Exit Function
+<a id="__codelineno-0-370" name="__codelineno-0-370" href="#__codelineno-0-370"></a>    If data.Exists(key) Then SafeStr = CStr(data(key))
+<a id="__codelineno-0-371" name="__codelineno-0-371" href="#__codelineno-0-371"></a>End Function
+<a id="__codelineno-0-372" name="__codelineno-0-372" href="#__codelineno-0-372"></a>
+<a id="__codelineno-0-373" name="__codelineno-0-373" href="#__codelineno-0-373"></a>&#39; Phase R-3-Omega legacy helper (kept for now).
+<a id="__codelineno-0-374" name="__codelineno-0-374" href="#__codelineno-0-374"></a>Private Function NthFieldValue(ByVal data As Object, ByVal n As Long) As String
+<a id="__codelineno-0-375" name="__codelineno-0-375" href="#__codelineno-0-375"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1808] modEntrySearch.NthFieldValue ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-376" name="__codelineno-0-376" href="#__codelineno-0-376"></a>    If data Is Nothing Then Exit Function
+<a id="__codelineno-0-377" name="__codelineno-0-377" href="#__codelineno-0-377"></a>    Dim meta As String
+<a id="__codelineno-0-378" name="__codelineno-0-378" href="#__codelineno-0-378"></a>    meta = &quot;|KnowledgeNo|FormatID|FormatId|FormatVersion|CreatedAt|UpdatedAt|&quot;
+<a id="__codelineno-0-379" name="__codelineno-0-379" href="#__codelineno-0-379"></a>    Dim cnt As Long
+<a id="__codelineno-0-380" name="__codelineno-0-380" href="#__codelineno-0-380"></a>    cnt = 0
+<a id="__codelineno-0-381" name="__codelineno-0-381" href="#__codelineno-0-381"></a>    Dim k As Variant
+<a id="__codelineno-0-382" name="__codelineno-0-382" href="#__codelineno-0-382"></a>    For Each k In data.Keys
+<a id="__codelineno-0-383" name="__codelineno-0-383" href="#__codelineno-0-383"></a>        If InStr(meta, &quot;|&quot; &amp; CStr(k) &amp; &quot;|&quot;) = 0 Then
+<a id="__codelineno-0-384" name="__codelineno-0-384" href="#__codelineno-0-384"></a>            cnt = cnt + 1
+<a id="__codelineno-0-385" name="__codelineno-0-385" href="#__codelineno-0-385"></a>            If cnt = n Then
+<a id="__codelineno-0-386" name="__codelineno-0-386" href="#__codelineno-0-386"></a>                Dim v As String
+<a id="__codelineno-0-387" name="__codelineno-0-387" href="#__codelineno-0-387"></a>                v = CStr(data(CStr(k)))
+<a id="__codelineno-0-388" name="__codelineno-0-388" href="#__codelineno-0-388"></a>                If Len(v) &gt; 50 Then v = Left(v, 50) &amp; &quot;...&quot;
+<a id="__codelineno-0-389" name="__codelineno-0-389" href="#__codelineno-0-389"></a>                NthFieldValue = v
+<a id="__codelineno-0-390" name="__codelineno-0-390" href="#__codelineno-0-390"></a>                If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1809] modEntrySearch.NthFieldValue EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-391" name="__codelineno-0-391" href="#__codelineno-0-391"></a>                Exit Function
+<a id="__codelineno-0-392" name="__codelineno-0-392" href="#__codelineno-0-392"></a>            End If
+<a id="__codelineno-0-393" name="__codelineno-0-393" href="#__codelineno-0-393"></a>        End If
+<a id="__codelineno-0-394" name="__codelineno-0-394" href="#__codelineno-0-394"></a>    Next k
+<a id="__codelineno-0-395" name="__codelineno-0-395" href="#__codelineno-0-395"></a>End Function
+<a id="__codelineno-0-396" name="__codelineno-0-396" href="#__codelineno-0-396"></a>
+<a id="__codelineno-0-397" name="__codelineno-0-397" href="#__codelineno-0-397"></a>Private Function FirstTextFieldValue(ByVal data As Object) As String
+<a id="__codelineno-0-398" name="__codelineno-0-398" href="#__codelineno-0-398"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1810] modEntrySearch.FirstTextFieldValue ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-399" name="__codelineno-0-399" href="#__codelineno-0-399"></a>    If data Is Nothing Then Exit Function
 <a id="__codelineno-0-400" name="__codelineno-0-400" href="#__codelineno-0-400"></a>    Dim k As Variant
 <a id="__codelineno-0-401" name="__codelineno-0-401" href="#__codelineno-0-401"></a>    For Each k In data.Keys
-<a id="__codelineno-0-402" name="__codelineno-0-402" href="#__codelineno-0-402"></a>        If InStr(meta, &quot;|&quot; &amp; CStr(k) &amp; &quot;|&quot;) = 0 Then
-<a id="__codelineno-0-403" name="__codelineno-0-403" href="#__codelineno-0-403"></a>            cnt = cnt + 1
-<a id="__codelineno-0-404" name="__codelineno-0-404" href="#__codelineno-0-404"></a>            If cnt = n Then
-<a id="__codelineno-0-405" name="__codelineno-0-405" href="#__codelineno-0-405"></a>                Dim v As String
-<a id="__codelineno-0-406" name="__codelineno-0-406" href="#__codelineno-0-406"></a>                v = CStr(data(CStr(k)))
-<a id="__codelineno-0-407" name="__codelineno-0-407" href="#__codelineno-0-407"></a>                If Len(v) &gt; 50 Then v = Left(v, 50) &amp; &quot;...&quot;
-<a id="__codelineno-0-408" name="__codelineno-0-408" href="#__codelineno-0-408"></a>                NthFieldValue = v
-<a id="__codelineno-0-409" name="__codelineno-0-409" href="#__codelineno-0-409"></a>                If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1809] modEntrySearch.NthFieldValue EXIT-OK&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-410" name="__codelineno-0-410" href="#__codelineno-0-410"></a>                Exit Function
-<a id="__codelineno-0-411" name="__codelineno-0-411" href="#__codelineno-0-411"></a>            End If
-<a id="__codelineno-0-412" name="__codelineno-0-412" href="#__codelineno-0-412"></a>        End If
-<a id="__codelineno-0-413" name="__codelineno-0-413" href="#__codelineno-0-413"></a>    Next k
-<a id="__codelineno-0-414" name="__codelineno-0-414" href="#__codelineno-0-414"></a>End Function
-<a id="__codelineno-0-415" name="__codelineno-0-415" href="#__codelineno-0-415"></a>
-<a id="__codelineno-0-416" name="__codelineno-0-416" href="#__codelineno-0-416"></a>Private Function FirstTextFieldValue(ByVal data As Object) As String
-<a id="__codelineno-0-417" name="__codelineno-0-417" href="#__codelineno-0-417"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1810] modEntrySearch.FirstTextFieldValue ENTER&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-418" name="__codelineno-0-418" href="#__codelineno-0-418"></a>    If data Is Nothing Then Exit Function
-<a id="__codelineno-0-419" name="__codelineno-0-419" href="#__codelineno-0-419"></a>    Dim k As Variant
-<a id="__codelineno-0-420" name="__codelineno-0-420" href="#__codelineno-0-420"></a>    For Each k In data.Keys
-<a id="__codelineno-0-421" name="__codelineno-0-421" href="#__codelineno-0-421"></a>        Dim ks As String
-<a id="__codelineno-0-422" name="__codelineno-0-422" href="#__codelineno-0-422"></a>        ks = CStr(k)
-<a id="__codelineno-0-423" name="__codelineno-0-423" href="#__codelineno-0-423"></a>        If ks &lt;&gt; &quot;KnowledgeNo&quot; And ks &lt;&gt; &quot;FormatID&quot; Then
-<a id="__codelineno-0-424" name="__codelineno-0-424" href="#__codelineno-0-424"></a>            Dim v As String
-<a id="__codelineno-0-425" name="__codelineno-0-425" href="#__codelineno-0-425"></a>            v = CStr(data(ks))
-<a id="__codelineno-0-426" name="__codelineno-0-426" href="#__codelineno-0-426"></a>            If Len(v) &gt; 0 Then
-<a id="__codelineno-0-427" name="__codelineno-0-427" href="#__codelineno-0-427"></a>                If Len(v) &gt; 50 Then v = Left(v, 50) &amp; &quot;...&quot;
-<a id="__codelineno-0-428" name="__codelineno-0-428" href="#__codelineno-0-428"></a>                FirstTextFieldValue = v
-<a id="__codelineno-0-429" name="__codelineno-0-429" href="#__codelineno-0-429"></a>                If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1811] modEntrySearch.FirstTextFieldValue EXIT-OK&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-430" name="__codelineno-0-430" href="#__codelineno-0-430"></a>                Exit Function
-<a id="__codelineno-0-431" name="__codelineno-0-431" href="#__codelineno-0-431"></a>            End If
-<a id="__codelineno-0-432" name="__codelineno-0-432" href="#__codelineno-0-432"></a>        End If
-<a id="__codelineno-0-433" name="__codelineno-0-433" href="#__codelineno-0-433"></a>    Next k
-<a id="__codelineno-0-434" name="__codelineno-0-434" href="#__codelineno-0-434"></a>End Function
-<a id="__codelineno-0-435" name="__codelineno-0-435" href="#__codelineno-0-435"></a>
-<a id="__codelineno-0-436" name="__codelineno-0-436" href="#__codelineno-0-436"></a>&#39; SPEC_DRIFT-NEW3 (2026-05-31): trim a value for the subject / excerpt result columns.
-<a id="__codelineno-0-437" name="__codelineno-0-437" href="#__codelineno-0-437"></a>Private Function TrimExcerpt(ByVal v As String) As String
-<a id="__codelineno-0-438" name="__codelineno-0-438" href="#__codelineno-0-438"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1812] modEntrySearch.TrimExcerpt ENTER&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-439" name="__codelineno-0-439" href="#__codelineno-0-439"></a>    Dim s As String
-<a id="__codelineno-0-440" name="__codelineno-0-440" href="#__codelineno-0-440"></a>    s = v
-<a id="__codelineno-0-441" name="__codelineno-0-441" href="#__codelineno-0-441"></a>    s = Replace(s, vbCrLf, &quot; &quot;)
-<a id="__codelineno-0-442" name="__codelineno-0-442" href="#__codelineno-0-442"></a>    s = Replace(s, vbCr, &quot; &quot;)
-<a id="__codelineno-0-443" name="__codelineno-0-443" href="#__codelineno-0-443"></a>    s = Replace(s, vbLf, &quot; &quot;)
-<a id="__codelineno-0-444" name="__codelineno-0-444" href="#__codelineno-0-444"></a>    s = Trim(s)
-<a id="__codelineno-0-445" name="__codelineno-0-445" href="#__codelineno-0-445"></a>    If Len(s) &gt; 50 Then s = Left(s, 50) &amp; &quot;...&quot;
-<a id="__codelineno-0-446" name="__codelineno-0-446" href="#__codelineno-0-446"></a>    TrimExcerpt = s
-<a id="__codelineno-0-447" name="__codelineno-0-447" href="#__codelineno-0-447"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1813] modEntrySearch.TrimExcerpt EXIT-OK&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-448" name="__codelineno-0-448" href="#__codelineno-0-448"></a>End Function
-<a id="__codelineno-0-449" name="__codelineno-0-449" href="#__codelineno-0-449"></a>
-<a id="__codelineno-0-450" name="__codelineno-0-450" href="#__codelineno-0-450"></a>&#39; SPEC_DRIFT-NEW3 (2026-05-31): resolve subject/excerpt keys for a record.
-<a id="__codelineno-0-451" name="__codelineno-0-451" href="#__codelineno-0-451"></a>Private Sub SubjectAndExcerptKeys(ByVal data As Object, _
-<a id="__codelineno-0-452" name="__codelineno-0-452" href="#__codelineno-0-452"></a>                                  ByVal formatId As String, _
-<a id="__codelineno-0-453" name="__codelineno-0-453" href="#__codelineno-0-453"></a>                                  ByRef subjKey As String, _
-<a id="__codelineno-0-454" name="__codelineno-0-454" href="#__codelineno-0-454"></a>                                  ByRef excKey As String)
-<a id="__codelineno-0-455" name="__codelineno-0-455" href="#__codelineno-0-455"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1814] modEntrySearch.SubjectAndExcerptKeys ENTER&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-456" name="__codelineno-0-456" href="#__codelineno-0-456"></a>    subjKey = &quot;&quot;
-<a id="__codelineno-0-457" name="__codelineno-0-457" href="#__codelineno-0-457"></a>    excKey = &quot;&quot;
-<a id="__codelineno-0-458" name="__codelineno-0-458" href="#__codelineno-0-458"></a>
-<a id="__codelineno-0-459" name="__codelineno-0-459" href="#__codelineno-0-459"></a>    Dim L_KENMEI As String, L_JISHO As String, L_TANITSU As String, L_FUKUSU As String
-<a id="__codelineno-0-460" name="__codelineno-0-460" href="#__codelineno-0-460"></a>    Dim L_TEJUN As String
-<a id="__codelineno-0-461" name="__codelineno-0-461" href="#__codelineno-0-461"></a>    L_KENMEI = ChrW(&amp;H4EF6) &amp; ChrW(&amp;H540D)
-<a id="__codelineno-0-462" name="__codelineno-0-462" href="#__codelineno-0-462"></a>    L_JISHO  = ChrW(&amp;H4E8B) &amp; ChrW(&amp;H8C61)
-<a id="__codelineno-0-463" name="__codelineno-0-463" href="#__codelineno-0-463"></a>    L_TANITSU = ChrW(&amp;H5358) &amp; ChrW(&amp;H4E00) &amp; ChrW(&amp;H884C)
-<a id="__codelineno-0-464" name="__codelineno-0-464" href="#__codelineno-0-464"></a>    L_FUKUSU  = ChrW(&amp;H8907) &amp; ChrW(&amp;H6570) &amp; ChrW(&amp;H884C)
-<a id="__codelineno-0-465" name="__codelineno-0-465" href="#__codelineno-0-465"></a>    L_TEJUN  = ChrW(&amp;H624B) &amp; ChrW(&amp;H9806)
-<a id="__codelineno-0-466" name="__codelineno-0-466" href="#__codelineno-0-466"></a>
-<a id="__codelineno-0-467" name="__codelineno-0-467" href="#__codelineno-0-467"></a>    On Error Resume Next
-<a id="__codelineno-0-468" name="__codelineno-0-468" href="#__codelineno-0-468"></a>    Dim sections As Collection
-<a id="__codelineno-0-469" name="__codelineno-0-469" href="#__codelineno-0-469"></a>    If Len(formatId) &gt; 0 Then
-<a id="__codelineno-0-470" name="__codelineno-0-470" href="#__codelineno-0-470"></a>        Set sections = modFormatLoader.LoadFormat(formatId)
-<a id="__codelineno-0-471" name="__codelineno-0-471" href="#__codelineno-0-471"></a>    End If
-<a id="__codelineno-0-472" name="__codelineno-0-472" href="#__codelineno-0-472"></a>    On Error GoTo 0
-<a id="__codelineno-0-473" name="__codelineno-0-473" href="#__codelineno-0-473"></a>
-<a id="__codelineno-0-474" name="__codelineno-0-474" href="#__codelineno-0-474"></a>    Dim firstSingleLine As String
-<a id="__codelineno-0-475" name="__codelineno-0-475" href="#__codelineno-0-475"></a>    Dim firstMultiLine As String
-<a id="__codelineno-0-476" name="__codelineno-0-476" href="#__codelineno-0-476"></a>    Dim firstTejunLike As String
-<a id="__codelineno-0-477" name="__codelineno-0-477" href="#__codelineno-0-477"></a>    firstSingleLine = &quot;&quot;
-<a id="__codelineno-0-478" name="__codelineno-0-478" href="#__codelineno-0-478"></a>    firstMultiLine = &quot;&quot;
-<a id="__codelineno-0-479" name="__codelineno-0-479" href="#__codelineno-0-479"></a>    firstTejunLike = &quot;&quot;
-<a id="__codelineno-0-480" name="__codelineno-0-480" href="#__codelineno-0-480"></a>
-<a id="__codelineno-0-481" name="__codelineno-0-481" href="#__codelineno-0-481"></a>    If Not sections Is Nothing Then
-<a id="__codelineno-0-482" name="__codelineno-0-482" href="#__codelineno-0-482"></a>        Dim i As Long
-<a id="__codelineno-0-483" name="__codelineno-0-483" href="#__codelineno-0-483"></a>        For i = 1 To sections.Count
-<a id="__codelineno-0-484" name="__codelineno-0-484" href="#__codelineno-0-484"></a>            Dim sec As Object
-<a id="__codelineno-0-485" name="__codelineno-0-485" href="#__codelineno-0-485"></a>            Set sec = sections.Item(i)
-<a id="__codelineno-0-486" name="__codelineno-0-486" href="#__codelineno-0-486"></a>            If sec.SectionName = &quot;FIELD&quot; Then
-<a id="__codelineno-0-487" name="__codelineno-0-487" href="#__codelineno-0-487"></a>                Dim fName As String, fType As String
-<a id="__codelineno-0-488" name="__codelineno-0-488" href="#__codelineno-0-488"></a>                fName = sec.GetValue(&quot;FieldName&quot;)
-<a id="__codelineno-0-489" name="__codelineno-0-489" href="#__codelineno-0-489"></a>                fType = sec.GetValue(&quot;FieldType&quot;)
+<a id="__codelineno-0-402" name="__codelineno-0-402" href="#__codelineno-0-402"></a>        Dim ks As String
+<a id="__codelineno-0-403" name="__codelineno-0-403" href="#__codelineno-0-403"></a>        ks = CStr(k)
+<a id="__codelineno-0-404" name="__codelineno-0-404" href="#__codelineno-0-404"></a>        If ks &lt;&gt; &quot;KnowledgeNo&quot; And ks &lt;&gt; &quot;FormatID&quot; Then
+<a id="__codelineno-0-405" name="__codelineno-0-405" href="#__codelineno-0-405"></a>            Dim v As String
+<a id="__codelineno-0-406" name="__codelineno-0-406" href="#__codelineno-0-406"></a>            v = CStr(data(ks))
+<a id="__codelineno-0-407" name="__codelineno-0-407" href="#__codelineno-0-407"></a>            If Len(v) &gt; 0 Then
+<a id="__codelineno-0-408" name="__codelineno-0-408" href="#__codelineno-0-408"></a>                If Len(v) &gt; 50 Then v = Left(v, 50) &amp; &quot;...&quot;
+<a id="__codelineno-0-409" name="__codelineno-0-409" href="#__codelineno-0-409"></a>                FirstTextFieldValue = v
+<a id="__codelineno-0-410" name="__codelineno-0-410" href="#__codelineno-0-410"></a>                If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1811] modEntrySearch.FirstTextFieldValue EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-411" name="__codelineno-0-411" href="#__codelineno-0-411"></a>                Exit Function
+<a id="__codelineno-0-412" name="__codelineno-0-412" href="#__codelineno-0-412"></a>            End If
+<a id="__codelineno-0-413" name="__codelineno-0-413" href="#__codelineno-0-413"></a>        End If
+<a id="__codelineno-0-414" name="__codelineno-0-414" href="#__codelineno-0-414"></a>    Next k
+<a id="__codelineno-0-415" name="__codelineno-0-415" href="#__codelineno-0-415"></a>End Function
+<a id="__codelineno-0-416" name="__codelineno-0-416" href="#__codelineno-0-416"></a>
+<a id="__codelineno-0-417" name="__codelineno-0-417" href="#__codelineno-0-417"></a>&#39; SPEC_DRIFT-NEW3 (2026-05-31): trim a value for the subject / excerpt result columns.
+<a id="__codelineno-0-418" name="__codelineno-0-418" href="#__codelineno-0-418"></a>Private Function TrimExcerpt(ByVal v As String) As String
+<a id="__codelineno-0-419" name="__codelineno-0-419" href="#__codelineno-0-419"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1812] modEntrySearch.TrimExcerpt ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-420" name="__codelineno-0-420" href="#__codelineno-0-420"></a>    Dim s As String
+<a id="__codelineno-0-421" name="__codelineno-0-421" href="#__codelineno-0-421"></a>    s = v
+<a id="__codelineno-0-422" name="__codelineno-0-422" href="#__codelineno-0-422"></a>    s = Replace(s, vbCrLf, &quot; &quot;)
+<a id="__codelineno-0-423" name="__codelineno-0-423" href="#__codelineno-0-423"></a>    s = Replace(s, vbCr, &quot; &quot;)
+<a id="__codelineno-0-424" name="__codelineno-0-424" href="#__codelineno-0-424"></a>    s = Replace(s, vbLf, &quot; &quot;)
+<a id="__codelineno-0-425" name="__codelineno-0-425" href="#__codelineno-0-425"></a>    s = Trim(s)
+<a id="__codelineno-0-426" name="__codelineno-0-426" href="#__codelineno-0-426"></a>    If Len(s) &gt; 50 Then s = Left(s, 50) &amp; &quot;...&quot;
+<a id="__codelineno-0-427" name="__codelineno-0-427" href="#__codelineno-0-427"></a>    TrimExcerpt = s
+<a id="__codelineno-0-428" name="__codelineno-0-428" href="#__codelineno-0-428"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1813] modEntrySearch.TrimExcerpt EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-429" name="__codelineno-0-429" href="#__codelineno-0-429"></a>End Function
+<a id="__codelineno-0-430" name="__codelineno-0-430" href="#__codelineno-0-430"></a>
+<a id="__codelineno-0-431" name="__codelineno-0-431" href="#__codelineno-0-431"></a>&#39; SPEC_DRIFT-NEW3 (2026-05-31): resolve subject/excerpt keys for a record.
+<a id="__codelineno-0-432" name="__codelineno-0-432" href="#__codelineno-0-432"></a>Private Sub SubjectAndExcerptKeys(ByVal data As Object, _
+<a id="__codelineno-0-433" name="__codelineno-0-433" href="#__codelineno-0-433"></a>                                  ByVal formatId As String, _
+<a id="__codelineno-0-434" name="__codelineno-0-434" href="#__codelineno-0-434"></a>                                  ByRef subjKey As String, _
+<a id="__codelineno-0-435" name="__codelineno-0-435" href="#__codelineno-0-435"></a>                                  ByRef excKey As String)
+<a id="__codelineno-0-436" name="__codelineno-0-436" href="#__codelineno-0-436"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1814] modEntrySearch.SubjectAndExcerptKeys ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-437" name="__codelineno-0-437" href="#__codelineno-0-437"></a>    subjKey = &quot;&quot;
+<a id="__codelineno-0-438" name="__codelineno-0-438" href="#__codelineno-0-438"></a>    excKey = &quot;&quot;
+<a id="__codelineno-0-439" name="__codelineno-0-439" href="#__codelineno-0-439"></a>
+<a id="__codelineno-0-440" name="__codelineno-0-440" href="#__codelineno-0-440"></a>    Dim L_KENMEI As String, L_JISHO As String, L_TANITSU As String, L_FUKUSU As String
+<a id="__codelineno-0-441" name="__codelineno-0-441" href="#__codelineno-0-441"></a>    Dim L_TEJUN As String
+<a id="__codelineno-0-442" name="__codelineno-0-442" href="#__codelineno-0-442"></a>    L_KENMEI = ChrW(&amp;H4EF6) &amp; ChrW(&amp;H540D)
+<a id="__codelineno-0-443" name="__codelineno-0-443" href="#__codelineno-0-443"></a>    L_JISHO  = ChrW(&amp;H4E8B) &amp; ChrW(&amp;H8C61)
+<a id="__codelineno-0-444" name="__codelineno-0-444" href="#__codelineno-0-444"></a>    L_TANITSU = ChrW(&amp;H5358) &amp; ChrW(&amp;H4E00) &amp; ChrW(&amp;H884C)
+<a id="__codelineno-0-445" name="__codelineno-0-445" href="#__codelineno-0-445"></a>    L_FUKUSU  = ChrW(&amp;H8907) &amp; ChrW(&amp;H6570) &amp; ChrW(&amp;H884C)
+<a id="__codelineno-0-446" name="__codelineno-0-446" href="#__codelineno-0-446"></a>    L_TEJUN  = ChrW(&amp;H624B) &amp; ChrW(&amp;H9806)
+<a id="__codelineno-0-447" name="__codelineno-0-447" href="#__codelineno-0-447"></a>
+<a id="__codelineno-0-448" name="__codelineno-0-448" href="#__codelineno-0-448"></a>    On Error Resume Next
+<a id="__codelineno-0-449" name="__codelineno-0-449" href="#__codelineno-0-449"></a>    Dim sections As Collection
+<a id="__codelineno-0-450" name="__codelineno-0-450" href="#__codelineno-0-450"></a>    If Len(formatId) &gt; 0 Then
+<a id="__codelineno-0-451" name="__codelineno-0-451" href="#__codelineno-0-451"></a>        Set sections = modFormatLoader.LoadFormat(formatId)
+<a id="__codelineno-0-452" name="__codelineno-0-452" href="#__codelineno-0-452"></a>    End If
+<a id="__codelineno-0-453" name="__codelineno-0-453" href="#__codelineno-0-453"></a>    On Error GoTo 0
+<a id="__codelineno-0-454" name="__codelineno-0-454" href="#__codelineno-0-454"></a>
+<a id="__codelineno-0-455" name="__codelineno-0-455" href="#__codelineno-0-455"></a>    Dim firstSingleLine As String
+<a id="__codelineno-0-456" name="__codelineno-0-456" href="#__codelineno-0-456"></a>    Dim firstMultiLine As String
+<a id="__codelineno-0-457" name="__codelineno-0-457" href="#__codelineno-0-457"></a>    Dim firstTejunLike As String
+<a id="__codelineno-0-458" name="__codelineno-0-458" href="#__codelineno-0-458"></a>    firstSingleLine = &quot;&quot;
+<a id="__codelineno-0-459" name="__codelineno-0-459" href="#__codelineno-0-459"></a>    firstMultiLine = &quot;&quot;
+<a id="__codelineno-0-460" name="__codelineno-0-460" href="#__codelineno-0-460"></a>    firstTejunLike = &quot;&quot;
+<a id="__codelineno-0-461" name="__codelineno-0-461" href="#__codelineno-0-461"></a>
+<a id="__codelineno-0-462" name="__codelineno-0-462" href="#__codelineno-0-462"></a>    If Not sections Is Nothing Then
+<a id="__codelineno-0-463" name="__codelineno-0-463" href="#__codelineno-0-463"></a>        Dim i As Long
+<a id="__codelineno-0-464" name="__codelineno-0-464" href="#__codelineno-0-464"></a>        For i = 1 To sections.Count
+<a id="__codelineno-0-465" name="__codelineno-0-465" href="#__codelineno-0-465"></a>            Dim sec As Object
+<a id="__codelineno-0-466" name="__codelineno-0-466" href="#__codelineno-0-466"></a>            Set sec = sections.Item(i)
+<a id="__codelineno-0-467" name="__codelineno-0-467" href="#__codelineno-0-467"></a>            If sec.SectionName = &quot;FIELD&quot; Then
+<a id="__codelineno-0-468" name="__codelineno-0-468" href="#__codelineno-0-468"></a>                Dim fName As String, fType As String
+<a id="__codelineno-0-469" name="__codelineno-0-469" href="#__codelineno-0-469"></a>                fName = sec.GetValue(&quot;FieldName&quot;)
+<a id="__codelineno-0-470" name="__codelineno-0-470" href="#__codelineno-0-470"></a>                fType = sec.GetValue(&quot;FieldType&quot;)
+<a id="__codelineno-0-471" name="__codelineno-0-471" href="#__codelineno-0-471"></a>
+<a id="__codelineno-0-472" name="__codelineno-0-472" href="#__codelineno-0-472"></a>                If Len(subjKey) = 0 Then
+<a id="__codelineno-0-473" name="__codelineno-0-473" href="#__codelineno-0-473"></a>                    If InStr(fName, L_KENMEI) &gt; 0 Then subjKey = fName
+<a id="__codelineno-0-474" name="__codelineno-0-474" href="#__codelineno-0-474"></a>                End If
+<a id="__codelineno-0-475" name="__codelineno-0-475" href="#__codelineno-0-475"></a>                If Len(firstSingleLine) = 0 Then
+<a id="__codelineno-0-476" name="__codelineno-0-476" href="#__codelineno-0-476"></a>                    If fType = L_TANITSU Then firstSingleLine = fName
+<a id="__codelineno-0-477" name="__codelineno-0-477" href="#__codelineno-0-477"></a>                End If
+<a id="__codelineno-0-478" name="__codelineno-0-478" href="#__codelineno-0-478"></a>
+<a id="__codelineno-0-479" name="__codelineno-0-479" href="#__codelineno-0-479"></a>                If Len(excKey) = 0 Then
+<a id="__codelineno-0-480" name="__codelineno-0-480" href="#__codelineno-0-480"></a>                    If InStr(fName, L_JISHO) &gt; 0 Then excKey = fName
+<a id="__codelineno-0-481" name="__codelineno-0-481" href="#__codelineno-0-481"></a>                End If
+<a id="__codelineno-0-482" name="__codelineno-0-482" href="#__codelineno-0-482"></a>                If Len(firstMultiLine) = 0 Then
+<a id="__codelineno-0-483" name="__codelineno-0-483" href="#__codelineno-0-483"></a>                    If fType = L_FUKUSU Then firstMultiLine = fName
+<a id="__codelineno-0-484" name="__codelineno-0-484" href="#__codelineno-0-484"></a>                End If
+<a id="__codelineno-0-485" name="__codelineno-0-485" href="#__codelineno-0-485"></a>                If Len(firstTejunLike) = 0 Then
+<a id="__codelineno-0-486" name="__codelineno-0-486" href="#__codelineno-0-486"></a>                    If InStr(fName, L_TEJUN) &gt; 0 Then firstTejunLike = fName
+<a id="__codelineno-0-487" name="__codelineno-0-487" href="#__codelineno-0-487"></a>                End If
+<a id="__codelineno-0-488" name="__codelineno-0-488" href="#__codelineno-0-488"></a>            End If
+<a id="__codelineno-0-489" name="__codelineno-0-489" href="#__codelineno-0-489"></a>        Next i
 <a id="__codelineno-0-490" name="__codelineno-0-490" href="#__codelineno-0-490"></a>
-<a id="__codelineno-0-491" name="__codelineno-0-491" href="#__codelineno-0-491"></a>                If Len(subjKey) = 0 Then
-<a id="__codelineno-0-492" name="__codelineno-0-492" href="#__codelineno-0-492"></a>                    If InStr(fName, L_KENMEI) &gt; 0 Then subjKey = fName
-<a id="__codelineno-0-493" name="__codelineno-0-493" href="#__codelineno-0-493"></a>                End If
-<a id="__codelineno-0-494" name="__codelineno-0-494" href="#__codelineno-0-494"></a>                If Len(firstSingleLine) = 0 Then
-<a id="__codelineno-0-495" name="__codelineno-0-495" href="#__codelineno-0-495"></a>                    If fType = L_TANITSU Then firstSingleLine = fName
-<a id="__codelineno-0-496" name="__codelineno-0-496" href="#__codelineno-0-496"></a>                End If
-<a id="__codelineno-0-497" name="__codelineno-0-497" href="#__codelineno-0-497"></a>
-<a id="__codelineno-0-498" name="__codelineno-0-498" href="#__codelineno-0-498"></a>                If Len(excKey) = 0 Then
-<a id="__codelineno-0-499" name="__codelineno-0-499" href="#__codelineno-0-499"></a>                    If InStr(fName, L_JISHO) &gt; 0 Then excKey = fName
-<a id="__codelineno-0-500" name="__codelineno-0-500" href="#__codelineno-0-500"></a>                End If
-<a id="__codelineno-0-501" name="__codelineno-0-501" href="#__codelineno-0-501"></a>                If Len(firstMultiLine) = 0 Then
-<a id="__codelineno-0-502" name="__codelineno-0-502" href="#__codelineno-0-502"></a>                    If fType = L_FUKUSU Then firstMultiLine = fName
-<a id="__codelineno-0-503" name="__codelineno-0-503" href="#__codelineno-0-503"></a>                End If
-<a id="__codelineno-0-504" name="__codelineno-0-504" href="#__codelineno-0-504"></a>                If Len(firstTejunLike) = 0 Then
-<a id="__codelineno-0-505" name="__codelineno-0-505" href="#__codelineno-0-505"></a>                    If InStr(fName, L_TEJUN) &gt; 0 Then firstTejunLike = fName
-<a id="__codelineno-0-506" name="__codelineno-0-506" href="#__codelineno-0-506"></a>                End If
-<a id="__codelineno-0-507" name="__codelineno-0-507" href="#__codelineno-0-507"></a>            End If
-<a id="__codelineno-0-508" name="__codelineno-0-508" href="#__codelineno-0-508"></a>        Next i
-<a id="__codelineno-0-509" name="__codelineno-0-509" href="#__codelineno-0-509"></a>
-<a id="__codelineno-0-510" name="__codelineno-0-510" href="#__codelineno-0-510"></a>        If Len(subjKey) = 0 Then subjKey = firstSingleLine
-<a id="__codelineno-0-511" name="__codelineno-0-511" href="#__codelineno-0-511"></a>        If Len(excKey) = 0 Then
-<a id="__codelineno-0-512" name="__codelineno-0-512" href="#__codelineno-0-512"></a>            If Len(firstMultiLine) &gt; 0 Then
-<a id="__codelineno-0-513" name="__codelineno-0-513" href="#__codelineno-0-513"></a>                excKey = firstMultiLine
-<a id="__codelineno-0-514" name="__codelineno-0-514" href="#__codelineno-0-514"></a>            ElseIf Len(firstTejunLike) &gt; 0 Then
-<a id="__codelineno-0-515" name="__codelineno-0-515" href="#__codelineno-0-515"></a>                excKey = firstTejunLike
-<a id="__codelineno-0-516" name="__codelineno-0-516" href="#__codelineno-0-516"></a>            End If
-<a id="__codelineno-0-517" name="__codelineno-0-517" href="#__codelineno-0-517"></a>        End If
-<a id="__codelineno-0-518" name="__codelineno-0-518" href="#__codelineno-0-518"></a>    End If
-<a id="__codelineno-0-519" name="__codelineno-0-519" href="#__codelineno-0-519"></a>
-<a id="__codelineno-0-520" name="__codelineno-0-520" href="#__codelineno-0-520"></a>    If Len(subjKey) = 0 Or Len(excKey) = 0 Then
-<a id="__codelineno-0-521" name="__codelineno-0-521" href="#__codelineno-0-521"></a>        Dim meta As String
-<a id="__codelineno-0-522" name="__codelineno-0-522" href="#__codelineno-0-522"></a>        meta = &quot;|KnowledgeNo|FormatID|FormatId|FormatVersion|CreatedAt|UpdatedAt|&quot;
-<a id="__codelineno-0-523" name="__codelineno-0-523" href="#__codelineno-0-523"></a>        Dim cnt As Long
-<a id="__codelineno-0-524" name="__codelineno-0-524" href="#__codelineno-0-524"></a>        cnt = 0
-<a id="__codelineno-0-525" name="__codelineno-0-525" href="#__codelineno-0-525"></a>        Dim k As Variant
-<a id="__codelineno-0-526" name="__codelineno-0-526" href="#__codelineno-0-526"></a>        For Each k In data.Keys
-<a id="__codelineno-0-527" name="__codelineno-0-527" href="#__codelineno-0-527"></a>            Dim ks As String
-<a id="__codelineno-0-528" name="__codelineno-0-528" href="#__codelineno-0-528"></a>            ks = CStr(k)
-<a id="__codelineno-0-529" name="__codelineno-0-529" href="#__codelineno-0-529"></a>            If InStr(meta, &quot;|&quot; &amp; ks &amp; &quot;|&quot;) = 0 Then
-<a id="__codelineno-0-530" name="__codelineno-0-530" href="#__codelineno-0-530"></a>                cnt = cnt + 1
-<a id="__codelineno-0-531" name="__codelineno-0-531" href="#__codelineno-0-531"></a>                If cnt = 1 And Len(subjKey) = 0 Then subjKey = ks
-<a id="__codelineno-0-532" name="__codelineno-0-532" href="#__codelineno-0-532"></a>                If cnt = 2 And Len(excKey) = 0 Then excKey = ks
-<a id="__codelineno-0-533" name="__codelineno-0-533" href="#__codelineno-0-533"></a>                If cnt &gt;= 2 Then Exit For
-<a id="__codelineno-0-534" name="__codelineno-0-534" href="#__codelineno-0-534"></a>            End If
-<a id="__codelineno-0-535" name="__codelineno-0-535" href="#__codelineno-0-535"></a>        Next k
-<a id="__codelineno-0-536" name="__codelineno-0-536" href="#__codelineno-0-536"></a>    End If
-<a id="__codelineno-0-537" name="__codelineno-0-537" href="#__codelineno-0-537"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1815] modEntrySearch.SubjectAndExcerptKeys EXIT-OK&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-538" name="__codelineno-0-538" href="#__codelineno-0-538"></a>End Sub
-<a id="__codelineno-0-539" name="__codelineno-0-539" href="#__codelineno-0-539"></a>
-<a id="__codelineno-0-540" name="__codelineno-0-540" href="#__codelineno-0-540"></a>&#39; ================================================================
-<a id="__codelineno-0-541" name="__codelineno-0-541" href="#__codelineno-0-541"></a>&#39; Public Sub: Btn_OpenViewFromSheet
-<a id="__codelineno-0-542" name="__codelineno-0-542" href="#__codelineno-0-542"></a>&#39; Invoked from the &quot;View&quot; button on M-09 (display sheet, legacy).
-<a id="__codelineno-0-543" name="__codelineno-0-543" href="#__codelineno-0-543"></a>&#39; ADR-0090 (2026-06-01): cell address is SSOT-driven via ui_seed.
-<a id="__codelineno-0-544" name="__codelineno-0-544" href="#__codelineno-0-544"></a>&#39; M-09 sheet itself is retired per ADR-0085 (SPEC_DRIFT-NEW1); this
-<a id="__codelineno-0-545" name="__codelineno-0-545" href="#__codelineno-0-545"></a>&#39; handler is kept for legacy installs that still have the sheet.
-<a id="__codelineno-0-546" name="__codelineno-0-546" href="#__codelineno-0-546"></a>&#39; IsTestMode guard skips modal MsgBox during E2E runs.
-<a id="__codelineno-0-547" name="__codelineno-0-547" href="#__codelineno-0-547"></a>&#39; ================================================================
-<a id="__codelineno-0-548" name="__codelineno-0-548" href="#__codelineno-0-548"></a>Public Sub Btn_OpenViewFromSheet()
-<a id="__codelineno-0-549" name="__codelineno-0-549" href="#__codelineno-0-549"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1816] modEntrySearch.Btn_OpenViewFromSheet ENTER&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-550" name="__codelineno-0-550" href="#__codelineno-0-550"></a>    On Error GoTo ErrHandler
-<a id="__codelineno-0-551" name="__codelineno-0-551" href="#__codelineno-0-551"></a>    &#39; [BTN-GUARD-PRELUDE-BEGIN] auto-injected by inject_btn_template.py
-<a id="__codelineno-0-552" name="__codelineno-0-552" href="#__codelineno-0-552"></a>    Const BTN As String = &quot;Btn_OpenViewFromSheet&quot;
-<a id="__codelineno-0-553" name="__codelineno-0-553" href="#__codelineno-0-553"></a>    Dim XLSM As String
-<a id="__codelineno-0-554" name="__codelineno-0-554" href="#__codelineno-0-554"></a>    XLSM = ChrW(&amp;H691C) &amp; ChrW(&amp;H7D22)
-<a id="__codelineno-0-555" name="__codelineno-0-555" href="#__codelineno-0-555"></a>    modBtnGuard.LogEnter BTN, XLSM
-<a id="__codelineno-0-556" name="__codelineno-0-556" href="#__codelineno-0-556"></a>    If Not modBtnGuard.CheckPrereq(BTN, &quot;config;data_dir&quot;, XLSM) Then
-<a id="__codelineno-0-557" name="__codelineno-0-557" href="#__codelineno-0-557"></a>        modBtnGuard.LogExit BTN, XLSM, False
-<a id="__codelineno-0-558" name="__codelineno-0-558" href="#__codelineno-0-558"></a>        If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1817] modEntrySearch.Btn_OpenViewFromSheet EXIT-OK&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-559" name="__codelineno-0-559" href="#__codelineno-0-559"></a>        Exit Sub
-<a id="__codelineno-0-560" name="__codelineno-0-560" href="#__codelineno-0-560"></a>    End If
-<a id="__codelineno-0-561" name="__codelineno-0-561" href="#__codelineno-0-561"></a>    &#39; [BTN-GUARD-PRELUDE-END]
-<a id="__codelineno-0-562" name="__codelineno-0-562" href="#__codelineno-0-562"></a>    Dim jpName As String
-<a id="__codelineno-0-563" name="__codelineno-0-563" href="#__codelineno-0-563"></a>    jpName = ChrW(&amp;H30CA) &amp; ChrW(&amp;H30EC) &amp; ChrW(&amp;H30C3) &amp; ChrW(&amp;H30B8) &amp; ChrW(&amp;H8868) &amp; ChrW(&amp;H793A)
-<a id="__codelineno-0-564" name="__codelineno-0-564" href="#__codelineno-0-564"></a>    Dim ws As Worksheet
-<a id="__codelineno-0-565" name="__codelineno-0-565" href="#__codelineno-0-565"></a>    On Error Resume Next
-<a id="__codelineno-0-566" name="__codelineno-0-566" href="#__codelineno-0-566"></a>    Set ws = ThisWorkbook.Worksheets(jpName)
-<a id="__codelineno-0-567" name="__codelineno-0-567" href="#__codelineno-0-567"></a>    If ws Is Nothing Then Set ws = ThisWorkbook.Worksheets(&quot;M-09&quot;)
-<a id="__codelineno-0-568" name="__codelineno-0-568" href="#__codelineno-0-568"></a>    On Error GoTo ErrHandler
-<a id="__codelineno-0-569" name="__codelineno-0-569" href="#__codelineno-0-569"></a>    If ws Is Nothing Then
-<a id="__codelineno-0-570" name="__codelineno-0-570" href="#__codelineno-0-570"></a>        Debug.Print &quot;[INFO] Btn_OpenViewFromSheet: M-09 sheet retired (ADR-0085)&quot;
-<a id="__codelineno-0-571" name="__codelineno-0-571" href="#__codelineno-0-571"></a>        If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1818] modEntrySearch.Btn_OpenViewFromSheet EXIT-OK&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-572" name="__codelineno-0-572" href="#__codelineno-0-572"></a>        Exit Sub
-<a id="__codelineno-0-573" name="__codelineno-0-573" href="#__codelineno-0-573"></a>    End If
-<a id="__codelineno-0-574" name="__codelineno-0-574" href="#__codelineno-0-574"></a>
-<a id="__codelineno-0-575" name="__codelineno-0-575" href="#__codelineno-0-575"></a>    Dim kidCell As String
-<a id="__codelineno-0-576" name="__codelineno-0-576" href="#__codelineno-0-576"></a>    kidCell = ResolveM09KidCell()
-<a id="__codelineno-0-577" name="__codelineno-0-577" href="#__codelineno-0-577"></a>    Dim kid As String
-<a id="__codelineno-0-578" name="__codelineno-0-578" href="#__codelineno-0-578"></a>    kid = Trim(CStr(ws.Range(kidCell).Value))
-<a id="__codelineno-0-579" name="__codelineno-0-579" href="#__codelineno-0-579"></a>
-<a id="__codelineno-0-580" name="__codelineno-0-580" href="#__codelineno-0-580"></a>    If Len(kid) = 0 Then
-<a id="__codelineno-0-581" name="__codelineno-0-581" href="#__codelineno-0-581"></a>        If Not IsTestMode() Then
-<a id="__codelineno-0-582" name="__codelineno-0-582" href="#__codelineno-0-582"></a>            Dim msgEmpty As String
-<a id="__codelineno-0-583" name="__codelineno-0-583" href="#__codelineno-0-583"></a>            msgEmpty = kidCell &amp; ChrW(&amp;H306B) &amp; ChrW(&amp;H30CA) &amp; ChrW(&amp;H30EC) &amp; ChrW(&amp;H30C3) &amp; ChrW(&amp;H30B8) &amp; ChrW(&amp;H756A) &amp; ChrW(&amp;H53F7) &amp; ChrW(&amp;H3092) &amp; ChrW(&amp;H5165) &amp; ChrW(&amp;H529B) &amp; ChrW(&amp;H3057) &amp; ChrW(&amp;H3066) &amp; ChrW(&amp;H304F) &amp; ChrW(&amp;H3060) &amp; ChrW(&amp;H3055) &amp; ChrW(&amp;H3044)
-<a id="__codelineno-0-584" name="__codelineno-0-584" href="#__codelineno-0-584"></a>            MsgBox msgEmpty, vbExclamation, ChrW(&amp;H8A73) &amp; ChrW(&amp;H7D30) &amp; ChrW(&amp;H8868) &amp; ChrW(&amp;H793A)
-<a id="__codelineno-0-585" name="__codelineno-0-585" href="#__codelineno-0-585"></a>        End If
-<a id="__codelineno-0-586" name="__codelineno-0-586" href="#__codelineno-0-586"></a>        Debug.Print &quot;[WARN] Btn_OpenViewFromSheet: kid empty cell=&quot; &amp; kidCell
-<a id="__codelineno-0-587" name="__codelineno-0-587" href="#__codelineno-0-587"></a>        If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1819] modEntrySearch.Btn_OpenViewFromSheet EXIT-OK&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-588" name="__codelineno-0-588" href="#__codelineno-0-588"></a>        Exit Sub
-<a id="__codelineno-0-589" name="__codelineno-0-589" href="#__codelineno-0-589"></a>    End If
-<a id="__codelineno-0-590" name="__codelineno-0-590" href="#__codelineno-0-590"></a>
+<a id="__codelineno-0-491" name="__codelineno-0-491" href="#__codelineno-0-491"></a>        If Len(subjKey) = 0 Then subjKey = firstSingleLine
+<a id="__codelineno-0-492" name="__codelineno-0-492" href="#__codelineno-0-492"></a>        If Len(excKey) = 0 Then
+<a id="__codelineno-0-493" name="__codelineno-0-493" href="#__codelineno-0-493"></a>            If Len(firstMultiLine) &gt; 0 Then
+<a id="__codelineno-0-494" name="__codelineno-0-494" href="#__codelineno-0-494"></a>                excKey = firstMultiLine
+<a id="__codelineno-0-495" name="__codelineno-0-495" href="#__codelineno-0-495"></a>            ElseIf Len(firstTejunLike) &gt; 0 Then
+<a id="__codelineno-0-496" name="__codelineno-0-496" href="#__codelineno-0-496"></a>                excKey = firstTejunLike
+<a id="__codelineno-0-497" name="__codelineno-0-497" href="#__codelineno-0-497"></a>            End If
+<a id="__codelineno-0-498" name="__codelineno-0-498" href="#__codelineno-0-498"></a>        End If
+<a id="__codelineno-0-499" name="__codelineno-0-499" href="#__codelineno-0-499"></a>    End If
+<a id="__codelineno-0-500" name="__codelineno-0-500" href="#__codelineno-0-500"></a>
+<a id="__codelineno-0-501" name="__codelineno-0-501" href="#__codelineno-0-501"></a>    If Len(subjKey) = 0 Or Len(excKey) = 0 Then
+<a id="__codelineno-0-502" name="__codelineno-0-502" href="#__codelineno-0-502"></a>        Dim meta As String
+<a id="__codelineno-0-503" name="__codelineno-0-503" href="#__codelineno-0-503"></a>        meta = &quot;|KnowledgeNo|FormatID|FormatId|FormatVersion|CreatedAt|UpdatedAt|&quot;
+<a id="__codelineno-0-504" name="__codelineno-0-504" href="#__codelineno-0-504"></a>        Dim cnt As Long
+<a id="__codelineno-0-505" name="__codelineno-0-505" href="#__codelineno-0-505"></a>        cnt = 0
+<a id="__codelineno-0-506" name="__codelineno-0-506" href="#__codelineno-0-506"></a>        Dim k As Variant
+<a id="__codelineno-0-507" name="__codelineno-0-507" href="#__codelineno-0-507"></a>        For Each k In data.Keys
+<a id="__codelineno-0-508" name="__codelineno-0-508" href="#__codelineno-0-508"></a>            Dim ks As String
+<a id="__codelineno-0-509" name="__codelineno-0-509" href="#__codelineno-0-509"></a>            ks = CStr(k)
+<a id="__codelineno-0-510" name="__codelineno-0-510" href="#__codelineno-0-510"></a>            If InStr(meta, &quot;|&quot; &amp; ks &amp; &quot;|&quot;) = 0 Then
+<a id="__codelineno-0-511" name="__codelineno-0-511" href="#__codelineno-0-511"></a>                cnt = cnt + 1
+<a id="__codelineno-0-512" name="__codelineno-0-512" href="#__codelineno-0-512"></a>                If cnt = 1 And Len(subjKey) = 0 Then subjKey = ks
+<a id="__codelineno-0-513" name="__codelineno-0-513" href="#__codelineno-0-513"></a>                If cnt = 2 And Len(excKey) = 0 Then excKey = ks
+<a id="__codelineno-0-514" name="__codelineno-0-514" href="#__codelineno-0-514"></a>                If cnt &gt;= 2 Then Exit For
+<a id="__codelineno-0-515" name="__codelineno-0-515" href="#__codelineno-0-515"></a>            End If
+<a id="__codelineno-0-516" name="__codelineno-0-516" href="#__codelineno-0-516"></a>        Next k
+<a id="__codelineno-0-517" name="__codelineno-0-517" href="#__codelineno-0-517"></a>    End If
+<a id="__codelineno-0-518" name="__codelineno-0-518" href="#__codelineno-0-518"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1815] modEntrySearch.SubjectAndExcerptKeys EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-519" name="__codelineno-0-519" href="#__codelineno-0-519"></a>End Sub
+<a id="__codelineno-0-520" name="__codelineno-0-520" href="#__codelineno-0-520"></a>
+<a id="__codelineno-0-521" name="__codelineno-0-521" href="#__codelineno-0-521"></a>&#39; ================================================================
+<a id="__codelineno-0-522" name="__codelineno-0-522" href="#__codelineno-0-522"></a>&#39; Public Sub: Btn_OpenViewFromSheet
+<a id="__codelineno-0-523" name="__codelineno-0-523" href="#__codelineno-0-523"></a>&#39; Invoked from the &quot;View&quot; button on M-09 (display sheet, legacy).
+<a id="__codelineno-0-524" name="__codelineno-0-524" href="#__codelineno-0-524"></a>&#39; ADR-0090 (2026-06-01): cell address is SSOT-driven via ui_seed.
+<a id="__codelineno-0-525" name="__codelineno-0-525" href="#__codelineno-0-525"></a>&#39; M-09 sheet itself is retired per ADR-0085 (SPEC_DRIFT-NEW1); this
+<a id="__codelineno-0-526" name="__codelineno-0-526" href="#__codelineno-0-526"></a>&#39; handler is kept for legacy installs that still have the sheet.
+<a id="__codelineno-0-527" name="__codelineno-0-527" href="#__codelineno-0-527"></a>&#39; IsTestMode guard skips modal MsgBox during E2E runs.
+<a id="__codelineno-0-528" name="__codelineno-0-528" href="#__codelineno-0-528"></a>&#39; ================================================================
+<a id="__codelineno-0-529" name="__codelineno-0-529" href="#__codelineno-0-529"></a>Public Sub Btn_OpenViewFromSheet()
+<a id="__codelineno-0-530" name="__codelineno-0-530" href="#__codelineno-0-530"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1816] modEntrySearch.Btn_OpenViewFromSheet ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-531" name="__codelineno-0-531" href="#__codelineno-0-531"></a>    On Error GoTo ErrHandler
+<a id="__codelineno-0-532" name="__codelineno-0-532" href="#__codelineno-0-532"></a>    &#39; [BTN-GUARD-PRELUDE-BEGIN] auto-injected by inject_btn_template.py
+<a id="__codelineno-0-533" name="__codelineno-0-533" href="#__codelineno-0-533"></a>    Const BTN As String = &quot;Btn_OpenViewFromSheet&quot;
+<a id="__codelineno-0-534" name="__codelineno-0-534" href="#__codelineno-0-534"></a>    Dim XLSM As String
+<a id="__codelineno-0-535" name="__codelineno-0-535" href="#__codelineno-0-535"></a>    XLSM = ChrW(&amp;H691C) &amp; ChrW(&amp;H7D22)
+<a id="__codelineno-0-536" name="__codelineno-0-536" href="#__codelineno-0-536"></a>    modBtnGuard.LogEnter BTN, XLSM
+<a id="__codelineno-0-537" name="__codelineno-0-537" href="#__codelineno-0-537"></a>    If Not modBtnGuard.CheckPrereq(BTN, &quot;config;data_dir&quot;, XLSM) Then
+<a id="__codelineno-0-538" name="__codelineno-0-538" href="#__codelineno-0-538"></a>        modBtnGuard.LogExit BTN, XLSM, False
+<a id="__codelineno-0-539" name="__codelineno-0-539" href="#__codelineno-0-539"></a>        If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1817] modEntrySearch.Btn_OpenViewFromSheet EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-540" name="__codelineno-0-540" href="#__codelineno-0-540"></a>        Exit Sub
+<a id="__codelineno-0-541" name="__codelineno-0-541" href="#__codelineno-0-541"></a>    End If
+<a id="__codelineno-0-542" name="__codelineno-0-542" href="#__codelineno-0-542"></a>    &#39; [BTN-GUARD-PRELUDE-END]
+<a id="__codelineno-0-543" name="__codelineno-0-543" href="#__codelineno-0-543"></a>    Dim jpName As String
+<a id="__codelineno-0-544" name="__codelineno-0-544" href="#__codelineno-0-544"></a>    jpName = ChrW(&amp;H30CA) &amp; ChrW(&amp;H30EC) &amp; ChrW(&amp;H30C3) &amp; ChrW(&amp;H30B8) &amp; ChrW(&amp;H8868) &amp; ChrW(&amp;H793A)
+<a id="__codelineno-0-545" name="__codelineno-0-545" href="#__codelineno-0-545"></a>    Dim ws As Worksheet
+<a id="__codelineno-0-546" name="__codelineno-0-546" href="#__codelineno-0-546"></a>    On Error Resume Next
+<a id="__codelineno-0-547" name="__codelineno-0-547" href="#__codelineno-0-547"></a>    Set ws = ThisWorkbook.Worksheets(jpName)
+<a id="__codelineno-0-548" name="__codelineno-0-548" href="#__codelineno-0-548"></a>    If ws Is Nothing Then Set ws = ThisWorkbook.Worksheets(&quot;M-09&quot;)
+<a id="__codelineno-0-549" name="__codelineno-0-549" href="#__codelineno-0-549"></a>    On Error GoTo ErrHandler
+<a id="__codelineno-0-550" name="__codelineno-0-550" href="#__codelineno-0-550"></a>    If ws Is Nothing Then
+<a id="__codelineno-0-551" name="__codelineno-0-551" href="#__codelineno-0-551"></a>        Debug.Print &quot;[INFO] Btn_OpenViewFromSheet: M-09 sheet retired (ADR-0085)&quot;
+<a id="__codelineno-0-552" name="__codelineno-0-552" href="#__codelineno-0-552"></a>        If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1818] modEntrySearch.Btn_OpenViewFromSheet EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-553" name="__codelineno-0-553" href="#__codelineno-0-553"></a>        Exit Sub
+<a id="__codelineno-0-554" name="__codelineno-0-554" href="#__codelineno-0-554"></a>    End If
+<a id="__codelineno-0-555" name="__codelineno-0-555" href="#__codelineno-0-555"></a>
+<a id="__codelineno-0-556" name="__codelineno-0-556" href="#__codelineno-0-556"></a>    Dim kidCell As String
+<a id="__codelineno-0-557" name="__codelineno-0-557" href="#__codelineno-0-557"></a>    kidCell = ResolveM09KidCell()
+<a id="__codelineno-0-558" name="__codelineno-0-558" href="#__codelineno-0-558"></a>    Dim kid As String
+<a id="__codelineno-0-559" name="__codelineno-0-559" href="#__codelineno-0-559"></a>    kid = Trim(CStr(ws.Range(kidCell).Value))
+<a id="__codelineno-0-560" name="__codelineno-0-560" href="#__codelineno-0-560"></a>
+<a id="__codelineno-0-561" name="__codelineno-0-561" href="#__codelineno-0-561"></a>    If Len(kid) = 0 Then
+<a id="__codelineno-0-562" name="__codelineno-0-562" href="#__codelineno-0-562"></a>        If Not IsTestMode() Then
+<a id="__codelineno-0-563" name="__codelineno-0-563" href="#__codelineno-0-563"></a>            Dim msgEmpty As String
+<a id="__codelineno-0-564" name="__codelineno-0-564" href="#__codelineno-0-564"></a>            msgEmpty = kidCell &amp; ChrW(&amp;H306B) &amp; ChrW(&amp;H30CA) &amp; ChrW(&amp;H30EC) &amp; ChrW(&amp;H30C3) &amp; ChrW(&amp;H30B8) &amp; ChrW(&amp;H756A) &amp; ChrW(&amp;H53F7) &amp; ChrW(&amp;H3092) &amp; ChrW(&amp;H5165) &amp; ChrW(&amp;H529B) &amp; ChrW(&amp;H3057) &amp; ChrW(&amp;H3066) &amp; ChrW(&amp;H304F) &amp; ChrW(&amp;H3060) &amp; ChrW(&amp;H3055) &amp; ChrW(&amp;H3044)
+<a id="__codelineno-0-565" name="__codelineno-0-565" href="#__codelineno-0-565"></a>            MsgBox msgEmpty, vbExclamation, ChrW(&amp;H8A73) &amp; ChrW(&amp;H7D30) &amp; ChrW(&amp;H8868) &amp; ChrW(&amp;H793A)
+<a id="__codelineno-0-566" name="__codelineno-0-566" href="#__codelineno-0-566"></a>        End If
+<a id="__codelineno-0-567" name="__codelineno-0-567" href="#__codelineno-0-567"></a>        Debug.Print &quot;[WARN] Btn_OpenViewFromSheet: kid empty cell=&quot; &amp; kidCell
+<a id="__codelineno-0-568" name="__codelineno-0-568" href="#__codelineno-0-568"></a>        If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1819] modEntrySearch.Btn_OpenViewFromSheet EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-569" name="__codelineno-0-569" href="#__codelineno-0-569"></a>        Exit Sub
+<a id="__codelineno-0-570" name="__codelineno-0-570" href="#__codelineno-0-570"></a>    End If
+<a id="__codelineno-0-571" name="__codelineno-0-571" href="#__codelineno-0-571"></a>
+<a id="__codelineno-0-572" name="__codelineno-0-572" href="#__codelineno-0-572"></a>    On Error Resume Next
+<a id="__codelineno-0-573" name="__codelineno-0-573" href="#__codelineno-0-573"></a>    Dim engine As clsSearchEngine
+<a id="__codelineno-0-574" name="__codelineno-0-574" href="#__codelineno-0-574"></a>    Set engine = NewSearchEngine()
+<a id="__codelineno-0-575" name="__codelineno-0-575" href="#__codelineno-0-575"></a>    If Not engine Is Nothing Then engine.DisplayKnowledge kid
+<a id="__codelineno-0-576" name="__codelineno-0-576" href="#__codelineno-0-576"></a>    On Error GoTo ErrHandler
+<a id="__codelineno-0-577" name="__codelineno-0-577" href="#__codelineno-0-577"></a>    &#39; [BTN-GUARD-EXIT-OK] auto-injected
+<a id="__codelineno-0-578" name="__codelineno-0-578" href="#__codelineno-0-578"></a>    modBtnGuard.LogExit BTN, XLSM, True
+<a id="__codelineno-0-579" name="__codelineno-0-579" href="#__codelineno-0-579"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1820] modEntrySearch.Btn_OpenViewFromSheet EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-580" name="__codelineno-0-580" href="#__codelineno-0-580"></a>    Exit Sub
+<a id="__codelineno-0-581" name="__codelineno-0-581" href="#__codelineno-0-581"></a>
+<a id="__codelineno-0-582" name="__codelineno-0-582" href="#__codelineno-0-582"></a>ErrHandler:
+<a id="__codelineno-0-583" name="__codelineno-0-583" href="#__codelineno-0-583"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print &quot;[D-1821] modEntrySearch.Btn_OpenViewFromSheet EXIT-ERR &quot; &amp; &quot;errNum=&quot; &amp; Err.Number &amp; &quot; desc=&quot; &amp; Err.Description  &#39; [ADR-0100]
+<a id="__codelineno-0-584" name="__codelineno-0-584" href="#__codelineno-0-584"></a>    &#39; [BTN-GUARD-ERR-LOG] auto-injected
+<a id="__codelineno-0-585" name="__codelineno-0-585" href="#__codelineno-0-585"></a>    modBtnGuard.LogExit BTN, XLSM, False
+<a id="__codelineno-0-586" name="__codelineno-0-586" href="#__codelineno-0-586"></a>    Debug.Print &quot;[ERR] Btn_OpenViewFromSheet: &quot; &amp; Err.Number &amp; &quot; &quot; &amp; Err.Description
+<a id="__codelineno-0-587" name="__codelineno-0-587" href="#__codelineno-0-587"></a>End Sub
+<a id="__codelineno-0-588" name="__codelineno-0-588" href="#__codelineno-0-588"></a>
+<a id="__codelineno-0-589" name="__codelineno-0-589" href="#__codelineno-0-589"></a>Private Function ResolveM09KidCell() As String
+<a id="__codelineno-0-590" name="__codelineno-0-590" href="#__codelineno-0-590"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1822] modEntrySearch.ResolveM09KidCell ENTER&quot;  &#39; [ADR-0100]
 <a id="__codelineno-0-591" name="__codelineno-0-591" href="#__codelineno-0-591"></a>    On Error Resume Next
-<a id="__codelineno-0-592" name="__codelineno-0-592" href="#__codelineno-0-592"></a>    Dim engine As clsSearchEngine
-<a id="__codelineno-0-593" name="__codelineno-0-593" href="#__codelineno-0-593"></a>    Set engine = NewSearchEngine()
-<a id="__codelineno-0-594" name="__codelineno-0-594" href="#__codelineno-0-594"></a>    If Not engine Is Nothing Then engine.DisplayKnowledge kid
-<a id="__codelineno-0-595" name="__codelineno-0-595" href="#__codelineno-0-595"></a>    On Error GoTo ErrHandler
-<a id="__codelineno-0-596" name="__codelineno-0-596" href="#__codelineno-0-596"></a>    &#39; [BTN-GUARD-EXIT-OK] auto-injected
-<a id="__codelineno-0-597" name="__codelineno-0-597" href="#__codelineno-0-597"></a>    modBtnGuard.LogExit BTN, XLSM, True
-<a id="__codelineno-0-598" name="__codelineno-0-598" href="#__codelineno-0-598"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1820] modEntrySearch.Btn_OpenViewFromSheet EXIT-OK&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-599" name="__codelineno-0-599" href="#__codelineno-0-599"></a>    Exit Sub
-<a id="__codelineno-0-600" name="__codelineno-0-600" href="#__codelineno-0-600"></a>
-<a id="__codelineno-0-601" name="__codelineno-0-601" href="#__codelineno-0-601"></a>ErrHandler:
-<a id="__codelineno-0-602" name="__codelineno-0-602" href="#__codelineno-0-602"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print &quot;[D-1821] modEntrySearch.Btn_OpenViewFromSheet EXIT-ERR &quot; &amp; &quot;errNum=&quot; &amp; Err.Number &amp; &quot; desc=&quot; &amp; Err.Description  &#39; [ADR-0100]
-<a id="__codelineno-0-603" name="__codelineno-0-603" href="#__codelineno-0-603"></a>    &#39; [BTN-GUARD-ERR-LOG] auto-injected
-<a id="__codelineno-0-604" name="__codelineno-0-604" href="#__codelineno-0-604"></a>    modBtnGuard.LogExit BTN, XLSM, False
-<a id="__codelineno-0-605" name="__codelineno-0-605" href="#__codelineno-0-605"></a>    Debug.Print &quot;[ERR] Btn_OpenViewFromSheet: &quot; &amp; Err.Number &amp; &quot; &quot; &amp; Err.Description
-<a id="__codelineno-0-606" name="__codelineno-0-606" href="#__codelineno-0-606"></a>End Sub
-<a id="__codelineno-0-607" name="__codelineno-0-607" href="#__codelineno-0-607"></a>
-<a id="__codelineno-0-608" name="__codelineno-0-608" href="#__codelineno-0-608"></a>Private Function ResolveM09KidCell() As String
-<a id="__codelineno-0-609" name="__codelineno-0-609" href="#__codelineno-0-609"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1822] modEntrySearch.ResolveM09KidCell ENTER&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-610" name="__codelineno-0-610" href="#__codelineno-0-610"></a>    On Error Resume Next
-<a id="__codelineno-0-611" name="__codelineno-0-611" href="#__codelineno-0-611"></a>    Dim uiCol As Collection
-<a id="__codelineno-0-612" name="__codelineno-0-612" href="#__codelineno-0-612"></a>    Set uiCol = modUILoader.LoadUiDefinition(&quot;search&quot;, &quot;M-09&quot;)
-<a id="__codelineno-0-613" name="__codelineno-0-613" href="#__codelineno-0-613"></a>    If Err.Number = 0 And Not uiCol Is Nothing Then
-<a id="__codelineno-0-614" name="__codelineno-0-614" href="#__codelineno-0-614"></a>        Dim sec As ClsStanzaSection
-<a id="__codelineno-0-615" name="__codelineno-0-615" href="#__codelineno-0-615"></a>        Dim i As Long
-<a id="__codelineno-0-616" name="__codelineno-0-616" href="#__codelineno-0-616"></a>        For i = 1 To uiCol.Count
-<a id="__codelineno-0-617" name="__codelineno-0-617" href="#__codelineno-0-617"></a>            Set sec = uiCol.Item(i)
-<a id="__codelineno-0-618" name="__codelineno-0-618" href="#__codelineno-0-618"></a>            If sec.SectionName = &quot;INPUT&quot; Then
-<a id="__codelineno-0-619" name="__codelineno-0-619" href="#__codelineno-0-619"></a>                Dim nm As String
-<a id="__codelineno-0-620" name="__codelineno-0-620" href="#__codelineno-0-620"></a>                nm = sec.GetValue(&quot;Name&quot;)
-<a id="__codelineno-0-621" name="__codelineno-0-621" href="#__codelineno-0-621"></a>                If InStr(nm, ChrW(&amp;H756A) &amp; ChrW(&amp;H53F7)) &gt; 0 Then
-<a id="__codelineno-0-622" name="__codelineno-0-622" href="#__codelineno-0-622"></a>                    ResolveM09KidCell = sec.GetValue(&quot;Cell&quot;)
-<a id="__codelineno-0-623" name="__codelineno-0-623" href="#__codelineno-0-623"></a>                    If Len(ResolveM09KidCell) &gt; 0 Then Exit Function
-<a id="__codelineno-0-624" name="__codelineno-0-624" href="#__codelineno-0-624"></a>                End If
-<a id="__codelineno-0-625" name="__codelineno-0-625" href="#__codelineno-0-625"></a>            End If
-<a id="__codelineno-0-626" name="__codelineno-0-626" href="#__codelineno-0-626"></a>        Next i
-<a id="__codelineno-0-627" name="__codelineno-0-627" href="#__codelineno-0-627"></a>    End If
-<a id="__codelineno-0-628" name="__codelineno-0-628" href="#__codelineno-0-628"></a>    Err.Clear
-<a id="__codelineno-0-629" name="__codelineno-0-629" href="#__codelineno-0-629"></a>    On Error GoTo 0
-<a id="__codelineno-0-630" name="__codelineno-0-630" href="#__codelineno-0-630"></a>    ResolveM09KidCell = &quot;C5&quot;
-<a id="__codelineno-0-631" name="__codelineno-0-631" href="#__codelineno-0-631"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1823] modEntrySearch.ResolveM09KidCell EXIT-OK&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-632" name="__codelineno-0-632" href="#__codelineno-0-632"></a>End Function
+<a id="__codelineno-0-592" name="__codelineno-0-592" href="#__codelineno-0-592"></a>    Dim uiCol As Collection
+<a id="__codelineno-0-593" name="__codelineno-0-593" href="#__codelineno-0-593"></a>    Set uiCol = modUILoader.LoadUiDefinition(&quot;search&quot;, &quot;M-09&quot;)
+<a id="__codelineno-0-594" name="__codelineno-0-594" href="#__codelineno-0-594"></a>    If Err.Number = 0 And Not uiCol Is Nothing Then
+<a id="__codelineno-0-595" name="__codelineno-0-595" href="#__codelineno-0-595"></a>        Dim sec As ClsStanzaSection
+<a id="__codelineno-0-596" name="__codelineno-0-596" href="#__codelineno-0-596"></a>        Dim i As Long
+<a id="__codelineno-0-597" name="__codelineno-0-597" href="#__codelineno-0-597"></a>        For i = 1 To uiCol.Count
+<a id="__codelineno-0-598" name="__codelineno-0-598" href="#__codelineno-0-598"></a>            Set sec = uiCol.Item(i)
+<a id="__codelineno-0-599" name="__codelineno-0-599" href="#__codelineno-0-599"></a>            If sec.SectionName = &quot;INPUT&quot; Then
+<a id="__codelineno-0-600" name="__codelineno-0-600" href="#__codelineno-0-600"></a>                Dim nm As String
+<a id="__codelineno-0-601" name="__codelineno-0-601" href="#__codelineno-0-601"></a>                nm = sec.GetValue(&quot;Name&quot;)
+<a id="__codelineno-0-602" name="__codelineno-0-602" href="#__codelineno-0-602"></a>                If InStr(nm, ChrW(&amp;H756A) &amp; ChrW(&amp;H53F7)) &gt; 0 Then
+<a id="__codelineno-0-603" name="__codelineno-0-603" href="#__codelineno-0-603"></a>                    ResolveM09KidCell = sec.GetValue(&quot;Cell&quot;)
+<a id="__codelineno-0-604" name="__codelineno-0-604" href="#__codelineno-0-604"></a>                    If Len(ResolveM09KidCell) &gt; 0 Then Exit Function
+<a id="__codelineno-0-605" name="__codelineno-0-605" href="#__codelineno-0-605"></a>                End If
+<a id="__codelineno-0-606" name="__codelineno-0-606" href="#__codelineno-0-606"></a>            End If
+<a id="__codelineno-0-607" name="__codelineno-0-607" href="#__codelineno-0-607"></a>        Next i
+<a id="__codelineno-0-608" name="__codelineno-0-608" href="#__codelineno-0-608"></a>    End If
+<a id="__codelineno-0-609" name="__codelineno-0-609" href="#__codelineno-0-609"></a>    Err.Clear
+<a id="__codelineno-0-610" name="__codelineno-0-610" href="#__codelineno-0-610"></a>    On Error GoTo 0
+<a id="__codelineno-0-611" name="__codelineno-0-611" href="#__codelineno-0-611"></a>    ResolveM09KidCell = &quot;C5&quot;
+<a id="__codelineno-0-612" name="__codelineno-0-612" href="#__codelineno-0-612"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1823] modEntrySearch.ResolveM09KidCell EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-613" name="__codelineno-0-613" href="#__codelineno-0-613"></a>End Function
+<a id="__codelineno-0-614" name="__codelineno-0-614" href="#__codelineno-0-614"></a>
+<a id="__codelineno-0-615" name="__codelineno-0-615" href="#__codelineno-0-615"></a>Private Function IsTestMode() As Boolean
+<a id="__codelineno-0-616" name="__codelineno-0-616" href="#__codelineno-0-616"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1824] modEntrySearch.IsTestMode ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-617" name="__codelineno-0-617" href="#__codelineno-0-617"></a>    On Error Resume Next
+<a id="__codelineno-0-618" name="__codelineno-0-618" href="#__codelineno-0-618"></a>    IsTestMode = False
+<a id="__codelineno-0-619" name="__codelineno-0-619" href="#__codelineno-0-619"></a>    Dim v As String
+<a id="__codelineno-0-620" name="__codelineno-0-620" href="#__codelineno-0-620"></a>    v = Environ$(&quot;KNW_TEST_MODE&quot;)
+<a id="__codelineno-0-621" name="__codelineno-0-621" href="#__codelineno-0-621"></a>    If LCase(v) = &quot;1&quot; Or LCase(v) = &quot;true&quot; Then IsTestMode = True
+<a id="__codelineno-0-622" name="__codelineno-0-622" href="#__codelineno-0-622"></a>    On Error GoTo 0
+<a id="__codelineno-0-623" name="__codelineno-0-623" href="#__codelineno-0-623"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1825] modEntrySearch.IsTestMode EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-624" name="__codelineno-0-624" href="#__codelineno-0-624"></a>End Function
+<a id="__codelineno-0-625" name="__codelineno-0-625" href="#__codelineno-0-625"></a>
+<a id="__codelineno-0-626" name="__codelineno-0-626" href="#__codelineno-0-626"></a>Private Function NewSearchEngine() As clsSearchEngine
+<a id="__codelineno-0-627" name="__codelineno-0-627" href="#__codelineno-0-627"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1826] modEntrySearch.NewSearchEngine ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-628" name="__codelineno-0-628" href="#__codelineno-0-628"></a>    On Error Resume Next
+<a id="__codelineno-0-629" name="__codelineno-0-629" href="#__codelineno-0-629"></a>    Set NewSearchEngine = New clsSearchEngine
+<a id="__codelineno-0-630" name="__codelineno-0-630" href="#__codelineno-0-630"></a>    On Error GoTo 0
+<a id="__codelineno-0-631" name="__codelineno-0-631" href="#__codelineno-0-631"></a>End Function
+<a id="__codelineno-0-632" name="__codelineno-0-632" href="#__codelineno-0-632"></a>
 <a id="__codelineno-0-633" name="__codelineno-0-633" href="#__codelineno-0-633"></a>
-<a id="__codelineno-0-634" name="__codelineno-0-634" href="#__codelineno-0-634"></a>Private Function IsTestMode() As Boolean
-<a id="__codelineno-0-635" name="__codelineno-0-635" href="#__codelineno-0-635"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1824] modEntrySearch.IsTestMode ENTER&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-636" name="__codelineno-0-636" href="#__codelineno-0-636"></a>    On Error Resume Next
-<a id="__codelineno-0-637" name="__codelineno-0-637" href="#__codelineno-0-637"></a>    IsTestMode = False
-<a id="__codelineno-0-638" name="__codelineno-0-638" href="#__codelineno-0-638"></a>    Dim v As String
-<a id="__codelineno-0-639" name="__codelineno-0-639" href="#__codelineno-0-639"></a>    v = Environ$(&quot;KNW_TEST_MODE&quot;)
-<a id="__codelineno-0-640" name="__codelineno-0-640" href="#__codelineno-0-640"></a>    If LCase(v) = &quot;1&quot; Or LCase(v) = &quot;true&quot; Then IsTestMode = True
-<a id="__codelineno-0-641" name="__codelineno-0-641" href="#__codelineno-0-641"></a>    On Error GoTo 0
-<a id="__codelineno-0-642" name="__codelineno-0-642" href="#__codelineno-0-642"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1825] modEntrySearch.IsTestMode EXIT-OK&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-643" name="__codelineno-0-643" href="#__codelineno-0-643"></a>End Function
-<a id="__codelineno-0-644" name="__codelineno-0-644" href="#__codelineno-0-644"></a>
-<a id="__codelineno-0-645" name="__codelineno-0-645" href="#__codelineno-0-645"></a>Private Function NewSearchEngine() As clsSearchEngine
-<a id="__codelineno-0-646" name="__codelineno-0-646" href="#__codelineno-0-646"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1826] modEntrySearch.NewSearchEngine ENTER&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-647" name="__codelineno-0-647" href="#__codelineno-0-647"></a>    On Error Resume Next
-<a id="__codelineno-0-648" name="__codelineno-0-648" href="#__codelineno-0-648"></a>    Set NewSearchEngine = New clsSearchEngine
-<a id="__codelineno-0-649" name="__codelineno-0-649" href="#__codelineno-0-649"></a>    On Error GoTo 0
-<a id="__codelineno-0-650" name="__codelineno-0-650" href="#__codelineno-0-650"></a>End Function
-<a id="__codelineno-0-651" name="__codelineno-0-651" href="#__codelineno-0-651"></a>
-<a id="__codelineno-0-652" name="__codelineno-0-652" href="#__codelineno-0-652"></a>
-<a id="__codelineno-0-653" name="__codelineno-0-653" href="#__codelineno-0-653"></a>&#39; ================================================================
-<a id="__codelineno-0-654" name="__codelineno-0-654" href="#__codelineno-0-654"></a>&#39; Function: ContainsAllTerms ([BUG-B9 2026-06-11])
-<a id="__codelineno-0-655" name="__codelineno-0-655" href="#__codelineno-0-655"></a>&#39; Outline:  AND match - every space-separated term in terms must appear
-<a id="__codelineno-0-656" name="__codelineno-0-656" href="#__codelineno-0-656"></a>&#39;           in target (case-insensitive). Full-width spaces normalized.
-<a id="__codelineno-0-657" name="__codelineno-0-657" href="#__codelineno-0-657"></a>&#39; Args:     target - combined searchTarget field text
-<a id="__codelineno-0-658" name="__codelineno-0-658" href="#__codelineno-0-658"></a>&#39;           terms  - raw keyword cell value
-<a id="__codelineno-0-659" name="__codelineno-0-659" href="#__codelineno-0-659"></a>&#39; Returns:  Boolean - True when ALL terms hit (empty terms -&gt; True)
-<a id="__codelineno-0-660" name="__codelineno-0-660" href="#__codelineno-0-660"></a>&#39; ================================================================
-<a id="__codelineno-0-661" name="__codelineno-0-661" href="#__codelineno-0-661"></a>Private Function ContainsAllTerms(ByVal target As String, ByVal terms As String) As Boolean
-<a id="__codelineno-0-662" name="__codelineno-0-662" href="#__codelineno-0-662"></a>    Dim norm As String
-<a id="__codelineno-0-663" name="__codelineno-0-663" href="#__codelineno-0-663"></a>    norm = Replace(terms, ChrW(&amp;H3000), &quot; &quot;)
-<a id="__codelineno-0-664" name="__codelineno-0-664" href="#__codelineno-0-664"></a>    Dim parts() As String
-<a id="__codelineno-0-665" name="__codelineno-0-665" href="#__codelineno-0-665"></a>    parts = Split(Trim$(norm), &quot; &quot;)
-<a id="__codelineno-0-666" name="__codelineno-0-666" href="#__codelineno-0-666"></a>    Dim i As Long
-<a id="__codelineno-0-667" name="__codelineno-0-667" href="#__codelineno-0-667"></a>    For i = LBound(parts) To UBound(parts)
-<a id="__codelineno-0-668" name="__codelineno-0-668" href="#__codelineno-0-668"></a>        If Len(parts(i)) &gt; 0 Then
-<a id="__codelineno-0-669" name="__codelineno-0-669" href="#__codelineno-0-669"></a>            If InStr(1, target, parts(i), vbTextCompare) = 0 Then
-<a id="__codelineno-0-670" name="__codelineno-0-670" href="#__codelineno-0-670"></a>                ContainsAllTerms = False
-<a id="__codelineno-0-671" name="__codelineno-0-671" href="#__codelineno-0-671"></a>                Exit Function
-<a id="__codelineno-0-672" name="__codelineno-0-672" href="#__codelineno-0-672"></a>            End If
-<a id="__codelineno-0-673" name="__codelineno-0-673" href="#__codelineno-0-673"></a>        End If
-<a id="__codelineno-0-674" name="__codelineno-0-674" href="#__codelineno-0-674"></a>    Next i
-<a id="__codelineno-0-675" name="__codelineno-0-675" href="#__codelineno-0-675"></a>    ContainsAllTerms = True
-<a id="__codelineno-0-676" name="__codelineno-0-676" href="#__codelineno-0-676"></a>End Function
-<a id="__codelineno-0-677" name="__codelineno-0-677" href="#__codelineno-0-677"></a>
-<a id="__codelineno-0-678" name="__codelineno-0-678" href="#__codelineno-0-678"></a>&#39; ================================================================
-<a id="__codelineno-0-679" name="__codelineno-0-679" href="#__codelineno-0-679"></a>&#39; Function: ResolveFormatIdFromDisplay ([BUG-B8 2026-06-11])
-<a id="__codelineno-0-680" name="__codelineno-0-680" href="#__codelineno-0-680"></a>&#39; Outline:  Resolve format display name (FormatName) to FormatID via
-<a id="__codelineno-0-681" name="__codelineno-0-681" href="#__codelineno-0-681"></a>&#39;           modFormatLoader.LoadFormatList (same pattern as the B5 fix
-<a id="__codelineno-0-682" name="__codelineno-0-682" href="#__codelineno-0-682"></a>&#39;           clsUserFormRenderer.ResolveDisplayToFormatId).
-<a id="__codelineno-0-683" name="__codelineno-0-683" href="#__codelineno-0-683"></a>&#39; Args:     disp - dropdown cell value (display name or raw FormatID)
-<a id="__codelineno-0-684" name="__codelineno-0-684" href="#__codelineno-0-684"></a>&#39; Returns:  String - FormatID when resolved, otherwise disp pass-through
-<a id="__codelineno-0-685" name="__codelineno-0-685" href="#__codelineno-0-685"></a>&#39; ================================================================
-<a id="__codelineno-0-686" name="__codelineno-0-686" href="#__codelineno-0-686"></a>Private Function ResolveFormatIdFromDisplay(ByVal disp As String) As String
-<a id="__codelineno-0-687" name="__codelineno-0-687" href="#__codelineno-0-687"></a>    On Error GoTo ErrHandler
-<a id="__codelineno-0-688" name="__codelineno-0-688" href="#__codelineno-0-688"></a>    ResolveFormatIdFromDisplay = disp
-<a id="__codelineno-0-689" name="__codelineno-0-689" href="#__codelineno-0-689"></a>    If Len(disp) = 0 Then Exit Function
-<a id="__codelineno-0-690" name="__codelineno-0-690" href="#__codelineno-0-690"></a>    Dim formats As Collection
-<a id="__codelineno-0-691" name="__codelineno-0-691" href="#__codelineno-0-691"></a>    Set formats = modFormatLoader.LoadFormatList()
-<a id="__codelineno-0-692" name="__codelineno-0-692" href="#__codelineno-0-692"></a>    If formats Is Nothing Then Exit Function
-<a id="__codelineno-0-693" name="__codelineno-0-693" href="#__codelineno-0-693"></a>    Dim i As Long
-<a id="__codelineno-0-694" name="__codelineno-0-694" href="#__codelineno-0-694"></a>    For i = 1 To formats.Count
-<a id="__codelineno-0-695" name="__codelineno-0-695" href="#__codelineno-0-695"></a>        Dim ent As Object
-<a id="__codelineno-0-696" name="__codelineno-0-696" href="#__codelineno-0-696"></a>        Set ent = formats.Item(i)
-<a id="__codelineno-0-697" name="__codelineno-0-697" href="#__codelineno-0-697"></a>        If ent.Exists(&quot;Description&quot;) Then
-<a id="__codelineno-0-698" name="__codelineno-0-698" href="#__codelineno-0-698"></a>            If CStr(ent(&quot;Description&quot;)) = disp Then
-<a id="__codelineno-0-699" name="__codelineno-0-699" href="#__codelineno-0-699"></a>                If ent.Exists(&quot;FormatID&quot;) Then ResolveFormatIdFromDisplay = CStr(ent(&quot;FormatID&quot;))
-<a id="__codelineno-0-700" name="__codelineno-0-700" href="#__codelineno-0-700"></a>                Exit Function
-<a id="__codelineno-0-701" name="__codelineno-0-701" href="#__codelineno-0-701"></a>            End If
-<a id="__codelineno-0-702" name="__codelineno-0-702" href="#__codelineno-0-702"></a>        End If
-<a id="__codelineno-0-703" name="__codelineno-0-703" href="#__codelineno-0-703"></a>    Next i
-<a id="__codelineno-0-704" name="__codelineno-0-704" href="#__codelineno-0-704"></a>    Exit Function
-<a id="__codelineno-0-705" name="__codelineno-0-705" href="#__codelineno-0-705"></a>ErrHandler:
-<a id="__codelineno-0-706" name="__codelineno-0-706" href="#__codelineno-0-706"></a>    &#39; keep pass-through value on error (no resource to release)
-<a id="__codelineno-0-707" name="__codelineno-0-707" href="#__codelineno-0-707"></a>End Function
-<a id="__codelineno-0-708" name="__codelineno-0-708" href="#__codelineno-0-708"></a>
-<a id="__codelineno-0-709" name="__codelineno-0-709" href="#__codelineno-0-709"></a>&#39; ================================================================
-<a id="__codelineno-0-710" name="__codelineno-0-710" href="#__codelineno-0-710"></a>&#39; Function: MsgNoCondition ([SPEC T-24 / BUG-B10 2026-06-11])
-<a id="__codelineno-0-711" name="__codelineno-0-711" href="#__codelineno-0-711"></a>&#39; Outline:  &quot;Enter a search condition&quot; message. JP literal built with
-<a id="__codelineno-0-712" name="__codelineno-0-712" href="#__codelineno-0-712"></a>&#39;           ChrW per ADR-0006/0090/0094 (no raw JP literals in code).
-<a id="__codelineno-0-713" name="__codelineno-0-713" href="#__codelineno-0-713"></a>&#39; Returns:  String - message text
-<a id="__codelineno-0-714" name="__codelineno-0-714" href="#__codelineno-0-714"></a>&#39; ================================================================
-<a id="__codelineno-0-715" name="__codelineno-0-715" href="#__codelineno-0-715"></a>Private Function MsgNoCondition() As String
-<a id="__codelineno-0-716" name="__codelineno-0-716" href="#__codelineno-0-716"></a>    MsgNoCondition = ChrW(&amp;H691C) &amp; ChrW(&amp;H7D22) &amp; ChrW(&amp;H6761) &amp; ChrW(&amp;H4EF6) &amp; _
-<a id="__codelineno-0-717" name="__codelineno-0-717" href="#__codelineno-0-717"></a>                     ChrW(&amp;H3092) &amp; ChrW(&amp;H5165) &amp; ChrW(&amp;H529B) &amp; ChrW(&amp;H3057) &amp; _
-<a id="__codelineno-0-718" name="__codelineno-0-718" href="#__codelineno-0-718"></a>                     ChrW(&amp;H3066) &amp; ChrW(&amp;H304F) &amp; ChrW(&amp;H3060) &amp; ChrW(&amp;H3055) &amp; ChrW(&amp;H3044)
-<a id="__codelineno-0-719" name="__codelineno-0-719" href="#__codelineno-0-719"></a>End Function
-<a id="__codelineno-0-720" name="__codelineno-0-720" href="#__codelineno-0-720"></a>
-<a id="__codelineno-0-721" name="__codelineno-0-721" href="#__codelineno-0-721"></a>&#39; [USER-REQ 2026-06-09] Look up format display name from format file
-<a id="__codelineno-0-722" name="__codelineno-0-722" href="#__codelineno-0-722"></a>Private Function ResolveFormatName(ByVal fmtId As String) As String
-<a id="__codelineno-0-723" name="__codelineno-0-723" href="#__codelineno-0-723"></a>    On Error Resume Next
-<a id="__codelineno-0-724" name="__codelineno-0-724" href="#__codelineno-0-724"></a>    ResolveFormatName = fmtId
-<a id="__codelineno-0-725" name="__codelineno-0-725" href="#__codelineno-0-725"></a>    If Len(fmtId) = 0 Then Exit Function
-<a id="__codelineno-0-726" name="__codelineno-0-726" href="#__codelineno-0-726"></a>    Dim secs As Collection
-<a id="__codelineno-0-727" name="__codelineno-0-727" href="#__codelineno-0-727"></a>    Set secs = modFormatLoader.LoadFormat(fmtId)
-<a id="__codelineno-0-728" name="__codelineno-0-728" href="#__codelineno-0-728"></a>    If secs Is Nothing Then Exit Function
-<a id="__codelineno-0-729" name="__codelineno-0-729" href="#__codelineno-0-729"></a>    Dim sec As ClsStanzaSection
-<a id="__codelineno-0-730" name="__codelineno-0-730" href="#__codelineno-0-730"></a>    Dim i As Long
-<a id="__codelineno-0-731" name="__codelineno-0-731" href="#__codelineno-0-731"></a>    For i = 1 To secs.Count
-<a id="__codelineno-0-732" name="__codelineno-0-732" href="#__codelineno-0-732"></a>        Set sec = secs.Item(i)
-<a id="__codelineno-0-733" name="__codelineno-0-733" href="#__codelineno-0-733"></a>        If sec.SectionName = &quot;FORMAT&quot; Then
-<a id="__codelineno-0-734" name="__codelineno-0-734" href="#__codelineno-0-734"></a>            If sec.HasKey(&quot;FormatName&quot;) Then
-<a id="__codelineno-0-735" name="__codelineno-0-735" href="#__codelineno-0-735"></a>                Dim nm As String
-<a id="__codelineno-0-736" name="__codelineno-0-736" href="#__codelineno-0-736"></a>                nm = sec.GetValue(&quot;FormatName&quot;)
-<a id="__codelineno-0-737" name="__codelineno-0-737" href="#__codelineno-0-737"></a>                If Len(nm) &gt; 0 Then ResolveFormatName = nm
-<a id="__codelineno-0-738" name="__codelineno-0-738" href="#__codelineno-0-738"></a>            End If
-<a id="__codelineno-0-739" name="__codelineno-0-739" href="#__codelineno-0-739"></a>            Exit For
-<a id="__codelineno-0-740" name="__codelineno-0-740" href="#__codelineno-0-740"></a>        End If
-<a id="__codelineno-0-741" name="__codelineno-0-741" href="#__codelineno-0-741"></a>    Next i
-<a id="__codelineno-0-742" name="__codelineno-0-742" href="#__codelineno-0-742"></a>End Function
-<a id="__codelineno-0-743" name="__codelineno-0-743" href="#__codelineno-0-743"></a>
-<a id="__codelineno-0-744" name="__codelineno-0-744" href="#__codelineno-0-744"></a>&#39; [USER-REQ 2026-06-09] Return the first 3 searchTarget=TRUE field VALUES from data
-<a id="__codelineno-0-745" name="__codelineno-0-745" href="#__codelineno-0-745"></a>&#39; (field order from format). Empty string if fewer than 3 such fields.
-<a id="__codelineno-0-746" name="__codelineno-0-746" href="#__codelineno-0-746"></a>Private Sub GetSearchTargetFieldValues(ByVal data As Object, ByVal fmtId As String, ByRef out() As String)
-<a id="__codelineno-0-747" name="__codelineno-0-747" href="#__codelineno-0-747"></a>    On Error Resume Next
-<a id="__codelineno-0-748" name="__codelineno-0-748" href="#__codelineno-0-748"></a>    out(1) = &quot;&quot;: out(2) = &quot;&quot;: out(3) = &quot;&quot;
-<a id="__codelineno-0-749" name="__codelineno-0-749" href="#__codelineno-0-749"></a>    If Len(fmtId) = 0 Then Exit Sub
-<a id="__codelineno-0-750" name="__codelineno-0-750" href="#__codelineno-0-750"></a>    Dim secs As Collection
-<a id="__codelineno-0-751" name="__codelineno-0-751" href="#__codelineno-0-751"></a>    Set secs = modFormatLoader.LoadFormat(fmtId)
-<a id="__codelineno-0-752" name="__codelineno-0-752" href="#__codelineno-0-752"></a>    If secs Is Nothing Then Exit Sub
-<a id="__codelineno-0-753" name="__codelineno-0-753" href="#__codelineno-0-753"></a>    Dim sec As ClsStanzaSection
-<a id="__codelineno-0-754" name="__codelineno-0-754" href="#__codelineno-0-754"></a>    Dim i As Long, k As Long
-<a id="__codelineno-0-755" name="__codelineno-0-755" href="#__codelineno-0-755"></a>    k = 0
-<a id="__codelineno-0-756" name="__codelineno-0-756" href="#__codelineno-0-756"></a>    For i = 1 To secs.Count
-<a id="__codelineno-0-757" name="__codelineno-0-757" href="#__codelineno-0-757"></a>        Set sec = secs.Item(i)
-<a id="__codelineno-0-758" name="__codelineno-0-758" href="#__codelineno-0-758"></a>        If sec.SectionName = &quot;FIELD&quot; Then
-<a id="__codelineno-0-759" name="__codelineno-0-759" href="#__codelineno-0-759"></a>            Dim st As String
-<a id="__codelineno-0-760" name="__codelineno-0-760" href="#__codelineno-0-760"></a>            st = &quot;&quot;
-<a id="__codelineno-0-761" name="__codelineno-0-761" href="#__codelineno-0-761"></a>            If sec.HasKey(&quot;searchTarget&quot;) Then st = LCase(Trim(sec.GetValue(&quot;searchTarget&quot;)))
-<a id="__codelineno-0-762" name="__codelineno-0-762" href="#__codelineno-0-762"></a>            If st = &quot;true&quot; Or st = &quot;1&quot; Or st = &quot;yes&quot; Then
-<a id="__codelineno-0-763" name="__codelineno-0-763" href="#__codelineno-0-763"></a>                k = k + 1
-<a id="__codelineno-0-764" name="__codelineno-0-764" href="#__codelineno-0-764"></a>                If k &lt;= 3 Then
-<a id="__codelineno-0-765" name="__codelineno-0-765" href="#__codelineno-0-765"></a>                    Dim fName As String
-<a id="__codelineno-0-766" name="__codelineno-0-766" href="#__codelineno-0-766"></a>                    fName = &quot;&quot;
-<a id="__codelineno-0-767" name="__codelineno-0-767" href="#__codelineno-0-767"></a>                    If sec.HasKey(&quot;FieldName&quot;) Then fName = sec.GetValue(&quot;FieldName&quot;)
-<a id="__codelineno-0-768" name="__codelineno-0-768" href="#__codelineno-0-768"></a>                    If Len(fName) &gt; 0 Then out(k) = SafeStr(data, fName)
-<a id="__codelineno-0-769" name="__codelineno-0-769" href="#__codelineno-0-769"></a>                End If
-<a id="__codelineno-0-770" name="__codelineno-0-770" href="#__codelineno-0-770"></a>                If k &gt;= 3 Then Exit For
-<a id="__codelineno-0-771" name="__codelineno-0-771" href="#__codelineno-0-771"></a>            End If
-<a id="__codelineno-0-772" name="__codelineno-0-772" href="#__codelineno-0-772"></a>        End If
-<a id="__codelineno-0-773" name="__codelineno-0-773" href="#__codelineno-0-773"></a>    Next i
-<a id="__codelineno-0-774" name="__codelineno-0-774" href="#__codelineno-0-774"></a>End Sub
+<a id="__codelineno-0-634" name="__codelineno-0-634" href="#__codelineno-0-634"></a>&#39; ================================================================
+<a id="__codelineno-0-635" name="__codelineno-0-635" href="#__codelineno-0-635"></a>&#39; Function: ContainsAllTerms ([BUG-B9 2026-06-11])
+<a id="__codelineno-0-636" name="__codelineno-0-636" href="#__codelineno-0-636"></a>&#39; Outline:  AND match - every space-separated term in terms must appear
+<a id="__codelineno-0-637" name="__codelineno-0-637" href="#__codelineno-0-637"></a>&#39;           in target (case-insensitive). Full-width spaces normalized.
+<a id="__codelineno-0-638" name="__codelineno-0-638" href="#__codelineno-0-638"></a>&#39; Args:     target - combined searchTarget field text
+<a id="__codelineno-0-639" name="__codelineno-0-639" href="#__codelineno-0-639"></a>&#39;           terms  - raw keyword cell value
+<a id="__codelineno-0-640" name="__codelineno-0-640" href="#__codelineno-0-640"></a>&#39; Returns:  Boolean - True when ALL terms hit (empty terms -&gt; True)
+<a id="__codelineno-0-641" name="__codelineno-0-641" href="#__codelineno-0-641"></a>&#39; ================================================================
+<a id="__codelineno-0-642" name="__codelineno-0-642" href="#__codelineno-0-642"></a>Private Function ContainsAllTerms(ByVal target As String, ByVal terms As String) As Boolean
+<a id="__codelineno-0-643" name="__codelineno-0-643" href="#__codelineno-0-643"></a>    Dim norm As String
+<a id="__codelineno-0-644" name="__codelineno-0-644" href="#__codelineno-0-644"></a>    norm = Replace(terms, ChrW(&amp;H3000), &quot; &quot;)
+<a id="__codelineno-0-645" name="__codelineno-0-645" href="#__codelineno-0-645"></a>    Dim parts() As String
+<a id="__codelineno-0-646" name="__codelineno-0-646" href="#__codelineno-0-646"></a>    parts = Split(Trim$(norm), &quot; &quot;)
+<a id="__codelineno-0-647" name="__codelineno-0-647" href="#__codelineno-0-647"></a>    Dim i As Long
+<a id="__codelineno-0-648" name="__codelineno-0-648" href="#__codelineno-0-648"></a>    For i = LBound(parts) To UBound(parts)
+<a id="__codelineno-0-649" name="__codelineno-0-649" href="#__codelineno-0-649"></a>        If Len(parts(i)) &gt; 0 Then
+<a id="__codelineno-0-650" name="__codelineno-0-650" href="#__codelineno-0-650"></a>            If InStr(1, target, parts(i), vbTextCompare) = 0 Then
+<a id="__codelineno-0-651" name="__codelineno-0-651" href="#__codelineno-0-651"></a>                ContainsAllTerms = False
+<a id="__codelineno-0-652" name="__codelineno-0-652" href="#__codelineno-0-652"></a>                Exit Function
+<a id="__codelineno-0-653" name="__codelineno-0-653" href="#__codelineno-0-653"></a>            End If
+<a id="__codelineno-0-654" name="__codelineno-0-654" href="#__codelineno-0-654"></a>        End If
+<a id="__codelineno-0-655" name="__codelineno-0-655" href="#__codelineno-0-655"></a>    Next i
+<a id="__codelineno-0-656" name="__codelineno-0-656" href="#__codelineno-0-656"></a>    ContainsAllTerms = True
+<a id="__codelineno-0-657" name="__codelineno-0-657" href="#__codelineno-0-657"></a>End Function
+<a id="__codelineno-0-658" name="__codelineno-0-658" href="#__codelineno-0-658"></a>
+<a id="__codelineno-0-659" name="__codelineno-0-659" href="#__codelineno-0-659"></a>&#39; ================================================================
+<a id="__codelineno-0-660" name="__codelineno-0-660" href="#__codelineno-0-660"></a>&#39; Function: ResolveFormatIdFromDisplay ([BUG-B8 2026-06-11])
+<a id="__codelineno-0-661" name="__codelineno-0-661" href="#__codelineno-0-661"></a>&#39; Outline:  Resolve format display name (FormatName) to FormatID via
+<a id="__codelineno-0-662" name="__codelineno-0-662" href="#__codelineno-0-662"></a>&#39;           modFormatLoader.LoadFormatList (same pattern as the B5 fix
+<a id="__codelineno-0-663" name="__codelineno-0-663" href="#__codelineno-0-663"></a>&#39;           clsUserFormRenderer.ResolveDisplayToFormatId).
+<a id="__codelineno-0-664" name="__codelineno-0-664" href="#__codelineno-0-664"></a>&#39; Args:     disp - dropdown cell value (display name or raw FormatID)
+<a id="__codelineno-0-665" name="__codelineno-0-665" href="#__codelineno-0-665"></a>&#39; Returns:  String - FormatID when resolved, otherwise disp pass-through
+<a id="__codelineno-0-666" name="__codelineno-0-666" href="#__codelineno-0-666"></a>&#39; ================================================================
+<a id="__codelineno-0-667" name="__codelineno-0-667" href="#__codelineno-0-667"></a>Private Function ResolveFormatIdFromDisplay(ByVal disp As String) As String
+<a id="__codelineno-0-668" name="__codelineno-0-668" href="#__codelineno-0-668"></a>    On Error GoTo ErrHandler
+<a id="__codelineno-0-669" name="__codelineno-0-669" href="#__codelineno-0-669"></a>    ResolveFormatIdFromDisplay = disp
+<a id="__codelineno-0-670" name="__codelineno-0-670" href="#__codelineno-0-670"></a>    If Len(disp) = 0 Then Exit Function
+<a id="__codelineno-0-671" name="__codelineno-0-671" href="#__codelineno-0-671"></a>    Dim formats As Collection
+<a id="__codelineno-0-672" name="__codelineno-0-672" href="#__codelineno-0-672"></a>    Set formats = modFormatLoader.LoadFormatList()
+<a id="__codelineno-0-673" name="__codelineno-0-673" href="#__codelineno-0-673"></a>    If formats Is Nothing Then Exit Function
+<a id="__codelineno-0-674" name="__codelineno-0-674" href="#__codelineno-0-674"></a>    Dim i As Long
+<a id="__codelineno-0-675" name="__codelineno-0-675" href="#__codelineno-0-675"></a>    For i = 1 To formats.Count
+<a id="__codelineno-0-676" name="__codelineno-0-676" href="#__codelineno-0-676"></a>        Dim ent As Object
+<a id="__codelineno-0-677" name="__codelineno-0-677" href="#__codelineno-0-677"></a>        Set ent = formats.Item(i)
+<a id="__codelineno-0-678" name="__codelineno-0-678" href="#__codelineno-0-678"></a>        If ent.Exists(&quot;Description&quot;) Then
+<a id="__codelineno-0-679" name="__codelineno-0-679" href="#__codelineno-0-679"></a>            If CStr(ent(&quot;Description&quot;)) = disp Then
+<a id="__codelineno-0-680" name="__codelineno-0-680" href="#__codelineno-0-680"></a>                If ent.Exists(&quot;FormatID&quot;) Then ResolveFormatIdFromDisplay = CStr(ent(&quot;FormatID&quot;))
+<a id="__codelineno-0-681" name="__codelineno-0-681" href="#__codelineno-0-681"></a>                Exit Function
+<a id="__codelineno-0-682" name="__codelineno-0-682" href="#__codelineno-0-682"></a>            End If
+<a id="__codelineno-0-683" name="__codelineno-0-683" href="#__codelineno-0-683"></a>        End If
+<a id="__codelineno-0-684" name="__codelineno-0-684" href="#__codelineno-0-684"></a>    Next i
+<a id="__codelineno-0-685" name="__codelineno-0-685" href="#__codelineno-0-685"></a>    Exit Function
+<a id="__codelineno-0-686" name="__codelineno-0-686" href="#__codelineno-0-686"></a>ErrHandler:
+<a id="__codelineno-0-687" name="__codelineno-0-687" href="#__codelineno-0-687"></a>    &#39; keep pass-through value on error (no resource to release)
+<a id="__codelineno-0-688" name="__codelineno-0-688" href="#__codelineno-0-688"></a>End Function
+<a id="__codelineno-0-689" name="__codelineno-0-689" href="#__codelineno-0-689"></a>
+<a id="__codelineno-0-690" name="__codelineno-0-690" href="#__codelineno-0-690"></a>&#39; ================================================================
+<a id="__codelineno-0-691" name="__codelineno-0-691" href="#__codelineno-0-691"></a>&#39; Function: MsgNoCondition ([SPEC T-24 / BUG-B10 2026-06-11])
+<a id="__codelineno-0-692" name="__codelineno-0-692" href="#__codelineno-0-692"></a>&#39; Outline:  &quot;Enter a search condition&quot; message. JP literal built with
+<a id="__codelineno-0-693" name="__codelineno-0-693" href="#__codelineno-0-693"></a>&#39;           ChrW per ADR-0006/0090/0094 (no raw JP literals in code).
+<a id="__codelineno-0-694" name="__codelineno-0-694" href="#__codelineno-0-694"></a>&#39; Returns:  String - message text
+<a id="__codelineno-0-695" name="__codelineno-0-695" href="#__codelineno-0-695"></a>&#39; ================================================================
+<a id="__codelineno-0-696" name="__codelineno-0-696" href="#__codelineno-0-696"></a>Private Function MsgNoCondition() As String
+<a id="__codelineno-0-697" name="__codelineno-0-697" href="#__codelineno-0-697"></a>    MsgNoCondition = ChrW(&amp;H691C) &amp; ChrW(&amp;H7D22) &amp; ChrW(&amp;H6761) &amp; ChrW(&amp;H4EF6) &amp; _
+<a id="__codelineno-0-698" name="__codelineno-0-698" href="#__codelineno-0-698"></a>                     ChrW(&amp;H3092) &amp; ChrW(&amp;H5165) &amp; ChrW(&amp;H529B) &amp; ChrW(&amp;H3057) &amp; _
+<a id="__codelineno-0-699" name="__codelineno-0-699" href="#__codelineno-0-699"></a>                     ChrW(&amp;H3066) &amp; ChrW(&amp;H304F) &amp; ChrW(&amp;H3060) &amp; ChrW(&amp;H3055) &amp; ChrW(&amp;H3044)
+<a id="__codelineno-0-700" name="__codelineno-0-700" href="#__codelineno-0-700"></a>End Function
+<a id="__codelineno-0-701" name="__codelineno-0-701" href="#__codelineno-0-701"></a>
+<a id="__codelineno-0-702" name="__codelineno-0-702" href="#__codelineno-0-702"></a>&#39; [USER-REQ 2026-06-09] Look up format display name from format file
+<a id="__codelineno-0-703" name="__codelineno-0-703" href="#__codelineno-0-703"></a>Private Function ResolveFormatName(ByVal fmtId As String) As String
+<a id="__codelineno-0-704" name="__codelineno-0-704" href="#__codelineno-0-704"></a>    On Error Resume Next
+<a id="__codelineno-0-705" name="__codelineno-0-705" href="#__codelineno-0-705"></a>    ResolveFormatName = fmtId
+<a id="__codelineno-0-706" name="__codelineno-0-706" href="#__codelineno-0-706"></a>    If Len(fmtId) = 0 Then Exit Function
+<a id="__codelineno-0-707" name="__codelineno-0-707" href="#__codelineno-0-707"></a>    Dim secs As Collection
+<a id="__codelineno-0-708" name="__codelineno-0-708" href="#__codelineno-0-708"></a>    Set secs = modFormatLoader.LoadFormat(fmtId)
+<a id="__codelineno-0-709" name="__codelineno-0-709" href="#__codelineno-0-709"></a>    If secs Is Nothing Then Exit Function
+<a id="__codelineno-0-710" name="__codelineno-0-710" href="#__codelineno-0-710"></a>    Dim sec As ClsStanzaSection
+<a id="__codelineno-0-711" name="__codelineno-0-711" href="#__codelineno-0-711"></a>    Dim i As Long
+<a id="__codelineno-0-712" name="__codelineno-0-712" href="#__codelineno-0-712"></a>    For i = 1 To secs.Count
+<a id="__codelineno-0-713" name="__codelineno-0-713" href="#__codelineno-0-713"></a>        Set sec = secs.Item(i)
+<a id="__codelineno-0-714" name="__codelineno-0-714" href="#__codelineno-0-714"></a>        If sec.SectionName = &quot;FORMAT&quot; Then
+<a id="__codelineno-0-715" name="__codelineno-0-715" href="#__codelineno-0-715"></a>            If sec.HasKey(&quot;FormatName&quot;) Then
+<a id="__codelineno-0-716" name="__codelineno-0-716" href="#__codelineno-0-716"></a>                Dim nm As String
+<a id="__codelineno-0-717" name="__codelineno-0-717" href="#__codelineno-0-717"></a>                nm = sec.GetValue(&quot;FormatName&quot;)
+<a id="__codelineno-0-718" name="__codelineno-0-718" href="#__codelineno-0-718"></a>                If Len(nm) &gt; 0 Then ResolveFormatName = nm
+<a id="__codelineno-0-719" name="__codelineno-0-719" href="#__codelineno-0-719"></a>            End If
+<a id="__codelineno-0-720" name="__codelineno-0-720" href="#__codelineno-0-720"></a>            Exit For
+<a id="__codelineno-0-721" name="__codelineno-0-721" href="#__codelineno-0-721"></a>        End If
+<a id="__codelineno-0-722" name="__codelineno-0-722" href="#__codelineno-0-722"></a>    Next i
+<a id="__codelineno-0-723" name="__codelineno-0-723" href="#__codelineno-0-723"></a>End Function
+<a id="__codelineno-0-724" name="__codelineno-0-724" href="#__codelineno-0-724"></a>
+<a id="__codelineno-0-725" name="__codelineno-0-725" href="#__codelineno-0-725"></a>&#39; [USER-REQ 2026-06-09] Return the first 3 searchTarget=TRUE field VALUES from data
+<a id="__codelineno-0-726" name="__codelineno-0-726" href="#__codelineno-0-726"></a>&#39; (field order from format). Empty string if fewer than 3 such fields.
+<a id="__codelineno-0-727" name="__codelineno-0-727" href="#__codelineno-0-727"></a>Private Sub GetSearchTargetFieldValues(ByVal data As Object, ByVal fmtId As String, ByRef out() As String)
+<a id="__codelineno-0-728" name="__codelineno-0-728" href="#__codelineno-0-728"></a>    On Error Resume Next
+<a id="__codelineno-0-729" name="__codelineno-0-729" href="#__codelineno-0-729"></a>    out(1) = &quot;&quot;: out(2) = &quot;&quot;: out(3) = &quot;&quot;
+<a id="__codelineno-0-730" name="__codelineno-0-730" href="#__codelineno-0-730"></a>    If Len(fmtId) = 0 Then Exit Sub
+<a id="__codelineno-0-731" name="__codelineno-0-731" href="#__codelineno-0-731"></a>    Dim secs As Collection
+<a id="__codelineno-0-732" name="__codelineno-0-732" href="#__codelineno-0-732"></a>    Set secs = modFormatLoader.LoadFormat(fmtId)
+<a id="__codelineno-0-733" name="__codelineno-0-733" href="#__codelineno-0-733"></a>    If secs Is Nothing Then Exit Sub
+<a id="__codelineno-0-734" name="__codelineno-0-734" href="#__codelineno-0-734"></a>    Dim sec As ClsStanzaSection
+<a id="__codelineno-0-735" name="__codelineno-0-735" href="#__codelineno-0-735"></a>    Dim i As Long, k As Long
+<a id="__codelineno-0-736" name="__codelineno-0-736" href="#__codelineno-0-736"></a>    k = 0
+<a id="__codelineno-0-737" name="__codelineno-0-737" href="#__codelineno-0-737"></a>    For i = 1 To secs.Count
+<a id="__codelineno-0-738" name="__codelineno-0-738" href="#__codelineno-0-738"></a>        Set sec = secs.Item(i)
+<a id="__codelineno-0-739" name="__codelineno-0-739" href="#__codelineno-0-739"></a>        If sec.SectionName = &quot;FIELD&quot; Then
+<a id="__codelineno-0-740" name="__codelineno-0-740" href="#__codelineno-0-740"></a>            Dim st As String
+<a id="__codelineno-0-741" name="__codelineno-0-741" href="#__codelineno-0-741"></a>            st = &quot;&quot;
+<a id="__codelineno-0-742" name="__codelineno-0-742" href="#__codelineno-0-742"></a>            If sec.HasKey(&quot;searchTarget&quot;) Then st = LCase(Trim(sec.GetValue(&quot;searchTarget&quot;)))
+<a id="__codelineno-0-743" name="__codelineno-0-743" href="#__codelineno-0-743"></a>            If st = &quot;true&quot; Or st = &quot;1&quot; Or st = &quot;yes&quot; Then
+<a id="__codelineno-0-744" name="__codelineno-0-744" href="#__codelineno-0-744"></a>                k = k + 1
+<a id="__codelineno-0-745" name="__codelineno-0-745" href="#__codelineno-0-745"></a>                If k &lt;= 3 Then
+<a id="__codelineno-0-746" name="__codelineno-0-746" href="#__codelineno-0-746"></a>                    Dim fName As String
+<a id="__codelineno-0-747" name="__codelineno-0-747" href="#__codelineno-0-747"></a>                    fName = &quot;&quot;
+<a id="__codelineno-0-748" name="__codelineno-0-748" href="#__codelineno-0-748"></a>                    If sec.HasKey(&quot;FieldName&quot;) Then fName = sec.GetValue(&quot;FieldName&quot;)
+<a id="__codelineno-0-749" name="__codelineno-0-749" href="#__codelineno-0-749"></a>                    If Len(fName) &gt; 0 Then out(k) = SafeStr(data, fName)
+<a id="__codelineno-0-750" name="__codelineno-0-750" href="#__codelineno-0-750"></a>                End If
+<a id="__codelineno-0-751" name="__codelineno-0-751" href="#__codelineno-0-751"></a>                If k &gt;= 3 Then Exit For
+<a id="__codelineno-0-752" name="__codelineno-0-752" href="#__codelineno-0-752"></a>            End If
+<a id="__codelineno-0-753" name="__codelineno-0-753" href="#__codelineno-0-753"></a>        End If
+<a id="__codelineno-0-754" name="__codelineno-0-754" href="#__codelineno-0-754"></a>    Next i
+<a id="__codelineno-0-755" name="__codelineno-0-755" href="#__codelineno-0-755"></a>End Sub
 </code></pre></div>
 
 
