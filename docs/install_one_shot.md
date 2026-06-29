@@ -20902,7 +20902,7 @@ foreach ($role in @('admin', 'search')) {
     Start-Sleep -Seconds 2
     $prevEAP = $ErrorActionPreference
     $ErrorActionPreference = 'Continue'
-    & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $autoPs1 -XlsmPath $xlsm -Role $role -DataDir (Join-Path $KM 'data') -FormatDir (Join-Path $KM 'formats') -UiDir (Join-Path $KM 'ui') -BackupDir (Join-Path $KM 'backup') 2>&1 | ForEach-Object { Add-Content -LiteralPath $LogPath -Value ([string]$_); Write-Host $_ }
+    & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $autoPs1 -XlsmPath $xlsm -Role $role 2>&1 | ForEach-Object { Add-Content -LiteralPath $LogPath -Value ([string]$_); Write-Host $_ }
     $rc = $LASTEXITCODE
     $ErrorActionPreference = $prevEAP
     Log ('[..] install_' + $role + ' rc=' + $rc)
@@ -20925,3 +20925,4 @@ if ($rcTotal -eq 0) {
 }
 # === KVBA_EOF_V23 ===
 ```
+                                                                                                                                     
