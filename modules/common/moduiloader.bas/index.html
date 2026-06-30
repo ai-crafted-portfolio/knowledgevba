@@ -5063,7 +5063,7 @@
 <h1 id="moduiloaderbas">modUILoader.bas<a class="headerlink" href="#moduiloaderbas" title="Permanent link">&para;</a></h1>
 <p><strong>配置先</strong>: 共通モジュール（検索.xlsm / 管理.xlsm 共通）
 <strong>種類</strong>: 標準モジュール
-<strong>更新日</strong>: 2026-06-12 23:05 JST</p>
+<strong>更新日</strong>: 2026-06-30 14:44 JST</p>
 <hr />
 <h2 id="_1">保存方法<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <p>下のコードをメモ帳に貼り付け、<strong>[名前を付けて保存]</strong> で次のように保存してください。</p>
@@ -5138,7 +5138,7 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a>    On Error GoTo ErrHandler
 <a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>
 <a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a>    Dim filePath As String
-<a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a>    filePath = modConfigHolder.GetUiDir() &amp; xlsmName &amp; &quot;\&quot; &amp; screenId &amp; &quot;.txt&quot;
+<a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a>    filePath = modConfigHolder.GetUiDir() &amp; screenId &amp; &quot;.txt&quot;
 <a id="__codelineno-0-60" name="__codelineno-0-60" href="#__codelineno-0-60"></a>
 <a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a>    Dim fso As Object
 <a id="__codelineno-0-62" name="__codelineno-0-62" href="#__codelineno-0-62"></a>    Set fso = CreateObject(&quot;Scripting.FileSystemObject&quot;)
@@ -5222,7 +5222,7 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-140" name="__codelineno-0-140" href="#__codelineno-0-140"></a>    Dim fso As Object
 <a id="__codelineno-0-141" name="__codelineno-0-141" href="#__codelineno-0-141"></a>    Set fso = CreateObject(&quot;Scripting.FileSystemObject&quot;)
 <a id="__codelineno-0-142" name="__codelineno-0-142" href="#__codelineno-0-142"></a>    Dim folderPath As String
-<a id="__codelineno-0-143" name="__codelineno-0-143" href="#__codelineno-0-143"></a>    folderPath = modConfigHolder.GetUiDir() &amp; xlsmName &amp; &quot;\&quot;
+<a id="__codelineno-0-143" name="__codelineno-0-143" href="#__codelineno-0-143"></a>    folderPath = modConfigHolder.GetUiDir()
 <a id="__codelineno-0-144" name="__codelineno-0-144" href="#__codelineno-0-144"></a>
 <a id="__codelineno-0-145" name="__codelineno-0-145" href="#__codelineno-0-145"></a>    If Not fso.FolderExists(folderPath) Then
 <a id="__codelineno-0-146" name="__codelineno-0-146" href="#__codelineno-0-146"></a>        Set LoadUiList = result
@@ -5265,7 +5265,7 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-183" name="__codelineno-0-183" href="#__codelineno-0-183"></a>    failMode = GetUiSchemaFailMode()
 <a id="__codelineno-0-184" name="__codelineno-0-184" href="#__codelineno-0-184"></a>
 <a id="__codelineno-0-185" name="__codelineno-0-185" href="#__codelineno-0-185"></a>    Dim filePath As String
-<a id="__codelineno-0-186" name="__codelineno-0-186" href="#__codelineno-0-186"></a>    filePath = modConfigHolder.GetUiDir() &amp; xlsmName &amp; &quot;\&quot; &amp; screenId &amp; &quot;.txt&quot;
+<a id="__codelineno-0-186" name="__codelineno-0-186" href="#__codelineno-0-186"></a>    filePath = modConfigHolder.GetUiDir() &amp; screenId &amp; &quot;.txt&quot;
 <a id="__codelineno-0-187" name="__codelineno-0-187" href="#__codelineno-0-187"></a>
 <a id="__codelineno-0-188" name="__codelineno-0-188" href="#__codelineno-0-188"></a>    &#39; (???R?????g????: ?????G???R?[?h?j???????????s?\)
 <a id="__codelineno-0-189" name="__codelineno-0-189" href="#__codelineno-0-189"></a>    Dim fso As Object

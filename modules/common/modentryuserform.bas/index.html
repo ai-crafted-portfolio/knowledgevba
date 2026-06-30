@@ -5063,7 +5063,7 @@
 <h1 id="modentryuserformbas">modEntryUserForm.bas<a class="headerlink" href="#modentryuserformbas" title="Permanent link">&para;</a></h1>
 <p><strong>配置先</strong>: 共通モジュール（検索.xlsm / 管理.xlsm 共通）
 <strong>種類</strong>: 標準モジュール
-<strong>更新日</strong>: 2026-06-04 12:30 JST</p>
+<strong>更新日</strong>: 2026-06-30 14:44 JST</p>
 <hr />
 <h2 id="_1">保存方法<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <p>下のコードをメモ帳に貼り付け、<strong>[名前を付けて保存]</strong> で次のように保存してください。</p>
@@ -5132,7 +5132,7 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>    Dim r As clsUserFormRenderer
 <a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>    Set r = New clsUserFormRenderer
 <a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a>    Dim ret As String
-<a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a>    ret = r.ShowForm(NM_TOUROKU(), &quot;register&quot;, &quot;&quot;)
+<a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a>    ret = r.ShowForm(NM_KENSAKU(), &quot;register&quot;, &quot;&quot;)
 <a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a>    LogShowFormResult &quot;Btn_OpenRegisterForm&quot;, ret
 <a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a>    &#39; [BTN-GUARD-EXIT-OK] auto-injected
 <a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a>    modBtnGuard.LogExit BTN, XLSM, True
@@ -5299,7 +5299,7 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-217" name="__codelineno-0-217" href="#__codelineno-0-217"></a>    Next k
 <a id="__codelineno-0-218" name="__codelineno-0-218" href="#__codelineno-0-218"></a>
 <a id="__codelineno-0-219" name="__codelineno-0-219" href="#__codelineno-0-219"></a>    Dim filePath As String
-<a id="__codelineno-0-220" name="__codelineno-0-220" href="#__codelineno-0-220"></a>    filePath = modConfigHolder.GetDataDir() &amp; id &amp; &quot;.txt&quot;
+<a id="__codelineno-0-220" name="__codelineno-0-220" href="#__codelineno-0-220"></a>    filePath = modKnowledgeFileIO.DataFilePathForSave(id, formatId)
 <a id="__codelineno-0-221" name="__codelineno-0-221" href="#__codelineno-0-221"></a>    Dim adoStream As Object
 <a id="__codelineno-0-222" name="__codelineno-0-222" href="#__codelineno-0-222"></a>    Set adoStream = CreateObject(&quot;ADODB.Stream&quot;)
 <a id="__codelineno-0-223" name="__codelineno-0-223" href="#__codelineno-0-223"></a>    adoStream.Type = 2
@@ -5590,7 +5590,7 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-508" name="__codelineno-0-508" href="#__codelineno-0-508"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1156] modEntryUserForm.TestR2_Diagnose ENTER&quot;  &#39; [ADR-0100]
 <a id="__codelineno-0-509" name="__codelineno-0-509" href="#__codelineno-0-509"></a>    Dim sb As String
 <a id="__codelineno-0-510" name="__codelineno-0-510" href="#__codelineno-0-510"></a>    Dim filePath As String
-<a id="__codelineno-0-511" name="__codelineno-0-511" href="#__codelineno-0-511"></a>    filePath = modConfigHolder.GetUiDir() &amp; xlsmName &amp; &quot;\&quot; &amp; screenId &amp; &quot;.txt&quot;
+<a id="__codelineno-0-511" name="__codelineno-0-511" href="#__codelineno-0-511"></a>    filePath = modConfigHolder.GetUiDir() &amp; screenId &amp; &quot;.txt&quot;
 <a id="__codelineno-0-512" name="__codelineno-0-512" href="#__codelineno-0-512"></a>    sb = &quot;filePath=&quot; &amp; filePath &amp; vbCrLf
 <a id="__codelineno-0-513" name="__codelineno-0-513" href="#__codelineno-0-513"></a>    Dim fso As Object
 <a id="__codelineno-0-514" name="__codelineno-0-514" href="#__codelineno-0-514"></a>    Set fso = CreateObject(&quot;Scripting.FileSystemObject&quot;)
