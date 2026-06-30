@@ -7,7 +7,7 @@ description: modEntryUserForm.bas のソースコード（コピペ用）
 
 **配置先**: 共通モジュール（検索.xlsm / 管理.xlsm 共通）
 **種類**: 標準モジュール
-**更新日**: 2026-06-04 12:30 JST
+**更新日**: 2026-06-30 14:44 JST
 
 ---
 
@@ -81,7 +81,7 @@ Public Sub Btn_OpenRegisterForm()
     Dim r As clsUserFormRenderer
     Set r = New clsUserFormRenderer
     Dim ret As String
-    ret = r.ShowForm(NM_TOUROKU(), "register", "")
+    ret = r.ShowForm(NM_KENSAKU(), "register", "")
     LogShowFormResult "Btn_OpenRegisterForm", ret
     ' [BTN-GUARD-EXIT-OK] auto-injected
     modBtnGuard.LogExit BTN, XLSM, True
@@ -248,7 +248,7 @@ Public Function TestBuildOnly_ShowForm( _
     Next k
 
     Dim filePath As String
-    filePath = modConfigHolder.GetDataDir() & id & ".txt"
+    filePath = modKnowledgeFileIO.DataFilePathForSave(id, formatId)
     Dim adoStream As Object
     Set adoStream = CreateObject("ADODB.Stream")
     adoStream.Type = 2
@@ -539,7 +539,7 @@ Public Function TestR2_Diagnose(ByVal xlsmName As String, ByVal screenId As Stri
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1156] modEntryUserForm.TestR2_Diagnose ENTER"  ' [ADR-0100]
     Dim sb As String
     Dim filePath As String
-    filePath = modConfigHolder.GetUiDir() & xlsmName & "\" & screenId & ".txt"
+    filePath = modConfigHolder.GetUiDir() & screenId & ".txt"
     sb = "filePath=" & filePath & vbCrLf
     Dim fso As Object
     Set fso = CreateObject("Scripting.FileSystemObject")

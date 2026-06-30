@@ -7,7 +7,7 @@ description: clsSetupOrchestrator.cls のソースコード（コピペ用）
 
 **配置先**: 共通モジュール（検索.xlsm / 管理.xlsm 共通）
 **種類**: クラスモジュール
-**更新日**: 2026-06-09 22:14 JST
+**更新日**: 2026-06-30 14:44 JST
 
 ---
 
@@ -57,15 +57,19 @@ Option Explicit
 
 
 Private m_logger As clsLogger
+' ADR-0131 Fix-2: guard so the "ui_seed not found" MsgBox shows at most
+' once per RunFullSetup (reset at RunFullSetup entry). Prevents MsgBox
+' flooding when several sheets fail to resolve their display name.
+Private m_uiSeedErrShown As Boolean
 
 ' xlsm ?? sheet ?\???iADR-0053 ??2.1 / modSetup.bas SHEETS_* ????l?AR6-01?j
 ' SSOT: ADR-0053 ??2.1 ?\?i??2.1.1 ?T?u?O???[?v???j?B?o?^?C??=M-05/M-06?A????=M-08?A???=M-02/M-03/M-04/M-12/M-13/M-10/M-11/M-14?iLOG ??S xlsm ????j
 Private Const SHEETS_TOUROKU As String = "M-05|M-06|LOG"
 ' v2.3 fix (2026-05-27): M-07 ?i???b?W?? ?p?~ (ADR-0072 ??2.1?AM-08 ?????????)
 ' v2.3 fix (2026-05-31): M-09 ?i???b?W?\?? ?p?~ (M-08 grid DoubleClick ?\???A?I??OpenViewWithId ?????????o?H?)
-Private Const SHEETS_KENSAKU As String = "M-08|M-05|LOG"
+Private Const SHEETS_KENSAKU As String = "M-08|M-05|M-10|LOG"
 ' v2.3 fix (2026-05-27): M-13 ?t?@?C???`????? ?p?~ (ADR-0072 ??2.1)
-Private Const SHEETS_KANRI As String = "M-02|M-03|M-12|M-10|M-11|LOG"   ' 2026-06-07: M-14 retired
+Private Const SHEETS_KANRI As String = "M-02|M-03|M-12|M-10|LOG"   ' 2026-06-07: M-14 retired
 
 ' ?^?u?F?iADR-0053 ??2.1.1?j
 Private Const TAB_COLOR_TOUROKU As Long = 16711892  ' #FFB6C1 pink (BGR: B6C1FF -> FFC1B6 reversed)
@@ -171,6 +175,7 @@ Public Sub ReapplyAllSheets()
     On Error Resume Next
     If modCommon.gDebugLevel >= DEBUG_LEVEL_DEBUG Then Debug.Print "[D-0695] clsSetupOrchestrator.ReapplyAllSheets STEP-1 pre modSheetButtons.PlaceV23SheetButtons"  ' [ADR-0100]
     Call modSheetButtons.PlaceV23SheetButtons
+    modConfigLoader.RestoreSheetFromHolder   ' Fix-6 (ADR-0133): restore SSOT cells post-clear
     On Error GoTo EH
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0694] clsSetupOrchestrator.ReapplyAllSheets EXIT-OK"  ' [ADR-0100]
     Exit Sub
@@ -203,6 +208,7 @@ Public Sub ReapplySheet(ByVal screenId As String)
     On Error Resume Next
     If modCommon.gDebugLevel >= DEBUG_LEVEL_DEBUG Then Debug.Print "[D-0698] clsSetupOrchestrator.ReapplySheet STEP-1 pre modSheetButtons.PlaceV23SheetButtons"  ' [ADR-0100]
     Call modSheetButtons.PlaceV23SheetButtons
+    modConfigLoader.RestoreSheetFromHolder   ' Fix-6 (ADR-0133): restore SSOT cells post-clear
     On Error GoTo EH
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0697] clsSetupOrchestrator.ReapplySheet EXIT-OK"  ' [ADR-0100]
     Exit Sub
@@ -245,6 +251,9 @@ Public Sub RunFullSetup(ByVal xlsmName As String)
     ' LOG ?V?[?g??? m_logger.LogInfo ??????B
     Dim t As String
 
+    ' ADR-0131 Fix-2: reset per-run MsgBox guard
+    m_uiSeedErrShown = False
+
     t = "[setup] [" & Format$(Now(), "hh:nn:ss") & "] "
     Debug.Print t & "RunFullSetup step 0 : enter xlsmName=" & xlsmName
     modCommon.AppendProgressLog t & "RunFullSetup step 0 : enter xlsmName=" & xlsmName
@@ -267,10 +276,22 @@ Public Sub RunFullSetup(ByVal xlsmName As String)
     Debug.Print t & "RunFullSetup step 1 pre : LoadConfig(" & xlsmName & ")"
     modCommon.AppendProgressLog t & "RunFullSetup step 1 pre : LoadConfig(" & xlsmName & ")"
     If modCommon.gDebugLevel >= DEBUG_LEVEL_DEBUG Then Debug.Print "[D-0704] clsSetupOrchestrator.RunFullSetup STEP-1 pre modConfigLoader.LoadConfig"  ' [ADR-0100]
-    Call modConfigLoader.LoadConfig(xlsmName)
+    Dim cfgLoaded As Boolean
+    cfgLoaded = modConfigLoader.LoadConfig(xlsmName)
+    ' ADR-0131 Fix-1 D2: a failed config load (file absent / unparseable)
+    ' must not be silent. We still continue on safe defaults (ADR-0053
+    ' OQ-07) so the workbook opens, but surface a MsgBox in interactive
+    ' mode so the user knows their edited config was not read.
+    If (Not cfgLoaded) And (Not modCommon.IsHeadless()) Then
+        ' Fix-6 (ADR-0133): LoadConfig reads the 9-cell settings sheet and
+        ' returns False only on an interactive partial-missing sheet (it has
+        ' already shown the specific MsgBox). Abort the rest of setup so the
+        ' user fixes the settings sheet and reopens.
+        Exit Sub
+    End If
     t = "[setup] [" & Format$(Now(), "hh:nn:ss") & "] "
-    Debug.Print t & "RunFullSetup step 1 post : LoadConfig done"
-    modCommon.AppendProgressLog t & "RunFullSetup step 1 post : LoadConfig done"
+    Debug.Print t & "RunFullSetup step 1 post : LoadConfig done ok=" & cfgLoaded
+    modCommon.AppendProgressLog t & "RunFullSetup step 1 post : LoadConfig done ok=" & cfgLoaded
 
     ' (2) clsLogger ???????iQ7 ???? ERROR?j
     t = "[setup] [" & Format$(Now(), "hh:nn:ss") & "] "
@@ -398,6 +419,14 @@ Public Sub RunFullSetup(ByVal xlsmName As String)
     m_logger.LogInfo "clsSetupOrchestrator", "RunFullSetup", "[progress] step 8.5 : PlaceV23SheetButtons done", xlsmName, "LOG-SETUP-PROG"
     On Error GoTo ErrHandler
 
+    ' Fix-6 (ADR-0133): ApplyUiStanzas Cells.Clear wiped the admin M-10
+    ' (== settings sheet) value cells; restore the 9 SSOT values from the
+    ' holder so they round-trip across every Workbook_Open. No-op for
+    ' search/register (their settings sheet is not ui_seed-rendered).
+    On Error Resume Next
+    modConfigLoader.RestoreSheetFromHolder
+    On Error GoTo ErrHandler
+
     m_logger.LogInfo "clsSetupOrchestrator", "RunFullSetup", "????: " & xlsmName, "", "LOG-SETUP-OK"
     t = "[setup] [" & Format$(Now(), "hh:nn:ss") & "] "
     Debug.Print t & "RunFullSetup step 9 : COMPLETE xlsmName=" & xlsmName
@@ -492,7 +521,7 @@ Private Sub DropRetiredScreens(ByVal xlsmName As String)
             retired = "M-07|M-09"
         Case NAME_KANRI
             ' M-13 = ファイル形式設?? (admin-role, retired by ADR-0072 §2.1)
-            retired = "M-13|M-04|M-14"   ' 2026-06-07: M-14 ｴ鋓顥ｸ retired (user dropped operation-log screen)
+            retired = "M-13|M-04|M-14|M-11"   ' 2026-06-07: M-14 ｴ鋓顥ｸ retired (user dropped operation-log screen)
         Case Else
             If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0712] clsSetupOrchestrator.DropRetiredScreens EXIT-OK"  ' [ADR-0100]
             Exit Sub
@@ -556,6 +585,9 @@ Private Function RetiredDisplayNameFallback(ByVal screenId As String) As String
         Case "M-14"
             ' M-14 display name (ASCII-safe comment to avoid CP932 issues)
             RetiredDisplayNameFallback = ChrW(&H64CD) & ChrW(&H4F5C) & ChrW(&H30ED) & ChrW(&H30B0)
+        Case "M-11"
+            ' 設定 = U+8A2D U+5B9A (M-11 settei sheet, retired 2026-06-19)
+            RetiredDisplayNameFallback = ChrW(&H8A2D) & ChrW(&H5B9A)
         Case Else
             RetiredDisplayNameFallback = ""
     End Select
@@ -656,8 +688,10 @@ Private Sub EnsureSheetExists(ByVal xlsmName As String, ByVal screenId As String
 
     ' (1) resolve display name from ui_seed
     Dim displayName As String
+    Dim seedResolved As Boolean
     displayName = ReadDisplayNameFromUiSeed(xlsmName, screenId)
-    If Len(displayName) = 0 Then displayName = screenId   ' LOG / unseeded fallback
+    seedResolved = (Len(displayName) > 0)
+    If Not seedResolved Then displayName = screenId   ' LOG / unseeded fallback
 
     ' (2) sheet with display name already exists -> nothing to do
     Dim ws As Worksheet
@@ -686,7 +720,18 @@ Private Sub EnsureSheetExists(ByVal xlsmName As String, ByVal screenId As String
     End If
     Err.Clear
 
-    ' (4) neither exists -> create and name with display name
+    ' (4) neither exists -> create and name with display name.
+    ' ADR-0131 Fix-2: if the ui_seed display name could NOT be resolved
+    ' (ui_dir wrong or seed file missing) and this is not the LOG sheet,
+    ' do NOT create a literal "M-NN" sheet. That silent Worksheets.Add is
+    ' the root cause of the literal-sheet multiplication bug AND it masks a
+    ' misconfigured ui_dir. Surface a clear error (once/run) and skip.
+    If (Not seedResolved) And screenId <> "LOG" Then
+        On Error GoTo 0
+        NotifyUiSeedMissing xlsmName, screenId
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0745] clsSetupOrchestrator.EnsureSheetExists EXIT-OK"  ' [ADR-0100]
+        Exit Sub
+    End If
     Set ws = ThisWorkbook.Worksheets.Add(After:=ThisWorkbook.Worksheets(ThisWorkbook.Worksheets.Count))
     ws.Name = displayName
     If Err.Number <> 0 Then
@@ -714,7 +759,7 @@ Private Function ReadDisplayNameFromUiSeed(ByVal xlsmName As String, ByVal scree
     If Len(uiDir) = 0 Then Exit Function
 
     Dim filePath As String
-    filePath = uiDir & xlsmName & "\" & screenId & ".txt"
+    filePath = uiDir & screenId & ".txt"
 
     Dim fso As Object
     Set fso = CreateObject("Scripting.FileSystemObject")
@@ -900,6 +945,13 @@ Private Function GetSheetsCsv(ByVal xlsmName As String) As String
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0734] clsSetupOrchestrator.GetSheetsCsv EXIT-OK"  ' [ADR-0100]
 End Function
 
+' C3 (ADR-0134): public accessor over the per-role screen-id SSOT
+' (SHEETS_* constants). Lets the UI-definition-file presence check read
+' the authoritative screen list without duplicating it (ADR-0090).
+Public Function ScreenIdsCsv(ByVal xlsmName As String) As String
+    ScreenIdsCsv = GetSheetsCsv(xlsmName)
+End Function
+
 ' Phase R-3-psi-Refresh: ThisWorkbook ?? (kanri.xlsm ??) から role 名を得る??
 Private Function CurrentXlsmName() As String
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0735] clsSetupOrchestrator.CurrentXlsmName ENTER"  ' [ADR-0100]
@@ -953,7 +1005,7 @@ Private Function ScreenIdForSheetName(ByVal sheetName As String, ByVal xlsmName 
         screenId = Trim(names(i))
         If Len(screenId) > 0 Then
             Dim filePath As String
-            filePath = uiDir & xlsmName & "\" & screenId & ".txt"
+            filePath = uiDir & screenId & ".txt"
             If fso.FileExists(filePath) Then
                 Dim secs As Collection
                 Set secs = modStanzaIO.ParseStanzaFile(filePath)
@@ -979,6 +1031,37 @@ Private Function ScreenIdForSheetName(ByVal sheetName As String, ByVal xlsmName 
 EH:
     ScreenIdForSheetName = ""
 End Function
+' ADR-0131 Fix-2: surface a clear, one-shot error instead of silently
+' creating a literal "M-NN" sheet when the ui_seed display name cannot be
+' resolved (ui_dir wrong or seed file missing). Skips the Worksheets.Add so
+' the literal-sheet multiplication bug cannot recur. headless install path
+' suppresses the MsgBox and only logs.
+Private Sub NotifyUiSeedMissing(ByVal xlsmName As String, ByVal screenId As String)
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0743] clsSetupOrchestrator.NotifyUiSeedMissing ENTER"  ' [ADR-0100]
+    On Error Resume Next
+    Dim missPath As String
+    missPath = modConfigHolder.GetUiDir() & screenId & ".txt"
+    modCommon.AppendProgressLog modCommon.ProgressTs() & "NotifyUiSeedMissing screen=" & screenId & " path=" & missPath
+    If Not m_logger Is Nothing Then
+        m_logger.LogWarn "clsSetupOrchestrator", "EnsureSheetExists", "ui_seed not found, sheet not created: " & missPath, xlsmName, "LOG-SETUP-UISEED-MISSING"
+    End If
+    If Not modCommon.IsHeadless() Then
+        If Not m_uiSeedErrShown Then
+            m_uiSeedErrShown = True
+            Dim m1 As String, m2 As String, m3 As String, mt As String
+            m1 = ChrW(&H753B) & ChrW(&H9762) & ChrW(&H5B9A) & ChrW(&H7FA9) & ChrW(&H30D5) & ChrW(&H30A1) & ChrW(&H30A4) & ChrW(&H30EB) & ChrW(&H0020)
+            m2 = ChrW(&H0020) & ChrW(&H304C) & ChrW(&H898B) & ChrW(&H3064) & ChrW(&H304B) & ChrW(&H308A) & ChrW(&H307E) & ChrW(&H305B) & ChrW(&H3093) & ChrW(&H3002)
+            m3 = ChrW(&H8A2D) & ChrW(&H5B9A) & ChrW(&H30D5) & ChrW(&H30A1) & ChrW(&H30A4) & ChrW(&H30EB) & ChrW(&H306E) & ChrW(&H0020) & ChrW(&H0075) & ChrW(&H0069) & ChrW(&H005F) & ChrW(&H0064) & ChrW(&H0069) & ChrW(&H0072) & ChrW(&H0020) & ChrW(&H3092) & ChrW(&H78BA) & ChrW(&H8A8D) & ChrW(&H3057) & ChrW(&H3066) & ChrW(&H304F) & ChrW(&H3060) & ChrW(&H3055) & ChrW(&H3044) & ChrW(&H3002)
+            mt = ChrW(&H8A2D) & ChrW(&H5B9A) & ChrW(&H30A8) & ChrW(&H30E9) & ChrW(&H30FC)
+            MsgBox m1 & missPath & m2 & vbCrLf & m3, vbCritical, mt
+        End If
+    Else
+        Debug.Print "[HEADLESS] suppressed ui_seed-missing MsgBox: " & missPath
+    End If
+    On Error GoTo 0
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0744] clsSetupOrchestrator.NotifyUiSeedMissing EXIT-OK"  ' [ADR-0100]
+End Sub
+
 Private Function GetTabColor(ByVal xlsmName As String) As Long
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0741] clsSetupOrchestrator.GetTabColor ENTER"  ' [ADR-0100]
     Select Case xlsmName

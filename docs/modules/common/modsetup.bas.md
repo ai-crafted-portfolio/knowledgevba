@@ -7,7 +7,7 @@ description: modSetup.bas のソースコード（コピペ用）
 
 **配置先**: 共通モジュール（検索.xlsm / 管理.xlsm 共通）
 **種類**: 標準モジュール
-**更新日**: 2026-06-10 01:26 JST
+**更新日**: 2026-06-30 14:44 JST
 
 ---
 
@@ -115,10 +115,10 @@ Public Sub Setup_admin()
     Debug.Print "[SETUP-SEED] after SeedM03FormatIdIfEmpty err=" & Err.Number
     On Error GoTo 0
 
-    ' [USER-REQ 2026-06-09] Replace fake unicode ●○ chars on M-10 with real
-    ' OptionButton form controls (group=StorageDirGroup, single-select).
+    ' [Fix-6 follow-up] M-10 storage dirs are now plain cell inputs; the
+    ' legacy radios are gone. Clean up leftover radio shapes (idempotent).
     On Error Resume Next
-    SetupM10RadioButtons
+    RemoveLegacyM10Radios
     On Error GoTo 0
 
     ' [USER-REQ 2026-06-09] Apply TRUE/FALSE dropdown to M-03 searchTarget column (I19:I60)
@@ -130,12 +130,12 @@ Public Sub Setup_admin()
 End Sub
 
 ' ============================================================
-' Public Sub: SetupM10RadioButtons
-' Role: Replace ●○ unicode chars on M-10 (col A rows 11..14) with
-'       4 real OptionButton form controls. Single-select via GroupName.
+' Public Sub: RemoveLegacyM10Radios
+' Role: Remove leftover legacy M10_RadioDir_* OptionButton shapes from
+'       older installs. Storage dirs are now plain cell inputs (Fix-6).
 ' ============================================================
-Public Sub SetupM10RadioButtons()
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-9001] modSetup.SetupM10RadioButtons ENTER"
+Public Sub RemoveLegacyM10Radios()
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-9001] modSetup.RemoveLegacyM10Radios ENTER"
     On Error GoTo ErrHandler
 
     Dim wsName As String
@@ -164,37 +164,12 @@ Public Sub SetupM10RadioButtons()
         ws.Shapes(CStr(nm)).Delete
     Next nm
 
-    ' Clear leftover ●○ chars
-    Dim r As Long
-    For r = 11 To 15
-        ws.Cells(r, 1).Value = ""
-    Next r
-
-    Dim i As Long
-    For i = 1 To 5
-        Dim targetRow As Long
-        targetRow = 10 + i
-        Dim cellA As Range
-        Set cellA = ws.Cells(targetRow, 1)
-        Dim optBtn As Object
-        Set optBtn = ws.OptionButtons.Add(cellA.Left + 4, cellA.Top + 2, cellA.Width - 8, cellA.Height - 4)
-        optBtn.Name = "M10_RadioDir_" & i
-        optBtn.Caption = ""
-        optBtn.GroupName = "StorageDirGroup"
-        optBtn.LinkedCell = "A" & targetRow
-        If i = 1 Then
-            optBtn.Value = xlOn
-        Else
-            optBtn.Value = xlOff
-        End If
-    Next i
-
     If wasProt Then ws.Protect Password:="", UserInterfaceOnly:=True, AllowFormattingCells:=True
 
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-9002] modSetup.SetupM10RadioButtons EXIT-OK"
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-9002] modSetup.RemoveLegacyM10Radios EXIT-OK"
     Exit Sub
 ErrHandler:
-    Debug.Print "[ERR] SetupM10RadioButtons: " & Err.Number & " " & Err.Description
+    Debug.Print "[ERR] RemoveLegacyM10Radios: " & Err.Number & " " & Err.Description
 End Sub
 
 ' ============================================================

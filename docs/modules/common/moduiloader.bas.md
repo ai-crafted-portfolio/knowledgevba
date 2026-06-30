@@ -7,7 +7,7 @@ description: modUILoader.bas のソースコード（コピペ用）
 
 **配置先**: 共通モジュール（検索.xlsm / 管理.xlsm 共通）
 **種類**: 標準モジュール
-**更新日**: 2026-06-12 23:05 JST
+**更新日**: 2026-06-30 14:44 JST
 
 ---
 
@@ -87,7 +87,7 @@ Public Function LoadUiDefinition(ByVal xlsmName As String, ByVal screenId As Str
     On Error GoTo ErrHandler
 
     Dim filePath As String
-    filePath = modConfigHolder.GetUiDir() & xlsmName & "\" & screenId & ".txt"
+    filePath = modConfigHolder.GetUiDir() & screenId & ".txt"
 
     Dim fso As Object
     Set fso = CreateObject("Scripting.FileSystemObject")
@@ -171,7 +171,7 @@ Public Function LoadUiList(ByVal xlsmName As String) As Collection
     Dim fso As Object
     Set fso = CreateObject("Scripting.FileSystemObject")
     Dim folderPath As String
-    folderPath = modConfigHolder.GetUiDir() & xlsmName & "\"
+    folderPath = modConfigHolder.GetUiDir()
 
     If Not fso.FolderExists(folderPath) Then
         Set LoadUiList = result
@@ -214,7 +214,7 @@ Public Function ApplyUiToSheet( _
     failMode = GetUiSchemaFailMode()
 
     Dim filePath As String
-    filePath = modConfigHolder.GetUiDir() & xlsmName & "\" & screenId & ".txt"
+    filePath = modConfigHolder.GetUiDir() & screenId & ".txt"
 
     ' (???R?????g????: ?????G???R?[?h?j???????????s?\)
     Dim fso As Object

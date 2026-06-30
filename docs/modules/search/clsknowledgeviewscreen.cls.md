@@ -7,7 +7,7 @@ description: clsKnowledgeViewScreen.cls のソースコード（コピペ用）
 
 **配置先**: `検索.xlsm` 用の VBA モジュール
 **種類**: クラスモジュール
-**更新日**: 2026-06-03 23:22 JST
+**更新日**: 2026-06-30 14:44 JST
 
 ---
 

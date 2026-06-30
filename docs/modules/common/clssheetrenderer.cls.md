@@ -7,7 +7,7 @@ description: clsSheetRenderer.cls のソースコード（コピペ用）
 
 **配置先**: 共通モジュール（検索.xlsm / 管理.xlsm 共通）
 **種類**: クラスモジュール
-**更新日**: 2026-06-14 14:15 JST
+**更新日**: 2026-06-30 14:44 JST
 
 ---
 
@@ -96,13 +96,11 @@ Private Function ResolveDisplayNameFromSeed(ByVal screenId As String) As String
     Dim uiDir As String
     uiDir = modConfigHolder.GetUiDir()
     If Not fso.FolderExists(uiDir) Then Exit Function
-    Dim root As Object
-    Set root = fso.GetFolder(uiDir)
-    Dim sub_ As Object
-    For Each sub_ In root.SubFolders
-        Dim p As String
-        p = sub_.Path & "\" & screenId & ".txt"
-        If fso.FileExists(p) Then
+    ' [C1-refactor] ui_dir is now role-qualified (ui\<role>\); look up the
+    ' seed file directly instead of walking role subfolders.
+    Dim p As String
+    p = uiDir & screenId & ".txt"
+    If fso.FileExists(p) Then
             Dim secs As Collection
             Set secs = modStanzaIO.ParseStanzaFile(p)
             Dim s As ClsStanzaSection
@@ -126,7 +124,6 @@ Private Function ResolveDisplayNameFromSeed(ByVal screenId As String) As String
                 End If
             Next j
         End If
-    Next sub_
 End Function
 
 Private Sub IScreenRenderer_ClearScreen()

@@ -7,7 +7,7 @@ description: modConfigHolder.bas のソースコード（コピペ用）
 
 **配置先**: 共通モジュール（検索.xlsm / 管理.xlsm 共通）
 **種類**: 標準モジュール
-**更新日**: 2026-06-03 23:22 JST
+**更新日**: 2026-06-30 14:44 JST
 
 ---
 
@@ -40,11 +40,11 @@ Attribute VB_Name = "modConfigHolder"
 '          v2.3 Phase A: added SetConfigKeys (partial merge API)
 '          to mirror modConfigLoader.SaveConfigKeys behavior in
 '          memory.
-' Depends: nothing
+' Depends: modCommon / modFileIO. Fix-6 ADR-0133: path defaults removed; the 7-cell
 ' Related: ADR-0053 section 5.2 / 7.3 N6
 '          Q7  (debugLevel default ERROR)
 '          Q17 (GetDebugLevel As Long, enum return)
-'          Q22 (path default root C:\KnowledgeMgr\)
+'          Fix-6 ADR-0133: getters return the worksheet SSOT value
 ' Note:    Japanese block comments were lost in an earlier accident
 '          and restored here in ASCII to avoid encoding fragility.
 '          Logic unchanged; original public API surface preserved.
@@ -62,6 +62,7 @@ Private Const DEBUG_LEVEL_TRACE As Long = 5
 
 Private m_config As Object              ' Scripting.Dictionary
 Private m_isInitialized As Boolean
+Private m_lastMissingUiFile As String   ' C3: last missing required UI def file
 
 ' ----------------------------------------------------------------
 ' Public I/F
@@ -170,37 +171,142 @@ End Function
 ' ================================================================
 Public Function GetDataDir() As String
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0950] modConfigHolder.GetDataDir ENTER"  ' [ADR-0100]
-    GetDataDir = GetValueOrDefault("data_dir", "C:\KnowledgeMgr\data\")
+    GetDataDir = GetValueOrDefault("data_dir", vbNullString)
 End Function
 
 Public Function GetBackupDir() As String
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0951] modConfigHolder.GetBackupDir ENTER"  ' [ADR-0100]
-    GetBackupDir = GetValueOrDefault("backup_dir", "C:\KnowledgeMgr\backup\")
+    GetBackupDir = GetValueOrDefault("backup_dir", vbNullString)
 End Function
 
 Public Function GetFormatDir() As String
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0952] modConfigHolder.GetFormatDir ENTER"  ' [ADR-0100]
-    GetFormatDir = GetValueOrDefault("format_dir", "C:\KnowledgeMgr\formats\")
+    GetFormatDir = GetValueOrDefault("format_dir", vbNullString)
 End Function
 
 Public Function GetUiDir() As String
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0953] modConfigHolder.GetUiDir ENTER"  ' [ADR-0100]
-    GetUiDir = GetValueOrDefault("ui_dir", "C:\KnowledgeMgr\ui\")
-End Function
-
-Public Function GetLogDir() As String
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0954] modConfigHolder.GetLogDir ENTER"  ' [ADR-0100]
-    GetLogDir = GetValueOrDefault("log_dir", "C:\KnowledgeMgr\log\")
-End Function
-
-Public Function GetConfigDir() As String
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0955] modConfigHolder.GetConfigDir ENTER"  ' [ADR-0100]
-    GetConfigDir = GetValueOrDefault("config_dir", "C:\KnowledgeMgr\config\")
+    GetUiDir = GetValueOrDefault("ui_dir", vbNullString)
 End Function
 
 Public Function GetDebugLevelStr() As String
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0956] modConfigHolder.GetDebugLevelStr ENTER"  ' [ADR-0100]
     GetDebugLevelStr = GetValueOrDefault("debugLevel", "ERROR")
+End Function
+
+' ================================================================
+' Change-3: required-UI-file fallback (ADR-0134, revised 2026-06-23)
+' On Workbook_Open and on re-render, verify every screen the role
+' renders has its UI definition file under ui_dir\<role>\. The set of
+' screen-id list comes from the per-role SSOT (clsSetupOrchestrator
+' SHEETS_*), not a hard-coded list (ADR-0090). System ids (e.g. LOG)
+' have no UI file and are skipped. If any file is missing,
+' callers skip the re-render and keep the prior screen. Only UI
+' definition files are in scope; format/data/backup are not.
+' EnsureStorageAccessible is a compat shim: returns "" when all
+' required UI files are present, else the missing file name.
+' ================================================================
+Public Function EnsureStorageAccessible(ByVal xlsmName As String) As String
+    On Error GoTo EH
+    If RequiredUiFilesAvailable(xlsmName) Then
+        EnsureStorageAccessible = ""
+    Else
+        EnsureStorageAccessible = m_lastMissingUiFile
+    End If
+    Exit Function
+EH:
+    EnsureStorageAccessible = ""
+End Function
+
+' C3 core: True iff every screen of roleName has its UI definition file
+' (ui_dir\<role>\<screenId>.txt). On False the missing file name is
+' exposed via LastMissingUiFile. The screen-id list comes from the
+' per-role SSOT (clsSetupOrchestrator.ScreenIdsCsv over SHEETS_*), not a
+' hard-coded list (ADR-0090); ids without a UI file (e.g. LOG) are skipped,
+' and an intentionally disabled file (<id>.txt.disabled) counts as present.
+Public Function RequiredUiFilesAvailable(ByVal roleName As String) As Boolean
+    On Error GoTo EH
+    m_lastMissingUiFile = ""
+    Dim uiBase As String
+    uiBase = GetUiDir()
+    ' Fail-open when ui_dir is not loaded yet (e.g. Workbook_Open calls this
+    ' before LoadConfig): an empty path must NOT be reported as files-missing,
+    ' else the C3 MsgBox fires on every interactive open and setup is skipped.
+    If Len(uiBase) = 0 Then RequiredUiFilesAvailable = True: Exit Function
+    Dim orch As clsSetupOrchestrator
+    Set orch = New clsSetupOrchestrator
+    Dim ids() As String
+    ids = Split(orch.ScreenIdsCsv(roleName), "|")
+    Dim i As Long
+    Dim sid As String
+    For i = LBound(ids) To UBound(ids)
+        sid = Trim$(ids(i))
+        If IsScreenSheet(sid) Then
+            ' present = active file OR intentionally disabled file
+            Dim okF As Boolean
+            okF = modFileIO.FileExists(uiBase & sid & ".txt")
+            If Not okF Then okF = modFileIO.FileExists(uiBase & sid & ".txt.disabled")
+            If Not okF Then
+                m_lastMissingUiFile = sid & ".txt"
+                RequiredUiFilesAvailable = False
+                Exit Function
+            End If
+        End If
+    Next i
+    RequiredUiFilesAvailable = True
+    Exit Function
+EH:
+    ' fail-open: never block startup / re-render on a checker error
+    RequiredUiFilesAvailable = True
+End Function
+
+' Missing UI definition file from the last RequiredUiFilesAvailable call
+' (empty when none was missing).
+Public Function LastMissingUiFile() As String
+    LastMissingUiFile = m_lastMissingUiFile
+End Function
+
+' A screen id has a UI definition file; system ids (LOG, etc.) do not.
+' Screen ids follow the "M-<digits>" naming convention. This is a
+' convention, not a hard-coded screen list (ADR-0090): the id set comes
+' from the orchestrator SSOT and is filtered here by shape.
+Private Function IsScreenSheet(ByVal nm As String) As Boolean
+    On Error GoTo EH
+    If Len(nm) < 3 Then Exit Function
+    If Left$(nm, 2) <> "M-" Then Exit Function
+    Dim i As Long
+    Dim ch As String
+    For i = 3 To Len(nm)
+        ch = Mid$(nm, i, 1)
+        If ch < "0" Or ch > "9" Then Exit Function
+    Next i
+    IsScreenSheet = True
+    Exit Function
+EH:
+    IsScreenSheet = False
+End Function
+
+' Notify that a required UI definition file is missing and the previous
+' screen is being kept. Headless: progress-log only (no modal dialog).
+Public Sub NotifyStorageInaccessible(ByVal p As String)
+    On Error Resume Next
+    If modCommon.IsHeadless() Then
+        modCommon.AppendProgressLog "[STORAGE-INACCESSIBLE] skip re-render keep-prior missing=" & p
+        Exit Sub
+    End If
+    MsgBox MsgStorageA() & p & MsgStorageB(), vbExclamation, MsgStorageTitle()
+End Sub
+
+Private Function MsgStorageA() As String
+    MsgStorageA = ChrW(&H5B9A) & ChrW(&H7FA9) & ChrW(&H30D5) & ChrW(&H30A1) & ChrW(&H30A4) & ChrW(&H30EB) & ChrW(&H304C) & ChrW(&H898B) & ChrW(&H3064) & ChrW(&H304B) & ChrW(&H308A) & ChrW(&H307E) & ChrW(&H305B) & ChrW(&H3093) & ChrW(&H3A) & ChrW(&H20)
+End Function
+
+Private Function MsgStorageB() As String
+    MsgStorageB = ChrW(&H3002) & ChrW(&H524D) & ChrW(&H56DE) & ChrW(&H8868) & ChrW(&H793A) & ChrW(&H306E) & ChrW(&H307E) & ChrW(&H307E) & ChrW(&H3067) & ChrW(&H7D99) & ChrW(&H7D9A) & ChrW(&H3057) & ChrW(&H307E) & ChrW(&H3059) & ChrW(&H3002)
+End Function
+
+Private Function MsgStorageTitle() As String
+    MsgStorageTitle = ChrW(&H5B9A) & ChrW(&H7FA9) & ChrW(&H30D5) & ChrW(&H30A1) & ChrW(&H30A4) & ChrW(&H30EB) & ChrW(&H30A8) & ChrW(&H30E9) & ChrW(&H30FC)
 End Function
 
 Public Sub Reset()

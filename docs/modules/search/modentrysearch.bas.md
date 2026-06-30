@@ -7,7 +7,7 @@ description: modEntrySearch.bas のソースコード（コピペ用）
 
 **配置先**: `検索.xlsm` 用の VBA モジュール
 **種類**: 標準モジュール
-**更新日**: 2026-06-12 22:19 JST
+**更新日**: 2026-06-30 14:44 JST
 
 ---
 
@@ -125,8 +125,26 @@ Public Sub Btn_SearchV23()
     ' [USER-REQ 2026-06-09] Collect hits first so we can sort by UpdatedAt desc.
     Dim hits As Collection
     Set hits = New Collection
+    ' [Change-5] scope the scan to the selected format's data\<fmt>\ folder
+    ' (range separation: other formats' data is never read); with no filter
+    ' scan every per-format subfolder plus the flat root.
+    Dim scanDirs As Collection
+    Set scanDirs = New Collection
+    If Len(fmtFilter) > 0 Then
+        Dim oneDir As String
+        oneDir = dataDir & fmtFilter & "\"
+        If fso.FolderExists(oneDir) Then scanDirs.Add oneDir
+    Else
+        Dim sd As Object
+        For Each sd In fso.GetFolder(dataDir).SubFolders
+            scanDirs.Add sd.Path & "\"
+        Next sd
+        scanDirs.Add dataDir
+    End If
+    Dim sdir As Variant
+    For Each sdir In scanDirs
     Dim f As Object
-    For Each f In fso.GetFolder(dataDir).Files
+    For Each f In fso.GetFolder(CStr(sdir)).Files
         If LCase(fso.GetExtensionName(f.Name)) = "txt" Then
             Dim knwNo As String
             knwNo = fso.GetBaseName(f.Name)
@@ -155,6 +173,7 @@ Public Sub Btn_SearchV23()
             End If
         End If
     Next f
+    Next sdir
 
     ' [USER-REQ 2026-06-09] Sort hits by UpdatedAt descending.
     Dim ai As Long, bi As Long

@@ -7,7 +7,7 @@ description: modConfigLoader.bas のソースコード（コピペ用）
 
 **配置先**: 共通モジュール（検索.xlsm / 管理.xlsm 共通）
 **種類**: 標準モジュール
-**更新日**: 2026-06-07 00:50 JST
+**更新日**: 2026-06-30 14:44 JST
 
 ---
 
@@ -31,584 +31,590 @@ description: modConfigLoader.bas のソースコード（コピペ用）
 ```vb
 Attribute VB_Name = "modConfigLoader"
 ' ================================================================
-' Module:  modConfigLoader (Phase 2 task 2.3 / utility layer)
-' Summary: Reads xxxx_config.txt at startup and feeds modConfigHolder
-'          via SetConfig.
-'          ADR-0053 section 2.9 external I/O isolation rule compliant.
-'          Implements the 5-key load fallback of v2_config_schema.md.
-' Version: v2.1 (2026-05-16 EOD, Q1-Q57 resolved)
-'          v2.3 Phase A: added SaveConfigKeys (partial writeback).
-' Depends: modStanzaIO (parser), modConfigHolder (holder), clsLogger
-' Related: ADR-0053 section 2.9 / 7.3 N6, ADR-0054, ADR-0049
-'          Q7  (debugLevel default ERROR, config.txt edited directly,
-'               modConfigLoader is read-only)
-'          Q8  (xlsm name -> 3 config files)
-'          Q17 (public I/F: LoadConfig / Reload, no Save API)
-'               -> v2.3: added SaveConfigKeys partial-writeback API
-'          Q22 (default path root C:\KnowledgeMgr\)
-' Note:    Japanese block comments were lost (no backup) during a
-'          v2.1 bug-fix edit and restored here in ASCII. Logic unchanged.
+' Module:  modConfigLoader (Fix-6 / ADR-0133)
+' Summary: Reads the 9-cell worksheet SSOT (the "settings sheet")
+'          at startup and feeds modConfigHolder via SetConfig.
+'          Replaces the retired text-file loader. ADR-0133
+'          supersedes ADR-0132 (install-injected path constants).
+'          Layout: column B = label, column D = value (ui_seed
+'          input convention), rows 11..17 (4 paths + 3 behaviour).
+'          First run (all 4 path cells empty): InputBox for BASE_DIR
+'          interactive / default base headless, derive 6 dirs, seed
+'          3 behaviour defaults, write back, save the workbook.
+'          Partial-missing path: explicit error + abort (interactive)
+'          or default-fill + warn (headless).
+' Version: v2.4 Fix-6 (2026-06-18)
+' Depends: modConfigHolder (holder), modCommon (IsHeadless / gDebugLevel)
+' Related: ADR-0133 / ADR-0131 / ADR-0094 / ADR-0053 section 2.9
 ' ================================================================
 Option Explicit
 
-' ----------------------------------------------------------------
-' Constants (v2.1 default values, per Q7 / Q22)
-' ----------------------------------------------------------------
-Private Const DEFAULT_DEBUG_LEVEL As String = "ERROR"
+Private Const DEFAULT_BASE As String = "C:\KnowledgeMgr"
+Private Const DEFAULT_DEBUG_LEVEL As String = "INFO"
 Private Const DEFAULT_LOG_ROTATION_ROWS As String = "10000"
-Private Const DEFAULT_DATA_DIR As String = "C:\KnowledgeMgr\data\"
-Private Const DEFAULT_FORMAT_DIR As String = "C:\KnowledgeMgr\formats\"
-Private Const DEFAULT_UI_DIR As String = "C:\KnowledgeMgr\ui\"
-Private Const DEFAULT_BACKUP_DIR As String = "C:\KnowledgeMgr\backup\"
-Private Const DEFAULT_LOG_DIR As String = "C:\KnowledgeMgr\log\"
-Private Const DEFAULT_CONFIG_DIR As String = "C:\KnowledgeMgr\"
 Private Const DEFAULT_UI_SCHEMA_FAIL_MODE As String = "safeDefault"
-Private Const DEFAULT_SYSTEM_SHEET_VISIBILITY As String = "Hidden"
-Private Const DEFAULT_AUTO_RELOAD_ON_STARTUP As String = "TRUE"
-Private Const DEFAULT_MIGRATE_BACKUP_ENABLED As String = "TRUE"
 
-' v2.3 Phase A: SaveConfigKeys (partial writeback) constants. Declared at
-' module top because VBA requires module-level Const before any Sub/Function.
-Private Const SAVE_TMP_SUFFIX As String = ".tmp"
-Private Const SAVE_DEFAULT_SECTION As String = "added_by_setup"
-
-' v2.1: last loaded path kept for Reload
-Private m_currentConfigPath As String
+Private Const FIRST_DATA_ROW As Long = 11    ' worksheet row of first key (data_dir)
+Private Const KEY_COL As Long = 2            ' column B = key label
+Private Const VALUE_COL As Long = 4          ' column D = value (ui_seed input cell)
+Private Const PATH_KEY_COUNT As Long = 4     ' first 4 keys are paths
 
 ' ----------------------------------------------------------------
-' Public I/F (Q17: of the 8 functions, the loader exposes only
-' LoadConfig + Reload. GetValue / GetValueOrDefault / GetDataDir
-' belong to modConfigHolder.)
-' v2.3 Phase A: SaveConfigKeys added (partial writeback).
+' Public API
 ' ----------------------------------------------------------------
+
+' Display name of the settings sheet ("kakuno-saki settei"). JP via ChrW.
+Public Function SettingsSheetName() As String
+    SettingsSheetName = ChrW(&H683C) & ChrW(&H7D0D) & ChrW(&H5148) & ChrW(&H8A2D) & ChrW(&H5B9A)
+End Function
+
+' Compat shim (ADR-0131 used this to name the unreadable config file in a
+' MsgBox). With Fix-6 the source is a worksheet, so return its display name.
+Public Function LastConfigPath() As String
+    LastConfigPath = SettingsSheetName()
+End Function
 
 ' ================================================================
 ' Function: LoadConfig
-' Summary:  Reads the config.txt for xlsmName and feeds modConfigHolder
-'           via SetConfig. v2.1 (Q8): xlsmName maps to 3 config files.
-' Param:    ByVal xlsmName As String
-' Return:   Boolean - TRUE on success / FALSE when the file is absent
-'           or no key could be parsed (caller emits WARN).
+' Summary:  Orchestrator step-1 entry. Ensures + seeds the settings
+'           sheet, reads the 9 cells, handles empty/partial, feeds
+'           the holder. Returns False only on interactive
+'           partial-missing (caller aborts the remaining setup).
 ' ================================================================
 Public Function LoadConfig(ByVal xlsmName As String) As Boolean
     If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0960] modConfigLoader.LoadConfig ENTER"  ' [ADR-0100]
     On Error GoTo ErrHandler
 
-    Dim configFilePath As String
-    configFilePath = ResolveConfigDir() & xlsmName & "_config.txt"
-    m_currentConfigPath = configFilePath
+    Dim ws As Worksheet
+    Set ws = EnsureSettingsSheet()
+    If ws Is Nothing Then
+        LoadConfig = False
+        Exit Function
+    End If
 
-    LoadConfig = LoadConfigFromPath(configFilePath)
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0961] modConfigLoader.LoadConfig EXIT-OK"  ' [ADR-0100]
+    ' [M10-MIGRATE] in-place upgrade: drop old log_dir/config_dir rows and
+    ' shift the survivors to the current 7-key layout before reading.
+    MigrateOldStorageLayout ws
+    ' [M10-MIGRATE] in-place upgrade: point ui_dir at the role subfolder when
+    ' the configured path is the bare base (pre-C1) so the renderer resolves.
+    EnsureUiDirRoleResolvable ws
+
+    Dim d As Object
+    Set d = ReadSheetToDict(ws)
+
+    Dim emptyPaths As Long
+    emptyPaths = CountEmptyPaths(d)
+
+    If emptyPaths = PATH_KEY_COUNT Then
+        ' First run: no path is set yet.
+        DeriveDirs AskBaseDir(), d
+        ApplyBehaviorDefaults d
+        WriteDictToSheet ws, d
+        SaveBookQuiet
+        modConfigHolder.SetConfig d
+        LoadConfig = True
+        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0961] modConfigLoader.LoadConfig EXIT-OK first-run"  ' [ADR-0100]
+        Exit Function
+    End If
+
+    If emptyPaths > 0 Then
+        ' Partial-missing path cells.
+        ' [Fix-6 / ADR-0133-followup 2026-06-19] Auto-heal instead of the old
+        ' interactive hard-abort. The common real case is a config migrated
+        ' from a pre-Fix-6 config that had no base-dir line: the sub-dir
+        ' cells are filled but the base cell is empty, so emptyPaths is partial
+        ' and the first-run InputBox never fires. The user then sees an opaque
+        ' "base dir is empty or invalid" abort with no idea what to enter.
+        ' Instead, infer BASE_DIR from an existing path and derive only the
+        ' missing cells, then continue. Only when no base can be inferred do we
+        ' fall back to the previous default-fill (headless) / notify (interactive).
+        Dim base As String
+        base = InferBaseDir(d)
+        If Len(base) > 0 Then
+            FillMissingPathsFromBase d, base
+            ApplyBehaviorDefaults d
+            WriteDictToSheet ws, d
+            SaveBookQuiet
+            modConfigHolder.SetConfig d
+            LoadConfig = True
+            If modCommon.gDebugLevel >= DEBUG_LEVEL_DEBUG Then Debug.Print "[D-0962b] modConfigLoader.LoadConfig EXIT-OK partial-autoheal base=" & base  ' [ADR-0100]
+            Exit Function
+        End If
+        If modCommon.IsHeadless() Then
+            FillMissingPathsFromDefault d
+            ApplyBehaviorDefaults d
+            WriteDictToSheet ws, d
+            SaveBookQuiet
+            modConfigHolder.SetConfig d
+            LoadConfig = True
+            Exit Function
+        Else
+            NotifyMissingKey FirstEmptyPathKey(d)
+            LoadConfig = False
+            If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-0962] modConfigLoader.LoadConfig EXIT abort partial-missing"  ' [ADR-0100]
+            Exit Function
+        End If
+    End If
+
+    ' All path cells present.
+    ApplyBehaviorDefaults d
+    modConfigHolder.SetConfig d
+    LoadConfig = True
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0963] modConfigLoader.LoadConfig EXIT-OK"  ' [ADR-0100]
     Exit Function
 
 ErrHandler:
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-0962] modConfigLoader.LoadConfig EXIT-ERR " & "errNum=" & Err.Number & " desc=" & Err.Description  ' [ADR-0100]
-    ' ret=False exit must NOT pollute the holder; seed defensive
-    ' defaults only when the holder has not been initialized
-    ' (architecture OQ-07 safeDefault).
-    SeedHolderDefaultsIfEmpty
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-0964] modConfigLoader.LoadConfig EXIT-ERR errNum=" & Err.Number & " desc=" & Err.Description  ' [ADR-0100]
     LoadConfig = False
 End Function
 
-' ----------------------------------------------------------------
-' Private: ResolveConfigDir
-'   Resolves the config-file directory. When the holder is already
-'   initialized and carries a config_dir value, that value wins;
-'   otherwise fall back to DEFAULT_CONFIG_DIR (Q22).
-'   This also lets callers / tests redirect the config directory
-'   without abort (architecture OQ-07 safeDefault).
-' ----------------------------------------------------------------
-Private Function ResolveConfigDir() As String
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0963] modConfigLoader.ResolveConfigDir ENTER"  ' [ADR-0100]
-    Dim dir As String
-    dir = vbNullString
-    If modConfigHolder.IsInitialized() Then
-        dir = modConfigHolder.GetValue("config_dir")
-    End If
-    If Len(dir) = 0 Then
-        dir = DEFAULT_CONFIG_DIR
-    End If
-    ResolveConfigDir = dir
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0964] modConfigLoader.ResolveConfigDir EXIT-OK"  ' [ADR-0100]
-End Function
+' [M10-MIGRATE] In-place upgrade cleanup. The pre-2026-06 settings layout
+' had 8 data rows incl. log_dir (D14) and config_dir (D16); the current
+' 7-key layout dropped both, so an upgraded book shows the still-valid
+' values two rows too low (backup in the debugLevel row, etc.). Detect by
+' the new debugLevel cell (D15) holding a path (the old backup_dir) and
+' shift the survivors up; clear the old logRotationRows straggler in D18.
+' Idempotent: after migration D15 is a debug level (no path) so it never
+' re-triggers - no separate flag needed.
+Private Sub MigrateOldStorageLayout(ByVal ws As Object)
+    On Error Resume Next
+    Dim d15 As String
+    d15 = CStr(ws.Cells(15, VALUE_COL).Value)
+    If InStr(d15, "\") = 0 And InStr(d15, ":") = 0 Then Exit Sub  ' already new layout
+    ' capture still-valid old values (old D15=backup, D17=debugLevel, D18=logRotationRows)
+    Dim oldBackup As String, oldDebug As String, oldLogRot As String
+    oldBackup = CStr(ws.Cells(15, VALUE_COL).Value)
+    oldDebug = CStr(ws.Cells(17, VALUE_COL).Value)
+    oldLogRot = CStr(ws.Cells(18, VALUE_COL).Value)
+    Dim wasP As Boolean
+    wasP = ws.ProtectContents
+    If wasP Then ws.Unprotect Password:=""
+    ' new layout: D14=backup_dir, D15=debugLevel, D16=logRotationRows, D17=uiSchemaFailMode
+    ws.Cells(14, VALUE_COL).Value = oldBackup
+    ws.Cells(15, VALUE_COL).Value = oldDebug
+    ws.Cells(16, VALUE_COL).Value = oldLogRot
+    ws.Cells(17, VALUE_COL).Value = "safeDefault"
+    ws.Cells(18, VALUE_COL).ClearContents
+    If wasP Then ws.Protect Password:="", UserInterfaceOnly:=True
+    modCommon.AppendProgressLog "[M10-MIGRATE] old log_dir/config_dir layout migrated to 7-key layout"
+End Sub
 
-' ----------------------------------------------------------------
-' Private: SeedHolderDefaultsIfEmpty
-'   Seeds the holder with defensive defaults ONLY when SetConfig
-'   has not yet been called. An already-initialized holder is left
-'   untouched, so a failed load never overwrites a good config and
-'   never leaves loader-internal partial state behind (architecture
-'   OQ-07 safeDefault, holder-pollution prevention).
-' ----------------------------------------------------------------
-Private Sub SeedHolderDefaultsIfEmpty()
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0965] modConfigLoader.SeedHolderDefaultsIfEmpty ENTER"  ' [ADR-0100]
-    If modConfigHolder.IsInitialized() Then Exit Sub
-    Dim fallbackDict As Object
-    Set fallbackDict = CreateObject("Scripting.Dictionary")
-    LoadDefaults fallbackDict
-    modConfigHolder.SetConfig fallbackDict
+' [M10-MIGRATE] In-place upgrade: a pre-C1 book has ui_dir = the bare base
+' (...\ui\) but screen files now live under ...\ui\<role>\. C1 made consumers
+' read GetUiDir() verbatim, so the renderer would miss every file. When D13 is
+' not already role-qualified and a <path>\<role>\ subfolder exists, point D13
+' there. Idempotent; a genuine custom path (no such subfolder) is left as-is.
+Private Sub EnsureUiDirRoleResolvable(ByVal ws As Object)
+    On Error Resume Next
+    Dim role As String
+    role = Replace$(ThisWorkbook.Name, ".xlsm", "")
+    If Len(role) = 0 Then Exit Sub
+    Dim base As String
+    base = CStr(ws.Cells(13, VALUE_COL).Value)
+    Do While Len(base) > 0 And Right$(base, 1) = "\"
+        base = Left$(base, Len(base) - 1)
+    Loop
+    If Len(base) = 0 Then Exit Sub
+    If Len(base) > Len(role) Then
+        If Right$(base, Len(role) + 1) = "\" & role Then Exit Sub  ' already role-qualified
+    End If
+    Dim fso As Object
+    Set fso = CreateObject("Scripting.FileSystemObject")
+    If Not fso.FolderExists(base & "\" & role) Then Exit Sub
+    Dim wasP As Boolean
+    wasP = ws.ProtectContents
+    If wasP Then ws.Unprotect Password:=""
+    ws.Cells(13, VALUE_COL).Value = base & "\" & role & "\"
+    If wasP Then ws.Protect Password:="", UserInterfaceOnly:=True
+    modCommon.AppendProgressLog "[M10-MIGRATE] ui_dir upgraded to role-qualified: " & base & "\" & role & "\"
 End Sub
 
 ' ================================================================
-' Function: Reload (Q17, Q7 dynamic debugLevel update)
-' Summary:  Re-reads the current config path (clsLogger 5s polling).
-' Return:   Boolean
+' Function: Reload
+' Summary:  Re-read the 9 cells into the holder (clsLogger polling /
+'           dynamic debugLevel). No seeding, no abort.
 ' ================================================================
 Public Function Reload() As Boolean
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0966] modConfigLoader.Reload ENTER"  ' [ADR-0100]
-    If Len(m_currentConfigPath) = 0 Then
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0965] modConfigLoader.Reload ENTER"  ' [ADR-0100]
+    On Error GoTo ErrHandler
+    Dim ws As Worksheet
+    Set ws = GetSettingsSheet()
+    If ws Is Nothing Then
         Reload = False
         Exit Function
     End If
-    Reload = LoadConfigFromPath(m_currentConfigPath)
-End Function
-
-' ----------------------------------------------------------------
-' Private
-' ----------------------------------------------------------------
-
-Private Function LoadConfigFromPath(ByVal configFilePath As String) As Boolean
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0967] modConfigLoader.LoadConfigFromPath ENTER"  ' [ADR-0100]
-    On Error GoTo ErrHandler
-
-    Dim configDict As Object
-    Set configDict = CreateObject("Scripting.Dictionary")
-
-    LoadDefaults configDict
-
-    Dim fso As Object
-    Set fso = CreateObject("Scripting.FileSystemObject")
-    If Not fso.FileExists(configFilePath) Then
-        ' File absent: do not write the loader-internal configDict into
-        ' the holder. Seed defaults only when the holder is not yet
-        ' initialized (architecture OQ-07 safeDefault / holder-pollution
-        ' prevention).
-        SeedHolderDefaultsIfEmpty
-        LoadConfigFromPath = False
-        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0968] modConfigLoader.LoadConfigFromPath EXIT-OK"  ' [ADR-0100]
-        Exit Function
-    End If
-
-    Dim sections As Collection
-    Set sections = modStanzaIO.ParseStanzaFile(configFilePath)
-
-    Dim sec As Object
-    Dim i As Long
-    For i = 1 To sections.Count
-        Set sec = sections.Item(i)
-        Dim kv As Object
-        Set kv = sec.KeyValues
-        Dim k As Variant
-        For Each k In kv.Keys
-            configDict(CStr(k)) = CStr(kv(k))
-        Next k
-    Next i
-
-    modConfigHolder.SetConfig configDict
-    LoadConfigFromPath = True
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0969] modConfigLoader.LoadConfigFromPath EXIT-OK"  ' [ADR-0100]
+    Dim d As Object
+    Set d = ReadSheetToDict(ws)
+    ApplyBehaviorDefaults d
+    modConfigHolder.SetConfig d
+    Reload = True
     Exit Function
-
 ErrHandler:
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-0970] modConfigLoader.LoadConfigFromPath EXIT-ERR " & "errNum=" & Err.Number & " desc=" & Err.Description  ' [ADR-0100]
-    ' Error mid-parse: do NOT write the partially-built configDict into
-    ' the holder. Seed defensive defaults only when the holder has not
-    ' been initialized (architecture OQ-07 safeDefault).
-    SeedHolderDefaultsIfEmpty
-    LoadConfigFromPath = False
+    Reload = False
 End Function
 
-' ----------------------------------------------------------------
-' Private: LoadDefaults
-'   Fills configDict with the default values (per Q7 / Q22).
-' ----------------------------------------------------------------
-Private Sub LoadDefaults(ByVal configDict As Object)
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0971] modConfigLoader.LoadDefaults ENTER"  ' [ADR-0100]
-    configDict("debugLevel") = DEFAULT_DEBUG_LEVEL
-    configDict("logRotationRows") = DEFAULT_LOG_ROTATION_ROWS
-    configDict("data_dir") = DEFAULT_DATA_DIR
-    configDict("format_dir") = DEFAULT_FORMAT_DIR
-    configDict("ui_dir") = DEFAULT_UI_DIR
-    configDict("backup_dir") = DEFAULT_BACKUP_DIR
-    configDict("log_dir") = DEFAULT_LOG_DIR
-    configDict("config_dir") = DEFAULT_CONFIG_DIR
-    configDict("uiSchemaFailMode") = DEFAULT_UI_SCHEMA_FAIL_MODE
-    ' 2026-06-07: retired keys (systemSheetVisibility/autoReloadOnStartup/migrateBackupEnabled)
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0972] modConfigLoader.LoadDefaults EXIT-OK"  ' [ADR-0100]
-End Sub
+' ================================================================
+' Function: EnsureSettingsSheet
+' Summary:  Return the settings sheet, creating + seeding the frame
+'           (labels + validation) when it does not exist yet. Public
+'           so M-10 / the orchestrator can guarantee it exists.
+' ================================================================
+Public Function EnsureSettingsSheet() As Worksheet
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0966] modConfigLoader.EnsureSettingsSheet ENTER"  ' [ADR-0100]
+    Dim ws As Worksheet
+    Set ws = GetSettingsSheet()
+    If ws Is Nothing Then
+        On Error Resume Next
+        Set ws = ThisWorkbook.Worksheets.Add(After:=ThisWorkbook.Worksheets(ThisWorkbook.Worksheets.Count))
+        If Not ws Is Nothing Then ws.Name = SettingsSheetName()
+        On Error GoTo 0
+        If Not ws Is Nothing Then SeedSheetFrame ws
+    End If
+    Set EnsureSettingsSheet = ws
+End Function
 
 ' ================================================================
-' v2.3 Phase A: SaveConfigKeys (partial writeback API)
-' ----------------------------------------------------------------
-' design ref: migration_plan_v1_to_v2_rev2 / sekkeisho_v23_accepted
-' Adds partial writeback so M-11 / M-10 settings screens (and
-' future admin features) can persist edits to <xlsmName>_config.txt
-' without losing comments, section headers or unrelated keys.
-' Atomic by writing to a sibling .tmp file and renaming on success.
-' CP932 + CRLF preserved (CP932 = "Shift_JIS" via ADODB.Stream).
-' Logging is best-effort: failures Debug.Print and return 0.
+' Sub: RestoreSheetFromHolder
+' Summary:  Post-render hook. ApplyUiStanzas does Cells.Clear on the
+'           admin M-10 sheet (== settings sheet); after the re-render
+'           we write the holder values back into B2..B10 so the SSOT
+'           round-trips across every Workbook_Open. No-op when the
+'           holder is empty or the sheet is absent.
 ' ================================================================
-
-' (SAVE_TMP_SUFFIX / SAVE_DEFAULT_SECTION moved to module top - VBA requires module-level Const before any Sub/Function)
-
-' ================================================================
-' Function: SaveConfigKeys
-' Summary:  Partial writeback into <xlsmName>_config.txt.
-'           - lines of shape 'key=value' whose key appears in
-'             keyValues are rewritten with the new value
-'           - blank lines, '#' comments, '[section]' headers are
-'             left untouched
-'           - keys present in keyValues but NOT in the existing
-'             file are appended at the end under a marker section
-'             '[added_by_setup]'
-'           - write goes to <path>.tmp then is renamed onto path
-' Param:    xlsmName  As String  - logical name ("kanri" etc),
-'                                  same key as LoadConfig uses
-'           keyValues As Object  - Scripting.Dictionary
-'                                  key => new value (string)
-' Return:   Long - count of keys actually written (updated+added).
-'                  0 on any I/O error (logged, see Note).
-' Note:     If LoadConfig has not been called yet, ResolveConfigDir
-'           falls back to DEFAULT_CONFIG_DIR (C:\KnowledgeMgr\),
-'           same as LoadConfig. Caller is responsible for invoking
-'           modConfigHolder.SetConfigKeys to sync in-memory state.
-' ================================================================
-Public Function SaveConfigKeys(ByVal xlsmName As String, ByVal keyValues As Object) As Long
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0973] modConfigLoader.SaveConfigKeys ENTER"  ' [ADR-0100]
+Public Sub RestoreSheetFromHolder()
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0967] modConfigLoader.RestoreSheetFromHolder ENTER"  ' [ADR-0100]
     On Error GoTo ErrHandler
-
-    If keyValues Is Nothing Then
-        SaveConfigKeys = 0
-        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0974] modConfigLoader.SaveConfigKeys EXIT-OK"  ' [ADR-0100]
-        Exit Function
-    End If
-
-    Dim configFilePath As String
-    configFilePath = ResolveConfigDir() & xlsmName & "_config.txt"
-
-    Dim tmpPath As String
-    tmpPath = configFilePath & SAVE_TMP_SUFFIX
-
-    ' (1) Read current file into memory (if it exists). Lines are
-    '     preserved as-is so we keep blank lines, comments, headers.
-    Dim lines As Collection
-    Set lines = ReadAllLines(configFilePath)
-
-    ' (2) Rewrite lines whose key is in keyValues, track which keys
-    '     were consumed so we can append the rest at the end.
-    Dim seen As Object
-    Set seen = CreateObject("Scripting.Dictionary")
-    seen.CompareMode = 1 ' vbTextCompare = case-insensitive
-
-    Dim updatedCount As Long
-    updatedCount = RewriteMatchingLines(lines, keyValues, seen)
-
-    ' (3) Append keys that did not appear in the file.
-    Dim addedCount As Long
-    addedCount = AppendMissingKeys(lines, keyValues, seen)
-
-    ' (4) Write to .tmp then rename onto the real path (atomic-ish).
-    WriteAllLines tmpPath, lines
-    PromoteTmpToFinal tmpPath, configFilePath
-
-    SaveConfigKeys = updatedCount + addedCount
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0975] modConfigLoader.SaveConfigKeys EXIT-OK"  ' [ADR-0100]
-    Exit Function
-
-ErrHandler:
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-0976] modConfigLoader.SaveConfigKeys EXIT-ERR " & "errNum=" & Err.Number & " desc=" & Err.Description  ' [ADR-0100]
-    LogSaveError "SaveConfigKeys", xlsmName, Err.Number, Err.Description
-    ' Try to clean up tmp file (best effort, ignore errors)
-    On Error Resume Next
-    CleanupTmp configFilePath & SAVE_TMP_SUFFIX
-    On Error GoTo 0
-    SaveConfigKeys = 0
-End Function
-
-' ----------------------------------------------------------------
-' Private: ReadAllLines
-'   Returns Collection of String. If file missing, returns empty.
-'   Uses ADODB.Stream with Shift_JIS (CP932) charset.
-' ----------------------------------------------------------------
-Private Function ReadAllLines(ByVal filePath As String) As Collection
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0977] modConfigLoader.ReadAllLines ENTER"  ' [ADR-0100]
-    Dim result As Collection
-    Set result = New Collection
-
-    Dim fso As Object
-    Set fso = CreateObject("Scripting.FileSystemObject")
-    If Not fso.FileExists(filePath) Then
-        Set ReadAllLines = result
-        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0978] modConfigLoader.ReadAllLines EXIT-OK"  ' [ADR-0100]
-        Exit Function
-    End If
-
-    Dim stream As Object
-    Set stream = CreateObject("ADODB.Stream")
-    stream.Type = 2 ' adTypeText
-    stream.Charset = "Shift_JIS"
-    stream.Open
-    stream.LoadFromFile filePath
-    Dim allText As String
-    allText = stream.ReadText
-    stream.Close
-    Set stream = Nothing
-
-    ' Normalize line endings: split on vbCrLf first, then on vbLf
-    ' to be robust against tools that stripped CR.
-    Dim parts() As String
-    parts = SplitLinesPreserving(allText)
-
-    Dim i As Long
-    For i = LBound(parts) To UBound(parts)
-        result.Add parts(i)
-    Next i
-
-    Set ReadAllLines = result
-End Function
-
-' ----------------------------------------------------------------
-' Private: SplitLinesPreserving
-'   Splits on CRLF (preferred) or LF, returning array of lines
-'   without trailing line-terminator characters.
-' ----------------------------------------------------------------
-Private Function SplitLinesPreserving(ByVal s As String) As String()
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0979] modConfigLoader.SplitLinesPreserving ENTER"  ' [ADR-0100]
-    Dim normalized As String
-    normalized = Replace(s, vbCrLf, vbLf)
-    normalized = Replace(normalized, vbCr, vbLf)
-    SplitLinesPreserving = Split(normalized, vbLf)
-End Function
-
-' ----------------------------------------------------------------
-' Private: RewriteMatchingLines
-'   For each line of shape 'key=value', if key is in keyValues,
-'   replace the value portion with the new value (keeping any
-'   leading whitespace). Records consumed keys into 'seen'.
-' Return: count of lines actually modified.
-' ----------------------------------------------------------------
-Private Function RewriteMatchingLines(ByVal lines As Collection, _
-                                       ByVal keyValues As Object, _
-                                       ByVal seen As Object) As Long
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0980] modConfigLoader.RewriteMatchingLines ENTER"  ' [ADR-0100]
-    Dim modified As Long
-    modified = 0
-
-    Dim i As Long
-    For i = 1 To lines.Count
-        Dim line As String
-        line = lines.Item(i)
-
-        Dim parsed As Object
-        Set parsed = ParseKeyValueLine(line)
-        If parsed Is Nothing Then GoTo NextLine
-
-        Dim k As String
-        k = parsed("key")
-        If Not keyValues.Exists(k) Then GoTo NextLine
-
-        ' Found a key to update. Build new line preserving leading
-        ' whitespace; pick up the new value from keyValues.
-        Dim newLine As String
-        newLine = parsed("leading") & k & "=" & CStr(keyValues(k))
-
-        ' Replace by deleting and re-inserting at the same position.
-        lines.Remove i
-        If i > lines.Count Then
-            lines.Add newLine
-        Else
-            lines.Add newLine, Before:=i
-        End If
-        seen(k) = True
-        modified = modified + 1
-NextLine:
-    Next i
-
-    RewriteMatchingLines = modified
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0981] modConfigLoader.RewriteMatchingLines EXIT-OK"  ' [ADR-0100]
-End Function
-
-' ----------------------------------------------------------------
-' Private: ParseKeyValueLine
-'   Returns Scripting.Dictionary with keys "leading", "key" if the
-'   line is a key=value line, otherwise Nothing.
-'   Comment lines ('#') and section headers ('[xxx]') return Nothing.
-' ----------------------------------------------------------------
-Private Function ParseKeyValueLine(ByVal line As String) As Object
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0982] modConfigLoader.ParseKeyValueLine ENTER"  ' [ADR-0100]
-    Set ParseKeyValueLine = Nothing
-
-    Dim trimmed As String
-    trimmed = Trim(line)
-    If Len(trimmed) = 0 Then Exit Function
-    If Left(trimmed, 1) = "#" Then Exit Function
-    If Left(trimmed, 1) = "[" Then Exit Function ' section header
-
-    Dim eqPos As Long
-    eqPos = InStr(line, "=")
-    If eqPos <= 1 Then Exit Function
-
-    ' Split into leading-whitespace + key
-    Dim leading As String
-    Dim keyPart As String
-    Dim keyEnd As Long
-    keyEnd = eqPos - 1
-
-    ' Extract leading whitespace from the original line
-    Dim p As Long
-    p = 1
-    Do While p <= Len(line)
-        Dim ch As String
-        ch = Mid(line, p, 1)
-        If ch <> " " And ch <> vbTab Then Exit Do
-        p = p + 1
-    Loop
-    leading = Left(line, p - 1)
-    keyPart = Mid(line, p, keyEnd - p + 1)
-    keyPart = RTrim(keyPart)
-
-    ' Reject if key contains whitespace inside (defensive)
-    If InStr(keyPart, " ") > 0 Then Exit Function
-    If Len(keyPart) = 0 Then Exit Function
-
+    If Not modConfigHolder.IsInitialized() Then Exit Sub
+    Dim ws As Worksheet
+    Set ws = GetSettingsSheet()
+    If ws Is Nothing Then Exit Sub
     Dim d As Object
     Set d = CreateObject("Scripting.Dictionary")
-    d.CompareMode = 1
-    d("leading") = leading
-    d("key") = keyPart
-    Set ParseKeyValueLine = d
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0983] modConfigLoader.ParseKeyValueLine EXIT-OK"  ' [ADR-0100]
-End Function
+    Dim keys As Variant
+    keys = AllKeys()
+    Dim i As Long
+    For i = 0 To UBound(keys)
+        d(keys(i)) = modConfigHolder.GetValue(CStr(keys(i)))
+    Next i
+    WriteDictToSheet ws, d
+    Exit Sub
+ErrHandler:
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-0968] modConfigLoader.RestoreSheetFromHolder EXIT-ERR errNum=" & Err.Number  ' [ADR-0100]
+End Sub
 
-' ----------------------------------------------------------------
-' Private: AppendMissingKeys
-'   For each key in keyValues that was NOT seen during rewrite,
-'   append 'key=value' under a marker section at file end.
-'   If the marker section header is not present yet, add it.
-' Return: count of keys appended.
-' ----------------------------------------------------------------
-Private Function AppendMissingKeys(ByVal lines As Collection, _
-                                    ByVal keyValues As Object, _
-                                    ByVal seen As Object) As Long
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0984] modConfigLoader.AppendMissingKeys ENTER"  ' [ADR-0100]
-    Dim missingKeys As Collection
-    Set missingKeys = New Collection
+' ================================================================
+' Sub: WriteSettingsFromDict
+' Summary:  Persist edited keys (M-10 save). Merge keyValues over the
+'           current sheet values, write B2..B10, save the workbook,
+'           and refresh the holder. Replaces the retired text-file
+'           writeback pair.
+' ================================================================
+Public Sub WriteSettingsFromDict(ByVal keyValues As Object)
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0969] modConfigLoader.WriteSettingsFromDict ENTER"  ' [ADR-0100]
+    On Error GoTo ErrHandler
+    If keyValues Is Nothing Then Exit Sub
+    Dim ws As Worksheet
+    Set ws = EnsureSettingsSheet()
+    If ws Is Nothing Then Exit Sub
+    Dim d As Object
+    Set d = ReadSheetToDict(ws)
     Dim k As Variant
     For Each k In keyValues.Keys
-        If Not seen.Exists(CStr(k)) Then
-            missingKeys.Add CStr(k)
-        End If
+        d(CStr(k)) = CStr(keyValues(k))
     Next k
-    If missingKeys.Count = 0 Then
-        AppendMissingKeys = 0
-        If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0985] modConfigLoader.AppendMissingKeys EXIT-OK"  ' [ADR-0100]
+    WriteDictToSheet ws, d
+    SaveBookQuiet
+    modConfigHolder.SetConfig d
+    Exit Sub
+ErrHandler:
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-0970] modConfigLoader.WriteSettingsFromDict EXIT-ERR errNum=" & Err.Number  ' [ADR-0100]
+End Sub
+
+' ================================================================
+' Function: SnapshotSettings
+' Summary:  Fix-6 followup. Capture the 9 settings cells from the
+'           settings sheet into a fresh Dictionary so a re-render
+'           (Cells.Clear) cannot lose user-entered values. Never
+'           fails: a missing sheet yields empty-string values.
+' ================================================================
+Public Function SnapshotSettings() As Object
+    On Error GoTo ErrHandler
+    Dim ws As Worksheet
+    Set ws = GetSettingsSheet()
+    If ws Is Nothing Then
+        Set SnapshotSettings = NewEmptyKeyDict()
         Exit Function
     End If
-
-    ' Ensure a blank separator + marker section header.
-    If lines.Count > 0 Then
-        Dim lastLine As String
-        lastLine = lines.Item(lines.Count)
-        If Len(Trim(lastLine)) > 0 Then
-            lines.Add ""
-        End If
-    End If
-    lines.Add "[" & SAVE_DEFAULT_SECTION & "]"
-
-    Dim i As Long
-    For i = 1 To missingKeys.Count
-        Dim ky As String
-        ky = missingKeys.Item(i)
-        lines.Add ky & "=" & CStr(keyValues(ky))
-    Next i
-    AppendMissingKeys = missingKeys.Count
+    Set SnapshotSettings = ReadSheetToDict(ws)
+    Exit Function
+ErrHandler:
+    Set SnapshotSettings = NewEmptyKeyDict()
 End Function
 
+' ================================================================
+' Sub: RestoreSettings
+' Summary:  Fix-6 followup. Write a snapshot Dictionary back into the
+'           9 settings cells after a re-render. Creates the settings
+'           sheet when absent. Never raises.
+' ================================================================
+Public Sub RestoreSettings(ByVal d As Object)
+    On Error GoTo ErrHandler
+    If d Is Nothing Then Exit Sub
+    Dim ws As Worksheet
+    Set ws = EnsureSettingsSheet()
+    If ws Is Nothing Then Exit Sub
+    WriteDictToSheet ws, d
+    Exit Sub
+ErrHandler:
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-0971] modConfigLoader.RestoreSettings EXIT-ERR errNum=" & Err.Number  ' [ADR-0100]
+End Sub
+
 ' ----------------------------------------------------------------
-' Private: WriteAllLines
-'   Writes the collection of lines to filePath as CP932 + CRLF.
+' Private helpers
 ' ----------------------------------------------------------------
-Private Sub WriteAllLines(ByVal filePath As String, ByVal lines As Collection)
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0986] modConfigLoader.WriteAllLines ENTER"  ' [ADR-0100]
-    Dim buf As String
+
+Private Function AllKeys() As Variant
+    AllKeys = Array("data_dir", "format_dir", "ui_dir", "backup_dir", "debugLevel", "logRotationRows", "uiSchemaFailMode")
+End Function
+
+' Fix-6 followup: a Dictionary pre-populated with all 9 keys set to "".
+Private Function NewEmptyKeyDict() As Object
+    Dim d As Object
+    Set d = CreateObject("Scripting.Dictionary")
+    Dim keys As Variant
+    keys = AllKeys()
     Dim i As Long
-    For i = 1 To lines.Count
-        If i > 1 Then buf = buf & vbCrLf
-        buf = buf & lines.Item(i)
+    For i = 0 To UBound(keys)
+        d(keys(i)) = ""
     Next i
+    Set NewEmptyKeyDict = d
+End Function
 
-    Dim stream As Object
-    Set stream = CreateObject("ADODB.Stream")
-    stream.Type = 2 ' adTypeText
-    stream.Charset = "Shift_JIS"
-    stream.Open
-    stream.WriteText buf
-    stream.SaveToFile filePath, 2 ' adSaveCreateOverWrite
-    stream.Close
-    Set stream = Nothing
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0987] modConfigLoader.WriteAllLines EXIT-OK"  ' [ADR-0100]
-End Sub
-
-' ----------------------------------------------------------------
-' Private: PromoteTmpToFinal
-'   Atomic-ish rename of tmpPath onto finalPath. Uses FSO so we can
-'   overwrite. If finalPath exists, it is deleted first; then tmp is
-'   renamed. On Windows VBA there is no true atomic, but this brief
-'   window is acceptable for our config use-case.
-' ----------------------------------------------------------------
-Private Sub PromoteTmpToFinal(ByVal tmpPath As String, ByVal finalPath As String)
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0988] modConfigLoader.PromoteTmpToFinal ENTER"  ' [ADR-0100]
-    Dim fso As Object
-    Set fso = CreateObject("Scripting.FileSystemObject")
-    If Not fso.FileExists(tmpPath) Then
-        Err.Raise vbObjectError + 5001, _
-            "modConfigLoader.PromoteTmpToFinal", _
-            "tmp not written: " & tmpPath
-    End If
-    If fso.FileExists(finalPath) Then
-        fso.DeleteFile finalPath, True
-    End If
-    fso.MoveFile tmpPath, finalPath
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0989] modConfigLoader.PromoteTmpToFinal EXIT-OK"  ' [ADR-0100]
-End Sub
-
-' ----------------------------------------------------------------
-' Private: CleanupTmp
-'   Best-effort delete of leftover .tmp file. Used by ErrHandler.
-' ----------------------------------------------------------------
-Private Sub CleanupTmp(ByVal tmpPath As String)
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0990] modConfigLoader.CleanupTmp ENTER"  ' [ADR-0100]
-    Dim fso As Object
-    Set fso = CreateObject("Scripting.FileSystemObject")
-    If fso.FileExists(tmpPath) Then fso.DeleteFile tmpPath, True
-End Sub
-
-' ----------------------------------------------------------------
-' Private: LogSaveError
-'   Best-effort logging via clsLogger on the LOG sheet of the
-'   current workbook. If logging itself fails, fall back to
-'   Debug.Print. Always swallows the error so the caller can
-'   return 0.
-' ----------------------------------------------------------------
-Private Sub LogSaveError(ByVal func As String, _
-                          ByVal xlsmName As String, _
-                          ByVal errNum As Long, _
-                          ByVal errDesc As String)
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0991] modConfigLoader.LogSaveError ENTER"  ' [ADR-0100]
+Private Function GetSettingsSheet() As Worksheet
     On Error Resume Next
-    Dim logSheet As Object
-    Set logSheet = ThisWorkbook.Worksheets("LOG")
-    If Not logSheet Is Nothing Then
-        Dim oLogger As clsLogger
-        Set oLogger = New clsLogger
-        oLogger.Init logSheet
-        oLogger.LogError "modConfigLoader", func, _
-            "SaveConfigKeys failed: " & errNum & " " & errDesc, _
-            xlsmName, "SAVECFG-ERR-EE-001"
-    End If
-    Debug.Print "[ERR] modConfigLoader." & func & "(" & xlsmName & "): " & errNum & " " & errDesc
+    Set GetSettingsSheet = ThisWorkbook.Worksheets(SettingsSheetName())
     On Error GoTo 0
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0992] modConfigLoader.LogSaveError EXIT-OK"  ' [ADR-0100]
+End Function
+
+Private Function ReadSheetToDict(ByVal ws As Object) As Object
+    Dim d As Object
+    Set d = CreateObject("Scripting.Dictionary")
+    Dim keys As Variant
+    keys = AllKeys()
+    Dim i As Long
+    For i = 0 To UBound(keys)
+        d(keys(i)) = Trim(CStr(ws.Cells(FIRST_DATA_ROW + i, VALUE_COL).Value))
+    Next i
+    Set ReadSheetToDict = d
+End Function
+
+Private Sub WriteDictToSheet(ByVal ws As Object, ByVal d As Object)
+    Dim wasP As Boolean
+    On Error Resume Next
+    wasP = ws.ProtectContents
+    If wasP Then ws.Unprotect Password:=""
+    On Error GoTo 0
+    Dim keys As Variant
+    keys = AllKeys()
+    Dim i As Long
+    For i = 0 To UBound(keys)
+        ws.Cells(FIRST_DATA_ROW + i, VALUE_COL).Value = CStr(d(keys(i)))
+    Next i
+    On Error Resume Next
+    If wasP Then ws.Protect Password:="", UserInterfaceOnly:=True
+    On Error GoTo 0
 End Sub
+
+Private Sub SeedSheetFrame(ByVal ws As Object)
+    Dim wasP As Boolean
+    On Error Resume Next
+    wasP = ws.ProtectContents
+    If wasP Then ws.Unprotect Password:=""
+    On Error GoTo 0
+    ws.Cells(1, KEY_COL).Value = SettingsSheetName()
+    Dim keys As Variant
+    keys = AllKeys()
+    Dim i As Long
+    For i = 0 To UBound(keys)
+        ws.Cells(FIRST_DATA_ROW + i, KEY_COL).Value = keys(i)
+    Next i
+    AddListValidation ws.Cells(FIRST_DATA_ROW + 4, VALUE_COL), "DEBUG,INFO,WARN,ERROR,OFF,TRACE"
+    AddListValidation ws.Cells(FIRST_DATA_ROW + 6, VALUE_COL), "safeDefault,warn,abort"
+    On Error Resume Next
+    ws.Columns(KEY_COL).ColumnWidth = 18
+    ws.Columns(VALUE_COL).ColumnWidth = 34
+    If wasP Then ws.Protect Password:="", UserInterfaceOnly:=True
+    On Error GoTo 0
+End Sub
+
+Private Sub AddListValidation(ByVal rng As Object, ByVal listCsv As String)
+    On Error Resume Next
+    rng.Validation.Delete
+    rng.Validation.Add Type:=xlValidateList, AlertStyle:=xlValidAlertStop, Operator:=xlBetween, Formula1:=listCsv
+    On Error GoTo 0
+End Sub
+
+Private Function CountEmptyPaths(ByVal d As Object) As Long
+    Dim keys As Variant
+    keys = AllKeys()
+    Dim i As Long
+    Dim c As Long
+    For i = 0 To PATH_KEY_COUNT - 1
+        If Len(Trim(CStr(d(keys(i))))) = 0 Then c = c + 1
+    Next i
+    CountEmptyPaths = c
+End Function
+
+Private Function FirstEmptyPathKey(ByVal d As Object) As String
+    Dim keys As Variant
+    keys = AllKeys()
+    Dim i As Long
+    For i = 0 To PATH_KEY_COUNT - 1
+        If Len(Trim(CStr(d(keys(i))))) = 0 Then
+            FirstEmptyPathKey = CStr(keys(i))
+            Exit Function
+        End If
+    Next i
+    FirstEmptyPathKey = ""
+End Function
+
+Private Sub DeriveDirs(ByVal base As String, ByVal d As Object)
+    Dim b As String
+    b = base
+    Do While Right(b, 1) = "\"
+        b = Left(b, Len(b) - 1)
+    Loop
+    d("data_dir") = b & "\data\"
+    d("format_dir") = b & "\formats\"
+    ' [C1] ui_dir installer default is role-qualified (<base>\ui\<role>\),
+    ' role from ThisWorkbook (ADR-0090). Seeded on first run only; the cell is
+    ' then a free absolute path the user may change to anything.
+    Dim uiRole As String
+    uiRole = Replace$(ThisWorkbook.Name, ".xlsm", "")
+    If Len(uiRole) > 0 Then
+        d("ui_dir") = b & "\ui\" & uiRole & "\"
+    Else
+        d("ui_dir") = b & "\ui\"
+    End If
+    d("backup_dir") = b & "\backup\"
+End Sub
+
+Private Sub FillMissingPathsFromDefault(ByVal d As Object)
+    Dim def As Object
+    Set def = CreateObject("Scripting.Dictionary")
+    DeriveDirs DEFAULT_BASE, def
+    Dim keys As Variant
+    keys = AllKeys()
+    Dim i As Long
+    For i = 0 To PATH_KEY_COUNT - 1
+        If Len(Trim(CStr(d(keys(i))))) = 0 Then d(keys(i)) = def(keys(i))
+    Next i
+End Sub
+
+' [Fix-6 / ADR-0133-followup] Infer BASE_DIR from whatever path cells are
+' already filled, so a partially-migrated config can self-heal without an
+' InputBox. The parent of the first filled sub-path is used as the base.
+' Returns "" when nothing can be inferred.
+Private Function InferBaseDir(ByVal d As Object) As String
+    Dim subKeys As Variant
+    subKeys = Array("data_dir", "format_dir", "ui_dir", "backup_dir")
+    Dim i As Long
+    Dim v As String
+    For i = 0 To UBound(subKeys)
+        v = Trim(CStr(d(subKeys(i))))
+        If Len(v) > 0 Then
+            InferBaseDir = ParentDir(v)
+            If Len(InferBaseDir) > 0 Then Exit Function
+        End If
+    Next i
+    InferBaseDir = ""
+End Function
+
+' Derive every still-empty path cell from an inferred base (same layout as
+' DeriveDirs). Filled cells are left untouched so user customisations survive.
+Private Sub FillMissingPathsFromBase(ByVal d As Object, ByVal base As String)
+    Dim derived As Object
+    Set derived = CreateObject("Scripting.Dictionary")
+    DeriveDirs base, derived
+    Dim keys As Variant
+    keys = AllKeys()
+    Dim i As Long
+    For i = 0 To PATH_KEY_COUNT - 1
+        If Len(Trim(CStr(d(keys(i))))) = 0 Then d(keys(i)) = derived(keys(i))
+    Next i
+End Sub
+
+' Strip every trailing path separator ("C:\KnowledgeMgr\" -> "C:\KnowledgeMgr").
+Private Function StripTrailingSep(ByVal p As String) As String
+    Dim s As String
+    s = p
+    Do While Len(s) > 0 And Right(s, 1) = "\"
+        s = Left(s, Len(s) - 1)
+    Loop
+    StripTrailingSep = s
+End Function
+
+' Parent directory of a path ("C:\KnowledgeMgr\data\" -> "C:\KnowledgeMgr").
+Private Function ParentDir(ByVal p As String) As String
+    Dim s As String
+    s = StripTrailingSep(p)
+    Dim pos As Long
+    pos = InStrRev(s, "\")
+    If pos > 1 Then
+        ParentDir = Left(s, pos - 1)
+    Else
+        ParentDir = ""
+    End If
+End Function
+
+Private Sub ApplyBehaviorDefaults(ByVal d As Object)
+    If Len(Trim(CStr(d("debugLevel")))) = 0 Then d("debugLevel") = DEFAULT_DEBUG_LEVEL
+    If Len(Trim(CStr(d("logRotationRows")))) = 0 Then d("logRotationRows") = DEFAULT_LOG_ROTATION_ROWS
+    If Len(Trim(CStr(d("uiSchemaFailMode")))) = 0 Then d("uiSchemaFailMode") = DEFAULT_UI_SCHEMA_FAIL_MODE
+End Sub
+
+Private Function AskBaseDir() As String
+    If modCommon.IsHeadless() Then
+        AskBaseDir = DEFAULT_BASE
+        Exit Function
+    End If
+    Dim r As String
+    r = InputBox(InputPrompt(), SettingsSheetName(), DEFAULT_BASE)
+    If Len(Trim(r)) = 0 Then
+        AskBaseDir = DEFAULT_BASE
+    Else
+        AskBaseDir = r
+    End If
+End Function
+
+Private Sub NotifyMissingKey(ByVal key As String)
+    If modCommon.IsHeadless() Then Exit Sub
+    MsgBox MsgMissingA() & key & MsgMissingB(), vbExclamation, MsgErrTitle()
+End Sub
+
+Private Sub SaveBookQuiet()
+    On Error Resume Next
+    Application.DisplayAlerts = False
+    ThisWorkbook.Save
+    Application.DisplayAlerts = True
+    On Error GoTo 0
+End Sub
+
+' ---- JP user-facing strings (ChrW so the source is installer-safe) ----
+
+Private Function InputPrompt() As String
+    InputPrompt = ChrW(&H683C) & ChrW(&H7D0D) & ChrW(&H5148) & ChrW(&H306E) & ChrW(&H30D9) & ChrW(&H30FC) & ChrW(&H30B9) & ChrW(&H30D5) & ChrW(&H30A9) & ChrW(&H30EB) & ChrW(&H30C0) & ChrW(&H3092) & ChrW(&H5165) & ChrW(&H529B) & ChrW(&H3057) & ChrW(&H3066) & ChrW(&H304F) & ChrW(&H3060) & ChrW(&H3055) & ChrW(&H3044) & vbCrLf & DEFAULT_BASE
+End Function
+
+Private Function MsgMissingA() As String
+    MsgMissingA = ChrW(&H8A2D) & ChrW(&H5B9A) & ChrW(&H30B7) & ChrW(&H30FC) & ChrW(&H30C8) & ChrW(&H306E) & ChrW(&H20)
+End Function
+
+Private Function MsgMissingB() As String
+    MsgMissingB = ChrW(&H20) & ChrW(&H304C) & ChrW(&H7A7A) & ChrW(&H307E) & ChrW(&H305F) & ChrW(&H306F) & ChrW(&H4E0D) & ChrW(&H6B63) & ChrW(&H3067) & ChrW(&H3059) & ChrW(&H3002) & ChrW(&H8A2D) & ChrW(&H5B9A) & ChrW(&H30B7) & ChrW(&H30FC) & ChrW(&H30C8) & ChrW(&H3067) & ChrW(&H6307) & ChrW(&H5B9A) & ChrW(&H3057) & ChrW(&H3066) & ChrW(&H304F) & ChrW(&H3060) & ChrW(&H3055) & ChrW(&H3044) & ChrW(&H3002)
+End Function
+
+Private Function MsgErrTitle() As String
+    MsgErrTitle = ChrW(&H8A2D) & ChrW(&H5B9A) & ChrW(&H30A8) & ChrW(&H30E9) & ChrW(&H30FC)
+End Function
 ```
