@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="画面レイアウト定義ファイルの編集による画面の調整方法">
+        <meta name="description" content="保存先・画面の見た目・入力フォーム・フォーマットを、設定シートや外部ファイルの編集で調整するための完全な一覧と記入サンプル">
       
       
         <meta name="author" content="ai-crafted-portfolio">
@@ -15,7 +15,7 @@
         <link rel="canonical" href="https://ai-crafted-portfolio.github.io/knowledgevba/screen_customization_guide_v2/">
       
       
-        <link rel="prev" href="../settings/">
+        <link rel="prev" href="../spec/">
       
       
         <link rel="next" href="../stanza/">
@@ -29,7 +29,7 @@
     
     
       
-        <title>画面のカスタマイズ - ナレッジ管理ツール (VBA 製)</title>
+        <title>設定・カスタマイズ（全項目リファレンス） - ナレッジ管理ツール (VBA 製)</title>
       
     
     
@@ -118,7 +118,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              画面のカスタマイズ
+              設定・カスタマイズ（全項目リファレンス）
             
           </span>
         </div>
@@ -359,20 +359,17 @@
     
   
   
-    
-    
-      <li class="md-tabs__item md-tabs__item--active">
-        <a href="../settings/" class="md-tabs__link">
-          
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
   
   
     
   
-  設定とカスタマイズ
+  設定・カスタマイズ
 
-        </a>
-      </li>
-    
+      </a>
+    </li>
   
 
       
@@ -1085,97 +1082,6 @@
   
   
   
-    
-    
-      
-        
-      
-        
-      
-    
-    
-    
-      
-        
-        
-      
-      
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" checked>
-        
-          
-          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    設定とカスタマイズ
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_8">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    設定とカスタマイズ
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../settings/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    設定値の変更
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-    
-  
-  
-  
     <li class="md-nav__item md-nav__item--active">
       
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
@@ -1191,7 +1097,7 @@
   <span class="md-ellipsis">
     
   
-    画面のカスタマイズ
+    設定・カスタマイズ
   
 
     
@@ -1209,7 +1115,7 @@
   <span class="md-ellipsis">
     
   
-    画面のカスタマイズ
+    設定・カスタマイズ
   
 
     
@@ -1238,7 +1144,7 @@
   <a href="#1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. 画面レイアウトは外部ファイルで決まる
+        1. この章でできること
       
     </span>
   </a>
@@ -1249,7 +1155,7 @@
   <a href="#2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. 定義ファイルの書き方
+        2. 編集前の共通の注意
       
     </span>
   </a>
@@ -1257,22 +1163,33 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-1" class="md-nav__link">
+  <a href="#3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. 1 つの画面の見た目を変える
+        3. 保存先と動作の設定（「格納先設定」シート）
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="3. 1 つの画面の見た目を変える">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 画面（シート）の見た目を変える
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. 画面（シート）の見た目を変える">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#4-1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        例：ボタンの色を変える
+        4-1. シート全体・全体書式
       
     </span>
   </a>
@@ -1280,10 +1197,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#4-2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        例：列の幅を変える
+        4-2. 見出し・帯・列幅・枠固定
       
     </span>
   </a>
@@ -1291,10 +1208,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#4-3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        例：項目名（ラベル）を変える
+        4-3. ラベル・注釈・入力欄
       
     </span>
   </a>
@@ -1302,10 +1219,21 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#4-4" class="md-nav__link">
     <span class="md-ellipsis">
       
-        入力枠の調整
+        4-4. ボタン・一覧表
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4-5. 入力部品・上級者向けのセクション
       
     </span>
   </a>
@@ -1318,21 +1246,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        4. ボタンを増やす
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#5" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5. 入力項目を増やす
+        5. 入力フォームの寸法・文言を変える
       
     </span>
   </a>
@@ -1343,7 +1260,7 @@
   <a href="#6" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6. 変更の反映と確認
+        6. フォーマット（入力項目）の定義
       
     </span>
   </a>
@@ -1354,24 +1271,138 @@
   <a href="#7" class="md-nav__link">
     <span class="md-ellipsis">
       
-        7. やってはいけないこと
+        7. ボタンや入力項目を増やすには
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. ボタンや入力項目を増やすには">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ボタンを1つ増やす
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        入力項目を増やす
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. 変更が反映されるタイミング（早見表）
       
     </span>
   </a>
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. 触らない方がよい項目
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. 使われない過去の名残
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. まるごとサンプル（実際のファイル）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="11. まるごとサンプル（実際のファイル）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-1-uim-08txt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11-1. 検索画面（ui\検索\M-08.txt）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#11-2-uim-02txt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11-2. フォーマット一覧画面（ui\管理\M-02.txt）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#11-3-uim-05txt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11-3. 登録フォームの定義（ui\検索\M-05.txt）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#11-4-formatsfaulttxt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11-4. フォーマット定義（formats\FAULT.txt）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
-      
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
       
     </li>
   
@@ -5154,195 +5185,1309 @@
 
 
 
-<h1 id="_1">画面のカスタマイズ<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
-<p>ナレッジ管理ツール v2.3 の画面の見た目は、Excel ブックの外側に置いたテキストファイルで定義されています。このページでは、その定義ファイルを編集して画面を調整する方法を説明します。</p>
-<h2 id="1">1. 画面レイアウトは外部ファイルで決まる<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
-<p>各画面（M-02?M-14）の見た目は、<code>ui_dir</code>（既定 <code>C:\KnowledgeMgr\ui\</code>）の下にある<strong>画面レイアウト定義ファイル</strong>で決まります。ファイルはブック・画面ごとに 1 つです。</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>C:\KnowledgeMgr\ui\
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  ├ 検索\
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>  │   ├ M-05.txt
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>  │   ├ M-06.txt
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>  │   ├ M-07.txt
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>  │   ├ M-08.txt
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>  │   └ M-09.txt
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>  └ 管理\
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>      ├ M-02.txt ? M-04.txt
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>      └ M-10.txt ? M-14.txt
-</code></pre></div>
-<p>ブックを開くと、ツールがこの定義ファイルを読み込んでシート上に画面を組み立てます。<strong>そのため、画面の見た目を変えるときは、Excel ブックの中の VBA コードを書き換えるのではなく、対応する画面レイアウト定義ファイルを編集します。</strong></p>
-<p>定義ファイルは Shift_JIS、改行 CRLF のテキストです。編集の前に必ずコピーを取っておいてください。</p>
-<h2 id="2">2. 定義ファイルの書き方<a class="headerlink" href="#2" title="Permanent link">&para;</a></h2>
-<p>画面レイアウト定義は「スタンザ形式」で書かれています。<code>[セクション名]</code> の行に続けて <code>key=value</code> の行を並べ、次の <code>[セクション名]</code> までが 1 つのセクションです。</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>[SHEET]
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>SheetName=M-05
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>SheetTitle=ナレッジ登録
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>TabColor=#FFCC00
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>[COLUMN]
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>ColumnWidth_A=4
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>ColumnWidth_C=60
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>[LABEL]
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>Cell=A6
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>Text=件名
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>Bold=TRUE
-<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>
-<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>[BUTTON]
-<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>Cell=G2
-<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>Text=保存
-<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>OnClick=Btn_M05_Save
-<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>BackColor=#3366CC
-<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>ForeColor=#FFFFFF
-</code></pre></div>
-<p>使えるセクションは次の 11 種類です。</p>
-<table>
-<thead>
-<tr>
-<th>セクション</th>
-<th>役割</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>[SHEET]</code></td>
-<td>シート名・タブ色・保護レベル（1 ファイルに 1 つ、必須）</td>
-</tr>
-<tr>
-<td><code>[COLUMN]</code></td>
-<td>列幅</td>
-</tr>
-<tr>
-<td><code>[ROW]</code></td>
-<td>行の高さ</td>
-</tr>
-<tr>
-<td><code>[FONT]</code></td>
-<td>既定のフォントとサイズ</td>
-</tr>
-<tr>
-<td><code>[LABEL]</code></td>
-<td>固定の文字列（項目名など）</td>
-</tr>
-<tr>
-<td><code>[INPUT]</code></td>
-<td>入力枠</td>
-</tr>
-<tr>
-<td><code>[BUTTON]</code></td>
-<td>画面に常時 1 つ置くボタン</td>
-</tr>
-<tr>
-<td><code>[BUTTON_TEMPLATE]</code></td>
-<td>一覧の行ごとに増減するボタンのひな型</td>
-</tr>
-<tr>
-<td><code>[HEADER]</code></td>
-<td>画面上部の見出し帯</td>
-</tr>
-<tr>
-<td><code>[NOTE]</code></td>
-<td>説明文（画面下部にまとめて置く）</td>
-</tr>
-<tr>
-<td><code>[GRID]</code></td>
-<td>一覧表</td>
-</tr>
-</tbody>
-</table>
-<p>セクションを書く順番は自由です。ツールが読み込み時に適切な順序で画面へ反映します。</p>
-<h2 id="3-1">3. 1 つの画面の見た目を変える<a class="headerlink" href="#3-1" title="Permanent link">&para;</a></h2>
-<p>特定の画面を調整するときは、その画面の定義ファイル（例：<code>ui\管理\M-02.txt</code>）を編集します。</p>
-<h3 id="_2">例：ボタンの色を変える<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
-<p><code>[BUTTON]</code> セクションの <code>BackColor</code>（背景色）・<code>ForeColor</code>（文字色）を <code>#RRGGBB</code> 形式で書き換えます。</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>[BUTTON]
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>Cell=G2
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>Text=保存
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>OnClick=Btn_M05_Save
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>BackColor=#548235      ← 緑にする
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>ForeColor=#FFFFFF
-</code></pre></div>
-<h3 id="_3">例：列の幅を変える<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
-<p><code>[COLUMN]</code> セクションで <code>ColumnWidth_&lt;列文字&gt;</code> を書き換えます。値は Excel の列幅（おおよその文字数）です。</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>[COLUMN]
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>ColumnWidth_C=80       ← C 列を広げる
-</code></pre></div>
-<h3 id="_4">例：項目名（ラベル）を変える<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
-<p><code>[LABEL]</code> セクションの <code>Text</code> を書き換えます。</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>[LABEL]
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>Cell=A6
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>Text=タイトル           ← 「件名」から変更
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>Bold=TRUE
-</code></pre></div>
-<h3 id="_5">入力枠の調整<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h3>
-<p><code>[INPUT]</code> セクションの <code>Cell</code> で入力枠の位置や範囲（<code>C6</code> のような単一セル、または <code>C7:E20</code> のような範囲）を、<code>InputType</code> で入力の種類（1 行テキスト・複数行・数値・日付・選択肢など）を指定します。入力内容の想定文字数に合わせて枠の大きさを調整してください。</p>
-<h2 id="4">4. ボタンを増やす<a class="headerlink" href="#4" title="Permanent link">&para;</a></h2>
-<p>ボタンを 1 つ増やすには、<strong>次の 3 つの作業をもれなく</strong>行います。1 つでも欠けると「ボタンはあるが押しても何も起きない」「処理はあるがボタンが現れない」という状態になります。</p>
-<ol>
-<li>
-<p><strong>画面レイアウト定義に <code>[BUTTON]</code> セクションを追加する。</strong> <code>OnClick</code> には、押したときに実行する VBA の手続き名（<code>Btn_</code> で始まる名前を推奨）を書きます。</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>[BUTTON]
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>Cell=N10
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>Text=お気に入り
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>OnClick=Btn_M08_Favorite
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>BackColor=#3366CC
-<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>ForeColor=#FFFFFF
-</code></pre></div>
-</li>
-<li>
-<p><strong><code>OnClick</code> に書いた名前と同じ <code>Public Sub</code> を VBA に実装する。</strong> その画面のブックに対応する入口モジュール（<code>modEntry...</code>）に追加します。手続き名は <code>[BUTTON]</code> の <code>OnClick</code> と完全に一致させます。</p>
-</li>
-<li>
-<p><strong>Excel の画面シートに実機ボタンを配置し、そのマクロを割り当てる。</strong> 「開発 → 挿入 → フォームコントロール」のボタンを <code>[BUTTON]</code> の <code>Cell</code> で指定した位置に配置し、右クリック →「マクロの登録」で手続き 2 を選びます。配置の詳しい手順は<a href="../setup/">導入手順</a>を参照してください。</p>
-</li>
-</ol>
-<p>一覧表の行ごとに増減するボタン（各行の「編集」「削除」など）は、<code>[BUTTON]</code> ではなく <code>[BUTTON_TEMPLATE]</code> セクションでひな型を宣言します。実際のボタンは、表示するデータが決まったときにツールが自動で生成するため、実機での手配置は不要です。</p>
-<h2 id="5">5. 入力項目を増やす<a class="headerlink" href="#5" title="Permanent link">&para;</a></h2>
-<p>M-05 ナレッジ登録・M-06 ナレッジ修正の入力項目は、画面レイアウト定義ではなく<strong>フォーマット定義</strong>で決まります。項目を増やしたいときは、管理.xlsm の M-03 フォーマット設計画面でフォーマットを編集し、フィールド（入力項目）を追加します。</p>
-<p>フォーマットを保存すると、そのフォーマットを使う既存ナレッジへ変更が自動で反映されます。反映の前にバックアップが取られ、確認のメッセージが表示されます。</p>
-<p>検索画面（M-08）の検索条件のような、画面に固定された入力欄は、画面レイアウト定義の <code>[INPUT]</code> セクションで管理します。</p>
-<h2 id="6">6. 変更の反映と確認<a class="headerlink" href="#6" title="Permanent link">&para;</a></h2>
-<p>画面レイアウト定義ファイルを書き換えたあとは、次の手順で確認します。</p>
-<ol>
-<li>ファイルを Shift_JIS・改行 CRLF で保存する。</li>
-<li>対象のブックを開き直す（または対象画面のシートタブを選び直す）。</li>
-<li>変更した画面を実際に開き、表示が意図どおりか目で確認する。</li>
-<li>ボタンを増やした場合は、ボタンを押して想定どおりの処理が動くことを確認する。</li>
-</ol>
+<h1 id="_1">設定・カスタマイズ（全項目リファレンス）<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
+<p>ナレッジ管理ツールは、画面の見た目・保存先・入力フォームの大きさ・入力項目の構成などを、<strong>ブックの中のコードを書き換えずに</strong>、設定シートや外部のテキストファイルを編集するだけで調整できます。このページは、利用者が編集できる設定を<strong>1項目ずつ漏れなく</strong>まとめた完全リファレンスです。各設定について「どのファイル（シート）の・どの項目を・どう変えるか」「いつ反映されるか」を、<strong>コピーして使える記入サンプル付き</strong>で説明します。各章末の表に続けて記入例を、最後の章（11章）には実際に動く<strong>まるごとのサンプルファイル</strong>を載せています。</p>
+<h2 id="1">1. この章でできること<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
+<ul>
+<li>保存先フォルダ（ナレッジ本体・フォーマット・画面定義・バックアップ）の置き場所を変える</li>
+<li>画面のタブ名・見出し・フォント・色・列幅・枠固定・ボタンの文言や大きさ・一覧の見た目を変える</li>
+<li>登録・検索で開く入力フォームの幅や高さ、項目の行の高さを変える</li>
+<li>入力項目（フォーマット）の名前・型・必須/任意・選択肢・並び順を変える</li>
+<li>ボタンや入力項目を増やす</li>
+</ul>
+<p>設定の入り口は3つです。管理ブックの <strong>「格納先設定」シート</strong>（保存先と動作）、<strong>画面定義ファイル</strong>（<code>M-xx.txt</code>：画面の見た目と入力フォームの寸法）、<strong>フォーマット定義ファイル</strong>（<code>formats</code> フォルダ内の <code>&lt;フォーマットID&gt;.txt</code>：入力項目）です。</p>
+<h2 id="2">2. 編集前の共通の注意<a class="headerlink" href="#2" title="Permanent link">&para;</a></h2>
+<p>テキストファイル（<code>M-xx.txt</code> や フォーマット定義）を直接編集するときは、次を必ず守ってください。</p>
 <div class="admonition warning">
-<p class="admonition-title">保存時の注意</p>
-<p>定義ファイルを UTF-8 など別の文字コードで保存すると、日本語が文字化けしたり、画面が読み込めなくなったりします。必ず Shift_JIS で保存してください。</p>
+<p class="admonition-title">文字コードと改行</p>
+<p>メモ帳で開く場合は、保存時の文字コードを <strong>「ANSI」（日本語環境では Shift_JIS）</strong>、改行を <strong>CRLF</strong> のままにしてください。<strong>UTF-8 で保存すると日本語の項目名や見出しが文字化けし、画面が読み込めなくなることがあります。</strong></p>
 </div>
-<h2 id="7">7. やってはいけないこと<a class="headerlink" href="#7" title="Permanent link">&para;</a></h2>
+<ul>
+<li>編集する前に、対象ファイルの<strong>コピーを取って</strong>おいてください（うまくいかなかったら戻せます）。</li>
+<li>フォルダの区切りは<strong>半角の <code>\</code>（バックスラッシュ）</strong>を使います。全角の「￥」や全角スペースが混じるとパスが壊れます。</li>
+<li>値は「<code>キー=値</code>」の形で書きます。<code>=</code> の前後に余計な空白を入れない方が確実です。</li>
+<li>各セクションは <code>===</code> の行で区切ります（区切りは画面定義・フォーマット定義に共通の書き方です）。</li>
+<li>行頭が <code>[</code>〜<code>]</code> の行は「セクション（区切り）」です。セクション名そのものは変えないでください。</li>
+<li>色は <strong><code>#RRGGBB</code> の16進</strong>（例 <code>#1F3864</code>）でも、<strong>日本語の色名</strong>（例「濃いグレー」「白」）でも指定できます。色を付けたくないときは「―（色を付けない）」と書けます。</li>
+</ul>
+<h2 id="3">3. 保存先と動作の設定（「格納先設定」シート）<a class="headerlink" href="#3" title="Permanent link">&para;</a></h2>
+<p>保存先フォルダやログの設定は、管理ブックの <strong>「格納先設定」シート</strong> で行います。各行の項目名の右どなりのセルに値を入れ、<strong>Ctrl+S</strong> で上書き保存します（専用の保存ボタンはありません。セルに直接入力 → 通常の保存、という流れです）。設定はブックと一緒に保存されます。</p>
+<p>設定は次の <strong>7項目</strong>です。</p>
 <table>
 <thead>
 <tr>
-<th>避けること</th>
-<th>理由</th>
+<th>項目（行の見出し）</th>
+<th>意味</th>
+<th>既定の値（例）</th>
+<th>取りうる値・注意</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>画面レイアウト定義の <code>[SHEET]</code> セクションを削除する</td>
-<td><code>[SHEET]</code> は必須です。無いと画面を組み立てられません。</td>
+<td>データフォルダ</td>
+<td>ナレッジ本体（1件1ファイル）の保存先</td>
+<td><code>C:\KnowledgeMgr\data\</code></td>
+<td>末尾の <code>\</code> を必ず付ける</td>
 </tr>
 <tr>
-<td><code>[BUTTON]</code> を足したのに対応する手続きを実装しない</td>
-<td>ボタンを押しても何も起きません。</td>
+<td>フォーマットフォルダ</td>
+<td>フォーマット定義ファイルの置き場</td>
+<td><code>C:\KnowledgeMgr\formats\</code></td>
+<td>末尾の <code>\</code> を必ず付ける</td>
 </tr>
 <tr>
-<td>定義ファイルを Shift_JIS 以外で保存する</td>
-<td>文字化けや読み込み失敗の原因になります。</td>
+<td>UI 定義フォルダ</td>
+<td>画面定義ファイル（<code>M-xx.txt</code>）の置き場</td>
+<td><code>C:\KnowledgeMgr\ui\管理\</code>（検索ブックは <code>…\ui\検索\</code>）</td>
+<td>末尾の <code>\</code> を必ず付ける。<strong>役割（管理／検索）のサブフォルダまで</strong>指す</td>
 </tr>
 <tr>
-<td><code>[HEADER]</code> と <code>[INPUT]</code> などで同じセル範囲を重ねて指定する</td>
-<td>範囲が衝突し、画面が崩れます。</td>
+<td>バックアップフォルダ</td>
+<td>自動バックアップの保存先</td>
+<td><code>C:\KnowledgeMgr\backup\</code></td>
+<td>末尾の <code>\</code> を必ず付ける</td>
 </tr>
 <tr>
-<td>バックアップを取らずに編集する</td>
-<td>元に戻せなくなります。編集前に必ずコピーを取ってください。</td>
+<td>デバッグレベル</td>
+<td>ログに残す記録の詳しさ</td>
+<td><code>INFO</code></td>
+<td>下表の6段階から選ぶ（ドロップダウン）</td>
+</tr>
+<tr>
+<td>ログ回転行数</td>
+<td>ログとして保持する行数の上限。超えると古い行から自動削除</td>
+<td><code>10000</code></td>
+<td>数値</td>
+</tr>
+<tr>
+<td>UI スキーマ失敗時</td>
+<td>画面定義に不備があったときの動き</td>
+<td><code>safeDefault</code></td>
+<td><code>safeDefault</code> / <code>warn</code> / <code>abort</code> から選ぶ（ドロップダウン）</td>
 </tr>
 </tbody>
 </table>
+<div class="admonition warning">
+<p class="admonition-title">フォルダのパスは末尾の <code>\</code> が必須です</p>
+<p>パスはそのままファイル名とつなげて使われます。末尾に <code>\</code> が無いと、フォルダ名とファイル名がくっついて「ファイルが見つかりません」になります。例えば画面定義フォルダは <code>\\サーバ名\共有名\KnowledgeMgr\ui\管理\</code> のように<strong>必ず <code>\</code> で終える</strong>ようにしてください。</p>
+</div>
+<p>ネットワーク共有を使う場合は、<strong><code>\\サーバ名\共有名\…\管理\</code> の形（UNC）で直接</strong>入れてください。<code>Z:\</code> のような割り当てドライブは、Excel を「管理者として実行」していると見えなくなることがあり、「見つからない」の原因になります。割り当てドライブよりも UNC を直接指定する方が確実です。</p>
+<p><strong>デバッグレベルの6段階</strong>（上にいくほど記録が少なく、下にいくほど詳しくなります）：</p>
+<table>
+<thead>
+<tr>
+<th>値</th>
+<th>記録される内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>OFF</code></td>
+<td>記録しない</td>
+</tr>
+<tr>
+<td><code>ERROR</code></td>
+<td>エラーのみ</td>
+</tr>
+<tr>
+<td><code>WARN</code></td>
+<td>エラーと警告</td>
+</tr>
+<tr>
+<td><code>INFO</code></td>
+<td>上記に加えて通常の操作（既定）</td>
+</tr>
+<tr>
+<td><code>DEBUG</code></td>
+<td>上記に加えて調査向けの詳細</td>
+</tr>
+<tr>
+<td><code>TRACE</code></td>
+<td>最も詳しい記録</td>
+</tr>
+</tbody>
+</table>
+<p>通常は <code>INFO</code> のままで十分です。不具合を調べたいときだけ一時的に <code>DEBUG</code> や <code>TRACE</code> に上げ、調査が終わったら戻すと、ログが余計に大きくなりません。</p>
+<p><strong>「UI スキーマ失敗時」</strong>は、画面定義に不備があったときの動きです。<code>safeDefault</code> はその画面だけを安全な既定表示にして他の画面は通常どおり起動、<code>warn</code> は知らせたうえで続行、<code>abort</code> は1件でも不備があれば起動を中止します。</p>
+<div class="admonition note">
+<p class="admonition-title">初回起動時の保存先の確認</p>
+<p>インストール後にブックを初めて開いたとき、保存先がすべて空であれば、<strong>保存先の親フォルダをたずねるダイアログ</strong>が表示されます（既定 <code>C:\KnowledgeMgr</code>）。そのまま入力すると、その下に上記のフォルダが自動で設定され、ブックに保存されます。設定し忘れても既定値で起動します。</p>
+</div>
+<p><strong>反映のタイミング:</strong> 保存先や動作の設定は<strong>起動時に読み込まれる</strong>ため、変更後は<strong>ブックを開き直す（実質的に再起動）</strong>と反映されます。</p>
+<h2 id="4">4. 画面（シート）の見た目を変える<a class="headerlink" href="#4" title="Permanent link">&para;</a></h2>
+<p>各画面の見た目は、<code>UI 定義フォルダ</code> 内の <strong><code>M-xx.txt</code></strong>（例：検索ブックの検索画面は <code>ui\検索\M-08.txt</code>、登録画面は <code>ui\検索\M-05.txt</code>、管理ブックのフォーマット一覧は <code>ui\管理\M-02.txt</code>）で決まります。ファイルは <code>[セクション名]</code> の行に続けて <code>キー=値</code> を並べ、<code>===</code> で区切る形式です。書く順番は自由で、読み込み時に適切な順序で画面へ反映されます。</p>
+<p>以下、セクションごとに、コードが実際に読むキーと<strong>コピーして使える記入例</strong>を挙げます。<strong>「見た目」</strong>の列は自由に変えてよいもの、<strong>「構造」</strong>と記したキーは位置や仕組みに関わるため原則そのままにしてください（→ 9章）。記入例の値は実際の画面定義から採っています。</p>
+<h3 id="4-1">4-1. シート全体・全体書式<a class="headerlink" href="#4-1" title="Permanent link">&para;</a></h3>
+<p><strong>[SHEET]</strong>（シート全体）</p>
+<table>
+<thead>
+<tr>
+<th>キー</th>
+<th>意味</th>
+<th>値の例</th>
+<th>区分</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SheetTitle</code></td>
+<td>画面の見出し</td>
+<td><code>ナレッジ検索</code></td>
+<td>見た目</td>
+</tr>
+<tr>
+<td><code>Visible</code></td>
+<td>表示/非表示</td>
+<td><code>visible</code> / <code>hidden</code></td>
+<td>見た目</td>
+</tr>
+<tr>
+<td><code>TabColor</code></td>
+<td>シートタブの色</td>
+<td><code>#FFCC00</code> / 色名</td>
+<td>見た目</td>
+</tr>
+<tr>
+<td><code>HideColumnsFrom</code></td>
+<td>指定した列以降を隠す</td>
+<td><code>G</code></td>
+<td>見た目</td>
+</tr>
+<tr>
+<td><code>SheetName</code></td>
+<td>シートの内部名</td>
+<td>（変更しない）</td>
+<td>構造</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>[SHEET]
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>SheetName=ナレッジ検索
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>SheetTitle=ナレッジ検索
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>Visible=visible
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>TabColor=―（色を付けない）
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>HideColumnsFrom=G
+</code></pre></div>
+<p><strong>[STYLE]</strong>（画面全体の既定書式）</p>
+<table>
+<thead>
+<tr>
+<th>キー</th>
+<th>意味</th>
+<th>値の例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>BaseFont</code></td>
+<td>既定フォント名</td>
+<td><code>メイリオ</code></td>
+</tr>
+<tr>
+<td><code>BaseFontSize</code></td>
+<td>既定文字サイズ</td>
+<td><code>10</code></td>
+</tr>
+<tr>
+<td><code>BaseFontColor</code></td>
+<td>既定文字色</td>
+<td><code>濃いグレー</code> / <code>#333333</code></td>
+</tr>
+<tr>
+<td><code>SheetBackColor</code></td>
+<td>背景色</td>
+<td><code>白</code> / <code>#FFFFFF</code></td>
+</tr>
+<tr>
+<td><code>BaseAlignH</code></td>
+<td>横位置</td>
+<td><code>left</code> / <code>center</code> / <code>right</code></td>
+</tr>
+<tr>
+<td><code>BaseAlignV</code></td>
+<td>縦位置</td>
+<td><code>center</code></td>
+</tr>
+<tr>
+<td><code>BaseWrap</code></td>
+<td>折り返し</td>
+<td><code>on</code> / <code>off</code></td>
+</tr>
+<tr>
+<td><code>BaseNumberFormat</code></td>
+<td>既定の表示形式</td>
+<td><code>standard</code></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>[STYLE]
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>BaseFont=メイリオ
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>BaseFontSize=10
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>BaseFontColor=濃いグレー
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>SheetBackColor=白
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>BaseAlignH=left
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>BaseAlignV=center
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>BaseWrap=off
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>BaseNumberFormat=standard
+</code></pre></div>
+<h3 id="4-2">4-2. 見出し・帯・列幅・枠固定<a class="headerlink" href="#4-2" title="Permanent link">&para;</a></h3>
+<p><strong>[SCREEN]</strong>（上部の見出し帯）：<code>Title</code>（タイトル）、<code>Width</code>（列数）、<code>BackColor</code>／<code>FontColor</code>（帯と文字の色）、<code>EndCol</code>（帯の右端列）、<code>BarHeight</code>（帯の高さ・ポイント）。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>[SCREEN]
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>Width=7（列数）
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>Height=auto
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>Title=ナレッジ検索
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>BackColor=#1F3864
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>FontColor=#FFFFFF
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>EndCol=G
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>BarHeight=30
+</code></pre></div>
+<p><strong>[SUBHEADER]</strong>（小見出し帯）：<code>Title</code>、<code>BackColor</code>／<code>FontColor</code>、<code>EndCol</code>、<code>Height</code>（高さ・ポイント）、<code>Cell</code>（位置＝構造）。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>[SUBHEADER]
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>Title=条件で探す
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>Cell=A3
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>BackColor=#2F5597
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>FontColor=#FFFFFF
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>EndCol=G
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>Height=22
+</code></pre></div>
+<p><strong>[COLUMN]</strong>（列の幅）：<code>ColumnWidth_A</code>、<code>ColumnWidth_B</code>… のように <strong><code>ColumnWidth_&lt;列の文字&gt;</code></strong> で列ごとに指定します。値は Excel の列幅（おおよその文字数）。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>[COLUMN]
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>ColumnWidth_A=6
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>ColumnWidth_B=20
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>ColumnWidth_C=24
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>ColumnWidth_D=24
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>ColumnWidth_E=24
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>ColumnWidth_F=17
+</code></pre></div>
+<p><strong>[ROW]</strong>（行の高さ）：<code>RowHeight_&lt;行番号&gt;</code>（値はポイント）。標準の画面では使っていませんが、行の高さを固定したいときに使えます。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>[ROW]
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>RowHeight_3=24
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>RowHeight_4=60
+</code></pre></div>
+<p><strong>[FREEZE]</strong>（ウィンドウ枠の固定）：<code>Enabled</code>（<code>on</code> / <code>off</code>）、<code>Rows</code>／<code>Cols</code>（固定する位置）。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>[FREEZE]
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>Enabled=on
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>Rows=13
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>Cols=0
+</code></pre></div>
+<h3 id="4-3">4-3. ラベル・注釈・入力欄<a class="headerlink" href="#4-3" title="Permanent link">&para;</a></h3>
+<p><strong>[LABEL]</strong>（項目名などの固定文字）：<code>Text</code>（表示する文字）、<code>ForeColor</code>（文字色）、<code>FontSize</code>、<code>Cell</code>（位置＝構造）。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>[LABEL]
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>Cell=B8
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>Text=キーワード
+</code></pre></div>
+<p><strong>[NOTE]</strong>（説明文のボックス）：<code>Text</code>（本文。<code>\n</code> で改行）、<code>BackColor</code>、<code>Border</code>（<code>thin</code> など）、<code>Cell</code>（範囲＝構造）。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>[NOTE]
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>Cell=A4:G7
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>Text=キーワードを入れて「検索」を押すと、データの全ナレッジから一致するものを下の一覧に表示します。\nフォーマットで絞り込むこともできます。「条件クリア」で入力を空に戻します。
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>BackColor=#DEEBF7
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>Border=thin
+</code></pre></div>
+<p><strong>[INPUT]</strong>（入力欄）：<code>MaxLength</code>（最大文字数）、<code>InputColor</code>（背景色）、<code>Border</code>、<code>Value</code>（初期値）、<code>InputType</code>（<code>text</code> / <code>dropdown</code> など＝構造寄り）、<code>DropdownSource</code>（選択肢の取得元・構造）、<code>Cell</code>／<code>inputDataKey</code>（位置と内部キー＝構造）。</p>
+<p>文字入力欄の例：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>[INPUT]
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>Cell=C8:E8
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>inputDataKey=keyword
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>InputType=text
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>MaxLength=200
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>InputColor=#FFFFFF
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>Border=thin
+</code></pre></div>
+<p>ドロップダウン欄の例：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>[INPUT]
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>Cell=C10:E10
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>inputDataKey=formatId
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>InputType=dropdown
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>DropdownSource=format:list
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>InputColor=#FFFFFF
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>Border=thin
+</code></pre></div>
+<h3 id="4-4">4-4. ボタン・一覧表<a class="headerlink" href="#4-4" title="Permanent link">&para;</a></h3>
+<p><strong>[BUTTON]</strong>（ボタン）</p>
+<table>
+<thead>
+<tr>
+<th>キー</th>
+<th>意味</th>
+<th>値の例</th>
+<th>区分</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Text</code></td>
+<td>ボタンの文言</td>
+<td><code>検索</code></td>
+<td>見た目</td>
+</tr>
+<tr>
+<td><code>Width</code></td>
+<td>幅</td>
+<td><code>110</code></td>
+<td>見た目</td>
+</tr>
+<tr>
+<td><code>Height</code></td>
+<td>高さ</td>
+<td><code>22</code></td>
+<td>見た目</td>
+</tr>
+<tr>
+<td><code>BackColor</code></td>
+<td>背景色</td>
+<td><code>#4472C4</code></td>
+<td>見た目</td>
+</tr>
+<tr>
+<td><code>ForeColor</code></td>
+<td>文字色</td>
+<td><code>#FFFFFF</code></td>
+<td>見た目</td>
+</tr>
+<tr>
+<td><code>OnClick</code></td>
+<td>押したときに動く処理の名前</td>
+<td><code>Btn_…</code></td>
+<td>構造</td>
+</tr>
+<tr>
+<td><code>Cell</code></td>
+<td>配置位置</td>
+<td><code>B11</code></td>
+<td>構造</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>[BUTTON]
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>Cell=B11
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>Text=検索
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>OnClick=Btn_SearchV23
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>Width=110
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>Height=22
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>BackColor=#4472C4
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a>ForeColor=#FFFFFF
+</code></pre></div>
+<p><strong>[GRID]</strong>（一覧表）</p>
+<table>
+<thead>
+<tr>
+<th>キー</th>
+<th>意味</th>
+<th>値の例</th>
+<th>区分</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>InitialRows</code></td>
+<td>最初に表示する行数</td>
+<td><code>10</code></td>
+<td>見た目</td>
+</tr>
+<tr>
+<td><code>ColumnHeaders</code></td>
+<td>列の見出し（表示文字）</td>
+<td><code>No,フォーマット,検索1,…</code></td>
+<td>見た目</td>
+</tr>
+<tr>
+<td><code>HeaderBackColor</code></td>
+<td>見出し行の色</td>
+<td><code>#D9E1F2</code></td>
+<td>見た目</td>
+</tr>
+<tr>
+<td><code>FreezeHeader</code></td>
+<td>見出し行を固定するか</td>
+<td><code>TRUE</code> / <code>FALSE</code></td>
+<td>見た目</td>
+</tr>
+<tr>
+<td><code>StartCell</code> / <code>HeaderRow</code></td>
+<td>表の開始位置・見出し行</td>
+<td><code>A13</code> / <code>13</code></td>
+<td>構造</td>
+</tr>
+<tr>
+<td><code>Columns</code></td>
+<td>各列の内部キー</td>
+<td><code>No,formatId,…</code></td>
+<td>構造</td>
+</tr>
+<tr>
+<td><code>Name</code></td>
+<td>表の内部名</td>
+<td><code>gridResult</code></td>
+<td>構造</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>[GRID]
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>Name=gridResult
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>StartCell=A13
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>HeaderRow=13
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>InitialRows=10
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>Columns=No,formatId,searchField1,searchField2,searchField3,updatedAt,knowledgeNo
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a>ColumnHeaders=No,フォーマット,検索1,検索2,検索3,更新日,ナレッジ番号
+<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a>HeaderBackColor=#D9E1F2
+<a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a>FreezeHeader=FALSE
+</code></pre></div>
+<h3 id="4-5">4-5. 入力部品・上級者向けのセクション<a class="headerlink" href="#4-5" title="Permanent link">&para;</a></h3>
+<p>次のセクションも使えます。標準の画面では使っていない（または構造側で使う）ものが中心です。位置や内部名（<code>Cell</code> / <code>Name</code> / <code>OnClick</code> / <code>LinkedCell</code> など）は構造に関わるため、文言・色以外は原則そのままにしてください。記入例は最小構成です。</p>
+<p><strong>[CHECK]</strong>（チェック欄）：<code>Cell</code>、<code>DefaultChecked</code></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>[CHECK]
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>Cell=B5
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>DefaultChecked=FALSE
+</code></pre></div>
+<p><strong>[CHECKBOX]</strong>（チェックボックス部品）：<code>Caption</code>（文言）、<code>Cell</code>／<code>OnClick</code>／<code>LinkedCell</code>／<code>Name</code>（構造）</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>[CHECKBOX]
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>Cell=B5
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>Caption=対象に含める
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>OnClick=Btn_ToggleInclude
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>LinkedCell=H5
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a>Name=chkInclude
+</code></pre></div>
+<p><strong>[LISTBOX]</strong>（リスト部品）：<code>List</code>／<code>Choices</code>（選択肢）、<code>Cell</code>／<code>LinkedCell</code>／<code>Name</code>（構造）</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>[LISTBOX]
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>Cell=B6:C9
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>List=選択肢1|選択肢2|選択肢3
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>Choices=選択肢1|選択肢2|選択肢3
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a>LinkedCell=H6
+<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a>Name=lstSample
+</code></pre></div>
+<p><strong>[VALIDATION]</strong>（入力規則の選択肢）：<code>List</code>／<code>Choices</code>／<code>DefaultValue</code>、<code>Cell</code>（構造）</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>[VALIDATION]
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>Cell=C8
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>List=低|中|高
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a>Choices=低|中|高
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a>DefaultValue=中
+</code></pre></div>
+<p><strong>[BUTTON_TEMPLATE]</strong>（一覧の行ごとに自動で増減するボタンのひな型）：<code>GridRef</code>／<code>TemplateId</code>／<code>Name</code>（すべて構造）。実際のボタンは表示するデータが決まったときに自動で作られます。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>[BUTTON_TEMPLATE]
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>GridRef=gridResult
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>TemplateId=rowOpen
+<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a>Name=btnRowOpen
+</code></pre></div>
+<p><strong>[FORM_FROM_FORMAT] / [GRID_FROM_FORMAT]</strong>（フォーマットの内容から入力欄や一覧を自動生成する仕組み）：内部利用のためのセクションです。中身は触らず、項目を増やしたいときは6章のフォーマット編集で行ってください。</p>
+<p><strong>[FONT] / [HEADER]</strong>：以前の様式のセクションです。現行の画面定義では [STYLE] / [SCREEN] を使います。</p>
+<p><strong>反映のタイミング:</strong> 画面の <code>M-xx.txt</code> を変更したら、画面上の <strong>「画面更新」ボタン</strong>を押すか、<strong>ブックを開き直す</strong>と反映されます（Excel 全体の再起動は不要です）。</p>
+<h2 id="5">5. 入力フォームの寸法・文言を変える<a class="headerlink" href="#5" title="Permanent link">&para;</a></h2>
+<p>ナレッジを登録・閲覧・編集するときに開く<strong>入力フォーム</strong>の大きさや文言は、対応する <code>M-xx.txt</code> の <strong><code>[USERFORM]</code></strong> セクションで調整します。検索ブックでは、<strong>登録フォームが <code>ui\検索\M-05.txt</code></strong> です。</p>
+<p>寸法の単位はポイントで、数値を大きくすると広く・高くなります。<code>[USERFORM]</code> で指定できる項目は次のとおりです。</p>
+<table>
+<thead>
+<tr>
+<th>キー</th>
+<th>意味</th>
+<th>既定値</th>
+<th>区分</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>formWidth</code></td>
+<td>フォームの幅</td>
+<td><code>486</code></td>
+<td>見た目</td>
+</tr>
+<tr>
+<td><code>formHeight</code></td>
+<td>フォームの高さ（<code>0</code> で自動計算）</td>
+<td><code>0</code></td>
+<td>見た目</td>
+</tr>
+<tr>
+<td><code>headerHeight</code></td>
+<td>見出し部の高さ</td>
+<td><code>48</code></td>
+<td>見た目</td>
+</tr>
+<tr>
+<td><code>labelWidth</code></td>
+<td>項目名ラベルの幅</td>
+<td><code>107</code></td>
+<td>見た目</td>
+</tr>
+<tr>
+<td><code>margin</code></td>
+<td>左右の余白</td>
+<td><code>18</code></td>
+<td>見た目</td>
+</tr>
+<tr>
+<td><code>rowHeightSingle</code></td>
+<td>単一行項目の行の高さ</td>
+<td><code>48</code></td>
+<td>見た目</td>
+</tr>
+<tr>
+<td><code>rowHeightMulti</code></td>
+<td>複数行項目の行の高さ</td>
+<td><code>114</code></td>
+<td>見た目</td>
+</tr>
+<tr>
+<td><code>rowHeightMultiLong</code></td>
+<td>長い複数行項目の行の高さ</td>
+<td><code>129</code></td>
+<td>見た目</td>
+</tr>
+<tr>
+<td><code>subheaderHeight</code></td>
+<td>小見出しの高さ</td>
+<td><code>28</code></td>
+<td>見た目</td>
+</tr>
+<tr>
+<td><code>buttonBarHeight</code></td>
+<td>ボタン帯の高さ</td>
+<td><code>48</code></td>
+<td>見た目</td>
+</tr>
+<tr>
+<td><code>buttonWidth</code></td>
+<td>ボタンの幅</td>
+<td><code>113</code></td>
+<td>見た目</td>
+</tr>
+<tr>
+<td><code>buttonHeight</code></td>
+<td>ボタンの高さ</td>
+<td><code>26</code></td>
+<td>見た目</td>
+</tr>
+<tr>
+<td><code>buttonGap</code></td>
+<td>ボタンの間隔</td>
+<td><code>11</code></td>
+<td>見た目</td>
+</tr>
+<tr>
+<td><code>bottomMargin</code></td>
+<td>下の余白</td>
+<td><code>16</code></td>
+<td>見た目</td>
+</tr>
+<tr>
+<td><code>badgeWidth</code></td>
+<td>必須バッジの幅</td>
+<td><code>29</code></td>
+<td>見た目</td>
+</tr>
+<tr>
+<td><code>badgeHeight</code></td>
+<td>必須バッジの高さ</td>
+<td><code>16</code></td>
+<td>見た目</td>
+</tr>
+<tr>
+<td><code>fontSize</code></td>
+<td>文字サイズ</td>
+<td><code>10</code></td>
+<td>見た目</td>
+</tr>
+<tr>
+<td><code>subheaderFontSize</code></td>
+<td>小見出しの文字サイズ</td>
+<td><code>12</code></td>
+<td>見た目</td>
+</tr>
+<tr>
+<td><code>fontName</code></td>
+<td>フォント名</td>
+<td>（フォーム既定）</td>
+<td>見た目</td>
+</tr>
+<tr>
+<td><code>multiLineScrollBars</code></td>
+<td>複数行欄のスクロールバー</td>
+<td><code>vertical</code></td>
+<td>見た目</td>
+</tr>
+<tr>
+<td><code>caption</code></td>
+<td>フォームの見出し文言</td>
+<td>（画面ごと）</td>
+<td>見た目</td>
+</tr>
+<tr>
+<td><code>backColor</code></td>
+<td>フォームの背景色</td>
+<td><code>FFFFFF</code></td>
+<td>見た目</td>
+</tr>
+<tr>
+<td><code>formatHelp</code></td>
+<td>フォーマット選択のヘルプ文</td>
+<td>（任意）</td>
+<td>見た目</td>
+</tr>
+<tr>
+<td><code>knowledgeNoLabel</code></td>
+<td>ナレッジ番号欄のラベル</td>
+<td>（任意）</td>
+<td>見た目</td>
+</tr>
+<tr>
+<td><code>knowledgeNoHelp</code></td>
+<td>ナレッジ番号欄のヘルプ文</td>
+<td>（任意）</td>
+<td>見た目</td>
+</tr>
+<tr>
+<td><code>loadButtonLabel</code></td>
+<td>読み込みボタンの文言</td>
+<td>（任意）</td>
+<td>見た目</td>
+</tr>
+<tr>
+<td><code>headerHelp_&lt;項目&gt;</code></td>
+<td>各項目に付けるヘルプ文（項目名ごと）</td>
+<td>（任意）</td>
+<td>見た目</td>
+</tr>
+<tr>
+<td><code>headerFields</code></td>
+<td>上部に出す項目の指定</td>
+<td>（画面ごと）</td>
+<td>構造</td>
+</tr>
+<tr>
+<td><code>formatSelectorType</code></td>
+<td>フォーマット選択欄の種類</td>
+<td><code>dropdown</code></td>
+<td>構造</td>
+</tr>
+<tr>
+<td><code>formatRowEnabled</code></td>
+<td>フォーマット選択行の有無</td>
+<td>（画面ごと）</td>
+<td>構造</td>
+</tr>
+<tr>
+<td><code>knowledgeNoRow</code></td>
+<td>ナレッジ番号行の有無</td>
+<td>（画面ごと）</td>
+<td>構造</td>
+</tr>
+<tr>
+<td><code>buttons</code></td>
+<td>並べるボタンの構成</td>
+<td>（画面ごと）</td>
+<td>構造</td>
+</tr>
+</tbody>
+</table>
+<p>記入例（登録フォームの実際の <code>[USERFORM]</code>）：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>[USERFORM]
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>formWidth=486
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>formHeight=0
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a>fontName=メイリオ
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a>fontSize=10
+<a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a>labelWidth=107
+<a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a>rowHeightSingle=48
+<a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a>rowHeightMulti=114
+<a id="__codelineno-18-9" name="__codelineno-18-9" href="#__codelineno-18-9"></a>rowHeightMultiLong=129
+<a id="__codelineno-18-10" name="__codelineno-18-10" href="#__codelineno-18-10"></a>margin=18
+<a id="__codelineno-18-11" name="__codelineno-18-11" href="#__codelineno-18-11"></a>buttonBarHeight=48
+<a id="__codelineno-18-12" name="__codelineno-18-12" href="#__codelineno-18-12"></a>caption=ナレッジ登録
+<a id="__codelineno-18-13" name="__codelineno-18-13" href="#__codelineno-18-13"></a>multiLineScrollBars=vertical
+<a id="__codelineno-18-14" name="__codelineno-18-14" href="#__codelineno-18-14"></a>formatSelectorType=dropdown
+<a id="__codelineno-18-15" name="__codelineno-18-15" href="#__codelineno-18-15"></a>headerFields=knowledgeId
+<a id="__codelineno-18-16" name="__codelineno-18-16" href="#__codelineno-18-16"></a>formatHelp=登録するナレッジのフォーマットを選びます。選ぶと下に項目が並びます。
+<a id="__codelineno-18-17" name="__codelineno-18-17" href="#__codelineno-18-17"></a>headerHelp_knowledgeId=登録時に自動で割り当てられます。空き番号は手で入れ直すこともできます。
+</code></pre></div>
+<p>例えばフォームを少し広げたいときは、<code>formWidth=486</code> を <code>formWidth=620</code> のように書き換えます。閲覧フォーム・編集フォームの寸法も変えたいときは、それぞれの画面定義ファイルを用意し、同じ <code>[USERFORM]</code> セクションに値を書けば反映されます（管理ブックの設計画面からも調整できます）。専用ファイルが無い場合は上の既定値で表示されます。</p>
+<p><strong>反映のタイミング:</strong> 入力フォームの設定は、<strong>フォームを開き直すだけ</strong>で反映されます（Excel の再起動は不要です）。</p>
+<h2 id="6">6. フォーマット（入力項目）の定義<a class="headerlink" href="#6" title="Permanent link">&para;</a></h2>
+<p>入力項目の構成は、<strong>フォーマット定義ファイル</strong>（<code>フォーマットフォルダ</code> 内の <code>&lt;フォーマットID&gt;.txt</code>、例 <code>formats\FAULT.txt</code>）で決まります。通常は<strong>管理ブックの設計画面から</strong>作成・編集できますが、中身はテキストです。先頭の <code>[FORMAT]</code> で型そのものを、続く <code>[FIELD]</code> で項目を1つずつ定義し、項目どうしは <code>===</code> で区切ります。<strong>書いた順がそのまま画面の項目の並び順</strong>になります。</p>
+<p><strong>[FORMAT]（型そのもの）</strong></p>
+<table>
+<thead>
+<tr>
+<th>キー</th>
+<th>意味</th>
+<th>値の例</th>
+<th>区分</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>FormatName</code></td>
+<td>画面に表示される型の名前</td>
+<td><code>障害対応</code></td>
+<td>見た目</td>
+</tr>
+<tr>
+<td><code>Status</code></td>
+<td>状態（任意）</td>
+<td>（任意）</td>
+<td>任意</td>
+</tr>
+<tr>
+<td><code>FormatId</code></td>
+<td>型のID（ファイル名・フォルダ名にもなる）</td>
+<td><code>FAULT</code></td>
+<td>構造（変更非推奨）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>[FIELD]（項目ごと）</strong></p>
+<table>
+<thead>
+<tr>
+<th>キー</th>
+<th>意味</th>
+<th>取りうる値</th>
+<th>区分</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>FieldName</code></td>
+<td>項目名（入力欄に表示される名前）</td>
+<td>文字列</td>
+<td>見た目</td>
+</tr>
+<tr>
+<td><code>FieldType</code></td>
+<td>型</td>
+<td><code>単一行</code> / <code>複数行</code> / <code>日付</code> / <code>選択</code></td>
+<td>見た目</td>
+</tr>
+<tr>
+<td><code>Required</code></td>
+<td>入力を必須にするか</td>
+<td><code>TRUE</code> / <code>FALSE</code></td>
+<td>見た目</td>
+</tr>
+<tr>
+<td><code>MaxLength</code></td>
+<td>文字数の上限（単一行で使用）</td>
+<td>数字</td>
+<td>見た目</td>
+</tr>
+<tr>
+<td><code>Rows</code></td>
+<td>入力欄の高さ（複数行で使用）</td>
+<td>数字</td>
+<td>見た目</td>
+</tr>
+<tr>
+<td><code>Scroll</code></td>
+<td>複数行欄でスクロールバーを出すか</td>
+<td><code>TRUE</code> / <code>FALSE</code></td>
+<td>見た目</td>
+</tr>
+<tr>
+<td><code>DropdownOptions</code></td>
+<td>選択肢（<code>|</code> 区切り）</td>
+<td><code>低|中|高|緊急</code></td>
+<td>見た目</td>
+</tr>
+<tr>
+<td><code>fieldPlaceholder</code></td>
+<td>入力欄に薄く出す見本</td>
+<td>文字列</td>
+<td>見た目</td>
+</tr>
+<tr>
+<td><code>searchTarget</code></td>
+<td>キーワード検索の対象にするか</td>
+<td><code>TRUE</code> / <code>FALSE</code></td>
+<td>見た目</td>
+</tr>
+</tbody>
+</table>
+<p>型ごとの記入例（単一行・日付・選択・複数行）：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>[FIELD]
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>FieldName=件名
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>FieldType=単一行
+<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a>Required=TRUE
+<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a>MaxLength=120
+<a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a>fieldPlaceholder=（例）経理システムへログインできない
+<a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a>searchTarget=TRUE
+<a id="__codelineno-19-8" name="__codelineno-19-8" href="#__codelineno-19-8"></a>===
+<a id="__codelineno-19-9" name="__codelineno-19-9" href="#__codelineno-19-9"></a>[FIELD]
+<a id="__codelineno-19-10" name="__codelineno-19-10" href="#__codelineno-19-10"></a>FieldName=発生日時
+<a id="__codelineno-19-11" name="__codelineno-19-11" href="#__codelineno-19-11"></a>FieldType=日付
+<a id="__codelineno-19-12" name="__codelineno-19-12" href="#__codelineno-19-12"></a>Required=TRUE
+<a id="__codelineno-19-13" name="__codelineno-19-13" href="#__codelineno-19-13"></a>fieldPlaceholder=（例）2026-06-09 10:30
+<a id="__codelineno-19-14" name="__codelineno-19-14" href="#__codelineno-19-14"></a>searchTarget=TRUE
+<a id="__codelineno-19-15" name="__codelineno-19-15" href="#__codelineno-19-15"></a>===
+<a id="__codelineno-19-16" name="__codelineno-19-16" href="#__codelineno-19-16"></a>[FIELD]
+<a id="__codelineno-19-17" name="__codelineno-19-17" href="#__codelineno-19-17"></a>FieldName=カテゴリ
+<a id="__codelineno-19-18" name="__codelineno-19-18" href="#__codelineno-19-18"></a>FieldType=選択
+<a id="__codelineno-19-19" name="__codelineno-19-19" href="#__codelineno-19-19"></a>Required=FALSE
+<a id="__codelineno-19-20" name="__codelineno-19-20" href="#__codelineno-19-20"></a>DropdownOptions=アプリ障害|インフラ障害|ネットワーク障害|セキュリティ
+<a id="__codelineno-19-21" name="__codelineno-19-21" href="#__codelineno-19-21"></a>fieldPlaceholder=（例）アプリ障害
+<a id="__codelineno-19-22" name="__codelineno-19-22" href="#__codelineno-19-22"></a>searchTarget=FALSE
+<a id="__codelineno-19-23" name="__codelineno-19-23" href="#__codelineno-19-23"></a>===
+<a id="__codelineno-19-24" name="__codelineno-19-24" href="#__codelineno-19-24"></a>[FIELD]
+<a id="__codelineno-19-25" name="__codelineno-19-25" href="#__codelineno-19-25"></a>FieldName=概要
+<a id="__codelineno-19-26" name="__codelineno-19-26" href="#__codelineno-19-26"></a>FieldType=複数行
+<a id="__codelineno-19-27" name="__codelineno-19-27" href="#__codelineno-19-27"></a>Required=TRUE
+<a id="__codelineno-19-28" name="__codelineno-19-28" href="#__codelineno-19-28"></a>Rows=4
+<a id="__codelineno-19-29" name="__codelineno-19-29" href="#__codelineno-19-29"></a>fieldPlaceholder=（例）応答時間が通常の10倍以上に増加
+<a id="__codelineno-19-30" name="__codelineno-19-30" href="#__codelineno-19-30"></a>searchTarget=FALSE
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">フォーマットIDの変更について</p>
+<p><code>FormatId</code> は、ファイル名であると同時に、そのフォーマットのナレッジを入れるフォルダ名にもなります。<code>FormatId</code> を変えると別のフォーマット扱いになり、元の <code>FormatId</code> で保存していたナレッジのフォルダが取り残されます。IDは原則そのままにしてください。</p>
+</div>
+<h2 id="7">7. ボタンや入力項目を増やすには<a class="headerlink" href="#7" title="Permanent link">&para;</a></h2>
+<h3 id="1_1">ボタンを1つ増やす<a class="headerlink" href="#1_1" title="Permanent link">&para;</a></h3>
+<p>ボタンを増やすときは、<strong>次の3つの作業をもれなく</strong>行います。1つでも欠けると「ボタンはあるが押しても何も起きない」「処理はあるがボタンが現れない」状態になります。</p>
+<ol>
+<li>
+<p><strong>画面定義に <code>[BUTTON]</code> セクションを追加する。</strong> <code>OnClick</code> には、押したときに実行する処理の名前（<code>Btn_</code> で始まる名前を推奨）を書きます。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>[BUTTON]
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>Cell=N10
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a>Text=お気に入り
+<a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a>OnClick=Btn_Favorite
+<a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a>BackColor=#3366CC
+<a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a>ForeColor=#FFFFFF
+</code></pre></div>
+</li>
+<li>
+<p><strong><code>OnClick</code> に書いた名前と同じ処理（手続き）をブックの VBA に用意する。</strong> 名前は <code>[BUTTON]</code> の <code>OnClick</code> と完全に一致させます。</p>
+</li>
+<li>
+<p><strong>Excel の画面シートに実機ボタンを配置し、そのマクロを割り当てる。</strong> 「開発 → 挿入 → フォームコントロール」のボタンを <code>[BUTTON]</code> の <code>Cell</code> で指定した位置に置き、右クリック →「マクロの登録」で手順2の処理を選びます。</p>
+</li>
+</ol>
+<p>一覧表の行ごとに増減するボタン（各行の「編集」「削除」など）は、<code>[BUTTON]</code> ではなく <code>[BUTTON_TEMPLATE]</code> でひな型を宣言します。実際のボタンは表示するデータが決まったときに自動で作られるため、実機での手配置は不要です。</p>
+<h3 id="_2">入力項目を増やす<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
+<p>登録・修正の入力項目は、画面定義ではなく<strong>フォーマット定義</strong>で決まります。項目を増やすときは、管理ブックの<strong>フォーマット設計</strong>画面でフォーマットを編集し、項目（フィールド）を追加します。フォーマットを保存すると、そのフォーマットを使う既存ナレッジへ変更が反映されます（反映の前にバックアップが取られ、確認のメッセージが表示されます）。検索画面の検索条件のような、画面に固定された入力欄は、画面定義の <code>[INPUT]</code> で管理します。</p>
+<h2 id="8">8. 変更が反映されるタイミング（早見表）<a class="headerlink" href="#8" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>変更したもの</th>
+<th>反映の方法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>保存先のパス（「格納先設定」のフォルダ各種）</td>
+<td><strong>ブックを開き直す</strong>（実質的に再起動）</td>
+</tr>
+<tr>
+<td>画面（シート）の見た目（<code>M-xx.txt</code>）</td>
+<td><strong>「画面更新」ボタン</strong>、または開き直し</td>
+</tr>
+<tr>
+<td>入力フォームの寸法・文言（<code>[USERFORM]</code>）</td>
+<td><strong>フォームを開き直す</strong>だけ</td>
+</tr>
+<tr>
+<td>フォーマット（入力項目）</td>
+<td><strong>次にそのフォーマットを使う</strong>（登録フォームや検索を開く）とき</td>
+</tr>
+</tbody>
+</table>
+<p>画面定義ファイルやフォーマット定義の<strong>中身</strong>は、その都度読み直されます。ただし、保存先フォルダの<strong>場所そのもの</strong>を変えたときだけは、開き直し（再起動）が必要です。</p>
+<h2 id="9">9. 触らない方がよい項目<a class="headerlink" href="#9" title="Permanent link">&para;</a></h2>
+<p>見た目や寸法の調整と違い、次の項目は<strong>動作と直接つながっている</strong>ため、値を変えると画面やボタンが正しく動かなくなります。原則そのままにしてください。</p>
+<ul>
+<li>各セクションの<strong>セルの位置を表す値</strong>（<code>Cell</code> / <code>StartCell</code> / <code>EndCell</code> / <code>HeaderRow</code> など）</li>
+<li>ボタンに割り当てられた<strong>動作の指定</strong>（<code>OnClick</code> の値）と、それに対応する処理</li>
+<li>入力欄や一覧の<strong>内部キー</strong>（<code>inputDataKey</code>、<code>[GRID]</code> の <code>Columns</code>、<code>GridRef</code>、<code>Name</code>、<code>LinkedCell</code> など）</li>
+<li>シートの<strong>内部名</strong>（<code>SheetName</code>）と、<code>[SHEET]</code> セクションそのものの削除（必須のため）</li>
+<li>フォーマットの <strong><code>FormatId</code></strong></li>
+<li><code>[FORM_FROM_FORMAT]</code> / <code>[GRID_FROM_FORMAT]</code> / <code>[BUTTON_TEMPLATE]</code> といった、自動生成のためのセクション</li>
+<li><code>[HEADER]</code> と <code>[INPUT]</code> などで<strong>同じセル範囲を重ねて</strong>指定すること（範囲が衝突し画面が崩れます）</li>
+<li>定義ファイルを <strong>Shift_JIS 以外で保存</strong>すること（文字化け・読み込み失敗の原因）</li>
+<li><strong>バックアップを取らずに</strong>編集すること（元に戻せなくなります）</li>
+</ul>
+<p>これらを変えたい場合は、見た目の調整とは性質が異なるため、慎重に行うか、管理ブックの設計画面からの操作をおすすめします。</p>
+<h2 id="10">10. 使われない過去の名残<a class="headerlink" href="#10" title="Permanent link">&para;</a></h2>
+<p>一部の画面定義ファイルには、過去の様式の名残として <strong><code>[VALUE]</code> セクション</strong>や <strong><code>Editable</code> / <code>Source</code></strong> といったキーが残っていることがあります。現在のバージョンではこれらは読み込まれず、<strong>書いても画面には反映されません</strong>。そのまま残しておいても害はありませんが、新しく書き加える必要はありません。</p>
+<h2 id="11">11. まるごとサンプル（実際のファイル）<a class="headerlink" href="#11" title="Permanent link">&para;</a></h2>
+<p>ここでは、実際に使われているファイルを<strong>1枚まるごと</strong>載せます。コピーして自分の環境に合わせて値を変えれば、そのまま動くサンプルとして使えます（保存は Shift_JIS・改行 CRLF）。</p>
+<h3 id="11-1-uim-08txt">11-1. 検索画面（<code>ui\検索\M-08.txt</code>）<a class="headerlink" href="#11-1-uim-08txt" title="Permanent link">&para;</a></h3>
+<p>キーワード欄・フォーマット絞り込み欄・検索/条件クリア/画面更新ボタン・結果一覧（[GRID]）を持つ、検索ブックの検索画面の全体です。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>[SHEET]
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a>SheetName=ナレッジ検索
+<a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a>SheetTitle=ナレッジ検索
+<a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a>Visible=visible
+<a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a>TabColor=―（色を付けない）
+<a id="__codelineno-21-6" name="__codelineno-21-6" href="#__codelineno-21-6"></a>HideColumnsFrom=G
+<a id="__codelineno-21-7" name="__codelineno-21-7" href="#__codelineno-21-7"></a>===
+<a id="__codelineno-21-8" name="__codelineno-21-8" href="#__codelineno-21-8"></a>[STYLE]
+<a id="__codelineno-21-9" name="__codelineno-21-9" href="#__codelineno-21-9"></a>BaseFont=メイリオ
+<a id="__codelineno-21-10" name="__codelineno-21-10" href="#__codelineno-21-10"></a>BaseFontSize=10
+<a id="__codelineno-21-11" name="__codelineno-21-11" href="#__codelineno-21-11"></a>BaseFontColor=濃いグレー
+<a id="__codelineno-21-12" name="__codelineno-21-12" href="#__codelineno-21-12"></a>SheetBackColor=白
+<a id="__codelineno-21-13" name="__codelineno-21-13" href="#__codelineno-21-13"></a>BaseAlignH=left
+<a id="__codelineno-21-14" name="__codelineno-21-14" href="#__codelineno-21-14"></a>BaseAlignV=center
+<a id="__codelineno-21-15" name="__codelineno-21-15" href="#__codelineno-21-15"></a>BaseWrap=off
+<a id="__codelineno-21-16" name="__codelineno-21-16" href="#__codelineno-21-16"></a>BaseNumberFormat=standard
+<a id="__codelineno-21-17" name="__codelineno-21-17" href="#__codelineno-21-17"></a>===
+<a id="__codelineno-21-18" name="__codelineno-21-18" href="#__codelineno-21-18"></a>[SCREEN]
+<a id="__codelineno-21-19" name="__codelineno-21-19" href="#__codelineno-21-19"></a>Width=7（列数）
+<a id="__codelineno-21-20" name="__codelineno-21-20" href="#__codelineno-21-20"></a>Height=auto
+<a id="__codelineno-21-21" name="__codelineno-21-21" href="#__codelineno-21-21"></a>Title=ナレッジ検索
+<a id="__codelineno-21-22" name="__codelineno-21-22" href="#__codelineno-21-22"></a>BackColor=#1F3864
+<a id="__codelineno-21-23" name="__codelineno-21-23" href="#__codelineno-21-23"></a>FontColor=#FFFFFF
+<a id="__codelineno-21-24" name="__codelineno-21-24" href="#__codelineno-21-24"></a>EndCol=G
+<a id="__codelineno-21-25" name="__codelineno-21-25" href="#__codelineno-21-25"></a>BarHeight=30
+<a id="__codelineno-21-26" name="__codelineno-21-26" href="#__codelineno-21-26"></a>===
+<a id="__codelineno-21-27" name="__codelineno-21-27" href="#__codelineno-21-27"></a>[FREEZE]
+<a id="__codelineno-21-28" name="__codelineno-21-28" href="#__codelineno-21-28"></a>Enabled=on
+<a id="__codelineno-21-29" name="__codelineno-21-29" href="#__codelineno-21-29"></a>Rows=13
+<a id="__codelineno-21-30" name="__codelineno-21-30" href="#__codelineno-21-30"></a>Cols=0
+<a id="__codelineno-21-31" name="__codelineno-21-31" href="#__codelineno-21-31"></a>===
+<a id="__codelineno-21-32" name="__codelineno-21-32" href="#__codelineno-21-32"></a>[COLUMN]
+<a id="__codelineno-21-33" name="__codelineno-21-33" href="#__codelineno-21-33"></a>ColumnWidth_A=6
+<a id="__codelineno-21-34" name="__codelineno-21-34" href="#__codelineno-21-34"></a>ColumnWidth_B=20
+<a id="__codelineno-21-35" name="__codelineno-21-35" href="#__codelineno-21-35"></a>ColumnWidth_C=24
+<a id="__codelineno-21-36" name="__codelineno-21-36" href="#__codelineno-21-36"></a>ColumnWidth_D=24
+<a id="__codelineno-21-37" name="__codelineno-21-37" href="#__codelineno-21-37"></a>ColumnWidth_E=24
+<a id="__codelineno-21-38" name="__codelineno-21-38" href="#__codelineno-21-38"></a>ColumnWidth_F=17
+<a id="__codelineno-21-39" name="__codelineno-21-39" href="#__codelineno-21-39"></a>===
+<a id="__codelineno-21-40" name="__codelineno-21-40" href="#__codelineno-21-40"></a>[SUBHEADER]
+<a id="__codelineno-21-41" name="__codelineno-21-41" href="#__codelineno-21-41"></a>Title=条件で探す
+<a id="__codelineno-21-42" name="__codelineno-21-42" href="#__codelineno-21-42"></a>Cell=A3
+<a id="__codelineno-21-43" name="__codelineno-21-43" href="#__codelineno-21-43"></a>BackColor=#2F5597
+<a id="__codelineno-21-44" name="__codelineno-21-44" href="#__codelineno-21-44"></a>FontColor=#FFFFFF
+<a id="__codelineno-21-45" name="__codelineno-21-45" href="#__codelineno-21-45"></a>EndCol=G
+<a id="__codelineno-21-46" name="__codelineno-21-46" href="#__codelineno-21-46"></a>Height=22
+<a id="__codelineno-21-47" name="__codelineno-21-47" href="#__codelineno-21-47"></a>===
+<a id="__codelineno-21-48" name="__codelineno-21-48" href="#__codelineno-21-48"></a>[NOTE]
+<a id="__codelineno-21-49" name="__codelineno-21-49" href="#__codelineno-21-49"></a>Cell=A4:G7
+<a id="__codelineno-21-50" name="__codelineno-21-50" href="#__codelineno-21-50"></a>Text=キーワードを入れて「検索」を押すと、データの全ナレッジから一致するものを下の一覧に表示します。\nフォーマットで絞り込むこともできます。「条件クリア」で入力を空に戻します。\n検索結果の行のどこでもダブルクリックすると、その内容がナレッジ表示画面で開きます。
+<a id="__codelineno-21-51" name="__codelineno-21-51" href="#__codelineno-21-51"></a>BackColor=#DEEBF7
+<a id="__codelineno-21-52" name="__codelineno-21-52" href="#__codelineno-21-52"></a>Border=thin
+<a id="__codelineno-21-53" name="__codelineno-21-53" href="#__codelineno-21-53"></a>===
+<a id="__codelineno-21-54" name="__codelineno-21-54" href="#__codelineno-21-54"></a>[LABEL]
+<a id="__codelineno-21-55" name="__codelineno-21-55" href="#__codelineno-21-55"></a>Cell=B8
+<a id="__codelineno-21-56" name="__codelineno-21-56" href="#__codelineno-21-56"></a>Text=キーワード
+<a id="__codelineno-21-57" name="__codelineno-21-57" href="#__codelineno-21-57"></a>===
+<a id="__codelineno-21-58" name="__codelineno-21-58" href="#__codelineno-21-58"></a>[INPUT]
+<a id="__codelineno-21-59" name="__codelineno-21-59" href="#__codelineno-21-59"></a>Cell=C8:E8
+<a id="__codelineno-21-60" name="__codelineno-21-60" href="#__codelineno-21-60"></a>inputDataKey=keyword
+<a id="__codelineno-21-61" name="__codelineno-21-61" href="#__codelineno-21-61"></a>InputType=text
+<a id="__codelineno-21-62" name="__codelineno-21-62" href="#__codelineno-21-62"></a>MaxLength=200
+<a id="__codelineno-21-63" name="__codelineno-21-63" href="#__codelineno-21-63"></a>InputColor=#FFFFFF
+<a id="__codelineno-21-64" name="__codelineno-21-64" href="#__codelineno-21-64"></a>Border=thin
+<a id="__codelineno-21-65" name="__codelineno-21-65" href="#__codelineno-21-65"></a>===
+<a id="__codelineno-21-66" name="__codelineno-21-66" href="#__codelineno-21-66"></a>[LABEL]
+<a id="__codelineno-21-67" name="__codelineno-21-67" href="#__codelineno-21-67"></a>Cell=B10
+<a id="__codelineno-21-68" name="__codelineno-21-68" href="#__codelineno-21-68"></a>Text=フォーマット
+<a id="__codelineno-21-69" name="__codelineno-21-69" href="#__codelineno-21-69"></a>===
+<a id="__codelineno-21-70" name="__codelineno-21-70" href="#__codelineno-21-70"></a>[INPUT]
+<a id="__codelineno-21-71" name="__codelineno-21-71" href="#__codelineno-21-71"></a>Cell=C10:E10
+<a id="__codelineno-21-72" name="__codelineno-21-72" href="#__codelineno-21-72"></a>inputDataKey=formatId
+<a id="__codelineno-21-73" name="__codelineno-21-73" href="#__codelineno-21-73"></a>InputType=dropdown
+<a id="__codelineno-21-74" name="__codelineno-21-74" href="#__codelineno-21-74"></a>DropdownSource=format:list
+<a id="__codelineno-21-75" name="__codelineno-21-75" href="#__codelineno-21-75"></a>InputColor=#FFFFFF
+<a id="__codelineno-21-76" name="__codelineno-21-76" href="#__codelineno-21-76"></a>Border=thin
+<a id="__codelineno-21-77" name="__codelineno-21-77" href="#__codelineno-21-77"></a>===
+<a id="__codelineno-21-78" name="__codelineno-21-78" href="#__codelineno-21-78"></a>[BUTTON]
+<a id="__codelineno-21-79" name="__codelineno-21-79" href="#__codelineno-21-79"></a>Cell=B11
+<a id="__codelineno-21-80" name="__codelineno-21-80" href="#__codelineno-21-80"></a>Text=検索
+<a id="__codelineno-21-81" name="__codelineno-21-81" href="#__codelineno-21-81"></a>OnClick=Btn_SearchV23
+<a id="__codelineno-21-82" name="__codelineno-21-82" href="#__codelineno-21-82"></a>Width=110
+<a id="__codelineno-21-83" name="__codelineno-21-83" href="#__codelineno-21-83"></a>Height=22
+<a id="__codelineno-21-84" name="__codelineno-21-84" href="#__codelineno-21-84"></a>BackColor=#4472C4
+<a id="__codelineno-21-85" name="__codelineno-21-85" href="#__codelineno-21-85"></a>ForeColor=#FFFFFF
+<a id="__codelineno-21-86" name="__codelineno-21-86" href="#__codelineno-21-86"></a>===
+<a id="__codelineno-21-87" name="__codelineno-21-87" href="#__codelineno-21-87"></a>[BUTTON]
+<a id="__codelineno-21-88" name="__codelineno-21-88" href="#__codelineno-21-88"></a>Cell=D11
+<a id="__codelineno-21-89" name="__codelineno-21-89" href="#__codelineno-21-89"></a>Text=条件クリア
+<a id="__codelineno-21-90" name="__codelineno-21-90" href="#__codelineno-21-90"></a>OnClick=Btn_SearchClearV23
+<a id="__codelineno-21-91" name="__codelineno-21-91" href="#__codelineno-21-91"></a>Width=110
+<a id="__codelineno-21-92" name="__codelineno-21-92" href="#__codelineno-21-92"></a>Height=22
+<a id="__codelineno-21-93" name="__codelineno-21-93" href="#__codelineno-21-93"></a>BackColor=#4472C4
+<a id="__codelineno-21-94" name="__codelineno-21-94" href="#__codelineno-21-94"></a>ForeColor=#FFFFFF
+<a id="__codelineno-21-95" name="__codelineno-21-95" href="#__codelineno-21-95"></a>===
+<a id="__codelineno-21-96" name="__codelineno-21-96" href="#__codelineno-21-96"></a>[BUTTON]
+<a id="__codelineno-21-97" name="__codelineno-21-97" href="#__codelineno-21-97"></a>Cell=F1
+<a id="__codelineno-21-98" name="__codelineno-21-98" href="#__codelineno-21-98"></a>Text=画面更新
+<a id="__codelineno-21-99" name="__codelineno-21-99" href="#__codelineno-21-99"></a>OnClick=Btn_RefreshAllSheets
+<a id="__codelineno-21-100" name="__codelineno-21-100" href="#__codelineno-21-100"></a>Width=120
+<a id="__codelineno-21-101" name="__codelineno-21-101" href="#__codelineno-21-101"></a>Height=22
+<a id="__codelineno-21-102" name="__codelineno-21-102" href="#__codelineno-21-102"></a>BackColor=#D9E1F2
+<a id="__codelineno-21-103" name="__codelineno-21-103" href="#__codelineno-21-103"></a>ForeColor=#000000
+<a id="__codelineno-21-104" name="__codelineno-21-104" href="#__codelineno-21-104"></a>===
+<a id="__codelineno-21-105" name="__codelineno-21-105" href="#__codelineno-21-105"></a>[SUBHEADER]
+<a id="__codelineno-21-106" name="__codelineno-21-106" href="#__codelineno-21-106"></a>Title=検索結果
+<a id="__codelineno-21-107" name="__codelineno-21-107" href="#__codelineno-21-107"></a>Cell=A12
+<a id="__codelineno-21-108" name="__codelineno-21-108" href="#__codelineno-21-108"></a>BackColor=#2F5597
+<a id="__codelineno-21-109" name="__codelineno-21-109" href="#__codelineno-21-109"></a>FontColor=#FFFFFF
+<a id="__codelineno-21-110" name="__codelineno-21-110" href="#__codelineno-21-110"></a>EndCol=G
+<a id="__codelineno-21-111" name="__codelineno-21-111" href="#__codelineno-21-111"></a>Height=22
+<a id="__codelineno-21-112" name="__codelineno-21-112" href="#__codelineno-21-112"></a>===
+<a id="__codelineno-21-113" name="__codelineno-21-113" href="#__codelineno-21-113"></a>[GRID]
+<a id="__codelineno-21-114" name="__codelineno-21-114" href="#__codelineno-21-114"></a>Name=gridResult
+<a id="__codelineno-21-115" name="__codelineno-21-115" href="#__codelineno-21-115"></a>StartCell=A13
+<a id="__codelineno-21-116" name="__codelineno-21-116" href="#__codelineno-21-116"></a>HeaderRow=13
+<a id="__codelineno-21-117" name="__codelineno-21-117" href="#__codelineno-21-117"></a>InitialRows=10
+<a id="__codelineno-21-118" name="__codelineno-21-118" href="#__codelineno-21-118"></a>Columns=No,formatId,searchField1,searchField2,searchField3,updatedAt,knowledgeNo
+<a id="__codelineno-21-119" name="__codelineno-21-119" href="#__codelineno-21-119"></a>ColumnHeaders=No,フォーマット,検索1,検索2,検索3,更新日,ナレッジ番号
+<a id="__codelineno-21-120" name="__codelineno-21-120" href="#__codelineno-21-120"></a>HeaderBackColor=#D9E1F2
+<a id="__codelineno-21-121" name="__codelineno-21-121" href="#__codelineno-21-121"></a>FreezeHeader=FALSE
+<a id="__codelineno-21-122" name="__codelineno-21-122" href="#__codelineno-21-122"></a>===
+</code></pre></div>
+<h3 id="11-2-uim-02txt">11-2. フォーマット一覧画面（<code>ui\管理\M-02.txt</code>）<a class="headerlink" href="#11-2-uim-02txt" title="Permanent link">&para;</a></h3>
+<p>操作ボタン（編集・プレビュー・無効化・削除・リロード）と説明、登録済みフォーマットの一覧（[GRID]）を持つ、管理ブックの画面です。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>[SHEET]
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a>SheetName=フォーマット一覧
+<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a>SheetTitle=フォーマット一覧
+<a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a>Visible=visible
+<a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a>TabColor=―（色を付けない）
+<a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a>HideColumnsFrom=I
+<a id="__codelineno-22-7" name="__codelineno-22-7" href="#__codelineno-22-7"></a>===
+<a id="__codelineno-22-8" name="__codelineno-22-8" href="#__codelineno-22-8"></a>[STYLE]
+<a id="__codelineno-22-9" name="__codelineno-22-9" href="#__codelineno-22-9"></a>BaseFont=メイリオ
+<a id="__codelineno-22-10" name="__codelineno-22-10" href="#__codelineno-22-10"></a>BaseFontSize=10
+<a id="__codelineno-22-11" name="__codelineno-22-11" href="#__codelineno-22-11"></a>BaseFontColor=濃いグレー
+<a id="__codelineno-22-12" name="__codelineno-22-12" href="#__codelineno-22-12"></a>SheetBackColor=白
+<a id="__codelineno-22-13" name="__codelineno-22-13" href="#__codelineno-22-13"></a>BaseAlignH=left
+<a id="__codelineno-22-14" name="__codelineno-22-14" href="#__codelineno-22-14"></a>BaseAlignV=center
+<a id="__codelineno-22-15" name="__codelineno-22-15" href="#__codelineno-22-15"></a>BaseWrap=off
+<a id="__codelineno-22-16" name="__codelineno-22-16" href="#__codelineno-22-16"></a>BaseNumberFormat=standard
+<a id="__codelineno-22-17" name="__codelineno-22-17" href="#__codelineno-22-17"></a>===
+<a id="__codelineno-22-18" name="__codelineno-22-18" href="#__codelineno-22-18"></a>[SCREEN]
+<a id="__codelineno-22-19" name="__codelineno-22-19" href="#__codelineno-22-19"></a>Width=10（列数）
+<a id="__codelineno-22-20" name="__codelineno-22-20" href="#__codelineno-22-20"></a>Height=auto
+<a id="__codelineno-22-21" name="__codelineno-22-21" href="#__codelineno-22-21"></a>Title=フォーマット一覧
+<a id="__codelineno-22-22" name="__codelineno-22-22" href="#__codelineno-22-22"></a>BackColor=#1F3864
+<a id="__codelineno-22-23" name="__codelineno-22-23" href="#__codelineno-22-23"></a>FontColor=#FFFFFF
+<a id="__codelineno-22-24" name="__codelineno-22-24" href="#__codelineno-22-24"></a>EndCol=J
+<a id="__codelineno-22-25" name="__codelineno-22-25" href="#__codelineno-22-25"></a>BarHeight=30
+<a id="__codelineno-22-26" name="__codelineno-22-26" href="#__codelineno-22-26"></a>===
+<a id="__codelineno-22-27" name="__codelineno-22-27" href="#__codelineno-22-27"></a>[FREEZE]
+<a id="__codelineno-22-28" name="__codelineno-22-28" href="#__codelineno-22-28"></a>Enabled=on
+<a id="__codelineno-22-29" name="__codelineno-22-29" href="#__codelineno-22-29"></a>Rows=16
+<a id="__codelineno-22-30" name="__codelineno-22-30" href="#__codelineno-22-30"></a>Cols=0
+<a id="__codelineno-22-31" name="__codelineno-22-31" href="#__codelineno-22-31"></a>===
+<a id="__codelineno-22-32" name="__codelineno-22-32" href="#__codelineno-22-32"></a>[COLUMN]
+<a id="__codelineno-22-33" name="__codelineno-22-33" href="#__codelineno-22-33"></a>ColumnWidth_A=6
+<a id="__codelineno-22-34" name="__codelineno-22-34" href="#__codelineno-22-34"></a>ColumnWidth_B=5
+<a id="__codelineno-22-35" name="__codelineno-22-35" href="#__codelineno-22-35"></a>ColumnWidth_C=14
+<a id="__codelineno-22-36" name="__codelineno-22-36" href="#__codelineno-22-36"></a>ColumnWidth_D=22
+<a id="__codelineno-22-37" name="__codelineno-22-37" href="#__codelineno-22-37"></a>ColumnWidth_E=12
+<a id="__codelineno-22-38" name="__codelineno-22-38" href="#__codelineno-22-38"></a>ColumnWidth_F=12
+<a id="__codelineno-22-39" name="__codelineno-22-39" href="#__codelineno-22-39"></a>ColumnWidth_G=18
+<a id="__codelineno-22-40" name="__codelineno-22-40" href="#__codelineno-22-40"></a>ColumnWidth_H=12
+<a id="__codelineno-22-41" name="__codelineno-22-41" href="#__codelineno-22-41"></a>ColumnWidth_I=2
+<a id="__codelineno-22-42" name="__codelineno-22-42" href="#__codelineno-22-42"></a>ColumnWidth_J=14
+<a id="__codelineno-22-43" name="__codelineno-22-43" href="#__codelineno-22-43"></a>===
+<a id="__codelineno-22-44" name="__codelineno-22-44" href="#__codelineno-22-44"></a>[SUBHEADER]
+<a id="__codelineno-22-45" name="__codelineno-22-45" href="#__codelineno-22-45"></a>Title=操作
+<a id="__codelineno-22-46" name="__codelineno-22-46" href="#__codelineno-22-46"></a>Cell=A3
+<a id="__codelineno-22-47" name="__codelineno-22-47" href="#__codelineno-22-47"></a>BackColor=#2F5597
+<a id="__codelineno-22-48" name="__codelineno-22-48" href="#__codelineno-22-48"></a>FontColor=#FFFFFF
+<a id="__codelineno-22-49" name="__codelineno-22-49" href="#__codelineno-22-49"></a>EndCol=J
+<a id="__codelineno-22-50" name="__codelineno-22-50" href="#__codelineno-22-50"></a>Height=22
+<a id="__codelineno-22-51" name="__codelineno-22-51" href="#__codelineno-22-51"></a>===
+<a id="__codelineno-22-52" name="__codelineno-22-52" href="#__codelineno-22-52"></a>[BUTTON]
+<a id="__codelineno-22-53" name="__codelineno-22-53" href="#__codelineno-22-53"></a>Cell=B4
+<a id="__codelineno-22-54" name="__codelineno-22-54" href="#__codelineno-22-54"></a>Text=編集
+<a id="__codelineno-22-55" name="__codelineno-22-55" href="#__codelineno-22-55"></a>OnClick=Btn_EditFormat
+<a id="__codelineno-22-56" name="__codelineno-22-56" href="#__codelineno-22-56"></a>Width=90
+<a id="__codelineno-22-57" name="__codelineno-22-57" href="#__codelineno-22-57"></a>Height=22
+<a id="__codelineno-22-58" name="__codelineno-22-58" href="#__codelineno-22-58"></a>BackColor=#4472C4
+<a id="__codelineno-22-59" name="__codelineno-22-59" href="#__codelineno-22-59"></a>ForeColor=#FFFFFF
+<a id="__codelineno-22-60" name="__codelineno-22-60" href="#__codelineno-22-60"></a>===
+<a id="__codelineno-22-61" name="__codelineno-22-61" href="#__codelineno-22-61"></a>[BUTTON]
+<a id="__codelineno-22-62" name="__codelineno-22-62" href="#__codelineno-22-62"></a>Cell=D4
+<a id="__codelineno-22-63" name="__codelineno-22-63" href="#__codelineno-22-63"></a>Text=プレビュー
+<a id="__codelineno-22-64" name="__codelineno-22-64" href="#__codelineno-22-64"></a>OnClick=Btn_PreviewFormat
+<a id="__codelineno-22-65" name="__codelineno-22-65" href="#__codelineno-22-65"></a>Width=90
+<a id="__codelineno-22-66" name="__codelineno-22-66" href="#__codelineno-22-66"></a>Height=22
+<a id="__codelineno-22-67" name="__codelineno-22-67" href="#__codelineno-22-67"></a>BackColor=#4472C4
+<a id="__codelineno-22-68" name="__codelineno-22-68" href="#__codelineno-22-68"></a>ForeColor=#FFFFFF
+<a id="__codelineno-22-69" name="__codelineno-22-69" href="#__codelineno-22-69"></a>===
+<a id="__codelineno-22-70" name="__codelineno-22-70" href="#__codelineno-22-70"></a>[BUTTON]
+<a id="__codelineno-22-71" name="__codelineno-22-71" href="#__codelineno-22-71"></a>Cell=F4
+<a id="__codelineno-22-72" name="__codelineno-22-72" href="#__codelineno-22-72"></a>Text=無効化
+<a id="__codelineno-22-73" name="__codelineno-22-73" href="#__codelineno-22-73"></a>OnClick=Btn_DisableFormat
+<a id="__codelineno-22-74" name="__codelineno-22-74" href="#__codelineno-22-74"></a>Width=90
+<a id="__codelineno-22-75" name="__codelineno-22-75" href="#__codelineno-22-75"></a>Height=22
+<a id="__codelineno-22-76" name="__codelineno-22-76" href="#__codelineno-22-76"></a>BackColor=#4472C4
+<a id="__codelineno-22-77" name="__codelineno-22-77" href="#__codelineno-22-77"></a>ForeColor=#FFFFFF
+<a id="__codelineno-22-78" name="__codelineno-22-78" href="#__codelineno-22-78"></a>===
+<a id="__codelineno-22-79" name="__codelineno-22-79" href="#__codelineno-22-79"></a>[BUTTON]
+<a id="__codelineno-22-80" name="__codelineno-22-80" href="#__codelineno-22-80"></a>Cell=H4
+<a id="__codelineno-22-81" name="__codelineno-22-81" href="#__codelineno-22-81"></a>Text=削除
+<a id="__codelineno-22-82" name="__codelineno-22-82" href="#__codelineno-22-82"></a>OnClick=Btn_DeleteFormat
+<a id="__codelineno-22-83" name="__codelineno-22-83" href="#__codelineno-22-83"></a>Width=90
+<a id="__codelineno-22-84" name="__codelineno-22-84" href="#__codelineno-22-84"></a>Height=22
+<a id="__codelineno-22-85" name="__codelineno-22-85" href="#__codelineno-22-85"></a>BackColor=#4472C4
+<a id="__codelineno-22-86" name="__codelineno-22-86" href="#__codelineno-22-86"></a>ForeColor=#FFFFFF
+<a id="__codelineno-22-87" name="__codelineno-22-87" href="#__codelineno-22-87"></a>===
+<a id="__codelineno-22-88" name="__codelineno-22-88" href="#__codelineno-22-88"></a>[SUBHEADER]
+<a id="__codelineno-22-89" name="__codelineno-22-89" href="#__codelineno-22-89"></a>Title=操作の説明
+<a id="__codelineno-22-90" name="__codelineno-22-90" href="#__codelineno-22-90"></a>Cell=A6
+<a id="__codelineno-22-91" name="__codelineno-22-91" href="#__codelineno-22-91"></a>BackColor=#2F5597
+<a id="__codelineno-22-92" name="__codelineno-22-92" href="#__codelineno-22-92"></a>FontColor=#FFFFFF
+<a id="__codelineno-22-93" name="__codelineno-22-93" href="#__codelineno-22-93"></a>EndCol=J
+<a id="__codelineno-22-94" name="__codelineno-22-94" href="#__codelineno-22-94"></a>Height=22
+<a id="__codelineno-22-95" name="__codelineno-22-95" href="#__codelineno-22-95"></a>===
+<a id="__codelineno-22-96" name="__codelineno-22-96" href="#__codelineno-22-96"></a>[NOTE]
+<a id="__codelineno-22-97" name="__codelineno-22-97" href="#__codelineno-22-97"></a>Cell=A7:K12
+<a id="__codelineno-22-98" name="__codelineno-22-98" href="#__codelineno-22-98"></a>Text=各ボタンは、下の一覧でチェックを入れた行のフォーマットに働きます。\n編集 … そのフォーマットの内容を変更します。\nプレビュー … そのフォーマットの見た目を確認します。\n無効化 … 押すたびに「無効」と「有効」を切り替えます（無効にすると一覧で灰色になり、新しい登録に使えなくなります）。\n削除 … そのフォーマットを完全に消します（そのフォーマットを使うナレッジが残っていると消せません）。\nボタンを押す前に、一覧で対象の行にチェックを入れてください。
+<a id="__codelineno-22-99" name="__codelineno-22-99" href="#__codelineno-22-99"></a>BackColor=#DEEBF7
+<a id="__codelineno-22-100" name="__codelineno-22-100" href="#__codelineno-22-100"></a>Border=thin
+<a id="__codelineno-22-101" name="__codelineno-22-101" href="#__codelineno-22-101"></a>===
+<a id="__codelineno-22-102" name="__codelineno-22-102" href="#__codelineno-22-102"></a>[SUBHEADER]
+<a id="__codelineno-22-103" name="__codelineno-22-103" href="#__codelineno-22-103"></a>Title=登録済みフォーマット
+<a id="__codelineno-22-104" name="__codelineno-22-104" href="#__codelineno-22-104"></a>Cell=A13
+<a id="__codelineno-22-105" name="__codelineno-22-105" href="#__codelineno-22-105"></a>BackColor=#2F5597
+<a id="__codelineno-22-106" name="__codelineno-22-106" href="#__codelineno-22-106"></a>FontColor=#FFFFFF
+<a id="__codelineno-22-107" name="__codelineno-22-107" href="#__codelineno-22-107"></a>EndCol=J
+<a id="__codelineno-22-108" name="__codelineno-22-108" href="#__codelineno-22-108"></a>Height=22
+<a id="__codelineno-22-109" name="__codelineno-22-109" href="#__codelineno-22-109"></a>===
+<a id="__codelineno-22-110" name="__codelineno-22-110" href="#__codelineno-22-110"></a>[BUTTON]
+<a id="__codelineno-22-111" name="__codelineno-22-111" href="#__codelineno-22-111"></a>Cell=B14
+<a id="__codelineno-22-112" name="__codelineno-22-112" href="#__codelineno-22-112"></a>Text=リロード
+<a id="__codelineno-22-113" name="__codelineno-22-113" href="#__codelineno-22-113"></a>OnClick=Btn_ReloadFormats
+<a id="__codelineno-22-114" name="__codelineno-22-114" href="#__codelineno-22-114"></a>Width=90
+<a id="__codelineno-22-115" name="__codelineno-22-115" href="#__codelineno-22-115"></a>Height=22
+<a id="__codelineno-22-116" name="__codelineno-22-116" href="#__codelineno-22-116"></a>BackColor=#4472C4
+<a id="__codelineno-22-117" name="__codelineno-22-117" href="#__codelineno-22-117"></a>ForeColor=#FFFFFF
+<a id="__codelineno-22-118" name="__codelineno-22-118" href="#__codelineno-22-118"></a>===
+<a id="__codelineno-22-119" name="__codelineno-22-119" href="#__codelineno-22-119"></a>[BUTTON]
+<a id="__codelineno-22-120" name="__codelineno-22-120" href="#__codelineno-22-120"></a>Cell=I1
+<a id="__codelineno-22-121" name="__codelineno-22-121" href="#__codelineno-22-121"></a>Text=画面更新
+<a id="__codelineno-22-122" name="__codelineno-22-122" href="#__codelineno-22-122"></a>OnClick=Btn_RefreshAllSheets
+<a id="__codelineno-22-123" name="__codelineno-22-123" href="#__codelineno-22-123"></a>Width=120
+<a id="__codelineno-22-124" name="__codelineno-22-124" href="#__codelineno-22-124"></a>Height=22
+<a id="__codelineno-22-125" name="__codelineno-22-125" href="#__codelineno-22-125"></a>BackColor=#D9E1F2
+<a id="__codelineno-22-126" name="__codelineno-22-126" href="#__codelineno-22-126"></a>ForeColor=#000000
+<a id="__codelineno-22-127" name="__codelineno-22-127" href="#__codelineno-22-127"></a>===
+<a id="__codelineno-22-128" name="__codelineno-22-128" href="#__codelineno-22-128"></a>[GRID]
+<a id="__codelineno-22-129" name="__codelineno-22-129" href="#__codelineno-22-129"></a>Name=gridFormatList
+<a id="__codelineno-22-130" name="__codelineno-22-130" href="#__codelineno-22-130"></a>StartCell=A16
+<a id="__codelineno-22-131" name="__codelineno-22-131" href="#__codelineno-22-131"></a>HeaderRow=16
+<a id="__codelineno-22-132" name="__codelineno-22-132" href="#__codelineno-22-132"></a>Columns=Selected,No,FormatID,FormatName,FieldCount,KnowledgeCount,UpdatedAt,Status
+<a id="__codelineno-22-133" name="__codelineno-22-133" href="#__codelineno-22-133"></a>ColumnHeaders=選択,No,FormatID,フォーマット名,フィールド数,ナレッジ数,更新日,状態
+<a id="__codelineno-22-134" name="__codelineno-22-134" href="#__codelineno-22-134"></a>FreezeHeader=FALSE
+<a id="__codelineno-22-135" name="__codelineno-22-135" href="#__codelineno-22-135"></a>HeaderBackColor=#D9E1F2
+<a id="__codelineno-22-136" name="__codelineno-22-136" href="#__codelineno-22-136"></a>InitialRows=10
+<a id="__codelineno-22-137" name="__codelineno-22-137" href="#__codelineno-22-137"></a>===
+</code></pre></div>
+<h3 id="11-3-uim-05txt">11-3. 登録フォームの定義（<code>ui\検索\M-05.txt</code>）<a class="headerlink" href="#11-3-uim-05txt" title="Permanent link">&para;</a></h3>
+<p>入力フォームの寸法・文言を決める <code>[USERFORM]</code> を含む、検索ブックの登録画面の全体です。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>[SHEET]
+<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a>SheetName=ナレッジ登録
+<a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a>SheetTitle=ナレッジ登録
+<a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a>Visible=visible
+<a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a>TabColor=―（色を付けない）
+<a id="__codelineno-23-6" name="__codelineno-23-6" href="#__codelineno-23-6"></a>HideColumnsFrom=H
+<a id="__codelineno-23-7" name="__codelineno-23-7" href="#__codelineno-23-7"></a>===
+<a id="__codelineno-23-8" name="__codelineno-23-8" href="#__codelineno-23-8"></a>[STYLE]
+<a id="__codelineno-23-9" name="__codelineno-23-9" href="#__codelineno-23-9"></a>BaseFont=メイリオ
+<a id="__codelineno-23-10" name="__codelineno-23-10" href="#__codelineno-23-10"></a>BaseFontSize=10
+<a id="__codelineno-23-11" name="__codelineno-23-11" href="#__codelineno-23-11"></a>BaseFontColor=濃いグレー
+<a id="__codelineno-23-12" name="__codelineno-23-12" href="#__codelineno-23-12"></a>SheetBackColor=白
+<a id="__codelineno-23-13" name="__codelineno-23-13" href="#__codelineno-23-13"></a>BaseAlignH=left
+<a id="__codelineno-23-14" name="__codelineno-23-14" href="#__codelineno-23-14"></a>BaseAlignV=center
+<a id="__codelineno-23-15" name="__codelineno-23-15" href="#__codelineno-23-15"></a>BaseWrap=off
+<a id="__codelineno-23-16" name="__codelineno-23-16" href="#__codelineno-23-16"></a>BaseNumberFormat=standard
+<a id="__codelineno-23-17" name="__codelineno-23-17" href="#__codelineno-23-17"></a>===
+<a id="__codelineno-23-18" name="__codelineno-23-18" href="#__codelineno-23-18"></a>[SCREEN]
+<a id="__codelineno-23-19" name="__codelineno-23-19" href="#__codelineno-23-19"></a>Width=7（列数）
+<a id="__codelineno-23-20" name="__codelineno-23-20" href="#__codelineno-23-20"></a>Height=auto
+<a id="__codelineno-23-21" name="__codelineno-23-21" href="#__codelineno-23-21"></a>Title=ナレッジ登録
+<a id="__codelineno-23-22" name="__codelineno-23-22" href="#__codelineno-23-22"></a>BackColor=#1F3864
+<a id="__codelineno-23-23" name="__codelineno-23-23" href="#__codelineno-23-23"></a>FontColor=#FFFFFF
+<a id="__codelineno-23-24" name="__codelineno-23-24" href="#__codelineno-23-24"></a>EndCol=G
+<a id="__codelineno-23-25" name="__codelineno-23-25" href="#__codelineno-23-25"></a>BarHeight=30
+<a id="__codelineno-23-26" name="__codelineno-23-26" href="#__codelineno-23-26"></a>===
+<a id="__codelineno-23-27" name="__codelineno-23-27" href="#__codelineno-23-27"></a>[USERFORM]
+<a id="__codelineno-23-28" name="__codelineno-23-28" href="#__codelineno-23-28"></a>formWidth=486
+<a id="__codelineno-23-29" name="__codelineno-23-29" href="#__codelineno-23-29"></a>formHeight=0
+<a id="__codelineno-23-30" name="__codelineno-23-30" href="#__codelineno-23-30"></a>fontName=メイリオ
+<a id="__codelineno-23-31" name="__codelineno-23-31" href="#__codelineno-23-31"></a>fontSize=10
+<a id="__codelineno-23-32" name="__codelineno-23-32" href="#__codelineno-23-32"></a>labelWidth=107
+<a id="__codelineno-23-33" name="__codelineno-23-33" href="#__codelineno-23-33"></a>rowHeightSingle=48
+<a id="__codelineno-23-34" name="__codelineno-23-34" href="#__codelineno-23-34"></a>rowHeightMulti=114
+<a id="__codelineno-23-35" name="__codelineno-23-35" href="#__codelineno-23-35"></a>rowHeightMultiLong=129
+<a id="__codelineno-23-36" name="__codelineno-23-36" href="#__codelineno-23-36"></a>margin=18
+<a id="__codelineno-23-37" name="__codelineno-23-37" href="#__codelineno-23-37"></a>buttonBarHeight=48
+<a id="__codelineno-23-38" name="__codelineno-23-38" href="#__codelineno-23-38"></a>caption=ナレッジ登録
+<a id="__codelineno-23-39" name="__codelineno-23-39" href="#__codelineno-23-39"></a>multiLineScrollBars=vertical
+<a id="__codelineno-23-40" name="__codelineno-23-40" href="#__codelineno-23-40"></a>formatSelectorType=dropdown
+<a id="__codelineno-23-41" name="__codelineno-23-41" href="#__codelineno-23-41"></a>headerFields=knowledgeId
+<a id="__codelineno-23-42" name="__codelineno-23-42" href="#__codelineno-23-42"></a>formatHelp=登録するナレッジのフォーマットを選びます。選ぶと下に項目が並びます。
+<a id="__codelineno-23-43" name="__codelineno-23-43" href="#__codelineno-23-43"></a>headerHelp_knowledgeId=登録時に自動で割り当てられます。空き番号は手で入れ直すこともできます。
+<a id="__codelineno-23-44" name="__codelineno-23-44" href="#__codelineno-23-44"></a>===
+<a id="__codelineno-23-45" name="__codelineno-23-45" href="#__codelineno-23-45"></a>[BUTTON]
+<a id="__codelineno-23-46" name="__codelineno-23-46" href="#__codelineno-23-46"></a>Cell=F1
+<a id="__codelineno-23-47" name="__codelineno-23-47" href="#__codelineno-23-47"></a>Text=画面更新
+<a id="__codelineno-23-48" name="__codelineno-23-48" href="#__codelineno-23-48"></a>OnClick=Btn_RefreshAllSheets
+<a id="__codelineno-23-49" name="__codelineno-23-49" href="#__codelineno-23-49"></a>Width=120
+<a id="__codelineno-23-50" name="__codelineno-23-50" href="#__codelineno-23-50"></a>Height=22
+<a id="__codelineno-23-51" name="__codelineno-23-51" href="#__codelineno-23-51"></a>BackColor=#D9E1F2
+<a id="__codelineno-23-52" name="__codelineno-23-52" href="#__codelineno-23-52"></a>ForeColor=#000000
+<a id="__codelineno-23-53" name="__codelineno-23-53" href="#__codelineno-23-53"></a>===
+</code></pre></div>
+<h3 id="11-4-formatsfaulttxt">11-4. フォーマット定義（<code>formats\FAULT.txt</code>）<a class="headerlink" href="#11-4-formatsfaulttxt" title="Permanent link">&para;</a></h3>
+<p>「障害対応」型の完全な定義です。単一行・日付・選択・複数行のすべての型を含みます。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a>[FORMAT]
+<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a>FormatId=FAULT
+<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a>FormatName=障害対応
+<a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a>===
+<a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a>[FIELD]
+<a id="__codelineno-24-6" name="__codelineno-24-6" href="#__codelineno-24-6"></a>FieldName=件名
+<a id="__codelineno-24-7" name="__codelineno-24-7" href="#__codelineno-24-7"></a>FieldType=単一行
+<a id="__codelineno-24-8" name="__codelineno-24-8" href="#__codelineno-24-8"></a>Required=TRUE
+<a id="__codelineno-24-9" name="__codelineno-24-9" href="#__codelineno-24-9"></a>MaxLength=120
+<a id="__codelineno-24-10" name="__codelineno-24-10" href="#__codelineno-24-10"></a>fieldPlaceholder=（例）経理システムへログインできない
+<a id="__codelineno-24-11" name="__codelineno-24-11" href="#__codelineno-24-11"></a>searchTarget=TRUE
+<a id="__codelineno-24-12" name="__codelineno-24-12" href="#__codelineno-24-12"></a>===
+<a id="__codelineno-24-13" name="__codelineno-24-13" href="#__codelineno-24-13"></a>[FIELD]
+<a id="__codelineno-24-14" name="__codelineno-24-14" href="#__codelineno-24-14"></a>FieldName=発生日時
+<a id="__codelineno-24-15" name="__codelineno-24-15" href="#__codelineno-24-15"></a>FieldType=日付
+<a id="__codelineno-24-16" name="__codelineno-24-16" href="#__codelineno-24-16"></a>Required=TRUE
+<a id="__codelineno-24-17" name="__codelineno-24-17" href="#__codelineno-24-17"></a>fieldPlaceholder=（例）2026-06-09 10:30
+<a id="__codelineno-24-18" name="__codelineno-24-18" href="#__codelineno-24-18"></a>searchTarget=TRUE
+<a id="__codelineno-24-19" name="__codelineno-24-19" href="#__codelineno-24-19"></a>===
+<a id="__codelineno-24-20" name="__codelineno-24-20" href="#__codelineno-24-20"></a>[FIELD]
+<a id="__codelineno-24-21" name="__codelineno-24-21" href="#__codelineno-24-21"></a>FieldName=担当者
+<a id="__codelineno-24-22" name="__codelineno-24-22" href="#__codelineno-24-22"></a>FieldType=単一行
+<a id="__codelineno-24-23" name="__codelineno-24-23" href="#__codelineno-24-23"></a>Required=FALSE
+<a id="__codelineno-24-24" name="__codelineno-24-24" href="#__codelineno-24-24"></a>MaxLength=40
+<a id="__codelineno-24-25" name="__codelineno-24-25" href="#__codelineno-24-25"></a>fieldPlaceholder=（例）山田 太郎
+<a id="__codelineno-24-26" name="__codelineno-24-26" href="#__codelineno-24-26"></a>searchTarget=TRUE
+<a id="__codelineno-24-27" name="__codelineno-24-27" href="#__codelineno-24-27"></a>===
+<a id="__codelineno-24-28" name="__codelineno-24-28" href="#__codelineno-24-28"></a>[FIELD]
+<a id="__codelineno-24-29" name="__codelineno-24-29" href="#__codelineno-24-29"></a>FieldName=カテゴリ
+<a id="__codelineno-24-30" name="__codelineno-24-30" href="#__codelineno-24-30"></a>FieldType=選択
+<a id="__codelineno-24-31" name="__codelineno-24-31" href="#__codelineno-24-31"></a>Required=FALSE
+<a id="__codelineno-24-32" name="__codelineno-24-32" href="#__codelineno-24-32"></a>DropdownOptions=アプリ障害|インフラ障害|ネットワーク障害|セキュリティ
+<a id="__codelineno-24-33" name="__codelineno-24-33" href="#__codelineno-24-33"></a>fieldPlaceholder=（例）アプリ障害
+<a id="__codelineno-24-34" name="__codelineno-24-34" href="#__codelineno-24-34"></a>searchTarget=FALSE
+<a id="__codelineno-24-35" name="__codelineno-24-35" href="#__codelineno-24-35"></a>===
+<a id="__codelineno-24-36" name="__codelineno-24-36" href="#__codelineno-24-36"></a>[FIELD]
+<a id="__codelineno-24-37" name="__codelineno-24-37" href="#__codelineno-24-37"></a>FieldName=優先度
+<a id="__codelineno-24-38" name="__codelineno-24-38" href="#__codelineno-24-38"></a>FieldType=選択
+<a id="__codelineno-24-39" name="__codelineno-24-39" href="#__codelineno-24-39"></a>Required=FALSE
+<a id="__codelineno-24-40" name="__codelineno-24-40" href="#__codelineno-24-40"></a>DropdownOptions=低|中|高|緊急
+<a id="__codelineno-24-41" name="__codelineno-24-41" href="#__codelineno-24-41"></a>fieldPlaceholder=（例）高
+<a id="__codelineno-24-42" name="__codelineno-24-42" href="#__codelineno-24-42"></a>searchTarget=FALSE
+<a id="__codelineno-24-43" name="__codelineno-24-43" href="#__codelineno-24-43"></a>===
+<a id="__codelineno-24-44" name="__codelineno-24-44" href="#__codelineno-24-44"></a>[FIELD]
+<a id="__codelineno-24-45" name="__codelineno-24-45" href="#__codelineno-24-45"></a>FieldName=概要
+<a id="__codelineno-24-46" name="__codelineno-24-46" href="#__codelineno-24-46"></a>FieldType=複数行
+<a id="__codelineno-24-47" name="__codelineno-24-47" href="#__codelineno-24-47"></a>Required=TRUE
+<a id="__codelineno-24-48" name="__codelineno-24-48" href="#__codelineno-24-48"></a>Rows=4
+<a id="__codelineno-24-49" name="__codelineno-24-49" href="#__codelineno-24-49"></a>fieldPlaceholder=（例）応答時間が通常の10倍以上に増加
+<a id="__codelineno-24-50" name="__codelineno-24-50" href="#__codelineno-24-50"></a>searchTarget=FALSE
+<a id="__codelineno-24-51" name="__codelineno-24-51" href="#__codelineno-24-51"></a>===
+<a id="__codelineno-24-52" name="__codelineno-24-52" href="#__codelineno-24-52"></a>[FIELD]
+<a id="__codelineno-24-53" name="__codelineno-24-53" href="#__codelineno-24-53"></a>FieldName=原因
+<a id="__codelineno-24-54" name="__codelineno-24-54" href="#__codelineno-24-54"></a>FieldType=複数行
+<a id="__codelineno-24-55" name="__codelineno-24-55" href="#__codelineno-24-55"></a>Required=FALSE
+<a id="__codelineno-24-56" name="__codelineno-24-56" href="#__codelineno-24-56"></a>Rows=4
+<a id="__codelineno-24-57" name="__codelineno-24-57" href="#__codelineno-24-57"></a>fieldPlaceholder=（例）長時間トランザクションの累積
+<a id="__codelineno-24-58" name="__codelineno-24-58" href="#__codelineno-24-58"></a>searchTarget=FALSE
+<a id="__codelineno-24-59" name="__codelineno-24-59" href="#__codelineno-24-59"></a>===
+</code></pre></div>
 
 
 

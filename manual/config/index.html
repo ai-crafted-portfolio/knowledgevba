@@ -359,20 +359,17 @@
   
   
   
-    
-    
-      <li class="md-tabs__item">
-        <a href="../../settings/" class="md-tabs__link">
-          
+    <li class="md-tabs__item">
+      <a href="../../screen_customization_guide_v2/" class="md-tabs__link">
+        
   
   
     
   
-  設定とカスタマイズ
+  設定・カスタマイズ
 
-        </a>
-      </li>
-    
+      </a>
+    </li>
   
 
       
@@ -1229,92 +1226,6 @@
   
   
   
-    
-    
-      
-        
-      
-        
-      
-    
-    
-    
-      
-      
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
-        
-          
-          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    設定とカスタマイズ
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_8">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    設定とカスタマイズ
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../settings/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    設定値の変更
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
     <li class="md-nav__item">
       <a href="../../screen_customization_guide_v2/" class="md-nav__link">
         
@@ -1323,7 +1234,7 @@
   <span class="md-ellipsis">
     
   
-    画面のカスタマイズ
+    設定・カスタマイズ
   
 
     
@@ -1332,14 +1243,6 @@
   
 
       </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
     </li>
   
 
@@ -5122,7 +5025,7 @@
 
 
 <h1 id="_1">外部設定ファイル<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
-<p>ナレッジ管理ツールは、フォーマット定義や画面の見た目を <strong>外部のテキストファイル</strong> で管理しています。ファイルを書き換えるだけで、入力項目や画面の見た目を変更できます。保存先フォルダやログなどの動作設定は、各ブック内の <strong>「格納先設定」シート</strong> で管理します（<a href="../../settings/">設定値の変更</a> を参照）。</p>
+<p>ナレッジ管理ツールは、フォーマット定義や画面の見た目を <strong>外部のテキストファイル</strong> で管理しています。ファイルを書き換えるだけで、入力項目や画面の見た目を変更できます。保存先フォルダやログなどの動作設定は、各ブック内の <strong>「格納先設定」シート</strong> で管理します（<a href="../../screen_customization_guide_v2/">設定値の変更</a> を参照）。</p>
 <p>このページでは、外部ファイルの種類・置き場所と、設定項目・値を説明します。</p>
 <h2 id="_2">設定の全体像<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <table>
@@ -5137,7 +5040,7 @@
 <tr>
 <td>動作設定（格納先設定シート）</td>
 <td>各ブック内の「格納先設定」シート</td>
-<td>保存先フォルダや動作を決める（<a href="../../settings/">設定値の変更</a>）</td>
+<td>保存先フォルダや動作を決める（<a href="../../screen_customization_guide_v2/">設定値の変更</a>）</td>
 </tr>
 <tr>
 <td>フォーマット定義ファイル</td>
@@ -5157,7 +5060,7 @@
 </div>
 <h2 id="_3">動作設定（格納先設定シート）<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <p>保存先フォルダやログの詳細度などの動作設定は、以前はテキストファイルで持っていましたが、v2.3 からは各ブック内の <strong>「格納先設定」シート</strong> にまとまっています。テキストファイルの作成・編集は不要です。</p>
-<p>変更は、管理.xlsm の <strong>M-10「格納先設定」画面</strong> で値を直し、<strong>Ctrl+S</strong> で保存するだけです。設定項目（<code>data_dir</code> などの保存先 6 項目と、<code>debugLevel</code> / <code>logRotationRows</code> / <code>uiSchemaFailMode</code> の 3 項目）の意味と値は、<a href="../../settings/">設定値の変更</a> のページで詳しく説明しています。</p>
+<p>変更は、管理.xlsm の <strong>M-10「格納先設定」画面</strong> で値を直し、<strong>Ctrl+S</strong> で保存するだけです。設定項目（<code>data_dir</code> などの保存先 6 項目と、<code>debugLevel</code> / <code>logRotationRows</code> / <code>uiSchemaFailMode</code> の 3 項目）の意味と値は、<a href="../../screen_customization_guide_v2/">設定値の変更</a> のページで詳しく説明しています。</p>
 <h2 id="_4">フォーマット定義ファイル<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <p>型（フォーマット）ごとの項目を決めるファイルです。<code>format_dir</code>（既定では <code>C:\KnowledgeMgr\formats\</code>）に置きます。
 ファイル名は型の ID に合わせます（例：<code>FAULT.txt</code>）。</p>
