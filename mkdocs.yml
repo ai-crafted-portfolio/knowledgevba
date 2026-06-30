@@ -82,9 +82,7 @@ nav:
   - 設計:
       - 全体アーキテクチャ: architecture.md
       - 仕様: spec.md
-  - 設定とカスタマイズ:
-      - 設定値の変更: settings.md
-      - 画面のカスタマイズ: screen_customization_guide_v2.md
+  - 設定・カスタマイズ: screen_customization_guide_v2.md
   - 画面設定ファイル:
       - 一覧: stanza/index.md
       - 管理:
