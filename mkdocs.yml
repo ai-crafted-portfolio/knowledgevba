@@ -94,7 +94,9 @@ nav:
           - M-14 操作ログ: stanza/管理/M-14.txt.md
       - 検索:
           - M-05 ナレッジ登録: stanza/検索/M-05.txt.md
+          - M-06 ナレッジ修正: stanza/検索/M-06.txt.md
           - M-08 ナレッジ検索: stanza/検索/M-08.txt.md
+          - M-09 ナレッジ表示: stanza/検索/M-09.txt.md
           - M-10 格納先設定: stanza/検索/M-10.txt.md
   - サンプルデータ:
       - 一覧: sample_data/index.md

@@ -7,7 +7,7 @@ description: clsGridIO.cls のソースコード（コピペ用）
 
 **配置先**: 共通モジュール（検索.xlsm / 管理.xlsm 共通）
 **種類**: クラスモジュール
-**更新日**: 2026-06-30 14:44 JST
+**更新日**: 2026-07-02 20:58 JST
 
 ---
 
@@ -85,6 +85,9 @@ Public Function ReadGridFields(ByVal target As Object, ByVal gridSec As Object, 
             canonicalName = NormalizeColumnNameToCanonical(colName)
             cellAddr = clsCellAddrHelper.OffsetCellAddr(startCellAddr, rowIdx - 1, c)
             v = clsCellIO.ReadCellValue(target, cellAddr)
+            ' [B45 2026-07-02] rows column: normalize full-width digits so a
+            ' Japanese-IME "5" (full width) saves and validates like "5".
+            If LCase$(canonicalName) = "rows" Then v = Trim$(StrConv(v, vbNarrow))
             ' Store under canonical key so downstream Workflow accessors
             ' (Name/Type/Required/Options) find the value regardless of CSV form.
             rowDict(canonicalName) = v

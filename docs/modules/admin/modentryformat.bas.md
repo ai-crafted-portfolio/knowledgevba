@@ -7,7 +7,7 @@ description: modEntryFormat.bas のソースコード（コピペ用）
 
 **配置先**: `管理.xlsm` 用の VBA モジュール
 **種類**: 標準モジュール
-**更新日**: 2026-06-30 14:44 JST
+**更新日**: 2026-07-02 20:58 JST
 
 ---
 
@@ -520,7 +520,7 @@ Public Sub Btn_SaveFormat()
             fName = Trim$(CStr(wsSv.Cells(rChk, 2).Value))
             fType = Trim$(CStr(wsSv.Cells(rChk, 3).Value))
             fOpts = Trim$(CStr(wsSv.Cells(rChk, 6).Value))
-            fRows = Trim$(CStr(wsSv.Cells(rChk, 5).Value))
+            fRows = Trim$(StrConv(CStr(wsSv.Cells(rChk, 5).Value), vbNarrow))  ' [B45 2026-07-02] accept full-width digits
             If Len(fName) > 0 Or Len(fType) > 0 Then
                 gridCount = gridCount + 1
                 If Len(fName) = 0 Or Len(fType) = 0 Then

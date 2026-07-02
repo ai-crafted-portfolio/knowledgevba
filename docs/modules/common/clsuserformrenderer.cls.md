@@ -7,7 +7,7 @@ description: clsUserFormRenderer.cls のソースコード（コピペ用）
 
 **配置先**: 共通モジュール（検索.xlsm / 管理.xlsm 共通）
 **種類**: クラスモジュール
-**更新日**: 2026-06-30 14:44 JST
+**更新日**: 2026-07-02 20:56 JST
 
 ---
 
@@ -800,7 +800,24 @@ Private Sub PopulateComboBoxesOnInstance(ByVal uf As Object)
                 cb.AddItem CStr(items(i))
             Next i
             If m_comboInitialByCtl.Exists(CStr(ctlName)) Then
-                cb.value = CStr(m_comboInitialByCtl(CStr(ctlName)))
+                ' [B43 2026-07-02] Style=DropDownList rejects a value that is
+                ' not in the item list, and the On Error Resume Next above
+                ' swallowed the failure: a saved value missing from the
+                ' current DropdownOptions rendered as a BLANK combo and the
+                ' next update silently erased it. Append the saved value so
+                ' it stays visible and selectable.
+                Dim initV As String
+                initV = CStr(m_comboInitialByCtl(CStr(ctlName)))
+                If Len(initV) > 0 Then
+                    Dim foundI As Boolean
+                    foundI = False
+                    Dim li As Long
+                    For li = 0 To cb.ListCount - 1
+                        If CStr(cb.List(li)) = initV Then foundI = True
+                    Next li
+                    If Not foundI Then cb.AddItem initV
+                End If
+                cb.value = initV
             End If
         End If
     Next ctlName
@@ -1218,7 +1235,10 @@ Private Function AddHeaderFields(ByVal designer As Object, ByVal yStart As Long)
             ctl.Width = m_formWidth - m_margin * 2
             ctl.Height = dataHHF
             ' knowledgeId is auto-assigned but editable; view/preview locks it.
-            ctl.Locked = (m_mode = "view")  ' [USER-REQ 2026-06-09] preview is trial-input per spec
+            ' [B46 2026-07-02] edit also locks it: the save target is bound to
+            ' the internal m_knowledgeId, so typing here was silently ignored
+            ' (misleading editable box).
+            ctl.Locked = (m_mode = "view" Or m_mode = "edit")  ' [USER-REQ 2026-06-09] preview is trial-input per spec
             ApplyBaseFont ctl
 
             Dim hfExtra As Long
@@ -1717,13 +1737,16 @@ Private Sub InjectFormCode(ByVal vbc As Object)
     s = s & "Private Sub btnRegister_Click()" & vbCrLf
     s = s & "    Application.Run ""modUserFormCallback.OnRegisterV2""" & vbCrLf
     s = s & "End Sub" & vbCrLf & vbCrLf
+    ' [B42 2026-07-02] update/delete used to Unload unconditionally, so a
+    ' B16 (required missing) / B32 (invalid date) rejection or a "No" on the
+    ' B31 delete confirm still closed the form and discarded the user's
+    ' edits. OnUpdateV2/OnDeleteV2 return True only when the action really
+    ' happened; the form stays open otherwise.
     s = s & "Private Sub btnUpdate_Click()" & vbCrLf
-    s = s & "    Application.Run ""modUserFormCallback.OnUpdate""" & vbCrLf
-    s = s & "    Unload Me" & vbCrLf
+    s = s & "    If Application.Run(""modUserFormCallback.OnUpdateV2"") Then Unload Me" & vbCrLf
     s = s & "End Sub" & vbCrLf & vbCrLf
     s = s & "Private Sub btnDelete_Click()" & vbCrLf
-    s = s & "    Application.Run ""modUserFormCallback.OnDelete""" & vbCrLf
-    s = s & "    Unload Me" & vbCrLf
+    s = s & "    If Application.Run(""modUserFormCallback.OnDeleteV2"") Then Unload Me" & vbCrLf
     s = s & "End Sub" & vbCrLf & vbCrLf
     s = s & "Private Sub btnEdit_Click()" & vbCrLf
     s = s & "    Application.Run ""modUserFormCallback.OnEdit""" & vbCrLf
@@ -1770,9 +1793,22 @@ Private Sub InjectFormCode(ByVal vbc As Object)
     s = s & "    Set tbar = Nothing" & vbCrLf
     s = s & "    Set tbar = Me.Controls(""lblTitleBar"")" & vbCrLf
     s = s & "    If Not tbar Is Nothing Then tbar.Width = tbar.Width + dW" & vbCrLf
+    ' [B40 2026-07-02] Scroll=TRUE multiline fields live inside a wrapper
+    ' Frame (wr_*), which Frame.Controls of frScroll returns instead of the
+    ' TextBox itself, so those fields never followed the maximize resize
+    ' (user report: only multiline inputs stay small). Widen the wrapper
+    ' AND its inner TextBox by the same delta.
     s = s & "    Dim c2 As Object" & vbCrLf
+    s = s & "    Dim c3 As Object" & vbCrLf
     s = s & "    For Each c2 In frS.Controls" & vbCrLf
-    s = s & "        If TypeName(c2) = ""TextBox"" Or TypeName(c2) = ""ComboBox"" Then c2.Width = c2.Width + dW" & vbCrLf
+    s = s & "        If TypeName(c2) = ""TextBox"" Or TypeName(c2) = ""ComboBox"" Then" & vbCrLf
+    s = s & "            c2.Width = c2.Width + dW" & vbCrLf
+    s = s & "        ElseIf TypeName(c2) = ""Frame"" And Left(c2.Name, 3) = ""wr_"" Then" & vbCrLf
+    s = s & "            c2.Width = c2.Width + dW  '' [B40] multiline wrapper" & vbCrLf
+    s = s & "            For Each c3 In c2.Controls" & vbCrLf
+    s = s & "                If TypeName(c3) = ""TextBox"" Then c3.Width = c3.Width + dW" & vbCrLf
+    s = s & "            Next c3" & vbCrLf
+    s = s & "        End If" & vbCrLf
     s = s & "    Next c2" & vbCrLf
     s = s & "    Dim c As Object" & vbCrLf
     s = s & "    For Each c In Me.Controls" & vbCrLf

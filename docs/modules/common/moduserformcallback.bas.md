@@ -7,7 +7,7 @@ description: modUserFormCallback.bas のソースコード（コピペ用）
 
 **配置先**: 共通モジュール（検索.xlsm / 管理.xlsm 共通）
 **種類**: 標準モジュール
-**更新日**: 2026-06-30 14:44 JST
+**更新日**: 2026-07-02 20:58 JST
 
 ---
 
@@ -165,59 +165,108 @@ Private Function MsgRequiredHead() As String
                       ChrW(&H3066) & ChrW(&H304F) & ChrW(&H3060) & ChrW(&H3055) & ChrW(&H3044) & ":"
 End Function
 
-' Called from dynamic form's btnUpdate_Click
+' Called from dynamic form's btnUpdate_Click (legacy path; kept for compat)
+' [B42 2026-07-02] real logic moved to OnUpdateV2 (Boolean) so the injected
+' handler can keep the form open when validation fails or persist errors.
 Public Sub OnUpdate()
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1584] modUserFormCallback.OnUpdate ENTER"  ' [ADR-0100]
+    OnUpdateV2
+End Sub
+
+' ================================================================
+' [B42 2026-07-02] OnUpdateV2: returns True only when the update was
+' actually persisted. The injected btnUpdate_Click unloads the form only
+' on True - previously Unload ran unconditionally, so B16 (required) and
+' B32 (invalid date) rejections closed the form and discarded all edits.
+' ================================================================
+Public Function OnUpdateV2() As Boolean
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1584] modUserFormCallback.OnUpdateV2 ENTER"  ' [ADR-0100]
     On Error GoTo ErrHandler
-    If m_renderer Is Nothing Then Exit Sub
+    OnUpdateV2 = False
+    If m_renderer Is Nothing Then Exit Function
     ' [BUG-B16 2026-06-11] enforce required fields before persisting.
     Dim missMsg2 As String
     missMsg2 = MissingRequiredMessage()
     If Len(missMsg2) > 0 Then
         If Not modCommon.IsHeadless() Then MsgBox missMsg2, vbExclamation, MsgRegisterTitle()
-        Exit Sub
+        Exit Function
     End If
     Dim badDateMsg2 As String
     badDateMsg2 = InvalidDateMessage()
     If Len(badDateMsg2) > 0 Then
         If Not modCommon.IsHeadless() Then MsgBox badDateMsg2, vbExclamation, MsgRegisterTitle()
-        Exit Sub
+        Exit Function
     End If
     Dim id As String
     id = PersistFromActiveForm("edit")
+    If Len(id) = 0 Then
+        ' persist failed (IO/encoding error, already logged); keep the form open.
+        If Not modCommon.IsHeadless() Then MsgBox MsgUpdateFailed(), vbExclamation, MsgRegisterTitle()
+        Exit Function
+    End If
     m_renderer.SetReturnId id
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1585] modUserFormCallback.OnUpdate EXIT-OK"  ' [ADR-0100]
-    Exit Sub
+    OnUpdateV2 = True
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1585] modUserFormCallback.OnUpdateV2 EXIT-OK"  ' [ADR-0100]
+    Exit Function
 ErrHandler:
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-1586] modUserFormCallback.OnUpdate EXIT-ERR " & "errNum=" & Err.Number & " desc=" & Err.Description  ' [ADR-0100]
-    Debug.Print "[ERR] OnUpdate: " & Err.Number & " " & Err.Description
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-1586] modUserFormCallback.OnUpdateV2 EXIT-ERR " & "errNum=" & Err.Number & " desc=" & Err.Description  ' [ADR-0100]
+    Debug.Print "[ERR] OnUpdateV2: " & Err.Number & " " & Err.Description
+    OnUpdateV2 = False
+End Function
+
+' [B42] "koushin ni shippai shimashita." (update failed)
+Private Function MsgUpdateFailed() As String
+    MsgUpdateFailed = ChrW(&H66F4) & ChrW(&H65B0) & ChrW(&H306B) & ChrW(&H5931) & ChrW(&H6557) & _
+                      ChrW(&H3057) & ChrW(&H307E) & ChrW(&H3057) & ChrW(&H305F) & ChrW(&H3002)
+End Function
+
+' Called from dynamic form's btnDelete_Click (legacy path; kept for compat)
+Public Sub OnDelete()
+    OnDeleteV2
 End Sub
 
-' Called from dynamic form's btnDelete_Click
-Public Sub OnDelete()
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1587] modUserFormCallback.OnDelete ENTER"  ' [ADR-0100]
+' ================================================================
+' [B42 2026-07-02] OnDeleteV2: returns True only when the knowledge was
+' actually deleted. Choosing "No" on the B31 confirm (or a delete failure)
+' no longer closes the form.
+' ================================================================
+Public Function OnDeleteV2() As Boolean
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1587] modUserFormCallback.OnDeleteV2 ENTER"  ' [ADR-0100]
     On Error GoTo ErrHandler
-    If m_renderer Is Nothing Then Exit Sub
+    OnDeleteV2 = False
+    If m_renderer Is Nothing Then Exit Function
     Dim kid As String
     kid = m_renderer.GetKnowledgeId()
-    If Len(kid) = 0 Then Exit Sub
+    If Len(kid) = 0 Then Exit Function
     ' [B31 2026-06-12] spec (ADR-0125/v2.3.1 banner): delete must CONFIRM first.
     ' Was: one click = silent physical delete.
     If Not modCommon.IsHeadless() Then
         Dim ansDel As VbMsgBoxResult
         ansDel = MsgBox(ChrW(&H30CA) & ChrW(&H30EC) & ChrW(&H30C3) & ChrW(&H30B8) & ChrW(&H300C) & kid & ChrW(&H300D) & ChrW(&H3092) & ChrW(&H524A) & ChrW(&H9664) & ChrW(&H3057) & ChrW(&H307E) & ChrW(&H3059) & ChrW(&H304B) & ChrW(&HFF1F), _
             vbYesNo + vbExclamation + vbDefaultButton2, ChrW(&H30CA) & ChrW(&H30EC) & ChrW(&H30C3) & ChrW(&H30B8) & ChrW(&H524A) & ChrW(&H9664))
-        If ansDel <> vbYes Then Exit Sub
+        If ansDel <> vbYes Then Exit Function
     End If
     Dim ok As Boolean
     ok = modKnowledgeFileIO.DeleteKnowledge(kid)
-    If ok Then m_renderer.SetReturnId "DELETED"
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1588] modUserFormCallback.OnDelete EXIT-OK"  ' [ADR-0100]
-    Exit Sub
+    If ok Then
+        m_renderer.SetReturnId "DELETED"
+        OnDeleteV2 = True
+    Else
+        If Not modCommon.IsHeadless() Then MsgBox MsgDeleteFailed(), vbExclamation, _
+            ChrW(&H30CA) & ChrW(&H30EC) & ChrW(&H30C3) & ChrW(&H30B8) & ChrW(&H524A) & ChrW(&H9664)
+    End If
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1588] modUserFormCallback.OnDeleteV2 EXIT-OK"  ' [ADR-0100]
+    Exit Function
 ErrHandler:
-    If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-1589] modUserFormCallback.OnDelete EXIT-ERR " & "errNum=" & Err.Number & " desc=" & Err.Description  ' [ADR-0100]
-    Debug.Print "[ERR] OnDelete: " & Err.Number & " " & Err.Description
-End Sub
+    If modCommon.gDebugLevel >= DEBUG_LEVEL_ERROR Then Debug.Print "[D-1589] modUserFormCallback.OnDeleteV2 EXIT-ERR " & "errNum=" & Err.Number & " desc=" & Err.Description  ' [ADR-0100]
+    Debug.Print "[ERR] OnDeleteV2: " & Err.Number & " " & Err.Description
+    OnDeleteV2 = False
+End Function
+
+' [B42] "sakujo ni shippai shimashita." (delete failed)
+Private Function MsgDeleteFailed() As String
+    MsgDeleteFailed = ChrW(&H524A) & ChrW(&H9664) & ChrW(&H306B) & ChrW(&H5931) & ChrW(&H6557) & _
+                      ChrW(&H3057) & ChrW(&H307E) & ChrW(&H3057) & ChrW(&H305F) & ChrW(&H3002)
+End Function
 
 ' Called from dynamic form's btnEdit_Click (M-09 view -> M-06 edit)
 Public Sub OnEdit()
@@ -429,6 +478,18 @@ Private Function PersistFromActiveForm(ByVal mode As String) As String
     ' (search reads the in-file UpdatedAt key, not the file mtime).
     If mode <> "edit" Then
         sb = sb & "###CreatedAt###" & vbCrLf & Format$(Now, "yyyy-mm-dd hh:nn") & vbCrLf
+    Else
+        ' [B44 2026-07-02] edit rewrites the whole file and was silently
+        ' dropping CreatedAt on every update. Carry it over from the file.
+        Dim oldD As Object
+        Set oldD = modKnowledgeFileIO.LoadKnowledge(knowledgeId)
+        If Not oldD Is Nothing Then
+            If oldD.Exists("CreatedAt") Then
+                If Len(Trim$(CStr(oldD("CreatedAt")))) > 0 Then
+                    sb = sb & "###CreatedAt###" & vbCrLf & CStr(oldD("CreatedAt")) & vbCrLf
+                End If
+            End If
+        End If
     End If
     sb = sb & "###UpdatedAt###" & vbCrLf & Format$(Now, "yyyy-mm-dd hh:nn") & vbCrLf
 
