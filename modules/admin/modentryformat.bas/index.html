@@ -1429,6 +1429,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -1509,6 +1513,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../../stanza/%E6%A4%9C%E7%B4%A2/M-06.txt/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    M-06 ナレッジ修正
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../../stanza/%E6%A4%9C%E7%B4%A2/M-08.txt/" class="md-nav__link">
         
   
@@ -1517,6 +1549,34 @@
     
   
     M-08 ナレッジ検索
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../stanza/%E6%A4%9C%E7%B4%A2/M-09.txt/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    M-09 ナレッジ表示
   
 
     
@@ -4966,7 +5026,7 @@
 <h1 id="modentryformatbas">modEntryFormat.bas<a class="headerlink" href="#modentryformatbas" title="Permanent link">&para;</a></h1>
 <p><strong>配置先</strong>: <code>管理.xlsm</code> 用の VBA モジュール
 <strong>種類</strong>: 標準モジュール
-<strong>更新日</strong>: 2026-06-30 14:44 JST</p>
+<strong>更新日</strong>: 2026-07-02 20:58 JST</p>
 <hr />
 <h2 id="_1">保存方法<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <p>下のコードをメモ帳に貼り付け、<strong>[名前を付けて保存]</strong> で次のように保存してください。</p>
@@ -5474,7 +5534,7 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-489" name="__codelineno-0-489" href="#__codelineno-0-489"></a>            fName = Trim$(CStr(wsSv.Cells(rChk, 2).Value))
 <a id="__codelineno-0-490" name="__codelineno-0-490" href="#__codelineno-0-490"></a>            fType = Trim$(CStr(wsSv.Cells(rChk, 3).Value))
 <a id="__codelineno-0-491" name="__codelineno-0-491" href="#__codelineno-0-491"></a>            fOpts = Trim$(CStr(wsSv.Cells(rChk, 6).Value))
-<a id="__codelineno-0-492" name="__codelineno-0-492" href="#__codelineno-0-492"></a>            fRows = Trim$(CStr(wsSv.Cells(rChk, 5).Value))
+<a id="__codelineno-0-492" name="__codelineno-0-492" href="#__codelineno-0-492"></a>            fRows = Trim$(StrConv(CStr(wsSv.Cells(rChk, 5).Value), vbNarrow))  &#39; [B45 2026-07-02] accept full-width digits
 <a id="__codelineno-0-493" name="__codelineno-0-493" href="#__codelineno-0-493"></a>            If Len(fName) &gt; 0 Or Len(fType) &gt; 0 Then
 <a id="__codelineno-0-494" name="__codelineno-0-494" href="#__codelineno-0-494"></a>                gridCount = gridCount + 1
 <a id="__codelineno-0-495" name="__codelineno-0-495" href="#__codelineno-0-495"></a>                If Len(fName) = 0 Or Len(fType) = 0 Then
