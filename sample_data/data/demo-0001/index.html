@@ -2361,6 +2361,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DEMO-0001 サービス復旧手順（新入力型デモ）
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -2377,6 +2395,47 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目次">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目次
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        「手順書」欄（リッチ型）の記法
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        「添付」欄（ファイル（リンク）型）
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -5024,58 +5083,68 @@
 <h1 id="demo-0001-">DEMO-0001 - サービス復旧手順（新入力型デモ）<a class="headerlink" href="#demo-0001-" title="Permanent link">&para;</a></h1>
 <p><strong>配置先</strong>: <code>C:\KnowledgeMgr\data\DEMO-0001.txt</code></p>
 <p>メモ帳で <strong>ANSI</strong> (Shift-JIS) として保存してください。改行は CRLF。</p>
-<p>「手順書」欄はリッチ型です。記法は次の 3 つで、いずれも <strong>行単位</strong>で書きます。</p>
+<h2 id="_1">「手順書」欄（リッチ型）の記法<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<p>3 種類とも <strong>開始と終了で囲む</strong> 同じ書き方です。登録画面の
+［ブロック］／［見出し］／［太字］ ボタンを押すと、選択した行がこの形で囲まれます。</p>
 <table>
 <thead>
 <tr>
-<th>見た目</th>
+<th>要素</th>
 <th>書き方</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>見出し（大きい太字）</td>
-<td>行頭に <code>【見出し】</code> を付ける</td>
+<td><code>【見出し】</code> 〜 <code>【見出しここまで】</code></td>
 </tr>
 <tr>
 <td>太字の段落</td>
-<td>行頭に <code>【太字】</code> を付ける</td>
+<td><code>【太字】</code> 〜 <code>【太字ここまで】</code></td>
 </tr>
 <tr>
 <td>コピーボタン付きブロック</td>
-<td><code>【ブロック】</code> と <code>【ブロックここまで】</code> で囲む</td>
+<td><code>【ブロック】</code> 〜 <code>【ブロックここまで】</code></td>
 </tr>
 </tbody>
 </table>
-<blockquote>
-<p>登録画面では ［ブロック］／［見出し］／［太字］ ボタンを押すと、選択した行に
-この記法が自動で入ります。手で書いても同じです。</p>
-</blockquote>
+<h2 id="_2">「添付」欄（ファイル（リンク）型）<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p>1 行に 1 件。<strong>ローカルのファイルパスでも、Box などの https URL でも構いません</strong>。
+登録画面では ［ファイル選択］（ローカル）と ［URL追加］（Web リンク）で追加できます。
+表示画面では 1 件ごとに ［開く］ が付き、ローカルは既定アプリ、URL は既定ブラウザで開きます。</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>###formatId###
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>DEMO
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>###件名###
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>サービス復旧手順（新入力型デモ）
 <a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>###手順書###
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>【見出し】 概要
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>【太字】 作業前に責任者の承認が必要です。
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>本番サービスが停止したときの復旧手順です。
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>【見出し】 コマンド
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>以下を順に実行してください:
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>【ブロック】
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>sudo systemctl stop app
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>sudo systemctl start app
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>tail -f /var/log/app.log
-<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>【ブロックここまで】
-<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>【見出し】 確認
-<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>ヘルスチェックが 200 を返すこと。
-<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>###定型コマンド###
-<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>sudo systemctl status app
-<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>journalctl -u app --since "1 hour ago"
-<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>###添付###
-<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>C:\KnowledgeMgr\dist\管理.xlsm
-<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>C:\KnowledgeMgr\dist\検索.xlsm
-<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>###確認者###
-<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>山田 太郎
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>【見出し】
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>概要
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>【見出しここまで】
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>【太字】
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>作業前に責任者の承認が必要です。
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>【太字ここまで】
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>本番サービスが停止したときの復旧手順です。
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>【見出し】
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>コマンド
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>【見出しここまで】
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>以下を順に実行してください:
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>【ブロック】
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>sudo systemctl stop app
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>sudo systemctl start app
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>tail -f /var/log/app.log
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>【ブロックここまで】
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>【見出し】
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>確認
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>【見出しここまで】
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>ヘルスチェックが 200 を返すこと。
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>###定型コマンド###
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>sudo systemctl status app
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>journalctl -u app --since "1 hour ago"
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>###添付###
+<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>C:\KnowledgeMgr\dist\管理.xlsm
+<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>https://app.box.com/s/knowledgevba-demo
+<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>###確認者###
+<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>山田 太郎
 </code></pre></div>
 
 
