@@ -25,7 +25,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -33,7 +33,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -5043,23 +5043,23 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 </blockquote>
 <hr />
 <h2 id="_2">ソースコード<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Attribute VB_Name = &quot;modFactory&quot;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Attribute VB_Name = "modFactory"
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>Option Explicit
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>&#39; ================================================================
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>&#39; modFactory (v2.3 Phase R-1-j stub, 2026-05-28)
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>&#39; Original CreateScreen path is legacy + references modules that
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>&#39; no longer exist in current package (modScreenSpecRegistry,
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>&#39; clsFormatListScreen, clsMainScreen, etc.) causing project-wide
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>&#39; compile errors. Stubbed to keep API surface (CreateRenderer +
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>&#39; CreateScreen) without dead references.
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>&#39; ================================================================
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>' ================================================================
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>' modFactory (v2.3 Phase R-1-j stub, 2026-05-28)
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>' Original CreateScreen path is legacy + references modules that
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>' no longer exist in current package (modScreenSpecRegistry,
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>' clsFormatListScreen, clsMainScreen, etc.) causing project-wide
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>' compile errors. Stubbed to keep API surface (CreateRenderer +
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>' CreateScreen) without dead references.
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>' ================================================================
 <a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>Public Const RENDERER_KIND_SHEET As String = &quot;sheet&quot;
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>Public Const RENDERER_KIND_FORM As String = &quot;form&quot;
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>Public Const RENDERER_KIND_SHEET As String = "sheet"
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>Public Const RENDERER_KIND_FORM As String = "form"
 <a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>
 <a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>Public Function CreateRenderer(ByVal kind As String) As IScreenRenderer
-<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1167] modFactory.CreateRenderer ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1167] modFactory.CreateRenderer ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>    Select Case LCase(kind)
 <a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>        Case RENDERER_KIND_SHEET
 <a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>            Set CreateRenderer = New clsSheetRenderer
@@ -5068,13 +5068,13 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>        Case Else
 <a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>            Set CreateRenderer = New clsSheetRenderer
 <a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>    End Select
-<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1168] modFactory.CreateRenderer EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1168] modFactory.CreateRenderer EXIT-OK"  ' [ADR-0100]
 <a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>End Function
 <a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>
-<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>&#39; Phase R-1-j: stubbed. Returns Nothing for all screenIds.
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>' Phase R-1-j: stubbed. Returns Nothing for all screenIds.
 <a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>Public Function CreateScreen(ByVal screenId As String, _
 <a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>                              ByVal renderer As IScreenRenderer) As Object
-<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1169] modFactory.CreateScreen ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1169] modFactory.CreateScreen ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>    Set CreateScreen = Nothing
 <a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>End Function
 </code></pre></div>
@@ -5138,7 +5138,7 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
       <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.indexes", "toc.integrate", "search.highlight", "search.suggest", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u30b3\u30d4\u30fc\u3057\u307e\u3057\u305f", "clipboard.copy": "\u30af\u30ea\u30c3\u30d7\u30dc\u30fc\u30c9\u3078\u30b3\u30d4\u30fc", "search.result.more.one": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3082\u30461\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.more.other": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3042\u3068#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.none": "\u4f55\u3082\u898b\u3064\u304b\u308a\u307e\u305b\u3093\u3067\u3057\u305f", "search.result.one": "1\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.other": "#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.placeholder": "\u691c\u7d22\u30ad\u30fc\u30ef\u30fc\u30c9\u3092\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044", "search.result.term.missing": "\u691c\u7d22\u306b\u542b\u307e\u308c\u306a\u3044", "select.version": "\u30d0\u30fc\u30b8\u30e7\u30f3\u5207\u308a\u66ff\u3048"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>

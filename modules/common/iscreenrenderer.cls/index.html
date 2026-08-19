@@ -25,7 +25,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -33,7 +33,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -5045,99 +5045,99 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <h2 id="_2">ソースコード<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>VERSION 1.0 CLASS
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>BEGIN
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>  MultiUse = -1  &#39;True
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>  MultiUse = -1  'True
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>End
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>Attribute VB_Name = &quot;IScreenRenderer&quot;
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>Attribute VB_Name = "IScreenRenderer"
 <a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>Attribute VB_GlobalNameSpace = False
 <a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>Attribute VB_Creatable = False
 <a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>Attribute VB_PredeclaredId = False
 <a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>Attribute VB_Exposed = False
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>&#39; ================================================================
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>&#39; インターフェース: IScreenRenderer v2（ビジネスロジック層）
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>&#39; 概要:   v2 で simplification、画面構築は modUILoader.ApplyUIToSheet
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>&#39;         に委譲、本 interface は thin shim 用の 8 メソッドのみ
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>&#39; 関連:   clsSheetRenderer.cls（v2 実装）, modUILoader.bas（描画本体）
-<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>&#39; 関連 ADR: ADR-0053 §1.4 / §6, ADR-0056（mockup → UI スタンザ）
-<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>&#39; 関連 schema: v2_ui_stanza_schema.md
-<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>&#39;
-<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>&#39; v1 → v2 削除済 method:
-<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>&#39;   RenderTitle / RenderSubTitle / SetColumnWidths /
-<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>&#39;   RenderSection / RenderButton / RenderLabel /
-<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>&#39;   RenderInputField / RenderRequiredMark / RenderHint /
-<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>&#39;   RenderHeaderRow / RenderEmptyState
-<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>&#39;   （全 11 メソッドを modUILoader 内 Apply* に移譲）
-<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>&#39; ================================================================
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>' ================================================================
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>' インターフェース: IScreenRenderer v2（ビジネスロジック層）
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>' 概要:   v2 で simplification、画面構築は modUILoader.ApplyUIToSheet
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>'         に委譲、本 interface は thin shim 用の 8 メソッドのみ
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>' 関連:   clsSheetRenderer.cls（v2 実装）, modUILoader.bas（描画本体）
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>' 関連 ADR: ADR-0053 §1.4 / §6, ADR-0056（mockup → UI スタンザ）
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>' 関連 schema: v2_ui_stanza_schema.md
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>'
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>' v1 → v2 削除済 method:
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>'   RenderTitle / RenderSubTitle / SetColumnWidths /
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>'   RenderSection / RenderButton / RenderLabel /
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>'   RenderInputField / RenderRequiredMark / RenderHint /
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>'   RenderHeaderRow / RenderEmptyState
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>'   （全 11 メソッドを modUILoader 内 Apply* に移譲）
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>' ================================================================
 <a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>Option Explicit
 <a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>
-<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>&#39; ================================================================
-<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>&#39; BindSheet
-<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>&#39; 概要: 描画対象シートをこの renderer に bind
-<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>&#39; 引数: sheetName - ThisWorkbook 内のシート名
-<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>&#39; ================================================================
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>' ================================================================
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>' BindSheet
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>' 概要: 描画対象シートをこの renderer に bind
+<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>' 引数: sheetName - ThisWorkbook 内のシート名
+<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>' ================================================================
 <a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>Public Sub BindSheet(ByVal sheetName As String)
-<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0370] IScreenRenderer.BindSheet ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0370] IScreenRenderer.BindSheet ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>End Sub
 <a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>
-<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>&#39; ================================================================
-<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>&#39; ClearScreen
-<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>&#39; 概要: 現 bind sheet の全 cell をクリア（modUILoader が再構築する前提）
-<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>&#39; ================================================================
+<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>' ================================================================
+<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>' ClearScreen
+<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>' 概要: 現 bind sheet の全 cell をクリア（modUILoader が再構築する前提）
+<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>' ================================================================
 <a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>Public Sub ClearScreen()
-<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0371] IScreenRenderer.ClearScreen ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0371] IScreenRenderer.ClearScreen ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>End Sub
 <a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>
-<a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>&#39; ================================================================
-<a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>&#39; ApplyFromStanza
-<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>&#39; 概要: &lt;ui_dir&gt;/&lt;xlsmName&gt;/&lt;screenId&gt;.txt を modUILoader 経由で適用
-<a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>&#39; 引数: xlsmName  - &quot;登録修正&quot; / &quot;検索&quot; / &quot;管理&quot;
-<a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>&#39;       screenId  - &quot;M-05&quot; 等
-<a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>&#39; ================================================================
+<a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>' ================================================================
+<a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>' ApplyFromStanza
+<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>' 概要: &lt;ui_dir&gt;/&lt;xlsmName&gt;/&lt;screenId&gt;.txt を modUILoader 経由で適用
+<a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>' 引数: xlsmName  - "登録修正" / "検索" / "管理"
+<a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>'       screenId  - "M-05" 等
+<a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>' ================================================================
 <a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>Public Sub ApplyFromStanza(ByVal xlsmName As String, ByVal screenId As String)
-<a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0372] IScreenRenderer.ApplyFromStanza ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0372] IScreenRenderer.ApplyFromStanza ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a>End Sub
 <a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a>
-<a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a>&#39; ================================================================
-<a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a>&#39; ShowSheet
-<a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a>&#39; 概要: 現 bind sheet を Visible に
-<a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>&#39; ================================================================
+<a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a>' ================================================================
+<a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a>' ShowSheet
+<a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a>' 概要: 現 bind sheet を Visible に
+<a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>' ================================================================
 <a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a>Public Sub ShowSheet()
-<a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0373] IScreenRenderer.ShowSheet ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0373] IScreenRenderer.ShowSheet ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-60" name="__codelineno-0-60" href="#__codelineno-0-60"></a>End Sub
 <a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a>
-<a id="__codelineno-0-62" name="__codelineno-0-62" href="#__codelineno-0-62"></a>&#39; ================================================================
-<a id="__codelineno-0-63" name="__codelineno-0-63" href="#__codelineno-0-63"></a>&#39; HideSheet
-<a id="__codelineno-0-64" name="__codelineno-0-64" href="#__codelineno-0-64"></a>&#39; 概要: 現 bind sheet を Hidden に
-<a id="__codelineno-0-65" name="__codelineno-0-65" href="#__codelineno-0-65"></a>&#39;       v2 systemSheetVisibility = Hidden 既定（ADR-0053 §7.1 Q5 D2 確定）
-<a id="__codelineno-0-66" name="__codelineno-0-66" href="#__codelineno-0-66"></a>&#39; ================================================================
+<a id="__codelineno-0-62" name="__codelineno-0-62" href="#__codelineno-0-62"></a>' ================================================================
+<a id="__codelineno-0-63" name="__codelineno-0-63" href="#__codelineno-0-63"></a>' HideSheet
+<a id="__codelineno-0-64" name="__codelineno-0-64" href="#__codelineno-0-64"></a>' 概要: 現 bind sheet を Hidden に
+<a id="__codelineno-0-65" name="__codelineno-0-65" href="#__codelineno-0-65"></a>'       v2 systemSheetVisibility = Hidden 既定（ADR-0053 §7.1 Q5 D2 確定）
+<a id="__codelineno-0-66" name="__codelineno-0-66" href="#__codelineno-0-66"></a>' ================================================================
 <a id="__codelineno-0-67" name="__codelineno-0-67" href="#__codelineno-0-67"></a>Public Sub HideSheet()
-<a id="__codelineno-0-68" name="__codelineno-0-68" href="#__codelineno-0-68"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0374] IScreenRenderer.HideSheet ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-68" name="__codelineno-0-68" href="#__codelineno-0-68"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0374] IScreenRenderer.HideSheet ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-69" name="__codelineno-0-69" href="#__codelineno-0-69"></a>End Sub
 <a id="__codelineno-0-70" name="__codelineno-0-70" href="#__codelineno-0-70"></a>
-<a id="__codelineno-0-71" name="__codelineno-0-71" href="#__codelineno-0-71"></a>&#39; ================================================================
-<a id="__codelineno-0-72" name="__codelineno-0-72" href="#__codelineno-0-72"></a>&#39; ActivateSheet
-<a id="__codelineno-0-73" name="__codelineno-0-73" href="#__codelineno-0-73"></a>&#39; 概要: 現 bind sheet を active 状態に（シートタブ切替相当）
-<a id="__codelineno-0-74" name="__codelineno-0-74" href="#__codelineno-0-74"></a>&#39; ================================================================
+<a id="__codelineno-0-71" name="__codelineno-0-71" href="#__codelineno-0-71"></a>' ================================================================
+<a id="__codelineno-0-72" name="__codelineno-0-72" href="#__codelineno-0-72"></a>' ActivateSheet
+<a id="__codelineno-0-73" name="__codelineno-0-73" href="#__codelineno-0-73"></a>' 概要: 現 bind sheet を active 状態に（シートタブ切替相当）
+<a id="__codelineno-0-74" name="__codelineno-0-74" href="#__codelineno-0-74"></a>' ================================================================
 <a id="__codelineno-0-75" name="__codelineno-0-75" href="#__codelineno-0-75"></a>Public Sub ActivateSheet()
-<a id="__codelineno-0-76" name="__codelineno-0-76" href="#__codelineno-0-76"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0375] IScreenRenderer.ActivateSheet ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-76" name="__codelineno-0-76" href="#__codelineno-0-76"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0375] IScreenRenderer.ActivateSheet ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-77" name="__codelineno-0-77" href="#__codelineno-0-77"></a>End Sub
 <a id="__codelineno-0-78" name="__codelineno-0-78" href="#__codelineno-0-78"></a>
-<a id="__codelineno-0-79" name="__codelineno-0-79" href="#__codelineno-0-79"></a>&#39; ================================================================
-<a id="__codelineno-0-80" name="__codelineno-0-80" href="#__codelineno-0-80"></a>&#39; ProtectSheet
-<a id="__codelineno-0-81" name="__codelineno-0-81" href="#__codelineno-0-81"></a>&#39; 概要: シート保護レベルを適用
-<a id="__codelineno-0-82" name="__codelineno-0-82" href="#__codelineno-0-82"></a>&#39; 引数: level - &quot;none&quot; / &quot;light&quot; / &quot;strict&quot;
-<a id="__codelineno-0-83" name="__codelineno-0-83" href="#__codelineno-0-83"></a>&#39;       light: パスワード無し、誤入力防止用（書式変更は禁止、内容入力は可）
-<a id="__codelineno-0-84" name="__codelineno-0-84" href="#__codelineno-0-84"></a>&#39;       strict: 全保護（DrawingObjects / Contents / Scenarios すべて TRUE）
-<a id="__codelineno-0-85" name="__codelineno-0-85" href="#__codelineno-0-85"></a>&#39; ================================================================
+<a id="__codelineno-0-79" name="__codelineno-0-79" href="#__codelineno-0-79"></a>' ================================================================
+<a id="__codelineno-0-80" name="__codelineno-0-80" href="#__codelineno-0-80"></a>' ProtectSheet
+<a id="__codelineno-0-81" name="__codelineno-0-81" href="#__codelineno-0-81"></a>' 概要: シート保護レベルを適用
+<a id="__codelineno-0-82" name="__codelineno-0-82" href="#__codelineno-0-82"></a>' 引数: level - "none" / "light" / "strict"
+<a id="__codelineno-0-83" name="__codelineno-0-83" href="#__codelineno-0-83"></a>'       light: パスワード無し、誤入力防止用（書式変更は禁止、内容入力は可）
+<a id="__codelineno-0-84" name="__codelineno-0-84" href="#__codelineno-0-84"></a>'       strict: 全保護（DrawingObjects / Contents / Scenarios すべて TRUE）
+<a id="__codelineno-0-85" name="__codelineno-0-85" href="#__codelineno-0-85"></a>' ================================================================
 <a id="__codelineno-0-86" name="__codelineno-0-86" href="#__codelineno-0-86"></a>Public Sub ProtectSheet(ByVal level As String)
-<a id="__codelineno-0-87" name="__codelineno-0-87" href="#__codelineno-0-87"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0376] IScreenRenderer.ProtectSheet ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-87" name="__codelineno-0-87" href="#__codelineno-0-87"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0376] IScreenRenderer.ProtectSheet ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-88" name="__codelineno-0-88" href="#__codelineno-0-88"></a>End Sub
 <a id="__codelineno-0-89" name="__codelineno-0-89" href="#__codelineno-0-89"></a>
-<a id="__codelineno-0-90" name="__codelineno-0-90" href="#__codelineno-0-90"></a>&#39; ================================================================
-<a id="__codelineno-0-91" name="__codelineno-0-91" href="#__codelineno-0-91"></a>&#39; UnprotectSheet
-<a id="__codelineno-0-92" name="__codelineno-0-92" href="#__codelineno-0-92"></a>&#39; 概要: シート保護解除
-<a id="__codelineno-0-93" name="__codelineno-0-93" href="#__codelineno-0-93"></a>&#39; ================================================================
+<a id="__codelineno-0-90" name="__codelineno-0-90" href="#__codelineno-0-90"></a>' ================================================================
+<a id="__codelineno-0-91" name="__codelineno-0-91" href="#__codelineno-0-91"></a>' UnprotectSheet
+<a id="__codelineno-0-92" name="__codelineno-0-92" href="#__codelineno-0-92"></a>' 概要: シート保護解除
+<a id="__codelineno-0-93" name="__codelineno-0-93" href="#__codelineno-0-93"></a>' ================================================================
 <a id="__codelineno-0-94" name="__codelineno-0-94" href="#__codelineno-0-94"></a>Public Sub UnprotectSheet()
-<a id="__codelineno-0-95" name="__codelineno-0-95" href="#__codelineno-0-95"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0377] IScreenRenderer.UnprotectSheet ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-95" name="__codelineno-0-95" href="#__codelineno-0-95"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0377] IScreenRenderer.UnprotectSheet ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-96" name="__codelineno-0-96" href="#__codelineno-0-96"></a>End Sub
 </code></pre></div>
 
@@ -5200,7 +5200,7 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
       <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.indexes", "toc.integrate", "search.highlight", "search.suggest", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u30b3\u30d4\u30fc\u3057\u307e\u3057\u305f", "clipboard.copy": "\u30af\u30ea\u30c3\u30d7\u30dc\u30fc\u30c9\u3078\u30b3\u30d4\u30fc", "search.result.more.one": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3082\u30461\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.more.other": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3042\u3068#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.none": "\u4f55\u3082\u898b\u3064\u304b\u308a\u307e\u305b\u3093\u3067\u3057\u305f", "search.result.one": "1\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.other": "#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.placeholder": "\u691c\u7d22\u30ad\u30fc\u30ef\u30fc\u30c9\u3092\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044", "search.result.term.missing": "\u691c\u7d22\u306b\u542b\u307e\u308c\u306a\u3044", "select.version": "\u30d0\u30fc\u30b8\u30e7\u30f3\u5207\u308a\u66ff\u3048"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>

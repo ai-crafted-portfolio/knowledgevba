@@ -25,7 +25,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -33,7 +33,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -5043,60 +5043,60 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 </blockquote>
 <hr />
 <h2 id="_2">ソースコード<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Attribute VB_Name = &quot;modConfigLoader&quot;
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>&#39; ================================================================
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>&#39; Module:  modConfigLoader (Fix-6 / ADR-0133)
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>&#39; Summary: Reads the 9-cell worksheet SSOT (the &quot;settings sheet&quot;)
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>&#39;          at startup and feeds modConfigHolder via SetConfig.
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>&#39;          Replaces the retired text-file loader. ADR-0133
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>&#39;          supersedes ADR-0132 (install-injected path constants).
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>&#39;          Layout: column B = label, column D = value (ui_seed
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>&#39;          input convention), rows 11..17 (4 paths + 3 behaviour).
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>&#39;          First run (all 4 path cells empty): InputBox for BASE_DIR
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>&#39;          interactive / default base headless, derive 6 dirs, seed
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>&#39;          3 behaviour defaults, write back, save the workbook.
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>&#39;          Partial-missing path: explicit error + abort (interactive)
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>&#39;          or default-fill + warn (headless).
-<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>&#39; Version: v2.4 Fix-6 (2026-06-18)
-<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>&#39; Depends: modConfigHolder (holder), modCommon (IsHeadless / gDebugLevel)
-<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>&#39; Related: ADR-0133 / ADR-0131 / ADR-0094 / ADR-0053 section 2.9
-<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>&#39; ================================================================
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Attribute VB_Name = "modConfigLoader"
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>' ================================================================
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>' Module:  modConfigLoader (Fix-6 / ADR-0133)
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>' Summary: Reads the 9-cell worksheet SSOT (the "settings sheet")
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>'          at startup and feeds modConfigHolder via SetConfig.
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>'          Replaces the retired text-file loader. ADR-0133
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>'          supersedes ADR-0132 (install-injected path constants).
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>'          Layout: column B = label, column D = value (ui_seed
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>'          input convention), rows 11..17 (4 paths + 3 behaviour).
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>'          First run (all 4 path cells empty): InputBox for BASE_DIR
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>'          interactive / default base headless, derive 6 dirs, seed
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>'          3 behaviour defaults, write back, save the workbook.
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>'          Partial-missing path: explicit error + abort (interactive)
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>'          or default-fill + warn (headless).
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>' Version: v2.4 Fix-6 (2026-06-18)
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>' Depends: modConfigHolder (holder), modCommon (IsHeadless / gDebugLevel)
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>' Related: ADR-0133 / ADR-0131 / ADR-0094 / ADR-0053 section 2.9
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>' ================================================================
 <a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>Option Explicit
 <a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>
-<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>Private Const DEFAULT_BASE As String = &quot;C:\KnowledgeMgr&quot;
-<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>Private Const DEFAULT_DEBUG_LEVEL As String = &quot;INFO&quot;
-<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>Private Const DEFAULT_LOG_ROTATION_ROWS As String = &quot;10000&quot;
-<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>Private Const DEFAULT_UI_SCHEMA_FAIL_MODE As String = &quot;safeDefault&quot;
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>Private Const DEFAULT_BASE As String = "C:\KnowledgeMgr"
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>Private Const DEFAULT_DEBUG_LEVEL As String = "INFO"
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>Private Const DEFAULT_LOG_ROTATION_ROWS As String = "10000"
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>Private Const DEFAULT_UI_SCHEMA_FAIL_MODE As String = "safeDefault"
 <a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>
-<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>Private Const FIRST_DATA_ROW As Long = 11    &#39; worksheet row of first key (data_dir)
-<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>Private Const KEY_COL As Long = 2            &#39; column B = key label
-<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>Private Const VALUE_COL As Long = 4          &#39; column D = value (ui_seed input cell)
-<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>Private Const PATH_KEY_COUNT As Long = 4     &#39; first 4 keys are paths
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>Private Const FIRST_DATA_ROW As Long = 11    ' worksheet row of first key (data_dir)
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>Private Const KEY_COL As Long = 2            ' column B = key label
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>Private Const VALUE_COL As Long = 4          ' column D = value (ui_seed input cell)
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>Private Const PATH_KEY_COUNT As Long = 4     ' first 4 keys are paths
 <a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>
-<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>&#39; ----------------------------------------------------------------
-<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>&#39; Public API
-<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>&#39; ----------------------------------------------------------------
+<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>' ----------------------------------------------------------------
+<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>' Public API
+<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>' ----------------------------------------------------------------
 <a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>
-<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>&#39; Display name of the settings sheet (&quot;kakuno-saki settei&quot;). JP via ChrW.
+<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>' Display name of the settings sheet ("kakuno-saki settei"). JP via ChrW.
 <a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>Public Function SettingsSheetName() As String
 <a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>    SettingsSheetName = ChrW(&amp;H683C) &amp; ChrW(&amp;H7D0D) &amp; ChrW(&amp;H5148) &amp; ChrW(&amp;H8A2D) &amp; ChrW(&amp;H5B9A)
 <a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>End Function
 <a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>
-<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>&#39; Compat shim (ADR-0131 used this to name the unreadable config file in a
-<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>&#39; MsgBox). With Fix-6 the source is a worksheet, so return its display name.
+<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>' Compat shim (ADR-0131 used this to name the unreadable config file in a
+<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>' MsgBox). With Fix-6 the source is a worksheet, so return its display name.
 <a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>Public Function LastConfigPath() As String
 <a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>    LastConfigPath = SettingsSheetName()
 <a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>End Function
 <a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>
-<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>&#39; ================================================================
-<a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>&#39; Function: LoadConfig
-<a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>&#39; Summary:  Orchestrator step-1 entry. Ensures + seeds the settings
-<a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>&#39;           sheet, reads the 9 cells, handles empty/partial, feeds
-<a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>&#39;           the holder. Returns False only on interactive
-<a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>&#39;           partial-missing (caller aborts the remaining setup).
-<a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a>&#39; ================================================================
+<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>' ================================================================
+<a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>' Function: LoadConfig
+<a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>' Summary:  Orchestrator step-1 entry. Ensures + seeds the settings
+<a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>'           sheet, reads the 9 cells, handles empty/partial, feeds
+<a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>'           the holder. Returns False only on interactive
+<a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>'           partial-missing (caller aborts the remaining setup).
+<a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a>' ================================================================
 <a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a>Public Function LoadConfig(ByVal xlsmName As String) As Boolean
-<a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0960] modConfigLoader.LoadConfig ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0960] modConfigLoader.LoadConfig ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a>    On Error GoTo ErrHandler
 <a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a>
 <a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>    Dim ws As Worksheet
@@ -5106,11 +5106,11 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a>        Exit Function
 <a id="__codelineno-0-62" name="__codelineno-0-62" href="#__codelineno-0-62"></a>    End If
 <a id="__codelineno-0-63" name="__codelineno-0-63" href="#__codelineno-0-63"></a>
-<a id="__codelineno-0-64" name="__codelineno-0-64" href="#__codelineno-0-64"></a>    &#39; [M10-MIGRATE] in-place upgrade: drop old log_dir/config_dir rows and
-<a id="__codelineno-0-65" name="__codelineno-0-65" href="#__codelineno-0-65"></a>    &#39; shift the survivors to the current 7-key layout before reading.
+<a id="__codelineno-0-64" name="__codelineno-0-64" href="#__codelineno-0-64"></a>    ' [M10-MIGRATE] in-place upgrade: drop old log_dir/config_dir rows and
+<a id="__codelineno-0-65" name="__codelineno-0-65" href="#__codelineno-0-65"></a>    ' shift the survivors to the current 7-key layout before reading.
 <a id="__codelineno-0-66" name="__codelineno-0-66" href="#__codelineno-0-66"></a>    MigrateOldStorageLayout ws
-<a id="__codelineno-0-67" name="__codelineno-0-67" href="#__codelineno-0-67"></a>    &#39; [M10-MIGRATE] in-place upgrade: point ui_dir at the role subfolder when
-<a id="__codelineno-0-68" name="__codelineno-0-68" href="#__codelineno-0-68"></a>    &#39; the configured path is the bare base (pre-C1) so the renderer resolves.
+<a id="__codelineno-0-67" name="__codelineno-0-67" href="#__codelineno-0-67"></a>    ' [M10-MIGRATE] in-place upgrade: point ui_dir at the role subfolder when
+<a id="__codelineno-0-68" name="__codelineno-0-68" href="#__codelineno-0-68"></a>    ' the configured path is the bare base (pre-C1) so the renderer resolves.
 <a id="__codelineno-0-69" name="__codelineno-0-69" href="#__codelineno-0-69"></a>    EnsureUiDirRoleResolvable ws
 <a id="__codelineno-0-70" name="__codelineno-0-70" href="#__codelineno-0-70"></a>
 <a id="__codelineno-0-71" name="__codelineno-0-71" href="#__codelineno-0-71"></a>    Dim d As Object
@@ -5120,28 +5120,28 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-75" name="__codelineno-0-75" href="#__codelineno-0-75"></a>    emptyPaths = CountEmptyPaths(d)
 <a id="__codelineno-0-76" name="__codelineno-0-76" href="#__codelineno-0-76"></a>
 <a id="__codelineno-0-77" name="__codelineno-0-77" href="#__codelineno-0-77"></a>    If emptyPaths = PATH_KEY_COUNT Then
-<a id="__codelineno-0-78" name="__codelineno-0-78" href="#__codelineno-0-78"></a>        &#39; First run: no path is set yet.
+<a id="__codelineno-0-78" name="__codelineno-0-78" href="#__codelineno-0-78"></a>        ' First run: no path is set yet.
 <a id="__codelineno-0-79" name="__codelineno-0-79" href="#__codelineno-0-79"></a>        DeriveDirs AskBaseDir(), d
 <a id="__codelineno-0-80" name="__codelineno-0-80" href="#__codelineno-0-80"></a>        ApplyBehaviorDefaults d
 <a id="__codelineno-0-81" name="__codelineno-0-81" href="#__codelineno-0-81"></a>        WriteDictToSheet ws, d
 <a id="__codelineno-0-82" name="__codelineno-0-82" href="#__codelineno-0-82"></a>        SaveBookQuiet
 <a id="__codelineno-0-83" name="__codelineno-0-83" href="#__codelineno-0-83"></a>        modConfigHolder.SetConfig d
 <a id="__codelineno-0-84" name="__codelineno-0-84" href="#__codelineno-0-84"></a>        LoadConfig = True
-<a id="__codelineno-0-85" name="__codelineno-0-85" href="#__codelineno-0-85"></a>        If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0961] modConfigLoader.LoadConfig EXIT-OK first-run&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-85" name="__codelineno-0-85" href="#__codelineno-0-85"></a>        If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0961] modConfigLoader.LoadConfig EXIT-OK first-run"  ' [ADR-0100]
 <a id="__codelineno-0-86" name="__codelineno-0-86" href="#__codelineno-0-86"></a>        Exit Function
 <a id="__codelineno-0-87" name="__codelineno-0-87" href="#__codelineno-0-87"></a>    End If
 <a id="__codelineno-0-88" name="__codelineno-0-88" href="#__codelineno-0-88"></a>
 <a id="__codelineno-0-89" name="__codelineno-0-89" href="#__codelineno-0-89"></a>    If emptyPaths &gt; 0 Then
-<a id="__codelineno-0-90" name="__codelineno-0-90" href="#__codelineno-0-90"></a>        &#39; Partial-missing path cells.
-<a id="__codelineno-0-91" name="__codelineno-0-91" href="#__codelineno-0-91"></a>        &#39; [Fix-6 / ADR-0133-followup 2026-06-19] Auto-heal instead of the old
-<a id="__codelineno-0-92" name="__codelineno-0-92" href="#__codelineno-0-92"></a>        &#39; interactive hard-abort. The common real case is a config migrated
-<a id="__codelineno-0-93" name="__codelineno-0-93" href="#__codelineno-0-93"></a>        &#39; from a pre-Fix-6 config that had no base-dir line: the sub-dir
-<a id="__codelineno-0-94" name="__codelineno-0-94" href="#__codelineno-0-94"></a>        &#39; cells are filled but the base cell is empty, so emptyPaths is partial
-<a id="__codelineno-0-95" name="__codelineno-0-95" href="#__codelineno-0-95"></a>        &#39; and the first-run InputBox never fires. The user then sees an opaque
-<a id="__codelineno-0-96" name="__codelineno-0-96" href="#__codelineno-0-96"></a>        &#39; &quot;base dir is empty or invalid&quot; abort with no idea what to enter.
-<a id="__codelineno-0-97" name="__codelineno-0-97" href="#__codelineno-0-97"></a>        &#39; Instead, infer BASE_DIR from an existing path and derive only the
-<a id="__codelineno-0-98" name="__codelineno-0-98" href="#__codelineno-0-98"></a>        &#39; missing cells, then continue. Only when no base can be inferred do we
-<a id="__codelineno-0-99" name="__codelineno-0-99" href="#__codelineno-0-99"></a>        &#39; fall back to the previous default-fill (headless) / notify (interactive).
+<a id="__codelineno-0-90" name="__codelineno-0-90" href="#__codelineno-0-90"></a>        ' Partial-missing path cells.
+<a id="__codelineno-0-91" name="__codelineno-0-91" href="#__codelineno-0-91"></a>        ' [Fix-6 / ADR-0133-followup 2026-06-19] Auto-heal instead of the old
+<a id="__codelineno-0-92" name="__codelineno-0-92" href="#__codelineno-0-92"></a>        ' interactive hard-abort. The common real case is a config migrated
+<a id="__codelineno-0-93" name="__codelineno-0-93" href="#__codelineno-0-93"></a>        ' from a pre-Fix-6 config that had no base-dir line: the sub-dir
+<a id="__codelineno-0-94" name="__codelineno-0-94" href="#__codelineno-0-94"></a>        ' cells are filled but the base cell is empty, so emptyPaths is partial
+<a id="__codelineno-0-95" name="__codelineno-0-95" href="#__codelineno-0-95"></a>        ' and the first-run InputBox never fires. The user then sees an opaque
+<a id="__codelineno-0-96" name="__codelineno-0-96" href="#__codelineno-0-96"></a>        ' "base dir is empty or invalid" abort with no idea what to enter.
+<a id="__codelineno-0-97" name="__codelineno-0-97" href="#__codelineno-0-97"></a>        ' Instead, infer BASE_DIR from an existing path and derive only the
+<a id="__codelineno-0-98" name="__codelineno-0-98" href="#__codelineno-0-98"></a>        ' missing cells, then continue. Only when no base can be inferred do we
+<a id="__codelineno-0-99" name="__codelineno-0-99" href="#__codelineno-0-99"></a>        ' fall back to the previous default-fill (headless) / notify (interactive).
 <a id="__codelineno-0-100" name="__codelineno-0-100" href="#__codelineno-0-100"></a>        Dim base As String
 <a id="__codelineno-0-101" name="__codelineno-0-101" href="#__codelineno-0-101"></a>        base = InferBaseDir(d)
 <a id="__codelineno-0-102" name="__codelineno-0-102" href="#__codelineno-0-102"></a>        If Len(base) &gt; 0 Then
@@ -5151,7 +5151,7 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-106" name="__codelineno-0-106" href="#__codelineno-0-106"></a>            SaveBookQuiet
 <a id="__codelineno-0-107" name="__codelineno-0-107" href="#__codelineno-0-107"></a>            modConfigHolder.SetConfig d
 <a id="__codelineno-0-108" name="__codelineno-0-108" href="#__codelineno-0-108"></a>            LoadConfig = True
-<a id="__codelineno-0-109" name="__codelineno-0-109" href="#__codelineno-0-109"></a>            If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_DEBUG Then Debug.Print &quot;[D-0962b] modConfigLoader.LoadConfig EXIT-OK partial-autoheal base=&quot; &amp; base  &#39; [ADR-0100]
+<a id="__codelineno-0-109" name="__codelineno-0-109" href="#__codelineno-0-109"></a>            If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_DEBUG Then Debug.Print "[D-0962b] modConfigLoader.LoadConfig EXIT-OK partial-autoheal base=" &amp; base  ' [ADR-0100]
 <a id="__codelineno-0-110" name="__codelineno-0-110" href="#__codelineno-0-110"></a>            Exit Function
 <a id="__codelineno-0-111" name="__codelineno-0-111" href="#__codelineno-0-111"></a>        End If
 <a id="__codelineno-0-112" name="__codelineno-0-112" href="#__codelineno-0-112"></a>        If modCommon.IsHeadless() Then
@@ -5165,91 +5165,91 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-120" name="__codelineno-0-120" href="#__codelineno-0-120"></a>        Else
 <a id="__codelineno-0-121" name="__codelineno-0-121" href="#__codelineno-0-121"></a>            NotifyMissingKey FirstEmptyPathKey(d)
 <a id="__codelineno-0-122" name="__codelineno-0-122" href="#__codelineno-0-122"></a>            LoadConfig = False
-<a id="__codelineno-0-123" name="__codelineno-0-123" href="#__codelineno-0-123"></a>            If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print &quot;[D-0962] modConfigLoader.LoadConfig EXIT abort partial-missing&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-123" name="__codelineno-0-123" href="#__codelineno-0-123"></a>            If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print "[D-0962] modConfigLoader.LoadConfig EXIT abort partial-missing"  ' [ADR-0100]
 <a id="__codelineno-0-124" name="__codelineno-0-124" href="#__codelineno-0-124"></a>            Exit Function
 <a id="__codelineno-0-125" name="__codelineno-0-125" href="#__codelineno-0-125"></a>        End If
 <a id="__codelineno-0-126" name="__codelineno-0-126" href="#__codelineno-0-126"></a>    End If
 <a id="__codelineno-0-127" name="__codelineno-0-127" href="#__codelineno-0-127"></a>
-<a id="__codelineno-0-128" name="__codelineno-0-128" href="#__codelineno-0-128"></a>    &#39; All path cells present.
+<a id="__codelineno-0-128" name="__codelineno-0-128" href="#__codelineno-0-128"></a>    ' All path cells present.
 <a id="__codelineno-0-129" name="__codelineno-0-129" href="#__codelineno-0-129"></a>    ApplyBehaviorDefaults d
 <a id="__codelineno-0-130" name="__codelineno-0-130" href="#__codelineno-0-130"></a>    modConfigHolder.SetConfig d
 <a id="__codelineno-0-131" name="__codelineno-0-131" href="#__codelineno-0-131"></a>    LoadConfig = True
-<a id="__codelineno-0-132" name="__codelineno-0-132" href="#__codelineno-0-132"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0963] modConfigLoader.LoadConfig EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-132" name="__codelineno-0-132" href="#__codelineno-0-132"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0963] modConfigLoader.LoadConfig EXIT-OK"  ' [ADR-0100]
 <a id="__codelineno-0-133" name="__codelineno-0-133" href="#__codelineno-0-133"></a>    Exit Function
 <a id="__codelineno-0-134" name="__codelineno-0-134" href="#__codelineno-0-134"></a>
 <a id="__codelineno-0-135" name="__codelineno-0-135" href="#__codelineno-0-135"></a>ErrHandler:
-<a id="__codelineno-0-136" name="__codelineno-0-136" href="#__codelineno-0-136"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print &quot;[D-0964] modConfigLoader.LoadConfig EXIT-ERR errNum=&quot; &amp; Err.Number &amp; &quot; desc=&quot; &amp; Err.Description  &#39; [ADR-0100]
+<a id="__codelineno-0-136" name="__codelineno-0-136" href="#__codelineno-0-136"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print "[D-0964] modConfigLoader.LoadConfig EXIT-ERR errNum=" &amp; Err.Number &amp; " desc=" &amp; Err.Description  ' [ADR-0100]
 <a id="__codelineno-0-137" name="__codelineno-0-137" href="#__codelineno-0-137"></a>    LoadConfig = False
 <a id="__codelineno-0-138" name="__codelineno-0-138" href="#__codelineno-0-138"></a>End Function
 <a id="__codelineno-0-139" name="__codelineno-0-139" href="#__codelineno-0-139"></a>
-<a id="__codelineno-0-140" name="__codelineno-0-140" href="#__codelineno-0-140"></a>&#39; [M10-MIGRATE] In-place upgrade cleanup. The pre-2026-06 settings layout
-<a id="__codelineno-0-141" name="__codelineno-0-141" href="#__codelineno-0-141"></a>&#39; had 8 data rows incl. log_dir (D14) and config_dir (D16); the current
-<a id="__codelineno-0-142" name="__codelineno-0-142" href="#__codelineno-0-142"></a>&#39; 7-key layout dropped both, so an upgraded book shows the still-valid
-<a id="__codelineno-0-143" name="__codelineno-0-143" href="#__codelineno-0-143"></a>&#39; values two rows too low (backup in the debugLevel row, etc.). Detect by
-<a id="__codelineno-0-144" name="__codelineno-0-144" href="#__codelineno-0-144"></a>&#39; the new debugLevel cell (D15) holding a path (the old backup_dir) and
-<a id="__codelineno-0-145" name="__codelineno-0-145" href="#__codelineno-0-145"></a>&#39; shift the survivors up; clear the old logRotationRows straggler in D18.
-<a id="__codelineno-0-146" name="__codelineno-0-146" href="#__codelineno-0-146"></a>&#39; Idempotent: after migration D15 is a debug level (no path) so it never
-<a id="__codelineno-0-147" name="__codelineno-0-147" href="#__codelineno-0-147"></a>&#39; re-triggers - no separate flag needed.
+<a id="__codelineno-0-140" name="__codelineno-0-140" href="#__codelineno-0-140"></a>' [M10-MIGRATE] In-place upgrade cleanup. The pre-2026-06 settings layout
+<a id="__codelineno-0-141" name="__codelineno-0-141" href="#__codelineno-0-141"></a>' had 8 data rows incl. log_dir (D14) and config_dir (D16); the current
+<a id="__codelineno-0-142" name="__codelineno-0-142" href="#__codelineno-0-142"></a>' 7-key layout dropped both, so an upgraded book shows the still-valid
+<a id="__codelineno-0-143" name="__codelineno-0-143" href="#__codelineno-0-143"></a>' values two rows too low (backup in the debugLevel row, etc.). Detect by
+<a id="__codelineno-0-144" name="__codelineno-0-144" href="#__codelineno-0-144"></a>' the new debugLevel cell (D15) holding a path (the old backup_dir) and
+<a id="__codelineno-0-145" name="__codelineno-0-145" href="#__codelineno-0-145"></a>' shift the survivors up; clear the old logRotationRows straggler in D18.
+<a id="__codelineno-0-146" name="__codelineno-0-146" href="#__codelineno-0-146"></a>' Idempotent: after migration D15 is a debug level (no path) so it never
+<a id="__codelineno-0-147" name="__codelineno-0-147" href="#__codelineno-0-147"></a>' re-triggers - no separate flag needed.
 <a id="__codelineno-0-148" name="__codelineno-0-148" href="#__codelineno-0-148"></a>Private Sub MigrateOldStorageLayout(ByVal ws As Object)
 <a id="__codelineno-0-149" name="__codelineno-0-149" href="#__codelineno-0-149"></a>    On Error Resume Next
 <a id="__codelineno-0-150" name="__codelineno-0-150" href="#__codelineno-0-150"></a>    Dim d15 As String
 <a id="__codelineno-0-151" name="__codelineno-0-151" href="#__codelineno-0-151"></a>    d15 = CStr(ws.Cells(15, VALUE_COL).Value)
-<a id="__codelineno-0-152" name="__codelineno-0-152" href="#__codelineno-0-152"></a>    If InStr(d15, &quot;\&quot;) = 0 And InStr(d15, &quot;:&quot;) = 0 Then Exit Sub  &#39; already new layout
-<a id="__codelineno-0-153" name="__codelineno-0-153" href="#__codelineno-0-153"></a>    &#39; capture still-valid old values (old D15=backup, D17=debugLevel, D18=logRotationRows)
+<a id="__codelineno-0-152" name="__codelineno-0-152" href="#__codelineno-0-152"></a>    If InStr(d15, "\") = 0 And InStr(d15, ":") = 0 Then Exit Sub  ' already new layout
+<a id="__codelineno-0-153" name="__codelineno-0-153" href="#__codelineno-0-153"></a>    ' capture still-valid old values (old D15=backup, D17=debugLevel, D18=logRotationRows)
 <a id="__codelineno-0-154" name="__codelineno-0-154" href="#__codelineno-0-154"></a>    Dim oldBackup As String, oldDebug As String, oldLogRot As String
 <a id="__codelineno-0-155" name="__codelineno-0-155" href="#__codelineno-0-155"></a>    oldBackup = CStr(ws.Cells(15, VALUE_COL).Value)
 <a id="__codelineno-0-156" name="__codelineno-0-156" href="#__codelineno-0-156"></a>    oldDebug = CStr(ws.Cells(17, VALUE_COL).Value)
 <a id="__codelineno-0-157" name="__codelineno-0-157" href="#__codelineno-0-157"></a>    oldLogRot = CStr(ws.Cells(18, VALUE_COL).Value)
 <a id="__codelineno-0-158" name="__codelineno-0-158" href="#__codelineno-0-158"></a>    Dim wasP As Boolean
 <a id="__codelineno-0-159" name="__codelineno-0-159" href="#__codelineno-0-159"></a>    wasP = ws.ProtectContents
-<a id="__codelineno-0-160" name="__codelineno-0-160" href="#__codelineno-0-160"></a>    If wasP Then ws.Unprotect Password:=&quot;&quot;
-<a id="__codelineno-0-161" name="__codelineno-0-161" href="#__codelineno-0-161"></a>    &#39; new layout: D14=backup_dir, D15=debugLevel, D16=logRotationRows, D17=uiSchemaFailMode
+<a id="__codelineno-0-160" name="__codelineno-0-160" href="#__codelineno-0-160"></a>    If wasP Then ws.Unprotect Password:=""
+<a id="__codelineno-0-161" name="__codelineno-0-161" href="#__codelineno-0-161"></a>    ' new layout: D14=backup_dir, D15=debugLevel, D16=logRotationRows, D17=uiSchemaFailMode
 <a id="__codelineno-0-162" name="__codelineno-0-162" href="#__codelineno-0-162"></a>    ws.Cells(14, VALUE_COL).Value = oldBackup
 <a id="__codelineno-0-163" name="__codelineno-0-163" href="#__codelineno-0-163"></a>    ws.Cells(15, VALUE_COL).Value = oldDebug
 <a id="__codelineno-0-164" name="__codelineno-0-164" href="#__codelineno-0-164"></a>    ws.Cells(16, VALUE_COL).Value = oldLogRot
-<a id="__codelineno-0-165" name="__codelineno-0-165" href="#__codelineno-0-165"></a>    ws.Cells(17, VALUE_COL).Value = &quot;safeDefault&quot;
+<a id="__codelineno-0-165" name="__codelineno-0-165" href="#__codelineno-0-165"></a>    ws.Cells(17, VALUE_COL).Value = "safeDefault"
 <a id="__codelineno-0-166" name="__codelineno-0-166" href="#__codelineno-0-166"></a>    ws.Cells(18, VALUE_COL).ClearContents
-<a id="__codelineno-0-167" name="__codelineno-0-167" href="#__codelineno-0-167"></a>    If wasP Then ws.Protect Password:=&quot;&quot;, UserInterfaceOnly:=True
-<a id="__codelineno-0-168" name="__codelineno-0-168" href="#__codelineno-0-168"></a>    modCommon.AppendProgressLog &quot;[M10-MIGRATE] old log_dir/config_dir layout migrated to 7-key layout&quot;
+<a id="__codelineno-0-167" name="__codelineno-0-167" href="#__codelineno-0-167"></a>    If wasP Then ws.Protect Password:="", UserInterfaceOnly:=True
+<a id="__codelineno-0-168" name="__codelineno-0-168" href="#__codelineno-0-168"></a>    modCommon.AppendProgressLog "[M10-MIGRATE] old log_dir/config_dir layout migrated to 7-key layout"
 <a id="__codelineno-0-169" name="__codelineno-0-169" href="#__codelineno-0-169"></a>End Sub
 <a id="__codelineno-0-170" name="__codelineno-0-170" href="#__codelineno-0-170"></a>
-<a id="__codelineno-0-171" name="__codelineno-0-171" href="#__codelineno-0-171"></a>&#39; [M10-MIGRATE] In-place upgrade: a pre-C1 book has ui_dir = the bare base
-<a id="__codelineno-0-172" name="__codelineno-0-172" href="#__codelineno-0-172"></a>&#39; (...\ui\) but screen files now live under ...\ui\&lt;role&gt;\. C1 made consumers
-<a id="__codelineno-0-173" name="__codelineno-0-173" href="#__codelineno-0-173"></a>&#39; read GetUiDir() verbatim, so the renderer would miss every file. When D13 is
-<a id="__codelineno-0-174" name="__codelineno-0-174" href="#__codelineno-0-174"></a>&#39; not already role-qualified and a &lt;path&gt;\&lt;role&gt;\ subfolder exists, point D13
-<a id="__codelineno-0-175" name="__codelineno-0-175" href="#__codelineno-0-175"></a>&#39; there. Idempotent; a genuine custom path (no such subfolder) is left as-is.
+<a id="__codelineno-0-171" name="__codelineno-0-171" href="#__codelineno-0-171"></a>' [M10-MIGRATE] In-place upgrade: a pre-C1 book has ui_dir = the bare base
+<a id="__codelineno-0-172" name="__codelineno-0-172" href="#__codelineno-0-172"></a>' (...\ui\) but screen files now live under ...\ui\&lt;role&gt;\. C1 made consumers
+<a id="__codelineno-0-173" name="__codelineno-0-173" href="#__codelineno-0-173"></a>' read GetUiDir() verbatim, so the renderer would miss every file. When D13 is
+<a id="__codelineno-0-174" name="__codelineno-0-174" href="#__codelineno-0-174"></a>' not already role-qualified and a &lt;path&gt;\&lt;role&gt;\ subfolder exists, point D13
+<a id="__codelineno-0-175" name="__codelineno-0-175" href="#__codelineno-0-175"></a>' there. Idempotent; a genuine custom path (no such subfolder) is left as-is.
 <a id="__codelineno-0-176" name="__codelineno-0-176" href="#__codelineno-0-176"></a>Private Sub EnsureUiDirRoleResolvable(ByVal ws As Object)
 <a id="__codelineno-0-177" name="__codelineno-0-177" href="#__codelineno-0-177"></a>    On Error Resume Next
 <a id="__codelineno-0-178" name="__codelineno-0-178" href="#__codelineno-0-178"></a>    Dim role As String
-<a id="__codelineno-0-179" name="__codelineno-0-179" href="#__codelineno-0-179"></a>    role = Replace$(ThisWorkbook.Name, &quot;.xlsm&quot;, &quot;&quot;)
+<a id="__codelineno-0-179" name="__codelineno-0-179" href="#__codelineno-0-179"></a>    role = Replace$(ThisWorkbook.Name, ".xlsm", "")
 <a id="__codelineno-0-180" name="__codelineno-0-180" href="#__codelineno-0-180"></a>    If Len(role) = 0 Then Exit Sub
 <a id="__codelineno-0-181" name="__codelineno-0-181" href="#__codelineno-0-181"></a>    Dim base As String
 <a id="__codelineno-0-182" name="__codelineno-0-182" href="#__codelineno-0-182"></a>    base = CStr(ws.Cells(13, VALUE_COL).Value)
-<a id="__codelineno-0-183" name="__codelineno-0-183" href="#__codelineno-0-183"></a>    Do While Len(base) &gt; 0 And Right$(base, 1) = &quot;\&quot;
+<a id="__codelineno-0-183" name="__codelineno-0-183" href="#__codelineno-0-183"></a>    Do While Len(base) &gt; 0 And Right$(base, 1) = "\"
 <a id="__codelineno-0-184" name="__codelineno-0-184" href="#__codelineno-0-184"></a>        base = Left$(base, Len(base) - 1)
 <a id="__codelineno-0-185" name="__codelineno-0-185" href="#__codelineno-0-185"></a>    Loop
 <a id="__codelineno-0-186" name="__codelineno-0-186" href="#__codelineno-0-186"></a>    If Len(base) = 0 Then Exit Sub
 <a id="__codelineno-0-187" name="__codelineno-0-187" href="#__codelineno-0-187"></a>    If Len(base) &gt; Len(role) Then
-<a id="__codelineno-0-188" name="__codelineno-0-188" href="#__codelineno-0-188"></a>        If Right$(base, Len(role) + 1) = &quot;\&quot; &amp; role Then Exit Sub  &#39; already role-qualified
+<a id="__codelineno-0-188" name="__codelineno-0-188" href="#__codelineno-0-188"></a>        If Right$(base, Len(role) + 1) = "\" &amp; role Then Exit Sub  ' already role-qualified
 <a id="__codelineno-0-189" name="__codelineno-0-189" href="#__codelineno-0-189"></a>    End If
 <a id="__codelineno-0-190" name="__codelineno-0-190" href="#__codelineno-0-190"></a>    Dim fso As Object
-<a id="__codelineno-0-191" name="__codelineno-0-191" href="#__codelineno-0-191"></a>    Set fso = CreateObject(&quot;Scripting.FileSystemObject&quot;)
-<a id="__codelineno-0-192" name="__codelineno-0-192" href="#__codelineno-0-192"></a>    If Not fso.FolderExists(base &amp; &quot;\&quot; &amp; role) Then Exit Sub
+<a id="__codelineno-0-191" name="__codelineno-0-191" href="#__codelineno-0-191"></a>    Set fso = CreateObject("Scripting.FileSystemObject")
+<a id="__codelineno-0-192" name="__codelineno-0-192" href="#__codelineno-0-192"></a>    If Not fso.FolderExists(base &amp; "\" &amp; role) Then Exit Sub
 <a id="__codelineno-0-193" name="__codelineno-0-193" href="#__codelineno-0-193"></a>    Dim wasP As Boolean
 <a id="__codelineno-0-194" name="__codelineno-0-194" href="#__codelineno-0-194"></a>    wasP = ws.ProtectContents
-<a id="__codelineno-0-195" name="__codelineno-0-195" href="#__codelineno-0-195"></a>    If wasP Then ws.Unprotect Password:=&quot;&quot;
-<a id="__codelineno-0-196" name="__codelineno-0-196" href="#__codelineno-0-196"></a>    ws.Cells(13, VALUE_COL).Value = base &amp; &quot;\&quot; &amp; role &amp; &quot;\&quot;
-<a id="__codelineno-0-197" name="__codelineno-0-197" href="#__codelineno-0-197"></a>    If wasP Then ws.Protect Password:=&quot;&quot;, UserInterfaceOnly:=True
-<a id="__codelineno-0-198" name="__codelineno-0-198" href="#__codelineno-0-198"></a>    modCommon.AppendProgressLog &quot;[M10-MIGRATE] ui_dir upgraded to role-qualified: &quot; &amp; base &amp; &quot;\&quot; &amp; role &amp; &quot;\&quot;
+<a id="__codelineno-0-195" name="__codelineno-0-195" href="#__codelineno-0-195"></a>    If wasP Then ws.Unprotect Password:=""
+<a id="__codelineno-0-196" name="__codelineno-0-196" href="#__codelineno-0-196"></a>    ws.Cells(13, VALUE_COL).Value = base &amp; "\" &amp; role &amp; "\"
+<a id="__codelineno-0-197" name="__codelineno-0-197" href="#__codelineno-0-197"></a>    If wasP Then ws.Protect Password:="", UserInterfaceOnly:=True
+<a id="__codelineno-0-198" name="__codelineno-0-198" href="#__codelineno-0-198"></a>    modCommon.AppendProgressLog "[M10-MIGRATE] ui_dir upgraded to role-qualified: " &amp; base &amp; "\" &amp; role &amp; "\"
 <a id="__codelineno-0-199" name="__codelineno-0-199" href="#__codelineno-0-199"></a>End Sub
 <a id="__codelineno-0-200" name="__codelineno-0-200" href="#__codelineno-0-200"></a>
-<a id="__codelineno-0-201" name="__codelineno-0-201" href="#__codelineno-0-201"></a>&#39; ================================================================
-<a id="__codelineno-0-202" name="__codelineno-0-202" href="#__codelineno-0-202"></a>&#39; Function: Reload
-<a id="__codelineno-0-203" name="__codelineno-0-203" href="#__codelineno-0-203"></a>&#39; Summary:  Re-read the 9 cells into the holder (clsLogger polling /
-<a id="__codelineno-0-204" name="__codelineno-0-204" href="#__codelineno-0-204"></a>&#39;           dynamic debugLevel). No seeding, no abort.
-<a id="__codelineno-0-205" name="__codelineno-0-205" href="#__codelineno-0-205"></a>&#39; ================================================================
+<a id="__codelineno-0-201" name="__codelineno-0-201" href="#__codelineno-0-201"></a>' ================================================================
+<a id="__codelineno-0-202" name="__codelineno-0-202" href="#__codelineno-0-202"></a>' Function: Reload
+<a id="__codelineno-0-203" name="__codelineno-0-203" href="#__codelineno-0-203"></a>' Summary:  Re-read the 9 cells into the holder (clsLogger polling /
+<a id="__codelineno-0-204" name="__codelineno-0-204" href="#__codelineno-0-204"></a>'           dynamic debugLevel). No seeding, no abort.
+<a id="__codelineno-0-205" name="__codelineno-0-205" href="#__codelineno-0-205"></a>' ================================================================
 <a id="__codelineno-0-206" name="__codelineno-0-206" href="#__codelineno-0-206"></a>Public Function Reload() As Boolean
-<a id="__codelineno-0-207" name="__codelineno-0-207" href="#__codelineno-0-207"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0965] modConfigLoader.Reload ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-207" name="__codelineno-0-207" href="#__codelineno-0-207"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0965] modConfigLoader.Reload ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-208" name="__codelineno-0-208" href="#__codelineno-0-208"></a>    On Error GoTo ErrHandler
 <a id="__codelineno-0-209" name="__codelineno-0-209" href="#__codelineno-0-209"></a>    Dim ws As Worksheet
 <a id="__codelineno-0-210" name="__codelineno-0-210" href="#__codelineno-0-210"></a>    Set ws = GetSettingsSheet()
@@ -5267,14 +5267,14 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-222" name="__codelineno-0-222" href="#__codelineno-0-222"></a>    Reload = False
 <a id="__codelineno-0-223" name="__codelineno-0-223" href="#__codelineno-0-223"></a>End Function
 <a id="__codelineno-0-224" name="__codelineno-0-224" href="#__codelineno-0-224"></a>
-<a id="__codelineno-0-225" name="__codelineno-0-225" href="#__codelineno-0-225"></a>&#39; ================================================================
-<a id="__codelineno-0-226" name="__codelineno-0-226" href="#__codelineno-0-226"></a>&#39; Function: EnsureSettingsSheet
-<a id="__codelineno-0-227" name="__codelineno-0-227" href="#__codelineno-0-227"></a>&#39; Summary:  Return the settings sheet, creating + seeding the frame
-<a id="__codelineno-0-228" name="__codelineno-0-228" href="#__codelineno-0-228"></a>&#39;           (labels + validation) when it does not exist yet. Public
-<a id="__codelineno-0-229" name="__codelineno-0-229" href="#__codelineno-0-229"></a>&#39;           so M-10 / the orchestrator can guarantee it exists.
-<a id="__codelineno-0-230" name="__codelineno-0-230" href="#__codelineno-0-230"></a>&#39; ================================================================
+<a id="__codelineno-0-225" name="__codelineno-0-225" href="#__codelineno-0-225"></a>' ================================================================
+<a id="__codelineno-0-226" name="__codelineno-0-226" href="#__codelineno-0-226"></a>' Function: EnsureSettingsSheet
+<a id="__codelineno-0-227" name="__codelineno-0-227" href="#__codelineno-0-227"></a>' Summary:  Return the settings sheet, creating + seeding the frame
+<a id="__codelineno-0-228" name="__codelineno-0-228" href="#__codelineno-0-228"></a>'           (labels + validation) when it does not exist yet. Public
+<a id="__codelineno-0-229" name="__codelineno-0-229" href="#__codelineno-0-229"></a>'           so M-10 / the orchestrator can guarantee it exists.
+<a id="__codelineno-0-230" name="__codelineno-0-230" href="#__codelineno-0-230"></a>' ================================================================
 <a id="__codelineno-0-231" name="__codelineno-0-231" href="#__codelineno-0-231"></a>Public Function EnsureSettingsSheet() As Worksheet
-<a id="__codelineno-0-232" name="__codelineno-0-232" href="#__codelineno-0-232"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0966] modConfigLoader.EnsureSettingsSheet ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-232" name="__codelineno-0-232" href="#__codelineno-0-232"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0966] modConfigLoader.EnsureSettingsSheet ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-233" name="__codelineno-0-233" href="#__codelineno-0-233"></a>    Dim ws As Worksheet
 <a id="__codelineno-0-234" name="__codelineno-0-234" href="#__codelineno-0-234"></a>    Set ws = GetSettingsSheet()
 <a id="__codelineno-0-235" name="__codelineno-0-235" href="#__codelineno-0-235"></a>    If ws Is Nothing Then
@@ -5287,23 +5287,23 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-242" name="__codelineno-0-242" href="#__codelineno-0-242"></a>    Set EnsureSettingsSheet = ws
 <a id="__codelineno-0-243" name="__codelineno-0-243" href="#__codelineno-0-243"></a>End Function
 <a id="__codelineno-0-244" name="__codelineno-0-244" href="#__codelineno-0-244"></a>
-<a id="__codelineno-0-245" name="__codelineno-0-245" href="#__codelineno-0-245"></a>&#39; ================================================================
-<a id="__codelineno-0-246" name="__codelineno-0-246" href="#__codelineno-0-246"></a>&#39; Sub: RestoreSheetFromHolder
-<a id="__codelineno-0-247" name="__codelineno-0-247" href="#__codelineno-0-247"></a>&#39; Summary:  Post-render hook. ApplyUiStanzas does Cells.Clear on the
-<a id="__codelineno-0-248" name="__codelineno-0-248" href="#__codelineno-0-248"></a>&#39;           admin M-10 sheet (== settings sheet); after the re-render
-<a id="__codelineno-0-249" name="__codelineno-0-249" href="#__codelineno-0-249"></a>&#39;           we write the holder values back into B2..B10 so the SSOT
-<a id="__codelineno-0-250" name="__codelineno-0-250" href="#__codelineno-0-250"></a>&#39;           round-trips across every Workbook_Open. No-op when the
-<a id="__codelineno-0-251" name="__codelineno-0-251" href="#__codelineno-0-251"></a>&#39;           holder is empty or the sheet is absent.
-<a id="__codelineno-0-252" name="__codelineno-0-252" href="#__codelineno-0-252"></a>&#39; ================================================================
+<a id="__codelineno-0-245" name="__codelineno-0-245" href="#__codelineno-0-245"></a>' ================================================================
+<a id="__codelineno-0-246" name="__codelineno-0-246" href="#__codelineno-0-246"></a>' Sub: RestoreSheetFromHolder
+<a id="__codelineno-0-247" name="__codelineno-0-247" href="#__codelineno-0-247"></a>' Summary:  Post-render hook. ApplyUiStanzas does Cells.Clear on the
+<a id="__codelineno-0-248" name="__codelineno-0-248" href="#__codelineno-0-248"></a>'           admin M-10 sheet (== settings sheet); after the re-render
+<a id="__codelineno-0-249" name="__codelineno-0-249" href="#__codelineno-0-249"></a>'           we write the holder values back into B2..B10 so the SSOT
+<a id="__codelineno-0-250" name="__codelineno-0-250" href="#__codelineno-0-250"></a>'           round-trips across every Workbook_Open. No-op when the
+<a id="__codelineno-0-251" name="__codelineno-0-251" href="#__codelineno-0-251"></a>'           holder is empty or the sheet is absent.
+<a id="__codelineno-0-252" name="__codelineno-0-252" href="#__codelineno-0-252"></a>' ================================================================
 <a id="__codelineno-0-253" name="__codelineno-0-253" href="#__codelineno-0-253"></a>Public Sub RestoreSheetFromHolder()
-<a id="__codelineno-0-254" name="__codelineno-0-254" href="#__codelineno-0-254"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0967] modConfigLoader.RestoreSheetFromHolder ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-254" name="__codelineno-0-254" href="#__codelineno-0-254"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0967] modConfigLoader.RestoreSheetFromHolder ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-255" name="__codelineno-0-255" href="#__codelineno-0-255"></a>    On Error GoTo ErrHandler
 <a id="__codelineno-0-256" name="__codelineno-0-256" href="#__codelineno-0-256"></a>    If Not modConfigHolder.IsInitialized() Then Exit Sub
 <a id="__codelineno-0-257" name="__codelineno-0-257" href="#__codelineno-0-257"></a>    Dim ws As Worksheet
 <a id="__codelineno-0-258" name="__codelineno-0-258" href="#__codelineno-0-258"></a>    Set ws = GetSettingsSheet()
 <a id="__codelineno-0-259" name="__codelineno-0-259" href="#__codelineno-0-259"></a>    If ws Is Nothing Then Exit Sub
 <a id="__codelineno-0-260" name="__codelineno-0-260" href="#__codelineno-0-260"></a>    Dim d As Object
-<a id="__codelineno-0-261" name="__codelineno-0-261" href="#__codelineno-0-261"></a>    Set d = CreateObject(&quot;Scripting.Dictionary&quot;)
+<a id="__codelineno-0-261" name="__codelineno-0-261" href="#__codelineno-0-261"></a>    Set d = CreateObject("Scripting.Dictionary")
 <a id="__codelineno-0-262" name="__codelineno-0-262" href="#__codelineno-0-262"></a>    Dim keys As Variant
 <a id="__codelineno-0-263" name="__codelineno-0-263" href="#__codelineno-0-263"></a>    keys = AllKeys()
 <a id="__codelineno-0-264" name="__codelineno-0-264" href="#__codelineno-0-264"></a>    Dim i As Long
@@ -5313,18 +5313,18 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-268" name="__codelineno-0-268" href="#__codelineno-0-268"></a>    WriteDictToSheet ws, d
 <a id="__codelineno-0-269" name="__codelineno-0-269" href="#__codelineno-0-269"></a>    Exit Sub
 <a id="__codelineno-0-270" name="__codelineno-0-270" href="#__codelineno-0-270"></a>ErrHandler:
-<a id="__codelineno-0-271" name="__codelineno-0-271" href="#__codelineno-0-271"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print &quot;[D-0968] modConfigLoader.RestoreSheetFromHolder EXIT-ERR errNum=&quot; &amp; Err.Number  &#39; [ADR-0100]
+<a id="__codelineno-0-271" name="__codelineno-0-271" href="#__codelineno-0-271"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print "[D-0968] modConfigLoader.RestoreSheetFromHolder EXIT-ERR errNum=" &amp; Err.Number  ' [ADR-0100]
 <a id="__codelineno-0-272" name="__codelineno-0-272" href="#__codelineno-0-272"></a>End Sub
 <a id="__codelineno-0-273" name="__codelineno-0-273" href="#__codelineno-0-273"></a>
-<a id="__codelineno-0-274" name="__codelineno-0-274" href="#__codelineno-0-274"></a>&#39; ================================================================
-<a id="__codelineno-0-275" name="__codelineno-0-275" href="#__codelineno-0-275"></a>&#39; Sub: WriteSettingsFromDict
-<a id="__codelineno-0-276" name="__codelineno-0-276" href="#__codelineno-0-276"></a>&#39; Summary:  Persist edited keys (M-10 save). Merge keyValues over the
-<a id="__codelineno-0-277" name="__codelineno-0-277" href="#__codelineno-0-277"></a>&#39;           current sheet values, write B2..B10, save the workbook,
-<a id="__codelineno-0-278" name="__codelineno-0-278" href="#__codelineno-0-278"></a>&#39;           and refresh the holder. Replaces the retired text-file
-<a id="__codelineno-0-279" name="__codelineno-0-279" href="#__codelineno-0-279"></a>&#39;           writeback pair.
-<a id="__codelineno-0-280" name="__codelineno-0-280" href="#__codelineno-0-280"></a>&#39; ================================================================
+<a id="__codelineno-0-274" name="__codelineno-0-274" href="#__codelineno-0-274"></a>' ================================================================
+<a id="__codelineno-0-275" name="__codelineno-0-275" href="#__codelineno-0-275"></a>' Sub: WriteSettingsFromDict
+<a id="__codelineno-0-276" name="__codelineno-0-276" href="#__codelineno-0-276"></a>' Summary:  Persist edited keys (M-10 save). Merge keyValues over the
+<a id="__codelineno-0-277" name="__codelineno-0-277" href="#__codelineno-0-277"></a>'           current sheet values, write B2..B10, save the workbook,
+<a id="__codelineno-0-278" name="__codelineno-0-278" href="#__codelineno-0-278"></a>'           and refresh the holder. Replaces the retired text-file
+<a id="__codelineno-0-279" name="__codelineno-0-279" href="#__codelineno-0-279"></a>'           writeback pair.
+<a id="__codelineno-0-280" name="__codelineno-0-280" href="#__codelineno-0-280"></a>' ================================================================
 <a id="__codelineno-0-281" name="__codelineno-0-281" href="#__codelineno-0-281"></a>Public Sub WriteSettingsFromDict(ByVal keyValues As Object)
-<a id="__codelineno-0-282" name="__codelineno-0-282" href="#__codelineno-0-282"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0969] modConfigLoader.WriteSettingsFromDict ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-282" name="__codelineno-0-282" href="#__codelineno-0-282"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0969] modConfigLoader.WriteSettingsFromDict ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-283" name="__codelineno-0-283" href="#__codelineno-0-283"></a>    On Error GoTo ErrHandler
 <a id="__codelineno-0-284" name="__codelineno-0-284" href="#__codelineno-0-284"></a>    If keyValues Is Nothing Then Exit Sub
 <a id="__codelineno-0-285" name="__codelineno-0-285" href="#__codelineno-0-285"></a>    Dim ws As Worksheet
@@ -5341,16 +5341,16 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-296" name="__codelineno-0-296" href="#__codelineno-0-296"></a>    modConfigHolder.SetConfig d
 <a id="__codelineno-0-297" name="__codelineno-0-297" href="#__codelineno-0-297"></a>    Exit Sub
 <a id="__codelineno-0-298" name="__codelineno-0-298" href="#__codelineno-0-298"></a>ErrHandler:
-<a id="__codelineno-0-299" name="__codelineno-0-299" href="#__codelineno-0-299"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print &quot;[D-0970] modConfigLoader.WriteSettingsFromDict EXIT-ERR errNum=&quot; &amp; Err.Number  &#39; [ADR-0100]
+<a id="__codelineno-0-299" name="__codelineno-0-299" href="#__codelineno-0-299"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print "[D-0970] modConfigLoader.WriteSettingsFromDict EXIT-ERR errNum=" &amp; Err.Number  ' [ADR-0100]
 <a id="__codelineno-0-300" name="__codelineno-0-300" href="#__codelineno-0-300"></a>End Sub
 <a id="__codelineno-0-301" name="__codelineno-0-301" href="#__codelineno-0-301"></a>
-<a id="__codelineno-0-302" name="__codelineno-0-302" href="#__codelineno-0-302"></a>&#39; ================================================================
-<a id="__codelineno-0-303" name="__codelineno-0-303" href="#__codelineno-0-303"></a>&#39; Function: SnapshotSettings
-<a id="__codelineno-0-304" name="__codelineno-0-304" href="#__codelineno-0-304"></a>&#39; Summary:  Fix-6 followup. Capture the 9 settings cells from the
-<a id="__codelineno-0-305" name="__codelineno-0-305" href="#__codelineno-0-305"></a>&#39;           settings sheet into a fresh Dictionary so a re-render
-<a id="__codelineno-0-306" name="__codelineno-0-306" href="#__codelineno-0-306"></a>&#39;           (Cells.Clear) cannot lose user-entered values. Never
-<a id="__codelineno-0-307" name="__codelineno-0-307" href="#__codelineno-0-307"></a>&#39;           fails: a missing sheet yields empty-string values.
-<a id="__codelineno-0-308" name="__codelineno-0-308" href="#__codelineno-0-308"></a>&#39; ================================================================
+<a id="__codelineno-0-302" name="__codelineno-0-302" href="#__codelineno-0-302"></a>' ================================================================
+<a id="__codelineno-0-303" name="__codelineno-0-303" href="#__codelineno-0-303"></a>' Function: SnapshotSettings
+<a id="__codelineno-0-304" name="__codelineno-0-304" href="#__codelineno-0-304"></a>' Summary:  Fix-6 followup. Capture the 9 settings cells from the
+<a id="__codelineno-0-305" name="__codelineno-0-305" href="#__codelineno-0-305"></a>'           settings sheet into a fresh Dictionary so a re-render
+<a id="__codelineno-0-306" name="__codelineno-0-306" href="#__codelineno-0-306"></a>'           (Cells.Clear) cannot lose user-entered values. Never
+<a id="__codelineno-0-307" name="__codelineno-0-307" href="#__codelineno-0-307"></a>'           fails: a missing sheet yields empty-string values.
+<a id="__codelineno-0-308" name="__codelineno-0-308" href="#__codelineno-0-308"></a>' ================================================================
 <a id="__codelineno-0-309" name="__codelineno-0-309" href="#__codelineno-0-309"></a>Public Function SnapshotSettings() As Object
 <a id="__codelineno-0-310" name="__codelineno-0-310" href="#__codelineno-0-310"></a>    On Error GoTo ErrHandler
 <a id="__codelineno-0-311" name="__codelineno-0-311" href="#__codelineno-0-311"></a>    Dim ws As Worksheet
@@ -5365,12 +5365,12 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-320" name="__codelineno-0-320" href="#__codelineno-0-320"></a>    Set SnapshotSettings = NewEmptyKeyDict()
 <a id="__codelineno-0-321" name="__codelineno-0-321" href="#__codelineno-0-321"></a>End Function
 <a id="__codelineno-0-322" name="__codelineno-0-322" href="#__codelineno-0-322"></a>
-<a id="__codelineno-0-323" name="__codelineno-0-323" href="#__codelineno-0-323"></a>&#39; ================================================================
-<a id="__codelineno-0-324" name="__codelineno-0-324" href="#__codelineno-0-324"></a>&#39; Sub: RestoreSettings
-<a id="__codelineno-0-325" name="__codelineno-0-325" href="#__codelineno-0-325"></a>&#39; Summary:  Fix-6 followup. Write a snapshot Dictionary back into the
-<a id="__codelineno-0-326" name="__codelineno-0-326" href="#__codelineno-0-326"></a>&#39;           9 settings cells after a re-render. Creates the settings
-<a id="__codelineno-0-327" name="__codelineno-0-327" href="#__codelineno-0-327"></a>&#39;           sheet when absent. Never raises.
-<a id="__codelineno-0-328" name="__codelineno-0-328" href="#__codelineno-0-328"></a>&#39; ================================================================
+<a id="__codelineno-0-323" name="__codelineno-0-323" href="#__codelineno-0-323"></a>' ================================================================
+<a id="__codelineno-0-324" name="__codelineno-0-324" href="#__codelineno-0-324"></a>' Sub: RestoreSettings
+<a id="__codelineno-0-325" name="__codelineno-0-325" href="#__codelineno-0-325"></a>' Summary:  Fix-6 followup. Write a snapshot Dictionary back into the
+<a id="__codelineno-0-326" name="__codelineno-0-326" href="#__codelineno-0-326"></a>'           9 settings cells after a re-render. Creates the settings
+<a id="__codelineno-0-327" name="__codelineno-0-327" href="#__codelineno-0-327"></a>'           sheet when absent. Never raises.
+<a id="__codelineno-0-328" name="__codelineno-0-328" href="#__codelineno-0-328"></a>' ================================================================
 <a id="__codelineno-0-329" name="__codelineno-0-329" href="#__codelineno-0-329"></a>Public Sub RestoreSettings(ByVal d As Object)
 <a id="__codelineno-0-330" name="__codelineno-0-330" href="#__codelineno-0-330"></a>    On Error GoTo ErrHandler
 <a id="__codelineno-0-331" name="__codelineno-0-331" href="#__codelineno-0-331"></a>    If d Is Nothing Then Exit Sub
@@ -5380,26 +5380,26 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-335" name="__codelineno-0-335" href="#__codelineno-0-335"></a>    WriteDictToSheet ws, d
 <a id="__codelineno-0-336" name="__codelineno-0-336" href="#__codelineno-0-336"></a>    Exit Sub
 <a id="__codelineno-0-337" name="__codelineno-0-337" href="#__codelineno-0-337"></a>ErrHandler:
-<a id="__codelineno-0-338" name="__codelineno-0-338" href="#__codelineno-0-338"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print &quot;[D-0971] modConfigLoader.RestoreSettings EXIT-ERR errNum=&quot; &amp; Err.Number  &#39; [ADR-0100]
+<a id="__codelineno-0-338" name="__codelineno-0-338" href="#__codelineno-0-338"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print "[D-0971] modConfigLoader.RestoreSettings EXIT-ERR errNum=" &amp; Err.Number  ' [ADR-0100]
 <a id="__codelineno-0-339" name="__codelineno-0-339" href="#__codelineno-0-339"></a>End Sub
 <a id="__codelineno-0-340" name="__codelineno-0-340" href="#__codelineno-0-340"></a>
-<a id="__codelineno-0-341" name="__codelineno-0-341" href="#__codelineno-0-341"></a>&#39; ----------------------------------------------------------------
-<a id="__codelineno-0-342" name="__codelineno-0-342" href="#__codelineno-0-342"></a>&#39; Private helpers
-<a id="__codelineno-0-343" name="__codelineno-0-343" href="#__codelineno-0-343"></a>&#39; ----------------------------------------------------------------
+<a id="__codelineno-0-341" name="__codelineno-0-341" href="#__codelineno-0-341"></a>' ----------------------------------------------------------------
+<a id="__codelineno-0-342" name="__codelineno-0-342" href="#__codelineno-0-342"></a>' Private helpers
+<a id="__codelineno-0-343" name="__codelineno-0-343" href="#__codelineno-0-343"></a>' ----------------------------------------------------------------
 <a id="__codelineno-0-344" name="__codelineno-0-344" href="#__codelineno-0-344"></a>
 <a id="__codelineno-0-345" name="__codelineno-0-345" href="#__codelineno-0-345"></a>Private Function AllKeys() As Variant
-<a id="__codelineno-0-346" name="__codelineno-0-346" href="#__codelineno-0-346"></a>    AllKeys = Array(&quot;data_dir&quot;, &quot;format_dir&quot;, &quot;ui_dir&quot;, &quot;backup_dir&quot;, &quot;debugLevel&quot;, &quot;logRotationRows&quot;, &quot;uiSchemaFailMode&quot;)
+<a id="__codelineno-0-346" name="__codelineno-0-346" href="#__codelineno-0-346"></a>    AllKeys = Array("data_dir", "format_dir", "ui_dir", "backup_dir", "debugLevel", "logRotationRows", "uiSchemaFailMode")
 <a id="__codelineno-0-347" name="__codelineno-0-347" href="#__codelineno-0-347"></a>End Function
 <a id="__codelineno-0-348" name="__codelineno-0-348" href="#__codelineno-0-348"></a>
-<a id="__codelineno-0-349" name="__codelineno-0-349" href="#__codelineno-0-349"></a>&#39; Fix-6 followup: a Dictionary pre-populated with all 9 keys set to &quot;&quot;.
+<a id="__codelineno-0-349" name="__codelineno-0-349" href="#__codelineno-0-349"></a>' Fix-6 followup: a Dictionary pre-populated with all 9 keys set to "".
 <a id="__codelineno-0-350" name="__codelineno-0-350" href="#__codelineno-0-350"></a>Private Function NewEmptyKeyDict() As Object
 <a id="__codelineno-0-351" name="__codelineno-0-351" href="#__codelineno-0-351"></a>    Dim d As Object
-<a id="__codelineno-0-352" name="__codelineno-0-352" href="#__codelineno-0-352"></a>    Set d = CreateObject(&quot;Scripting.Dictionary&quot;)
+<a id="__codelineno-0-352" name="__codelineno-0-352" href="#__codelineno-0-352"></a>    Set d = CreateObject("Scripting.Dictionary")
 <a id="__codelineno-0-353" name="__codelineno-0-353" href="#__codelineno-0-353"></a>    Dim keys As Variant
 <a id="__codelineno-0-354" name="__codelineno-0-354" href="#__codelineno-0-354"></a>    keys = AllKeys()
 <a id="__codelineno-0-355" name="__codelineno-0-355" href="#__codelineno-0-355"></a>    Dim i As Long
 <a id="__codelineno-0-356" name="__codelineno-0-356" href="#__codelineno-0-356"></a>    For i = 0 To UBound(keys)
-<a id="__codelineno-0-357" name="__codelineno-0-357" href="#__codelineno-0-357"></a>        d(keys(i)) = &quot;&quot;
+<a id="__codelineno-0-357" name="__codelineno-0-357" href="#__codelineno-0-357"></a>        d(keys(i)) = ""
 <a id="__codelineno-0-358" name="__codelineno-0-358" href="#__codelineno-0-358"></a>    Next i
 <a id="__codelineno-0-359" name="__codelineno-0-359" href="#__codelineno-0-359"></a>    Set NewEmptyKeyDict = d
 <a id="__codelineno-0-360" name="__codelineno-0-360" href="#__codelineno-0-360"></a>End Function
@@ -5412,7 +5412,7 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-367" name="__codelineno-0-367" href="#__codelineno-0-367"></a>
 <a id="__codelineno-0-368" name="__codelineno-0-368" href="#__codelineno-0-368"></a>Private Function ReadSheetToDict(ByVal ws As Object) As Object
 <a id="__codelineno-0-369" name="__codelineno-0-369" href="#__codelineno-0-369"></a>    Dim d As Object
-<a id="__codelineno-0-370" name="__codelineno-0-370" href="#__codelineno-0-370"></a>    Set d = CreateObject(&quot;Scripting.Dictionary&quot;)
+<a id="__codelineno-0-370" name="__codelineno-0-370" href="#__codelineno-0-370"></a>    Set d = CreateObject("Scripting.Dictionary")
 <a id="__codelineno-0-371" name="__codelineno-0-371" href="#__codelineno-0-371"></a>    Dim keys As Variant
 <a id="__codelineno-0-372" name="__codelineno-0-372" href="#__codelineno-0-372"></a>    keys = AllKeys()
 <a id="__codelineno-0-373" name="__codelineno-0-373" href="#__codelineno-0-373"></a>    Dim i As Long
@@ -5426,7 +5426,7 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-381" name="__codelineno-0-381" href="#__codelineno-0-381"></a>    Dim wasP As Boolean
 <a id="__codelineno-0-382" name="__codelineno-0-382" href="#__codelineno-0-382"></a>    On Error Resume Next
 <a id="__codelineno-0-383" name="__codelineno-0-383" href="#__codelineno-0-383"></a>    wasP = ws.ProtectContents
-<a id="__codelineno-0-384" name="__codelineno-0-384" href="#__codelineno-0-384"></a>    If wasP Then ws.Unprotect Password:=&quot;&quot;
+<a id="__codelineno-0-384" name="__codelineno-0-384" href="#__codelineno-0-384"></a>    If wasP Then ws.Unprotect Password:=""
 <a id="__codelineno-0-385" name="__codelineno-0-385" href="#__codelineno-0-385"></a>    On Error GoTo 0
 <a id="__codelineno-0-386" name="__codelineno-0-386" href="#__codelineno-0-386"></a>    Dim keys As Variant
 <a id="__codelineno-0-387" name="__codelineno-0-387" href="#__codelineno-0-387"></a>    keys = AllKeys()
@@ -5435,7 +5435,7 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-390" name="__codelineno-0-390" href="#__codelineno-0-390"></a>        ws.Cells(FIRST_DATA_ROW + i, VALUE_COL).Value = CStr(d(keys(i)))
 <a id="__codelineno-0-391" name="__codelineno-0-391" href="#__codelineno-0-391"></a>    Next i
 <a id="__codelineno-0-392" name="__codelineno-0-392" href="#__codelineno-0-392"></a>    On Error Resume Next
-<a id="__codelineno-0-393" name="__codelineno-0-393" href="#__codelineno-0-393"></a>    If wasP Then ws.Protect Password:=&quot;&quot;, UserInterfaceOnly:=True
+<a id="__codelineno-0-393" name="__codelineno-0-393" href="#__codelineno-0-393"></a>    If wasP Then ws.Protect Password:="", UserInterfaceOnly:=True
 <a id="__codelineno-0-394" name="__codelineno-0-394" href="#__codelineno-0-394"></a>    On Error GoTo 0
 <a id="__codelineno-0-395" name="__codelineno-0-395" href="#__codelineno-0-395"></a>End Sub
 <a id="__codelineno-0-396" name="__codelineno-0-396" href="#__codelineno-0-396"></a>
@@ -5443,7 +5443,7 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-398" name="__codelineno-0-398" href="#__codelineno-0-398"></a>    Dim wasP As Boolean
 <a id="__codelineno-0-399" name="__codelineno-0-399" href="#__codelineno-0-399"></a>    On Error Resume Next
 <a id="__codelineno-0-400" name="__codelineno-0-400" href="#__codelineno-0-400"></a>    wasP = ws.ProtectContents
-<a id="__codelineno-0-401" name="__codelineno-0-401" href="#__codelineno-0-401"></a>    If wasP Then ws.Unprotect Password:=&quot;&quot;
+<a id="__codelineno-0-401" name="__codelineno-0-401" href="#__codelineno-0-401"></a>    If wasP Then ws.Unprotect Password:=""
 <a id="__codelineno-0-402" name="__codelineno-0-402" href="#__codelineno-0-402"></a>    On Error GoTo 0
 <a id="__codelineno-0-403" name="__codelineno-0-403" href="#__codelineno-0-403"></a>    ws.Cells(1, KEY_COL).Value = SettingsSheetName()
 <a id="__codelineno-0-404" name="__codelineno-0-404" href="#__codelineno-0-404"></a>    Dim keys As Variant
@@ -5452,12 +5452,12 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-407" name="__codelineno-0-407" href="#__codelineno-0-407"></a>    For i = 0 To UBound(keys)
 <a id="__codelineno-0-408" name="__codelineno-0-408" href="#__codelineno-0-408"></a>        ws.Cells(FIRST_DATA_ROW + i, KEY_COL).Value = keys(i)
 <a id="__codelineno-0-409" name="__codelineno-0-409" href="#__codelineno-0-409"></a>    Next i
-<a id="__codelineno-0-410" name="__codelineno-0-410" href="#__codelineno-0-410"></a>    AddListValidation ws.Cells(FIRST_DATA_ROW + 4, VALUE_COL), &quot;DEBUG,INFO,WARN,ERROR,OFF,TRACE&quot;
-<a id="__codelineno-0-411" name="__codelineno-0-411" href="#__codelineno-0-411"></a>    AddListValidation ws.Cells(FIRST_DATA_ROW + 6, VALUE_COL), &quot;safeDefault,warn,abort&quot;
+<a id="__codelineno-0-410" name="__codelineno-0-410" href="#__codelineno-0-410"></a>    AddListValidation ws.Cells(FIRST_DATA_ROW + 4, VALUE_COL), "DEBUG,INFO,WARN,ERROR,OFF,TRACE"
+<a id="__codelineno-0-411" name="__codelineno-0-411" href="#__codelineno-0-411"></a>    AddListValidation ws.Cells(FIRST_DATA_ROW + 6, VALUE_COL), "safeDefault,warn,abort"
 <a id="__codelineno-0-412" name="__codelineno-0-412" href="#__codelineno-0-412"></a>    On Error Resume Next
 <a id="__codelineno-0-413" name="__codelineno-0-413" href="#__codelineno-0-413"></a>    ws.Columns(KEY_COL).ColumnWidth = 18
 <a id="__codelineno-0-414" name="__codelineno-0-414" href="#__codelineno-0-414"></a>    ws.Columns(VALUE_COL).ColumnWidth = 34
-<a id="__codelineno-0-415" name="__codelineno-0-415" href="#__codelineno-0-415"></a>    If wasP Then ws.Protect Password:=&quot;&quot;, UserInterfaceOnly:=True
+<a id="__codelineno-0-415" name="__codelineno-0-415" href="#__codelineno-0-415"></a>    If wasP Then ws.Protect Password:="", UserInterfaceOnly:=True
 <a id="__codelineno-0-416" name="__codelineno-0-416" href="#__codelineno-0-416"></a>    On Error GoTo 0
 <a id="__codelineno-0-417" name="__codelineno-0-417" href="#__codelineno-0-417"></a>End Sub
 <a id="__codelineno-0-418" name="__codelineno-0-418" href="#__codelineno-0-418"></a>
@@ -5489,33 +5489,33 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-444" name="__codelineno-0-444" href="#__codelineno-0-444"></a>            Exit Function
 <a id="__codelineno-0-445" name="__codelineno-0-445" href="#__codelineno-0-445"></a>        End If
 <a id="__codelineno-0-446" name="__codelineno-0-446" href="#__codelineno-0-446"></a>    Next i
-<a id="__codelineno-0-447" name="__codelineno-0-447" href="#__codelineno-0-447"></a>    FirstEmptyPathKey = &quot;&quot;
+<a id="__codelineno-0-447" name="__codelineno-0-447" href="#__codelineno-0-447"></a>    FirstEmptyPathKey = ""
 <a id="__codelineno-0-448" name="__codelineno-0-448" href="#__codelineno-0-448"></a>End Function
 <a id="__codelineno-0-449" name="__codelineno-0-449" href="#__codelineno-0-449"></a>
 <a id="__codelineno-0-450" name="__codelineno-0-450" href="#__codelineno-0-450"></a>Private Sub DeriveDirs(ByVal base As String, ByVal d As Object)
 <a id="__codelineno-0-451" name="__codelineno-0-451" href="#__codelineno-0-451"></a>    Dim b As String
 <a id="__codelineno-0-452" name="__codelineno-0-452" href="#__codelineno-0-452"></a>    b = base
-<a id="__codelineno-0-453" name="__codelineno-0-453" href="#__codelineno-0-453"></a>    Do While Right(b, 1) = &quot;\&quot;
+<a id="__codelineno-0-453" name="__codelineno-0-453" href="#__codelineno-0-453"></a>    Do While Right(b, 1) = "\"
 <a id="__codelineno-0-454" name="__codelineno-0-454" href="#__codelineno-0-454"></a>        b = Left(b, Len(b) - 1)
 <a id="__codelineno-0-455" name="__codelineno-0-455" href="#__codelineno-0-455"></a>    Loop
-<a id="__codelineno-0-456" name="__codelineno-0-456" href="#__codelineno-0-456"></a>    d(&quot;data_dir&quot;) = b &amp; &quot;\data\&quot;
-<a id="__codelineno-0-457" name="__codelineno-0-457" href="#__codelineno-0-457"></a>    d(&quot;format_dir&quot;) = b &amp; &quot;\formats\&quot;
-<a id="__codelineno-0-458" name="__codelineno-0-458" href="#__codelineno-0-458"></a>    &#39; [C1] ui_dir installer default is role-qualified (&lt;base&gt;\ui\&lt;role&gt;\),
-<a id="__codelineno-0-459" name="__codelineno-0-459" href="#__codelineno-0-459"></a>    &#39; role from ThisWorkbook (ADR-0090). Seeded on first run only; the cell is
-<a id="__codelineno-0-460" name="__codelineno-0-460" href="#__codelineno-0-460"></a>    &#39; then a free absolute path the user may change to anything.
+<a id="__codelineno-0-456" name="__codelineno-0-456" href="#__codelineno-0-456"></a>    d("data_dir") = b &amp; "\data\"
+<a id="__codelineno-0-457" name="__codelineno-0-457" href="#__codelineno-0-457"></a>    d("format_dir") = b &amp; "\formats\"
+<a id="__codelineno-0-458" name="__codelineno-0-458" href="#__codelineno-0-458"></a>    ' [C1] ui_dir installer default is role-qualified (&lt;base&gt;\ui\&lt;role&gt;\),
+<a id="__codelineno-0-459" name="__codelineno-0-459" href="#__codelineno-0-459"></a>    ' role from ThisWorkbook (ADR-0090). Seeded on first run only; the cell is
+<a id="__codelineno-0-460" name="__codelineno-0-460" href="#__codelineno-0-460"></a>    ' then a free absolute path the user may change to anything.
 <a id="__codelineno-0-461" name="__codelineno-0-461" href="#__codelineno-0-461"></a>    Dim uiRole As String
-<a id="__codelineno-0-462" name="__codelineno-0-462" href="#__codelineno-0-462"></a>    uiRole = Replace$(ThisWorkbook.Name, &quot;.xlsm&quot;, &quot;&quot;)
+<a id="__codelineno-0-462" name="__codelineno-0-462" href="#__codelineno-0-462"></a>    uiRole = Replace$(ThisWorkbook.Name, ".xlsm", "")
 <a id="__codelineno-0-463" name="__codelineno-0-463" href="#__codelineno-0-463"></a>    If Len(uiRole) &gt; 0 Then
-<a id="__codelineno-0-464" name="__codelineno-0-464" href="#__codelineno-0-464"></a>        d(&quot;ui_dir&quot;) = b &amp; &quot;\ui\&quot; &amp; uiRole &amp; &quot;\&quot;
+<a id="__codelineno-0-464" name="__codelineno-0-464" href="#__codelineno-0-464"></a>        d("ui_dir") = b &amp; "\ui\" &amp; uiRole &amp; "\"
 <a id="__codelineno-0-465" name="__codelineno-0-465" href="#__codelineno-0-465"></a>    Else
-<a id="__codelineno-0-466" name="__codelineno-0-466" href="#__codelineno-0-466"></a>        d(&quot;ui_dir&quot;) = b &amp; &quot;\ui\&quot;
+<a id="__codelineno-0-466" name="__codelineno-0-466" href="#__codelineno-0-466"></a>        d("ui_dir") = b &amp; "\ui\"
 <a id="__codelineno-0-467" name="__codelineno-0-467" href="#__codelineno-0-467"></a>    End If
-<a id="__codelineno-0-468" name="__codelineno-0-468" href="#__codelineno-0-468"></a>    d(&quot;backup_dir&quot;) = b &amp; &quot;\backup\&quot;
+<a id="__codelineno-0-468" name="__codelineno-0-468" href="#__codelineno-0-468"></a>    d("backup_dir") = b &amp; "\backup\"
 <a id="__codelineno-0-469" name="__codelineno-0-469" href="#__codelineno-0-469"></a>End Sub
 <a id="__codelineno-0-470" name="__codelineno-0-470" href="#__codelineno-0-470"></a>
 <a id="__codelineno-0-471" name="__codelineno-0-471" href="#__codelineno-0-471"></a>Private Sub FillMissingPathsFromDefault(ByVal d As Object)
 <a id="__codelineno-0-472" name="__codelineno-0-472" href="#__codelineno-0-472"></a>    Dim def As Object
-<a id="__codelineno-0-473" name="__codelineno-0-473" href="#__codelineno-0-473"></a>    Set def = CreateObject(&quot;Scripting.Dictionary&quot;)
+<a id="__codelineno-0-473" name="__codelineno-0-473" href="#__codelineno-0-473"></a>    Set def = CreateObject("Scripting.Dictionary")
 <a id="__codelineno-0-474" name="__codelineno-0-474" href="#__codelineno-0-474"></a>    DeriveDirs DEFAULT_BASE, def
 <a id="__codelineno-0-475" name="__codelineno-0-475" href="#__codelineno-0-475"></a>    Dim keys As Variant
 <a id="__codelineno-0-476" name="__codelineno-0-476" href="#__codelineno-0-476"></a>    keys = AllKeys()
@@ -5525,13 +5525,13 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-480" name="__codelineno-0-480" href="#__codelineno-0-480"></a>    Next i
 <a id="__codelineno-0-481" name="__codelineno-0-481" href="#__codelineno-0-481"></a>End Sub
 <a id="__codelineno-0-482" name="__codelineno-0-482" href="#__codelineno-0-482"></a>
-<a id="__codelineno-0-483" name="__codelineno-0-483" href="#__codelineno-0-483"></a>&#39; [Fix-6 / ADR-0133-followup] Infer BASE_DIR from whatever path cells are
-<a id="__codelineno-0-484" name="__codelineno-0-484" href="#__codelineno-0-484"></a>&#39; already filled, so a partially-migrated config can self-heal without an
-<a id="__codelineno-0-485" name="__codelineno-0-485" href="#__codelineno-0-485"></a>&#39; InputBox. The parent of the first filled sub-path is used as the base.
-<a id="__codelineno-0-486" name="__codelineno-0-486" href="#__codelineno-0-486"></a>&#39; Returns &quot;&quot; when nothing can be inferred.
+<a id="__codelineno-0-483" name="__codelineno-0-483" href="#__codelineno-0-483"></a>' [Fix-6 / ADR-0133-followup] Infer BASE_DIR from whatever path cells are
+<a id="__codelineno-0-484" name="__codelineno-0-484" href="#__codelineno-0-484"></a>' already filled, so a partially-migrated config can self-heal without an
+<a id="__codelineno-0-485" name="__codelineno-0-485" href="#__codelineno-0-485"></a>' InputBox. The parent of the first filled sub-path is used as the base.
+<a id="__codelineno-0-486" name="__codelineno-0-486" href="#__codelineno-0-486"></a>' Returns "" when nothing can be inferred.
 <a id="__codelineno-0-487" name="__codelineno-0-487" href="#__codelineno-0-487"></a>Private Function InferBaseDir(ByVal d As Object) As String
 <a id="__codelineno-0-488" name="__codelineno-0-488" href="#__codelineno-0-488"></a>    Dim subKeys As Variant
-<a id="__codelineno-0-489" name="__codelineno-0-489" href="#__codelineno-0-489"></a>    subKeys = Array(&quot;data_dir&quot;, &quot;format_dir&quot;, &quot;ui_dir&quot;, &quot;backup_dir&quot;)
+<a id="__codelineno-0-489" name="__codelineno-0-489" href="#__codelineno-0-489"></a>    subKeys = Array("data_dir", "format_dir", "ui_dir", "backup_dir")
 <a id="__codelineno-0-490" name="__codelineno-0-490" href="#__codelineno-0-490"></a>    Dim i As Long
 <a id="__codelineno-0-491" name="__codelineno-0-491" href="#__codelineno-0-491"></a>    Dim v As String
 <a id="__codelineno-0-492" name="__codelineno-0-492" href="#__codelineno-0-492"></a>    For i = 0 To UBound(subKeys)
@@ -5541,14 +5541,14 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-496" name="__codelineno-0-496" href="#__codelineno-0-496"></a>            If Len(InferBaseDir) &gt; 0 Then Exit Function
 <a id="__codelineno-0-497" name="__codelineno-0-497" href="#__codelineno-0-497"></a>        End If
 <a id="__codelineno-0-498" name="__codelineno-0-498" href="#__codelineno-0-498"></a>    Next i
-<a id="__codelineno-0-499" name="__codelineno-0-499" href="#__codelineno-0-499"></a>    InferBaseDir = &quot;&quot;
+<a id="__codelineno-0-499" name="__codelineno-0-499" href="#__codelineno-0-499"></a>    InferBaseDir = ""
 <a id="__codelineno-0-500" name="__codelineno-0-500" href="#__codelineno-0-500"></a>End Function
 <a id="__codelineno-0-501" name="__codelineno-0-501" href="#__codelineno-0-501"></a>
-<a id="__codelineno-0-502" name="__codelineno-0-502" href="#__codelineno-0-502"></a>&#39; Derive every still-empty path cell from an inferred base (same layout as
-<a id="__codelineno-0-503" name="__codelineno-0-503" href="#__codelineno-0-503"></a>&#39; DeriveDirs). Filled cells are left untouched so user customisations survive.
+<a id="__codelineno-0-502" name="__codelineno-0-502" href="#__codelineno-0-502"></a>' Derive every still-empty path cell from an inferred base (same layout as
+<a id="__codelineno-0-503" name="__codelineno-0-503" href="#__codelineno-0-503"></a>' DeriveDirs). Filled cells are left untouched so user customisations survive.
 <a id="__codelineno-0-504" name="__codelineno-0-504" href="#__codelineno-0-504"></a>Private Sub FillMissingPathsFromBase(ByVal d As Object, ByVal base As String)
 <a id="__codelineno-0-505" name="__codelineno-0-505" href="#__codelineno-0-505"></a>    Dim derived As Object
-<a id="__codelineno-0-506" name="__codelineno-0-506" href="#__codelineno-0-506"></a>    Set derived = CreateObject(&quot;Scripting.Dictionary&quot;)
+<a id="__codelineno-0-506" name="__codelineno-0-506" href="#__codelineno-0-506"></a>    Set derived = CreateObject("Scripting.Dictionary")
 <a id="__codelineno-0-507" name="__codelineno-0-507" href="#__codelineno-0-507"></a>    DeriveDirs base, derived
 <a id="__codelineno-0-508" name="__codelineno-0-508" href="#__codelineno-0-508"></a>    Dim keys As Variant
 <a id="__codelineno-0-509" name="__codelineno-0-509" href="#__codelineno-0-509"></a>    keys = AllKeys()
@@ -5558,33 +5558,33 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-513" name="__codelineno-0-513" href="#__codelineno-0-513"></a>    Next i
 <a id="__codelineno-0-514" name="__codelineno-0-514" href="#__codelineno-0-514"></a>End Sub
 <a id="__codelineno-0-515" name="__codelineno-0-515" href="#__codelineno-0-515"></a>
-<a id="__codelineno-0-516" name="__codelineno-0-516" href="#__codelineno-0-516"></a>&#39; Strip every trailing path separator (&quot;C:\KnowledgeMgr\&quot; -&gt; &quot;C:\KnowledgeMgr&quot;).
+<a id="__codelineno-0-516" name="__codelineno-0-516" href="#__codelineno-0-516"></a>' Strip every trailing path separator ("C:\KnowledgeMgr\" -&gt; "C:\KnowledgeMgr").
 <a id="__codelineno-0-517" name="__codelineno-0-517" href="#__codelineno-0-517"></a>Private Function StripTrailingSep(ByVal p As String) As String
 <a id="__codelineno-0-518" name="__codelineno-0-518" href="#__codelineno-0-518"></a>    Dim s As String
 <a id="__codelineno-0-519" name="__codelineno-0-519" href="#__codelineno-0-519"></a>    s = p
-<a id="__codelineno-0-520" name="__codelineno-0-520" href="#__codelineno-0-520"></a>    Do While Len(s) &gt; 0 And Right(s, 1) = &quot;\&quot;
+<a id="__codelineno-0-520" name="__codelineno-0-520" href="#__codelineno-0-520"></a>    Do While Len(s) &gt; 0 And Right(s, 1) = "\"
 <a id="__codelineno-0-521" name="__codelineno-0-521" href="#__codelineno-0-521"></a>        s = Left(s, Len(s) - 1)
 <a id="__codelineno-0-522" name="__codelineno-0-522" href="#__codelineno-0-522"></a>    Loop
 <a id="__codelineno-0-523" name="__codelineno-0-523" href="#__codelineno-0-523"></a>    StripTrailingSep = s
 <a id="__codelineno-0-524" name="__codelineno-0-524" href="#__codelineno-0-524"></a>End Function
 <a id="__codelineno-0-525" name="__codelineno-0-525" href="#__codelineno-0-525"></a>
-<a id="__codelineno-0-526" name="__codelineno-0-526" href="#__codelineno-0-526"></a>&#39; Parent directory of a path (&quot;C:\KnowledgeMgr\data\&quot; -&gt; &quot;C:\KnowledgeMgr&quot;).
+<a id="__codelineno-0-526" name="__codelineno-0-526" href="#__codelineno-0-526"></a>' Parent directory of a path ("C:\KnowledgeMgr\data\" -&gt; "C:\KnowledgeMgr").
 <a id="__codelineno-0-527" name="__codelineno-0-527" href="#__codelineno-0-527"></a>Private Function ParentDir(ByVal p As String) As String
 <a id="__codelineno-0-528" name="__codelineno-0-528" href="#__codelineno-0-528"></a>    Dim s As String
 <a id="__codelineno-0-529" name="__codelineno-0-529" href="#__codelineno-0-529"></a>    s = StripTrailingSep(p)
 <a id="__codelineno-0-530" name="__codelineno-0-530" href="#__codelineno-0-530"></a>    Dim pos As Long
-<a id="__codelineno-0-531" name="__codelineno-0-531" href="#__codelineno-0-531"></a>    pos = InStrRev(s, &quot;\&quot;)
+<a id="__codelineno-0-531" name="__codelineno-0-531" href="#__codelineno-0-531"></a>    pos = InStrRev(s, "\")
 <a id="__codelineno-0-532" name="__codelineno-0-532" href="#__codelineno-0-532"></a>    If pos &gt; 1 Then
 <a id="__codelineno-0-533" name="__codelineno-0-533" href="#__codelineno-0-533"></a>        ParentDir = Left(s, pos - 1)
 <a id="__codelineno-0-534" name="__codelineno-0-534" href="#__codelineno-0-534"></a>    Else
-<a id="__codelineno-0-535" name="__codelineno-0-535" href="#__codelineno-0-535"></a>        ParentDir = &quot;&quot;
+<a id="__codelineno-0-535" name="__codelineno-0-535" href="#__codelineno-0-535"></a>        ParentDir = ""
 <a id="__codelineno-0-536" name="__codelineno-0-536" href="#__codelineno-0-536"></a>    End If
 <a id="__codelineno-0-537" name="__codelineno-0-537" href="#__codelineno-0-537"></a>End Function
 <a id="__codelineno-0-538" name="__codelineno-0-538" href="#__codelineno-0-538"></a>
 <a id="__codelineno-0-539" name="__codelineno-0-539" href="#__codelineno-0-539"></a>Private Sub ApplyBehaviorDefaults(ByVal d As Object)
-<a id="__codelineno-0-540" name="__codelineno-0-540" href="#__codelineno-0-540"></a>    If Len(Trim(CStr(d(&quot;debugLevel&quot;)))) = 0 Then d(&quot;debugLevel&quot;) = DEFAULT_DEBUG_LEVEL
-<a id="__codelineno-0-541" name="__codelineno-0-541" href="#__codelineno-0-541"></a>    If Len(Trim(CStr(d(&quot;logRotationRows&quot;)))) = 0 Then d(&quot;logRotationRows&quot;) = DEFAULT_LOG_ROTATION_ROWS
-<a id="__codelineno-0-542" name="__codelineno-0-542" href="#__codelineno-0-542"></a>    If Len(Trim(CStr(d(&quot;uiSchemaFailMode&quot;)))) = 0 Then d(&quot;uiSchemaFailMode&quot;) = DEFAULT_UI_SCHEMA_FAIL_MODE
+<a id="__codelineno-0-540" name="__codelineno-0-540" href="#__codelineno-0-540"></a>    If Len(Trim(CStr(d("debugLevel")))) = 0 Then d("debugLevel") = DEFAULT_DEBUG_LEVEL
+<a id="__codelineno-0-541" name="__codelineno-0-541" href="#__codelineno-0-541"></a>    If Len(Trim(CStr(d("logRotationRows")))) = 0 Then d("logRotationRows") = DEFAULT_LOG_ROTATION_ROWS
+<a id="__codelineno-0-542" name="__codelineno-0-542" href="#__codelineno-0-542"></a>    If Len(Trim(CStr(d("uiSchemaFailMode")))) = 0 Then d("uiSchemaFailMode") = DEFAULT_UI_SCHEMA_FAIL_MODE
 <a id="__codelineno-0-543" name="__codelineno-0-543" href="#__codelineno-0-543"></a>End Sub
 <a id="__codelineno-0-544" name="__codelineno-0-544" href="#__codelineno-0-544"></a>
 <a id="__codelineno-0-545" name="__codelineno-0-545" href="#__codelineno-0-545"></a>Private Function AskBaseDir() As String
@@ -5614,7 +5614,7 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-569" name="__codelineno-0-569" href="#__codelineno-0-569"></a>    On Error GoTo 0
 <a id="__codelineno-0-570" name="__codelineno-0-570" href="#__codelineno-0-570"></a>End Sub
 <a id="__codelineno-0-571" name="__codelineno-0-571" href="#__codelineno-0-571"></a>
-<a id="__codelineno-0-572" name="__codelineno-0-572" href="#__codelineno-0-572"></a>&#39; ---- JP user-facing strings (ChrW so the source is installer-safe) ----
+<a id="__codelineno-0-572" name="__codelineno-0-572" href="#__codelineno-0-572"></a>' ---- JP user-facing strings (ChrW so the source is installer-safe) ----
 <a id="__codelineno-0-573" name="__codelineno-0-573" href="#__codelineno-0-573"></a>
 <a id="__codelineno-0-574" name="__codelineno-0-574" href="#__codelineno-0-574"></a>Private Function InputPrompt() As String
 <a id="__codelineno-0-575" name="__codelineno-0-575" href="#__codelineno-0-575"></a>    InputPrompt = ChrW(&amp;H683C) &amp; ChrW(&amp;H7D0D) &amp; ChrW(&amp;H5148) &amp; ChrW(&amp;H306E) &amp; ChrW(&amp;H30D9) &amp; ChrW(&amp;H30FC) &amp; ChrW(&amp;H30B9) &amp; ChrW(&amp;H30D5) &amp; ChrW(&amp;H30A9) &amp; ChrW(&amp;H30EB) &amp; ChrW(&amp;H30C0) &amp; ChrW(&amp;H3092) &amp; ChrW(&amp;H5165) &amp; ChrW(&amp;H529B) &amp; ChrW(&amp;H3057) &amp; ChrW(&amp;H3066) &amp; ChrW(&amp;H304F) &amp; ChrW(&amp;H3060) &amp; ChrW(&amp;H3055) &amp; ChrW(&amp;H3044) &amp; vbCrLf &amp; DEFAULT_BASE
@@ -5692,7 +5692,7 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
       <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.indexes", "toc.integrate", "search.highlight", "search.suggest", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u30b3\u30d4\u30fc\u3057\u307e\u3057\u305f", "clipboard.copy": "\u30af\u30ea\u30c3\u30d7\u30dc\u30fc\u30c9\u3078\u30b3\u30d4\u30fc", "search.result.more.one": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3082\u30461\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.more.other": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3042\u3068#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.none": "\u4f55\u3082\u898b\u3064\u304b\u308a\u307e\u305b\u3093\u3067\u3057\u305f", "search.result.one": "1\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.other": "#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.placeholder": "\u691c\u7d22\u30ad\u30fc\u30ef\u30fc\u30c9\u3092\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044", "search.result.term.missing": "\u691c\u7d22\u306b\u542b\u307e\u308c\u306a\u3044", "select.version": "\u30d0\u30fc\u30b8\u30e7\u30f3\u5207\u308a\u66ff\u3048"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>

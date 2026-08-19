@@ -25,7 +25,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -33,7 +33,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -5043,41 +5043,41 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 </blockquote>
 <hr />
 <h2 id="_2">ソースコード<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Attribute VB_Name = &quot;modE2E_Environment&quot;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Attribute VB_Name = "modE2E_Environment"
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>Option Explicit
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>Public Function Run_Environment_Cases(ByVal role As String) As String
 <a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    Dim sb As String, n As Long, sep As String
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    sb = &quot;{&quot;&quot;role&quot;&quot;:&quot;&quot;env-&quot; &amp; role &amp; &quot;&quot;&quot;,&quot;&quot;cases&quot;&quot;:[&quot;
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    sep = &quot;&quot;
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    sb = sb &amp; sep &amp; EnvCase(&quot;env-01&quot;, &quot;excel_version&quot;, CStr(Application.Version)): sep = &quot;,&quot;
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    sb = sb &amp; sep &amp; EnvCase(&quot;env-02&quot;, &quot;excel_build&quot;, CStr(Application.Build))
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    sb = sb &amp; sep &amp; EnvCase(&quot;env-03&quot;, &quot;os_name&quot;, CStr(Application.OperatingSystem))
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>    sb = sb &amp; sep &amp; EnvCase(&quot;env-04&quot;, &quot;user_name&quot;, Environ$(&quot;USERNAME&quot;))
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>    sb = sb &amp; sep &amp; EnvCase(&quot;env-05&quot;, &quot;computer_name&quot;, Environ$(&quot;COMPUTERNAME&quot;))
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>    sb = sb &amp; sep &amp; EnvCase(&quot;env-06&quot;, &quot;system_root&quot;, Environ$(&quot;SystemRoot&quot;))
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>    sb = sb &amp; sep &amp; EnvCase(&quot;env-07&quot;, &quot;temp_dir&quot;, Environ$(&quot;TEMP&quot;))
-<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>    sb = sb &amp; sep &amp; EnvCase(&quot;env-08&quot;, &quot;user_profile&quot;, Environ$(&quot;USERPROFILE&quot;))
-<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>    sb = sb &amp; sep &amp; EnvCase(&quot;env-09&quot;, &quot;calculation_mode&quot;, CStr(Application.Calculation))
-<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>    sb = sb &amp; sep &amp; EnvCase(&quot;env-10&quot;, &quot;screen_updating&quot;, CStr(Application.ScreenUpdating))
-<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>    sb = sb &amp; sep &amp; EnvCase(&quot;env-11&quot;, &quot;enable_events&quot;, CStr(Application.EnableEvents))
-<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>    sb = sb &amp; sep &amp; EnvCase(&quot;env-12&quot;, &quot;workbook_count&quot;, CStr(Application.Workbooks.Count))
-<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>    sb = sb &amp; sep &amp; EnvCase(&quot;env-13&quot;, &quot;active_printer&quot;, CStr(Application.ActivePrinter))
-<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>    sb = sb &amp; sep &amp; EnvCase(&quot;env-14&quot;, &quot;cursor_movement&quot;, CStr(Application.CursorMovement))
-<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>    sb = sb &amp; sep &amp; EnvCase(&quot;env-15&quot;, &quot;this_workbook&quot;, ThisWorkbook.Name)
-<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>    sb = sb &amp; &quot;]}&quot;
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    sb = "{""role"":""env-" &amp; role &amp; """,""cases"":["
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    sep = ""
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    sb = sb &amp; sep &amp; EnvCase("env-01", "excel_version", CStr(Application.Version)): sep = ","
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    sb = sb &amp; sep &amp; EnvCase("env-02", "excel_build", CStr(Application.Build))
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    sb = sb &amp; sep &amp; EnvCase("env-03", "os_name", CStr(Application.OperatingSystem))
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>    sb = sb &amp; sep &amp; EnvCase("env-04", "user_name", Environ$("USERNAME"))
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>    sb = sb &amp; sep &amp; EnvCase("env-05", "computer_name", Environ$("COMPUTERNAME"))
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>    sb = sb &amp; sep &amp; EnvCase("env-06", "system_root", Environ$("SystemRoot"))
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>    sb = sb &amp; sep &amp; EnvCase("env-07", "temp_dir", Environ$("TEMP"))
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>    sb = sb &amp; sep &amp; EnvCase("env-08", "user_profile", Environ$("USERPROFILE"))
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>    sb = sb &amp; sep &amp; EnvCase("env-09", "calculation_mode", CStr(Application.Calculation))
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>    sb = sb &amp; sep &amp; EnvCase("env-10", "screen_updating", CStr(Application.ScreenUpdating))
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>    sb = sb &amp; sep &amp; EnvCase("env-11", "enable_events", CStr(Application.EnableEvents))
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>    sb = sb &amp; sep &amp; EnvCase("env-12", "workbook_count", CStr(Application.Workbooks.Count))
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>    sb = sb &amp; sep &amp; EnvCase("env-13", "active_printer", CStr(Application.ActivePrinter))
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>    sb = sb &amp; sep &amp; EnvCase("env-14", "cursor_movement", CStr(Application.CursorMovement))
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>    sb = sb &amp; sep &amp; EnvCase("env-15", "this_workbook", ThisWorkbook.Name)
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>    sb = sb &amp; "]}"
 <a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>    Run_Environment_Cases = sb
 <a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>End Function
 <a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>
 <a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>Private Function EnvCase(ByVal id As String, ByVal name As String, ByVal observed As String) As String
 <a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>    Dim p As String
-<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>    If Len(observed) &gt; 0 Then p = &quot;true&quot; Else p = &quot;false&quot;
-<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>    EnvCase = &quot;{&quot;&quot;id&quot;&quot;:&quot;&quot;&quot; &amp; id &amp; &quot;&quot;&quot;,&quot;&quot;name&quot;&quot;:&quot;&quot;&quot; &amp; name &amp; &quot;&quot;&quot;,&quot;&quot;pass&quot;&quot;:&quot; &amp; p &amp; &quot;,&quot;&quot;note&quot;&quot;:&quot;&quot;&quot; &amp; Replace(observed, &quot;&quot;&quot;&quot;, &quot;&#39;&quot;) &amp; &quot;&quot;&quot;}&quot;
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>    If Len(observed) &gt; 0 Then p = "true" Else p = "false"
+<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>    EnvCase = "{""id"":""" &amp; id &amp; """,""name"":""" &amp; name &amp; """,""pass"":" &amp; p &amp; ",""note"":""" &amp; Replace(observed, """", "'") &amp; """}"
 <a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>End Function
 <a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>
 <a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>Public Sub Run_Environment_Cases_Out(ByVal outPath As String)
 <a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>    Dim role As String, s As String, fh As Integer
-<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>    role = Replace(ThisWorkbook.Name, &quot;.xlsm&quot;, &quot;&quot;)
+<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>    role = Replace(ThisWorkbook.Name, ".xlsm", "")
 <a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>    s = Run_Environment_Cases(role)
 <a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>    fh = FreeFile
 <a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>    Open outPath For Output As #fh
@@ -5145,7 +5145,7 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
       <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.indexes", "toc.integrate", "search.highlight", "search.suggest", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u30b3\u30d4\u30fc\u3057\u307e\u3057\u305f", "clipboard.copy": "\u30af\u30ea\u30c3\u30d7\u30dc\u30fc\u30c9\u3078\u30b3\u30d4\u30fc", "search.result.more.one": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3082\u30461\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.more.other": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3042\u3068#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.none": "\u4f55\u3082\u898b\u3064\u304b\u308a\u307e\u305b\u3093\u3067\u3057\u305f", "search.result.one": "1\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.other": "#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.placeholder": "\u691c\u7d22\u30ad\u30fc\u30ef\u30fc\u30c9\u3092\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044", "search.result.term.missing": "\u691c\u7d22\u306b\u542b\u307e\u308c\u306a\u3044", "select.version": "\u30d0\u30fc\u30b8\u30e7\u30f3\u5207\u308a\u66ff\u3048"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>

@@ -25,7 +25,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -33,7 +33,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -5043,90 +5043,90 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 </blockquote>
 <hr />
 <h2 id="_2">ソースコード<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Attribute VB_Name = &quot;modSheetMap&quot;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Attribute VB_Name = "modSheetMap"
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>Option Explicit
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>&#39; ================================================================
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>&#39; モジュール: modSheetMap（ユーティリティ層）
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>&#39; 概要:       Sheet 名 ⇔ 画面 ID (M-01?M-14) の双方向 mapping を
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>&#39;             一元提供する SSOT モジュール。
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>&#39;             SSOT-27 (Rank B B0 FAIL) 解消のため Sprint 1 W1-P0-12
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>&#39;             / S1-P0-23 で新規追加 (2026-05-15)。
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>&#39; 設計参照:   modScreenSpecRegistry.bas BuildXxxSpec 群の
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>&#39;             ScreenId / SheetName ペアを SSOT とする
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>&#39;             (M-01: メイン / M-02: フォーマット一覧 / M-03: フォーマット設計 /
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>&#39;              M-04: フォーマットプレビュー / M-05: ナレッジ登録 /
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>&#39;              M-06: ナレッジ修正 / M-07: ナレッジ一覧 / M-08: 検索 /
-<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>&#39;              M-09: ナレッジ表示 / M-10: 格納先設定 / M-11: 設定 /
-<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>&#39;              M-12: 既存データへのフィールド反映 /
-<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>&#39;              M-13: 廃止 (ADR-0072 §2.1) / M-14: ログ)
-<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>&#39;             ※ M-15 は現行 SSOT に存在しない (将来予約)。
-<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>&#39; 依存先:     modCommon (SHEET_* 定数)
-<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>&#39; 利用例:
-<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>&#39;     Dim sid As String
-<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>&#39;     sid = SheetToScreenId(ActiveSheet.Name)  &#39; &quot;M-08&quot; 等
-<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>&#39;     If sid = &quot;&quot; Then ... &#39; 未知シートはハンドリング
-<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>&#39; ================================================================
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>' ================================================================
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>' モジュール: modSheetMap（ユーティリティ層）
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>' 概要:       Sheet 名 ⇔ 画面 ID (M-01?M-14) の双方向 mapping を
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>'             一元提供する SSOT モジュール。
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>'             SSOT-27 (Rank B B0 FAIL) 解消のため Sprint 1 W1-P0-12
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>'             / S1-P0-23 で新規追加 (2026-05-15)。
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>' 設計参照:   modScreenSpecRegistry.bas BuildXxxSpec 群の
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>'             ScreenId / SheetName ペアを SSOT とする
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>'             (M-01: メイン / M-02: フォーマット一覧 / M-03: フォーマット設計 /
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>'              M-04: フォーマットプレビュー / M-05: ナレッジ登録 /
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>'              M-06: ナレッジ修正 / M-07: ナレッジ一覧 / M-08: 検索 /
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>'              M-09: ナレッジ表示 / M-10: 格納先設定 / M-11: 設定 /
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>'              M-12: 既存データへのフィールド反映 /
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>'              M-13: 廃止 (ADR-0072 §2.1) / M-14: ログ)
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>'             ※ M-15 は現行 SSOT に存在しない (将来予約)。
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>' 依存先:     modCommon (SHEET_* 定数)
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>' 利用例:
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>'     Dim sid As String
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>'     sid = SheetToScreenId(ActiveSheet.Name)  ' "M-08" 等
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>'     If sid = "" Then ... ' 未知シートはハンドリング
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>' ================================================================
 <a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>
-<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>&#39; ================================================================
-<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>&#39; 関数名: SheetToScreenId
-<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>&#39; 概要:   シート名から画面 ID (M-01?M-14) を返す。
-<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>&#39;         未知シート名は &quot;&quot; (空文字) を返す。
-<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>&#39; 引数:   sheetName - シート名 (例: &quot;メイン&quot;)
-<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>&#39; 戻り値: String - 画面 ID (例: &quot;M-01&quot;) / 未知なら &quot;&quot;
-<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>&#39; 備考:   Select Case 実装 (Dictionary 初期化コスト回避 / Const 配列限界回避)。
-<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>&#39;         比較は完全一致 (大文字小文字区別、trim せず)。
-<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>&#39; ================================================================
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>' ================================================================
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>' 関数名: SheetToScreenId
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>' 概要:   シート名から画面 ID (M-01?M-14) を返す。
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>'         未知シート名は "" (空文字) を返す。
+<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>' 引数:   sheetName - シート名 (例: "メイン")
+<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>' 戻り値: String - 画面 ID (例: "M-01") / 未知なら ""
+<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>' 備考:   Select Case 実装 (Dictionary 初期化コスト回避 / Const 配列限界回避)。
+<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>'         比較は完全一致 (大文字小文字区別、trim せず)。
+<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>' ================================================================
 <a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>Public Function SheetToScreenId(ByVal sheetName As String) As String
-<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1368] modSheetMap.SheetToScreenId ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1368] modSheetMap.SheetToScreenId ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>    Select Case sheetName
-<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>        Case SHEET_MAIN:           SheetToScreenId = &quot;M-01&quot;
-<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>        Case SHEET_FORMAT_LIST:    SheetToScreenId = &quot;M-02&quot;
-<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>        Case SHEET_FORMAT_DESIGN:  SheetToScreenId = &quot;M-03&quot;
-<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>        Case SHEET_FORMAT_PREVIEW: SheetToScreenId = &quot;M-04&quot;
-<a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>        Case SHEET_KNW_SAVE:       SheetToScreenId = &quot;M-05&quot;
-<a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>        Case SHEET_KNW_EDIT:       SheetToScreenId = &quot;M-06&quot;
-<a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>        Case SHEET_KNW_LIST:       SheetToScreenId = &quot;M-07&quot;
-<a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>        Case SHEET_SEARCH:         SheetToScreenId = &quot;M-08&quot;
-<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>        Case SHEET_KNW_DISPLAY:    SheetToScreenId = &quot;M-09&quot;
-<a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>        Case SHEET_STORAGE:        SheetToScreenId = &quot;M-10&quot;
-<a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>        Case SHEET_SETTINGS:       SheetToScreenId = &quot;M-11&quot;
-<a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>        Case SHEET_MIGRATION:      SheetToScreenId = &quot;M-12&quot;
-<a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>        &#39; M-13 廃止 (ADR-0072 §2.1): SHEET_FILE_FORMAT は v2.3 で除外、mapping なし
-<a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>        Case SHEET_LOG:            SheetToScreenId = &quot;M-14&quot;
-<a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a>        Case Else:                 SheetToScreenId = &quot;&quot;
+<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>        Case SHEET_MAIN:           SheetToScreenId = "M-01"
+<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>        Case SHEET_FORMAT_LIST:    SheetToScreenId = "M-02"
+<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>        Case SHEET_FORMAT_DESIGN:  SheetToScreenId = "M-03"
+<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>        Case SHEET_FORMAT_PREVIEW: SheetToScreenId = "M-04"
+<a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>        Case SHEET_KNW_SAVE:       SheetToScreenId = "M-05"
+<a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>        Case SHEET_KNW_EDIT:       SheetToScreenId = "M-06"
+<a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>        Case SHEET_KNW_LIST:       SheetToScreenId = "M-07"
+<a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>        Case SHEET_SEARCH:         SheetToScreenId = "M-08"
+<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>        Case SHEET_KNW_DISPLAY:    SheetToScreenId = "M-09"
+<a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>        Case SHEET_STORAGE:        SheetToScreenId = "M-10"
+<a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>        Case SHEET_SETTINGS:       SheetToScreenId = "M-11"
+<a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>        Case SHEET_MIGRATION:      SheetToScreenId = "M-12"
+<a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>        ' M-13 廃止 (ADR-0072 §2.1): SHEET_FILE_FORMAT は v2.3 で除外、mapping なし
+<a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>        Case SHEET_LOG:            SheetToScreenId = "M-14"
+<a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a>        Case Else:                 SheetToScreenId = ""
 <a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a>    End Select
-<a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1369] modSheetMap.SheetToScreenId EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1369] modSheetMap.SheetToScreenId EXIT-OK"  ' [ADR-0100]
 <a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a>End Function
 <a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a>
-<a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>&#39; ================================================================
-<a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a>&#39; 関数名: ScreenIdToSheet
-<a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a>&#39; 概要:   画面 ID (M-01?M-14) からシート名を返す (逆引き)。
-<a id="__codelineno-0-60" name="__codelineno-0-60" href="#__codelineno-0-60"></a>&#39;         未知 ID は &quot;&quot; (空文字) を返す。
-<a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a>&#39; 引数:   screenId - 画面 ID (例: &quot;M-01&quot;)
-<a id="__codelineno-0-62" name="__codelineno-0-62" href="#__codelineno-0-62"></a>&#39; 戻り値: String - シート名 (例: &quot;メイン&quot;) / 未知なら &quot;&quot;
-<a id="__codelineno-0-63" name="__codelineno-0-63" href="#__codelineno-0-63"></a>&#39; 備考:   SheetToScreenId と完全一致対応。modCommon の SHEET_* 定数を返す。
-<a id="__codelineno-0-64" name="__codelineno-0-64" href="#__codelineno-0-64"></a>&#39; ================================================================
+<a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>' ================================================================
+<a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a>' 関数名: ScreenIdToSheet
+<a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a>' 概要:   画面 ID (M-01?M-14) からシート名を返す (逆引き)。
+<a id="__codelineno-0-60" name="__codelineno-0-60" href="#__codelineno-0-60"></a>'         未知 ID は "" (空文字) を返す。
+<a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a>' 引数:   screenId - 画面 ID (例: "M-01")
+<a id="__codelineno-0-62" name="__codelineno-0-62" href="#__codelineno-0-62"></a>' 戻り値: String - シート名 (例: "メイン") / 未知なら ""
+<a id="__codelineno-0-63" name="__codelineno-0-63" href="#__codelineno-0-63"></a>' 備考:   SheetToScreenId と完全一致対応。modCommon の SHEET_* 定数を返す。
+<a id="__codelineno-0-64" name="__codelineno-0-64" href="#__codelineno-0-64"></a>' ================================================================
 <a id="__codelineno-0-65" name="__codelineno-0-65" href="#__codelineno-0-65"></a>Public Function ScreenIdToSheet(ByVal screenId As String) As String
-<a id="__codelineno-0-66" name="__codelineno-0-66" href="#__codelineno-0-66"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1370] modSheetMap.ScreenIdToSheet ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-66" name="__codelineno-0-66" href="#__codelineno-0-66"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1370] modSheetMap.ScreenIdToSheet ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-67" name="__codelineno-0-67" href="#__codelineno-0-67"></a>    Select Case screenId
-<a id="__codelineno-0-68" name="__codelineno-0-68" href="#__codelineno-0-68"></a>        Case &quot;M-01&quot;: ScreenIdToSheet = SHEET_MAIN
-<a id="__codelineno-0-69" name="__codelineno-0-69" href="#__codelineno-0-69"></a>        Case &quot;M-02&quot;: ScreenIdToSheet = SHEET_FORMAT_LIST
-<a id="__codelineno-0-70" name="__codelineno-0-70" href="#__codelineno-0-70"></a>        Case &quot;M-03&quot;: ScreenIdToSheet = SHEET_FORMAT_DESIGN
-<a id="__codelineno-0-71" name="__codelineno-0-71" href="#__codelineno-0-71"></a>        Case &quot;M-04&quot;: ScreenIdToSheet = SHEET_FORMAT_PREVIEW
-<a id="__codelineno-0-72" name="__codelineno-0-72" href="#__codelineno-0-72"></a>        Case &quot;M-05&quot;: ScreenIdToSheet = SHEET_KNW_SAVE
-<a id="__codelineno-0-73" name="__codelineno-0-73" href="#__codelineno-0-73"></a>        Case &quot;M-06&quot;: ScreenIdToSheet = SHEET_KNW_EDIT
-<a id="__codelineno-0-74" name="__codelineno-0-74" href="#__codelineno-0-74"></a>        Case &quot;M-07&quot;: ScreenIdToSheet = SHEET_KNW_LIST
-<a id="__codelineno-0-75" name="__codelineno-0-75" href="#__codelineno-0-75"></a>        Case &quot;M-08&quot;: ScreenIdToSheet = SHEET_SEARCH
-<a id="__codelineno-0-76" name="__codelineno-0-76" href="#__codelineno-0-76"></a>        Case &quot;M-09&quot;: ScreenIdToSheet = SHEET_KNW_DISPLAY
-<a id="__codelineno-0-77" name="__codelineno-0-77" href="#__codelineno-0-77"></a>        Case &quot;M-10&quot;: ScreenIdToSheet = SHEET_STORAGE
-<a id="__codelineno-0-78" name="__codelineno-0-78" href="#__codelineno-0-78"></a>        Case &quot;M-11&quot;: ScreenIdToSheet = SHEET_SETTINGS
-<a id="__codelineno-0-79" name="__codelineno-0-79" href="#__codelineno-0-79"></a>        Case &quot;M-12&quot;: ScreenIdToSheet = SHEET_MIGRATION
-<a id="__codelineno-0-80" name="__codelineno-0-80" href="#__codelineno-0-80"></a>        &#39; M-13 廃止 (ADR-0072 §2.1): ScreenIdToSheet(&quot;M-13&quot;) は &quot;&quot; を返す (Case Else)
-<a id="__codelineno-0-81" name="__codelineno-0-81" href="#__codelineno-0-81"></a>        Case &quot;M-14&quot;: ScreenIdToSheet = SHEET_LOG
-<a id="__codelineno-0-82" name="__codelineno-0-82" href="#__codelineno-0-82"></a>        Case Else:   ScreenIdToSheet = &quot;&quot;
+<a id="__codelineno-0-68" name="__codelineno-0-68" href="#__codelineno-0-68"></a>        Case "M-01": ScreenIdToSheet = SHEET_MAIN
+<a id="__codelineno-0-69" name="__codelineno-0-69" href="#__codelineno-0-69"></a>        Case "M-02": ScreenIdToSheet = SHEET_FORMAT_LIST
+<a id="__codelineno-0-70" name="__codelineno-0-70" href="#__codelineno-0-70"></a>        Case "M-03": ScreenIdToSheet = SHEET_FORMAT_DESIGN
+<a id="__codelineno-0-71" name="__codelineno-0-71" href="#__codelineno-0-71"></a>        Case "M-04": ScreenIdToSheet = SHEET_FORMAT_PREVIEW
+<a id="__codelineno-0-72" name="__codelineno-0-72" href="#__codelineno-0-72"></a>        Case "M-05": ScreenIdToSheet = SHEET_KNW_SAVE
+<a id="__codelineno-0-73" name="__codelineno-0-73" href="#__codelineno-0-73"></a>        Case "M-06": ScreenIdToSheet = SHEET_KNW_EDIT
+<a id="__codelineno-0-74" name="__codelineno-0-74" href="#__codelineno-0-74"></a>        Case "M-07": ScreenIdToSheet = SHEET_KNW_LIST
+<a id="__codelineno-0-75" name="__codelineno-0-75" href="#__codelineno-0-75"></a>        Case "M-08": ScreenIdToSheet = SHEET_SEARCH
+<a id="__codelineno-0-76" name="__codelineno-0-76" href="#__codelineno-0-76"></a>        Case "M-09": ScreenIdToSheet = SHEET_KNW_DISPLAY
+<a id="__codelineno-0-77" name="__codelineno-0-77" href="#__codelineno-0-77"></a>        Case "M-10": ScreenIdToSheet = SHEET_STORAGE
+<a id="__codelineno-0-78" name="__codelineno-0-78" href="#__codelineno-0-78"></a>        Case "M-11": ScreenIdToSheet = SHEET_SETTINGS
+<a id="__codelineno-0-79" name="__codelineno-0-79" href="#__codelineno-0-79"></a>        Case "M-12": ScreenIdToSheet = SHEET_MIGRATION
+<a id="__codelineno-0-80" name="__codelineno-0-80" href="#__codelineno-0-80"></a>        ' M-13 廃止 (ADR-0072 §2.1): ScreenIdToSheet("M-13") は "" を返す (Case Else)
+<a id="__codelineno-0-81" name="__codelineno-0-81" href="#__codelineno-0-81"></a>        Case "M-14": ScreenIdToSheet = SHEET_LOG
+<a id="__codelineno-0-82" name="__codelineno-0-82" href="#__codelineno-0-82"></a>        Case Else:   ScreenIdToSheet = ""
 <a id="__codelineno-0-83" name="__codelineno-0-83" href="#__codelineno-0-83"></a>    End Select
-<a id="__codelineno-0-84" name="__codelineno-0-84" href="#__codelineno-0-84"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1371] modSheetMap.ScreenIdToSheet EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-84" name="__codelineno-0-84" href="#__codelineno-0-84"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1371] modSheetMap.ScreenIdToSheet EXIT-OK"  ' [ADR-0100]
 <a id="__codelineno-0-85" name="__codelineno-0-85" href="#__codelineno-0-85"></a>End Function
 </code></pre></div>
 
@@ -5189,7 +5189,7 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
       <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.indexes", "toc.integrate", "search.highlight", "search.suggest", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u30b3\u30d4\u30fc\u3057\u307e\u3057\u305f", "clipboard.copy": "\u30af\u30ea\u30c3\u30d7\u30dc\u30fc\u30c9\u3078\u30b3\u30d4\u30fc", "search.result.more.one": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3082\u30461\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.more.other": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3042\u3068#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.none": "\u4f55\u3082\u898b\u3064\u304b\u308a\u307e\u305b\u3093\u3067\u3057\u305f", "search.result.one": "1\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.other": "#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.placeholder": "\u691c\u7d22\u30ad\u30fc\u30ef\u30fc\u30c9\u3092\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044", "search.result.term.missing": "\u691c\u7d22\u306b\u542b\u307e\u308c\u306a\u3044", "select.version": "\u30d0\u30fc\u30b8\u30e7\u30f3\u5207\u308a\u66ff\u3048"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>

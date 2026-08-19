@@ -25,7 +25,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -33,7 +33,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -5043,88 +5043,88 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 </blockquote>
 <hr />
 <h2 id="_2">ソースコード<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Attribute VB_Name = &quot;modPreviewForm&quot;
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>&#39; ================================================================
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>&#39; modPreviewForm (v2.5, 2026-06-03, ADR-0099)
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>&#39;
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>&#39; Role:
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>&#39;   M-04 format preview entry point. Hosts the public Sub
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>&#39;   ShowPreviewForm(formatId) called from M-02 Btn_PreviewFormat
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>&#39;   and M-03 Btn_PreviewInDesign. Wraps clsUserFormRenderer with
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>&#39;   mode=&quot;preview&quot; so the format&#39;s input form layout renders as
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>&#39;   a modal UserForm with read-only controls and a single close
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>&#39;   button.
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>&#39;
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>&#39; ADR-0099 (2026-06-03):
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>&#39;   The previous M-04 worksheet (&quot;プレビュー&quot; sheet) is retired.
-<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>&#39;   clsSetupOrchestrator.SHEETS_KANRI no longer includes M-04 so
-<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>&#39;   the sheet is never created. ui_seed/管理/M-04.txt is renamed
-<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>&#39;   to M-04.txt.deprecated. The wired buttons now route here.
-<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>&#39;
-<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>&#39; Why not call clsUserFormRenderer.ShowForm(&quot;view&quot;) instead:
-<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>&#39;   &quot;view&quot; mode resolves m_formatId from the loaded knowledge
-<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>&#39;   record. Preview has no knowledge record (knowledgeId=&quot;&quot;) so
-<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>&#39;   m_formatId would never be populated. The dedicated &quot;preview&quot;
-<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>&#39;   mode treats formatId as an explicit parameter (m_formatId)
-<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>&#39;   and skips the knowledge load, the register-style buttons, and
-<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>&#39;   the edit/view buttons -- only &quot;閉じる&quot; remains.
-<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>&#39;
-<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>&#39; Dependencies:
-<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>&#39;   clsUserFormRenderer (existing, ADR-0073 dynamic UserForm)
-<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>&#39;   modEntryUserForm.GetSharedRenderer (single-instance lookup)
-<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>&#39; ================================================================
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Attribute VB_Name = "modPreviewForm"
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>' ================================================================
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>' modPreviewForm (v2.5, 2026-06-03, ADR-0099)
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>'
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>' Role:
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>'   M-04 format preview entry point. Hosts the public Sub
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>'   ShowPreviewForm(formatId) called from M-02 Btn_PreviewFormat
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>'   and M-03 Btn_PreviewInDesign. Wraps clsUserFormRenderer with
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>'   mode="preview" so the format's input form layout renders as
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>'   a modal UserForm with read-only controls and a single close
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>'   button.
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>'
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>' ADR-0099 (2026-06-03):
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>'   The previous M-04 worksheet ("プレビュー" sheet) is retired.
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>'   clsSetupOrchestrator.SHEETS_KANRI no longer includes M-04 so
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>'   the sheet is never created. ui_seed/管理/M-04.txt is renamed
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>'   to M-04.txt.deprecated. The wired buttons now route here.
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>'
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>' Why not call clsUserFormRenderer.ShowForm("view") instead:
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>'   "view" mode resolves m_formatId from the loaded knowledge
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>'   record. Preview has no knowledge record (knowledgeId="") so
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>'   m_formatId would never be populated. The dedicated "preview"
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>'   mode treats formatId as an explicit parameter (m_formatId)
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>'   and skips the knowledge load, the register-style buttons, and
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>'   the edit/view buttons -- only "閉じる" remains.
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>'
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>' Dependencies:
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>'   clsUserFormRenderer (existing, ADR-0073 dynamic UserForm)
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>'   modEntryUserForm.GetSharedRenderer (single-instance lookup)
+<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>' ================================================================
 <a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>Option Explicit
 <a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>
-<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>&#39; xlsm display name used as scope label only (the form is workbook-local).
-<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>&#39; Use ChrW so the .bas source is ASCII-safe through CP932 round trips.
+<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>' xlsm display name used as scope label only (the form is workbook-local).
+<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>' Use ChrW so the .bas source is ASCII-safe through CP932 round trips.
 <a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>Private Function KANRI_NAME() As String
-<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1827] modPreviewForm.KANRI_NAME ENTER&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>    KANRI_NAME = ChrW(&amp;H7BA1) &amp; ChrW(&amp;H7406)   &#39; 管理
+<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1827] modPreviewForm.KANRI_NAME ENTER"  ' [ADR-0100]
+<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>    KANRI_NAME = ChrW(&amp;H7BA1) &amp; ChrW(&amp;H7406)   ' 管理
 <a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>End Function
 <a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>
-<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>&#39; ================================================================
-<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>&#39; Public Sub: ShowPreviewForm
-<a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>&#39; Role:
-<a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>&#39;   Render the format&#39;s input form layout as a modal UserForm.
-<a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>&#39;   Each field of &lt;formatId&gt; becomes a labeled, read-only control
-<a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>&#39;   per clsUserFormRenderer&#39;s existing FieldType -&gt; control map:
-<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>&#39;     単一行 -&gt; TextBox (MultiLine=False)
-<a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>&#39;     複数行 -&gt; TextBox (MultiLine=True)
-<a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>&#39;     日時   -&gt; TextBox (single line)
-<a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>&#39;     選択   -&gt; ComboBox (DropdownList)
-<a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>&#39;   Required fields show the &quot;必須&quot; badge. The form title is
-<a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>&#39;   &quot;プレビュー: &lt;formatId&gt;&quot;. One &quot;閉じる&quot; button dismisses the
-<a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a>&#39;   form (Unload Me). No persistence (read-only display only).
-<a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a>&#39; Args:
-<a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a>&#39;   formatId - target format id. If empty the call is a no-op.
-<a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a>&#39; Returns: nothing.
-<a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a>&#39; Notes:
-<a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>&#39;   - clsUserFormRenderer.ShowForm returns &quot;&quot; for preview mode
-<a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a>&#39;     because no return id is set (no save / no delete buttons).
-<a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a>&#39;   - On error a Debug.Print line is emitted (no MsgBox so the
-<a id="__codelineno-0-60" name="__codelineno-0-60" href="#__codelineno-0-60"></a>&#39;     headless E2E harness does not block).
-<a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a>&#39; ================================================================
+<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>' ================================================================
+<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>' Public Sub: ShowPreviewForm
+<a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>' Role:
+<a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>'   Render the format's input form layout as a modal UserForm.
+<a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>'   Each field of &lt;formatId&gt; becomes a labeled, read-only control
+<a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>'   per clsUserFormRenderer's existing FieldType -&gt; control map:
+<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>'     単一行 -&gt; TextBox (MultiLine=False)
+<a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>'     複数行 -&gt; TextBox (MultiLine=True)
+<a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>'     日時   -&gt; TextBox (single line)
+<a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>'     選択   -&gt; ComboBox (DropdownList)
+<a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>'   Required fields show the "必須" badge. The form title is
+<a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>'   "プレビュー: &lt;formatId&gt;". One "閉じる" button dismisses the
+<a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a>'   form (Unload Me). No persistence (read-only display only).
+<a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a>' Args:
+<a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a>'   formatId - target format id. If empty the call is a no-op.
+<a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a>' Returns: nothing.
+<a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a>' Notes:
+<a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>'   - clsUserFormRenderer.ShowForm returns "" for preview mode
+<a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a>'     because no return id is set (no save / no delete buttons).
+<a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a>'   - On error a Debug.Print line is emitted (no MsgBox so the
+<a id="__codelineno-0-60" name="__codelineno-0-60" href="#__codelineno-0-60"></a>'     headless E2E harness does not block).
+<a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a>' ================================================================
 <a id="__codelineno-0-62" name="__codelineno-0-62" href="#__codelineno-0-62"></a>Public Sub ShowPreviewForm(ByVal formatId As String)
-<a id="__codelineno-0-63" name="__codelineno-0-63" href="#__codelineno-0-63"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1828] modPreviewForm.ShowPreviewForm ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-63" name="__codelineno-0-63" href="#__codelineno-0-63"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1828] modPreviewForm.ShowPreviewForm ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-64" name="__codelineno-0-64" href="#__codelineno-0-64"></a>    On Error GoTo ErrHandler
 <a id="__codelineno-0-65" name="__codelineno-0-65" href="#__codelineno-0-65"></a>    If Len(Trim(formatId)) = 0 Then
-<a id="__codelineno-0-66" name="__codelineno-0-66" href="#__codelineno-0-66"></a>        Debug.Print &quot;[modPreviewForm.ShowPreviewForm] empty formatId, no-op&quot;
-<a id="__codelineno-0-67" name="__codelineno-0-67" href="#__codelineno-0-67"></a>        If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1829] modPreviewForm.ShowPreviewForm EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-66" name="__codelineno-0-66" href="#__codelineno-0-66"></a>        Debug.Print "[modPreviewForm.ShowPreviewForm] empty formatId, no-op"
+<a id="__codelineno-0-67" name="__codelineno-0-67" href="#__codelineno-0-67"></a>        If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1829] modPreviewForm.ShowPreviewForm EXIT-OK"  ' [ADR-0100]
 <a id="__codelineno-0-68" name="__codelineno-0-68" href="#__codelineno-0-68"></a>        Exit Sub
 <a id="__codelineno-0-69" name="__codelineno-0-69" href="#__codelineno-0-69"></a>    End If
 <a id="__codelineno-0-70" name="__codelineno-0-70" href="#__codelineno-0-70"></a>    Dim renderer As clsUserFormRenderer
 <a id="__codelineno-0-71" name="__codelineno-0-71" href="#__codelineno-0-71"></a>    Set renderer = New clsUserFormRenderer
-<a id="__codelineno-0-72" name="__codelineno-0-72" href="#__codelineno-0-72"></a>    &#39; xlsmName=管理 / mode=preview / knowledgeId=&quot;&quot; / readOnlyFormat=True.
-<a id="__codelineno-0-73" name="__codelineno-0-73" href="#__codelineno-0-73"></a>    &#39; readOnlyFormat=True keeps the format selector locked (preview is
-<a id="__codelineno-0-74" name="__codelineno-0-74" href="#__codelineno-0-74"></a>    &#39; scoped to one format -- changing it would lose the M-03 context).
+<a id="__codelineno-0-72" name="__codelineno-0-72" href="#__codelineno-0-72"></a>    ' xlsmName=管理 / mode=preview / knowledgeId="" / readOnlyFormat=True.
+<a id="__codelineno-0-73" name="__codelineno-0-73" href="#__codelineno-0-73"></a>    ' readOnlyFormat=True keeps the format selector locked (preview is
+<a id="__codelineno-0-74" name="__codelineno-0-74" href="#__codelineno-0-74"></a>    ' scoped to one format -- changing it would lose the M-03 context).
 <a id="__codelineno-0-75" name="__codelineno-0-75" href="#__codelineno-0-75"></a>    Dim ignored As String
 <a id="__codelineno-0-76" name="__codelineno-0-76" href="#__codelineno-0-76"></a>    ignored = renderer.ShowFormPreview(KANRI_NAME(), formatId)
-<a id="__codelineno-0-77" name="__codelineno-0-77" href="#__codelineno-0-77"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1830] modPreviewForm.ShowPreviewForm EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-77" name="__codelineno-0-77" href="#__codelineno-0-77"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1830] modPreviewForm.ShowPreviewForm EXIT-OK"  ' [ADR-0100]
 <a id="__codelineno-0-78" name="__codelineno-0-78" href="#__codelineno-0-78"></a>    Exit Sub
 <a id="__codelineno-0-79" name="__codelineno-0-79" href="#__codelineno-0-79"></a>
 <a id="__codelineno-0-80" name="__codelineno-0-80" href="#__codelineno-0-80"></a>ErrHandler:
-<a id="__codelineno-0-81" name="__codelineno-0-81" href="#__codelineno-0-81"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print &quot;[D-1831] modPreviewForm.ShowPreviewForm EXIT-ERR &quot; &amp; &quot;errNum=&quot; &amp; Err.Number &amp; &quot; desc=&quot; &amp; Err.Description  &#39; [ADR-0100]
-<a id="__codelineno-0-82" name="__codelineno-0-82" href="#__codelineno-0-82"></a>    Debug.Print &quot;[ERR] modPreviewForm.ShowPreviewForm: &quot; &amp; Err.Number &amp; &quot; &quot; &amp; Err.Description
+<a id="__codelineno-0-81" name="__codelineno-0-81" href="#__codelineno-0-81"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print "[D-1831] modPreviewForm.ShowPreviewForm EXIT-ERR " &amp; "errNum=" &amp; Err.Number &amp; " desc=" &amp; Err.Description  ' [ADR-0100]
+<a id="__codelineno-0-82" name="__codelineno-0-82" href="#__codelineno-0-82"></a>    Debug.Print "[ERR] modPreviewForm.ShowPreviewForm: " &amp; Err.Number &amp; " " &amp; Err.Description
 <a id="__codelineno-0-83" name="__codelineno-0-83" href="#__codelineno-0-83"></a>End Sub
 </code></pre></div>
 
@@ -5187,7 +5187,7 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
       <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.indexes", "toc.integrate", "search.highlight", "search.suggest", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u30b3\u30d4\u30fc\u3057\u307e\u3057\u305f", "clipboard.copy": "\u30af\u30ea\u30c3\u30d7\u30dc\u30fc\u30c9\u3078\u30b3\u30d4\u30fc", "search.result.more.one": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3082\u30461\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.more.other": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3042\u3068#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.none": "\u4f55\u3082\u898b\u3064\u304b\u308a\u307e\u305b\u3093\u3067\u3057\u305f", "search.result.one": "1\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.other": "#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.placeholder": "\u691c\u7d22\u30ad\u30fc\u30ef\u30fc\u30c9\u3092\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044", "search.result.term.missing": "\u691c\u7d22\u306b\u542b\u307e\u308c\u306a\u3044", "select.version": "\u30d0\u30fc\u30b8\u30e7\u30f3\u5207\u308a\u66ff\u3048"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>

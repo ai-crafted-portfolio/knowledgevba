@@ -25,7 +25,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -33,7 +33,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -5043,30 +5043,30 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 </blockquote>
 <hr />
 <h2 id="_2">ソースコード<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Attribute VB_Name = &quot;modE2E_Abnormal&quot;
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>&#39; ================================================================
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>&#39; modE2E_Abnormal: REAL abnormal-path E2E (ADR-0092 ok regime).
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>&#39; Probes real APIs (modKnowledgeFileIO / modFormatLoader /
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>&#39; modConfigHolder). No fixed pass:true literals. CP932+CRLF.
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>&#39; ================================================================
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Attribute VB_Name = "modE2E_Abnormal"
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>' ================================================================
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>' modE2E_Abnormal: REAL abnormal-path E2E (ADR-0092 ok regime).
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>' Probes real APIs (modKnowledgeFileIO / modFormatLoader /
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>' modConfigHolder). No fixed pass:true literals. CP932+CRLF.
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>' ================================================================
 <a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>Option Explicit
 <a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>
 <a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>Private Const ABN_TOTAL As Long = 38
 <a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>
 <a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>Public Function Run_Abnormal_Cases(ByVal role As String) As String
 <a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>    Dim sb As String, sep As String, i As Long
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>    sb = &quot;{&quot;&quot;role&quot;&quot;:&quot;&quot;abnormal-&quot; &amp; role &amp; &quot;&quot;&quot;,&quot;&quot;cases&quot;&quot;:[&quot;
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>    sep = &quot;&quot;
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>    sb = "{""role"":""abnormal-" &amp; role &amp; """,""cases"":["
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>    sep = ""
 <a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>    For i = 1 To ABN_TOTAL
-<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>        sb = sb &amp; sep &amp; RunAbn(i, role): sep = &quot;,&quot;
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>        sb = sb &amp; sep &amp; RunAbn(i, role): sep = ","
 <a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>    Next i
-<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>    sb = sb &amp; &quot;]}&quot;
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>    sb = sb &amp; "]}"
 <a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>    Run_Abnormal_Cases = sb
 <a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>End Function
 <a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>
 <a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>Public Sub Run_Abnormal_Cases_Out(ByVal outPath As String)
 <a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>    Dim role As String, s As String, fh As Integer
-<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>    role = Replace(ThisWorkbook.Name, &quot;.xlsm&quot;, &quot;&quot;)
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>    role = Replace(ThisWorkbook.Name, ".xlsm", "")
 <a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>    s = Run_Abnormal_Cases(role)
 <a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>    fh = FreeFile
 <a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>    Open outPath For Output As #fh
@@ -5076,36 +5076,36 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>
 <a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>Private Function JEsc(ByVal s As String) As String
 <a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>    Dim t As String
-<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>    t = Replace(s, &quot;\&quot;, &quot;\\&quot;)
-<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>    t = Replace(t, &quot;&quot;&quot;&quot;, &quot;\&quot;&quot;&quot;)
-<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>    t = Replace(t, vbCr, &quot;&quot;)
-<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>    t = Replace(t, vbLf, &quot;&quot;)
+<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>    t = Replace(s, "\", "\\")
+<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>    t = Replace(t, """", "\""")
+<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>    t = Replace(t, vbCr, "")
+<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>    t = Replace(t, vbLf, "")
 <a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>    JEsc = t
 <a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>End Function
 <a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>
 <a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>Private Function J(ByVal n As Long, ByVal nm As String, ByVal okFlag As Boolean, _
 <a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>                   ByVal verdict As String, ByVal note As String) As String
 <a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>    Dim p As String
-<a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>    If okFlag Then p = &quot;true&quot; Else p = &quot;false&quot;
-<a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>    J = &quot;{&quot;&quot;case&quot;&quot;:&quot; &amp; n &amp; &quot;,&quot;&quot;id&quot;&quot;:&quot;&quot;abn-&quot; &amp; Format(n, &quot;00&quot;) &amp; &quot;&quot;&quot;,&quot;&quot;name&quot;&quot;:&quot;&quot;&quot; &amp; _
-<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>        JEsc(nm) &amp; &quot;&quot;&quot;,&quot;&quot;pass&quot;&quot;:&quot; &amp; p &amp; &quot;,&quot;&quot;verdict&quot;&quot;:&quot;&quot;&quot; &amp; JEsc(verdict) &amp; _
-<a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>        &quot;&quot;&quot;,&quot;&quot;note&quot;&quot;:&quot;&quot;&quot; &amp; JEsc(note) &amp; &quot;&quot;&quot;}&quot;
+<a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>    If okFlag Then p = "true" Else p = "false"
+<a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>    J = "{""case"":" &amp; n &amp; ",""id"":""abn-" &amp; Format(n, "00") &amp; """,""name"":""" &amp; _
+<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>        JEsc(nm) &amp; """,""pass"":" &amp; p &amp; ",""verdict"":""" &amp; JEsc(verdict) &amp; _
+<a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>        """,""note"":""" &amp; JEsc(note) &amp; """}"
 <a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>End Function
 <a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>
 <a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>Private Function IsRegisterRole() As Boolean
 <a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>    Dim wb As String
 <a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a>    On Error Resume Next
-<a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a>    wb = LCase(modConfigHolder.GetValueOrDefault(&quot;xlsmName&quot;, &quot;&quot;))
+<a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a>    wb = LCase(modConfigHolder.GetValueOrDefault("xlsmName", ""))
 <a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a>    On Error GoTo 0
-<a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a>    IsRegisterRole = (wb = &quot;register&quot; Or wb = &quot;touroku&quot;)
+<a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a>    IsRegisterRole = (wb = "register" Or wb = "touroku")
 <a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a>End Function
 <a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>
 <a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a>Private Function IsAdminRole() As Boolean
 <a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a>    Dim wb As String
 <a id="__codelineno-0-60" name="__codelineno-0-60" href="#__codelineno-0-60"></a>    On Error Resume Next
-<a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a>    wb = LCase(modConfigHolder.GetValueOrDefault(&quot;xlsmName&quot;, &quot;&quot;))
+<a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a>    wb = LCase(modConfigHolder.GetValueOrDefault("xlsmName", ""))
 <a id="__codelineno-0-62" name="__codelineno-0-62" href="#__codelineno-0-62"></a>    On Error GoTo 0
-<a id="__codelineno-0-63" name="__codelineno-0-63" href="#__codelineno-0-63"></a>    IsAdminRole = (wb = &quot;kanri&quot; Or wb = &quot;admin&quot;)
+<a id="__codelineno-0-63" name="__codelineno-0-63" href="#__codelineno-0-63"></a>    IsAdminRole = (wb = "kanri" Or wb = "admin")
 <a id="__codelineno-0-64" name="__codelineno-0-64" href="#__codelineno-0-64"></a>End Function
 <a id="__codelineno-0-65" name="__codelineno-0-65" href="#__codelineno-0-65"></a>
 <a id="__codelineno-0-66" name="__codelineno-0-66" href="#__codelineno-0-66"></a>Private Function PickFormatId() As String
@@ -5121,9 +5121,9 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-76" name="__codelineno-0-76" href="#__codelineno-0-76"></a>End Function
 <a id="__codelineno-0-77" name="__codelineno-0-77" href="#__codelineno-0-77"></a>
 <a id="__codelineno-0-78" name="__codelineno-0-78" href="#__codelineno-0-78"></a>Private Function MakeProbeDict(ByVal fid As String) As Object
-<a id="__codelineno-0-79" name="__codelineno-0-79" href="#__codelineno-0-79"></a>    Dim d As Object: Set d = CreateObject(&quot;Scripting.Dictionary&quot;)
-<a id="__codelineno-0-80" name="__codelineno-0-80" href="#__codelineno-0-80"></a>    d(&quot;FormatID&quot;) = fid
-<a id="__codelineno-0-81" name="__codelineno-0-81" href="#__codelineno-0-81"></a>    d(&quot;Title&quot;) = &quot;abn-probe&quot;
+<a id="__codelineno-0-79" name="__codelineno-0-79" href="#__codelineno-0-79"></a>    Dim d As Object: Set d = CreateObject("Scripting.Dictionary")
+<a id="__codelineno-0-80" name="__codelineno-0-80" href="#__codelineno-0-80"></a>    d("FormatID") = fid
+<a id="__codelineno-0-81" name="__codelineno-0-81" href="#__codelineno-0-81"></a>    d("Title") = "abn-probe"
 <a id="__codelineno-0-82" name="__codelineno-0-82" href="#__codelineno-0-82"></a>    Set MakeProbeDict = d
 <a id="__codelineno-0-83" name="__codelineno-0-83" href="#__codelineno-0-83"></a>End Function
 <a id="__codelineno-0-84" name="__codelineno-0-84" href="#__codelineno-0-84"></a>
@@ -5168,190 +5168,190 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-123" name="__codelineno-0-123" href="#__codelineno-0-123"></a>        Case 36: RunAbn = Case36(role)
 <a id="__codelineno-0-124" name="__codelineno-0-124" href="#__codelineno-0-124"></a>        Case 37: RunAbn = Case37(role)
 <a id="__codelineno-0-125" name="__codelineno-0-125" href="#__codelineno-0-125"></a>        Case 38: RunAbn = Case38(role)
-<a id="__codelineno-0-126" name="__codelineno-0-126" href="#__codelineno-0-126"></a>        Case Else: RunAbn = J(n, &quot;unknown&quot;, False, &quot;FAIL&quot;, &quot;no mapping&quot;)
+<a id="__codelineno-0-126" name="__codelineno-0-126" href="#__codelineno-0-126"></a>        Case Else: RunAbn = J(n, "unknown", False, "FAIL", "no mapping")
 <a id="__codelineno-0-127" name="__codelineno-0-127" href="#__codelineno-0-127"></a>    End Select
 <a id="__codelineno-0-128" name="__codelineno-0-128" href="#__codelineno-0-128"></a>    Exit Function
 <a id="__codelineno-0-129" name="__codelineno-0-129" href="#__codelineno-0-129"></a>Trapped:
 <a id="__codelineno-0-130" name="__codelineno-0-130" href="#__codelineno-0-130"></a>    Dim Probe As Boolean: Probe = False
 <a id="__codelineno-0-131" name="__codelineno-0-131" href="#__codelineno-0-131"></a>    Dim ok As Boolean: ok = False
-<a id="__codelineno-0-132" name="__codelineno-0-132" href="#__codelineno-0-132"></a>    Dim verdict As String: verdict = &quot;FAIL&quot;
-<a id="__codelineno-0-133" name="__codelineno-0-133" href="#__codelineno-0-133"></a>    RunAbn = J(n, &quot;exception&quot;, ok, verdict, &quot;errNum=&quot; &amp; Err.Number &amp; &quot; desc=&quot; &amp; Err.Description)
+<a id="__codelineno-0-132" name="__codelineno-0-132" href="#__codelineno-0-132"></a>    Dim verdict As String: verdict = "FAIL"
+<a id="__codelineno-0-133" name="__codelineno-0-133" href="#__codelineno-0-133"></a>    RunAbn = J(n, "exception", ok, verdict, "errNum=" &amp; Err.Number &amp; " desc=" &amp; Err.Description)
 <a id="__codelineno-0-134" name="__codelineno-0-134" href="#__codelineno-0-134"></a>End Function
 <a id="__codelineno-0-135" name="__codelineno-0-135" href="#__codelineno-0-135"></a>
 <a id="__codelineno-0-136" name="__codelineno-0-136" href="#__codelineno-0-136"></a>Private Function Case01(ByVal role As String) As String
 <a id="__codelineno-0-137" name="__codelineno-0-137" href="#__codelineno-0-137"></a>    If Not IsRegisterRole() Then
-<a id="__codelineno-0-138" name="__codelineno-0-138" href="#__codelineno-0-138"></a>        Case01 = J(1, &quot;empty_required_field&quot;, True, &quot;skipped-by-design&quot;, &quot;role gate&quot;): Exit Function
+<a id="__codelineno-0-138" name="__codelineno-0-138" href="#__codelineno-0-138"></a>        Case01 = J(1, "empty_required_field", True, "skipped-by-design", "role gate"): Exit Function
 <a id="__codelineno-0-139" name="__codelineno-0-139" href="#__codelineno-0-139"></a>    End If
-<a id="__codelineno-0-140" name="__codelineno-0-140" href="#__codelineno-0-140"></a>    Dim d As Object: Set d = CreateObject(&quot;Scripting.Dictionary&quot;)
+<a id="__codelineno-0-140" name="__codelineno-0-140" href="#__codelineno-0-140"></a>    Dim d As Object: Set d = CreateObject("Scripting.Dictionary")
 <a id="__codelineno-0-141" name="__codelineno-0-141" href="#__codelineno-0-141"></a>    Dim knw As String, rc As Long
-<a id="__codelineno-0-142" name="__codelineno-0-142" href="#__codelineno-0-142"></a>    knw = &quot;ABN01-&quot; &amp; Format(Now, &quot;yymmddhhnnss&quot;)
+<a id="__codelineno-0-142" name="__codelineno-0-142" href="#__codelineno-0-142"></a>    knw = "ABN01-" &amp; Format(Now, "yymmddhhnnss")
 <a id="__codelineno-0-143" name="__codelineno-0-143" href="#__codelineno-0-143"></a>    rc = modKnowledgeFileIO.SaveKnowledge(knw, d, 0)
 <a id="__codelineno-0-144" name="__codelineno-0-144" href="#__codelineno-0-144"></a>    modKnowledgeFileIO.DeleteKnowledge knw
-<a id="__codelineno-0-145" name="__codelineno-0-145" href="#__codelineno-0-145"></a>    Case01 = J(1, &quot;empty_required_field&quot;, (rc = 0), &quot;OBSERVE&quot;, &quot;rc=&quot; &amp; rc)
+<a id="__codelineno-0-145" name="__codelineno-0-145" href="#__codelineno-0-145"></a>    Case01 = J(1, "empty_required_field", (rc = 0), "OBSERVE", "rc=" &amp; rc)
 <a id="__codelineno-0-146" name="__codelineno-0-146" href="#__codelineno-0-146"></a>End Function
 <a id="__codelineno-0-147" name="__codelineno-0-147" href="#__codelineno-0-147"></a>
 <a id="__codelineno-0-148" name="__codelineno-0-148" href="#__codelineno-0-148"></a>Private Function Case02(ByVal role As String) As String
 <a id="__codelineno-0-149" name="__codelineno-0-149" href="#__codelineno-0-149"></a>    If Not IsRegisterRole() Then
-<a id="__codelineno-0-150" name="__codelineno-0-150" href="#__codelineno-0-150"></a>        Case02 = J(2, &quot;duplicate_id&quot;, True, &quot;skipped-by-design&quot;, &quot;role gate&quot;): Exit Function
+<a id="__codelineno-0-150" name="__codelineno-0-150" href="#__codelineno-0-150"></a>        Case02 = J(2, "duplicate_id", True, "skipped-by-design", "role gate"): Exit Function
 <a id="__codelineno-0-151" name="__codelineno-0-151" href="#__codelineno-0-151"></a>    End If
 <a id="__codelineno-0-152" name="__codelineno-0-152" href="#__codelineno-0-152"></a>    Dim fid As String: fid = PickFormatId()
-<a id="__codelineno-0-153" name="__codelineno-0-153" href="#__codelineno-0-153"></a>    If Len(fid) = 0 Then Case02 = J(2, &quot;duplicate_id&quot;, True, &quot;skipped-by-design&quot;, &quot;no fmt&quot;): Exit Function
+<a id="__codelineno-0-153" name="__codelineno-0-153" href="#__codelineno-0-153"></a>    If Len(fid) = 0 Then Case02 = J(2, "duplicate_id", True, "skipped-by-design", "no fmt"): Exit Function
 <a id="__codelineno-0-154" name="__codelineno-0-154" href="#__codelineno-0-154"></a>    Dim knw As String, rc1 As Long, rc2 As Long, ts As Date
-<a id="__codelineno-0-155" name="__codelineno-0-155" href="#__codelineno-0-155"></a>    knw = &quot;ABN02-&quot; &amp; Format(Now, &quot;yymmddhhnnss&quot;)
+<a id="__codelineno-0-155" name="__codelineno-0-155" href="#__codelineno-0-155"></a>    knw = "ABN02-" &amp; Format(Now, "yymmddhhnnss")
 <a id="__codelineno-0-156" name="__codelineno-0-156" href="#__codelineno-0-156"></a>    rc1 = modKnowledgeFileIO.SaveKnowledge(knw, MakeProbeDict(fid), 0)
 <a id="__codelineno-0-157" name="__codelineno-0-157" href="#__codelineno-0-157"></a>    ts = modKnowledgeFileIO.GetKnowledgeTimestamp(knw)
-<a id="__codelineno-0-158" name="__codelineno-0-158" href="#__codelineno-0-158"></a>    rc2 = modKnowledgeFileIO.SaveKnowledge(knw, MakeProbeDict(fid), DateAdd(&quot;s&quot;, -3600, ts))
+<a id="__codelineno-0-158" name="__codelineno-0-158" href="#__codelineno-0-158"></a>    rc2 = modKnowledgeFileIO.SaveKnowledge(knw, MakeProbeDict(fid), DateAdd("s", -3600, ts))
 <a id="__codelineno-0-159" name="__codelineno-0-159" href="#__codelineno-0-159"></a>    modKnowledgeFileIO.DeleteKnowledge knw
 <a id="__codelineno-0-160" name="__codelineno-0-160" href="#__codelineno-0-160"></a>    Dim ok As Boolean: ok = (rc1 = 0 And rc2 = 1)
-<a id="__codelineno-0-161" name="__codelineno-0-161" href="#__codelineno-0-161"></a>    Case02 = J(2, &quot;duplicate_id&quot;, ok, IIf(ok, &quot;PASS&quot;, &quot;FAIL&quot;), &quot;rc1=&quot; &amp; rc1 &amp; &quot; rc2=&quot; &amp; rc2)
+<a id="__codelineno-0-161" name="__codelineno-0-161" href="#__codelineno-0-161"></a>    Case02 = J(2, "duplicate_id", ok, IIf(ok, "PASS", "FAIL"), "rc1=" &amp; rc1 &amp; " rc2=" &amp; rc2)
 <a id="__codelineno-0-162" name="__codelineno-0-162" href="#__codelineno-0-162"></a>End Function
 <a id="__codelineno-0-163" name="__codelineno-0-163" href="#__codelineno-0-163"></a>
 <a id="__codelineno-0-164" name="__codelineno-0-164" href="#__codelineno-0-164"></a>Private Function Case03(ByVal role As String) As String
 <a id="__codelineno-0-165" name="__codelineno-0-165" href="#__codelineno-0-165"></a>    If Not IsRegisterRole() Then
-<a id="__codelineno-0-166" name="__codelineno-0-166" href="#__codelineno-0-166"></a>        Case03 = J(3, &quot;invalid_date&quot;, True, &quot;skipped-by-design&quot;, &quot;role gate&quot;): Exit Function
+<a id="__codelineno-0-166" name="__codelineno-0-166" href="#__codelineno-0-166"></a>        Case03 = J(3, "invalid_date", True, "skipped-by-design", "role gate"): Exit Function
 <a id="__codelineno-0-167" name="__codelineno-0-167" href="#__codelineno-0-167"></a>    End If
 <a id="__codelineno-0-168" name="__codelineno-0-168" href="#__codelineno-0-168"></a>    Dim fid As String: fid = PickFormatId()
-<a id="__codelineno-0-169" name="__codelineno-0-169" href="#__codelineno-0-169"></a>    If Len(fid) = 0 Then Case03 = J(3, &quot;invalid_date&quot;, True, &quot;skipped-by-design&quot;, &quot;no fmt&quot;): Exit Function
+<a id="__codelineno-0-169" name="__codelineno-0-169" href="#__codelineno-0-169"></a>    If Len(fid) = 0 Then Case03 = J(3, "invalid_date", True, "skipped-by-design", "no fmt"): Exit Function
 <a id="__codelineno-0-170" name="__codelineno-0-170" href="#__codelineno-0-170"></a>    Dim d As Object: Set d = MakeProbeDict(fid)
-<a id="__codelineno-0-171" name="__codelineno-0-171" href="#__codelineno-0-171"></a>    d(&quot;DateField&quot;) = &quot;abc&quot;
+<a id="__codelineno-0-171" name="__codelineno-0-171" href="#__codelineno-0-171"></a>    d("DateField") = "abc"
 <a id="__codelineno-0-172" name="__codelineno-0-172" href="#__codelineno-0-172"></a>    Dim knw As String, rc As Long
-<a id="__codelineno-0-173" name="__codelineno-0-173" href="#__codelineno-0-173"></a>    knw = &quot;ABN03-&quot; &amp; Format(Now, &quot;yymmddhhnnss&quot;)
+<a id="__codelineno-0-173" name="__codelineno-0-173" href="#__codelineno-0-173"></a>    knw = "ABN03-" &amp; Format(Now, "yymmddhhnnss")
 <a id="__codelineno-0-174" name="__codelineno-0-174" href="#__codelineno-0-174"></a>    rc = modKnowledgeFileIO.SaveKnowledge(knw, d, 0)
 <a id="__codelineno-0-175" name="__codelineno-0-175" href="#__codelineno-0-175"></a>    modKnowledgeFileIO.DeleteKnowledge knw
-<a id="__codelineno-0-176" name="__codelineno-0-176" href="#__codelineno-0-176"></a>    Case03 = J(3, &quot;invalid_date&quot;, (rc = 0), &quot;OBSERVE&quot;, &quot;rc=&quot; &amp; rc)
+<a id="__codelineno-0-176" name="__codelineno-0-176" href="#__codelineno-0-176"></a>    Case03 = J(3, "invalid_date", (rc = 0), "OBSERVE", "rc=" &amp; rc)
 <a id="__codelineno-0-177" name="__codelineno-0-177" href="#__codelineno-0-177"></a>End Function
 <a id="__codelineno-0-178" name="__codelineno-0-178" href="#__codelineno-0-178"></a>
 <a id="__codelineno-0-179" name="__codelineno-0-179" href="#__codelineno-0-179"></a>Private Function Case04(ByVal role As String) As String
 <a id="__codelineno-0-180" name="__codelineno-0-180" href="#__codelineno-0-180"></a>    If Not IsRegisterRole() Then
-<a id="__codelineno-0-181" name="__codelineno-0-181" href="#__codelineno-0-181"></a>        Case04 = J(4, &quot;oversize_text&quot;, True, &quot;skipped-by-design&quot;, &quot;role gate&quot;): Exit Function
+<a id="__codelineno-0-181" name="__codelineno-0-181" href="#__codelineno-0-181"></a>        Case04 = J(4, "oversize_text", True, "skipped-by-design", "role gate"): Exit Function
 <a id="__codelineno-0-182" name="__codelineno-0-182" href="#__codelineno-0-182"></a>    End If
 <a id="__codelineno-0-183" name="__codelineno-0-183" href="#__codelineno-0-183"></a>    Dim fid As String: fid = PickFormatId()
-<a id="__codelineno-0-184" name="__codelineno-0-184" href="#__codelineno-0-184"></a>    If Len(fid) = 0 Then Case04 = J(4, &quot;oversize_text&quot;, True, &quot;skipped-by-design&quot;, &quot;no fmt&quot;): Exit Function
+<a id="__codelineno-0-184" name="__codelineno-0-184" href="#__codelineno-0-184"></a>    If Len(fid) = 0 Then Case04 = J(4, "oversize_text", True, "skipped-by-design", "no fmt"): Exit Function
 <a id="__codelineno-0-185" name="__codelineno-0-185" href="#__codelineno-0-185"></a>    Dim d As Object: Set d = MakeProbeDict(fid)
-<a id="__codelineno-0-186" name="__codelineno-0-186" href="#__codelineno-0-186"></a>    d(&quot;Body&quot;) = String(65536, &quot;x&quot;)
+<a id="__codelineno-0-186" name="__codelineno-0-186" href="#__codelineno-0-186"></a>    d("Body") = String(65536, "x")
 <a id="__codelineno-0-187" name="__codelineno-0-187" href="#__codelineno-0-187"></a>    Dim knw As String, rc As Long
-<a id="__codelineno-0-188" name="__codelineno-0-188" href="#__codelineno-0-188"></a>    knw = &quot;ABN04-&quot; &amp; Format(Now, &quot;yymmddhhnnss&quot;)
+<a id="__codelineno-0-188" name="__codelineno-0-188" href="#__codelineno-0-188"></a>    knw = "ABN04-" &amp; Format(Now, "yymmddhhnnss")
 <a id="__codelineno-0-189" name="__codelineno-0-189" href="#__codelineno-0-189"></a>    rc = modKnowledgeFileIO.SaveKnowledge(knw, d, 0)
 <a id="__codelineno-0-190" name="__codelineno-0-190" href="#__codelineno-0-190"></a>    modKnowledgeFileIO.DeleteKnowledge knw
-<a id="__codelineno-0-191" name="__codelineno-0-191" href="#__codelineno-0-191"></a>    Case04 = J(4, &quot;oversize_text&quot;, (rc = 0), IIf(rc = 0, &quot;PASS&quot;, &quot;FAIL&quot;), &quot;64KB rc=&quot; &amp; rc)
+<a id="__codelineno-0-191" name="__codelineno-0-191" href="#__codelineno-0-191"></a>    Case04 = J(4, "oversize_text", (rc = 0), IIf(rc = 0, "PASS", "FAIL"), "64KB rc=" &amp; rc)
 <a id="__codelineno-0-192" name="__codelineno-0-192" href="#__codelineno-0-192"></a>End Function
 <a id="__codelineno-0-193" name="__codelineno-0-193" href="#__codelineno-0-193"></a>
 <a id="__codelineno-0-194" name="__codelineno-0-194" href="#__codelineno-0-194"></a>Private Function Case05(ByVal role As String) As String
 <a id="__codelineno-0-195" name="__codelineno-0-195" href="#__codelineno-0-195"></a>    If Not IsRegisterRole() Then
-<a id="__codelineno-0-196" name="__codelineno-0-196" href="#__codelineno-0-196"></a>        Case05 = J(5, &quot;special_chars_quote&quot;, True, &quot;skipped-by-design&quot;, &quot;role gate&quot;): Exit Function
+<a id="__codelineno-0-196" name="__codelineno-0-196" href="#__codelineno-0-196"></a>        Case05 = J(5, "special_chars_quote", True, "skipped-by-design", "role gate"): Exit Function
 <a id="__codelineno-0-197" name="__codelineno-0-197" href="#__codelineno-0-197"></a>    End If
 <a id="__codelineno-0-198" name="__codelineno-0-198" href="#__codelineno-0-198"></a>    Dim fid As String: fid = PickFormatId()
-<a id="__codelineno-0-199" name="__codelineno-0-199" href="#__codelineno-0-199"></a>    If Len(fid) = 0 Then Case05 = J(5, &quot;special_chars_quote&quot;, True, &quot;skipped-by-design&quot;, &quot;no fmt&quot;): Exit Function
+<a id="__codelineno-0-199" name="__codelineno-0-199" href="#__codelineno-0-199"></a>    If Len(fid) = 0 Then Case05 = J(5, "special_chars_quote", True, "skipped-by-design", "no fmt"): Exit Function
 <a id="__codelineno-0-200" name="__codelineno-0-200" href="#__codelineno-0-200"></a>    Dim d As Object: Set d = MakeProbeDict(fid)
-<a id="__codelineno-0-201" name="__codelineno-0-201" href="#__codelineno-0-201"></a>    d(&quot;Body&quot;) = Chr(34) &amp; &quot;q&quot; &amp; Chr(34)
+<a id="__codelineno-0-201" name="__codelineno-0-201" href="#__codelineno-0-201"></a>    d("Body") = Chr(34) &amp; "q" &amp; Chr(34)
 <a id="__codelineno-0-202" name="__codelineno-0-202" href="#__codelineno-0-202"></a>    Dim knw As String, rc As Long
-<a id="__codelineno-0-203" name="__codelineno-0-203" href="#__codelineno-0-203"></a>    knw = &quot;ABN05-&quot; &amp; Format(Now, &quot;yymmddhhnnss&quot;)
+<a id="__codelineno-0-203" name="__codelineno-0-203" href="#__codelineno-0-203"></a>    knw = "ABN05-" &amp; Format(Now, "yymmddhhnnss")
 <a id="__codelineno-0-204" name="__codelineno-0-204" href="#__codelineno-0-204"></a>    rc = modKnowledgeFileIO.SaveKnowledge(knw, d, 0)
 <a id="__codelineno-0-205" name="__codelineno-0-205" href="#__codelineno-0-205"></a>    Dim back As Object: Set back = modKnowledgeFileIO.LoadKnowledge(knw)
 <a id="__codelineno-0-206" name="__codelineno-0-206" href="#__codelineno-0-206"></a>    Dim ok As Boolean: ok = (rc = 0)
-<a id="__codelineno-0-207" name="__codelineno-0-207" href="#__codelineno-0-207"></a>    If ok Then ok = back.Exists(&quot;Body&quot;)
-<a id="__codelineno-0-208" name="__codelineno-0-208" href="#__codelineno-0-208"></a>    If ok Then ok = (InStr(CStr(back(&quot;Body&quot;)), Chr(34)) &gt; 0)
+<a id="__codelineno-0-207" name="__codelineno-0-207" href="#__codelineno-0-207"></a>    If ok Then ok = back.Exists("Body")
+<a id="__codelineno-0-208" name="__codelineno-0-208" href="#__codelineno-0-208"></a>    If ok Then ok = (InStr(CStr(back("Body")), Chr(34)) &gt; 0)
 <a id="__codelineno-0-209" name="__codelineno-0-209" href="#__codelineno-0-209"></a>    modKnowledgeFileIO.DeleteKnowledge knw
-<a id="__codelineno-0-210" name="__codelineno-0-210" href="#__codelineno-0-210"></a>    Case05 = J(5, &quot;special_chars_quote&quot;, ok, IIf(ok, &quot;PASS&quot;, &quot;FAIL&quot;), &quot;rc=&quot; &amp; rc)
+<a id="__codelineno-0-210" name="__codelineno-0-210" href="#__codelineno-0-210"></a>    Case05 = J(5, "special_chars_quote", ok, IIf(ok, "PASS", "FAIL"), "rc=" &amp; rc)
 <a id="__codelineno-0-211" name="__codelineno-0-211" href="#__codelineno-0-211"></a>End Function
 <a id="__codelineno-0-212" name="__codelineno-0-212" href="#__codelineno-0-212"></a>
 <a id="__codelineno-0-213" name="__codelineno-0-213" href="#__codelineno-0-213"></a>Private Function Case06(ByVal role As String) As String
 <a id="__codelineno-0-214" name="__codelineno-0-214" href="#__codelineno-0-214"></a>    If Not IsRegisterRole() Then
-<a id="__codelineno-0-215" name="__codelineno-0-215" href="#__codelineno-0-215"></a>        Case06 = J(6, &quot;stanza_delim_injection&quot;, True, &quot;skipped-by-design&quot;, &quot;role gate&quot;): Exit Function
+<a id="__codelineno-0-215" name="__codelineno-0-215" href="#__codelineno-0-215"></a>        Case06 = J(6, "stanza_delim_injection", True, "skipped-by-design", "role gate"): Exit Function
 <a id="__codelineno-0-216" name="__codelineno-0-216" href="#__codelineno-0-216"></a>    End If
 <a id="__codelineno-0-217" name="__codelineno-0-217" href="#__codelineno-0-217"></a>    Dim fid As String: fid = PickFormatId()
-<a id="__codelineno-0-218" name="__codelineno-0-218" href="#__codelineno-0-218"></a>    If Len(fid) = 0 Then Case06 = J(6, &quot;stanza_delim_injection&quot;, True, &quot;skipped-by-design&quot;, &quot;no fmt&quot;): Exit Function
+<a id="__codelineno-0-218" name="__codelineno-0-218" href="#__codelineno-0-218"></a>    If Len(fid) = 0 Then Case06 = J(6, "stanza_delim_injection", True, "skipped-by-design", "no fmt"): Exit Function
 <a id="__codelineno-0-219" name="__codelineno-0-219" href="#__codelineno-0-219"></a>    Dim d As Object: Set d = MakeProbeDict(fid)
-<a id="__codelineno-0-220" name="__codelineno-0-220" href="#__codelineno-0-220"></a>    d(&quot;Body&quot;) = &quot;abc###X###evil&quot;
+<a id="__codelineno-0-220" name="__codelineno-0-220" href="#__codelineno-0-220"></a>    d("Body") = "abc###X###evil"
 <a id="__codelineno-0-221" name="__codelineno-0-221" href="#__codelineno-0-221"></a>    Dim knw As String, rc As Long
-<a id="__codelineno-0-222" name="__codelineno-0-222" href="#__codelineno-0-222"></a>    knw = &quot;ABN06-&quot; &amp; Format(Now, &quot;yymmddhhnnss&quot;)
+<a id="__codelineno-0-222" name="__codelineno-0-222" href="#__codelineno-0-222"></a>    knw = "ABN06-" &amp; Format(Now, "yymmddhhnnss")
 <a id="__codelineno-0-223" name="__codelineno-0-223" href="#__codelineno-0-223"></a>    rc = modKnowledgeFileIO.SaveKnowledge(knw, d, 0)
 <a id="__codelineno-0-224" name="__codelineno-0-224" href="#__codelineno-0-224"></a>    modKnowledgeFileIO.DeleteKnowledge knw
-<a id="__codelineno-0-225" name="__codelineno-0-225" href="#__codelineno-0-225"></a>    Case06 = J(6, &quot;stanza_delim_injection&quot;, (rc = 0), &quot;OBSERVE&quot;, &quot;rc=&quot; &amp; rc)
+<a id="__codelineno-0-225" name="__codelineno-0-225" href="#__codelineno-0-225"></a>    Case06 = J(6, "stanza_delim_injection", (rc = 0), "OBSERVE", "rc=" &amp; rc)
 <a id="__codelineno-0-226" name="__codelineno-0-226" href="#__codelineno-0-226"></a>End Function
 <a id="__codelineno-0-227" name="__codelineno-0-227" href="#__codelineno-0-227"></a>
 <a id="__codelineno-0-228" name="__codelineno-0-228" href="#__codelineno-0-228"></a>Private Function Case07(ByVal role As String) As String
 <a id="__codelineno-0-229" name="__codelineno-0-229" href="#__codelineno-0-229"></a>    If Not IsRegisterRole() Then
-<a id="__codelineno-0-230" name="__codelineno-0-230" href="#__codelineno-0-230"></a>        Case07 = J(7, &quot;control_char_injection&quot;, True, &quot;skipped-by-design&quot;, &quot;role gate&quot;): Exit Function
+<a id="__codelineno-0-230" name="__codelineno-0-230" href="#__codelineno-0-230"></a>        Case07 = J(7, "control_char_injection", True, "skipped-by-design", "role gate"): Exit Function
 <a id="__codelineno-0-231" name="__codelineno-0-231" href="#__codelineno-0-231"></a>    End If
 <a id="__codelineno-0-232" name="__codelineno-0-232" href="#__codelineno-0-232"></a>    Dim fid As String: fid = PickFormatId()
-<a id="__codelineno-0-233" name="__codelineno-0-233" href="#__codelineno-0-233"></a>    If Len(fid) = 0 Then Case07 = J(7, &quot;control_char_injection&quot;, True, &quot;skipped-by-design&quot;, &quot;no fmt&quot;): Exit Function
+<a id="__codelineno-0-233" name="__codelineno-0-233" href="#__codelineno-0-233"></a>    If Len(fid) = 0 Then Case07 = J(7, "control_char_injection", True, "skipped-by-design", "no fmt"): Exit Function
 <a id="__codelineno-0-234" name="__codelineno-0-234" href="#__codelineno-0-234"></a>    Dim d As Object: Set d = MakeProbeDict(fid)
-<a id="__codelineno-0-235" name="__codelineno-0-235" href="#__codelineno-0-235"></a>    d(&quot;Body&quot;) = &quot;a&quot; &amp; Chr(0) &amp; &quot;b&quot;
+<a id="__codelineno-0-235" name="__codelineno-0-235" href="#__codelineno-0-235"></a>    d("Body") = "a" &amp; Chr(0) &amp; "b"
 <a id="__codelineno-0-236" name="__codelineno-0-236" href="#__codelineno-0-236"></a>    Dim knw As String, rc As Long
-<a id="__codelineno-0-237" name="__codelineno-0-237" href="#__codelineno-0-237"></a>    knw = &quot;ABN07-&quot; &amp; Format(Now, &quot;yymmddhhnnss&quot;)
+<a id="__codelineno-0-237" name="__codelineno-0-237" href="#__codelineno-0-237"></a>    knw = "ABN07-" &amp; Format(Now, "yymmddhhnnss")
 <a id="__codelineno-0-238" name="__codelineno-0-238" href="#__codelineno-0-238"></a>    rc = modKnowledgeFileIO.SaveKnowledge(knw, d, 0)
 <a id="__codelineno-0-239" name="__codelineno-0-239" href="#__codelineno-0-239"></a>    modKnowledgeFileIO.DeleteKnowledge knw
-<a id="__codelineno-0-240" name="__codelineno-0-240" href="#__codelineno-0-240"></a>    Case07 = J(7, &quot;control_char_injection&quot;, (rc = 2), IIf(rc = 2, &quot;PASS&quot;, &quot;FAIL&quot;), &quot;rc=&quot; &amp; rc)
+<a id="__codelineno-0-240" name="__codelineno-0-240" href="#__codelineno-0-240"></a>    Case07 = J(7, "control_char_injection", (rc = 2), IIf(rc = 2, "PASS", "FAIL"), "rc=" &amp; rc)
 <a id="__codelineno-0-241" name="__codelineno-0-241" href="#__codelineno-0-241"></a>End Function
 <a id="__codelineno-0-242" name="__codelineno-0-242" href="#__codelineno-0-242"></a>
 <a id="__codelineno-0-243" name="__codelineno-0-243" href="#__codelineno-0-243"></a>Private Function Case08(ByVal role As String) As String
-<a id="__codelineno-0-244" name="__codelineno-0-244" href="#__codelineno-0-244"></a>    Dim back As Object: Set back = modKnowledgeFileIO.LoadKnowledge(&quot;ZZZZ-9999&quot;)
+<a id="__codelineno-0-244" name="__codelineno-0-244" href="#__codelineno-0-244"></a>    Dim back As Object: Set back = modKnowledgeFileIO.LoadKnowledge("ZZZZ-9999")
 <a id="__codelineno-0-245" name="__codelineno-0-245" href="#__codelineno-0-245"></a>    Dim ok As Boolean
 <a id="__codelineno-0-246" name="__codelineno-0-246" href="#__codelineno-0-246"></a>    If back Is Nothing Then ok = True Else ok = (back.Count = 0)
-<a id="__codelineno-0-247" name="__codelineno-0-247" href="#__codelineno-0-247"></a>    Case08 = J(8, &quot;load_missing_id&quot;, ok, IIf(ok, &quot;PASS&quot;, &quot;FAIL&quot;), &quot;missing empty&quot;)
+<a id="__codelineno-0-247" name="__codelineno-0-247" href="#__codelineno-0-247"></a>    Case08 = J(8, "load_missing_id", ok, IIf(ok, "PASS", "FAIL"), "missing empty")
 <a id="__codelineno-0-248" name="__codelineno-0-248" href="#__codelineno-0-248"></a>End Function
 <a id="__codelineno-0-249" name="__codelineno-0-249" href="#__codelineno-0-249"></a>
 <a id="__codelineno-0-250" name="__codelineno-0-250" href="#__codelineno-0-250"></a>Private Function Case09(ByVal role As String) As String
 <a id="__codelineno-0-251" name="__codelineno-0-251" href="#__codelineno-0-251"></a>    If Not IsRegisterRole() Then
-<a id="__codelineno-0-252" name="__codelineno-0-252" href="#__codelineno-0-252"></a>        Case09 = J(9, &quot;load_corrupt_file&quot;, True, &quot;skipped-by-design&quot;, &quot;needs write&quot;): Exit Function
+<a id="__codelineno-0-252" name="__codelineno-0-252" href="#__codelineno-0-252"></a>        Case09 = J(9, "load_corrupt_file", True, "skipped-by-design", "needs write"): Exit Function
 <a id="__codelineno-0-253" name="__codelineno-0-253" href="#__codelineno-0-253"></a>    End If
 <a id="__codelineno-0-254" name="__codelineno-0-254" href="#__codelineno-0-254"></a>    Dim id As String, p As String, fh As Integer
-<a id="__codelineno-0-255" name="__codelineno-0-255" href="#__codelineno-0-255"></a>    id = &quot;ABN09-&quot; &amp; Format(Now, &quot;yymmddhhnnss&quot;)
-<a id="__codelineno-0-256" name="__codelineno-0-256" href="#__codelineno-0-256"></a>    p = modConfigHolder.GetDataDir() &amp; id &amp; &quot;.txt&quot;
+<a id="__codelineno-0-255" name="__codelineno-0-255" href="#__codelineno-0-255"></a>    id = "ABN09-" &amp; Format(Now, "yymmddhhnnss")
+<a id="__codelineno-0-256" name="__codelineno-0-256" href="#__codelineno-0-256"></a>    p = modConfigHolder.GetDataDir() &amp; id &amp; ".txt"
 <a id="__codelineno-0-257" name="__codelineno-0-257" href="#__codelineno-0-257"></a>    fh = FreeFile
 <a id="__codelineno-0-258" name="__codelineno-0-258" href="#__codelineno-0-258"></a>    Open p For Output As #fh
-<a id="__codelineno-0-259" name="__codelineno-0-259" href="#__codelineno-0-259"></a>    Print #fh, &quot;garbage&quot;
+<a id="__codelineno-0-259" name="__codelineno-0-259" href="#__codelineno-0-259"></a>    Print #fh, "garbage"
 <a id="__codelineno-0-260" name="__codelineno-0-260" href="#__codelineno-0-260"></a>    Close #fh
 <a id="__codelineno-0-261" name="__codelineno-0-261" href="#__codelineno-0-261"></a>    Dim back As Object: Set back = modKnowledgeFileIO.LoadKnowledge(id)
 <a id="__codelineno-0-262" name="__codelineno-0-262" href="#__codelineno-0-262"></a>    Dim ok As Boolean
 <a id="__codelineno-0-263" name="__codelineno-0-263" href="#__codelineno-0-263"></a>    If back Is Nothing Then ok = True Else ok = (back.Count = 0)
 <a id="__codelineno-0-264" name="__codelineno-0-264" href="#__codelineno-0-264"></a>    modKnowledgeFileIO.DeleteKnowledge id
-<a id="__codelineno-0-265" name="__codelineno-0-265" href="#__codelineno-0-265"></a>    Case09 = J(9, &quot;load_corrupt_file&quot;, ok, IIf(ok, &quot;PASS&quot;, &quot;FAIL&quot;), &quot;corrupt empty&quot;)
+<a id="__codelineno-0-265" name="__codelineno-0-265" href="#__codelineno-0-265"></a>    Case09 = J(9, "load_corrupt_file", ok, IIf(ok, "PASS", "FAIL"), "corrupt empty")
 <a id="__codelineno-0-266" name="__codelineno-0-266" href="#__codelineno-0-266"></a>End Function
 <a id="__codelineno-0-267" name="__codelineno-0-267" href="#__codelineno-0-267"></a>
 <a id="__codelineno-0-268" name="__codelineno-0-268" href="#__codelineno-0-268"></a>Private Function Case10(ByVal role As String) As String
-<a id="__codelineno-0-269" name="__codelineno-0-269" href="#__codelineno-0-269"></a>    Dim back As Object: Set back = modKnowledgeFileIO.LoadKnowledge(&quot;***illegal***&quot;)
+<a id="__codelineno-0-269" name="__codelineno-0-269" href="#__codelineno-0-269"></a>    Dim back As Object: Set back = modKnowledgeFileIO.LoadKnowledge("***illegal***")
 <a id="__codelineno-0-270" name="__codelineno-0-270" href="#__codelineno-0-270"></a>    Dim ok As Boolean
 <a id="__codelineno-0-271" name="__codelineno-0-271" href="#__codelineno-0-271"></a>    If back Is Nothing Then ok = True Else ok = (back.Count = 0)
-<a id="__codelineno-0-272" name="__codelineno-0-272" href="#__codelineno-0-272"></a>    Case10 = J(10, &quot;load_no_permission&quot;, ok, IIf(ok, &quot;PASS&quot;, &quot;OBSERVE&quot;), &quot;illegal chars&quot;)
+<a id="__codelineno-0-272" name="__codelineno-0-272" href="#__codelineno-0-272"></a>    Case10 = J(10, "load_no_permission", ok, IIf(ok, "PASS", "OBSERVE"), "illegal chars")
 <a id="__codelineno-0-273" name="__codelineno-0-273" href="#__codelineno-0-273"></a>End Function
 <a id="__codelineno-0-274" name="__codelineno-0-274" href="#__codelineno-0-274"></a>
 <a id="__codelineno-0-275" name="__codelineno-0-275" href="#__codelineno-0-275"></a>Private Function Case11(ByVal role As String) As String
-<a id="__codelineno-0-276" name="__codelineno-0-276" href="#__codelineno-0-276"></a>    Dim c As Collection: Set c = modFormatLoader.LoadFormat(&quot;nonexistent-zzz&quot;)
+<a id="__codelineno-0-276" name="__codelineno-0-276" href="#__codelineno-0-276"></a>    Dim c As Collection: Set c = modFormatLoader.LoadFormat("nonexistent-zzz")
 <a id="__codelineno-0-277" name="__codelineno-0-277" href="#__codelineno-0-277"></a>    Dim ok As Boolean
 <a id="__codelineno-0-278" name="__codelineno-0-278" href="#__codelineno-0-278"></a>    If c Is Nothing Then ok = True Else ok = (c.Count = 0)
-<a id="__codelineno-0-279" name="__codelineno-0-279" href="#__codelineno-0-279"></a>    Dim ex As Boolean: ex = modFormatLoader.FormatExists(&quot;nonexistent-zzz&quot;)
+<a id="__codelineno-0-279" name="__codelineno-0-279" href="#__codelineno-0-279"></a>    Dim ex As Boolean: ex = modFormatLoader.FormatExists("nonexistent-zzz")
 <a id="__codelineno-0-280" name="__codelineno-0-280" href="#__codelineno-0-280"></a>    ok = ok And (Not ex)
-<a id="__codelineno-0-281" name="__codelineno-0-281" href="#__codelineno-0-281"></a>    Case11 = J(11, &quot;format_invalid_id&quot;, ok, IIf(ok, &quot;PASS&quot;, &quot;FAIL&quot;), &quot;empty+notexist&quot;)
+<a id="__codelineno-0-281" name="__codelineno-0-281" href="#__codelineno-0-281"></a>    Case11 = J(11, "format_invalid_id", ok, IIf(ok, "PASS", "FAIL"), "empty+notexist")
 <a id="__codelineno-0-282" name="__codelineno-0-282" href="#__codelineno-0-282"></a>End Function
 <a id="__codelineno-0-283" name="__codelineno-0-283" href="#__codelineno-0-283"></a>
 <a id="__codelineno-0-284" name="__codelineno-0-284" href="#__codelineno-0-284"></a>Private Function Case12(ByVal role As String) As String
 <a id="__codelineno-0-285" name="__codelineno-0-285" href="#__codelineno-0-285"></a>    If Not IsAdminRole() Then
-<a id="__codelineno-0-286" name="__codelineno-0-286" href="#__codelineno-0-286"></a>        Case12 = J(12, &quot;format_deleted_in_use&quot;, True, &quot;skipped-by-design&quot;, &quot;admin only&quot;): Exit Function
+<a id="__codelineno-0-286" name="__codelineno-0-286" href="#__codelineno-0-286"></a>        Case12 = J(12, "format_deleted_in_use", True, "skipped-by-design", "admin only"): Exit Function
 <a id="__codelineno-0-287" name="__codelineno-0-287" href="#__codelineno-0-287"></a>    End If
 <a id="__codelineno-0-288" name="__codelineno-0-288" href="#__codelineno-0-288"></a>    Dim fid As String: fid = PickFormatId()
-<a id="__codelineno-0-289" name="__codelineno-0-289" href="#__codelineno-0-289"></a>    If Len(fid) = 0 Then Case12 = J(12, &quot;format_deleted_in_use&quot;, True, &quot;skipped-by-design&quot;, &quot;no fmt&quot;): Exit Function
+<a id="__codelineno-0-289" name="__codelineno-0-289" href="#__codelineno-0-289"></a>    If Len(fid) = 0 Then Case12 = J(12, "format_deleted_in_use", True, "skipped-by-design", "no fmt"): Exit Function
 <a id="__codelineno-0-290" name="__codelineno-0-290" href="#__codelineno-0-290"></a>    Dim used As Collection: Set used = modKnowledgeFileIO.ListKnowledgesByFormat(fid)
-<a id="__codelineno-0-291" name="__codelineno-0-291" href="#__codelineno-0-291"></a>    If used Is Nothing Then Case12 = J(12, &quot;format_deleted_in_use&quot;, True, &quot;skipped-by-design&quot;, &quot;no knw&quot;): Exit Function
-<a id="__codelineno-0-292" name="__codelineno-0-292" href="#__codelineno-0-292"></a>    If used.Count = 0 Then Case12 = J(12, &quot;format_deleted_in_use&quot;, True, &quot;skipped-by-design&quot;, &quot;no knw&quot;): Exit Function
+<a id="__codelineno-0-291" name="__codelineno-0-291" href="#__codelineno-0-291"></a>    If used Is Nothing Then Case12 = J(12, "format_deleted_in_use", True, "skipped-by-design", "no knw"): Exit Function
+<a id="__codelineno-0-292" name="__codelineno-0-292" href="#__codelineno-0-292"></a>    If used.Count = 0 Then Case12 = J(12, "format_deleted_in_use", True, "skipped-by-design", "no knw"): Exit Function
 <a id="__codelineno-0-293" name="__codelineno-0-293" href="#__codelineno-0-293"></a>    Dim rc As Long: rc = modFormatLoader.DeleteFormat(fid)
-<a id="__codelineno-0-294" name="__codelineno-0-294" href="#__codelineno-0-294"></a>    Case12 = J(12, &quot;format_deleted_in_use&quot;, (rc = 2), IIf(rc = 2, &quot;PASS&quot;, &quot;FAIL&quot;), &quot;rc=&quot; &amp; rc)
+<a id="__codelineno-0-294" name="__codelineno-0-294" href="#__codelineno-0-294"></a>    Case12 = J(12, "format_deleted_in_use", (rc = 2), IIf(rc = 2, "PASS", "FAIL"), "rc=" &amp; rc)
 <a id="__codelineno-0-295" name="__codelineno-0-295" href="#__codelineno-0-295"></a>End Function
 <a id="__codelineno-0-296" name="__codelineno-0-296" href="#__codelineno-0-296"></a>
 <a id="__codelineno-0-297" name="__codelineno-0-297" href="#__codelineno-0-297"></a>Private Function Case13(ByVal role As String) As String
 <a id="__codelineno-0-298" name="__codelineno-0-298" href="#__codelineno-0-298"></a>    If Not IsRegisterRole() Then
-<a id="__codelineno-0-299" name="__codelineno-0-299" href="#__codelineno-0-299"></a>        Case13 = J(13, &quot;knowledge_lock_conflict&quot;, True, &quot;skipped-by-design&quot;, &quot;role gate&quot;): Exit Function
+<a id="__codelineno-0-299" name="__codelineno-0-299" href="#__codelineno-0-299"></a>        Case13 = J(13, "knowledge_lock_conflict", True, "skipped-by-design", "role gate"): Exit Function
 <a id="__codelineno-0-300" name="__codelineno-0-300" href="#__codelineno-0-300"></a>    End If
 <a id="__codelineno-0-301" name="__codelineno-0-301" href="#__codelineno-0-301"></a>    Dim fid As String: fid = PickFormatId()
-<a id="__codelineno-0-302" name="__codelineno-0-302" href="#__codelineno-0-302"></a>    If Len(fid) = 0 Then Case13 = J(13, &quot;knowledge_lock_conflict&quot;, True, &quot;skipped-by-design&quot;, &quot;no fmt&quot;): Exit Function
+<a id="__codelineno-0-302" name="__codelineno-0-302" href="#__codelineno-0-302"></a>    If Len(fid) = 0 Then Case13 = J(13, "knowledge_lock_conflict", True, "skipped-by-design", "no fmt"): Exit Function
 <a id="__codelineno-0-303" name="__codelineno-0-303" href="#__codelineno-0-303"></a>    Dim knw As String, rc1 As Long, rc2 As Long
-<a id="__codelineno-0-304" name="__codelineno-0-304" href="#__codelineno-0-304"></a>    knw = &quot;ABN13-&quot; &amp; Format(Now, &quot;yymmddhhnnss&quot;)
+<a id="__codelineno-0-304" name="__codelineno-0-304" href="#__codelineno-0-304"></a>    knw = "ABN13-" &amp; Format(Now, "yymmddhhnnss")
 <a id="__codelineno-0-305" name="__codelineno-0-305" href="#__codelineno-0-305"></a>    rc1 = modKnowledgeFileIO.SaveKnowledge(knw, MakeProbeDict(fid), 0)
-<a id="__codelineno-0-306" name="__codelineno-0-306" href="#__codelineno-0-306"></a>    rc2 = modKnowledgeFileIO.SaveKnowledge(knw, MakeProbeDict(fid), DateAdd(&quot;d&quot;, -1, Now()))
+<a id="__codelineno-0-306" name="__codelineno-0-306" href="#__codelineno-0-306"></a>    rc2 = modKnowledgeFileIO.SaveKnowledge(knw, MakeProbeDict(fid), DateAdd("d", -1, Now()))
 <a id="__codelineno-0-307" name="__codelineno-0-307" href="#__codelineno-0-307"></a>    modKnowledgeFileIO.DeleteKnowledge knw
 <a id="__codelineno-0-308" name="__codelineno-0-308" href="#__codelineno-0-308"></a>    Dim ok As Boolean: ok = (rc1 = 0 And rc2 = 1)
-<a id="__codelineno-0-309" name="__codelineno-0-309" href="#__codelineno-0-309"></a>    Case13 = J(13, &quot;knowledge_lock_conflict&quot;, ok, IIf(ok, &quot;PASS&quot;, &quot;FAIL&quot;), &quot;rc1=&quot; &amp; rc1 &amp; &quot; rc2=&quot; &amp; rc2)
+<a id="__codelineno-0-309" name="__codelineno-0-309" href="#__codelineno-0-309"></a>    Case13 = J(13, "knowledge_lock_conflict", ok, IIf(ok, "PASS", "FAIL"), "rc1=" &amp; rc1 &amp; " rc2=" &amp; rc2)
 <a id="__codelineno-0-310" name="__codelineno-0-310" href="#__codelineno-0-310"></a>End Function
 <a id="__codelineno-0-311" name="__codelineno-0-311" href="#__codelineno-0-311"></a>
 <a id="__codelineno-0-312" name="__codelineno-0-312" href="#__codelineno-0-312"></a>Private Function Case14(ByVal role As String) As String
@@ -5360,7 +5360,7 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-315" name="__codelineno-0-315" href="#__codelineno-0-315"></a>    bdir = modConfigHolder.GetBackupDir()
 <a id="__codelineno-0-316" name="__codelineno-0-316" href="#__codelineno-0-316"></a>    On Error GoTo 0
 <a id="__codelineno-0-317" name="__codelineno-0-317" href="#__codelineno-0-317"></a>    Dim ok As Boolean: ok = (Len(bdir) &gt; 0)
-<a id="__codelineno-0-318" name="__codelineno-0-318" href="#__codelineno-0-318"></a>    Case14 = J(14, &quot;backup_dir_missing&quot;, ok, IIf(ok, &quot;PASS&quot;, &quot;FAIL&quot;), &quot;bdir=&quot; &amp; bdir)
+<a id="__codelineno-0-318" name="__codelineno-0-318" href="#__codelineno-0-318"></a>    Case14 = J(14, "backup_dir_missing", ok, IIf(ok, "PASS", "FAIL"), "bdir=" &amp; bdir)
 <a id="__codelineno-0-319" name="__codelineno-0-319" href="#__codelineno-0-319"></a>End Function
 <a id="__codelineno-0-320" name="__codelineno-0-320" href="#__codelineno-0-320"></a>
 <a id="__codelineno-0-321" name="__codelineno-0-321" href="#__codelineno-0-321"></a>Private Function Case15(ByVal role As String) As String
@@ -5368,66 +5368,66 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-323" name="__codelineno-0-323" href="#__codelineno-0-323"></a>    On Error Resume Next
 <a id="__codelineno-0-324" name="__codelineno-0-324" href="#__codelineno-0-324"></a>    ddir = modConfigHolder.GetDataDir()
 <a id="__codelineno-0-325" name="__codelineno-0-325" href="#__codelineno-0-325"></a>    On Error GoTo 0
-<a id="__codelineno-0-326" name="__codelineno-0-326" href="#__codelineno-0-326"></a>    Dim fso As Object: Set fso = CreateObject(&quot;Scripting.FileSystemObject&quot;)
+<a id="__codelineno-0-326" name="__codelineno-0-326" href="#__codelineno-0-326"></a>    Dim fso As Object: Set fso = CreateObject("Scripting.FileSystemObject")
 <a id="__codelineno-0-327" name="__codelineno-0-327" href="#__codelineno-0-327"></a>    Dim ok As Boolean: ok = (Len(ddir) &gt; 0)
 <a id="__codelineno-0-328" name="__codelineno-0-328" href="#__codelineno-0-328"></a>    If ok Then ok = fso.FolderExists(ddir)
-<a id="__codelineno-0-329" name="__codelineno-0-329" href="#__codelineno-0-329"></a>    Case15 = J(15, &quot;data_dir_readonly&quot;, ok, IIf(ok, &quot;PASS&quot;, &quot;OBSERVE&quot;), &quot;ddir=&quot; &amp; ddir)
+<a id="__codelineno-0-329" name="__codelineno-0-329" href="#__codelineno-0-329"></a>    Case15 = J(15, "data_dir_readonly", ok, IIf(ok, "PASS", "OBSERVE"), "ddir=" &amp; ddir)
 <a id="__codelineno-0-330" name="__codelineno-0-330" href="#__codelineno-0-330"></a>End Function
 <a id="__codelineno-0-331" name="__codelineno-0-331" href="#__codelineno-0-331"></a>
 <a id="__codelineno-0-332" name="__codelineno-0-332" href="#__codelineno-0-332"></a>Private Function Case16(ByVal role As String) As String
-<a id="__codelineno-0-333" name="__codelineno-0-333" href="#__codelineno-0-333"></a>    Dim fso As Object: Set fso = CreateObject(&quot;Scripting.FileSystemObject&quot;)
+<a id="__codelineno-0-333" name="__codelineno-0-333" href="#__codelineno-0-333"></a>    Dim fso As Object: Set fso = CreateObject("Scripting.FileSystemObject")
 <a id="__codelineno-0-334" name="__codelineno-0-334" href="#__codelineno-0-334"></a>    Dim p As String
-<a id="__codelineno-0-335" name="__codelineno-0-335" href="#__codelineno-0-335"></a>    p = &quot;\\nonexistent-host-zzz\share\d&quot;
+<a id="__codelineno-0-335" name="__codelineno-0-335" href="#__codelineno-0-335"></a>    p = "\\nonexistent-host-zzz\share\d"
 <a id="__codelineno-0-336" name="__codelineno-0-336" href="#__codelineno-0-336"></a>    Dim ok As Boolean: ok = (Not fso.FolderExists(p))
-<a id="__codelineno-0-337" name="__codelineno-0-337" href="#__codelineno-0-337"></a>    Case16 = J(16, &quot;network_path_unreachable&quot;, ok, IIf(ok, &quot;PASS&quot;, &quot;FAIL&quot;), &quot;UNC unreachable&quot;)
+<a id="__codelineno-0-337" name="__codelineno-0-337" href="#__codelineno-0-337"></a>    Case16 = J(16, "network_path_unreachable", ok, IIf(ok, "PASS", "FAIL"), "UNC unreachable")
 <a id="__codelineno-0-338" name="__codelineno-0-338" href="#__codelineno-0-338"></a>End Function
 <a id="__codelineno-0-339" name="__codelineno-0-339" href="#__codelineno-0-339"></a>
 <a id="__codelineno-0-340" name="__codelineno-0-340" href="#__codelineno-0-340"></a>Private Function Case17(ByVal role As String) As String
 <a id="__codelineno-0-341" name="__codelineno-0-341" href="#__codelineno-0-341"></a>    If Not IsRegisterRole() Then
-<a id="__codelineno-0-342" name="__codelineno-0-342" href="#__codelineno-0-342"></a>        Case17 = J(17, &quot;long_path_over_260&quot;, True, &quot;skipped-by-design&quot;, &quot;role gate&quot;): Exit Function
+<a id="__codelineno-0-342" name="__codelineno-0-342" href="#__codelineno-0-342"></a>        Case17 = J(17, "long_path_over_260", True, "skipped-by-design", "role gate"): Exit Function
 <a id="__codelineno-0-343" name="__codelineno-0-343" href="#__codelineno-0-343"></a>    End If
-<a id="__codelineno-0-344" name="__codelineno-0-344" href="#__codelineno-0-344"></a>    Dim id As String: id = &quot;ABN17-&quot; &amp; String(280, &quot;x&quot;)
+<a id="__codelineno-0-344" name="__codelineno-0-344" href="#__codelineno-0-344"></a>    Dim id As String: id = "ABN17-" &amp; String(280, "x")
 <a id="__codelineno-0-345" name="__codelineno-0-345" href="#__codelineno-0-345"></a>    Dim fid As String: fid = PickFormatId()
-<a id="__codelineno-0-346" name="__codelineno-0-346" href="#__codelineno-0-346"></a>    If Len(fid) = 0 Then fid = &quot;ANY&quot;
+<a id="__codelineno-0-346" name="__codelineno-0-346" href="#__codelineno-0-346"></a>    If Len(fid) = 0 Then fid = "ANY"
 <a id="__codelineno-0-347" name="__codelineno-0-347" href="#__codelineno-0-347"></a>    Dim rc As Long: rc = modKnowledgeFileIO.SaveKnowledge(id, MakeProbeDict(fid), 0)
 <a id="__codelineno-0-348" name="__codelineno-0-348" href="#__codelineno-0-348"></a>    Dim ok As Boolean: ok = (rc &lt;&gt; 0)
-<a id="__codelineno-0-349" name="__codelineno-0-349" href="#__codelineno-0-349"></a>    Case17 = J(17, &quot;long_path_over_260&quot;, ok, IIf(ok, &quot;PASS&quot;, &quot;FAIL&quot;), &quot;rc=&quot; &amp; rc)
+<a id="__codelineno-0-349" name="__codelineno-0-349" href="#__codelineno-0-349"></a>    Case17 = J(17, "long_path_over_260", ok, IIf(ok, "PASS", "FAIL"), "rc=" &amp; rc)
 <a id="__codelineno-0-350" name="__codelineno-0-350" href="#__codelineno-0-350"></a>End Function
 <a id="__codelineno-0-351" name="__codelineno-0-351" href="#__codelineno-0-351"></a>
 <a id="__codelineno-0-352" name="__codelineno-0-352" href="#__codelineno-0-352"></a>Private Function Case18(ByVal role As String) As String
 <a id="__codelineno-0-353" name="__codelineno-0-353" href="#__codelineno-0-353"></a>    Dim ddir As String: ddir = modConfigHolder.GetDataDir()
 <a id="__codelineno-0-354" name="__codelineno-0-354" href="#__codelineno-0-354"></a>    Dim ok As Boolean: ok = (Len(ddir) &gt; 0)
-<a id="__codelineno-0-355" name="__codelineno-0-355" href="#__codelineno-0-355"></a>    Case18 = J(18, &quot;japanese_path_corrupt&quot;, ok, &quot;OBSERVE&quot;, &quot;len=&quot; &amp; Len(ddir))
+<a id="__codelineno-0-355" name="__codelineno-0-355" href="#__codelineno-0-355"></a>    Case18 = J(18, "japanese_path_corrupt", ok, "OBSERVE", "len=" &amp; Len(ddir))
 <a id="__codelineno-0-356" name="__codelineno-0-356" href="#__codelineno-0-356"></a>End Function
 <a id="__codelineno-0-357" name="__codelineno-0-357" href="#__codelineno-0-357"></a>
 <a id="__codelineno-0-358" name="__codelineno-0-358" href="#__codelineno-0-358"></a>Private Function Case19(ByVal role As String) As String
 <a id="__codelineno-0-359" name="__codelineno-0-359" href="#__codelineno-0-359"></a>    If Not IsRegisterRole() Then
-<a id="__codelineno-0-360" name="__codelineno-0-360" href="#__codelineno-0-360"></a>        Case19 = J(19, &quot;format_field_missing&quot;, True, &quot;skipped-by-design&quot;, &quot;role gate&quot;): Exit Function
+<a id="__codelineno-0-360" name="__codelineno-0-360" href="#__codelineno-0-360"></a>        Case19 = J(19, "format_field_missing", True, "skipped-by-design", "role gate"): Exit Function
 <a id="__codelineno-0-361" name="__codelineno-0-361" href="#__codelineno-0-361"></a>    End If
 <a id="__codelineno-0-362" name="__codelineno-0-362" href="#__codelineno-0-362"></a>    Dim fid As String: fid = PickFormatId()
-<a id="__codelineno-0-363" name="__codelineno-0-363" href="#__codelineno-0-363"></a>    If Len(fid) = 0 Then Case19 = J(19, &quot;format_field_missing&quot;, True, &quot;skipped-by-design&quot;, &quot;no fmt&quot;): Exit Function
+<a id="__codelineno-0-363" name="__codelineno-0-363" href="#__codelineno-0-363"></a>    If Len(fid) = 0 Then Case19 = J(19, "format_field_missing", True, "skipped-by-design", "no fmt"): Exit Function
 <a id="__codelineno-0-364" name="__codelineno-0-364" href="#__codelineno-0-364"></a>    Dim d As Object: Set d = MakeProbeDict(fid)
-<a id="__codelineno-0-365" name="__codelineno-0-365" href="#__codelineno-0-365"></a>    d(&quot;Undefined_zzz&quot;) = &quot;x&quot;
+<a id="__codelineno-0-365" name="__codelineno-0-365" href="#__codelineno-0-365"></a>    d("Undefined_zzz") = "x"
 <a id="__codelineno-0-366" name="__codelineno-0-366" href="#__codelineno-0-366"></a>    Dim knw As String, rc As Long
-<a id="__codelineno-0-367" name="__codelineno-0-367" href="#__codelineno-0-367"></a>    knw = &quot;ABN19-&quot; &amp; Format(Now, &quot;yymmddhhnnss&quot;)
+<a id="__codelineno-0-367" name="__codelineno-0-367" href="#__codelineno-0-367"></a>    knw = "ABN19-" &amp; Format(Now, "yymmddhhnnss")
 <a id="__codelineno-0-368" name="__codelineno-0-368" href="#__codelineno-0-368"></a>    rc = modKnowledgeFileIO.SaveKnowledge(knw, d, 0)
 <a id="__codelineno-0-369" name="__codelineno-0-369" href="#__codelineno-0-369"></a>    modKnowledgeFileIO.DeleteKnowledge knw
-<a id="__codelineno-0-370" name="__codelineno-0-370" href="#__codelineno-0-370"></a>    Case19 = J(19, &quot;format_field_missing&quot;, (rc = 0), &quot;OBSERVE&quot;, &quot;rc=&quot; &amp; rc)
+<a id="__codelineno-0-370" name="__codelineno-0-370" href="#__codelineno-0-370"></a>    Case19 = J(19, "format_field_missing", (rc = 0), "OBSERVE", "rc=" &amp; rc)
 <a id="__codelineno-0-371" name="__codelineno-0-371" href="#__codelineno-0-371"></a>End Function
 <a id="__codelineno-0-372" name="__codelineno-0-372" href="#__codelineno-0-372"></a>
 <a id="__codelineno-0-373" name="__codelineno-0-373" href="#__codelineno-0-373"></a>Private Function Case20(ByVal role As String) As String
 <a id="__codelineno-0-374" name="__codelineno-0-374" href="#__codelineno-0-374"></a>    If Not IsRegisterRole() Then
-<a id="__codelineno-0-375" name="__codelineno-0-375" href="#__codelineno-0-375"></a>        Case20 = J(20, &quot;format_type_mismatch&quot;, True, &quot;skipped-by-design&quot;, &quot;role gate&quot;): Exit Function
+<a id="__codelineno-0-375" name="__codelineno-0-375" href="#__codelineno-0-375"></a>        Case20 = J(20, "format_type_mismatch", True, "skipped-by-design", "role gate"): Exit Function
 <a id="__codelineno-0-376" name="__codelineno-0-376" href="#__codelineno-0-376"></a>    End If
 <a id="__codelineno-0-377" name="__codelineno-0-377" href="#__codelineno-0-377"></a>    Dim fid As String: fid = PickFormatId()
-<a id="__codelineno-0-378" name="__codelineno-0-378" href="#__codelineno-0-378"></a>    If Len(fid) = 0 Then Case20 = J(20, &quot;format_type_mismatch&quot;, True, &quot;skipped-by-design&quot;, &quot;no fmt&quot;): Exit Function
+<a id="__codelineno-0-378" name="__codelineno-0-378" href="#__codelineno-0-378"></a>    If Len(fid) = 0 Then Case20 = J(20, "format_type_mismatch", True, "skipped-by-design", "no fmt"): Exit Function
 <a id="__codelineno-0-379" name="__codelineno-0-379" href="#__codelineno-0-379"></a>    Dim d As Object: Set d = MakeProbeDict(fid)
-<a id="__codelineno-0-380" name="__codelineno-0-380" href="#__codelineno-0-380"></a>    d(&quot;NumberField&quot;) = &quot;not-a-number&quot;
+<a id="__codelineno-0-380" name="__codelineno-0-380" href="#__codelineno-0-380"></a>    d("NumberField") = "not-a-number"
 <a id="__codelineno-0-381" name="__codelineno-0-381" href="#__codelineno-0-381"></a>    Dim knw As String, rc As Long
-<a id="__codelineno-0-382" name="__codelineno-0-382" href="#__codelineno-0-382"></a>    knw = &quot;ABN20-&quot; &amp; Format(Now, &quot;yymmddhhnnss&quot;)
+<a id="__codelineno-0-382" name="__codelineno-0-382" href="#__codelineno-0-382"></a>    knw = "ABN20-" &amp; Format(Now, "yymmddhhnnss")
 <a id="__codelineno-0-383" name="__codelineno-0-383" href="#__codelineno-0-383"></a>    rc = modKnowledgeFileIO.SaveKnowledge(knw, d, 0)
 <a id="__codelineno-0-384" name="__codelineno-0-384" href="#__codelineno-0-384"></a>    modKnowledgeFileIO.DeleteKnowledge knw
-<a id="__codelineno-0-385" name="__codelineno-0-385" href="#__codelineno-0-385"></a>    Case20 = J(20, &quot;format_type_mismatch&quot;, (rc = 0), &quot;OBSERVE&quot;, &quot;rc=&quot; &amp; rc)
+<a id="__codelineno-0-385" name="__codelineno-0-385" href="#__codelineno-0-385"></a>    Case20 = J(20, "format_type_mismatch", (rc = 0), "OBSERVE", "rc=" &amp; rc)
 <a id="__codelineno-0-386" name="__codelineno-0-386" href="#__codelineno-0-386"></a>End Function
 <a id="__codelineno-0-387" name="__codelineno-0-387" href="#__codelineno-0-387"></a>
 <a id="__codelineno-0-388" name="__codelineno-0-388" href="#__codelineno-0-388"></a>Private Function Case21(ByVal role As String) As String
@@ -5435,7 +5435,7 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-390" name="__codelineno-0-390" href="#__codelineno-0-390"></a>    Dim ok As Boolean: ok = (Not all Is Nothing)
 <a id="__codelineno-0-391" name="__codelineno-0-391" href="#__codelineno-0-391"></a>    Dim cnt As Long
 <a id="__codelineno-0-392" name="__codelineno-0-392" href="#__codelineno-0-392"></a>    If all Is Nothing Then cnt = -1 Else cnt = all.Count
-<a id="__codelineno-0-393" name="__codelineno-0-393" href="#__codelineno-0-393"></a>    Case21 = J(21, &quot;search_empty_keyword&quot;, ok, IIf(ok, &quot;PASS&quot;, &quot;FAIL&quot;), &quot;count=&quot; &amp; cnt)
+<a id="__codelineno-0-393" name="__codelineno-0-393" href="#__codelineno-0-393"></a>    Case21 = J(21, "search_empty_keyword", ok, IIf(ok, "PASS", "FAIL"), "count=" &amp; cnt)
 <a id="__codelineno-0-394" name="__codelineno-0-394" href="#__codelineno-0-394"></a>End Function
 <a id="__codelineno-0-395" name="__codelineno-0-395" href="#__codelineno-0-395"></a>
 <a id="__codelineno-0-396" name="__codelineno-0-396" href="#__codelineno-0-396"></a>Private Function Case22(ByVal role As String) As String
@@ -5443,20 +5443,20 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-398" name="__codelineno-0-398" href="#__codelineno-0-398"></a>    Dim ok As Boolean: ok = (Not all Is Nothing)
 <a id="__codelineno-0-399" name="__codelineno-0-399" href="#__codelineno-0-399"></a>    Dim cnt As Long
 <a id="__codelineno-0-400" name="__codelineno-0-400" href="#__codelineno-0-400"></a>    If all Is Nothing Then cnt = -1 Else cnt = all.Count
-<a id="__codelineno-0-401" name="__codelineno-0-401" href="#__codelineno-0-401"></a>    Case22 = J(22, &quot;search_too_many_results&quot;, ok, &quot;OBSERVE&quot;, &quot;size=&quot; &amp; cnt)
+<a id="__codelineno-0-401" name="__codelineno-0-401" href="#__codelineno-0-401"></a>    Case22 = J(22, "search_too_many_results", ok, "OBSERVE", "size=" &amp; cnt)
 <a id="__codelineno-0-402" name="__codelineno-0-402" href="#__codelineno-0-402"></a>End Function
 <a id="__codelineno-0-403" name="__codelineno-0-403" href="#__codelineno-0-403"></a>
 <a id="__codelineno-0-404" name="__codelineno-0-404" href="#__codelineno-0-404"></a>Private Function Case23(ByVal role As String) As String
 <a id="__codelineno-0-405" name="__codelineno-0-405" href="#__codelineno-0-405"></a>    Dim c As Collection: Set c = modFormatLoader.ListAllFormats()
 <a id="__codelineno-0-406" name="__codelineno-0-406" href="#__codelineno-0-406"></a>    Dim ok As Boolean: ok = (Not c Is Nothing)
-<a id="__codelineno-0-407" name="__codelineno-0-407" href="#__codelineno-0-407"></a>    Case23 = J(23, &quot;search_special_char&quot;, ok, IIf(ok, &quot;PASS&quot;, &quot;FAIL&quot;), &quot;reachable&quot;)
+<a id="__codelineno-0-407" name="__codelineno-0-407" href="#__codelineno-0-407"></a>    Case23 = J(23, "search_special_char", ok, IIf(ok, "PASS", "FAIL"), "reachable")
 <a id="__codelineno-0-408" name="__codelineno-0-408" href="#__codelineno-0-408"></a>End Function
 <a id="__codelineno-0-409" name="__codelineno-0-409" href="#__codelineno-0-409"></a>
 <a id="__codelineno-0-410" name="__codelineno-0-410" href="#__codelineno-0-410"></a>Private Function Case24(ByVal role As String) As String
-<a id="__codelineno-0-411" name="__codelineno-0-411" href="#__codelineno-0-411"></a>    &#39; REAL: simulate cancel by suppressing modal alerts then attempting
-<a id="__codelineno-0-412" name="__codelineno-0-412" href="#__codelineno-0-412"></a>    &#39; SaveNewKnowledge with insufficient input. Cancel path =&gt; empty id.
+<a id="__codelineno-0-411" name="__codelineno-0-411" href="#__codelineno-0-411"></a>    ' REAL: simulate cancel by suppressing modal alerts then attempting
+<a id="__codelineno-0-412" name="__codelineno-0-412" href="#__codelineno-0-412"></a>    ' SaveNewKnowledge with insufficient input. Cancel path =&gt; empty id.
 <a id="__codelineno-0-413" name="__codelineno-0-413" href="#__codelineno-0-413"></a>    If Not IsRegisterRole() Then
-<a id="__codelineno-0-414" name="__codelineno-0-414" href="#__codelineno-0-414"></a>        Case24 = J(24, &quot;modal_cancel&quot;, True, &quot;skipped-by-design&quot;, &quot;role gate&quot;): Exit Function
+<a id="__codelineno-0-414" name="__codelineno-0-414" href="#__codelineno-0-414"></a>        Case24 = J(24, "modal_cancel", True, "skipped-by-design", "role gate"): Exit Function
 <a id="__codelineno-0-415" name="__codelineno-0-415" href="#__codelineno-0-415"></a>    End If
 <a id="__codelineno-0-416" name="__codelineno-0-416" href="#__codelineno-0-416"></a>    Dim oldAlerts As Boolean: oldAlerts = Application.DisplayAlerts
 <a id="__codelineno-0-417" name="__codelineno-0-417" href="#__codelineno-0-417"></a>    Application.DisplayAlerts = False
@@ -5469,7 +5469,7 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-424" name="__codelineno-0-424" href="#__codelineno-0-424"></a>    On Error GoTo 0
 <a id="__codelineno-0-425" name="__codelineno-0-425" href="#__codelineno-0-425"></a>    Application.DisplayAlerts = oldAlerts
 <a id="__codelineno-0-426" name="__codelineno-0-426" href="#__codelineno-0-426"></a>    Dim ok As Boolean: ok = (Len(id24) = 0)
-<a id="__codelineno-0-427" name="__codelineno-0-427" href="#__codelineno-0-427"></a>    Case24 = J(24, &quot;modal_cancel&quot;, ok, IIf(ok, &quot;PASS&quot;, &quot;FAIL&quot;), &quot;cancel_id=&quot; &amp; id24)
+<a id="__codelineno-0-427" name="__codelineno-0-427" href="#__codelineno-0-427"></a>    Case24 = J(24, "modal_cancel", ok, IIf(ok, "PASS", "FAIL"), "cancel_id=" &amp; id24)
 <a id="__codelineno-0-428" name="__codelineno-0-428" href="#__codelineno-0-428"></a>End Function
 <a id="__codelineno-0-429" name="__codelineno-0-429" href="#__codelineno-0-429"></a>
 <a id="__codelineno-0-430" name="__codelineno-0-430" href="#__codelineno-0-430"></a>Private Function Case25(ByVal role As String) As String
@@ -5477,7 +5477,7 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-432" name="__codelineno-0-432" href="#__codelineno-0-432"></a>    Dim n As Long
 <a id="__codelineno-0-433" name="__codelineno-0-433" href="#__codelineno-0-433"></a>    If ids Is Nothing Then n = -1 Else n = ids.Count
 <a id="__codelineno-0-434" name="__codelineno-0-434" href="#__codelineno-0-434"></a>    Dim ok As Boolean: ok = (n &gt;= 0)
-<a id="__codelineno-0-435" name="__codelineno-0-435" href="#__codelineno-0-435"></a>    Case25 = J(25, &quot;format_grid_overflow&quot;, ok, &quot;OBSERVE&quot;, &quot;n=&quot; &amp; n)
+<a id="__codelineno-0-435" name="__codelineno-0-435" href="#__codelineno-0-435"></a>    Case25 = J(25, "format_grid_overflow", ok, "OBSERVE", "n=" &amp; n)
 <a id="__codelineno-0-436" name="__codelineno-0-436" href="#__codelineno-0-436"></a>End Function
 <a id="__codelineno-0-437" name="__codelineno-0-437" href="#__codelineno-0-437"></a>
 <a id="__codelineno-0-438" name="__codelineno-0-438" href="#__codelineno-0-438"></a>Private Function Case26(ByVal role As String) As String
@@ -5485,7 +5485,7 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-440" name="__codelineno-0-440" href="#__codelineno-0-440"></a>    Dim n As Long
 <a id="__codelineno-0-441" name="__codelineno-0-441" href="#__codelineno-0-441"></a>    If ids Is Nothing Then n = -1 Else n = ids.Count
 <a id="__codelineno-0-442" name="__codelineno-0-442" href="#__codelineno-0-442"></a>    Dim ok As Boolean: ok = (n &gt;= 0)
-<a id="__codelineno-0-443" name="__codelineno-0-443" href="#__codelineno-0-443"></a>    Case26 = J(26, &quot;knowledge_grid_overflow&quot;, ok, &quot;OBSERVE&quot;, &quot;n=&quot; &amp; n)
+<a id="__codelineno-0-443" name="__codelineno-0-443" href="#__codelineno-0-443"></a>    Case26 = J(26, "knowledge_grid_overflow", ok, "OBSERVE", "n=" &amp; n)
 <a id="__codelineno-0-444" name="__codelineno-0-444" href="#__codelineno-0-444"></a>End Function
 <a id="__codelineno-0-445" name="__codelineno-0-445" href="#__codelineno-0-445"></a>
 <a id="__codelineno-0-446" name="__codelineno-0-446" href="#__codelineno-0-446"></a>Private Function Case27(ByVal role As String) As String
@@ -5495,7 +5495,7 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-450" name="__codelineno-0-450" href="#__codelineno-0-450"></a>    fdir = modConfigHolder.GetFormatDir()
 <a id="__codelineno-0-451" name="__codelineno-0-451" href="#__codelineno-0-451"></a>    On Error GoTo 0
 <a id="__codelineno-0-452" name="__codelineno-0-452" href="#__codelineno-0-452"></a>    Dim ok As Boolean: ok = (Len(ddir) &gt; 0 And Len(fdir) &gt; 0)
-<a id="__codelineno-0-453" name="__codelineno-0-453" href="#__codelineno-0-453"></a>    Case27 = J(27, &quot;config_corrupt_admin_json&quot;, ok, IIf(ok, &quot;PASS&quot;, &quot;FAIL&quot;), &quot;resolved&quot;)
+<a id="__codelineno-0-453" name="__codelineno-0-453" href="#__codelineno-0-453"></a>    Case27 = J(27, "config_corrupt_admin_json", ok, IIf(ok, "PASS", "FAIL"), "resolved")
 <a id="__codelineno-0-454" name="__codelineno-0-454" href="#__codelineno-0-454"></a>End Function
 <a id="__codelineno-0-455" name="__codelineno-0-455" href="#__codelineno-0-455"></a>
 <a id="__codelineno-0-456" name="__codelineno-0-456" href="#__codelineno-0-456"></a>Private Function Case28(ByVal role As String) As String
@@ -5506,92 +5506,92 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-461" name="__codelineno-0-461" href="#__codelineno-0-461"></a>    Dim n As Long
 <a id="__codelineno-0-462" name="__codelineno-0-462" href="#__codelineno-0-462"></a>    If ids Is Nothing Then n = 0 Else n = ids.Count
 <a id="__codelineno-0-463" name="__codelineno-0-463" href="#__codelineno-0-463"></a>    Dim ok As Boolean: ok = (n &gt;= 0)
-<a id="__codelineno-0-464" name="__codelineno-0-464" href="#__codelineno-0-464"></a>    Case28 = J(28, &quot;ui_seed_missing&quot;, ok, &quot;OBSERVE&quot;, &quot;n=&quot; &amp; n)
+<a id="__codelineno-0-464" name="__codelineno-0-464" href="#__codelineno-0-464"></a>    Case28 = J(28, "ui_seed_missing", ok, "OBSERVE", "n=" &amp; n)
 <a id="__codelineno-0-465" name="__codelineno-0-465" href="#__codelineno-0-465"></a>End Function
 <a id="__codelineno-0-466" name="__codelineno-0-466" href="#__codelineno-0-466"></a>
 <a id="__codelineno-0-467" name="__codelineno-0-467" href="#__codelineno-0-467"></a>Private Function Case29(ByVal role As String) As String
-<a id="__codelineno-0-468" name="__codelineno-0-468" href="#__codelineno-0-468"></a>    Dim c As Collection: Set c = modFormatLoader.LoadFormat(&quot;ZZZ_NOT_THERE&quot;)
+<a id="__codelineno-0-468" name="__codelineno-0-468" href="#__codelineno-0-468"></a>    Dim c As Collection: Set c = modFormatLoader.LoadFormat("ZZZ_NOT_THERE")
 <a id="__codelineno-0-469" name="__codelineno-0-469" href="#__codelineno-0-469"></a>    Dim ok As Boolean
 <a id="__codelineno-0-470" name="__codelineno-0-470" href="#__codelineno-0-470"></a>    If c Is Nothing Then ok = True Else ok = (c.Count = 0)
-<a id="__codelineno-0-471" name="__codelineno-0-471" href="#__codelineno-0-471"></a>    Case29 = J(29, &quot;ui_seed_corrupt_stanza&quot;, ok, IIf(ok, &quot;PASS&quot;, &quot;FAIL&quot;), &quot;empty&quot;)
+<a id="__codelineno-0-471" name="__codelineno-0-471" href="#__codelineno-0-471"></a>    Case29 = J(29, "ui_seed_corrupt_stanza", ok, IIf(ok, "PASS", "FAIL"), "empty")
 <a id="__codelineno-0-472" name="__codelineno-0-472" href="#__codelineno-0-472"></a>End Function
 <a id="__codelineno-0-473" name="__codelineno-0-473" href="#__codelineno-0-473"></a>
 <a id="__codelineno-0-474" name="__codelineno-0-474" href="#__codelineno-0-474"></a>Private Function Case30(ByVal role As String) As String
-<a id="__codelineno-0-475" name="__codelineno-0-475" href="#__codelineno-0-475"></a>    &#39; REAL: probe checkbox-typed field with out-of-range value.
+<a id="__codelineno-0-475" name="__codelineno-0-475" href="#__codelineno-0-475"></a>    ' REAL: probe checkbox-typed field with out-of-range value.
 <a id="__codelineno-0-476" name="__codelineno-0-476" href="#__codelineno-0-476"></a>    If Not IsRegisterRole() Then
-<a id="__codelineno-0-477" name="__codelineno-0-477" href="#__codelineno-0-477"></a>        Case30 = J(30, &quot;checkbox_invalid_state&quot;, True, &quot;skipped-by-design&quot;, &quot;role gate&quot;): Exit Function
+<a id="__codelineno-0-477" name="__codelineno-0-477" href="#__codelineno-0-477"></a>        Case30 = J(30, "checkbox_invalid_state", True, "skipped-by-design", "role gate"): Exit Function
 <a id="__codelineno-0-478" name="__codelineno-0-478" href="#__codelineno-0-478"></a>    End If
 <a id="__codelineno-0-479" name="__codelineno-0-479" href="#__codelineno-0-479"></a>    Dim fid As String: fid = PickFormatId()
-<a id="__codelineno-0-480" name="__codelineno-0-480" href="#__codelineno-0-480"></a>    If Len(fid) = 0 Then Case30 = J(30, &quot;checkbox_invalid_state&quot;, True, &quot;skipped-by-design&quot;, &quot;no fmt&quot;): Exit Function
+<a id="__codelineno-0-480" name="__codelineno-0-480" href="#__codelineno-0-480"></a>    If Len(fid) = 0 Then Case30 = J(30, "checkbox_invalid_state", True, "skipped-by-design", "no fmt"): Exit Function
 <a id="__codelineno-0-481" name="__codelineno-0-481" href="#__codelineno-0-481"></a>    Dim d30 As Object: Set d30 = MakeProbeDict(fid)
-<a id="__codelineno-0-482" name="__codelineno-0-482" href="#__codelineno-0-482"></a>    d30(&quot;CheckboxField&quot;) = &quot;99&quot;
+<a id="__codelineno-0-482" name="__codelineno-0-482" href="#__codelineno-0-482"></a>    d30("CheckboxField") = "99"
 <a id="__codelineno-0-483" name="__codelineno-0-483" href="#__codelineno-0-483"></a>    Dim knw As String, rc30 As Long
-<a id="__codelineno-0-484" name="__codelineno-0-484" href="#__codelineno-0-484"></a>    knw = &quot;ABN30-&quot; &amp; Format(Now, &quot;yymmddhhnnss&quot;)
+<a id="__codelineno-0-484" name="__codelineno-0-484" href="#__codelineno-0-484"></a>    knw = "ABN30-" &amp; Format(Now, "yymmddhhnnss")
 <a id="__codelineno-0-485" name="__codelineno-0-485" href="#__codelineno-0-485"></a>    rc30 = modKnowledgeFileIO.SaveKnowledge(knw, d30, 0)
 <a id="__codelineno-0-486" name="__codelineno-0-486" href="#__codelineno-0-486"></a>    modKnowledgeFileIO.DeleteKnowledge knw
-<a id="__codelineno-0-487" name="__codelineno-0-487" href="#__codelineno-0-487"></a>    &#39; OBSERVE: production may accept (default-coerce) or reject; record rc.
+<a id="__codelineno-0-487" name="__codelineno-0-487" href="#__codelineno-0-487"></a>    ' OBSERVE: production may accept (default-coerce) or reject; record rc.
 <a id="__codelineno-0-488" name="__codelineno-0-488" href="#__codelineno-0-488"></a>    Dim ok As Boolean: ok = (rc30 = 0 Or rc30 &lt;&gt; 0)
-<a id="__codelineno-0-489" name="__codelineno-0-489" href="#__codelineno-0-489"></a>    Case30 = J(30, &quot;checkbox_invalid_state&quot;, ok, &quot;OBSERVE&quot;, &quot;checkbox_invalid_rc=&quot; &amp; rc30)
+<a id="__codelineno-0-489" name="__codelineno-0-489" href="#__codelineno-0-489"></a>    Case30 = J(30, "checkbox_invalid_state", ok, "OBSERVE", "checkbox_invalid_rc=" &amp; rc30)
 <a id="__codelineno-0-490" name="__codelineno-0-490" href="#__codelineno-0-490"></a>End Function
 <a id="__codelineno-0-491" name="__codelineno-0-491" href="#__codelineno-0-491"></a>
 <a id="__codelineno-0-492" name="__codelineno-0-492" href="#__codelineno-0-492"></a>Private Function Case31(ByVal role As String) As String
-<a id="__codelineno-0-493" name="__codelineno-0-493" href="#__codelineno-0-493"></a>    &#39; REAL: probe dropdown-typed field with off-list value.
+<a id="__codelineno-0-493" name="__codelineno-0-493" href="#__codelineno-0-493"></a>    ' REAL: probe dropdown-typed field with off-list value.
 <a id="__codelineno-0-494" name="__codelineno-0-494" href="#__codelineno-0-494"></a>    If Not IsRegisterRole() Then
-<a id="__codelineno-0-495" name="__codelineno-0-495" href="#__codelineno-0-495"></a>        Case31 = J(31, &quot;dropdown_invalid_option&quot;, True, &quot;skipped-by-design&quot;, &quot;role gate&quot;): Exit Function
+<a id="__codelineno-0-495" name="__codelineno-0-495" href="#__codelineno-0-495"></a>        Case31 = J(31, "dropdown_invalid_option", True, "skipped-by-design", "role gate"): Exit Function
 <a id="__codelineno-0-496" name="__codelineno-0-496" href="#__codelineno-0-496"></a>    End If
 <a id="__codelineno-0-497" name="__codelineno-0-497" href="#__codelineno-0-497"></a>    Dim fid As String: fid = PickFormatId()
-<a id="__codelineno-0-498" name="__codelineno-0-498" href="#__codelineno-0-498"></a>    If Len(fid) = 0 Then Case31 = J(31, &quot;dropdown_invalid_option&quot;, True, &quot;skipped-by-design&quot;, &quot;no fmt&quot;): Exit Function
+<a id="__codelineno-0-498" name="__codelineno-0-498" href="#__codelineno-0-498"></a>    If Len(fid) = 0 Then Case31 = J(31, "dropdown_invalid_option", True, "skipped-by-design", "no fmt"): Exit Function
 <a id="__codelineno-0-499" name="__codelineno-0-499" href="#__codelineno-0-499"></a>    Dim d31 As Object: Set d31 = MakeProbeDict(fid)
-<a id="__codelineno-0-500" name="__codelineno-0-500" href="#__codelineno-0-500"></a>    d31(&quot;DropdownField&quot;) = &quot;zzz_not_in_list&quot;
+<a id="__codelineno-0-500" name="__codelineno-0-500" href="#__codelineno-0-500"></a>    d31("DropdownField") = "zzz_not_in_list"
 <a id="__codelineno-0-501" name="__codelineno-0-501" href="#__codelineno-0-501"></a>    Dim knw As String, rc31 As Long
-<a id="__codelineno-0-502" name="__codelineno-0-502" href="#__codelineno-0-502"></a>    knw = &quot;ABN31-&quot; &amp; Format(Now, &quot;yymmddhhnnss&quot;)
+<a id="__codelineno-0-502" name="__codelineno-0-502" href="#__codelineno-0-502"></a>    knw = "ABN31-" &amp; Format(Now, "yymmddhhnnss")
 <a id="__codelineno-0-503" name="__codelineno-0-503" href="#__codelineno-0-503"></a>    rc31 = modKnowledgeFileIO.SaveKnowledge(knw, d31, 0)
 <a id="__codelineno-0-504" name="__codelineno-0-504" href="#__codelineno-0-504"></a>    modKnowledgeFileIO.DeleteKnowledge knw
-<a id="__codelineno-0-505" name="__codelineno-0-505" href="#__codelineno-0-505"></a>    &#39; OBSERVE: production stores raw payload; document observed rc.
+<a id="__codelineno-0-505" name="__codelineno-0-505" href="#__codelineno-0-505"></a>    ' OBSERVE: production stores raw payload; document observed rc.
 <a id="__codelineno-0-506" name="__codelineno-0-506" href="#__codelineno-0-506"></a>    Dim ok As Boolean: ok = (rc31 = 0 Or rc31 &lt;&gt; 0)
-<a id="__codelineno-0-507" name="__codelineno-0-507" href="#__codelineno-0-507"></a>    Case31 = J(31, &quot;dropdown_invalid_option&quot;, ok, &quot;OBSERVE&quot;, &quot;dropdown_invalid_rc=&quot; &amp; rc31)
+<a id="__codelineno-0-507" name="__codelineno-0-507" href="#__codelineno-0-507"></a>    Case31 = J(31, "dropdown_invalid_option", ok, "OBSERVE", "dropdown_invalid_rc=" &amp; rc31)
 <a id="__codelineno-0-508" name="__codelineno-0-508" href="#__codelineno-0-508"></a>End Function
 <a id="__codelineno-0-509" name="__codelineno-0-509" href="#__codelineno-0-509"></a>
 <a id="__codelineno-0-510" name="__codelineno-0-510" href="#__codelineno-0-510"></a>Private Function Case32(ByVal role As String) As String
 <a id="__codelineno-0-511" name="__codelineno-0-511" href="#__codelineno-0-511"></a>    If Not IsRegisterRole() Then
-<a id="__codelineno-0-512" name="__codelineno-0-512" href="#__codelineno-0-512"></a>        Case32 = J(32, &quot;datetime_overflow&quot;, True, &quot;skipped-by-design&quot;, &quot;role gate&quot;): Exit Function
+<a id="__codelineno-0-512" name="__codelineno-0-512" href="#__codelineno-0-512"></a>        Case32 = J(32, "datetime_overflow", True, "skipped-by-design", "role gate"): Exit Function
 <a id="__codelineno-0-513" name="__codelineno-0-513" href="#__codelineno-0-513"></a>    End If
 <a id="__codelineno-0-514" name="__codelineno-0-514" href="#__codelineno-0-514"></a>    Dim fid As String: fid = PickFormatId()
-<a id="__codelineno-0-515" name="__codelineno-0-515" href="#__codelineno-0-515"></a>    If Len(fid) = 0 Then Case32 = J(32, &quot;datetime_overflow&quot;, True, &quot;skipped-by-design&quot;, &quot;no fmt&quot;): Exit Function
+<a id="__codelineno-0-515" name="__codelineno-0-515" href="#__codelineno-0-515"></a>    If Len(fid) = 0 Then Case32 = J(32, "datetime_overflow", True, "skipped-by-design", "no fmt"): Exit Function
 <a id="__codelineno-0-516" name="__codelineno-0-516" href="#__codelineno-0-516"></a>    Dim d As Object: Set d = MakeProbeDict(fid)
-<a id="__codelineno-0-517" name="__codelineno-0-517" href="#__codelineno-0-517"></a>    d(&quot;DateField&quot;) = &quot;99999-99-99 99:99:99&quot;
+<a id="__codelineno-0-517" name="__codelineno-0-517" href="#__codelineno-0-517"></a>    d("DateField") = "99999-99-99 99:99:99"
 <a id="__codelineno-0-518" name="__codelineno-0-518" href="#__codelineno-0-518"></a>    Dim knw As String, rc As Long
-<a id="__codelineno-0-519" name="__codelineno-0-519" href="#__codelineno-0-519"></a>    knw = &quot;ABN32-&quot; &amp; Format(Now, &quot;yymmddhhnnss&quot;)
+<a id="__codelineno-0-519" name="__codelineno-0-519" href="#__codelineno-0-519"></a>    knw = "ABN32-" &amp; Format(Now, "yymmddhhnnss")
 <a id="__codelineno-0-520" name="__codelineno-0-520" href="#__codelineno-0-520"></a>    rc = modKnowledgeFileIO.SaveKnowledge(knw, d, 0)
 <a id="__codelineno-0-521" name="__codelineno-0-521" href="#__codelineno-0-521"></a>    modKnowledgeFileIO.DeleteKnowledge knw
-<a id="__codelineno-0-522" name="__codelineno-0-522" href="#__codelineno-0-522"></a>    Case32 = J(32, &quot;datetime_overflow&quot;, (rc = 0), &quot;OBSERVE&quot;, &quot;rc=&quot; &amp; rc)
+<a id="__codelineno-0-522" name="__codelineno-0-522" href="#__codelineno-0-522"></a>    Case32 = J(32, "datetime_overflow", (rc = 0), "OBSERVE", "rc=" &amp; rc)
 <a id="__codelineno-0-523" name="__codelineno-0-523" href="#__codelineno-0-523"></a>End Function
 <a id="__codelineno-0-524" name="__codelineno-0-524" href="#__codelineno-0-524"></a>
 <a id="__codelineno-0-525" name="__codelineno-0-525" href="#__codelineno-0-525"></a>Private Function Case33(ByVal role As String) As String
-<a id="__codelineno-0-526" name="__codelineno-0-526" href="#__codelineno-0-526"></a>    Dim c As Collection: Set c = modFormatLoader.LoadFormat(&quot;bad id sp&quot;)
+<a id="__codelineno-0-526" name="__codelineno-0-526" href="#__codelineno-0-526"></a>    Dim c As Collection: Set c = modFormatLoader.LoadFormat("bad id sp")
 <a id="__codelineno-0-527" name="__codelineno-0-527" href="#__codelineno-0-527"></a>    Dim ok As Boolean
 <a id="__codelineno-0-528" name="__codelineno-0-528" href="#__codelineno-0-528"></a>    If c Is Nothing Then ok = True Else ok = (c.Count = 0)
-<a id="__codelineno-0-529" name="__codelineno-0-529" href="#__codelineno-0-529"></a>    Case33 = J(33, &quot;fmt_id_special_chars&quot;, ok, IIf(ok, &quot;PASS&quot;, &quot;FAIL&quot;), &quot;space empty&quot;)
+<a id="__codelineno-0-529" name="__codelineno-0-529" href="#__codelineno-0-529"></a>    Case33 = J(33, "fmt_id_special_chars", ok, IIf(ok, "PASS", "FAIL"), "space empty")
 <a id="__codelineno-0-530" name="__codelineno-0-530" href="#__codelineno-0-530"></a>End Function
 <a id="__codelineno-0-531" name="__codelineno-0-531" href="#__codelineno-0-531"></a>
 <a id="__codelineno-0-532" name="__codelineno-0-532" href="#__codelineno-0-532"></a>Private Function Case34(ByVal role As String) As String
-<a id="__codelineno-0-533" name="__codelineno-0-533" href="#__codelineno-0-533"></a>    &#39; REAL: invoke clsLogger.LogInfo on a Nothing sheet; ensure no fatal.
+<a id="__codelineno-0-533" name="__codelineno-0-533" href="#__codelineno-0-533"></a>    ' REAL: invoke clsLogger.LogInfo on a Nothing sheet; ensure no fatal.
 <a id="__codelineno-0-534" name="__codelineno-0-534" href="#__codelineno-0-534"></a>    Dim okFlag As Boolean: okFlag = True
-<a id="__codelineno-0-535" name="__codelineno-0-535" href="#__codelineno-0-535"></a>    Dim verdict As String: verdict = &quot;PASS&quot;
-<a id="__codelineno-0-536" name="__codelineno-0-536" href="#__codelineno-0-536"></a>    Dim noteStr As String: noteStr = &quot;&quot;
+<a id="__codelineno-0-535" name="__codelineno-0-535" href="#__codelineno-0-535"></a>    Dim verdict As String: verdict = "PASS"
+<a id="__codelineno-0-536" name="__codelineno-0-536" href="#__codelineno-0-536"></a>    Dim noteStr As String: noteStr = ""
 <a id="__codelineno-0-537" name="__codelineno-0-537" href="#__codelineno-0-537"></a>    On Error Resume Next
 <a id="__codelineno-0-538" name="__codelineno-0-538" href="#__codelineno-0-538"></a>    Dim lg As Object: Set lg = New clsLogger
 <a id="__codelineno-0-539" name="__codelineno-0-539" href="#__codelineno-0-539"></a>    lg.Init Nothing
-<a id="__codelineno-0-540" name="__codelineno-0-540" href="#__codelineno-0-540"></a>    lg.LogInfo &quot;modE2E_Abnormal&quot;, &quot;Case34&quot;, &quot;protected-probe&quot;, &quot;&quot;
+<a id="__codelineno-0-540" name="__codelineno-0-540" href="#__codelineno-0-540"></a>    lg.LogInfo "modE2E_Abnormal", "Case34", "protected-probe", ""
 <a id="__codelineno-0-541" name="__codelineno-0-541" href="#__codelineno-0-541"></a>    Dim errN As Long: errN = Err.Number
 <a id="__codelineno-0-542" name="__codelineno-0-542" href="#__codelineno-0-542"></a>    On Error GoTo 0
 <a id="__codelineno-0-543" name="__codelineno-0-543" href="#__codelineno-0-543"></a>    okFlag = (errN = 0)
-<a id="__codelineno-0-544" name="__codelineno-0-544" href="#__codelineno-0-544"></a>    noteStr = &quot;errN=&quot; &amp; errN
-<a id="__codelineno-0-545" name="__codelineno-0-545" href="#__codelineno-0-545"></a>    Case34 = J(34, &quot;log_sheet_protected&quot;, okFlag, IIf(okFlag, &quot;PASS&quot;, &quot;FAIL&quot;), noteStr)
+<a id="__codelineno-0-544" name="__codelineno-0-544" href="#__codelineno-0-544"></a>    noteStr = "errN=" &amp; errN
+<a id="__codelineno-0-545" name="__codelineno-0-545" href="#__codelineno-0-545"></a>    Case34 = J(34, "log_sheet_protected", okFlag, IIf(okFlag, "PASS", "FAIL"), noteStr)
 <a id="__codelineno-0-546" name="__codelineno-0-546" href="#__codelineno-0-546"></a>End Function
 <a id="__codelineno-0-547" name="__codelineno-0-547" href="#__codelineno-0-547"></a>
 <a id="__codelineno-0-548" name="__codelineno-0-548" href="#__codelineno-0-548"></a>Private Function Case35(ByVal role As String) As String
-<a id="__codelineno-0-549" name="__codelineno-0-549" href="#__codelineno-0-549"></a>    &#39; REAL: probe clsLogger via 100 consecutive LogInfo calls and a near-upper-row write.
+<a id="__codelineno-0-549" name="__codelineno-0-549" href="#__codelineno-0-549"></a>    ' REAL: probe clsLogger via 100 consecutive LogInfo calls and a near-upper-row write.
 <a id="__codelineno-0-550" name="__codelineno-0-550" href="#__codelineno-0-550"></a>    Dim okWrite As Boolean: okWrite = True
 <a id="__codelineno-0-551" name="__codelineno-0-551" href="#__codelineno-0-551"></a>    Dim writeErrAt As Long: writeErrAt = 0
 <a id="__codelineno-0-552" name="__codelineno-0-552" href="#__codelineno-0-552"></a>    Dim loggerErr As Long: loggerErr = 0
@@ -5601,7 +5601,7 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-556" name="__codelineno-0-556" href="#__codelineno-0-556"></a>    Dim lg As Object: Set lg = New clsLogger
 <a id="__codelineno-0-557" name="__codelineno-0-557" href="#__codelineno-0-557"></a>    lg.Init Nothing
 <a id="__codelineno-0-558" name="__codelineno-0-558" href="#__codelineno-0-558"></a>    For ii = 1 To 100
-<a id="__codelineno-0-559" name="__codelineno-0-559" href="#__codelineno-0-559"></a>        lg.LogInfo &quot;modE2E_Abnormal&quot;, &quot;case35_full_test&quot;, &quot;stress test row &quot; &amp; ii, &quot;log-stress&quot;
+<a id="__codelineno-0-559" name="__codelineno-0-559" href="#__codelineno-0-559"></a>        lg.LogInfo "modE2E_Abnormal", "case35_full_test", "stress test row " &amp; ii, "log-stress"
 <a id="__codelineno-0-560" name="__codelineno-0-560" href="#__codelineno-0-560"></a>        If Err.Number &lt;&gt; 0 Then
 <a id="__codelineno-0-561" name="__codelineno-0-561" href="#__codelineno-0-561"></a>            okWrite = False
 <a id="__codelineno-0-562" name="__codelineno-0-562" href="#__codelineno-0-562"></a>            writeErrAt = ii
@@ -5611,7 +5611,7 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-566" name="__codelineno-0-566" href="#__codelineno-0-566"></a>        End If
 <a id="__codelineno-0-567" name="__codelineno-0-567" href="#__codelineno-0-567"></a>    Next ii
 <a id="__codelineno-0-568" name="__codelineno-0-568" href="#__codelineno-0-568"></a>    Dim wsLog As Worksheet
-<a id="__codelineno-0-569" name="__codelineno-0-569" href="#__codelineno-0-569"></a>    &#39; 2026-06-06: handle ProtectStructure (register/search) before Add.
+<a id="__codelineno-0-569" name="__codelineno-0-569" href="#__codelineno-0-569"></a>    ' 2026-06-06: handle ProtectStructure (register/search) before Add.
 <a id="__codelineno-0-570" name="__codelineno-0-570" href="#__codelineno-0-570"></a>    Dim wasProtected35 As Boolean: wasProtected35 = ThisWorkbook.ProtectStructure
 <a id="__codelineno-0-571" name="__codelineno-0-571" href="#__codelineno-0-571"></a>    If wasProtected35 Then ThisWorkbook.Unprotect
 <a id="__codelineno-0-572" name="__codelineno-0-572" href="#__codelineno-0-572"></a>    Err.Clear
@@ -5619,15 +5619,15 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-574" name="__codelineno-0-574" href="#__codelineno-0-574"></a>    Dim addErr As Long: addErr = Err.Number
 <a id="__codelineno-0-575" name="__codelineno-0-575" href="#__codelineno-0-575"></a>    Err.Clear
 <a id="__codelineno-0-576" name="__codelineno-0-576" href="#__codelineno-0-576"></a>    Dim okCell As Boolean: okCell = False
-<a id="__codelineno-0-577" name="__codelineno-0-577" href="#__codelineno-0-577"></a>    Dim readBack35 As String: readBack35 = &quot;&quot;
+<a id="__codelineno-0-577" name="__codelineno-0-577" href="#__codelineno-0-577"></a>    Dim readBack35 As String: readBack35 = ""
 <a id="__codelineno-0-578" name="__codelineno-0-578" href="#__codelineno-0-578"></a>    If addErr = 0 And Not wsLog Is Nothing Then
 <a id="__codelineno-0-579" name="__codelineno-0-579" href="#__codelineno-0-579"></a>        Dim oldAlerts As Boolean: oldAlerts = Application.DisplayAlerts
 <a id="__codelineno-0-580" name="__codelineno-0-580" href="#__codelineno-0-580"></a>        Dim oldUpd As Boolean: oldUpd = Application.ScreenUpdating
 <a id="__codelineno-0-581" name="__codelineno-0-581" href="#__codelineno-0-581"></a>        Application.DisplayAlerts = False
 <a id="__codelineno-0-582" name="__codelineno-0-582" href="#__codelineno-0-582"></a>        Application.ScreenUpdating = False
-<a id="__codelineno-0-583" name="__codelineno-0-583" href="#__codelineno-0-583"></a>        wsLog.Cells(65530, 1).Value = &quot;test_row_65530&quot;
+<a id="__codelineno-0-583" name="__codelineno-0-583" href="#__codelineno-0-583"></a>        wsLog.Cells(65530, 1).Value = "test_row_65530"
 <a id="__codelineno-0-584" name="__codelineno-0-584" href="#__codelineno-0-584"></a>        readBack35 = CStr(wsLog.Cells(65530, 1).Value)
-<a id="__codelineno-0-585" name="__codelineno-0-585" href="#__codelineno-0-585"></a>        okCell = (readBack35 = &quot;test_row_65530&quot;)
+<a id="__codelineno-0-585" name="__codelineno-0-585" href="#__codelineno-0-585"></a>        okCell = (readBack35 = "test_row_65530")
 <a id="__codelineno-0-586" name="__codelineno-0-586" href="#__codelineno-0-586"></a>        wsLog.Delete
 <a id="__codelineno-0-587" name="__codelineno-0-587" href="#__codelineno-0-587"></a>        Application.DisplayAlerts = oldAlerts
 <a id="__codelineno-0-588" name="__codelineno-0-588" href="#__codelineno-0-588"></a>        Application.ScreenUpdating = oldUpd
@@ -5637,44 +5637,44 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-592" name="__codelineno-0-592" href="#__codelineno-0-592"></a>    Dim ok As Boolean: ok = (okWrite And okCell)
 <a id="__codelineno-0-593" name="__codelineno-0-593" href="#__codelineno-0-593"></a>    Dim noteStr As String
 <a id="__codelineno-0-594" name="__codelineno-0-594" href="#__codelineno-0-594"></a>    If okWrite Then
-<a id="__codelineno-0-595" name="__codelineno-0-595" href="#__codelineno-0-595"></a>        noteStr = &quot;log_writes=100/100, cell_65530_ok=&quot; &amp; okCell &amp; &quot;, logger_err=&quot; &amp; loggerErr &amp; &quot;, readBack=&quot; &amp; readBack35 &amp; &quot;, addErr=&quot; &amp; addErr
+<a id="__codelineno-0-595" name="__codelineno-0-595" href="#__codelineno-0-595"></a>        noteStr = "log_writes=100/100, cell_65530_ok=" &amp; okCell &amp; ", logger_err=" &amp; loggerErr &amp; ", readBack=" &amp; readBack35 &amp; ", addErr=" &amp; addErr
 <a id="__codelineno-0-596" name="__codelineno-0-596" href="#__codelineno-0-596"></a>    Else
-<a id="__codelineno-0-597" name="__codelineno-0-597" href="#__codelineno-0-597"></a>        noteStr = &quot;log_write_err_at=&quot; &amp; writeErrAt &amp; &quot; err=&quot; &amp; loggerErr &amp; &quot;, cell_65530_ok=&quot; &amp; okCell
+<a id="__codelineno-0-597" name="__codelineno-0-597" href="#__codelineno-0-597"></a>        noteStr = "log_write_err_at=" &amp; writeErrAt &amp; " err=" &amp; loggerErr &amp; ", cell_65530_ok=" &amp; okCell
 <a id="__codelineno-0-598" name="__codelineno-0-598" href="#__codelineno-0-598"></a>    End If
-<a id="__codelineno-0-599" name="__codelineno-0-599" href="#__codelineno-0-599"></a>    Case35 = J(35, &quot;log_sheet_full&quot;, ok, IIf(ok, &quot;PASS&quot;, &quot;FAIL&quot;), noteStr)
+<a id="__codelineno-0-599" name="__codelineno-0-599" href="#__codelineno-0-599"></a>    Case35 = J(35, "log_sheet_full", ok, IIf(ok, "PASS", "FAIL"), noteStr)
 <a id="__codelineno-0-600" name="__codelineno-0-600" href="#__codelineno-0-600"></a>End Function
 <a id="__codelineno-0-601" name="__codelineno-0-601" href="#__codelineno-0-601"></a>
 <a id="__codelineno-0-602" name="__codelineno-0-602" href="#__codelineno-0-602"></a>Private Function Case36(ByVal role As String) As String
-<a id="__codelineno-0-603" name="__codelineno-0-603" href="#__codelineno-0-603"></a>    &#39; REAL: this xlsm is the single live instance; confirm not ReadOnly.
+<a id="__codelineno-0-603" name="__codelineno-0-603" href="#__codelineno-0-603"></a>    ' REAL: this xlsm is the single live instance; confirm not ReadOnly.
 <a id="__codelineno-0-604" name="__codelineno-0-604" href="#__codelineno-0-604"></a>    Dim ro As Boolean
 <a id="__codelineno-0-605" name="__codelineno-0-605" href="#__codelineno-0-605"></a>    On Error Resume Next
 <a id="__codelineno-0-606" name="__codelineno-0-606" href="#__codelineno-0-606"></a>    ro = ThisWorkbook.ReadOnly
 <a id="__codelineno-0-607" name="__codelineno-0-607" href="#__codelineno-0-607"></a>    On Error GoTo 0
 <a id="__codelineno-0-608" name="__codelineno-0-608" href="#__codelineno-0-608"></a>    Dim ok As Boolean: ok = (ro = False)
-<a id="__codelineno-0-609" name="__codelineno-0-609" href="#__codelineno-0-609"></a>    Case36 = J(36, &quot;concurrent_open&quot;, ok, IIf(ok, &quot;PASS&quot;, &quot;FAIL&quot;), &quot;ReadOnly=&quot; &amp; ro)
+<a id="__codelineno-0-609" name="__codelineno-0-609" href="#__codelineno-0-609"></a>    Case36 = J(36, "concurrent_open", ok, IIf(ok, "PASS", "FAIL"), "ReadOnly=" &amp; ro)
 <a id="__codelineno-0-610" name="__codelineno-0-610" href="#__codelineno-0-610"></a>End Function
 <a id="__codelineno-0-611" name="__codelineno-0-611" href="#__codelineno-0-611"></a>
 <a id="__codelineno-0-612" name="__codelineno-0-612" href="#__codelineno-0-612"></a>Private Function Case37(ByVal role As String) As String
-<a id="__codelineno-0-613" name="__codelineno-0-613" href="#__codelineno-0-613"></a>    &#39; REAL: register-only; Save then BackupKnowledgeFile and verify file present.
+<a id="__codelineno-0-613" name="__codelineno-0-613" href="#__codelineno-0-613"></a>    ' REAL: register-only; Save then BackupKnowledgeFile and verify file present.
 <a id="__codelineno-0-614" name="__codelineno-0-614" href="#__codelineno-0-614"></a>    If Not IsRegisterRole() Then
-<a id="__codelineno-0-615" name="__codelineno-0-615" href="#__codelineno-0-615"></a>        Case37 = J(37, &quot;excel_force_quit&quot;, True, &quot;skipped-by-design&quot;, &quot;role gate&quot;): Exit Function
+<a id="__codelineno-0-615" name="__codelineno-0-615" href="#__codelineno-0-615"></a>        Case37 = J(37, "excel_force_quit", True, "skipped-by-design", "role gate"): Exit Function
 <a id="__codelineno-0-616" name="__codelineno-0-616" href="#__codelineno-0-616"></a>    End If
 <a id="__codelineno-0-617" name="__codelineno-0-617" href="#__codelineno-0-617"></a>    Dim fid As String: fid = PickFormatId()
-<a id="__codelineno-0-618" name="__codelineno-0-618" href="#__codelineno-0-618"></a>    If Len(fid) = 0 Then Case37 = J(37, &quot;excel_force_quit&quot;, True, &quot;skipped-by-design&quot;, &quot;no fmt&quot;): Exit Function
+<a id="__codelineno-0-618" name="__codelineno-0-618" href="#__codelineno-0-618"></a>    If Len(fid) = 0 Then Case37 = J(37, "excel_force_quit", True, "skipped-by-design", "no fmt"): Exit Function
 <a id="__codelineno-0-619" name="__codelineno-0-619" href="#__codelineno-0-619"></a>    Dim knw As String, rc As Long
-<a id="__codelineno-0-620" name="__codelineno-0-620" href="#__codelineno-0-620"></a>    knw = &quot;ABN37-&quot; &amp; Format(Now, &quot;yymmddhhnnss&quot;)
+<a id="__codelineno-0-620" name="__codelineno-0-620" href="#__codelineno-0-620"></a>    knw = "ABN37-" &amp; Format(Now, "yymmddhhnnss")
 <a id="__codelineno-0-621" name="__codelineno-0-621" href="#__codelineno-0-621"></a>    rc = modKnowledgeFileIO.SaveKnowledge(knw, MakeProbeDict(fid), 0)
-<a id="__codelineno-0-622" name="__codelineno-0-622" href="#__codelineno-0-622"></a>    Dim ts As String: ts = Format(Now, &quot;yyyymmddhhnnss&quot;)
+<a id="__codelineno-0-622" name="__codelineno-0-622" href="#__codelineno-0-622"></a>    Dim ts As String: ts = Format(Now, "yyyymmddhhnnss")
 <a id="__codelineno-0-623" name="__codelineno-0-623" href="#__codelineno-0-623"></a>    Dim bkOk As Boolean
 <a id="__codelineno-0-624" name="__codelineno-0-624" href="#__codelineno-0-624"></a>    bkOk = modKnowledgeFileIO.BackupKnowledgeFile(knw, ts)
-<a id="__codelineno-0-625" name="__codelineno-0-625" href="#__codelineno-0-625"></a>    Dim fso As Object: Set fso = CreateObject(&quot;Scripting.FileSystemObject&quot;)
+<a id="__codelineno-0-625" name="__codelineno-0-625" href="#__codelineno-0-625"></a>    Dim fso As Object: Set fso = CreateObject("Scripting.FileSystemObject")
 <a id="__codelineno-0-626" name="__codelineno-0-626" href="#__codelineno-0-626"></a>    Dim bpath As String
-<a id="__codelineno-0-627" name="__codelineno-0-627" href="#__codelineno-0-627"></a>    bpath = modConfigHolder.GetBackupDir() &amp; knw &amp; &quot;_&quot; &amp; ts &amp; &quot;.txt&quot;
+<a id="__codelineno-0-627" name="__codelineno-0-627" href="#__codelineno-0-627"></a>    bpath = modConfigHolder.GetBackupDir() &amp; knw &amp; "_" &amp; ts &amp; ".txt"
 <a id="__codelineno-0-628" name="__codelineno-0-628" href="#__codelineno-0-628"></a>    Dim exists As Boolean: exists = fso.FileExists(bpath)
 <a id="__codelineno-0-629" name="__codelineno-0-629" href="#__codelineno-0-629"></a>    modKnowledgeFileIO.DeleteKnowledge knw
 <a id="__codelineno-0-630" name="__codelineno-0-630" href="#__codelineno-0-630"></a>    If exists Then fso.DeleteFile bpath, True
 <a id="__codelineno-0-631" name="__codelineno-0-631" href="#__codelineno-0-631"></a>    Dim ok As Boolean: ok = (rc = 0 And bkOk And exists)
-<a id="__codelineno-0-632" name="__codelineno-0-632" href="#__codelineno-0-632"></a>    Case37 = J(37, &quot;excel_force_quit&quot;, ok, IIf(ok, &quot;PASS&quot;, &quot;FAIL&quot;), &quot;rc=&quot; &amp; rc &amp; &quot; bk=&quot; &amp; bkOk &amp; &quot; exists=&quot; &amp; exists)
+<a id="__codelineno-0-632" name="__codelineno-0-632" href="#__codelineno-0-632"></a>    Case37 = J(37, "excel_force_quit", ok, IIf(ok, "PASS", "FAIL"), "rc=" &amp; rc &amp; " bk=" &amp; bkOk &amp; " exists=" &amp; exists)
 <a id="__codelineno-0-633" name="__codelineno-0-633" href="#__codelineno-0-633"></a>End Function
 <a id="__codelineno-0-634" name="__codelineno-0-634" href="#__codelineno-0-634"></a>
 <a id="__codelineno-0-635" name="__codelineno-0-635" href="#__codelineno-0-635"></a>Private Function Case38(ByVal role As String) As String
@@ -5686,7 +5686,7 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-641" name="__codelineno-0-641" href="#__codelineno-0-641"></a>    Dim trapped As Boolean: trapped = (Err.Number &lt;&gt; 0)
 <a id="__codelineno-0-642" name="__codelineno-0-642" href="#__codelineno-0-642"></a>    Err.Clear
 <a id="__codelineno-0-643" name="__codelineno-0-643" href="#__codelineno-0-643"></a>    On Error GoTo 0
-<a id="__codelineno-0-644" name="__codelineno-0-644" href="#__codelineno-0-644"></a>    Case38 = J(38, &quot;rte_subscript_out_of_range&quot;, trapped, IIf(trapped, &quot;PASS&quot;, &quot;FAIL&quot;), &quot;caught=&quot; &amp; trapped)
+<a id="__codelineno-0-644" name="__codelineno-0-644" href="#__codelineno-0-644"></a>    Case38 = J(38, "rte_subscript_out_of_range", trapped, IIf(trapped, "PASS", "FAIL"), "caught=" &amp; trapped)
 <a id="__codelineno-0-645" name="__codelineno-0-645" href="#__codelineno-0-645"></a>End Function
 </code></pre></div>
 
@@ -5749,7 +5749,7 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
       <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.indexes", "toc.integrate", "search.highlight", "search.suggest", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u30b3\u30d4\u30fc\u3057\u307e\u3057\u305f", "clipboard.copy": "\u30af\u30ea\u30c3\u30d7\u30dc\u30fc\u30c9\u3078\u30b3\u30d4\u30fc", "search.result.more.one": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3082\u30461\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.more.other": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3042\u3068#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.none": "\u4f55\u3082\u898b\u3064\u304b\u308a\u307e\u305b\u3093\u3067\u3057\u305f", "search.result.one": "1\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.other": "#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.placeholder": "\u691c\u7d22\u30ad\u30fc\u30ef\u30fc\u30c9\u3092\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044", "search.result.term.missing": "\u691c\u7d22\u306b\u542b\u307e\u308c\u306a\u3044", "select.version": "\u30d0\u30fc\u30b8\u30e7\u30f3\u5207\u308a\u66ff\u3048"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>

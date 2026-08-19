@@ -21,7 +21,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -29,7 +29,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -4952,89 +4952,89 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 </blockquote>
 <hr />
 <h2 id="_2">ソースコード<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Attribute VB_Name = &quot;modKnowledgeEntryHelpers&quot;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Attribute VB_Name = "modKnowledgeEntryHelpers"
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>Option Explicit
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>&#39; ================================================================
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>&#39; Module: modKnowledgeEntryHelpers (register layer helper)
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>&#39; Purpose: 7 helper functions required by modEntryKnowledge (BUG-3 fix)
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>&#39;   - BuildLogger()       : new clsLogger + Init(LOG sheet)
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>&#39;   - GetDataFolder()     : modConfigHolder.GetDataDir()
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>&#39;   - IsTestMode()        : modCommon.IsHeadless() proxy
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>&#39;   - ShowError(op, det, act)
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>&#39;   - ShowWarning(op, det, act)
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>&#39;   - ShowInfo(op, det)
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>&#39;   - ConfirmAction(op, det) As Boolean
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>&#39; Notes:
-<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>&#39;   - JP literals encoded via ChrW() to keep this file ASCII-source safe
-<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>&#39;     (per memory rule feedback_edit_tool_cp932_conversion).
-<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>&#39;   - LOG sheet name is &quot;LOG&quot; (modCommon.SHEET_LOG constant exists).
-<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>&#39;   - In headless/COM mode, dialogs are suppressed and routed to logger.
-<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>&#39; ================================================================
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>' ================================================================
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>' Module: modKnowledgeEntryHelpers (register layer helper)
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>' Purpose: 7 helper functions required by modEntryKnowledge (BUG-3 fix)
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>'   - BuildLogger()       : new clsLogger + Init(LOG sheet)
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>'   - GetDataFolder()     : modConfigHolder.GetDataDir()
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>'   - IsTestMode()        : modCommon.IsHeadless() proxy
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>'   - ShowError(op, det, act)
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>'   - ShowWarning(op, det, act)
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>'   - ShowInfo(op, det)
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>'   - ConfirmAction(op, det) As Boolean
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>' Notes:
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>'   - JP literals encoded via ChrW() to keep this file ASCII-source safe
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>'     (per memory rule feedback_edit_tool_cp932_conversion).
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>'   - LOG sheet name is "LOG" (modCommon.SHEET_LOG constant exists).
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>'   - In headless/COM mode, dialogs are suppressed and routed to logger.
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>' ================================================================
 <a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>
-<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>Private Const SHEET_LOG_NAME As String = &quot;LOG&quot;
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>Private Const SHEET_LOG_NAME As String = "LOG"
 <a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>
-<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>&#39; ----------------------------------------------------------------
-<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>&#39; Title strings (JP) built via ChrW so file stays ASCII source.
-<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>&#39; ----------------------------------------------------------------
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>' ----------------------------------------------------------------
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>' Title strings (JP) built via ChrW so file stays ASCII source.
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>' ----------------------------------------------------------------
 <a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>Private Function TitleError() As String
-<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1747] modKnowledgeEntryHelpers.TitleError ENTER&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>    &#39; JP: title &#39;Error&#39;
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1747] modKnowledgeEntryHelpers.TitleError ENTER"  ' [ADR-0100]
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>    ' JP: title 'Error'
 <a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>    TitleError = ChrW(&amp;H30A8) &amp; ChrW(&amp;H30E9) &amp; ChrW(&amp;H30FC)
 <a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>End Function
 <a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>
 <a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>Private Function TitleWarning() As String
-<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1748] modKnowledgeEntryHelpers.TitleWarning ENTER&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>    &#39; JP: title &#39;Warning&#39;
+<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1748] modKnowledgeEntryHelpers.TitleWarning ENTER"  ' [ADR-0100]
+<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>    ' JP: title 'Warning'
 <a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>    TitleWarning = ChrW(&amp;H8B66) &amp; ChrW(&amp;H544A)
 <a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>End Function
 <a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>
 <a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>Private Function TitleInfo() As String
-<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1749] modKnowledgeEntryHelpers.TitleInfo ENTER&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>    &#39; JP: title &#39;Info&#39;
+<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1749] modKnowledgeEntryHelpers.TitleInfo ENTER"  ' [ADR-0100]
+<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>    ' JP: title 'Info'
 <a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>    TitleInfo = ChrW(&amp;H60C5) &amp; ChrW(&amp;H5831)
 <a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>End Function
 <a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>
 <a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>Private Function TitleConfirm() As String
-<a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1750] modKnowledgeEntryHelpers.TitleConfirm ENTER&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>    &#39; JP: title &#39;Confirm&#39;
+<a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1750] modKnowledgeEntryHelpers.TitleConfirm ENTER"  ' [ADR-0100]
+<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>    ' JP: title 'Confirm'
 <a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>    TitleConfirm = ChrW(&amp;H78BA) &amp; ChrW(&amp;H8A8D)
 <a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>End Function
 <a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>
 <a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>Private Function LblOperation() As String
-<a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1751] modKnowledgeEntryHelpers.LblOperation ENTER&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a>    &#39; JP: label &#39;Operation: &#39;
-<a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a>    LblOperation = ChrW(&amp;H64CD) &amp; ChrW(&amp;H4F5C) &amp; ChrW(&amp;H540D) &amp; &quot;:&quot; &amp; &quot; &quot;
+<a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1751] modKnowledgeEntryHelpers.LblOperation ENTER"  ' [ADR-0100]
+<a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a>    ' JP: label 'Operation: '
+<a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a>    LblOperation = ChrW(&amp;H64CD) &amp; ChrW(&amp;H4F5C) &amp; ChrW(&amp;H540D) &amp; ":" &amp; " "
 <a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a>End Function
 <a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a>
 <a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a>Private Function LblDetail() As String
-<a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1752] modKnowledgeEntryHelpers.LblDetail ENTER&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a>    &#39; JP: label &#39;Detail: &#39;
-<a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a>    LblDetail = ChrW(&amp;H5185) &amp; ChrW(&amp;H5BB9) &amp; &quot;:&quot; &amp; &quot; &quot;
+<a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1752] modKnowledgeEntryHelpers.LblDetail ENTER"  ' [ADR-0100]
+<a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a>    ' JP: label 'Detail: '
+<a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a>    LblDetail = ChrW(&amp;H5185) &amp; ChrW(&amp;H5BB9) &amp; ":" &amp; " "
 <a id="__codelineno-0-60" name="__codelineno-0-60" href="#__codelineno-0-60"></a>End Function
 <a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a>
 <a id="__codelineno-0-62" name="__codelineno-0-62" href="#__codelineno-0-62"></a>Private Function LblAction() As String
-<a id="__codelineno-0-63" name="__codelineno-0-63" href="#__codelineno-0-63"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1753] modKnowledgeEntryHelpers.LblAction ENTER&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-64" name="__codelineno-0-64" href="#__codelineno-0-64"></a>    &#39; JP: label &#39;Action: &#39;
-<a id="__codelineno-0-65" name="__codelineno-0-65" href="#__codelineno-0-65"></a>    LblAction = ChrW(&amp;H5BFE) &amp; ChrW(&amp;H51E6) &amp; &quot;:&quot; &amp; &quot; &quot;
+<a id="__codelineno-0-63" name="__codelineno-0-63" href="#__codelineno-0-63"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1753] modKnowledgeEntryHelpers.LblAction ENTER"  ' [ADR-0100]
+<a id="__codelineno-0-64" name="__codelineno-0-64" href="#__codelineno-0-64"></a>    ' JP: label 'Action: '
+<a id="__codelineno-0-65" name="__codelineno-0-65" href="#__codelineno-0-65"></a>    LblAction = ChrW(&amp;H5BFE) &amp; ChrW(&amp;H51E6) &amp; ":" &amp; " "
 <a id="__codelineno-0-66" name="__codelineno-0-66" href="#__codelineno-0-66"></a>End Function
 <a id="__codelineno-0-67" name="__codelineno-0-67" href="#__codelineno-0-67"></a>
 <a id="__codelineno-0-68" name="__codelineno-0-68" href="#__codelineno-0-68"></a>Private Function LblConfirmPrompt() As String
-<a id="__codelineno-0-69" name="__codelineno-0-69" href="#__codelineno-0-69"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1754] modKnowledgeEntryHelpers.LblConfirmPrompt ENTER&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-70" name="__codelineno-0-70" href="#__codelineno-0-70"></a>    &#39; JP: prompt &#39;Are you sure to proceed?&#39;
+<a id="__codelineno-0-69" name="__codelineno-0-69" href="#__codelineno-0-69"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1754] modKnowledgeEntryHelpers.LblConfirmPrompt ENTER"  ' [ADR-0100]
+<a id="__codelineno-0-70" name="__codelineno-0-70" href="#__codelineno-0-70"></a>    ' JP: prompt 'Are you sure to proceed?'
 <a id="__codelineno-0-71" name="__codelineno-0-71" href="#__codelineno-0-71"></a>    LblConfirmPrompt = ChrW(&amp;H5B9F) &amp; ChrW(&amp;H884C) &amp; ChrW(&amp;H3057) &amp; ChrW(&amp;H3066) &amp; _
 <a id="__codelineno-0-72" name="__codelineno-0-72" href="#__codelineno-0-72"></a>                      ChrW(&amp;H3082) &amp; ChrW(&amp;H3088) &amp; ChrW(&amp;H308D) &amp; ChrW(&amp;H3057) &amp; _
-<a id="__codelineno-0-73" name="__codelineno-0-73" href="#__codelineno-0-73"></a>                      ChrW(&amp;H3044) &amp; ChrW(&amp;H3067) &amp; ChrW(&amp;H3059) &amp; ChrW(&amp;H304B) &amp; &quot;?&quot;
+<a id="__codelineno-0-73" name="__codelineno-0-73" href="#__codelineno-0-73"></a>                      ChrW(&amp;H3044) &amp; ChrW(&amp;H3067) &amp; ChrW(&amp;H3059) &amp; ChrW(&amp;H304B) &amp; "?"
 <a id="__codelineno-0-74" name="__codelineno-0-74" href="#__codelineno-0-74"></a>End Function
 <a id="__codelineno-0-75" name="__codelineno-0-75" href="#__codelineno-0-75"></a>
-<a id="__codelineno-0-76" name="__codelineno-0-76" href="#__codelineno-0-76"></a>&#39; ================================================================
-<a id="__codelineno-0-77" name="__codelineno-0-77" href="#__codelineno-0-77"></a>&#39; Public Function: BuildLogger
-<a id="__codelineno-0-78" name="__codelineno-0-78" href="#__codelineno-0-78"></a>&#39; Return: initialized clsLogger bound to ThisWorkbook &quot;LOG&quot; sheet.
-<a id="__codelineno-0-79" name="__codelineno-0-79" href="#__codelineno-0-79"></a>&#39;         If LOG sheet missing or Init fails, returns a logger object
-<a id="__codelineno-0-80" name="__codelineno-0-80" href="#__codelineno-0-80"></a>&#39;         whose calls become no-ops (On Error Resume Next inside caller).
-<a id="__codelineno-0-81" name="__codelineno-0-81" href="#__codelineno-0-81"></a>&#39; ================================================================
+<a id="__codelineno-0-76" name="__codelineno-0-76" href="#__codelineno-0-76"></a>' ================================================================
+<a id="__codelineno-0-77" name="__codelineno-0-77" href="#__codelineno-0-77"></a>' Public Function: BuildLogger
+<a id="__codelineno-0-78" name="__codelineno-0-78" href="#__codelineno-0-78"></a>' Return: initialized clsLogger bound to ThisWorkbook "LOG" sheet.
+<a id="__codelineno-0-79" name="__codelineno-0-79" href="#__codelineno-0-79"></a>'         If LOG sheet missing or Init fails, returns a logger object
+<a id="__codelineno-0-80" name="__codelineno-0-80" href="#__codelineno-0-80"></a>'         whose calls become no-ops (On Error Resume Next inside caller).
+<a id="__codelineno-0-81" name="__codelineno-0-81" href="#__codelineno-0-81"></a>' ================================================================
 <a id="__codelineno-0-82" name="__codelineno-0-82" href="#__codelineno-0-82"></a>Public Function BuildLogger() As clsLogger
-<a id="__codelineno-0-83" name="__codelineno-0-83" href="#__codelineno-0-83"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1755] modKnowledgeEntryHelpers.BuildLogger ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-83" name="__codelineno-0-83" href="#__codelineno-0-83"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1755] modKnowledgeEntryHelpers.BuildLogger ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-84" name="__codelineno-0-84" href="#__codelineno-0-84"></a>    On Error GoTo ErrHandler
 <a id="__codelineno-0-85" name="__codelineno-0-85" href="#__codelineno-0-85"></a>    Dim lg As clsLogger
 <a id="__codelineno-0-86" name="__codelineno-0-86" href="#__codelineno-0-86"></a>    Set lg = New clsLogger
@@ -5044,47 +5044,47 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-90" name="__codelineno-0-90" href="#__codelineno-0-90"></a>    Set ws = ThisWorkbook.Worksheets(SHEET_LOG_NAME)
 <a id="__codelineno-0-91" name="__codelineno-0-91" href="#__codelineno-0-91"></a>    On Error GoTo ErrHandler
 <a id="__codelineno-0-92" name="__codelineno-0-92" href="#__codelineno-0-92"></a>    If Not ws Is Nothing Then
-<a id="__codelineno-0-93" name="__codelineno-0-93" href="#__codelineno-0-93"></a>        &#39; iter20 fix: in headless E2E COM mode the modConfigHolder is not
-<a id="__codelineno-0-94" name="__codelineno-0-94" href="#__codelineno-0-94"></a>        &#39; initialized via Workbook_Open (EnableEvents=false), so debug
-<a id="__codelineno-0-95" name="__codelineno-0-95" href="#__codelineno-0-95"></a>        &#39; level defaults to ERROR and LogInfo entries are silently dropped.
-<a id="__codelineno-0-96" name="__codelineno-0-96" href="#__codelineno-0-96"></a>        &#39; Override to INFO when running headless so LOG-effect test
-<a id="__codelineno-0-97" name="__codelineno-0-97" href="#__codelineno-0-97"></a>        &#39; assertions can observe entry-point markers.
+<a id="__codelineno-0-93" name="__codelineno-0-93" href="#__codelineno-0-93"></a>        ' iter20 fix: in headless E2E COM mode the modConfigHolder is not
+<a id="__codelineno-0-94" name="__codelineno-0-94" href="#__codelineno-0-94"></a>        ' initialized via Workbook_Open (EnableEvents=false), so debug
+<a id="__codelineno-0-95" name="__codelineno-0-95" href="#__codelineno-0-95"></a>        ' level defaults to ERROR and LogInfo entries are silently dropped.
+<a id="__codelineno-0-96" name="__codelineno-0-96" href="#__codelineno-0-96"></a>        ' Override to INFO when running headless so LOG-effect test
+<a id="__codelineno-0-97" name="__codelineno-0-97" href="#__codelineno-0-97"></a>        ' assertions can observe entry-point markers.
 <a id="__codelineno-0-98" name="__codelineno-0-98" href="#__codelineno-0-98"></a>        If modCommon.IsHeadless() Then
-<a id="__codelineno-0-99" name="__codelineno-0-99" href="#__codelineno-0-99"></a>            lg.Init ws, 3  &#39; DEBUG_LEVEL_INFO
+<a id="__codelineno-0-99" name="__codelineno-0-99" href="#__codelineno-0-99"></a>            lg.Init ws, 3  ' DEBUG_LEVEL_INFO
 <a id="__codelineno-0-100" name="__codelineno-0-100" href="#__codelineno-0-100"></a>        Else
 <a id="__codelineno-0-101" name="__codelineno-0-101" href="#__codelineno-0-101"></a>            lg.Init ws
 <a id="__codelineno-0-102" name="__codelineno-0-102" href="#__codelineno-0-102"></a>        End If
 <a id="__codelineno-0-103" name="__codelineno-0-103" href="#__codelineno-0-103"></a>    End If
 <a id="__codelineno-0-104" name="__codelineno-0-104" href="#__codelineno-0-104"></a>    Set BuildLogger = lg
-<a id="__codelineno-0-105" name="__codelineno-0-105" href="#__codelineno-0-105"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1756] modKnowledgeEntryHelpers.BuildLogger EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-105" name="__codelineno-0-105" href="#__codelineno-0-105"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1756] modKnowledgeEntryHelpers.BuildLogger EXIT-OK"  ' [ADR-0100]
 <a id="__codelineno-0-106" name="__codelineno-0-106" href="#__codelineno-0-106"></a>    Exit Function
 <a id="__codelineno-0-107" name="__codelineno-0-107" href="#__codelineno-0-107"></a>ErrHandler:
-<a id="__codelineno-0-108" name="__codelineno-0-108" href="#__codelineno-0-108"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print &quot;[D-1757] modKnowledgeEntryHelpers.BuildLogger EXIT-ERR &quot; &amp; &quot;errNum=&quot; &amp; Err.Number &amp; &quot; desc=&quot; &amp; Err.Description  &#39; [ADR-0100]
+<a id="__codelineno-0-108" name="__codelineno-0-108" href="#__codelineno-0-108"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print "[D-1757] modKnowledgeEntryHelpers.BuildLogger EXIT-ERR " &amp; "errNum=" &amp; Err.Number &amp; " desc=" &amp; Err.Description  ' [ADR-0100]
 <a id="__codelineno-0-109" name="__codelineno-0-109" href="#__codelineno-0-109"></a>    On Error Resume Next
 <a id="__codelineno-0-110" name="__codelineno-0-110" href="#__codelineno-0-110"></a>    Set BuildLogger = New clsLogger
 <a id="__codelineno-0-111" name="__codelineno-0-111" href="#__codelineno-0-111"></a>End Function
 <a id="__codelineno-0-112" name="__codelineno-0-112" href="#__codelineno-0-112"></a>
-<a id="__codelineno-0-113" name="__codelineno-0-113" href="#__codelineno-0-113"></a>&#39; ================================================================
-<a id="__codelineno-0-114" name="__codelineno-0-114" href="#__codelineno-0-114"></a>&#39; Public Function: GetDataFolder
-<a id="__codelineno-0-115" name="__codelineno-0-115" href="#__codelineno-0-115"></a>&#39; Return: data_dir resolved via modConfigHolder (config.txt SSOT).
-<a id="__codelineno-0-116" name="__codelineno-0-116" href="#__codelineno-0-116"></a>&#39;         Falls back to &quot;&quot; on error.
-<a id="__codelineno-0-117" name="__codelineno-0-117" href="#__codelineno-0-117"></a>&#39; ================================================================
+<a id="__codelineno-0-113" name="__codelineno-0-113" href="#__codelineno-0-113"></a>' ================================================================
+<a id="__codelineno-0-114" name="__codelineno-0-114" href="#__codelineno-0-114"></a>' Public Function: GetDataFolder
+<a id="__codelineno-0-115" name="__codelineno-0-115" href="#__codelineno-0-115"></a>' Return: data_dir resolved via modConfigHolder (config.txt SSOT).
+<a id="__codelineno-0-116" name="__codelineno-0-116" href="#__codelineno-0-116"></a>'         Falls back to "" on error.
+<a id="__codelineno-0-117" name="__codelineno-0-117" href="#__codelineno-0-117"></a>' ================================================================
 <a id="__codelineno-0-118" name="__codelineno-0-118" href="#__codelineno-0-118"></a>Public Function GetDataFolder() As String
-<a id="__codelineno-0-119" name="__codelineno-0-119" href="#__codelineno-0-119"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1758] modKnowledgeEntryHelpers.GetDataFolder ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-119" name="__codelineno-0-119" href="#__codelineno-0-119"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1758] modKnowledgeEntryHelpers.GetDataFolder ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-120" name="__codelineno-0-120" href="#__codelineno-0-120"></a>    On Error GoTo ErrHandler
 <a id="__codelineno-0-121" name="__codelineno-0-121" href="#__codelineno-0-121"></a>    GetDataFolder = modConfigHolder.GetDataDir()
 <a id="__codelineno-0-122" name="__codelineno-0-122" href="#__codelineno-0-122"></a>    Exit Function
 <a id="__codelineno-0-123" name="__codelineno-0-123" href="#__codelineno-0-123"></a>ErrHandler:
-<a id="__codelineno-0-124" name="__codelineno-0-124" href="#__codelineno-0-124"></a>    GetDataFolder = &quot;&quot;
+<a id="__codelineno-0-124" name="__codelineno-0-124" href="#__codelineno-0-124"></a>    GetDataFolder = ""
 <a id="__codelineno-0-125" name="__codelineno-0-125" href="#__codelineno-0-125"></a>End Function
 <a id="__codelineno-0-126" name="__codelineno-0-126" href="#__codelineno-0-126"></a>
-<a id="__codelineno-0-127" name="__codelineno-0-127" href="#__codelineno-0-127"></a>&#39; ================================================================
-<a id="__codelineno-0-128" name="__codelineno-0-128" href="#__codelineno-0-128"></a>&#39; Public Function: IsTestMode
-<a id="__codelineno-0-129" name="__codelineno-0-129" href="#__codelineno-0-129"></a>&#39; Return: True when running headless (E2E COM mode) so dialog
-<a id="__codelineno-0-130" name="__codelineno-0-130" href="#__codelineno-0-130"></a>&#39;         suppression behaves like the legacy modEntryMain.IsTestMode().
-<a id="__codelineno-0-131" name="__codelineno-0-131" href="#__codelineno-0-131"></a>&#39; ================================================================
+<a id="__codelineno-0-127" name="__codelineno-0-127" href="#__codelineno-0-127"></a>' ================================================================
+<a id="__codelineno-0-128" name="__codelineno-0-128" href="#__codelineno-0-128"></a>' Public Function: IsTestMode
+<a id="__codelineno-0-129" name="__codelineno-0-129" href="#__codelineno-0-129"></a>' Return: True when running headless (E2E COM mode) so dialog
+<a id="__codelineno-0-130" name="__codelineno-0-130" href="#__codelineno-0-130"></a>'         suppression behaves like the legacy modEntryMain.IsTestMode().
+<a id="__codelineno-0-131" name="__codelineno-0-131" href="#__codelineno-0-131"></a>' ================================================================
 <a id="__codelineno-0-132" name="__codelineno-0-132" href="#__codelineno-0-132"></a>Public Function IsTestMode() As Boolean
-<a id="__codelineno-0-133" name="__codelineno-0-133" href="#__codelineno-0-133"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1759] modKnowledgeEntryHelpers.IsTestMode ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-133" name="__codelineno-0-133" href="#__codelineno-0-133"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1759] modKnowledgeEntryHelpers.IsTestMode ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-134" name="__codelineno-0-134" href="#__codelineno-0-134"></a>    On Error GoTo ErrHandler
 <a id="__codelineno-0-135" name="__codelineno-0-135" href="#__codelineno-0-135"></a>    IsTestMode = modCommon.IsHeadless()
 <a id="__codelineno-0-136" name="__codelineno-0-136" href="#__codelineno-0-136"></a>    Exit Function
@@ -5092,15 +5092,15 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-138" name="__codelineno-0-138" href="#__codelineno-0-138"></a>    IsTestMode = False
 <a id="__codelineno-0-139" name="__codelineno-0-139" href="#__codelineno-0-139"></a>End Function
 <a id="__codelineno-0-140" name="__codelineno-0-140" href="#__codelineno-0-140"></a>
-<a id="__codelineno-0-141" name="__codelineno-0-141" href="#__codelineno-0-141"></a>&#39; ================================================================
-<a id="__codelineno-0-142" name="__codelineno-0-142" href="#__codelineno-0-142"></a>&#39; Public Sub: ShowError
-<a id="__codelineno-0-143" name="__codelineno-0-143" href="#__codelineno-0-143"></a>&#39; ================================================================
+<a id="__codelineno-0-141" name="__codelineno-0-141" href="#__codelineno-0-141"></a>' ================================================================
+<a id="__codelineno-0-142" name="__codelineno-0-142" href="#__codelineno-0-142"></a>' Public Sub: ShowError
+<a id="__codelineno-0-143" name="__codelineno-0-143" href="#__codelineno-0-143"></a>' ================================================================
 <a id="__codelineno-0-144" name="__codelineno-0-144" href="#__codelineno-0-144"></a>Public Sub ShowError(ByVal operation As String, ByVal detail As String, ByVal action As String)
-<a id="__codelineno-0-145" name="__codelineno-0-145" href="#__codelineno-0-145"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1760] modKnowledgeEntryHelpers.ShowError ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-145" name="__codelineno-0-145" href="#__codelineno-0-145"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1760] modKnowledgeEntryHelpers.ShowError ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-146" name="__codelineno-0-146" href="#__codelineno-0-146"></a>    On Error Resume Next
 <a id="__codelineno-0-147" name="__codelineno-0-147" href="#__codelineno-0-147"></a>    If IsTestMode() Then
-<a id="__codelineno-0-148" name="__codelineno-0-148" href="#__codelineno-0-148"></a>        Call LogDialogSuppressed(&quot;ShowError&quot;, operation, detail, action)
-<a id="__codelineno-0-149" name="__codelineno-0-149" href="#__codelineno-0-149"></a>        If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1761] modKnowledgeEntryHelpers.ShowError EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-148" name="__codelineno-0-148" href="#__codelineno-0-148"></a>        Call LogDialogSuppressed("ShowError", operation, detail, action)
+<a id="__codelineno-0-149" name="__codelineno-0-149" href="#__codelineno-0-149"></a>        If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1761] modKnowledgeEntryHelpers.ShowError EXIT-OK"  ' [ADR-0100]
 <a id="__codelineno-0-150" name="__codelineno-0-150" href="#__codelineno-0-150"></a>        Exit Sub
 <a id="__codelineno-0-151" name="__codelineno-0-151" href="#__codelineno-0-151"></a>    End If
 <a id="__codelineno-0-152" name="__codelineno-0-152" href="#__codelineno-0-152"></a>    Dim body As String
@@ -5110,15 +5110,15 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-156" name="__codelineno-0-156" href="#__codelineno-0-156"></a>    MsgBox body, vbCritical, TitleError()
 <a id="__codelineno-0-157" name="__codelineno-0-157" href="#__codelineno-0-157"></a>End Sub
 <a id="__codelineno-0-158" name="__codelineno-0-158" href="#__codelineno-0-158"></a>
-<a id="__codelineno-0-159" name="__codelineno-0-159" href="#__codelineno-0-159"></a>&#39; ================================================================
-<a id="__codelineno-0-160" name="__codelineno-0-160" href="#__codelineno-0-160"></a>&#39; Public Sub: ShowWarning
-<a id="__codelineno-0-161" name="__codelineno-0-161" href="#__codelineno-0-161"></a>&#39; ================================================================
+<a id="__codelineno-0-159" name="__codelineno-0-159" href="#__codelineno-0-159"></a>' ================================================================
+<a id="__codelineno-0-160" name="__codelineno-0-160" href="#__codelineno-0-160"></a>' Public Sub: ShowWarning
+<a id="__codelineno-0-161" name="__codelineno-0-161" href="#__codelineno-0-161"></a>' ================================================================
 <a id="__codelineno-0-162" name="__codelineno-0-162" href="#__codelineno-0-162"></a>Public Sub ShowWarning(ByVal operation As String, ByVal detail As String, ByVal action As String)
-<a id="__codelineno-0-163" name="__codelineno-0-163" href="#__codelineno-0-163"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1762] modKnowledgeEntryHelpers.ShowWarning ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-163" name="__codelineno-0-163" href="#__codelineno-0-163"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1762] modKnowledgeEntryHelpers.ShowWarning ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-164" name="__codelineno-0-164" href="#__codelineno-0-164"></a>    On Error Resume Next
 <a id="__codelineno-0-165" name="__codelineno-0-165" href="#__codelineno-0-165"></a>    If IsTestMode() Then
-<a id="__codelineno-0-166" name="__codelineno-0-166" href="#__codelineno-0-166"></a>        Call LogDialogSuppressed(&quot;ShowWarning&quot;, operation, detail, action)
-<a id="__codelineno-0-167" name="__codelineno-0-167" href="#__codelineno-0-167"></a>        If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1763] modKnowledgeEntryHelpers.ShowWarning EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-166" name="__codelineno-0-166" href="#__codelineno-0-166"></a>        Call LogDialogSuppressed("ShowWarning", operation, detail, action)
+<a id="__codelineno-0-167" name="__codelineno-0-167" href="#__codelineno-0-167"></a>        If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1763] modKnowledgeEntryHelpers.ShowWarning EXIT-OK"  ' [ADR-0100]
 <a id="__codelineno-0-168" name="__codelineno-0-168" href="#__codelineno-0-168"></a>        Exit Sub
 <a id="__codelineno-0-169" name="__codelineno-0-169" href="#__codelineno-0-169"></a>    End If
 <a id="__codelineno-0-170" name="__codelineno-0-170" href="#__codelineno-0-170"></a>    Dim body As String
@@ -5128,15 +5128,15 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-174" name="__codelineno-0-174" href="#__codelineno-0-174"></a>    MsgBox body, vbExclamation, TitleWarning()
 <a id="__codelineno-0-175" name="__codelineno-0-175" href="#__codelineno-0-175"></a>End Sub
 <a id="__codelineno-0-176" name="__codelineno-0-176" href="#__codelineno-0-176"></a>
-<a id="__codelineno-0-177" name="__codelineno-0-177" href="#__codelineno-0-177"></a>&#39; ================================================================
-<a id="__codelineno-0-178" name="__codelineno-0-178" href="#__codelineno-0-178"></a>&#39; Public Sub: ShowInfo
-<a id="__codelineno-0-179" name="__codelineno-0-179" href="#__codelineno-0-179"></a>&#39; ================================================================
+<a id="__codelineno-0-177" name="__codelineno-0-177" href="#__codelineno-0-177"></a>' ================================================================
+<a id="__codelineno-0-178" name="__codelineno-0-178" href="#__codelineno-0-178"></a>' Public Sub: ShowInfo
+<a id="__codelineno-0-179" name="__codelineno-0-179" href="#__codelineno-0-179"></a>' ================================================================
 <a id="__codelineno-0-180" name="__codelineno-0-180" href="#__codelineno-0-180"></a>Public Sub ShowInfo(ByVal operation As String, ByVal detail As String)
-<a id="__codelineno-0-181" name="__codelineno-0-181" href="#__codelineno-0-181"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1764] modKnowledgeEntryHelpers.ShowInfo ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-181" name="__codelineno-0-181" href="#__codelineno-0-181"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1764] modKnowledgeEntryHelpers.ShowInfo ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-182" name="__codelineno-0-182" href="#__codelineno-0-182"></a>    On Error Resume Next
 <a id="__codelineno-0-183" name="__codelineno-0-183" href="#__codelineno-0-183"></a>    If IsTestMode() Then
-<a id="__codelineno-0-184" name="__codelineno-0-184" href="#__codelineno-0-184"></a>        Call LogDialogSuppressed(&quot;ShowInfo&quot;, operation, detail, &quot;&quot;)
-<a id="__codelineno-0-185" name="__codelineno-0-185" href="#__codelineno-0-185"></a>        If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1765] modKnowledgeEntryHelpers.ShowInfo EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-184" name="__codelineno-0-184" href="#__codelineno-0-184"></a>        Call LogDialogSuppressed("ShowInfo", operation, detail, "")
+<a id="__codelineno-0-185" name="__codelineno-0-185" href="#__codelineno-0-185"></a>        If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1765] modKnowledgeEntryHelpers.ShowInfo EXIT-OK"  ' [ADR-0100]
 <a id="__codelineno-0-186" name="__codelineno-0-186" href="#__codelineno-0-186"></a>        Exit Sub
 <a id="__codelineno-0-187" name="__codelineno-0-187" href="#__codelineno-0-187"></a>    End If
 <a id="__codelineno-0-188" name="__codelineno-0-188" href="#__codelineno-0-188"></a>    Dim body As String
@@ -5145,17 +5145,17 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-191" name="__codelineno-0-191" href="#__codelineno-0-191"></a>    MsgBox body, vbInformation, TitleInfo()
 <a id="__codelineno-0-192" name="__codelineno-0-192" href="#__codelineno-0-192"></a>End Sub
 <a id="__codelineno-0-193" name="__codelineno-0-193" href="#__codelineno-0-193"></a>
-<a id="__codelineno-0-194" name="__codelineno-0-194" href="#__codelineno-0-194"></a>&#39; ================================================================
-<a id="__codelineno-0-195" name="__codelineno-0-195" href="#__codelineno-0-195"></a>&#39; Public Function: ConfirmAction
-<a id="__codelineno-0-196" name="__codelineno-0-196" href="#__codelineno-0-196"></a>&#39; Return: True if user (or auto in test mode) confirms.
-<a id="__codelineno-0-197" name="__codelineno-0-197" href="#__codelineno-0-197"></a>&#39; ================================================================
+<a id="__codelineno-0-194" name="__codelineno-0-194" href="#__codelineno-0-194"></a>' ================================================================
+<a id="__codelineno-0-195" name="__codelineno-0-195" href="#__codelineno-0-195"></a>' Public Function: ConfirmAction
+<a id="__codelineno-0-196" name="__codelineno-0-196" href="#__codelineno-0-196"></a>' Return: True if user (or auto in test mode) confirms.
+<a id="__codelineno-0-197" name="__codelineno-0-197" href="#__codelineno-0-197"></a>' ================================================================
 <a id="__codelineno-0-198" name="__codelineno-0-198" href="#__codelineno-0-198"></a>Public Function ConfirmAction(ByVal operation As String, ByVal detail As String) As Boolean
-<a id="__codelineno-0-199" name="__codelineno-0-199" href="#__codelineno-0-199"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1766] modKnowledgeEntryHelpers.ConfirmAction ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-199" name="__codelineno-0-199" href="#__codelineno-0-199"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1766] modKnowledgeEntryHelpers.ConfirmAction ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-200" name="__codelineno-0-200" href="#__codelineno-0-200"></a>    On Error GoTo ErrHandler
 <a id="__codelineno-0-201" name="__codelineno-0-201" href="#__codelineno-0-201"></a>    If IsTestMode() Then
-<a id="__codelineno-0-202" name="__codelineno-0-202" href="#__codelineno-0-202"></a>        Call LogDialogSuppressed(&quot;ConfirmAction&quot;, operation, detail, &quot;auto-Yes&quot;)
+<a id="__codelineno-0-202" name="__codelineno-0-202" href="#__codelineno-0-202"></a>        Call LogDialogSuppressed("ConfirmAction", operation, detail, "auto-Yes")
 <a id="__codelineno-0-203" name="__codelineno-0-203" href="#__codelineno-0-203"></a>        ConfirmAction = True
-<a id="__codelineno-0-204" name="__codelineno-0-204" href="#__codelineno-0-204"></a>        If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1767] modKnowledgeEntryHelpers.ConfirmAction EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-204" name="__codelineno-0-204" href="#__codelineno-0-204"></a>        If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1767] modKnowledgeEntryHelpers.ConfirmAction EXIT-OK"  ' [ADR-0100]
 <a id="__codelineno-0-205" name="__codelineno-0-205" href="#__codelineno-0-205"></a>        Exit Function
 <a id="__codelineno-0-206" name="__codelineno-0-206" href="#__codelineno-0-206"></a>    End If
 <a id="__codelineno-0-207" name="__codelineno-0-207" href="#__codelineno-0-207"></a>    Dim body As String
@@ -5165,33 +5165,33 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-211" name="__codelineno-0-211" href="#__codelineno-0-211"></a>    Dim r As VbMsgBoxResult
 <a id="__codelineno-0-212" name="__codelineno-0-212" href="#__codelineno-0-212"></a>    r = MsgBox(body, vbQuestion + vbYesNo, TitleConfirm())
 <a id="__codelineno-0-213" name="__codelineno-0-213" href="#__codelineno-0-213"></a>    ConfirmAction = (r = vbYes)
-<a id="__codelineno-0-214" name="__codelineno-0-214" href="#__codelineno-0-214"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1768] modKnowledgeEntryHelpers.ConfirmAction EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-214" name="__codelineno-0-214" href="#__codelineno-0-214"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1768] modKnowledgeEntryHelpers.ConfirmAction EXIT-OK"  ' [ADR-0100]
 <a id="__codelineno-0-215" name="__codelineno-0-215" href="#__codelineno-0-215"></a>    Exit Function
 <a id="__codelineno-0-216" name="__codelineno-0-216" href="#__codelineno-0-216"></a>ErrHandler:
-<a id="__codelineno-0-217" name="__codelineno-0-217" href="#__codelineno-0-217"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print &quot;[D-1769] modKnowledgeEntryHelpers.ConfirmAction EXIT-ERR &quot; &amp; &quot;errNum=&quot; &amp; Err.Number &amp; &quot; desc=&quot; &amp; Err.Description  &#39; [ADR-0100]
+<a id="__codelineno-0-217" name="__codelineno-0-217" href="#__codelineno-0-217"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print "[D-1769] modKnowledgeEntryHelpers.ConfirmAction EXIT-ERR " &amp; "errNum=" &amp; Err.Number &amp; " desc=" &amp; Err.Description  ' [ADR-0100]
 <a id="__codelineno-0-218" name="__codelineno-0-218" href="#__codelineno-0-218"></a>    ConfirmAction = False
 <a id="__codelineno-0-219" name="__codelineno-0-219" href="#__codelineno-0-219"></a>End Function
 <a id="__codelineno-0-220" name="__codelineno-0-220" href="#__codelineno-0-220"></a>
-<a id="__codelineno-0-221" name="__codelineno-0-221" href="#__codelineno-0-221"></a>&#39; ================================================================
-<a id="__codelineno-0-222" name="__codelineno-0-222" href="#__codelineno-0-222"></a>&#39; Private Sub: LogDialogSuppressed
-<a id="__codelineno-0-223" name="__codelineno-0-223" href="#__codelineno-0-223"></a>&#39; Notes:   Mirrors legacy modEntryMain behavior; logs that a dialog
-<a id="__codelineno-0-224" name="__codelineno-0-224" href="#__codelineno-0-224"></a>&#39;          would have appeared while headless.
-<a id="__codelineno-0-225" name="__codelineno-0-225" href="#__codelineno-0-225"></a>&#39; ================================================================
+<a id="__codelineno-0-221" name="__codelineno-0-221" href="#__codelineno-0-221"></a>' ================================================================
+<a id="__codelineno-0-222" name="__codelineno-0-222" href="#__codelineno-0-222"></a>' Private Sub: LogDialogSuppressed
+<a id="__codelineno-0-223" name="__codelineno-0-223" href="#__codelineno-0-223"></a>' Notes:   Mirrors legacy modEntryMain behavior; logs that a dialog
+<a id="__codelineno-0-224" name="__codelineno-0-224" href="#__codelineno-0-224"></a>'          would have appeared while headless.
+<a id="__codelineno-0-225" name="__codelineno-0-225" href="#__codelineno-0-225"></a>' ================================================================
 <a id="__codelineno-0-226" name="__codelineno-0-226" href="#__codelineno-0-226"></a>Private Sub LogDialogSuppressed(ByVal dialogType As String, _
 <a id="__codelineno-0-227" name="__codelineno-0-227" href="#__codelineno-0-227"></a>                                ByVal operation As String, _
 <a id="__codelineno-0-228" name="__codelineno-0-228" href="#__codelineno-0-228"></a>                                ByVal detail As String, _
 <a id="__codelineno-0-229" name="__codelineno-0-229" href="#__codelineno-0-229"></a>                                ByVal action As String)
-<a id="__codelineno-0-230" name="__codelineno-0-230" href="#__codelineno-0-230"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1770] modKnowledgeEntryHelpers.LogDialogSuppressed ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-230" name="__codelineno-0-230" href="#__codelineno-0-230"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1770] modKnowledgeEntryHelpers.LogDialogSuppressed ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-231" name="__codelineno-0-231" href="#__codelineno-0-231"></a>    On Error Resume Next
 <a id="__codelineno-0-232" name="__codelineno-0-232" href="#__codelineno-0-232"></a>    Dim lg As clsLogger
 <a id="__codelineno-0-233" name="__codelineno-0-233" href="#__codelineno-0-233"></a>    Set lg = BuildLogger()
 <a id="__codelineno-0-234" name="__codelineno-0-234" href="#__codelineno-0-234"></a>    Dim msg As String
-<a id="__codelineno-0-235" name="__codelineno-0-235" href="#__codelineno-0-235"></a>    msg = &quot;[&quot; &amp; dialogType &amp; &quot; suppressed] op=&quot; &amp; operation &amp; _
-<a id="__codelineno-0-236" name="__codelineno-0-236" href="#__codelineno-0-236"></a>          &quot;, detail=&quot; &amp; detail
-<a id="__codelineno-0-237" name="__codelineno-0-237" href="#__codelineno-0-237"></a>    If Len(action) &gt; 0 Then msg = msg &amp; &quot;, action=&quot; &amp; action
-<a id="__codelineno-0-238" name="__codelineno-0-238" href="#__codelineno-0-238"></a>    lg.LogInfo &quot;modKnowledgeEntryHelpers&quot;, &quot;LogDialogSuppressed&quot;, msg
+<a id="__codelineno-0-235" name="__codelineno-0-235" href="#__codelineno-0-235"></a>    msg = "[" &amp; dialogType &amp; " suppressed] op=" &amp; operation &amp; _
+<a id="__codelineno-0-236" name="__codelineno-0-236" href="#__codelineno-0-236"></a>          ", detail=" &amp; detail
+<a id="__codelineno-0-237" name="__codelineno-0-237" href="#__codelineno-0-237"></a>    If Len(action) &gt; 0 Then msg = msg &amp; ", action=" &amp; action
+<a id="__codelineno-0-238" name="__codelineno-0-238" href="#__codelineno-0-238"></a>    lg.LogInfo "modKnowledgeEntryHelpers", "LogDialogSuppressed", msg
 <a id="__codelineno-0-239" name="__codelineno-0-239" href="#__codelineno-0-239"></a>    Err.Clear
-<a id="__codelineno-0-240" name="__codelineno-0-240" href="#__codelineno-0-240"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1771] modKnowledgeEntryHelpers.LogDialogSuppressed EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-240" name="__codelineno-0-240" href="#__codelineno-0-240"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1771] modKnowledgeEntryHelpers.LogDialogSuppressed EXIT-OK"  ' [ADR-0100]
 <a id="__codelineno-0-241" name="__codelineno-0-241" href="#__codelineno-0-241"></a>End Sub
 </code></pre></div>
 
@@ -5254,7 +5254,7 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
       <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.indexes", "toc.integrate", "search.highlight", "search.suggest", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u30b3\u30d4\u30fc\u3057\u307e\u3057\u305f", "clipboard.copy": "\u30af\u30ea\u30c3\u30d7\u30dc\u30fc\u30c9\u3078\u30b3\u30d4\u30fc", "search.result.more.one": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3082\u30461\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.more.other": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3042\u3068#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.none": "\u4f55\u3082\u898b\u3064\u304b\u308a\u307e\u305b\u3093\u3067\u3057\u305f", "search.result.one": "1\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.other": "#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.placeholder": "\u691c\u7d22\u30ad\u30fc\u30ef\u30fc\u30c9\u3092\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044", "search.result.term.missing": "\u691c\u7d22\u306b\u542b\u307e\u308c\u306a\u3044", "select.version": "\u30d0\u30fc\u30b8\u30e7\u30f3\u5207\u308a\u66ff\u3048"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>

@@ -25,7 +25,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -33,7 +33,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -5043,111 +5043,111 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 </blockquote>
 <hr />
 <h2 id="_2">ソースコード<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Attribute VB_Name = &quot;modScreenRender&quot;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Attribute VB_Name = "modScreenRender"
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>Option Explicit
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>&#39; ================================================================
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>&#39; モジュール: modScreenRender (画面層 ユーティリティ)
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>&#39; 概要: 各画面クラスが共通で使うシート描画 entry + 画面層ログヘルパー
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>&#39; 依存先: IScreenRenderer (v2 8-method), clsScreenSpec, modCommon, clsLogger
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>&#39; 備考: 2026-05-20 v1→v2 migration。逐次 Render* パイプライン
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>&#39;       (RenderTitle / RenderSection / RenderButton 等) を ApplyFromStanza
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>&#39;       1 呼出に集約。ui_layout / coords 切替え部は削除 (architecture §807 #27)。
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>&#39;       色指定 (COLOR_BTN_*) は modUILoader / UI スタンザ側に委譲。
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>&#39; ================================================================
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>' ================================================================
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>' モジュール: modScreenRender (画面層 ユーティリティ)
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>' 概要: 各画面クラスが共通で使うシート描画 entry + 画面層ログヘルパー
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>' 依存先: IScreenRenderer (v2 8-method), clsScreenSpec, modCommon, clsLogger
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>' 備考: 2026-05-20 v1→v2 migration。逐次 Render* パイプライン
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>'       (RenderTitle / RenderSection / RenderButton 等) を ApplyFromStanza
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>'       1 呼出に集約。ui_layout / coords 切替え部は削除 (architecture §807 #27)。
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>'       色指定 (COLOR_BTN_*) は modUILoader / UI スタンザ側に委譲。
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>' ================================================================
 <a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>Private Const MOD_NAME As String = &quot;modScreenRender&quot;
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>Private Const MOD_NAME As String = "modScreenRender"
 <a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>
-<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>&#39; ================================================================
-<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>&#39; 関数名: RenderStandardScreen
-<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>&#39; 概要: 1 画面分の物理 UI をシートに再構築する。
-<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>&#39;       v2: BindSheet → ClearScreen → ApplyFromStanza の 3 手順。
-<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>&#39; 引数: renderer  - IScreenRenderer (v2 8-method)
-<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>&#39;       spec      - clsScreenSpec (ScreenId / SheetName 等を参照)
-<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>&#39;       xlsmName  - UI スタンザ配置先 xlsm 名 (&quot;登録・修正&quot; / &quot;設定&quot; / &quot;管理&quot;)
-<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>&#39;                   未指定 (&quot;&quot;) の場合は ApplyFromStanza にそのまま
-<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>&#39;                   渡し (modUILoader 内部で空ディレクトリ判定)。
-<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>&#39;                   clsScreenSpec に xlsmName が無いため Optional 引数とし、
-<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>&#39;                   呼出元 (画面層 cls) は無指定のまま無改修で通。
-<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>&#39; ================================================================
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>' ================================================================
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>' 関数名: RenderStandardScreen
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>' 概要: 1 画面分の物理 UI をシートに再構築する。
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>'       v2: BindSheet → ClearScreen → ApplyFromStanza の 3 手順。
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>' 引数: renderer  - IScreenRenderer (v2 8-method)
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>'       spec      - clsScreenSpec (ScreenId / SheetName 等を参照)
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>'       xlsmName  - UI スタンザ配置先 xlsm 名 ("登録・修正" / "設定" / "管理")
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>'                   未指定 ("") の場合は ApplyFromStanza にそのまま
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>'                   渡し (modUILoader 内部で空ディレクトリ判定)。
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>'                   clsScreenSpec に xlsmName が無いため Optional 引数とし、
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>'                   呼出元 (画面層 cls) は無指定のまま無改修で通。
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>' ================================================================
 <a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>Public Sub RenderStandardScreen(ByVal renderer As IScreenRenderer, _
 <a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>                                 ByVal spec As clsScreenSpec, _
-<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>                                 Optional ByVal xlsmName As String = &quot;&quot;)
-<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1331] modScreenRender.RenderStandardScreen ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>                                 Optional ByVal xlsmName As String = "")
+<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1331] modScreenRender.RenderStandardScreen ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>    On Error GoTo ErrHandler
-<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>    Dim stepName As String : stepName = &quot;begin&quot;
-<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>    Dim sid As String : sid = &quot;&quot;
+<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>    Dim stepName As String : stepName = "begin"
+<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>    Dim sid As String : sid = ""
 <a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>    On Error Resume Next
 <a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>    sid = spec.ScreenId
 <a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>    Err.Clear
 <a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>    On Error GoTo ErrHandler
 <a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>
-<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_DEBUG Then Debug.Print &quot;[D-1334] modScreenRender.RenderStandardScreen STEP-1 pre LogScreenTrace&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>    Call LogScreenTrace(MOD_NAME, &quot;RenderStandardScreen&quot;, &quot;ENTER sid=&quot; &amp; sid)
+<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_DEBUG Then Debug.Print "[D-1334] modScreenRender.RenderStandardScreen STEP-1 pre LogScreenTrace"  ' [ADR-0100]
+<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>    Call LogScreenTrace(MOD_NAME, "RenderStandardScreen", "ENTER sid=" &amp; sid)
 <a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>
-<a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>    stepName = &quot;BindSheet &quot; &amp; spec.SheetName
+<a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>    stepName = "BindSheet " &amp; spec.SheetName
 <a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>    renderer.BindSheet spec.SheetName
 <a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>
-<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>    &#39; --- 画面遷移時に既存描画を全消し (clsSheetRenderer.ClearScreen が cell + shape 削除) ---
-<a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>    stepName = &quot;ClearScreen&quot;
+<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>    ' --- 画面遷移時に既存描画を全消し (clsSheetRenderer.ClearScreen が cell + shape 削除) ---
+<a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>    stepName = "ClearScreen"
 <a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>    renderer.ClearScreen
 <a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>
-<a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>    &#39; --- v2: 物理 UI 構築は ApplyFromStanza 1 呼出に集約 (modUILoader 経由) ---
-<a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>    &#39; 逐次 Render* (Title / Section / Button / Field / HeaderRow 等) は UI スタンザ
-<a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a>    &#39; .txt 定義側に委譲。色指定や coords 切替えも modUILoader 内で解決する。
-<a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a>    stepName = &quot;ApplyFromStanza &quot; &amp; sid
+<a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>    ' --- v2: 物理 UI 構築は ApplyFromStanza 1 呼出に集約 (modUILoader 経由) ---
+<a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>    ' 逐次 Render* (Title / Section / Button / Field / HeaderRow 等) は UI スタンザ
+<a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a>    ' .txt 定義側に委譲。色指定や coords 切替えも modUILoader 内で解決する。
+<a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a>    stepName = "ApplyFromStanza " &amp; sid
 <a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a>    renderer.ApplyFromStanza xlsmName, sid
 <a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a>
-<a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_DEBUG Then Debug.Print &quot;[D-1335] modScreenRender.RenderStandardScreen STEP-2 pre LogScreenTrace&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>    Call LogScreenTrace(MOD_NAME, &quot;RenderStandardScreen&quot;, &quot;EXIT sid=&quot; &amp; sid)
-<a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1332] modScreenRender.RenderStandardScreen EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_DEBUG Then Debug.Print "[D-1335] modScreenRender.RenderStandardScreen STEP-2 pre LogScreenTrace"  ' [ADR-0100]
+<a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>    Call LogScreenTrace(MOD_NAME, "RenderStandardScreen", "EXIT sid=" &amp; sid)
+<a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1332] modScreenRender.RenderStandardScreen EXIT-OK"  ' [ADR-0100]
 <a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a>    Exit Sub
 <a id="__codelineno-0-60" name="__codelineno-0-60" href="#__codelineno-0-60"></a>
 <a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a>ErrHandler:
-<a id="__codelineno-0-62" name="__codelineno-0-62" href="#__codelineno-0-62"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_DEBUG Then Debug.Print &quot;[D-1336] modScreenRender.RenderStandardScreen STEP-3 pre LogScreenError&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-63" name="__codelineno-0-63" href="#__codelineno-0-63"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print &quot;[D-1333] modScreenRender.RenderStandardScreen EXIT-ERR &quot; &amp; &quot;errNum=&quot; &amp; Err.Number &amp; &quot; desc=&quot; &amp; Err.Description  &#39; [ADR-0100]
-<a id="__codelineno-0-64" name="__codelineno-0-64" href="#__codelineno-0-64"></a>    Call LogScreenError(MOD_NAME, &quot;RenderStandardScreen&quot;, _
-<a id="__codelineno-0-65" name="__codelineno-0-65" href="#__codelineno-0-65"></a>                         &quot;sid=&quot; &amp; sid &amp; &quot; step=&quot; &amp; stepName, Err.Number, Err.Description)
+<a id="__codelineno-0-62" name="__codelineno-0-62" href="#__codelineno-0-62"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_DEBUG Then Debug.Print "[D-1336] modScreenRender.RenderStandardScreen STEP-3 pre LogScreenError"  ' [ADR-0100]
+<a id="__codelineno-0-63" name="__codelineno-0-63" href="#__codelineno-0-63"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print "[D-1333] modScreenRender.RenderStandardScreen EXIT-ERR " &amp; "errNum=" &amp; Err.Number &amp; " desc=" &amp; Err.Description  ' [ADR-0100]
+<a id="__codelineno-0-64" name="__codelineno-0-64" href="#__codelineno-0-64"></a>    Call LogScreenError(MOD_NAME, "RenderStandardScreen", _
+<a id="__codelineno-0-65" name="__codelineno-0-65" href="#__codelineno-0-65"></a>                         "sid=" &amp; sid &amp; " step=" &amp; stepName, Err.Number, Err.Description)
 <a id="__codelineno-0-66" name="__codelineno-0-66" href="#__codelineno-0-66"></a>End Sub
 <a id="__codelineno-0-67" name="__codelineno-0-67" href="#__codelineno-0-67"></a>
-<a id="__codelineno-0-68" name="__codelineno-0-68" href="#__codelineno-0-68"></a>&#39; ================================================================
-<a id="__codelineno-0-69" name="__codelineno-0-69" href="#__codelineno-0-69"></a>&#39; 関数名: LogScreenTrace
-<a id="__codelineno-0-70" name="__codelineno-0-70" href="#__codelineno-0-70"></a>&#39; 概要: 画面層共通の Trace ログ出力ラッパ (v1/v2 非依存)
-<a id="__codelineno-0-71" name="__codelineno-0-71" href="#__codelineno-0-71"></a>&#39; ================================================================
+<a id="__codelineno-0-68" name="__codelineno-0-68" href="#__codelineno-0-68"></a>' ================================================================
+<a id="__codelineno-0-69" name="__codelineno-0-69" href="#__codelineno-0-69"></a>' 関数名: LogScreenTrace
+<a id="__codelineno-0-70" name="__codelineno-0-70" href="#__codelineno-0-70"></a>' 概要: 画面層共通の Trace ログ出力ラッパ (v1/v2 非依存)
+<a id="__codelineno-0-71" name="__codelineno-0-71" href="#__codelineno-0-71"></a>' ================================================================
 <a id="__codelineno-0-72" name="__codelineno-0-72" href="#__codelineno-0-72"></a>Public Sub LogScreenTrace(ByVal className As String, _
 <a id="__codelineno-0-73" name="__codelineno-0-73" href="#__codelineno-0-73"></a>                            ByVal funcName As String, _
 <a id="__codelineno-0-74" name="__codelineno-0-74" href="#__codelineno-0-74"></a>                            ByVal message As String, _
-<a id="__codelineno-0-75" name="__codelineno-0-75" href="#__codelineno-0-75"></a>                            Optional ByVal logId As String = &quot;&quot;)
-<a id="__codelineno-0-76" name="__codelineno-0-76" href="#__codelineno-0-76"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1337] modScreenRender.LogScreenTrace ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-75" name="__codelineno-0-75" href="#__codelineno-0-75"></a>                            Optional ByVal logId As String = "")
+<a id="__codelineno-0-76" name="__codelineno-0-76" href="#__codelineno-0-76"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1337] modScreenRender.LogScreenTrace ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-77" name="__codelineno-0-77" href="#__codelineno-0-77"></a>    On Error Resume Next
 <a id="__codelineno-0-78" name="__codelineno-0-78" href="#__codelineno-0-78"></a>    Dim lg As clsLogger
 <a id="__codelineno-0-79" name="__codelineno-0-79" href="#__codelineno-0-79"></a>    Set lg = New clsLogger
-<a id="__codelineno-0-80" name="__codelineno-0-80" href="#__codelineno-0-80"></a>    lg.Init ThisWorkbook.Worksheets(&quot;LOG&quot;)
+<a id="__codelineno-0-80" name="__codelineno-0-80" href="#__codelineno-0-80"></a>    lg.Init ThisWorkbook.Worksheets("LOG")
 <a id="__codelineno-0-81" name="__codelineno-0-81" href="#__codelineno-0-81"></a>    If Not lg Is Nothing Then
-<a id="__codelineno-0-82" name="__codelineno-0-82" href="#__codelineno-0-82"></a>        lg.LogTrace className, funcName, message, &quot;&quot;, logId
+<a id="__codelineno-0-82" name="__codelineno-0-82" href="#__codelineno-0-82"></a>        lg.LogTrace className, funcName, message, "", logId
 <a id="__codelineno-0-83" name="__codelineno-0-83" href="#__codelineno-0-83"></a>    End If
-<a id="__codelineno-0-84" name="__codelineno-0-84" href="#__codelineno-0-84"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1338] modScreenRender.LogScreenTrace EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-84" name="__codelineno-0-84" href="#__codelineno-0-84"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1338] modScreenRender.LogScreenTrace EXIT-OK"  ' [ADR-0100]
 <a id="__codelineno-0-85" name="__codelineno-0-85" href="#__codelineno-0-85"></a>End Sub
 <a id="__codelineno-0-86" name="__codelineno-0-86" href="#__codelineno-0-86"></a>
-<a id="__codelineno-0-87" name="__codelineno-0-87" href="#__codelineno-0-87"></a>&#39; ================================================================
-<a id="__codelineno-0-88" name="__codelineno-0-88" href="#__codelineno-0-88"></a>&#39; 関数名: LogScreenError
-<a id="__codelineno-0-89" name="__codelineno-0-89" href="#__codelineno-0-89"></a>&#39; 概要: 画面層共通の Error ログ出力ラッパ (v1/v2 非依存)
-<a id="__codelineno-0-90" name="__codelineno-0-90" href="#__codelineno-0-90"></a>&#39; ================================================================
+<a id="__codelineno-0-87" name="__codelineno-0-87" href="#__codelineno-0-87"></a>' ================================================================
+<a id="__codelineno-0-88" name="__codelineno-0-88" href="#__codelineno-0-88"></a>' 関数名: LogScreenError
+<a id="__codelineno-0-89" name="__codelineno-0-89" href="#__codelineno-0-89"></a>' 概要: 画面層共通の Error ログ出力ラッパ (v1/v2 非依存)
+<a id="__codelineno-0-90" name="__codelineno-0-90" href="#__codelineno-0-90"></a>' ================================================================
 <a id="__codelineno-0-91" name="__codelineno-0-91" href="#__codelineno-0-91"></a>Public Sub LogScreenError(ByVal className As String, _
 <a id="__codelineno-0-92" name="__codelineno-0-92" href="#__codelineno-0-92"></a>                            ByVal funcName As String, _
 <a id="__codelineno-0-93" name="__codelineno-0-93" href="#__codelineno-0-93"></a>                            ByVal stepName As String, _
 <a id="__codelineno-0-94" name="__codelineno-0-94" href="#__codelineno-0-94"></a>                            ByVal errNum As Long, _
 <a id="__codelineno-0-95" name="__codelineno-0-95" href="#__codelineno-0-95"></a>                            ByVal errDesc As String, _
-<a id="__codelineno-0-96" name="__codelineno-0-96" href="#__codelineno-0-96"></a>                            Optional ByVal logId As String = &quot;&quot;)
-<a id="__codelineno-0-97" name="__codelineno-0-97" href="#__codelineno-0-97"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1339] modScreenRender.LogScreenError ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-96" name="__codelineno-0-96" href="#__codelineno-0-96"></a>                            Optional ByVal logId As String = "")
+<a id="__codelineno-0-97" name="__codelineno-0-97" href="#__codelineno-0-97"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1339] modScreenRender.LogScreenError ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-98" name="__codelineno-0-98" href="#__codelineno-0-98"></a>    On Error Resume Next
 <a id="__codelineno-0-99" name="__codelineno-0-99" href="#__codelineno-0-99"></a>    Dim lg As clsLogger
 <a id="__codelineno-0-100" name="__codelineno-0-100" href="#__codelineno-0-100"></a>    Set lg = New clsLogger
-<a id="__codelineno-0-101" name="__codelineno-0-101" href="#__codelineno-0-101"></a>    lg.Init ThisWorkbook.Worksheets(&quot;LOG&quot;)
+<a id="__codelineno-0-101" name="__codelineno-0-101" href="#__codelineno-0-101"></a>    lg.Init ThisWorkbook.Worksheets("LOG")
 <a id="__codelineno-0-102" name="__codelineno-0-102" href="#__codelineno-0-102"></a>    If Not lg Is Nothing Then
-<a id="__codelineno-0-103" name="__codelineno-0-103" href="#__codelineno-0-103"></a>        lg.LogError className, funcName, &quot;step=&quot; &amp; stepName &amp; &quot; Err#&quot; &amp; errNum &amp; &quot; &quot; &amp; errDesc, &quot;&quot;, logId
+<a id="__codelineno-0-103" name="__codelineno-0-103" href="#__codelineno-0-103"></a>        lg.LogError className, funcName, "step=" &amp; stepName &amp; " Err#" &amp; errNum &amp; " " &amp; errDesc, "", logId
 <a id="__codelineno-0-104" name="__codelineno-0-104" href="#__codelineno-0-104"></a>    End If
-<a id="__codelineno-0-105" name="__codelineno-0-105" href="#__codelineno-0-105"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1340] modScreenRender.LogScreenError EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-105" name="__codelineno-0-105" href="#__codelineno-0-105"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1340] modScreenRender.LogScreenError EXIT-OK"  ' [ADR-0100]
 <a id="__codelineno-0-106" name="__codelineno-0-106" href="#__codelineno-0-106"></a>End Sub
 </code></pre></div>
 
@@ -5210,7 +5210,7 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
       <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.indexes", "toc.integrate", "search.highlight", "search.suggest", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u30b3\u30d4\u30fc\u3057\u307e\u3057\u305f", "clipboard.copy": "\u30af\u30ea\u30c3\u30d7\u30dc\u30fc\u30c9\u3078\u30b3\u30d4\u30fc", "search.result.more.one": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3082\u30461\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.more.other": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3042\u3068#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.none": "\u4f55\u3082\u898b\u3064\u304b\u308a\u307e\u305b\u3093\u3067\u3057\u305f", "search.result.one": "1\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.other": "#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.placeholder": "\u691c\u7d22\u30ad\u30fc\u30ef\u30fc\u30c9\u3092\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044", "search.result.term.missing": "\u691c\u7d22\u306b\u542b\u307e\u308c\u306a\u3044", "select.version": "\u30d0\u30fc\u30b8\u30e7\u30f3\u5207\u308a\u66ff\u3048"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>

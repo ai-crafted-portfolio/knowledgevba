@@ -25,7 +25,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -33,7 +33,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -5045,55 +5045,55 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <h2 id="_2">ソースコード<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>VERSION 1.0 CLASS
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>BEGIN
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>  MultiUse = -1  &#39;True
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>  MultiUse = -1  'True
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>End
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>Attribute VB_Name = &quot;ClsStanzaValidationResult&quot;
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>Attribute VB_Name = "ClsStanzaValidationResult"
 <a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>Attribute VB_GlobalNameSpace = False
 <a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>Attribute VB_Creatable = False
 <a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>Attribute VB_PredeclaredId = False
 <a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>Attribute VB_Exposed = False
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>&#39; ================================================================
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>&#39; クラス: ClsStanzaValidationResult（Phase 2 ユーティリティ層）
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>&#39; 概要:   schema 検証結果の集約（ERROR/WARN 件数 + ClsStanzaValidationIssue のリスト）
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>&#39; 依存先: ClsStanzaValidationIssue
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>&#39; 関連 schema: v2_stanza_parser_spec.md §4
-<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>&#39; ================================================================
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>' ================================================================
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>' クラス: ClsStanzaValidationResult（Phase 2 ユーティリティ層）
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>' 概要:   schema 検証結果の集約（ERROR/WARN 件数 + ClsStanzaValidationIssue のリスト）
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>' 依存先: ClsStanzaValidationIssue
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>' 関連 schema: v2_stanza_parser_spec.md §4
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>' ================================================================
 <a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>Option Explicit
 <a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>
-<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>Private m_errors As Collection    &#39; ClsStanzaValidationIssue (Severity=ERROR)
-<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>Private m_warnings As Collection  &#39; ClsStanzaValidationIssue (Severity=WARN)
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>Private m_errors As Collection    ' ClsStanzaValidationIssue (Severity=ERROR)
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>Private m_warnings As Collection  ' ClsStanzaValidationIssue (Severity=WARN)
 <a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>
-<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>&#39; ================================================================
-<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>&#39; 関数名: Init
-<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>&#39; 概要:   インスタンス初期化
-<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>&#39; ================================================================
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>' ================================================================
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>' 関数名: Init
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>' 概要:   インスタンス初期化
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>' ================================================================
 <a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>Public Sub Init()
-<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0360] ClsStanzaValidationResult.Init ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0360] ClsStanzaValidationResult.Init ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>    Set m_errors = New Collection
 <a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>    Set m_warnings = New Collection
 <a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>End Sub
 <a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>
-<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>&#39; ================================================================
-<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>&#39; 関数名: AddIssue
-<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>&#39; 概要:   issue を追加（Severity に応じて Errors/Warnings に振り分け）
-<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>&#39; 引数:   ByVal issue As ClsStanzaValidationIssue
-<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>&#39; ================================================================
+<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>' ================================================================
+<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>' 関数名: AddIssue
+<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>' 概要:   issue を追加（Severity に応じて Errors/Warnings に振り分け）
+<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>' 引数:   ByVal issue As ClsStanzaValidationIssue
+<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>' ================================================================
 <a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>Public Sub AddIssue(ByVal issue As ClsStanzaValidationIssue)
-<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0361] ClsStanzaValidationResult.AddIssue ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0361] ClsStanzaValidationResult.AddIssue ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>    If m_errors Is Nothing Then Init
-<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>    If issue.Severity = &quot;ERROR&quot; Then
+<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>    If issue.Severity = "ERROR" Then
 <a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>        m_errors.Add issue
-<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>    ElseIf issue.Severity = &quot;WARN&quot; Then
+<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>    ElseIf issue.Severity = "WARN" Then
 <a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>        m_warnings.Add issue
 <a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>    End If
-<a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0362] ClsStanzaValidationResult.AddIssue EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0362] ClsStanzaValidationResult.AddIssue EXIT-OK"  ' [ADR-0100]
 <a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>End Sub
 <a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>
-<a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>&#39; ----------------------------------------------------------------
-<a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>&#39; Property: IsValid（ERROR 0 件なら TRUE）
-<a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>&#39; ----------------------------------------------------------------
+<a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>' ----------------------------------------------------------------
+<a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>' Property: IsValid（ERROR 0 件なら TRUE）
+<a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>' ----------------------------------------------------------------
 <a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>Public Property Get IsValid() As Boolean
-<a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0363] ClsStanzaValidationResult.IsValid ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0363] ClsStanzaValidationResult.IsValid ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a>    If m_errors Is Nothing Then
 <a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a>        IsValid = True
 <a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a>    Else
@@ -5101,11 +5101,11 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a>    End If
 <a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>End Property
 <a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a>
-<a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a>&#39; ----------------------------------------------------------------
-<a id="__codelineno-0-60" name="__codelineno-0-60" href="#__codelineno-0-60"></a>&#39; Property: ErrorCount
-<a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a>&#39; ----------------------------------------------------------------
+<a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a>' ----------------------------------------------------------------
+<a id="__codelineno-0-60" name="__codelineno-0-60" href="#__codelineno-0-60"></a>' Property: ErrorCount
+<a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a>' ----------------------------------------------------------------
 <a id="__codelineno-0-62" name="__codelineno-0-62" href="#__codelineno-0-62"></a>Public Property Get ErrorCount() As Long
-<a id="__codelineno-0-63" name="__codelineno-0-63" href="#__codelineno-0-63"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0364] ClsStanzaValidationResult.ErrorCount ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-63" name="__codelineno-0-63" href="#__codelineno-0-63"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0364] ClsStanzaValidationResult.ErrorCount ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-64" name="__codelineno-0-64" href="#__codelineno-0-64"></a>    If m_errors Is Nothing Then
 <a id="__codelineno-0-65" name="__codelineno-0-65" href="#__codelineno-0-65"></a>        ErrorCount = 0
 <a id="__codelineno-0-66" name="__codelineno-0-66" href="#__codelineno-0-66"></a>    Else
@@ -5113,11 +5113,11 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-68" name="__codelineno-0-68" href="#__codelineno-0-68"></a>    End If
 <a id="__codelineno-0-69" name="__codelineno-0-69" href="#__codelineno-0-69"></a>End Property
 <a id="__codelineno-0-70" name="__codelineno-0-70" href="#__codelineno-0-70"></a>
-<a id="__codelineno-0-71" name="__codelineno-0-71" href="#__codelineno-0-71"></a>&#39; ----------------------------------------------------------------
-<a id="__codelineno-0-72" name="__codelineno-0-72" href="#__codelineno-0-72"></a>&#39; Property: WarningCount
-<a id="__codelineno-0-73" name="__codelineno-0-73" href="#__codelineno-0-73"></a>&#39; ----------------------------------------------------------------
+<a id="__codelineno-0-71" name="__codelineno-0-71" href="#__codelineno-0-71"></a>' ----------------------------------------------------------------
+<a id="__codelineno-0-72" name="__codelineno-0-72" href="#__codelineno-0-72"></a>' Property: WarningCount
+<a id="__codelineno-0-73" name="__codelineno-0-73" href="#__codelineno-0-73"></a>' ----------------------------------------------------------------
 <a id="__codelineno-0-74" name="__codelineno-0-74" href="#__codelineno-0-74"></a>Public Property Get WarningCount() As Long
-<a id="__codelineno-0-75" name="__codelineno-0-75" href="#__codelineno-0-75"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0365] ClsStanzaValidationResult.WarningCount ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-75" name="__codelineno-0-75" href="#__codelineno-0-75"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0365] ClsStanzaValidationResult.WarningCount ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-76" name="__codelineno-0-76" href="#__codelineno-0-76"></a>    If m_warnings Is Nothing Then
 <a id="__codelineno-0-77" name="__codelineno-0-77" href="#__codelineno-0-77"></a>        WarningCount = 0
 <a id="__codelineno-0-78" name="__codelineno-0-78" href="#__codelineno-0-78"></a>    Else
@@ -5125,39 +5125,39 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-80" name="__codelineno-0-80" href="#__codelineno-0-80"></a>    End If
 <a id="__codelineno-0-81" name="__codelineno-0-81" href="#__codelineno-0-81"></a>End Property
 <a id="__codelineno-0-82" name="__codelineno-0-82" href="#__codelineno-0-82"></a>
-<a id="__codelineno-0-83" name="__codelineno-0-83" href="#__codelineno-0-83"></a>&#39; ----------------------------------------------------------------
-<a id="__codelineno-0-84" name="__codelineno-0-84" href="#__codelineno-0-84"></a>&#39; Property: Errors（参照）
-<a id="__codelineno-0-85" name="__codelineno-0-85" href="#__codelineno-0-85"></a>&#39; ----------------------------------------------------------------
+<a id="__codelineno-0-83" name="__codelineno-0-83" href="#__codelineno-0-83"></a>' ----------------------------------------------------------------
+<a id="__codelineno-0-84" name="__codelineno-0-84" href="#__codelineno-0-84"></a>' Property: Errors（参照）
+<a id="__codelineno-0-85" name="__codelineno-0-85" href="#__codelineno-0-85"></a>' ----------------------------------------------------------------
 <a id="__codelineno-0-86" name="__codelineno-0-86" href="#__codelineno-0-86"></a>Public Property Get Errors() As Collection
-<a id="__codelineno-0-87" name="__codelineno-0-87" href="#__codelineno-0-87"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0366] ClsStanzaValidationResult.Errors ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-87" name="__codelineno-0-87" href="#__codelineno-0-87"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0366] ClsStanzaValidationResult.Errors ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-88" name="__codelineno-0-88" href="#__codelineno-0-88"></a>    If m_errors Is Nothing Then Init
 <a id="__codelineno-0-89" name="__codelineno-0-89" href="#__codelineno-0-89"></a>    Set Errors = m_errors
 <a id="__codelineno-0-90" name="__codelineno-0-90" href="#__codelineno-0-90"></a>End Property
 <a id="__codelineno-0-91" name="__codelineno-0-91" href="#__codelineno-0-91"></a>
-<a id="__codelineno-0-92" name="__codelineno-0-92" href="#__codelineno-0-92"></a>&#39; ----------------------------------------------------------------
-<a id="__codelineno-0-93" name="__codelineno-0-93" href="#__codelineno-0-93"></a>&#39; Property: Warnings（参照）
-<a id="__codelineno-0-94" name="__codelineno-0-94" href="#__codelineno-0-94"></a>&#39; ----------------------------------------------------------------
+<a id="__codelineno-0-92" name="__codelineno-0-92" href="#__codelineno-0-92"></a>' ----------------------------------------------------------------
+<a id="__codelineno-0-93" name="__codelineno-0-93" href="#__codelineno-0-93"></a>' Property: Warnings（参照）
+<a id="__codelineno-0-94" name="__codelineno-0-94" href="#__codelineno-0-94"></a>' ----------------------------------------------------------------
 <a id="__codelineno-0-95" name="__codelineno-0-95" href="#__codelineno-0-95"></a>Public Property Get Warnings() As Collection
-<a id="__codelineno-0-96" name="__codelineno-0-96" href="#__codelineno-0-96"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0367] ClsStanzaValidationResult.Warnings ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-96" name="__codelineno-0-96" href="#__codelineno-0-96"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0367] ClsStanzaValidationResult.Warnings ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-97" name="__codelineno-0-97" href="#__codelineno-0-97"></a>    If m_warnings Is Nothing Then Init
 <a id="__codelineno-0-98" name="__codelineno-0-98" href="#__codelineno-0-98"></a>    Set Warnings = m_warnings
 <a id="__codelineno-0-99" name="__codelineno-0-99" href="#__codelineno-0-99"></a>End Property
 <a id="__codelineno-0-100" name="__codelineno-0-100" href="#__codelineno-0-100"></a>
-<a id="__codelineno-0-101" name="__codelineno-0-101" href="#__codelineno-0-101"></a>&#39; ================================================================
-<a id="__codelineno-0-102" name="__codelineno-0-102" href="#__codelineno-0-102"></a>&#39; 関数名: FormatSummary
-<a id="__codelineno-0-103" name="__codelineno-0-103" href="#__codelineno-0-103"></a>&#39; 概要:   人間可読サマリ（&quot;PASS (0 errors, 2 warnings)&quot; 等）
-<a id="__codelineno-0-104" name="__codelineno-0-104" href="#__codelineno-0-104"></a>&#39; 戻り値: String
-<a id="__codelineno-0-105" name="__codelineno-0-105" href="#__codelineno-0-105"></a>&#39; ================================================================
+<a id="__codelineno-0-101" name="__codelineno-0-101" href="#__codelineno-0-101"></a>' ================================================================
+<a id="__codelineno-0-102" name="__codelineno-0-102" href="#__codelineno-0-102"></a>' 関数名: FormatSummary
+<a id="__codelineno-0-103" name="__codelineno-0-103" href="#__codelineno-0-103"></a>' 概要:   人間可読サマリ（"PASS (0 errors, 2 warnings)" 等）
+<a id="__codelineno-0-104" name="__codelineno-0-104" href="#__codelineno-0-104"></a>' 戻り値: String
+<a id="__codelineno-0-105" name="__codelineno-0-105" href="#__codelineno-0-105"></a>' ================================================================
 <a id="__codelineno-0-106" name="__codelineno-0-106" href="#__codelineno-0-106"></a>Public Function FormatSummary() As String
-<a id="__codelineno-0-107" name="__codelineno-0-107" href="#__codelineno-0-107"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0368] ClsStanzaValidationResult.FormatSummary ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-107" name="__codelineno-0-107" href="#__codelineno-0-107"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0368] ClsStanzaValidationResult.FormatSummary ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-108" name="__codelineno-0-108" href="#__codelineno-0-108"></a>    Dim status As String
 <a id="__codelineno-0-109" name="__codelineno-0-109" href="#__codelineno-0-109"></a>    If IsValid Then
-<a id="__codelineno-0-110" name="__codelineno-0-110" href="#__codelineno-0-110"></a>        status = &quot;PASS&quot;
+<a id="__codelineno-0-110" name="__codelineno-0-110" href="#__codelineno-0-110"></a>        status = "PASS"
 <a id="__codelineno-0-111" name="__codelineno-0-111" href="#__codelineno-0-111"></a>    Else
-<a id="__codelineno-0-112" name="__codelineno-0-112" href="#__codelineno-0-112"></a>        status = &quot;FAIL&quot;
+<a id="__codelineno-0-112" name="__codelineno-0-112" href="#__codelineno-0-112"></a>        status = "FAIL"
 <a id="__codelineno-0-113" name="__codelineno-0-113" href="#__codelineno-0-113"></a>    End If
-<a id="__codelineno-0-114" name="__codelineno-0-114" href="#__codelineno-0-114"></a>    FormatSummary = status &amp; &quot; (&quot; &amp; ErrorCount &amp; &quot; errors, &quot; &amp; WarningCount &amp; &quot; warnings)&quot;
-<a id="__codelineno-0-115" name="__codelineno-0-115" href="#__codelineno-0-115"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0369] ClsStanzaValidationResult.FormatSummary EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-114" name="__codelineno-0-114" href="#__codelineno-0-114"></a>    FormatSummary = status &amp; " (" &amp; ErrorCount &amp; " errors, " &amp; WarningCount &amp; " warnings)"
+<a id="__codelineno-0-115" name="__codelineno-0-115" href="#__codelineno-0-115"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0369] ClsStanzaValidationResult.FormatSummary EXIT-OK"  ' [ADR-0100]
 <a id="__codelineno-0-116" name="__codelineno-0-116" href="#__codelineno-0-116"></a>End Function
 </code></pre></div>
 
@@ -5220,7 +5220,7 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
       <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.indexes", "toc.integrate", "search.highlight", "search.suggest", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u30b3\u30d4\u30fc\u3057\u307e\u3057\u305f", "clipboard.copy": "\u30af\u30ea\u30c3\u30d7\u30dc\u30fc\u30c9\u3078\u30b3\u30d4\u30fc", "search.result.more.one": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3082\u30461\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.more.other": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3042\u3068#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.none": "\u4f55\u3082\u898b\u3064\u304b\u308a\u307e\u305b\u3093\u3067\u3057\u305f", "search.result.one": "1\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.other": "#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.placeholder": "\u691c\u7d22\u30ad\u30fc\u30ef\u30fc\u30c9\u3092\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044", "search.result.term.missing": "\u691c\u7d22\u306b\u542b\u307e\u308c\u306a\u3044", "select.version": "\u30d0\u30fc\u30b8\u30e7\u30f3\u5207\u308a\u66ff\u3048"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>

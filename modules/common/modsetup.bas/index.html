@@ -25,7 +25,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -33,7 +33,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -5043,113 +5043,113 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 </blockquote>
 <hr />
 <h2 id="_2">ソースコード<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Attribute VB_Name = &quot;modSetup&quot;
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>&#39; ============================================================
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>&#39; modSetup (Installer layer, v2.1 / 3-xlsm + v2.3 Phase A wrappers)
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>&#39; Role:
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>&#39;   Common installer entry for the 3 xlsm books (??? / ???? / ?o?^?C??).
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>&#39;   Each xlsm calls its dedicated Public Sub Setup_xxx which:
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>&#39;     - ensures required sheets (LOG / M-*) exist (creates if missing)
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>&#39;     - seeds SystemSettings sheets (???.xlsm only)
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>&#39;     - emits success/failure logId
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>&#39;       (SAVE-EXIT-OK-II-009 / BACKTOMAIN-ERR-EE-033)
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>&#39; Design SSOT:
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>&#39;   - vba_module_placement_v2.md  1.1 (modSetup = all xlsm, 3 xlsm setup)
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>&#39;   - installer_3xlsm_v2_main.md  1.4 / 1.5 (Step 5-7 per-xlsm placement)
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>&#39;   - architecture_v2_3xlsm_stanza.md  7
-<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>&#39; Logging:
-<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>&#39;   - LogID convention = logging_naming_cheatsheet_v1.md  3 (II / EE suffix)
-<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>&#39;   - max SEQ + 1 (audit script verified)
-<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>&#39; ASCII-only inside VBA string literals (CP932 mojibake avoidance).
-<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>&#39; v2.3 (Phase A): ASCII Setup_admin / Setup_register / Setup_search added
-<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>&#39;                 at the bottom of this module; they delegate to
-<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>&#39;                 clsSetupOrchestrator (re-use, no logic duplication).
-<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>&#39; ============================================================
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Attribute VB_Name = "modSetup"
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>' ============================================================
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>' modSetup (Installer layer, v2.1 / 3-xlsm + v2.3 Phase A wrappers)
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>' Role:
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>'   Common installer entry for the 3 xlsm books (??? / ???? / ?o?^?C??).
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>'   Each xlsm calls its dedicated Public Sub Setup_xxx which:
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>'     - ensures required sheets (LOG / M-*) exist (creates if missing)
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>'     - seeds SystemSettings sheets (???.xlsm only)
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>'     - emits success/failure logId
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>'       (SAVE-EXIT-OK-II-009 / BACKTOMAIN-ERR-EE-033)
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>' Design SSOT:
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>'   - vba_module_placement_v2.md  1.1 (modSetup = all xlsm, 3 xlsm setup)
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>'   - installer_3xlsm_v2_main.md  1.4 / 1.5 (Step 5-7 per-xlsm placement)
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>'   - architecture_v2_3xlsm_stanza.md  7
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>' Logging:
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>'   - LogID convention = logging_naming_cheatsheet_v1.md  3 (II / EE suffix)
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>'   - max SEQ + 1 (audit script verified)
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>' ASCII-only inside VBA string literals (CP932 mojibake avoidance).
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>' v2.3 (Phase A): ASCII Setup_admin / Setup_register / Setup_search added
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>'                 at the bottom of this module; they delegate to
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>'                 clsSetupOrchestrator (re-use, no logic duplication).
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>' ============================================================
 <a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>Option Explicit
 <a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>
-<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>Private Const MOD_NAME As String = &quot;modSetup&quot;
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>Private Const MOD_NAME As String = "modSetup"
 <a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>
-<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>&#39; v2.3 Phase A: SETUP_ROLE_* constants moved here (declarations section)
-<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>&#39; to fix VBA &quot;variable not defined&quot; compile error caused by them being
-<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>&#39; placed after Public Sub bodies (lines moved from below original position).
-<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>Private Const SETUP_ROLE_ADMIN    As String = &quot;admin&quot;
-<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>Private Const SETUP_ROLE_REGISTER As String = &quot;register&quot;
-<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>Private Const SETUP_ROLE_SEARCH   As String = &quot;search&quot;
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>' v2.3 Phase A: SETUP_ROLE_* constants moved here (declarations section)
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>' to fix VBA "variable not defined" compile error caused by them being
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>' placed after Public Sub bodies (lines moved from below original position).
+<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>Private Const SETUP_ROLE_ADMIN    As String = "admin"
+<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>Private Const SETUP_ROLE_REGISTER As String = "register"
+<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>Private Const SETUP_ROLE_SEARCH   As String = "search"
 <a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>
-<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>&#39; v2.3 Phase J (DRIFT-iter2 / ADR-0068, 2026-05-31):
-<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>&#39;   Setup_kanri_legacy / Setup_kensaku_legacy / Setup_touroku_legacy
-<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>&#39;   removed (legacy v2.1 install entries). The corresponding SHEETS_*
-<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>&#39;   constants referenced retired screens (M-13 / M-07 / M-09), so
-<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>&#39;   they DRIFTed from clsSetupOrchestrator (the v2.3 SSOT). Deleted
-<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>&#39;   along with the helpers (SetupCore / EnsureSheets / SheetExists /
-<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>&#39;   SeedSystemSettings / SeedStorage / SeedLabel / SeedValueIfEmpty /
-<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>&#39;   SafeGetConfig) that only the legacy entries used.
-<a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>&#39;   v2.3 install bat -&gt; Setup_admin / Setup_register / Setup_search
-<a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>&#39;   -&gt; clsSetupOrchestrator.RunFor* is the only live install path.
+<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>' v2.3 Phase J (DRIFT-iter2 / ADR-0068, 2026-05-31):
+<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>'   Setup_kanri_legacy / Setup_kensaku_legacy / Setup_touroku_legacy
+<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>'   removed (legacy v2.1 install entries). The corresponding SHEETS_*
+<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>'   constants referenced retired screens (M-13 / M-07 / M-09), so
+<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>'   they DRIFTed from clsSetupOrchestrator (the v2.3 SSOT). Deleted
+<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>'   along with the helpers (SetupCore / EnsureSheets / SheetExists /
+<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>'   SeedSystemSettings / SeedStorage / SeedLabel / SeedValueIfEmpty /
+<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>'   SafeGetConfig) that only the legacy entries used.
+<a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>'   v2.3 install bat -&gt; Setup_admin / Setup_register / Setup_search
+<a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>'   -&gt; clsSetupOrchestrator.RunFor* is the only live install path.
 <a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>
-<a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>&#39; ============================================================
-<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>&#39; v2.3 Phase A: ASCII Setup_* entries
-<a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>&#39; ----------------------------------------------------------------
-<a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>&#39; Adds Setup_admin / Setup_register / Setup_search Public Subs so
-<a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>&#39; the v2.3 install bat (migration_plan_v1_to_v2_rev2 sect.16) can
-<a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>&#39; drive setup via Application.Run &quot;Setup_admin&quot; without depending
-<a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>&#39; on the CP932-encoded names Setup_??? / etc. These wrappers
-<a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a>&#39; delegate to clsSetupOrchestrator (re-use, no logic duplication)
-<a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a>&#39; v2.3 Phase F: MsgBox removed; failures are logged only.
-<a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a>&#39; v2.3 Phase J (DRIFT-iter2, 2026-05-31): legacy v2.1 Setup_*_legacy
-<a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a>&#39;   and SetupCore path were removed (see top header). Only the v2.3
-<a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a>&#39;   ASCII Setup_* path below is live.
-<a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>&#39; ============================================================
+<a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>' ============================================================
+<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>' v2.3 Phase A: ASCII Setup_* entries
+<a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>' ----------------------------------------------------------------
+<a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>' Adds Setup_admin / Setup_register / Setup_search Public Subs so
+<a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>' the v2.3 install bat (migration_plan_v1_to_v2_rev2 sect.16) can
+<a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>' drive setup via Application.Run "Setup_admin" without depending
+<a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>' on the CP932-encoded names Setup_??? / etc. These wrappers
+<a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a>' delegate to clsSetupOrchestrator (re-use, no logic duplication)
+<a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a>' v2.3 Phase F: MsgBox removed; failures are logged only.
+<a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a>' v2.3 Phase J (DRIFT-iter2, 2026-05-31): legacy v2.1 Setup_*_legacy
+<a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a>'   and SetupCore path were removed (see top header). Only the v2.3
+<a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a>'   ASCII Setup_* path below is live.
+<a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>' ============================================================
 <a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a>
-<a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a>&#39; (SETUP_ROLE_* moved to declarations section near top of module)
+<a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a>' (SETUP_ROLE_* moved to declarations section near top of module)
 <a id="__codelineno-0-60" name="__codelineno-0-60" href="#__codelineno-0-60"></a>
-<a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a>&#39; ============================================================
-<a id="__codelineno-0-62" name="__codelineno-0-62" href="#__codelineno-0-62"></a>&#39; Public Sub: Setup_admin
-<a id="__codelineno-0-63" name="__codelineno-0-63" href="#__codelineno-0-63"></a>&#39; Role: v2.3 install entry for ???.xlsm. Drives the full setup
-<a id="__codelineno-0-64" name="__codelineno-0-64" href="#__codelineno-0-64"></a>&#39;       sequence via clsSetupOrchestrator.RunForAdmin:
-<a id="__codelineno-0-65" name="__codelineno-0-65" href="#__codelineno-0-65"></a>&#39;         - log sheet bootstrap
-<a id="__codelineno-0-66" name="__codelineno-0-66" href="#__codelineno-0-66"></a>&#39;         - config.txt reload
-<a id="__codelineno-0-67" name="__codelineno-0-67" href="#__codelineno-0-67"></a>&#39;         - sheet ensure (M-02/M-03/M-04/M-10/M-11/M-12/M-14)
-<a id="__codelineno-0-68" name="__codelineno-0-68" href="#__codelineno-0-68"></a>&#39;         - tab color, UI stanza apply, protection
-<a id="__codelineno-0-69" name="__codelineno-0-69" href="#__codelineno-0-69"></a>&#39;         - active sheet = M-02
-<a id="__codelineno-0-70" name="__codelineno-0-70" href="#__codelineno-0-70"></a>&#39;       NOTE: Sheet list (incl. removal of deprecated M-13 / M-07 /
-<a id="__codelineno-0-71" name="__codelineno-0-71" href="#__codelineno-0-71"></a>&#39;             M-09) is governed by clsSetupOrchestrator (the v2.3 SSOT
-<a id="__codelineno-0-72" name="__codelineno-0-72" href="#__codelineno-0-72"></a>&#39;             after legacy SHEETS_* constants were removed in Phase J).
-<a id="__codelineno-0-73" name="__codelineno-0-73" href="#__codelineno-0-73"></a>&#39;             This wrapper is the stable bat entry regardless.
-<a id="__codelineno-0-74" name="__codelineno-0-74" href="#__codelineno-0-74"></a>&#39; Errors: caught -&gt; clsLogger.LogError only (v2.3 Phase F: no MsgBox).
-<a id="__codelineno-0-75" name="__codelineno-0-75" href="#__codelineno-0-75"></a>&#39; ============================================================
+<a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a>' ============================================================
+<a id="__codelineno-0-62" name="__codelineno-0-62" href="#__codelineno-0-62"></a>' Public Sub: Setup_admin
+<a id="__codelineno-0-63" name="__codelineno-0-63" href="#__codelineno-0-63"></a>' Role: v2.3 install entry for ???.xlsm. Drives the full setup
+<a id="__codelineno-0-64" name="__codelineno-0-64" href="#__codelineno-0-64"></a>'       sequence via clsSetupOrchestrator.RunForAdmin:
+<a id="__codelineno-0-65" name="__codelineno-0-65" href="#__codelineno-0-65"></a>'         - log sheet bootstrap
+<a id="__codelineno-0-66" name="__codelineno-0-66" href="#__codelineno-0-66"></a>'         - config.txt reload
+<a id="__codelineno-0-67" name="__codelineno-0-67" href="#__codelineno-0-67"></a>'         - sheet ensure (M-02/M-03/M-04/M-10/M-11/M-12/M-14)
+<a id="__codelineno-0-68" name="__codelineno-0-68" href="#__codelineno-0-68"></a>'         - tab color, UI stanza apply, protection
+<a id="__codelineno-0-69" name="__codelineno-0-69" href="#__codelineno-0-69"></a>'         - active sheet = M-02
+<a id="__codelineno-0-70" name="__codelineno-0-70" href="#__codelineno-0-70"></a>'       NOTE: Sheet list (incl. removal of deprecated M-13 / M-07 /
+<a id="__codelineno-0-71" name="__codelineno-0-71" href="#__codelineno-0-71"></a>'             M-09) is governed by clsSetupOrchestrator (the v2.3 SSOT
+<a id="__codelineno-0-72" name="__codelineno-0-72" href="#__codelineno-0-72"></a>'             after legacy SHEETS_* constants were removed in Phase J).
+<a id="__codelineno-0-73" name="__codelineno-0-73" href="#__codelineno-0-73"></a>'             This wrapper is the stable bat entry regardless.
+<a id="__codelineno-0-74" name="__codelineno-0-74" href="#__codelineno-0-74"></a>' Errors: caught -&gt; clsLogger.LogError only (v2.3 Phase F: no MsgBox).
+<a id="__codelineno-0-75" name="__codelineno-0-75" href="#__codelineno-0-75"></a>' ============================================================
 <a id="__codelineno-0-76" name="__codelineno-0-76" href="#__codelineno-0-76"></a>Public Sub Setup_admin()
-<a id="__codelineno-0-77" name="__codelineno-0-77" href="#__codelineno-0-77"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1341] modSetup.Setup_admin ENTER&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-78" name="__codelineno-0-78" href="#__codelineno-0-78"></a>    Debug.Print &quot;[SETUP-ENTER] Setup_admin ts=&quot; &amp; Format$(Now, &quot;hh:nn:ss&quot;)  &#39; [SETUP-DEBUG-PRINT-INJECTED]
+<a id="__codelineno-0-77" name="__codelineno-0-77" href="#__codelineno-0-77"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1341] modSetup.Setup_admin ENTER"  ' [ADR-0100]
+<a id="__codelineno-0-78" name="__codelineno-0-78" href="#__codelineno-0-78"></a>    Debug.Print "[SETUP-ENTER] Setup_admin ts=" &amp; Format$(Now, "hh:nn:ss")  ' [SETUP-DEBUG-PRINT-INJECTED]
 <a id="__codelineno-0-79" name="__codelineno-0-79" href="#__codelineno-0-79"></a>    InvokeSetupForRole SETUP_ROLE_ADMIN
-<a id="__codelineno-0-80" name="__codelineno-0-80" href="#__codelineno-0-80"></a>    &#39; 2026-06-07: Seed M-03 C4 with next FmtId if empty (post-Setup hook).
-<a id="__codelineno-0-81" name="__codelineno-0-81" href="#__codelineno-0-81"></a>    Debug.Print &quot;[SETUP-SEED] before SeedM03FormatIdIfEmpty&quot;  &#39; [SETUP-DEBUG-PRINT-INJECTED]
+<a id="__codelineno-0-80" name="__codelineno-0-80" href="#__codelineno-0-80"></a>    ' 2026-06-07: Seed M-03 C4 with next FmtId if empty (post-Setup hook).
+<a id="__codelineno-0-81" name="__codelineno-0-81" href="#__codelineno-0-81"></a>    Debug.Print "[SETUP-SEED] before SeedM03FormatIdIfEmpty"  ' [SETUP-DEBUG-PRINT-INJECTED]
 <a id="__codelineno-0-82" name="__codelineno-0-82" href="#__codelineno-0-82"></a>    On Error Resume Next
-<a id="__codelineno-0-83" name="__codelineno-0-83" href="#__codelineno-0-83"></a>    Application.Run ThisWorkbook.Name &amp; &quot;!modEntryFormat.SeedM03FormatIdIfEmpty&quot;
-<a id="__codelineno-0-84" name="__codelineno-0-84" href="#__codelineno-0-84"></a>    Debug.Print &quot;[SETUP-SEED] after SeedM03FormatIdIfEmpty err=&quot; &amp; Err.Number
+<a id="__codelineno-0-83" name="__codelineno-0-83" href="#__codelineno-0-83"></a>    Application.Run ThisWorkbook.Name &amp; "!modEntryFormat.SeedM03FormatIdIfEmpty"
+<a id="__codelineno-0-84" name="__codelineno-0-84" href="#__codelineno-0-84"></a>    Debug.Print "[SETUP-SEED] after SeedM03FormatIdIfEmpty err=" &amp; Err.Number
 <a id="__codelineno-0-85" name="__codelineno-0-85" href="#__codelineno-0-85"></a>    On Error GoTo 0
 <a id="__codelineno-0-86" name="__codelineno-0-86" href="#__codelineno-0-86"></a>
-<a id="__codelineno-0-87" name="__codelineno-0-87" href="#__codelineno-0-87"></a>    &#39; [Fix-6 follow-up] M-10 storage dirs are now plain cell inputs; the
-<a id="__codelineno-0-88" name="__codelineno-0-88" href="#__codelineno-0-88"></a>    &#39; legacy radios are gone. Clean up leftover radio shapes (idempotent).
+<a id="__codelineno-0-87" name="__codelineno-0-87" href="#__codelineno-0-87"></a>    ' [Fix-6 follow-up] M-10 storage dirs are now plain cell inputs; the
+<a id="__codelineno-0-88" name="__codelineno-0-88" href="#__codelineno-0-88"></a>    ' legacy radios are gone. Clean up leftover radio shapes (idempotent).
 <a id="__codelineno-0-89" name="__codelineno-0-89" href="#__codelineno-0-89"></a>    On Error Resume Next
 <a id="__codelineno-0-90" name="__codelineno-0-90" href="#__codelineno-0-90"></a>    RemoveLegacyM10Radios
 <a id="__codelineno-0-91" name="__codelineno-0-91" href="#__codelineno-0-91"></a>    On Error GoTo 0
 <a id="__codelineno-0-92" name="__codelineno-0-92" href="#__codelineno-0-92"></a>
-<a id="__codelineno-0-93" name="__codelineno-0-93" href="#__codelineno-0-93"></a>    &#39; [USER-REQ 2026-06-09] Apply TRUE/FALSE dropdown to M-03 searchTarget column (I19:I60)
+<a id="__codelineno-0-93" name="__codelineno-0-93" href="#__codelineno-0-93"></a>    ' [USER-REQ 2026-06-09] Apply TRUE/FALSE dropdown to M-03 searchTarget column (I19:I60)
 <a id="__codelineno-0-94" name="__codelineno-0-94" href="#__codelineno-0-94"></a>    On Error Resume Next
 <a id="__codelineno-0-95" name="__codelineno-0-95" href="#__codelineno-0-95"></a>    SetupM03SearchTargetValidation
 <a id="__codelineno-0-96" name="__codelineno-0-96" href="#__codelineno-0-96"></a>    On Error GoTo 0
 <a id="__codelineno-0-97" name="__codelineno-0-97" href="#__codelineno-0-97"></a>
-<a id="__codelineno-0-98" name="__codelineno-0-98" href="#__codelineno-0-98"></a>    Debug.Print &quot;[SETUP-EXIT] Setup_admin ts=&quot; &amp; Format$(Now, &quot;hh:nn:ss&quot;)  &#39; [SETUP-DEBUG-PRINT-INJECTED]
+<a id="__codelineno-0-98" name="__codelineno-0-98" href="#__codelineno-0-98"></a>    Debug.Print "[SETUP-EXIT] Setup_admin ts=" &amp; Format$(Now, "hh:nn:ss")  ' [SETUP-DEBUG-PRINT-INJECTED]
 <a id="__codelineno-0-99" name="__codelineno-0-99" href="#__codelineno-0-99"></a>End Sub
 <a id="__codelineno-0-100" name="__codelineno-0-100" href="#__codelineno-0-100"></a>
-<a id="__codelineno-0-101" name="__codelineno-0-101" href="#__codelineno-0-101"></a>&#39; ============================================================
-<a id="__codelineno-0-102" name="__codelineno-0-102" href="#__codelineno-0-102"></a>&#39; Public Sub: RemoveLegacyM10Radios
-<a id="__codelineno-0-103" name="__codelineno-0-103" href="#__codelineno-0-103"></a>&#39; Role: Remove leftover legacy M10_RadioDir_* OptionButton shapes from
-<a id="__codelineno-0-104" name="__codelineno-0-104" href="#__codelineno-0-104"></a>&#39;       older installs. Storage dirs are now plain cell inputs (Fix-6).
-<a id="__codelineno-0-105" name="__codelineno-0-105" href="#__codelineno-0-105"></a>&#39; ============================================================
+<a id="__codelineno-0-101" name="__codelineno-0-101" href="#__codelineno-0-101"></a>' ============================================================
+<a id="__codelineno-0-102" name="__codelineno-0-102" href="#__codelineno-0-102"></a>' Public Sub: RemoveLegacyM10Radios
+<a id="__codelineno-0-103" name="__codelineno-0-103" href="#__codelineno-0-103"></a>' Role: Remove leftover legacy M10_RadioDir_* OptionButton shapes from
+<a id="__codelineno-0-104" name="__codelineno-0-104" href="#__codelineno-0-104"></a>'       older installs. Storage dirs are now plain cell inputs (Fix-6).
+<a id="__codelineno-0-105" name="__codelineno-0-105" href="#__codelineno-0-105"></a>' ============================================================
 <a id="__codelineno-0-106" name="__codelineno-0-106" href="#__codelineno-0-106"></a>Public Sub RemoveLegacyM10Radios()
-<a id="__codelineno-0-107" name="__codelineno-0-107" href="#__codelineno-0-107"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-9001] modSetup.RemoveLegacyM10Radios ENTER&quot;
+<a id="__codelineno-0-107" name="__codelineno-0-107" href="#__codelineno-0-107"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-9001] modSetup.RemoveLegacyM10Radios ENTER"
 <a id="__codelineno-0-108" name="__codelineno-0-108" href="#__codelineno-0-108"></a>    On Error GoTo ErrHandler
 <a id="__codelineno-0-109" name="__codelineno-0-109" href="#__codelineno-0-109"></a>
 <a id="__codelineno-0-110" name="__codelineno-0-110" href="#__codelineno-0-110"></a>    Dim wsName As String
@@ -5164,12 +5164,12 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-119" name="__codelineno-0-119" href="#__codelineno-0-119"></a>    wasProt = ws.ProtectContents
 <a id="__codelineno-0-120" name="__codelineno-0-120" href="#__codelineno-0-120"></a>    If wasProt Then ws.Unprotect
 <a id="__codelineno-0-121" name="__codelineno-0-121" href="#__codelineno-0-121"></a>
-<a id="__codelineno-0-122" name="__codelineno-0-122" href="#__codelineno-0-122"></a>    &#39; Remove existing M10_RadioDir_* shapes (idempotent for re-runs)
+<a id="__codelineno-0-122" name="__codelineno-0-122" href="#__codelineno-0-122"></a>    ' Remove existing M10_RadioDir_* shapes (idempotent for re-runs)
 <a id="__codelineno-0-123" name="__codelineno-0-123" href="#__codelineno-0-123"></a>    Dim shp As Object
 <a id="__codelineno-0-124" name="__codelineno-0-124" href="#__codelineno-0-124"></a>    Dim toDelete As Collection
 <a id="__codelineno-0-125" name="__codelineno-0-125" href="#__codelineno-0-125"></a>    Set toDelete = New Collection
 <a id="__codelineno-0-126" name="__codelineno-0-126" href="#__codelineno-0-126"></a>    For Each shp In ws.Shapes
-<a id="__codelineno-0-127" name="__codelineno-0-127" href="#__codelineno-0-127"></a>        If shp.Name Like &quot;M10_RadioDir_*&quot; Then
+<a id="__codelineno-0-127" name="__codelineno-0-127" href="#__codelineno-0-127"></a>        If shp.Name Like "M10_RadioDir_*" Then
 <a id="__codelineno-0-128" name="__codelineno-0-128" href="#__codelineno-0-128"></a>            toDelete.Add shp.Name
 <a id="__codelineno-0-129" name="__codelineno-0-129" href="#__codelineno-0-129"></a>        End If
 <a id="__codelineno-0-130" name="__codelineno-0-130" href="#__codelineno-0-130"></a>    Next shp
@@ -5178,71 +5178,71 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-133" name="__codelineno-0-133" href="#__codelineno-0-133"></a>        ws.Shapes(CStr(nm)).Delete
 <a id="__codelineno-0-134" name="__codelineno-0-134" href="#__codelineno-0-134"></a>    Next nm
 <a id="__codelineno-0-135" name="__codelineno-0-135" href="#__codelineno-0-135"></a>
-<a id="__codelineno-0-136" name="__codelineno-0-136" href="#__codelineno-0-136"></a>    If wasProt Then ws.Protect Password:=&quot;&quot;, UserInterfaceOnly:=True, AllowFormattingCells:=True
+<a id="__codelineno-0-136" name="__codelineno-0-136" href="#__codelineno-0-136"></a>    If wasProt Then ws.Protect Password:="", UserInterfaceOnly:=True, AllowFormattingCells:=True
 <a id="__codelineno-0-137" name="__codelineno-0-137" href="#__codelineno-0-137"></a>
-<a id="__codelineno-0-138" name="__codelineno-0-138" href="#__codelineno-0-138"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-9002] modSetup.RemoveLegacyM10Radios EXIT-OK&quot;
+<a id="__codelineno-0-138" name="__codelineno-0-138" href="#__codelineno-0-138"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-9002] modSetup.RemoveLegacyM10Radios EXIT-OK"
 <a id="__codelineno-0-139" name="__codelineno-0-139" href="#__codelineno-0-139"></a>    Exit Sub
 <a id="__codelineno-0-140" name="__codelineno-0-140" href="#__codelineno-0-140"></a>ErrHandler:
-<a id="__codelineno-0-141" name="__codelineno-0-141" href="#__codelineno-0-141"></a>    Debug.Print &quot;[ERR] RemoveLegacyM10Radios: &quot; &amp; Err.Number &amp; &quot; &quot; &amp; Err.Description
+<a id="__codelineno-0-141" name="__codelineno-0-141" href="#__codelineno-0-141"></a>    Debug.Print "[ERR] RemoveLegacyM10Radios: " &amp; Err.Number &amp; " " &amp; Err.Description
 <a id="__codelineno-0-142" name="__codelineno-0-142" href="#__codelineno-0-142"></a>End Sub
 <a id="__codelineno-0-143" name="__codelineno-0-143" href="#__codelineno-0-143"></a>
-<a id="__codelineno-0-144" name="__codelineno-0-144" href="#__codelineno-0-144"></a>&#39; ============================================================
-<a id="__codelineno-0-145" name="__codelineno-0-145" href="#__codelineno-0-145"></a>&#39; Public Sub: Setup_register
-<a id="__codelineno-0-146" name="__codelineno-0-146" href="#__codelineno-0-146"></a>&#39; Role: v2.3 install entry for ?o?^?C??.xlsm (skeleton; full
-<a id="__codelineno-0-147" name="__codelineno-0-147" href="#__codelineno-0-147"></a>&#39;       behavior is delegated to clsSetupOrchestrator.RunForRegister).
-<a id="__codelineno-0-148" name="__codelineno-0-148" href="#__codelineno-0-148"></a>&#39;       Body details are tracked under v2.3 Phase B.
-<a id="__codelineno-0-149" name="__codelineno-0-149" href="#__codelineno-0-149"></a>&#39; ============================================================
+<a id="__codelineno-0-144" name="__codelineno-0-144" href="#__codelineno-0-144"></a>' ============================================================
+<a id="__codelineno-0-145" name="__codelineno-0-145" href="#__codelineno-0-145"></a>' Public Sub: Setup_register
+<a id="__codelineno-0-146" name="__codelineno-0-146" href="#__codelineno-0-146"></a>' Role: v2.3 install entry for ?o?^?C??.xlsm (skeleton; full
+<a id="__codelineno-0-147" name="__codelineno-0-147" href="#__codelineno-0-147"></a>'       behavior is delegated to clsSetupOrchestrator.RunForRegister).
+<a id="__codelineno-0-148" name="__codelineno-0-148" href="#__codelineno-0-148"></a>'       Body details are tracked under v2.3 Phase B.
+<a id="__codelineno-0-149" name="__codelineno-0-149" href="#__codelineno-0-149"></a>' ============================================================
 <a id="__codelineno-0-150" name="__codelineno-0-150" href="#__codelineno-0-150"></a>Public Sub Setup_register()
-<a id="__codelineno-0-151" name="__codelineno-0-151" href="#__codelineno-0-151"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1342] modSetup.Setup_register ENTER&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-152" name="__codelineno-0-152" href="#__codelineno-0-152"></a>    Debug.Print &quot;[SETUP-ENTER] Setup_register ts=&quot; &amp; Format$(Now, &quot;hh:nn:ss&quot;)  &#39; [SETUP-DEBUG-PRINT-INJECTED]
+<a id="__codelineno-0-151" name="__codelineno-0-151" href="#__codelineno-0-151"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1342] modSetup.Setup_register ENTER"  ' [ADR-0100]
+<a id="__codelineno-0-152" name="__codelineno-0-152" href="#__codelineno-0-152"></a>    Debug.Print "[SETUP-ENTER] Setup_register ts=" &amp; Format$(Now, "hh:nn:ss")  ' [SETUP-DEBUG-PRINT-INJECTED]
 <a id="__codelineno-0-153" name="__codelineno-0-153" href="#__codelineno-0-153"></a>    InvokeSetupForRole SETUP_ROLE_REGISTER
-<a id="__codelineno-0-154" name="__codelineno-0-154" href="#__codelineno-0-154"></a>    Debug.Print &quot;[SETUP-EXIT] Setup_register ts=&quot; &amp; Format$(Now, &quot;hh:nn:ss&quot;)  &#39; [SETUP-DEBUG-PRINT-INJECTED]
+<a id="__codelineno-0-154" name="__codelineno-0-154" href="#__codelineno-0-154"></a>    Debug.Print "[SETUP-EXIT] Setup_register ts=" &amp; Format$(Now, "hh:nn:ss")  ' [SETUP-DEBUG-PRINT-INJECTED]
 <a id="__codelineno-0-155" name="__codelineno-0-155" href="#__codelineno-0-155"></a>End Sub
 <a id="__codelineno-0-156" name="__codelineno-0-156" href="#__codelineno-0-156"></a>
-<a id="__codelineno-0-157" name="__codelineno-0-157" href="#__codelineno-0-157"></a>&#39; ============================================================
-<a id="__codelineno-0-158" name="__codelineno-0-158" href="#__codelineno-0-158"></a>&#39; Public Sub: Setup_search
-<a id="__codelineno-0-159" name="__codelineno-0-159" href="#__codelineno-0-159"></a>&#39; Role: v2.3 install entry for ????.xlsm (skeleton; full
-<a id="__codelineno-0-160" name="__codelineno-0-160" href="#__codelineno-0-160"></a>&#39;       behavior is delegated to clsSetupOrchestrator.RunForSearch).
-<a id="__codelineno-0-161" name="__codelineno-0-161" href="#__codelineno-0-161"></a>&#39;       Body details are tracked under v2.3 Phase B.
-<a id="__codelineno-0-162" name="__codelineno-0-162" href="#__codelineno-0-162"></a>&#39; ============================================================
+<a id="__codelineno-0-157" name="__codelineno-0-157" href="#__codelineno-0-157"></a>' ============================================================
+<a id="__codelineno-0-158" name="__codelineno-0-158" href="#__codelineno-0-158"></a>' Public Sub: Setup_search
+<a id="__codelineno-0-159" name="__codelineno-0-159" href="#__codelineno-0-159"></a>' Role: v2.3 install entry for ????.xlsm (skeleton; full
+<a id="__codelineno-0-160" name="__codelineno-0-160" href="#__codelineno-0-160"></a>'       behavior is delegated to clsSetupOrchestrator.RunForSearch).
+<a id="__codelineno-0-161" name="__codelineno-0-161" href="#__codelineno-0-161"></a>'       Body details are tracked under v2.3 Phase B.
+<a id="__codelineno-0-162" name="__codelineno-0-162" href="#__codelineno-0-162"></a>' ============================================================
 <a id="__codelineno-0-163" name="__codelineno-0-163" href="#__codelineno-0-163"></a>Public Sub Setup_search()
-<a id="__codelineno-0-164" name="__codelineno-0-164" href="#__codelineno-0-164"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1343] modSetup.Setup_search ENTER&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-165" name="__codelineno-0-165" href="#__codelineno-0-165"></a>    Debug.Print &quot;[SETUP-ENTER] Setup_search ts=&quot; &amp; Format$(Now, &quot;hh:nn:ss&quot;)  &#39; [SETUP-DEBUG-PRINT-INJECTED]
+<a id="__codelineno-0-164" name="__codelineno-0-164" href="#__codelineno-0-164"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1343] modSetup.Setup_search ENTER"  ' [ADR-0100]
+<a id="__codelineno-0-165" name="__codelineno-0-165" href="#__codelineno-0-165"></a>    Debug.Print "[SETUP-ENTER] Setup_search ts=" &amp; Format$(Now, "hh:nn:ss")  ' [SETUP-DEBUG-PRINT-INJECTED]
 <a id="__codelineno-0-166" name="__codelineno-0-166" href="#__codelineno-0-166"></a>    InvokeSetupForRole SETUP_ROLE_SEARCH
-<a id="__codelineno-0-167" name="__codelineno-0-167" href="#__codelineno-0-167"></a>    Debug.Print &quot;[SETUP-EXIT] Setup_search ts=&quot; &amp; Format$(Now, &quot;hh:nn:ss&quot;)  &#39; [SETUP-DEBUG-PRINT-INJECTED]
+<a id="__codelineno-0-167" name="__codelineno-0-167" href="#__codelineno-0-167"></a>    Debug.Print "[SETUP-EXIT] Setup_search ts=" &amp; Format$(Now, "hh:nn:ss")  ' [SETUP-DEBUG-PRINT-INJECTED]
 <a id="__codelineno-0-168" name="__codelineno-0-168" href="#__codelineno-0-168"></a>End Sub
 <a id="__codelineno-0-169" name="__codelineno-0-169" href="#__codelineno-0-169"></a>
-<a id="__codelineno-0-170" name="__codelineno-0-170" href="#__codelineno-0-170"></a>&#39; ============================================================
-<a id="__codelineno-0-171" name="__codelineno-0-171" href="#__codelineno-0-171"></a>&#39; Private Sub: InvokeSetupForRole
-<a id="__codelineno-0-172" name="__codelineno-0-172" href="#__codelineno-0-172"></a>&#39; Role: Common dispatcher used by Setup_admin/Setup_register/
-<a id="__codelineno-0-173" name="__codelineno-0-173" href="#__codelineno-0-173"></a>&#39;       Setup_search. Instantiates clsSetupOrchestrator once,
-<a id="__codelineno-0-174" name="__codelineno-0-174" href="#__codelineno-0-174"></a>&#39;       dispatches by role. v2.3 Phase F: MsgBox removed for
-<a id="__codelineno-0-175" name="__codelineno-0-175" href="#__codelineno-0-175"></a>&#39;       headless install safety. Failures are logged only.
-<a id="__codelineno-0-176" name="__codelineno-0-176" href="#__codelineno-0-176"></a>&#39; Args:
-<a id="__codelineno-0-177" name="__codelineno-0-177" href="#__codelineno-0-177"></a>&#39;   roleName - &quot;admin&quot; | &quot;register&quot; | &quot;search&quot;
-<a id="__codelineno-0-178" name="__codelineno-0-178" href="#__codelineno-0-178"></a>&#39; ============================================================
+<a id="__codelineno-0-170" name="__codelineno-0-170" href="#__codelineno-0-170"></a>' ============================================================
+<a id="__codelineno-0-171" name="__codelineno-0-171" href="#__codelineno-0-171"></a>' Private Sub: InvokeSetupForRole
+<a id="__codelineno-0-172" name="__codelineno-0-172" href="#__codelineno-0-172"></a>' Role: Common dispatcher used by Setup_admin/Setup_register/
+<a id="__codelineno-0-173" name="__codelineno-0-173" href="#__codelineno-0-173"></a>'       Setup_search. Instantiates clsSetupOrchestrator once,
+<a id="__codelineno-0-174" name="__codelineno-0-174" href="#__codelineno-0-174"></a>'       dispatches by role. v2.3 Phase F: MsgBox removed for
+<a id="__codelineno-0-175" name="__codelineno-0-175" href="#__codelineno-0-175"></a>'       headless install safety. Failures are logged only.
+<a id="__codelineno-0-176" name="__codelineno-0-176" href="#__codelineno-0-176"></a>' Args:
+<a id="__codelineno-0-177" name="__codelineno-0-177" href="#__codelineno-0-177"></a>'   roleName - "admin" | "register" | "search"
+<a id="__codelineno-0-178" name="__codelineno-0-178" href="#__codelineno-0-178"></a>' ============================================================
 <a id="__codelineno-0-179" name="__codelineno-0-179" href="#__codelineno-0-179"></a>Private Sub InvokeSetupForRole(ByVal roleName As String)
-<a id="__codelineno-0-180" name="__codelineno-0-180" href="#__codelineno-0-180"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1344] modSetup.InvokeSetupForRole ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-180" name="__codelineno-0-180" href="#__codelineno-0-180"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1344] modSetup.InvokeSetupForRole ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-181" name="__codelineno-0-181" href="#__codelineno-0-181"></a>    On Error GoTo ErrHandler
 <a id="__codelineno-0-182" name="__codelineno-0-182" href="#__codelineno-0-182"></a>
-<a id="__codelineno-0-183" name="__codelineno-0-183" href="#__codelineno-0-183"></a>    &#39; v2.3 install hang fix (2026-05-26): ???X?e?b?v??n???O???????
-<a id="__codelineno-0-184" name="__codelineno-0-184" href="#__codelineno-0-184"></a>    &#39; ?? install_admin.bat ?o?H???????????ADebug.Print ??
-<a id="__codelineno-0-185" name="__codelineno-0-185" href="#__codelineno-0-185"></a>    &#39; modCommon.AppendProgressLog ??i?????O???c???Bc:\temp\setup_admin_progress.txt
-<a id="__codelineno-0-186" name="__codelineno-0-186" href="#__codelineno-0-186"></a>    &#39; ?? append ?????B
+<a id="__codelineno-0-183" name="__codelineno-0-183" href="#__codelineno-0-183"></a>    ' v2.3 install hang fix (2026-05-26): ???X?e?b?v??n???O???????
+<a id="__codelineno-0-184" name="__codelineno-0-184" href="#__codelineno-0-184"></a>    ' ?? install_admin.bat ?o?H???????????ADebug.Print ??
+<a id="__codelineno-0-185" name="__codelineno-0-185" href="#__codelineno-0-185"></a>    ' modCommon.AppendProgressLog ??i?????O???c???Bc:\temp\setup_admin_progress.txt
+<a id="__codelineno-0-186" name="__codelineno-0-186" href="#__codelineno-0-186"></a>    ' ?? append ?????B
 <a id="__codelineno-0-187" name="__codelineno-0-187" href="#__codelineno-0-187"></a>    Dim stepTs As String
-<a id="__codelineno-0-188" name="__codelineno-0-188" href="#__codelineno-0-188"></a>    stepTs = &quot;[setup] [&quot; &amp; Format$(Now(), &quot;hh:nn:ss&quot;) &amp; &quot;] &quot;
-<a id="__codelineno-0-189" name="__codelineno-0-189" href="#__codelineno-0-189"></a>    Debug.Print stepTs &amp; &quot;InvokeSetupForRole step 0 : enter role=&quot; &amp; roleName
-<a id="__codelineno-0-190" name="__codelineno-0-190" href="#__codelineno-0-190"></a>    modCommon.AppendProgressLog stepTs &amp; &quot;InvokeSetupForRole step 0 : enter role=&quot; &amp; roleName
+<a id="__codelineno-0-188" name="__codelineno-0-188" href="#__codelineno-0-188"></a>    stepTs = "[setup] [" &amp; Format$(Now(), "hh:nn:ss") &amp; "] "
+<a id="__codelineno-0-189" name="__codelineno-0-189" href="#__codelineno-0-189"></a>    Debug.Print stepTs &amp; "InvokeSetupForRole step 0 : enter role=" &amp; roleName
+<a id="__codelineno-0-190" name="__codelineno-0-190" href="#__codelineno-0-190"></a>    modCommon.AppendProgressLog stepTs &amp; "InvokeSetupForRole step 0 : enter role=" &amp; roleName
 <a id="__codelineno-0-191" name="__codelineno-0-191" href="#__codelineno-0-191"></a>
-<a id="__codelineno-0-192" name="__codelineno-0-192" href="#__codelineno-0-192"></a>    Debug.Print stepTs &amp; &quot;InvokeSetupForRole step 1 : new clsSetupOrchestrator&quot;
-<a id="__codelineno-0-193" name="__codelineno-0-193" href="#__codelineno-0-193"></a>    modCommon.AppendProgressLog stepTs &amp; &quot;InvokeSetupForRole step 1 : new clsSetupOrchestrator&quot;
+<a id="__codelineno-0-192" name="__codelineno-0-192" href="#__codelineno-0-192"></a>    Debug.Print stepTs &amp; "InvokeSetupForRole step 1 : new clsSetupOrchestrator"
+<a id="__codelineno-0-193" name="__codelineno-0-193" href="#__codelineno-0-193"></a>    modCommon.AppendProgressLog stepTs &amp; "InvokeSetupForRole step 1 : new clsSetupOrchestrator"
 <a id="__codelineno-0-194" name="__codelineno-0-194" href="#__codelineno-0-194"></a>    Dim orch As clsSetupOrchestrator
 <a id="__codelineno-0-195" name="__codelineno-0-195" href="#__codelineno-0-195"></a>    Set orch = New clsSetupOrchestrator
-<a id="__codelineno-0-196" name="__codelineno-0-196" href="#__codelineno-0-196"></a>    Debug.Print stepTs &amp; &quot;InvokeSetupForRole step 2 : clsSetupOrchestrator instantiated OK&quot;
-<a id="__codelineno-0-197" name="__codelineno-0-197" href="#__codelineno-0-197"></a>    modCommon.AppendProgressLog stepTs &amp; &quot;InvokeSetupForRole step 2 : clsSetupOrchestrator instantiated OK&quot;
+<a id="__codelineno-0-196" name="__codelineno-0-196" href="#__codelineno-0-196"></a>    Debug.Print stepTs &amp; "InvokeSetupForRole step 2 : clsSetupOrchestrator instantiated OK"
+<a id="__codelineno-0-197" name="__codelineno-0-197" href="#__codelineno-0-197"></a>    modCommon.AppendProgressLog stepTs &amp; "InvokeSetupForRole step 2 : clsSetupOrchestrator instantiated OK"
 <a id="__codelineno-0-198" name="__codelineno-0-198" href="#__codelineno-0-198"></a>
-<a id="__codelineno-0-199" name="__codelineno-0-199" href="#__codelineno-0-199"></a>    Debug.Print stepTs &amp; &quot;InvokeSetupForRole step 3 : dispatch to RunFor* role=&quot; &amp; roleName
-<a id="__codelineno-0-200" name="__codelineno-0-200" href="#__codelineno-0-200"></a>    modCommon.AppendProgressLog stepTs &amp; &quot;InvokeSetupForRole step 3 : dispatch to RunFor* role=&quot; &amp; roleName
+<a id="__codelineno-0-199" name="__codelineno-0-199" href="#__codelineno-0-199"></a>    Debug.Print stepTs &amp; "InvokeSetupForRole step 3 : dispatch to RunFor* role=" &amp; roleName
+<a id="__codelineno-0-200" name="__codelineno-0-200" href="#__codelineno-0-200"></a>    modCommon.AppendProgressLog stepTs &amp; "InvokeSetupForRole step 3 : dispatch to RunFor* role=" &amp; roleName
 <a id="__codelineno-0-201" name="__codelineno-0-201" href="#__codelineno-0-201"></a>    Select Case roleName
 <a id="__codelineno-0-202" name="__codelineno-0-202" href="#__codelineno-0-202"></a>        Case SETUP_ROLE_ADMIN
 <a id="__codelineno-0-203" name="__codelineno-0-203" href="#__codelineno-0-203"></a>            orch.RunForAdmin
@@ -5252,59 +5252,59 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-207" name="__codelineno-0-207" href="#__codelineno-0-207"></a>            orch.RunForSearch
 <a id="__codelineno-0-208" name="__codelineno-0-208" href="#__codelineno-0-208"></a>        Case Else
 <a id="__codelineno-0-209" name="__codelineno-0-209" href="#__codelineno-0-209"></a>            Err.Raise vbObjectError + 5100, _
-<a id="__codelineno-0-210" name="__codelineno-0-210" href="#__codelineno-0-210"></a>                &quot;modSetup.InvokeSetupForRole&quot;, _
-<a id="__codelineno-0-211" name="__codelineno-0-211" href="#__codelineno-0-211"></a>                &quot;Unknown role: &quot; &amp; roleName
+<a id="__codelineno-0-210" name="__codelineno-0-210" href="#__codelineno-0-210"></a>                "modSetup.InvokeSetupForRole", _
+<a id="__codelineno-0-211" name="__codelineno-0-211" href="#__codelineno-0-211"></a>                "Unknown role: " &amp; roleName
 <a id="__codelineno-0-212" name="__codelineno-0-212" href="#__codelineno-0-212"></a>    End Select
-<a id="__codelineno-0-213" name="__codelineno-0-213" href="#__codelineno-0-213"></a>    Debug.Print stepTs &amp; &quot;InvokeSetupForRole step 4 : RunFor* returned OK role=&quot; &amp; roleName
-<a id="__codelineno-0-214" name="__codelineno-0-214" href="#__codelineno-0-214"></a>    modCommon.AppendProgressLog stepTs &amp; &quot;InvokeSetupForRole step 4 : RunFor* returned OK role=&quot; &amp; roleName
-<a id="__codelineno-0-215" name="__codelineno-0-215" href="#__codelineno-0-215"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1345] modSetup.InvokeSetupForRole EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-213" name="__codelineno-0-213" href="#__codelineno-0-213"></a>    Debug.Print stepTs &amp; "InvokeSetupForRole step 4 : RunFor* returned OK role=" &amp; roleName
+<a id="__codelineno-0-214" name="__codelineno-0-214" href="#__codelineno-0-214"></a>    modCommon.AppendProgressLog stepTs &amp; "InvokeSetupForRole step 4 : RunFor* returned OK role=" &amp; roleName
+<a id="__codelineno-0-215" name="__codelineno-0-215" href="#__codelineno-0-215"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1345] modSetup.InvokeSetupForRole EXIT-OK"  ' [ADR-0100]
 <a id="__codelineno-0-216" name="__codelineno-0-216" href="#__codelineno-0-216"></a>    Exit Sub
 <a id="__codelineno-0-217" name="__codelineno-0-217" href="#__codelineno-0-217"></a>
 <a id="__codelineno-0-218" name="__codelineno-0-218" href="#__codelineno-0-218"></a>ErrHandler:
-<a id="__codelineno-0-219" name="__codelineno-0-219" href="#__codelineno-0-219"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print &quot;[D-1346] modSetup.InvokeSetupForRole EXIT-ERR &quot; &amp; &quot;errNum=&quot; &amp; Err.Number &amp; &quot; desc=&quot; &amp; Err.Description  &#39; [ADR-0100]
-<a id="__codelineno-0-220" name="__codelineno-0-220" href="#__codelineno-0-220"></a>    Debug.Print &quot;[SETUP-ERR] role=&quot; &amp; roleName &amp; &quot; err=&quot; &amp; Err.Number &amp; &quot; &quot; &amp; Err.Description  &#39; [SETUP-DEBUG-PRINT-INJECTED]
-<a id="__codelineno-0-221" name="__codelineno-0-221" href="#__codelineno-0-221"></a>    &#39; v2.3 Phase F: headless run safety. MsgBox removed; error
-<a id="__codelineno-0-222" name="__codelineno-0-222" href="#__codelineno-0-222"></a>    &#39;              notification is done via LOG sheet (clsLogger)
-<a id="__codelineno-0-223" name="__codelineno-0-223" href="#__codelineno-0-223"></a>    &#39;              and Debug.Print only. Setup_xxx returns void
-<a id="__codelineno-0-224" name="__codelineno-0-224" href="#__codelineno-0-224"></a>    &#39;              but failure is observable in the LOG sheet.
+<a id="__codelineno-0-219" name="__codelineno-0-219" href="#__codelineno-0-219"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print "[D-1346] modSetup.InvokeSetupForRole EXIT-ERR " &amp; "errNum=" &amp; Err.Number &amp; " desc=" &amp; Err.Description  ' [ADR-0100]
+<a id="__codelineno-0-220" name="__codelineno-0-220" href="#__codelineno-0-220"></a>    Debug.Print "[SETUP-ERR] role=" &amp; roleName &amp; " err=" &amp; Err.Number &amp; " " &amp; Err.Description  ' [SETUP-DEBUG-PRINT-INJECTED]
+<a id="__codelineno-0-221" name="__codelineno-0-221" href="#__codelineno-0-221"></a>    ' v2.3 Phase F: headless run safety. MsgBox removed; error
+<a id="__codelineno-0-222" name="__codelineno-0-222" href="#__codelineno-0-222"></a>    '              notification is done via LOG sheet (clsLogger)
+<a id="__codelineno-0-223" name="__codelineno-0-223" href="#__codelineno-0-223"></a>    '              and Debug.Print only. Setup_xxx returns void
+<a id="__codelineno-0-224" name="__codelineno-0-224" href="#__codelineno-0-224"></a>    '              but failure is observable in the LOG sheet.
 <a id="__codelineno-0-225" name="__codelineno-0-225" href="#__codelineno-0-225"></a>    Dim errTs As String
-<a id="__codelineno-0-226" name="__codelineno-0-226" href="#__codelineno-0-226"></a>    errTs = &quot;[setup] [&quot; &amp; Format$(Now(), &quot;hh:nn:ss&quot;) &amp; &quot;] &quot;
-<a id="__codelineno-0-227" name="__codelineno-0-227" href="#__codelineno-0-227"></a>    Debug.Print errTs &amp; &quot;InvokeSetupForRole ErrHandler : role=&quot; &amp; roleName &amp; &quot; errNum=&quot; &amp; Err.Number &amp; &quot; errDesc=&quot; &amp; Err.Description
-<a id="__codelineno-0-228" name="__codelineno-0-228" href="#__codelineno-0-228"></a>    modCommon.AppendProgressLog errTs &amp; &quot;InvokeSetupForRole ErrHandler : role=&quot; &amp; roleName &amp; &quot; errNum=&quot; &amp; Err.Number &amp; &quot; errDesc=&quot; &amp; Err.Description
+<a id="__codelineno-0-226" name="__codelineno-0-226" href="#__codelineno-0-226"></a>    errTs = "[setup] [" &amp; Format$(Now(), "hh:nn:ss") &amp; "] "
+<a id="__codelineno-0-227" name="__codelineno-0-227" href="#__codelineno-0-227"></a>    Debug.Print errTs &amp; "InvokeSetupForRole ErrHandler : role=" &amp; roleName &amp; " errNum=" &amp; Err.Number &amp; " errDesc=" &amp; Err.Description
+<a id="__codelineno-0-228" name="__codelineno-0-228" href="#__codelineno-0-228"></a>    modCommon.AppendProgressLog errTs &amp; "InvokeSetupForRole ErrHandler : role=" &amp; roleName &amp; " errNum=" &amp; Err.Number &amp; " errDesc=" &amp; Err.Description
 <a id="__codelineno-0-229" name="__codelineno-0-229" href="#__codelineno-0-229"></a>    LogSetupAdminError roleName, Err.Number, Err.Description
 <a id="__codelineno-0-230" name="__codelineno-0-230" href="#__codelineno-0-230"></a>    On Error GoTo 0
 <a id="__codelineno-0-231" name="__codelineno-0-231" href="#__codelineno-0-231"></a>End Sub
 <a id="__codelineno-0-232" name="__codelineno-0-232" href="#__codelineno-0-232"></a>
-<a id="__codelineno-0-233" name="__codelineno-0-233" href="#__codelineno-0-233"></a>&#39; ============================================================
-<a id="__codelineno-0-234" name="__codelineno-0-234" href="#__codelineno-0-234"></a>&#39; Private Sub: LogSetupAdminError
-<a id="__codelineno-0-235" name="__codelineno-0-235" href="#__codelineno-0-235"></a>&#39; Role: Best-effort LogError via clsLogger on LOG sheet.
-<a id="__codelineno-0-236" name="__codelineno-0-236" href="#__codelineno-0-236"></a>&#39;       Swallows any logging error (best-effort logging only).
-<a id="__codelineno-0-237" name="__codelineno-0-237" href="#__codelineno-0-237"></a>&#39; ============================================================
+<a id="__codelineno-0-233" name="__codelineno-0-233" href="#__codelineno-0-233"></a>' ============================================================
+<a id="__codelineno-0-234" name="__codelineno-0-234" href="#__codelineno-0-234"></a>' Private Sub: LogSetupAdminError
+<a id="__codelineno-0-235" name="__codelineno-0-235" href="#__codelineno-0-235"></a>' Role: Best-effort LogError via clsLogger on LOG sheet.
+<a id="__codelineno-0-236" name="__codelineno-0-236" href="#__codelineno-0-236"></a>'       Swallows any logging error (best-effort logging only).
+<a id="__codelineno-0-237" name="__codelineno-0-237" href="#__codelineno-0-237"></a>' ============================================================
 <a id="__codelineno-0-238" name="__codelineno-0-238" href="#__codelineno-0-238"></a>Private Sub LogSetupAdminError(ByVal roleName As String, _
 <a id="__codelineno-0-239" name="__codelineno-0-239" href="#__codelineno-0-239"></a>                                ByVal errNum As Long, _
 <a id="__codelineno-0-240" name="__codelineno-0-240" href="#__codelineno-0-240"></a>                                ByVal errDesc As String)
-<a id="__codelineno-0-241" name="__codelineno-0-241" href="#__codelineno-0-241"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1347] modSetup.LogSetupAdminError ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-241" name="__codelineno-0-241" href="#__codelineno-0-241"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1347] modSetup.LogSetupAdminError ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-242" name="__codelineno-0-242" href="#__codelineno-0-242"></a>    On Error Resume Next
 <a id="__codelineno-0-243" name="__codelineno-0-243" href="#__codelineno-0-243"></a>    Dim logSheet As Object
-<a id="__codelineno-0-244" name="__codelineno-0-244" href="#__codelineno-0-244"></a>    Set logSheet = ThisWorkbook.Worksheets(&quot;LOG&quot;)
+<a id="__codelineno-0-244" name="__codelineno-0-244" href="#__codelineno-0-244"></a>    Set logSheet = ThisWorkbook.Worksheets("LOG")
 <a id="__codelineno-0-245" name="__codelineno-0-245" href="#__codelineno-0-245"></a>    If Not logSheet Is Nothing Then
 <a id="__codelineno-0-246" name="__codelineno-0-246" href="#__codelineno-0-246"></a>        Dim oLogger As clsLogger
 <a id="__codelineno-0-247" name="__codelineno-0-247" href="#__codelineno-0-247"></a>        Set oLogger = New clsLogger
 <a id="__codelineno-0-248" name="__codelineno-0-248" href="#__codelineno-0-248"></a>        oLogger.Init logSheet
-<a id="__codelineno-0-249" name="__codelineno-0-249" href="#__codelineno-0-249"></a>        oLogger.LogError &quot;modSetup&quot;, &quot;Setup_&quot; &amp; roleName, _
-<a id="__codelineno-0-250" name="__codelineno-0-250" href="#__codelineno-0-250"></a>            &quot;Setup wrapper failed: &quot; &amp; errNum &amp; &quot; &quot; &amp; errDesc, _
-<a id="__codelineno-0-251" name="__codelineno-0-251" href="#__codelineno-0-251"></a>            roleName, &quot;SETUPV23-ERR-EE-001&quot;
+<a id="__codelineno-0-249" name="__codelineno-0-249" href="#__codelineno-0-249"></a>        oLogger.LogError "modSetup", "Setup_" &amp; roleName, _
+<a id="__codelineno-0-250" name="__codelineno-0-250" href="#__codelineno-0-250"></a>            "Setup wrapper failed: " &amp; errNum &amp; " " &amp; errDesc, _
+<a id="__codelineno-0-251" name="__codelineno-0-251" href="#__codelineno-0-251"></a>            roleName, "SETUPV23-ERR-EE-001"
 <a id="__codelineno-0-252" name="__codelineno-0-252" href="#__codelineno-0-252"></a>    End If
-<a id="__codelineno-0-253" name="__codelineno-0-253" href="#__codelineno-0-253"></a>    Debug.Print &quot;[ERR] modSetup.Setup_&quot; &amp; roleName &amp; &quot;: &quot; &amp; _
-<a id="__codelineno-0-254" name="__codelineno-0-254" href="#__codelineno-0-254"></a>                errNum &amp; &quot; &quot; &amp; errDesc
+<a id="__codelineno-0-253" name="__codelineno-0-253" href="#__codelineno-0-253"></a>    Debug.Print "[ERR] modSetup.Setup_" &amp; roleName &amp; ": " &amp; _
+<a id="__codelineno-0-254" name="__codelineno-0-254" href="#__codelineno-0-254"></a>                errNum &amp; " " &amp; errDesc
 <a id="__codelineno-0-255" name="__codelineno-0-255" href="#__codelineno-0-255"></a>    On Error GoTo 0
-<a id="__codelineno-0-256" name="__codelineno-0-256" href="#__codelineno-0-256"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1348] modSetup.LogSetupAdminError EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-256" name="__codelineno-0-256" href="#__codelineno-0-256"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1348] modSetup.LogSetupAdminError EXIT-OK"  ' [ADR-0100]
 <a id="__codelineno-0-257" name="__codelineno-0-257" href="#__codelineno-0-257"></a>End Sub
 <a id="__codelineno-0-258" name="__codelineno-0-258" href="#__codelineno-0-258"></a>
 <a id="__codelineno-0-259" name="__codelineno-0-259" href="#__codelineno-0-259"></a>
-<a id="__codelineno-0-260" name="__codelineno-0-260" href="#__codelineno-0-260"></a>&#39; [USER-REQ 2026-06-09] Public Sub: SetupM03SearchTargetValidation
-<a id="__codelineno-0-261" name="__codelineno-0-261" href="#__codelineno-0-261"></a>&#39; Applies TRUE/FALSE dropdown validation to M-03 grid column I (searchTarget)
-<a id="__codelineno-0-262" name="__codelineno-0-262" href="#__codelineno-0-262"></a>&#39; so the dropdown is visible even before user clicks 読込 / フィールド追加.
+<a id="__codelineno-0-260" name="__codelineno-0-260" href="#__codelineno-0-260"></a>' [USER-REQ 2026-06-09] Public Sub: SetupM03SearchTargetValidation
+<a id="__codelineno-0-261" name="__codelineno-0-261" href="#__codelineno-0-261"></a>' Applies TRUE/FALSE dropdown validation to M-03 grid column I (searchTarget)
+<a id="__codelineno-0-262" name="__codelineno-0-262" href="#__codelineno-0-262"></a>' so the dropdown is visible even before user clicks 読込 / フィールド追加.
 <a id="__codelineno-0-263" name="__codelineno-0-263" href="#__codelineno-0-263"></a>Public Sub SetupM03SearchTargetValidation()
 <a id="__codelineno-0-264" name="__codelineno-0-264" href="#__codelineno-0-264"></a>    On Error Resume Next
 <a id="__codelineno-0-265" name="__codelineno-0-265" href="#__codelineno-0-265"></a>    Dim wsName As String
@@ -5316,14 +5316,14 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-271" name="__codelineno-0-271" href="#__codelineno-0-271"></a>    wasProt = ws.ProtectContents
 <a id="__codelineno-0-272" name="__codelineno-0-272" href="#__codelineno-0-272"></a>    If wasProt Then ws.Unprotect
 <a id="__codelineno-0-273" name="__codelineno-0-273" href="#__codelineno-0-273"></a>    Dim r As Range
-<a id="__codelineno-0-274" name="__codelineno-0-274" href="#__codelineno-0-274"></a>    Set r = ws.Range(&quot;I19:I60&quot;)
+<a id="__codelineno-0-274" name="__codelineno-0-274" href="#__codelineno-0-274"></a>    Set r = ws.Range("I19:I60")
 <a id="__codelineno-0-275" name="__codelineno-0-275" href="#__codelineno-0-275"></a>    r.Validation.Delete
-<a id="__codelineno-0-276" name="__codelineno-0-276" href="#__codelineno-0-276"></a>    r.Validation.Add Type:=xlValidateList, Formula1:=&quot;TRUE,FALSE&quot;
+<a id="__codelineno-0-276" name="__codelineno-0-276" href="#__codelineno-0-276"></a>    r.Validation.Add Type:=xlValidateList, Formula1:="TRUE,FALSE"
 <a id="__codelineno-0-277" name="__codelineno-0-277" href="#__codelineno-0-277"></a>    r.Validation.InCellDropdown = True
 <a id="__codelineno-0-278" name="__codelineno-0-278" href="#__codelineno-0-278"></a>    r.Validation.IgnoreBlank = True
-<a id="__codelineno-0-279" name="__codelineno-0-279" href="#__codelineno-0-279"></a>    &#39; Also unlock for direct edit
+<a id="__codelineno-0-279" name="__codelineno-0-279" href="#__codelineno-0-279"></a>    ' Also unlock for direct edit
 <a id="__codelineno-0-280" name="__codelineno-0-280" href="#__codelineno-0-280"></a>    r.Locked = False
-<a id="__codelineno-0-281" name="__codelineno-0-281" href="#__codelineno-0-281"></a>    If wasProt Then ws.Protect Password:=&quot;&quot;, UserInterfaceOnly:=True, AllowFormattingCells:=True
+<a id="__codelineno-0-281" name="__codelineno-0-281" href="#__codelineno-0-281"></a>    If wasProt Then ws.Protect Password:="", UserInterfaceOnly:=True, AllowFormattingCells:=True
 <a id="__codelineno-0-282" name="__codelineno-0-282" href="#__codelineno-0-282"></a>End Sub
 </code></pre></div>
 
@@ -5386,7 +5386,7 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
       <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.indexes", "toc.integrate", "search.highlight", "search.suggest", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u30b3\u30d4\u30fc\u3057\u307e\u3057\u305f", "clipboard.copy": "\u30af\u30ea\u30c3\u30d7\u30dc\u30fc\u30c9\u3078\u30b3\u30d4\u30fc", "search.result.more.one": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3082\u30461\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.more.other": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3042\u3068#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.none": "\u4f55\u3082\u898b\u3064\u304b\u308a\u307e\u305b\u3093\u3067\u3057\u305f", "search.result.one": "1\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.other": "#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.placeholder": "\u691c\u7d22\u30ad\u30fc\u30ef\u30fc\u30c9\u3092\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044", "search.result.term.missing": "\u691c\u7d22\u306b\u542b\u307e\u308c\u306a\u3044", "select.version": "\u30d0\u30fc\u30b8\u30e7\u30f3\u5207\u308a\u66ff\u3048"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>

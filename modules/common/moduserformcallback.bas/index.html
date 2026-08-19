@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -5041,59 +5041,59 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 </blockquote>
 <hr />
 <h2 id="_2">ソースコード<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Attribute VB_Name = &quot;modUserFormCallback&quot;
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>&#39; ================================================================
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>&#39; modUserFormCallback (v2.3 Phase N-3, 2026-05-27)
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>&#39; Purpose:
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>&#39;   Bridge from dynamically-generated UserForm button click handlers
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>&#39;   back to the calling clsUserFormRenderer instance. The injected
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>&#39;   handlers in the dynamic form call Application.Run &quot;modUserFormCallback.OnXxx&quot;
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>&#39;   which routes back to the singleton renderer instance.
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>&#39; Design:
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>&#39;   The renderer instance is stashed in modUserFormCallback at ShowForm
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>&#39;   start, then handlers (OnRegister/OnUpdate/OnDelete/OnEdit/OnClear)
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>&#39;   look it up to write the return value or trigger an action.
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>&#39; ================================================================
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Attribute VB_Name = "modUserFormCallback"
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>' ================================================================
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>' modUserFormCallback (v2.3 Phase N-3, 2026-05-27)
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>' Purpose:
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>'   Bridge from dynamically-generated UserForm button click handlers
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>'   back to the calling clsUserFormRenderer instance. The injected
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>'   handlers in the dynamic form call Application.Run "modUserFormCallback.OnXxx"
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>'   which routes back to the singleton renderer instance.
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>' Design:
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>'   The renderer instance is stashed in modUserFormCallback at ShowForm
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>'   start, then handlers (OnRegister/OnUpdate/OnDelete/OnEdit/OnClear)
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>'   look it up to write the return value or trigger an action.
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>' ================================================================
 <a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>Option Explicit
 <a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>
 <a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>Private m_renderer As clsUserFormRenderer
 <a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>
 <a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>Public Sub SetRenderer(ByVal r As clsUserFormRenderer)
-<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1580] modUserFormCallback.SetRenderer ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1580] modUserFormCallback.SetRenderer ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>    Set m_renderer = r
 <a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>End Sub
 <a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>
-<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>&#39; Called from dynamic form&#39;s btnRegister_Click
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>' Called from dynamic form's btnRegister_Click
 <a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>Public Sub OnRegister()
-<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1581] modUserFormCallback.OnRegister ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1581] modUserFormCallback.OnRegister ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>    On Error GoTo ErrHandler
 <a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>    If m_renderer Is Nothing Then Exit Sub
 <a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>    Dim newId As String
-<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>    newId = PersistFromActiveForm(&quot;register&quot;)
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>    newId = PersistFromActiveForm("register")
 <a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>    m_renderer.SetReturnId newId
-<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1582] modUserFormCallback.OnRegister EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1582] modUserFormCallback.OnRegister EXIT-OK"  ' [ADR-0100]
 <a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>    Exit Sub
 <a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>ErrHandler:
-<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print &quot;[D-1583] modUserFormCallback.OnRegister EXIT-ERR &quot; &amp; &quot;errNum=&quot; &amp; Err.Number &amp; &quot; desc=&quot; &amp; Err.Description  &#39; [ADR-0100]
-<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>    Debug.Print &quot;[ERR] OnRegister: &quot; &amp; Err.Number &amp; &quot; &quot; &amp; Err.Description
+<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print "[D-1583] modUserFormCallback.OnRegister EXIT-ERR " &amp; "errNum=" &amp; Err.Number &amp; " desc=" &amp; Err.Description  ' [ADR-0100]
+<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>    Debug.Print "[ERR] OnRegister: " &amp; Err.Number &amp; " " &amp; Err.Description
 <a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>End Sub
 <a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>
-<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>&#39; [BUG-B12 2026-06-11] Register with completion message + form kept open
-<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>&#39; (spec M-05). Called from the dynamic form&#39;s btnRegister_Click. Returns
-<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>&#39; True when a knowledge file was created (newId non-empty).
+<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>' [BUG-B12 2026-06-11] Register with completion message + form kept open
+<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>' (spec M-05). Called from the dynamic form's btnRegister_Click. Returns
+<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>' True when a knowledge file was created (newId non-empty).
 <a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>Public Function OnRegisterV2() As Boolean
-<a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1581b] modUserFormCallback.OnRegisterV2 ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1581b] modUserFormCallback.OnRegisterV2 ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>    On Error GoTo ErrHandler
 <a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>    OnRegisterV2 = False
 <a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>    If m_renderer Is Nothing Then Exit Function
-<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>    &#39; [BUG-B16 2026-06-11] enforce required fields before persisting.
+<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>    ' [BUG-B16 2026-06-11] enforce required fields before persisting.
 <a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>    Dim missMsg As String
 <a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>    missMsg = MissingRequiredMessage()
 <a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>    If Len(missMsg) &gt; 0 Then
 <a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>        If Not modCommon.IsHeadless() Then MsgBox missMsg, vbExclamation, MsgRegisterTitle()
 <a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>        Exit Function
 <a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a>    End If
-<a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a>    &#39; [B32 2026-06-12] block invalid date values (user decision Q4)
+<a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a>    ' [B32 2026-06-12] block invalid date values (user decision Q4)
 <a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a>    Dim badDateMsg As String
 <a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a>    badDateMsg = InvalidDateMessage()
 <a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a>    If Len(badDateMsg) &gt; 0 Then
@@ -5101,7 +5101,7 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a>        Exit Function
 <a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a>    End If
 <a id="__codelineno-0-60" name="__codelineno-0-60" href="#__codelineno-0-60"></a>    Dim newId As String
-<a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a>    newId = PersistFromActiveForm(&quot;register&quot;)
+<a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a>    newId = PersistFromActiveForm("register")
 <a id="__codelineno-0-62" name="__codelineno-0-62" href="#__codelineno-0-62"></a>    m_renderer.SetReturnId newId
 <a id="__codelineno-0-63" name="__codelineno-0-63" href="#__codelineno-0-63"></a>    If Len(newId) &gt; 0 Then
 <a id="__codelineno-0-64" name="__codelineno-0-64" href="#__codelineno-0-64"></a>        OnRegisterV2 = True
@@ -5109,47 +5109,47 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-66" name="__codelineno-0-66" href="#__codelineno-0-66"></a>            MsgBox MsgRegisterDone() &amp; newId, vbInformation, MsgRegisterTitle()
 <a id="__codelineno-0-67" name="__codelineno-0-67" href="#__codelineno-0-67"></a>        End If
 <a id="__codelineno-0-68" name="__codelineno-0-68" href="#__codelineno-0-68"></a>    End If
-<a id="__codelineno-0-69" name="__codelineno-0-69" href="#__codelineno-0-69"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1582b] modUserFormCallback.OnRegisterV2 EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-69" name="__codelineno-0-69" href="#__codelineno-0-69"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1582b] modUserFormCallback.OnRegisterV2 EXIT-OK"  ' [ADR-0100]
 <a id="__codelineno-0-70" name="__codelineno-0-70" href="#__codelineno-0-70"></a>    Exit Function
 <a id="__codelineno-0-71" name="__codelineno-0-71" href="#__codelineno-0-71"></a>ErrHandler:
-<a id="__codelineno-0-72" name="__codelineno-0-72" href="#__codelineno-0-72"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print &quot;[D-1583b] modUserFormCallback.OnRegisterV2 EXIT-ERR &quot; &amp; &quot;errNum=&quot; &amp; Err.Number &amp; &quot; desc=&quot; &amp; Err.Description  &#39; [ADR-0100]
-<a id="__codelineno-0-73" name="__codelineno-0-73" href="#__codelineno-0-73"></a>    Debug.Print &quot;[ERR] OnRegisterV2: &quot; &amp; Err.Number &amp; &quot; &quot; &amp; Err.Description
+<a id="__codelineno-0-72" name="__codelineno-0-72" href="#__codelineno-0-72"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print "[D-1583b] modUserFormCallback.OnRegisterV2 EXIT-ERR " &amp; "errNum=" &amp; Err.Number &amp; " desc=" &amp; Err.Description  ' [ADR-0100]
+<a id="__codelineno-0-73" name="__codelineno-0-73" href="#__codelineno-0-73"></a>    Debug.Print "[ERR] OnRegisterV2: " &amp; Err.Number &amp; " " &amp; Err.Description
 <a id="__codelineno-0-74" name="__codelineno-0-74" href="#__codelineno-0-74"></a>End Function
 <a id="__codelineno-0-75" name="__codelineno-0-75" href="#__codelineno-0-75"></a>
-<a id="__codelineno-0-76" name="__codelineno-0-76" href="#__codelineno-0-76"></a>&#39; [BUG-B12] JP literal via ChrW per ADR-0006/0090/0094: &quot;TOUROKU shimashita: &quot;
+<a id="__codelineno-0-76" name="__codelineno-0-76" href="#__codelineno-0-76"></a>' [BUG-B12] JP literal via ChrW per ADR-0006/0090/0094: "TOUROKU shimashita: "
 <a id="__codelineno-0-77" name="__codelineno-0-77" href="#__codelineno-0-77"></a>Private Function MsgRegisterDone() As String
 <a id="__codelineno-0-78" name="__codelineno-0-78" href="#__codelineno-0-78"></a>    MsgRegisterDone = ChrW(&amp;H767B) &amp; ChrW(&amp;H9332) &amp; ChrW(&amp;H3057) &amp; ChrW(&amp;H307E) &amp; _
-<a id="__codelineno-0-79" name="__codelineno-0-79" href="#__codelineno-0-79"></a>                      ChrW(&amp;H3057) &amp; ChrW(&amp;H305F) &amp; &quot;: &quot;
+<a id="__codelineno-0-79" name="__codelineno-0-79" href="#__codelineno-0-79"></a>                      ChrW(&amp;H3057) &amp; ChrW(&amp;H305F) &amp; ": "
 <a id="__codelineno-0-80" name="__codelineno-0-80" href="#__codelineno-0-80"></a>End Function
 <a id="__codelineno-0-81" name="__codelineno-0-81" href="#__codelineno-0-81"></a>
-<a id="__codelineno-0-82" name="__codelineno-0-82" href="#__codelineno-0-82"></a>&#39; [BUG-B12] title &quot;nareggi touroku&quot;
+<a id="__codelineno-0-82" name="__codelineno-0-82" href="#__codelineno-0-82"></a>' [BUG-B12] title "nareggi touroku"
 <a id="__codelineno-0-83" name="__codelineno-0-83" href="#__codelineno-0-83"></a>Private Function MsgRegisterTitle() As String
 <a id="__codelineno-0-84" name="__codelineno-0-84" href="#__codelineno-0-84"></a>    MsgRegisterTitle = ChrW(&amp;H30CA) &amp; ChrW(&amp;H30EC) &amp; ChrW(&amp;H30C3) &amp; ChrW(&amp;H30B8) &amp; ChrW(&amp;H767B) &amp; ChrW(&amp;H9332)
 <a id="__codelineno-0-85" name="__codelineno-0-85" href="#__codelineno-0-85"></a>End Function
 <a id="__codelineno-0-86" name="__codelineno-0-86" href="#__codelineno-0-86"></a>
-<a id="__codelineno-0-87" name="__codelineno-0-87" href="#__codelineno-0-87"></a>&#39; [BUG-B16 2026-06-11] Returns a non-empty warning listing empty required
-<a id="__codelineno-0-88" name="__codelineno-0-88" href="#__codelineno-0-88"></a>&#39; fields (or &quot;&quot; when all required fields are filled). Required flag comes
-<a id="__codelineno-0-89" name="__codelineno-0-89" href="#__codelineno-0-89"></a>&#39; from the renderer&#39;s per-control map (set at render time from the format).
+<a id="__codelineno-0-87" name="__codelineno-0-87" href="#__codelineno-0-87"></a>' [BUG-B16 2026-06-11] Returns a non-empty warning listing empty required
+<a id="__codelineno-0-88" name="__codelineno-0-88" href="#__codelineno-0-88"></a>' fields (or "" when all required fields are filled). Required flag comes
+<a id="__codelineno-0-89" name="__codelineno-0-89" href="#__codelineno-0-89"></a>' from the renderer's per-control map (set at render time from the format).
 <a id="__codelineno-0-90" name="__codelineno-0-90" href="#__codelineno-0-90"></a>Private Function MissingRequiredMessage() As String
 <a id="__codelineno-0-91" name="__codelineno-0-91" href="#__codelineno-0-91"></a>    On Error GoTo ErrHandler
-<a id="__codelineno-0-92" name="__codelineno-0-92" href="#__codelineno-0-92"></a>    MissingRequiredMessage = &quot;&quot;
+<a id="__codelineno-0-92" name="__codelineno-0-92" href="#__codelineno-0-92"></a>    MissingRequiredMessage = ""
 <a id="__codelineno-0-93" name="__codelineno-0-93" href="#__codelineno-0-93"></a>    If m_renderer Is Nothing Then Exit Function
 <a id="__codelineno-0-94" name="__codelineno-0-94" href="#__codelineno-0-94"></a>    Dim frm As Object
 <a id="__codelineno-0-95" name="__codelineno-0-95" href="#__codelineno-0-95"></a>    Set frm = GetActiveDynForm()
 <a id="__codelineno-0-96" name="__codelineno-0-96" href="#__codelineno-0-96"></a>    If frm Is Nothing Then Exit Function
 <a id="__codelineno-0-97" name="__codelineno-0-97" href="#__codelineno-0-97"></a>    Dim missing As String
-<a id="__codelineno-0-98" name="__codelineno-0-98" href="#__codelineno-0-98"></a>    missing = &quot;&quot;
+<a id="__codelineno-0-98" name="__codelineno-0-98" href="#__codelineno-0-98"></a>    missing = ""
 <a id="__codelineno-0-99" name="__codelineno-0-99" href="#__codelineno-0-99"></a>    Dim ctl As Object
 <a id="__codelineno-0-100" name="__codelineno-0-100" href="#__codelineno-0-100"></a>    For Each ctl In AllFormControls(frm)
 <a id="__codelineno-0-101" name="__codelineno-0-101" href="#__codelineno-0-101"></a>        Dim nm As String
 <a id="__codelineno-0-102" name="__codelineno-0-102" href="#__codelineno-0-102"></a>        nm = ctl.Name
-<a id="__codelineno-0-103" name="__codelineno-0-103" href="#__codelineno-0-103"></a>        If Left(nm, 4) = &quot;ctl_&quot; And nm &lt;&gt; &quot;txtFormatId&quot; Then
+<a id="__codelineno-0-103" name="__codelineno-0-103" href="#__codelineno-0-103"></a>        If Left(nm, 4) = "ctl_" And nm &lt;&gt; "txtFormatId" Then
 <a id="__codelineno-0-104" name="__codelineno-0-104" href="#__codelineno-0-104"></a>            If m_renderer.IsRequiredCtl(nm) Then
 <a id="__codelineno-0-105" name="__codelineno-0-105" href="#__codelineno-0-105"></a>                Dim v As String
-<a id="__codelineno-0-106" name="__codelineno-0-106" href="#__codelineno-0-106"></a>                v = &quot;&quot;
-<a id="__codelineno-0-107" name="__codelineno-0-107" href="#__codelineno-0-107"></a>                If TypeName(ctl) = &quot;TextBox&quot; Then
-<a id="__codelineno-0-108" name="__codelineno-0-108" href="#__codelineno-0-108"></a>                    If CStr(ctl.Tag) &lt;&gt; &quot;PLACEHOLDER&quot; Then v = Trim(CStr(ctl.Text))
-<a id="__codelineno-0-109" name="__codelineno-0-109" href="#__codelineno-0-109"></a>                ElseIf TypeName(ctl) = &quot;ComboBox&quot; Then
+<a id="__codelineno-0-106" name="__codelineno-0-106" href="#__codelineno-0-106"></a>                v = ""
+<a id="__codelineno-0-107" name="__codelineno-0-107" href="#__codelineno-0-107"></a>                If TypeName(ctl) = "TextBox" Then
+<a id="__codelineno-0-108" name="__codelineno-0-108" href="#__codelineno-0-108"></a>                    If CStr(ctl.Tag) &lt;&gt; "PLACEHOLDER" Then v = Trim(CStr(ctl.Text))
+<a id="__codelineno-0-109" name="__codelineno-0-109" href="#__codelineno-0-109"></a>                ElseIf TypeName(ctl) = "ComboBox" Then
 <a id="__codelineno-0-110" name="__codelineno-0-110" href="#__codelineno-0-110"></a>                    v = Trim(CStr(ctl.Value))
 <a id="__codelineno-0-111" name="__codelineno-0-111" href="#__codelineno-0-111"></a>                End If
 <a id="__codelineno-0-112" name="__codelineno-0-112" href="#__codelineno-0-112"></a>                If Len(v) = 0 Then
@@ -5157,7 +5157,7 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-114" name="__codelineno-0-114" href="#__codelineno-0-114"></a>                    fn = m_renderer.GetFieldNameForCtl(nm)
 <a id="__codelineno-0-115" name="__codelineno-0-115" href="#__codelineno-0-115"></a>                    If Len(fn) = 0 Then fn = Mid(nm, 5)
 <a id="__codelineno-0-116" name="__codelineno-0-116" href="#__codelineno-0-116"></a>                    If Len(missing) &gt; 0 Then missing = missing &amp; vbCrLf
-<a id="__codelineno-0-117" name="__codelineno-0-117" href="#__codelineno-0-117"></a>                    missing = missing &amp; &quot;・&quot; &amp; fn
+<a id="__codelineno-0-117" name="__codelineno-0-117" href="#__codelineno-0-117"></a>                    missing = missing &amp; "・" &amp; fn
 <a id="__codelineno-0-118" name="__codelineno-0-118" href="#__codelineno-0-118"></a>                End If
 <a id="__codelineno-0-119" name="__codelineno-0-119" href="#__codelineno-0-119"></a>            End If
 <a id="__codelineno-0-120" name="__codelineno-0-120" href="#__codelineno-0-120"></a>        End If
@@ -5167,35 +5167,35 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-124" name="__codelineno-0-124" href="#__codelineno-0-124"></a>    End If
 <a id="__codelineno-0-125" name="__codelineno-0-125" href="#__codelineno-0-125"></a>    Exit Function
 <a id="__codelineno-0-126" name="__codelineno-0-126" href="#__codelineno-0-126"></a>ErrHandler:
-<a id="__codelineno-0-127" name="__codelineno-0-127" href="#__codelineno-0-127"></a>    MissingRequiredMessage = &quot;&quot;
+<a id="__codelineno-0-127" name="__codelineno-0-127" href="#__codelineno-0-127"></a>    MissingRequiredMessage = ""
 <a id="__codelineno-0-128" name="__codelineno-0-128" href="#__codelineno-0-128"></a>End Function
 <a id="__codelineno-0-129" name="__codelineno-0-129" href="#__codelineno-0-129"></a>
-<a id="__codelineno-0-130" name="__codelineno-0-130" href="#__codelineno-0-130"></a>&#39; [BUG-B16] head line: &quot;hissu koumoku wo nyuuryoku shite kudasai:&quot;
+<a id="__codelineno-0-130" name="__codelineno-0-130" href="#__codelineno-0-130"></a>' [BUG-B16] head line: "hissu koumoku wo nyuuryoku shite kudasai:"
 <a id="__codelineno-0-131" name="__codelineno-0-131" href="#__codelineno-0-131"></a>Private Function MsgRequiredHead() As String
 <a id="__codelineno-0-132" name="__codelineno-0-132" href="#__codelineno-0-132"></a>    MsgRequiredHead = ChrW(&amp;H5FC5) &amp; ChrW(&amp;H9808) &amp; ChrW(&amp;H9805) &amp; ChrW(&amp;H76EE) &amp; _
 <a id="__codelineno-0-133" name="__codelineno-0-133" href="#__codelineno-0-133"></a>                      ChrW(&amp;H3092) &amp; ChrW(&amp;H5165) &amp; ChrW(&amp;H529B) &amp; ChrW(&amp;H3057) &amp; _
-<a id="__codelineno-0-134" name="__codelineno-0-134" href="#__codelineno-0-134"></a>                      ChrW(&amp;H3066) &amp; ChrW(&amp;H304F) &amp; ChrW(&amp;H3060) &amp; ChrW(&amp;H3055) &amp; ChrW(&amp;H3044) &amp; &quot;:&quot;
+<a id="__codelineno-0-134" name="__codelineno-0-134" href="#__codelineno-0-134"></a>                      ChrW(&amp;H3066) &amp; ChrW(&amp;H304F) &amp; ChrW(&amp;H3060) &amp; ChrW(&amp;H3055) &amp; ChrW(&amp;H3044) &amp; ":"
 <a id="__codelineno-0-135" name="__codelineno-0-135" href="#__codelineno-0-135"></a>End Function
 <a id="__codelineno-0-136" name="__codelineno-0-136" href="#__codelineno-0-136"></a>
-<a id="__codelineno-0-137" name="__codelineno-0-137" href="#__codelineno-0-137"></a>&#39; Called from dynamic form&#39;s btnUpdate_Click (legacy path; kept for compat)
-<a id="__codelineno-0-138" name="__codelineno-0-138" href="#__codelineno-0-138"></a>&#39; [B42 2026-07-02] real logic moved to OnUpdateV2 (Boolean) so the injected
-<a id="__codelineno-0-139" name="__codelineno-0-139" href="#__codelineno-0-139"></a>&#39; handler can keep the form open when validation fails or persist errors.
+<a id="__codelineno-0-137" name="__codelineno-0-137" href="#__codelineno-0-137"></a>' Called from dynamic form's btnUpdate_Click (legacy path; kept for compat)
+<a id="__codelineno-0-138" name="__codelineno-0-138" href="#__codelineno-0-138"></a>' [B42 2026-07-02] real logic moved to OnUpdateV2 (Boolean) so the injected
+<a id="__codelineno-0-139" name="__codelineno-0-139" href="#__codelineno-0-139"></a>' handler can keep the form open when validation fails or persist errors.
 <a id="__codelineno-0-140" name="__codelineno-0-140" href="#__codelineno-0-140"></a>Public Sub OnUpdate()
 <a id="__codelineno-0-141" name="__codelineno-0-141" href="#__codelineno-0-141"></a>    OnUpdateV2
 <a id="__codelineno-0-142" name="__codelineno-0-142" href="#__codelineno-0-142"></a>End Sub
 <a id="__codelineno-0-143" name="__codelineno-0-143" href="#__codelineno-0-143"></a>
-<a id="__codelineno-0-144" name="__codelineno-0-144" href="#__codelineno-0-144"></a>&#39; ================================================================
-<a id="__codelineno-0-145" name="__codelineno-0-145" href="#__codelineno-0-145"></a>&#39; [B42 2026-07-02] OnUpdateV2: returns True only when the update was
-<a id="__codelineno-0-146" name="__codelineno-0-146" href="#__codelineno-0-146"></a>&#39; actually persisted. The injected btnUpdate_Click unloads the form only
-<a id="__codelineno-0-147" name="__codelineno-0-147" href="#__codelineno-0-147"></a>&#39; on True - previously Unload ran unconditionally, so B16 (required) and
-<a id="__codelineno-0-148" name="__codelineno-0-148" href="#__codelineno-0-148"></a>&#39; B32 (invalid date) rejections closed the form and discarded all edits.
-<a id="__codelineno-0-149" name="__codelineno-0-149" href="#__codelineno-0-149"></a>&#39; ================================================================
+<a id="__codelineno-0-144" name="__codelineno-0-144" href="#__codelineno-0-144"></a>' ================================================================
+<a id="__codelineno-0-145" name="__codelineno-0-145" href="#__codelineno-0-145"></a>' [B42 2026-07-02] OnUpdateV2: returns True only when the update was
+<a id="__codelineno-0-146" name="__codelineno-0-146" href="#__codelineno-0-146"></a>' actually persisted. The injected btnUpdate_Click unloads the form only
+<a id="__codelineno-0-147" name="__codelineno-0-147" href="#__codelineno-0-147"></a>' on True - previously Unload ran unconditionally, so B16 (required) and
+<a id="__codelineno-0-148" name="__codelineno-0-148" href="#__codelineno-0-148"></a>' B32 (invalid date) rejections closed the form and discarded all edits.
+<a id="__codelineno-0-149" name="__codelineno-0-149" href="#__codelineno-0-149"></a>' ================================================================
 <a id="__codelineno-0-150" name="__codelineno-0-150" href="#__codelineno-0-150"></a>Public Function OnUpdateV2() As Boolean
-<a id="__codelineno-0-151" name="__codelineno-0-151" href="#__codelineno-0-151"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1584] modUserFormCallback.OnUpdateV2 ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-151" name="__codelineno-0-151" href="#__codelineno-0-151"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1584] modUserFormCallback.OnUpdateV2 ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-152" name="__codelineno-0-152" href="#__codelineno-0-152"></a>    On Error GoTo ErrHandler
 <a id="__codelineno-0-153" name="__codelineno-0-153" href="#__codelineno-0-153"></a>    OnUpdateV2 = False
 <a id="__codelineno-0-154" name="__codelineno-0-154" href="#__codelineno-0-154"></a>    If m_renderer Is Nothing Then Exit Function
-<a id="__codelineno-0-155" name="__codelineno-0-155" href="#__codelineno-0-155"></a>    &#39; [BUG-B16 2026-06-11] enforce required fields before persisting.
+<a id="__codelineno-0-155" name="__codelineno-0-155" href="#__codelineno-0-155"></a>    ' [BUG-B16 2026-06-11] enforce required fields before persisting.
 <a id="__codelineno-0-156" name="__codelineno-0-156" href="#__codelineno-0-156"></a>    Dim missMsg2 As String
 <a id="__codelineno-0-157" name="__codelineno-0-157" href="#__codelineno-0-157"></a>    missMsg2 = MissingRequiredMessage()
 <a id="__codelineno-0-158" name="__codelineno-0-158" href="#__codelineno-0-158"></a>    If Len(missMsg2) &gt; 0 Then
@@ -5209,48 +5209,48 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-166" name="__codelineno-0-166" href="#__codelineno-0-166"></a>        Exit Function
 <a id="__codelineno-0-167" name="__codelineno-0-167" href="#__codelineno-0-167"></a>    End If
 <a id="__codelineno-0-168" name="__codelineno-0-168" href="#__codelineno-0-168"></a>    Dim id As String
-<a id="__codelineno-0-169" name="__codelineno-0-169" href="#__codelineno-0-169"></a>    id = PersistFromActiveForm(&quot;edit&quot;)
+<a id="__codelineno-0-169" name="__codelineno-0-169" href="#__codelineno-0-169"></a>    id = PersistFromActiveForm("edit")
 <a id="__codelineno-0-170" name="__codelineno-0-170" href="#__codelineno-0-170"></a>    If Len(id) = 0 Then
-<a id="__codelineno-0-171" name="__codelineno-0-171" href="#__codelineno-0-171"></a>        &#39; persist failed (IO/encoding error, already logged); keep the form open.
+<a id="__codelineno-0-171" name="__codelineno-0-171" href="#__codelineno-0-171"></a>        ' persist failed (IO/encoding error, already logged); keep the form open.
 <a id="__codelineno-0-172" name="__codelineno-0-172" href="#__codelineno-0-172"></a>        If Not modCommon.IsHeadless() Then MsgBox MsgUpdateFailed(), vbExclamation, MsgRegisterTitle()
 <a id="__codelineno-0-173" name="__codelineno-0-173" href="#__codelineno-0-173"></a>        Exit Function
 <a id="__codelineno-0-174" name="__codelineno-0-174" href="#__codelineno-0-174"></a>    End If
 <a id="__codelineno-0-175" name="__codelineno-0-175" href="#__codelineno-0-175"></a>    m_renderer.SetReturnId id
 <a id="__codelineno-0-176" name="__codelineno-0-176" href="#__codelineno-0-176"></a>    OnUpdateV2 = True
-<a id="__codelineno-0-177" name="__codelineno-0-177" href="#__codelineno-0-177"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1585] modUserFormCallback.OnUpdateV2 EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-177" name="__codelineno-0-177" href="#__codelineno-0-177"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1585] modUserFormCallback.OnUpdateV2 EXIT-OK"  ' [ADR-0100]
 <a id="__codelineno-0-178" name="__codelineno-0-178" href="#__codelineno-0-178"></a>    Exit Function
 <a id="__codelineno-0-179" name="__codelineno-0-179" href="#__codelineno-0-179"></a>ErrHandler:
-<a id="__codelineno-0-180" name="__codelineno-0-180" href="#__codelineno-0-180"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print &quot;[D-1586] modUserFormCallback.OnUpdateV2 EXIT-ERR &quot; &amp; &quot;errNum=&quot; &amp; Err.Number &amp; &quot; desc=&quot; &amp; Err.Description  &#39; [ADR-0100]
-<a id="__codelineno-0-181" name="__codelineno-0-181" href="#__codelineno-0-181"></a>    Debug.Print &quot;[ERR] OnUpdateV2: &quot; &amp; Err.Number &amp; &quot; &quot; &amp; Err.Description
+<a id="__codelineno-0-180" name="__codelineno-0-180" href="#__codelineno-0-180"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print "[D-1586] modUserFormCallback.OnUpdateV2 EXIT-ERR " &amp; "errNum=" &amp; Err.Number &amp; " desc=" &amp; Err.Description  ' [ADR-0100]
+<a id="__codelineno-0-181" name="__codelineno-0-181" href="#__codelineno-0-181"></a>    Debug.Print "[ERR] OnUpdateV2: " &amp; Err.Number &amp; " " &amp; Err.Description
 <a id="__codelineno-0-182" name="__codelineno-0-182" href="#__codelineno-0-182"></a>    OnUpdateV2 = False
 <a id="__codelineno-0-183" name="__codelineno-0-183" href="#__codelineno-0-183"></a>End Function
 <a id="__codelineno-0-184" name="__codelineno-0-184" href="#__codelineno-0-184"></a>
-<a id="__codelineno-0-185" name="__codelineno-0-185" href="#__codelineno-0-185"></a>&#39; [B42] &quot;koushin ni shippai shimashita.&quot; (update failed)
+<a id="__codelineno-0-185" name="__codelineno-0-185" href="#__codelineno-0-185"></a>' [B42] "koushin ni shippai shimashita." (update failed)
 <a id="__codelineno-0-186" name="__codelineno-0-186" href="#__codelineno-0-186"></a>Private Function MsgUpdateFailed() As String
 <a id="__codelineno-0-187" name="__codelineno-0-187" href="#__codelineno-0-187"></a>    MsgUpdateFailed = ChrW(&amp;H66F4) &amp; ChrW(&amp;H65B0) &amp; ChrW(&amp;H306B) &amp; ChrW(&amp;H5931) &amp; ChrW(&amp;H6557) &amp; _
 <a id="__codelineno-0-188" name="__codelineno-0-188" href="#__codelineno-0-188"></a>                      ChrW(&amp;H3057) &amp; ChrW(&amp;H307E) &amp; ChrW(&amp;H3057) &amp; ChrW(&amp;H305F) &amp; ChrW(&amp;H3002)
 <a id="__codelineno-0-189" name="__codelineno-0-189" href="#__codelineno-0-189"></a>End Function
 <a id="__codelineno-0-190" name="__codelineno-0-190" href="#__codelineno-0-190"></a>
-<a id="__codelineno-0-191" name="__codelineno-0-191" href="#__codelineno-0-191"></a>&#39; Called from dynamic form&#39;s btnDelete_Click (legacy path; kept for compat)
+<a id="__codelineno-0-191" name="__codelineno-0-191" href="#__codelineno-0-191"></a>' Called from dynamic form's btnDelete_Click (legacy path; kept for compat)
 <a id="__codelineno-0-192" name="__codelineno-0-192" href="#__codelineno-0-192"></a>Public Sub OnDelete()
 <a id="__codelineno-0-193" name="__codelineno-0-193" href="#__codelineno-0-193"></a>    OnDeleteV2
 <a id="__codelineno-0-194" name="__codelineno-0-194" href="#__codelineno-0-194"></a>End Sub
 <a id="__codelineno-0-195" name="__codelineno-0-195" href="#__codelineno-0-195"></a>
-<a id="__codelineno-0-196" name="__codelineno-0-196" href="#__codelineno-0-196"></a>&#39; ================================================================
-<a id="__codelineno-0-197" name="__codelineno-0-197" href="#__codelineno-0-197"></a>&#39; [B42 2026-07-02] OnDeleteV2: returns True only when the knowledge was
-<a id="__codelineno-0-198" name="__codelineno-0-198" href="#__codelineno-0-198"></a>&#39; actually deleted. Choosing &quot;No&quot; on the B31 confirm (or a delete failure)
-<a id="__codelineno-0-199" name="__codelineno-0-199" href="#__codelineno-0-199"></a>&#39; no longer closes the form.
-<a id="__codelineno-0-200" name="__codelineno-0-200" href="#__codelineno-0-200"></a>&#39; ================================================================
+<a id="__codelineno-0-196" name="__codelineno-0-196" href="#__codelineno-0-196"></a>' ================================================================
+<a id="__codelineno-0-197" name="__codelineno-0-197" href="#__codelineno-0-197"></a>' [B42 2026-07-02] OnDeleteV2: returns True only when the knowledge was
+<a id="__codelineno-0-198" name="__codelineno-0-198" href="#__codelineno-0-198"></a>' actually deleted. Choosing "No" on the B31 confirm (or a delete failure)
+<a id="__codelineno-0-199" name="__codelineno-0-199" href="#__codelineno-0-199"></a>' no longer closes the form.
+<a id="__codelineno-0-200" name="__codelineno-0-200" href="#__codelineno-0-200"></a>' ================================================================
 <a id="__codelineno-0-201" name="__codelineno-0-201" href="#__codelineno-0-201"></a>Public Function OnDeleteV2() As Boolean
-<a id="__codelineno-0-202" name="__codelineno-0-202" href="#__codelineno-0-202"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1587] modUserFormCallback.OnDeleteV2 ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-202" name="__codelineno-0-202" href="#__codelineno-0-202"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1587] modUserFormCallback.OnDeleteV2 ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-203" name="__codelineno-0-203" href="#__codelineno-0-203"></a>    On Error GoTo ErrHandler
 <a id="__codelineno-0-204" name="__codelineno-0-204" href="#__codelineno-0-204"></a>    OnDeleteV2 = False
 <a id="__codelineno-0-205" name="__codelineno-0-205" href="#__codelineno-0-205"></a>    If m_renderer Is Nothing Then Exit Function
 <a id="__codelineno-0-206" name="__codelineno-0-206" href="#__codelineno-0-206"></a>    Dim kid As String
 <a id="__codelineno-0-207" name="__codelineno-0-207" href="#__codelineno-0-207"></a>    kid = m_renderer.GetKnowledgeId()
 <a id="__codelineno-0-208" name="__codelineno-0-208" href="#__codelineno-0-208"></a>    If Len(kid) = 0 Then Exit Function
-<a id="__codelineno-0-209" name="__codelineno-0-209" href="#__codelineno-0-209"></a>    &#39; [B31 2026-06-12] spec (ADR-0125/v2.3.1 banner): delete must CONFIRM first.
-<a id="__codelineno-0-210" name="__codelineno-0-210" href="#__codelineno-0-210"></a>    &#39; Was: one click = silent physical delete.
+<a id="__codelineno-0-209" name="__codelineno-0-209" href="#__codelineno-0-209"></a>    ' [B31 2026-06-12] spec (ADR-0125/v2.3.1 banner): delete must CONFIRM first.
+<a id="__codelineno-0-210" name="__codelineno-0-210" href="#__codelineno-0-210"></a>    ' Was: one click = silent physical delete.
 <a id="__codelineno-0-211" name="__codelineno-0-211" href="#__codelineno-0-211"></a>    If Not modCommon.IsHeadless() Then
 <a id="__codelineno-0-212" name="__codelineno-0-212" href="#__codelineno-0-212"></a>        Dim ansDel As VbMsgBoxResult
 <a id="__codelineno-0-213" name="__codelineno-0-213" href="#__codelineno-0-213"></a>        ansDel = MsgBox(ChrW(&amp;H30CA) &amp; ChrW(&amp;H30EC) &amp; ChrW(&amp;H30C3) &amp; ChrW(&amp;H30B8) &amp; ChrW(&amp;H300C) &amp; kid &amp; ChrW(&amp;H300D) &amp; ChrW(&amp;H3092) &amp; ChrW(&amp;H524A) &amp; ChrW(&amp;H9664) &amp; ChrW(&amp;H3057) &amp; ChrW(&amp;H307E) &amp; ChrW(&amp;H3059) &amp; ChrW(&amp;H304B) &amp; ChrW(&amp;HFF1F), _
@@ -5260,44 +5260,44 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-217" name="__codelineno-0-217" href="#__codelineno-0-217"></a>    Dim ok As Boolean
 <a id="__codelineno-0-218" name="__codelineno-0-218" href="#__codelineno-0-218"></a>    ok = modKnowledgeFileIO.DeleteKnowledge(kid)
 <a id="__codelineno-0-219" name="__codelineno-0-219" href="#__codelineno-0-219"></a>    If ok Then
-<a id="__codelineno-0-220" name="__codelineno-0-220" href="#__codelineno-0-220"></a>        m_renderer.SetReturnId &quot;DELETED&quot;
+<a id="__codelineno-0-220" name="__codelineno-0-220" href="#__codelineno-0-220"></a>        m_renderer.SetReturnId "DELETED"
 <a id="__codelineno-0-221" name="__codelineno-0-221" href="#__codelineno-0-221"></a>        OnDeleteV2 = True
 <a id="__codelineno-0-222" name="__codelineno-0-222" href="#__codelineno-0-222"></a>    Else
 <a id="__codelineno-0-223" name="__codelineno-0-223" href="#__codelineno-0-223"></a>        If Not modCommon.IsHeadless() Then MsgBox MsgDeleteFailed(), vbExclamation, _
 <a id="__codelineno-0-224" name="__codelineno-0-224" href="#__codelineno-0-224"></a>            ChrW(&amp;H30CA) &amp; ChrW(&amp;H30EC) &amp; ChrW(&amp;H30C3) &amp; ChrW(&amp;H30B8) &amp; ChrW(&amp;H524A) &amp; ChrW(&amp;H9664)
 <a id="__codelineno-0-225" name="__codelineno-0-225" href="#__codelineno-0-225"></a>    End If
-<a id="__codelineno-0-226" name="__codelineno-0-226" href="#__codelineno-0-226"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1588] modUserFormCallback.OnDeleteV2 EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-226" name="__codelineno-0-226" href="#__codelineno-0-226"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1588] modUserFormCallback.OnDeleteV2 EXIT-OK"  ' [ADR-0100]
 <a id="__codelineno-0-227" name="__codelineno-0-227" href="#__codelineno-0-227"></a>    Exit Function
 <a id="__codelineno-0-228" name="__codelineno-0-228" href="#__codelineno-0-228"></a>ErrHandler:
-<a id="__codelineno-0-229" name="__codelineno-0-229" href="#__codelineno-0-229"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print &quot;[D-1589] modUserFormCallback.OnDeleteV2 EXIT-ERR &quot; &amp; &quot;errNum=&quot; &amp; Err.Number &amp; &quot; desc=&quot; &amp; Err.Description  &#39; [ADR-0100]
-<a id="__codelineno-0-230" name="__codelineno-0-230" href="#__codelineno-0-230"></a>    Debug.Print &quot;[ERR] OnDeleteV2: &quot; &amp; Err.Number &amp; &quot; &quot; &amp; Err.Description
+<a id="__codelineno-0-229" name="__codelineno-0-229" href="#__codelineno-0-229"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print "[D-1589] modUserFormCallback.OnDeleteV2 EXIT-ERR " &amp; "errNum=" &amp; Err.Number &amp; " desc=" &amp; Err.Description  ' [ADR-0100]
+<a id="__codelineno-0-230" name="__codelineno-0-230" href="#__codelineno-0-230"></a>    Debug.Print "[ERR] OnDeleteV2: " &amp; Err.Number &amp; " " &amp; Err.Description
 <a id="__codelineno-0-231" name="__codelineno-0-231" href="#__codelineno-0-231"></a>    OnDeleteV2 = False
 <a id="__codelineno-0-232" name="__codelineno-0-232" href="#__codelineno-0-232"></a>End Function
 <a id="__codelineno-0-233" name="__codelineno-0-233" href="#__codelineno-0-233"></a>
-<a id="__codelineno-0-234" name="__codelineno-0-234" href="#__codelineno-0-234"></a>&#39; [B42] &quot;sakujo ni shippai shimashita.&quot; (delete failed)
+<a id="__codelineno-0-234" name="__codelineno-0-234" href="#__codelineno-0-234"></a>' [B42] "sakujo ni shippai shimashita." (delete failed)
 <a id="__codelineno-0-235" name="__codelineno-0-235" href="#__codelineno-0-235"></a>Private Function MsgDeleteFailed() As String
 <a id="__codelineno-0-236" name="__codelineno-0-236" href="#__codelineno-0-236"></a>    MsgDeleteFailed = ChrW(&amp;H524A) &amp; ChrW(&amp;H9664) &amp; ChrW(&amp;H306B) &amp; ChrW(&amp;H5931) &amp; ChrW(&amp;H6557) &amp; _
 <a id="__codelineno-0-237" name="__codelineno-0-237" href="#__codelineno-0-237"></a>                      ChrW(&amp;H3057) &amp; ChrW(&amp;H307E) &amp; ChrW(&amp;H3057) &amp; ChrW(&amp;H305F) &amp; ChrW(&amp;H3002)
 <a id="__codelineno-0-238" name="__codelineno-0-238" href="#__codelineno-0-238"></a>End Function
 <a id="__codelineno-0-239" name="__codelineno-0-239" href="#__codelineno-0-239"></a>
-<a id="__codelineno-0-240" name="__codelineno-0-240" href="#__codelineno-0-240"></a>&#39; Called from dynamic form&#39;s btnEdit_Click (M-09 view -&gt; M-06 edit)
+<a id="__codelineno-0-240" name="__codelineno-0-240" href="#__codelineno-0-240"></a>' Called from dynamic form's btnEdit_Click (M-09 view -&gt; M-06 edit)
 <a id="__codelineno-0-241" name="__codelineno-0-241" href="#__codelineno-0-241"></a>Public Sub OnEdit()
-<a id="__codelineno-0-242" name="__codelineno-0-242" href="#__codelineno-0-242"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1590] modUserFormCallback.OnEdit ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-242" name="__codelineno-0-242" href="#__codelineno-0-242"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1590] modUserFormCallback.OnEdit ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-243" name="__codelineno-0-243" href="#__codelineno-0-243"></a>    On Error GoTo ErrHandler
 <a id="__codelineno-0-244" name="__codelineno-0-244" href="#__codelineno-0-244"></a>    If m_renderer Is Nothing Then Exit Sub
 <a id="__codelineno-0-245" name="__codelineno-0-245" href="#__codelineno-0-245"></a>    Dim kid As String
 <a id="__codelineno-0-246" name="__codelineno-0-246" href="#__codelineno-0-246"></a>    kid = m_renderer.GetKnowledgeId()
-<a id="__codelineno-0-247" name="__codelineno-0-247" href="#__codelineno-0-247"></a>    m_renderer.SetReturnId &quot;EDIT:&quot; &amp; kid
-<a id="__codelineno-0-248" name="__codelineno-0-248" href="#__codelineno-0-248"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1591] modUserFormCallback.OnEdit EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-247" name="__codelineno-0-247" href="#__codelineno-0-247"></a>    m_renderer.SetReturnId "EDIT:" &amp; kid
+<a id="__codelineno-0-248" name="__codelineno-0-248" href="#__codelineno-0-248"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1591] modUserFormCallback.OnEdit EXIT-OK"  ' [ADR-0100]
 <a id="__codelineno-0-249" name="__codelineno-0-249" href="#__codelineno-0-249"></a>    Exit Sub
 <a id="__codelineno-0-250" name="__codelineno-0-250" href="#__codelineno-0-250"></a>ErrHandler:
-<a id="__codelineno-0-251" name="__codelineno-0-251" href="#__codelineno-0-251"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print &quot;[D-1592] modUserFormCallback.OnEdit EXIT-ERR &quot; &amp; &quot;errNum=&quot; &amp; Err.Number &amp; &quot; desc=&quot; &amp; Err.Description  &#39; [ADR-0100]
-<a id="__codelineno-0-252" name="__codelineno-0-252" href="#__codelineno-0-252"></a>    Debug.Print &quot;[ERR] OnEdit: &quot; &amp; Err.Number &amp; &quot; &quot; &amp; Err.Description
+<a id="__codelineno-0-251" name="__codelineno-0-251" href="#__codelineno-0-251"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print "[D-1592] modUserFormCallback.OnEdit EXIT-ERR " &amp; "errNum=" &amp; Err.Number &amp; " desc=" &amp; Err.Description  ' [ADR-0100]
+<a id="__codelineno-0-252" name="__codelineno-0-252" href="#__codelineno-0-252"></a>    Debug.Print "[ERR] OnEdit: " &amp; Err.Number &amp; " " &amp; Err.Description
 <a id="__codelineno-0-253" name="__codelineno-0-253" href="#__codelineno-0-253"></a>End Sub
 <a id="__codelineno-0-254" name="__codelineno-0-254" href="#__codelineno-0-254"></a>
-<a id="__codelineno-0-255" name="__codelineno-0-255" href="#__codelineno-0-255"></a>&#39; Called from dynamic form&#39;s btnClear_Click (M-05 register)
+<a id="__codelineno-0-255" name="__codelineno-0-255" href="#__codelineno-0-255"></a>' Called from dynamic form's btnClear_Click (M-05 register)
 <a id="__codelineno-0-256" name="__codelineno-0-256" href="#__codelineno-0-256"></a>Public Sub OnClear()
-<a id="__codelineno-0-257" name="__codelineno-0-257" href="#__codelineno-0-257"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1593] modUserFormCallback.OnClear ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-257" name="__codelineno-0-257" href="#__codelineno-0-257"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1593] modUserFormCallback.OnClear ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-258" name="__codelineno-0-258" href="#__codelineno-0-258"></a>    On Error GoTo ErrHandler
 <a id="__codelineno-0-259" name="__codelineno-0-259" href="#__codelineno-0-259"></a>    Dim frm As Object
 <a id="__codelineno-0-260" name="__codelineno-0-260" href="#__codelineno-0-260"></a>    Set frm = GetActiveDynForm()
@@ -5306,27 +5306,27 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-263" name="__codelineno-0-263" href="#__codelineno-0-263"></a>    For Each ctl In frm.Controls
 <a id="__codelineno-0-264" name="__codelineno-0-264" href="#__codelineno-0-264"></a>        Dim nm As String
 <a id="__codelineno-0-265" name="__codelineno-0-265" href="#__codelineno-0-265"></a>        nm = ctl.Name
-<a id="__codelineno-0-266" name="__codelineno-0-266" href="#__codelineno-0-266"></a>        &#39; Phase R-2: never clear the format selector or readonly header fields.
-<a id="__codelineno-0-267" name="__codelineno-0-267" href="#__codelineno-0-267"></a>        If nm = &quot;txtFormatId&quot; Or nm = &quot;cboFormatId&quot; Or Left(nm, 7) = &quot;hdrctl_&quot; Then
-<a id="__codelineno-0-268" name="__codelineno-0-268" href="#__codelineno-0-268"></a>            &#39; skip
-<a id="__codelineno-0-269" name="__codelineno-0-269" href="#__codelineno-0-269"></a>        ElseIf TypeName(ctl) = &quot;TextBox&quot; Then
-<a id="__codelineno-0-270" name="__codelineno-0-270" href="#__codelineno-0-270"></a>            ctl.Text = &quot;&quot;
-<a id="__codelineno-0-271" name="__codelineno-0-271" href="#__codelineno-0-271"></a>        ElseIf TypeName(ctl) = &quot;ComboBox&quot; Then
-<a id="__codelineno-0-272" name="__codelineno-0-272" href="#__codelineno-0-272"></a>            ctl.Value = &quot;&quot;
+<a id="__codelineno-0-266" name="__codelineno-0-266" href="#__codelineno-0-266"></a>        ' Phase R-2: never clear the format selector or readonly header fields.
+<a id="__codelineno-0-267" name="__codelineno-0-267" href="#__codelineno-0-267"></a>        If nm = "txtFormatId" Or nm = "cboFormatId" Or Left(nm, 7) = "hdrctl_" Then
+<a id="__codelineno-0-268" name="__codelineno-0-268" href="#__codelineno-0-268"></a>            ' skip
+<a id="__codelineno-0-269" name="__codelineno-0-269" href="#__codelineno-0-269"></a>        ElseIf TypeName(ctl) = "TextBox" Then
+<a id="__codelineno-0-270" name="__codelineno-0-270" href="#__codelineno-0-270"></a>            ctl.Text = ""
+<a id="__codelineno-0-271" name="__codelineno-0-271" href="#__codelineno-0-271"></a>        ElseIf TypeName(ctl) = "ComboBox" Then
+<a id="__codelineno-0-272" name="__codelineno-0-272" href="#__codelineno-0-272"></a>            ctl.Value = ""
 <a id="__codelineno-0-273" name="__codelineno-0-273" href="#__codelineno-0-273"></a>        End If
 <a id="__codelineno-0-274" name="__codelineno-0-274" href="#__codelineno-0-274"></a>    Next ctl
-<a id="__codelineno-0-275" name="__codelineno-0-275" href="#__codelineno-0-275"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1594] modUserFormCallback.OnClear EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-275" name="__codelineno-0-275" href="#__codelineno-0-275"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1594] modUserFormCallback.OnClear EXIT-OK"  ' [ADR-0100]
 <a id="__codelineno-0-276" name="__codelineno-0-276" href="#__codelineno-0-276"></a>    Exit Sub
 <a id="__codelineno-0-277" name="__codelineno-0-277" href="#__codelineno-0-277"></a>ErrHandler:
-<a id="__codelineno-0-278" name="__codelineno-0-278" href="#__codelineno-0-278"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print &quot;[D-1595] modUserFormCallback.OnClear EXIT-ERR &quot; &amp; &quot;errNum=&quot; &amp; Err.Number &amp; &quot; desc=&quot; &amp; Err.Description  &#39; [ADR-0100]
-<a id="__codelineno-0-279" name="__codelineno-0-279" href="#__codelineno-0-279"></a>    Debug.Print &quot;[ERR] OnClear: &quot; &amp; Err.Number &amp; &quot; &quot; &amp; Err.Description
+<a id="__codelineno-0-278" name="__codelineno-0-278" href="#__codelineno-0-278"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print "[D-1595] modUserFormCallback.OnClear EXIT-ERR " &amp; "errNum=" &amp; Err.Number &amp; " desc=" &amp; Err.Description  ' [ADR-0100]
+<a id="__codelineno-0-279" name="__codelineno-0-279" href="#__codelineno-0-279"></a>    Debug.Print "[ERR] OnClear: " &amp; Err.Number &amp; " " &amp; Err.Description
 <a id="__codelineno-0-280" name="__codelineno-0-280" href="#__codelineno-0-280"></a>End Sub
 <a id="__codelineno-0-281" name="__codelineno-0-281" href="#__codelineno-0-281"></a>
-<a id="__codelineno-0-282" name="__codelineno-0-282" href="#__codelineno-0-282"></a>&#39; Phase R-2 F-3: called from dynamic form&#39;s cboFormatId_Change. Reads the newly
-<a id="__codelineno-0-283" name="__codelineno-0-283" href="#__codelineno-0-283"></a>&#39; selected format and, if it differs from the current one, unloads the form so
-<a id="__codelineno-0-284" name="__codelineno-0-284" href="#__codelineno-0-284"></a>&#39; ShowForm&#39;s loop rebuilds it with the new format&#39;s field set.
+<a id="__codelineno-0-282" name="__codelineno-0-282" href="#__codelineno-0-282"></a>' Phase R-2 F-3: called from dynamic form's cboFormatId_Change. Reads the newly
+<a id="__codelineno-0-283" name="__codelineno-0-283" href="#__codelineno-0-283"></a>' selected format and, if it differs from the current one, unloads the form so
+<a id="__codelineno-0-284" name="__codelineno-0-284" href="#__codelineno-0-284"></a>' ShowForm's loop rebuilds it with the new format's field set.
 <a id="__codelineno-0-285" name="__codelineno-0-285" href="#__codelineno-0-285"></a>Public Sub OnFormatChange()
-<a id="__codelineno-0-286" name="__codelineno-0-286" href="#__codelineno-0-286"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1596] modUserFormCallback.OnFormatChange ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-286" name="__codelineno-0-286" href="#__codelineno-0-286"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1596] modUserFormCallback.OnFormatChange ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-287" name="__codelineno-0-287" href="#__codelineno-0-287"></a>    On Error GoTo ErrHandler
 <a id="__codelineno-0-288" name="__codelineno-0-288" href="#__codelineno-0-288"></a>    If m_renderer Is Nothing Then Exit Sub
 <a id="__codelineno-0-289" name="__codelineno-0-289" href="#__codelineno-0-289"></a>    Dim frm As Object
@@ -5334,25 +5334,25 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-291" name="__codelineno-0-291" href="#__codelineno-0-291"></a>    If frm Is Nothing Then Exit Sub
 <a id="__codelineno-0-292" name="__codelineno-0-292" href="#__codelineno-0-292"></a>    Dim newFmt As String
 <a id="__codelineno-0-293" name="__codelineno-0-293" href="#__codelineno-0-293"></a>    On Error Resume Next
-<a id="__codelineno-0-294" name="__codelineno-0-294" href="#__codelineno-0-294"></a>    newFmt = CStr(frm.Controls(&quot;cboFormatId&quot;).Value)
+<a id="__codelineno-0-294" name="__codelineno-0-294" href="#__codelineno-0-294"></a>    newFmt = CStr(frm.Controls("cboFormatId").Value)
 <a id="__codelineno-0-295" name="__codelineno-0-295" href="#__codelineno-0-295"></a>    On Error GoTo ErrHandler
-<a id="__codelineno-0-296" name="__codelineno-0-296" href="#__codelineno-0-296"></a>    &#39; 2026-06-11 fix: dropdown carries the display name; map back to FormatID.
+<a id="__codelineno-0-296" name="__codelineno-0-296" href="#__codelineno-0-296"></a>    ' 2026-06-11 fix: dropdown carries the display name; map back to FormatID.
 <a id="__codelineno-0-297" name="__codelineno-0-297" href="#__codelineno-0-297"></a>    newFmt = m_renderer.ResolveDisplayToFormatId(newFmt)
 <a id="__codelineno-0-298" name="__codelineno-0-298" href="#__codelineno-0-298"></a>    Dim before As String
 <a id="__codelineno-0-299" name="__codelineno-0-299" href="#__codelineno-0-299"></a>    before = m_renderer.GetFormatId()
 <a id="__codelineno-0-300" name="__codelineno-0-300" href="#__codelineno-0-300"></a>    m_renderer.RequestReformat newFmt
 <a id="__codelineno-0-301" name="__codelineno-0-301" href="#__codelineno-0-301"></a>    If m_renderer.GetFormatId() &lt;&gt; before Then Unload frm
-<a id="__codelineno-0-302" name="__codelineno-0-302" href="#__codelineno-0-302"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1597] modUserFormCallback.OnFormatChange EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-302" name="__codelineno-0-302" href="#__codelineno-0-302"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1597] modUserFormCallback.OnFormatChange EXIT-OK"  ' [ADR-0100]
 <a id="__codelineno-0-303" name="__codelineno-0-303" href="#__codelineno-0-303"></a>    Exit Sub
 <a id="__codelineno-0-304" name="__codelineno-0-304" href="#__codelineno-0-304"></a>ErrHandler:
-<a id="__codelineno-0-305" name="__codelineno-0-305" href="#__codelineno-0-305"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print &quot;[D-1598] modUserFormCallback.OnFormatChange EXIT-ERR &quot; &amp; &quot;errNum=&quot; &amp; Err.Number &amp; &quot; desc=&quot; &amp; Err.Description  &#39; [ADR-0100]
-<a id="__codelineno-0-306" name="__codelineno-0-306" href="#__codelineno-0-306"></a>    Debug.Print &quot;[ERR] OnFormatChange: &quot; &amp; Err.Number &amp; &quot; &quot; &amp; Err.Description
+<a id="__codelineno-0-305" name="__codelineno-0-305" href="#__codelineno-0-305"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print "[D-1598] modUserFormCallback.OnFormatChange EXIT-ERR " &amp; "errNum=" &amp; Err.Number &amp; " desc=" &amp; Err.Description  ' [ADR-0100]
+<a id="__codelineno-0-306" name="__codelineno-0-306" href="#__codelineno-0-306"></a>    Debug.Print "[ERR] OnFormatChange: " &amp; Err.Number &amp; " " &amp; Err.Description
 <a id="__codelineno-0-307" name="__codelineno-0-307" href="#__codelineno-0-307"></a>End Sub
 <a id="__codelineno-0-308" name="__codelineno-0-308" href="#__codelineno-0-308"></a>
-<a id="__codelineno-0-309" name="__codelineno-0-309" href="#__codelineno-0-309"></a>&#39; R-3-a (2026-05-28): called from dynamic form&#39;s btnLoad_Click (M-06 edit).
-<a id="__codelineno-0-310" name="__codelineno-0-310" href="#__codelineno-0-310"></a>&#39; Reads the entered knowledge number and asks the renderer to reload + re-render.
+<a id="__codelineno-0-309" name="__codelineno-0-309" href="#__codelineno-0-309"></a>' R-3-a (2026-05-28): called from dynamic form's btnLoad_Click (M-06 edit).
+<a id="__codelineno-0-310" name="__codelineno-0-310" href="#__codelineno-0-310"></a>' Reads the entered knowledge number and asks the renderer to reload + re-render.
 <a id="__codelineno-0-311" name="__codelineno-0-311" href="#__codelineno-0-311"></a>Public Sub OnLoad()
-<a id="__codelineno-0-312" name="__codelineno-0-312" href="#__codelineno-0-312"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1599] modUserFormCallback.OnLoad ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-312" name="__codelineno-0-312" href="#__codelineno-0-312"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1599] modUserFormCallback.OnLoad ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-313" name="__codelineno-0-313" href="#__codelineno-0-313"></a>    On Error GoTo ErrHandler
 <a id="__codelineno-0-314" name="__codelineno-0-314" href="#__codelineno-0-314"></a>    If m_renderer Is Nothing Then Exit Sub
 <a id="__codelineno-0-315" name="__codelineno-0-315" href="#__codelineno-0-315"></a>    Dim frm As Object
@@ -5360,39 +5360,39 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-317" name="__codelineno-0-317" href="#__codelineno-0-317"></a>    If frm Is Nothing Then Exit Sub
 <a id="__codelineno-0-318" name="__codelineno-0-318" href="#__codelineno-0-318"></a>    Dim no As String
 <a id="__codelineno-0-319" name="__codelineno-0-319" href="#__codelineno-0-319"></a>    On Error Resume Next
-<a id="__codelineno-0-320" name="__codelineno-0-320" href="#__codelineno-0-320"></a>    no = CStr(FindCtl(frm, &quot;txtKnowledgeNo&quot;).Text)   &#39; R-3-χ-4: frScroll 内
+<a id="__codelineno-0-320" name="__codelineno-0-320" href="#__codelineno-0-320"></a>    no = CStr(FindCtl(frm, "txtKnowledgeNo").Text)   ' R-3-χ-4: frScroll 内
 <a id="__codelineno-0-321" name="__codelineno-0-321" href="#__codelineno-0-321"></a>    On Error GoTo ErrHandler
 <a id="__codelineno-0-322" name="__codelineno-0-322" href="#__codelineno-0-322"></a>    If Len(Trim(no)) = 0 Then Exit Sub
 <a id="__codelineno-0-323" name="__codelineno-0-323" href="#__codelineno-0-323"></a>    m_renderer.RequestLoad no
 <a id="__codelineno-0-324" name="__codelineno-0-324" href="#__codelineno-0-324"></a>    Unload frm
-<a id="__codelineno-0-325" name="__codelineno-0-325" href="#__codelineno-0-325"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1600] modUserFormCallback.OnLoad EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-325" name="__codelineno-0-325" href="#__codelineno-0-325"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1600] modUserFormCallback.OnLoad EXIT-OK"  ' [ADR-0100]
 <a id="__codelineno-0-326" name="__codelineno-0-326" href="#__codelineno-0-326"></a>    Exit Sub
 <a id="__codelineno-0-327" name="__codelineno-0-327" href="#__codelineno-0-327"></a>ErrHandler:
-<a id="__codelineno-0-328" name="__codelineno-0-328" href="#__codelineno-0-328"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print &quot;[D-1601] modUserFormCallback.OnLoad EXIT-ERR &quot; &amp; &quot;errNum=&quot; &amp; Err.Number &amp; &quot; desc=&quot; &amp; Err.Description  &#39; [ADR-0100]
-<a id="__codelineno-0-329" name="__codelineno-0-329" href="#__codelineno-0-329"></a>    Debug.Print &quot;[ERR] OnLoad: &quot; &amp; Err.Number &amp; &quot; &quot; &amp; Err.Description
+<a id="__codelineno-0-328" name="__codelineno-0-328" href="#__codelineno-0-328"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print "[D-1601] modUserFormCallback.OnLoad EXIT-ERR " &amp; "errNum=" &amp; Err.Number &amp; " desc=" &amp; Err.Description  ' [ADR-0100]
+<a id="__codelineno-0-329" name="__codelineno-0-329" href="#__codelineno-0-329"></a>    Debug.Print "[ERR] OnLoad: " &amp; Err.Number &amp; " " &amp; Err.Description
 <a id="__codelineno-0-330" name="__codelineno-0-330" href="#__codelineno-0-330"></a>End Sub
 <a id="__codelineno-0-331" name="__codelineno-0-331" href="#__codelineno-0-331"></a>
-<a id="__codelineno-0-332" name="__codelineno-0-332" href="#__codelineno-0-332"></a>&#39; Phase R-3-χ-4: field 系 controls は frScroll Frame 内にある。frm.Controls は直下のみ
-<a id="__codelineno-0-333" name="__codelineno-0-333" href="#__codelineno-0-333"></a>&#39; なので、frame 子も含めて探索/列挙するヘルパを使う(1 段ネスト = frScroll)。
+<a id="__codelineno-0-332" name="__codelineno-0-332" href="#__codelineno-0-332"></a>' Phase R-3-χ-4: field 系 controls は frScroll Frame 内にある。frm.Controls は直下のみ
+<a id="__codelineno-0-333" name="__codelineno-0-333" href="#__codelineno-0-333"></a>' なので、frame 子も含めて探索/列挙するヘルパを使う(1 段ネスト = frScroll)。
 <a id="__codelineno-0-334" name="__codelineno-0-334" href="#__codelineno-0-334"></a>Private Function FindCtl(ByVal frm As Object, ByVal nm As String) As Object
-<a id="__codelineno-0-335" name="__codelineno-0-335" href="#__codelineno-0-335"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1602] modUserFormCallback.FindCtl ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-335" name="__codelineno-0-335" href="#__codelineno-0-335"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1602] modUserFormCallback.FindCtl ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-336" name="__codelineno-0-336" href="#__codelineno-0-336"></a>    On Error Resume Next
 <a id="__codelineno-0-337" name="__codelineno-0-337" href="#__codelineno-0-337"></a>    Dim c As Object
 <a id="__codelineno-0-338" name="__codelineno-0-338" href="#__codelineno-0-338"></a>    Set c = frm.Controls(nm)
 <a id="__codelineno-0-339" name="__codelineno-0-339" href="#__codelineno-0-339"></a>    If Not c Is Nothing Then
 <a id="__codelineno-0-340" name="__codelineno-0-340" href="#__codelineno-0-340"></a>        Set FindCtl = c
-<a id="__codelineno-0-341" name="__codelineno-0-341" href="#__codelineno-0-341"></a>        If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1603] modUserFormCallback.FindCtl EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-341" name="__codelineno-0-341" href="#__codelineno-0-341"></a>        If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1603] modUserFormCallback.FindCtl EXIT-OK"  ' [ADR-0100]
 <a id="__codelineno-0-342" name="__codelineno-0-342" href="#__codelineno-0-342"></a>        Exit Function
 <a id="__codelineno-0-343" name="__codelineno-0-343" href="#__codelineno-0-343"></a>    End If
 <a id="__codelineno-0-344" name="__codelineno-0-344" href="#__codelineno-0-344"></a>    Dim f As Object
 <a id="__codelineno-0-345" name="__codelineno-0-345" href="#__codelineno-0-345"></a>    For Each f In frm.Controls
-<a id="__codelineno-0-346" name="__codelineno-0-346" href="#__codelineno-0-346"></a>        If TypeName(f) = &quot;Frame&quot; Then
+<a id="__codelineno-0-346" name="__codelineno-0-346" href="#__codelineno-0-346"></a>        If TypeName(f) = "Frame" Then
 <a id="__codelineno-0-347" name="__codelineno-0-347" href="#__codelineno-0-347"></a>            Dim cc As Object
 <a id="__codelineno-0-348" name="__codelineno-0-348" href="#__codelineno-0-348"></a>            Set cc = Nothing
 <a id="__codelineno-0-349" name="__codelineno-0-349" href="#__codelineno-0-349"></a>            Set cc = f.Controls(nm)
 <a id="__codelineno-0-350" name="__codelineno-0-350" href="#__codelineno-0-350"></a>            If Not cc Is Nothing Then
 <a id="__codelineno-0-351" name="__codelineno-0-351" href="#__codelineno-0-351"></a>                Set FindCtl = cc
-<a id="__codelineno-0-352" name="__codelineno-0-352" href="#__codelineno-0-352"></a>                If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1604] modUserFormCallback.FindCtl EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-352" name="__codelineno-0-352" href="#__codelineno-0-352"></a>                If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1604] modUserFormCallback.FindCtl EXIT-OK"  ' [ADR-0100]
 <a id="__codelineno-0-353" name="__codelineno-0-353" href="#__codelineno-0-353"></a>                Exit Function
 <a id="__codelineno-0-354" name="__codelineno-0-354" href="#__codelineno-0-354"></a>            End If
 <a id="__codelineno-0-355" name="__codelineno-0-355" href="#__codelineno-0-355"></a>        End If
@@ -5400,26 +5400,26 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-357" name="__codelineno-0-357" href="#__codelineno-0-357"></a>End Function
 <a id="__codelineno-0-358" name="__codelineno-0-358" href="#__codelineno-0-358"></a>
 <a id="__codelineno-0-359" name="__codelineno-0-359" href="#__codelineno-0-359"></a>Private Function AllFormControls(ByVal frm As Object) As Collection
-<a id="__codelineno-0-360" name="__codelineno-0-360" href="#__codelineno-0-360"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1605] modUserFormCallback.AllFormControls ENTER&quot;  &#39; [ADR-0100]
-<a id="__codelineno-0-361" name="__codelineno-0-361" href="#__codelineno-0-361"></a>    &#39; R-3-χ-4/γ-2: frm.Controls の挙動(直下のみ / frame子も flatten 込み)は環境差があるため、
-<a id="__codelineno-0-362" name="__codelineno-0-362" href="#__codelineno-0-362"></a>    &#39; frm.Controls と frame の子を両方走査しつつ name で重複排除する(二重列挙=二重保存を防ぐ)。
+<a id="__codelineno-0-360" name="__codelineno-0-360" href="#__codelineno-0-360"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1605] modUserFormCallback.AllFormControls ENTER"  ' [ADR-0100]
+<a id="__codelineno-0-361" name="__codelineno-0-361" href="#__codelineno-0-361"></a>    ' R-3-χ-4/γ-2: frm.Controls の挙動(直下のみ / frame子も flatten 込み)は環境差があるため、
+<a id="__codelineno-0-362" name="__codelineno-0-362" href="#__codelineno-0-362"></a>    ' frm.Controls と frame の子を両方走査しつつ name で重複排除する(二重列挙=二重保存を防ぐ)。
 <a id="__codelineno-0-363" name="__codelineno-0-363" href="#__codelineno-0-363"></a>    Dim col As Collection
 <a id="__codelineno-0-364" name="__codelineno-0-364" href="#__codelineno-0-364"></a>    Set col = New Collection
 <a id="__codelineno-0-365" name="__codelineno-0-365" href="#__codelineno-0-365"></a>    Dim seen As Object
-<a id="__codelineno-0-366" name="__codelineno-0-366" href="#__codelineno-0-366"></a>    Set seen = CreateObject(&quot;Scripting.Dictionary&quot;)
+<a id="__codelineno-0-366" name="__codelineno-0-366" href="#__codelineno-0-366"></a>    Set seen = CreateObject("Scripting.Dictionary")
 <a id="__codelineno-0-367" name="__codelineno-0-367" href="#__codelineno-0-367"></a>    Dim c As Object, cc As Object
 <a id="__codelineno-0-368" name="__codelineno-0-368" href="#__codelineno-0-368"></a>    For Each c In frm.Controls
 <a id="__codelineno-0-369" name="__codelineno-0-369" href="#__codelineno-0-369"></a>        If Not seen.Exists(c.Name) Then
 <a id="__codelineno-0-370" name="__codelineno-0-370" href="#__codelineno-0-370"></a>            col.Add c
 <a id="__codelineno-0-371" name="__codelineno-0-371" href="#__codelineno-0-371"></a>            seen(c.Name) = True
 <a id="__codelineno-0-372" name="__codelineno-0-372" href="#__codelineno-0-372"></a>        End If
-<a id="__codelineno-0-373" name="__codelineno-0-373" href="#__codelineno-0-373"></a>        If TypeName(c) = &quot;Frame&quot; Then
+<a id="__codelineno-0-373" name="__codelineno-0-373" href="#__codelineno-0-373"></a>        If TypeName(c) = "Frame" Then
 <a id="__codelineno-0-374" name="__codelineno-0-374" href="#__codelineno-0-374"></a>            For Each cc In c.Controls
 <a id="__codelineno-0-375" name="__codelineno-0-375" href="#__codelineno-0-375"></a>                If Not seen.Exists(cc.Name) Then
 <a id="__codelineno-0-376" name="__codelineno-0-376" href="#__codelineno-0-376"></a>                    col.Add cc
 <a id="__codelineno-0-377" name="__codelineno-0-377" href="#__codelineno-0-377"></a>                    seen(cc.Name) = True
 <a id="__codelineno-0-378" name="__codelineno-0-378" href="#__codelineno-0-378"></a>                End If
-<a id="__codelineno-0-379" name="__codelineno-0-379" href="#__codelineno-0-379"></a>                If TypeName(cc) = &quot;Frame&quot; Then
+<a id="__codelineno-0-379" name="__codelineno-0-379" href="#__codelineno-0-379"></a>                If TypeName(cc) = "Frame" Then
 <a id="__codelineno-0-380" name="__codelineno-0-380" href="#__codelineno-0-380"></a>                    Dim ccc As Object
 <a id="__codelineno-0-381" name="__codelineno-0-381" href="#__codelineno-0-381"></a>                    For Each ccc In cc.Controls
 <a id="__codelineno-0-382" name="__codelineno-0-382" href="#__codelineno-0-382"></a>                        If Not seen.Exists(ccc.Name) Then
@@ -5432,15 +5432,15 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-389" name="__codelineno-0-389" href="#__codelineno-0-389"></a>        End If
 <a id="__codelineno-0-390" name="__codelineno-0-390" href="#__codelineno-0-390"></a>    Next c
 <a id="__codelineno-0-391" name="__codelineno-0-391" href="#__codelineno-0-391"></a>    Set AllFormControls = col
-<a id="__codelineno-0-392" name="__codelineno-0-392" href="#__codelineno-0-392"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1606] modUserFormCallback.AllFormControls EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-392" name="__codelineno-0-392" href="#__codelineno-0-392"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1606] modUserFormCallback.AllFormControls EXIT-OK"  ' [ADR-0100]
 <a id="__codelineno-0-393" name="__codelineno-0-393" href="#__codelineno-0-393"></a>End Function
 <a id="__codelineno-0-394" name="__codelineno-0-394" href="#__codelineno-0-394"></a>
-<a id="__codelineno-0-395" name="__codelineno-0-395" href="#__codelineno-0-395"></a>&#39; Read field values from the active dynamic form and persist as a
-<a id="__codelineno-0-396" name="__codelineno-0-396" href="#__codelineno-0-396"></a>&#39; knowledge file. Returns the knowledgeId on success, &quot;&quot; on failure.
-<a id="__codelineno-0-397" name="__codelineno-0-397" href="#__codelineno-0-397"></a>&#39; mode = &quot;register&quot; -&gt; generate next knowledgeId
-<a id="__codelineno-0-398" name="__codelineno-0-398" href="#__codelineno-0-398"></a>&#39; mode = &quot;edit&quot;     -&gt; reuse current knowledgeId from renderer
+<a id="__codelineno-0-395" name="__codelineno-0-395" href="#__codelineno-0-395"></a>' Read field values from the active dynamic form and persist as a
+<a id="__codelineno-0-396" name="__codelineno-0-396" href="#__codelineno-0-396"></a>' knowledge file. Returns the knowledgeId on success, "" on failure.
+<a id="__codelineno-0-397" name="__codelineno-0-397" href="#__codelineno-0-397"></a>' mode = "register" -&gt; generate next knowledgeId
+<a id="__codelineno-0-398" name="__codelineno-0-398" href="#__codelineno-0-398"></a>' mode = "edit"     -&gt; reuse current knowledgeId from renderer
 <a id="__codelineno-0-399" name="__codelineno-0-399" href="#__codelineno-0-399"></a>Private Function PersistFromActiveForm(ByVal mode As String) As String
-<a id="__codelineno-0-400" name="__codelineno-0-400" href="#__codelineno-0-400"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1607] modUserFormCallback.PersistFromActiveForm ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-400" name="__codelineno-0-400" href="#__codelineno-0-400"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1607] modUserFormCallback.PersistFromActiveForm ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-401" name="__codelineno-0-401" href="#__codelineno-0-401"></a>    On Error GoTo ErrHandler
 <a id="__codelineno-0-402" name="__codelineno-0-402" href="#__codelineno-0-402"></a>    If m_renderer Is Nothing Then Exit Function
 <a id="__codelineno-0-403" name="__codelineno-0-403" href="#__codelineno-0-403"></a>    Dim frm As Object
@@ -5449,25 +5449,25 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-406" name="__codelineno-0-406" href="#__codelineno-0-406"></a>
 <a id="__codelineno-0-407" name="__codelineno-0-407" href="#__codelineno-0-407"></a>    Dim fmtId As String
 <a id="__codelineno-0-408" name="__codelineno-0-408" href="#__codelineno-0-408"></a>    fmtId = m_renderer.GetFormatId()
-<a id="__codelineno-0-409" name="__codelineno-0-409" href="#__codelineno-0-409"></a>    &#39; For register: fmtId may have been changed in the form. Phase R-2 F-3:
-<a id="__codelineno-0-410" name="__codelineno-0-410" href="#__codelineno-0-410"></a>    &#39; read whichever selector control exists (textbox or dropdown).
+<a id="__codelineno-0-409" name="__codelineno-0-409" href="#__codelineno-0-409"></a>    ' For register: fmtId may have been changed in the form. Phase R-2 F-3:
+<a id="__codelineno-0-410" name="__codelineno-0-410" href="#__codelineno-0-410"></a>    ' read whichever selector control exists (textbox or dropdown).
 <a id="__codelineno-0-411" name="__codelineno-0-411" href="#__codelineno-0-411"></a>    On Error Resume Next
 <a id="__codelineno-0-412" name="__codelineno-0-412" href="#__codelineno-0-412"></a>    Dim ctlFmt As Object
 <a id="__codelineno-0-413" name="__codelineno-0-413" href="#__codelineno-0-413"></a>    Set ctlFmt = Nothing
-<a id="__codelineno-0-414" name="__codelineno-0-414" href="#__codelineno-0-414"></a>    Set ctlFmt = frm.Controls(&quot;txtFormatId&quot;)
+<a id="__codelineno-0-414" name="__codelineno-0-414" href="#__codelineno-0-414"></a>    Set ctlFmt = frm.Controls("txtFormatId")
 <a id="__codelineno-0-415" name="__codelineno-0-415" href="#__codelineno-0-415"></a>    If Not ctlFmt Is Nothing Then fmtId = CStr(ctlFmt.Text)
 <a id="__codelineno-0-416" name="__codelineno-0-416" href="#__codelineno-0-416"></a>    Dim ctlCbo As Object
 <a id="__codelineno-0-417" name="__codelineno-0-417" href="#__codelineno-0-417"></a>    Set ctlCbo = Nothing
-<a id="__codelineno-0-418" name="__codelineno-0-418" href="#__codelineno-0-418"></a>    Set ctlCbo = frm.Controls(&quot;cboFormatId&quot;)
+<a id="__codelineno-0-418" name="__codelineno-0-418" href="#__codelineno-0-418"></a>    Set ctlCbo = frm.Controls("cboFormatId")
 <a id="__codelineno-0-419" name="__codelineno-0-419" href="#__codelineno-0-419"></a>    If Not ctlCbo Is Nothing Then
-<a id="__codelineno-0-420" name="__codelineno-0-420" href="#__codelineno-0-420"></a>        &#39; 2026-06-11 fix: dropdown value is the display name; resolve to FormatID.
+<a id="__codelineno-0-420" name="__codelineno-0-420" href="#__codelineno-0-420"></a>        ' 2026-06-11 fix: dropdown value is the display name; resolve to FormatID.
 <a id="__codelineno-0-421" name="__codelineno-0-421" href="#__codelineno-0-421"></a>        If Len(CStr(ctlCbo.Value)) &gt; 0 Then fmtId = m_renderer.ResolveDisplayToFormatId(CStr(ctlCbo.Value))
 <a id="__codelineno-0-422" name="__codelineno-0-422" href="#__codelineno-0-422"></a>    End If
 <a id="__codelineno-0-423" name="__codelineno-0-423" href="#__codelineno-0-423"></a>    On Error GoTo ErrHandler
 <a id="__codelineno-0-424" name="__codelineno-0-424" href="#__codelineno-0-424"></a>
-<a id="__codelineno-0-425" name="__codelineno-0-425" href="#__codelineno-0-425"></a>    &#39; [B23 2026-06-11] guard: a format must be selected before persisting
-<a id="__codelineno-0-426" name="__codelineno-0-426" href="#__codelineno-0-426"></a>    &#39; (was: empty FormatID produced orphan files like &quot;-2026-0001.txt&quot;).
-<a id="__codelineno-0-427" name="__codelineno-0-427" href="#__codelineno-0-427"></a>    If mode &lt;&gt; &quot;edit&quot; And Len(Trim$(fmtId)) = 0 Then
+<a id="__codelineno-0-425" name="__codelineno-0-425" href="#__codelineno-0-425"></a>    ' [B23 2026-06-11] guard: a format must be selected before persisting
+<a id="__codelineno-0-426" name="__codelineno-0-426" href="#__codelineno-0-426"></a>    ' (was: empty FormatID produced orphan files like "-2026-0001.txt").
+<a id="__codelineno-0-427" name="__codelineno-0-427" href="#__codelineno-0-427"></a>    If mode &lt;&gt; "edit" And Len(Trim$(fmtId)) = 0 Then
 <a id="__codelineno-0-428" name="__codelineno-0-428" href="#__codelineno-0-428"></a>        If Not modCommon.IsHeadless() Then
 <a id="__codelineno-0-429" name="__codelineno-0-429" href="#__codelineno-0-429"></a>            MsgBox ChrW(&amp;H30D5) &amp; ChrW(&amp;H30A9) &amp; ChrW(&amp;H30FC) &amp; ChrW(&amp;H30DE) &amp; ChrW(&amp;H30C3) &amp; ChrW(&amp;H30C8) &amp; ChrW(&amp;H3092) &amp; ChrW(&amp;H9078) &amp; ChrW(&amp;H629E) &amp; ChrW(&amp;H3057) &amp; ChrW(&amp;H3066) &amp; ChrW(&amp;H304F) &amp; ChrW(&amp;H3060) &amp; ChrW(&amp;H3055) &amp; ChrW(&amp;H3044) &amp; ChrW(&amp;H3002), vbExclamation, MsgRegisterTitle()
 <a id="__codelineno-0-430" name="__codelineno-0-430" href="#__codelineno-0-430"></a>        End If
@@ -5475,113 +5475,113 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-432" name="__codelineno-0-432" href="#__codelineno-0-432"></a>    End If
 <a id="__codelineno-0-433" name="__codelineno-0-433" href="#__codelineno-0-433"></a>
 <a id="__codelineno-0-434" name="__codelineno-0-434" href="#__codelineno-0-434"></a>    Dim knowledgeId As String
-<a id="__codelineno-0-435" name="__codelineno-0-435" href="#__codelineno-0-435"></a>    If mode = &quot;edit&quot; Then
+<a id="__codelineno-0-435" name="__codelineno-0-435" href="#__codelineno-0-435"></a>    If mode = "edit" Then
 <a id="__codelineno-0-436" name="__codelineno-0-436" href="#__codelineno-0-436"></a>        knowledgeId = m_renderer.GetKnowledgeId()
 <a id="__codelineno-0-437" name="__codelineno-0-437" href="#__codelineno-0-437"></a>    Else
 <a id="__codelineno-0-438" name="__codelineno-0-438" href="#__codelineno-0-438"></a>        knowledgeId = GenerateKnowledgeId(fmtId)
 <a id="__codelineno-0-439" name="__codelineno-0-439" href="#__codelineno-0-439"></a>    End If
 <a id="__codelineno-0-440" name="__codelineno-0-440" href="#__codelineno-0-440"></a>
-<a id="__codelineno-0-441" name="__codelineno-0-441" href="#__codelineno-0-441"></a>    &#39; Build content as ### header ### body for each field control
+<a id="__codelineno-0-441" name="__codelineno-0-441" href="#__codelineno-0-441"></a>    ' Build content as ### header ### body for each field control
 <a id="__codelineno-0-442" name="__codelineno-0-442" href="#__codelineno-0-442"></a>    Dim sb As String
-<a id="__codelineno-0-443" name="__codelineno-0-443" href="#__codelineno-0-443"></a>    sb = &quot;###KnowledgeNo###&quot; &amp; vbCrLf &amp; knowledgeId &amp; vbCrLf
-<a id="__codelineno-0-444" name="__codelineno-0-444" href="#__codelineno-0-444"></a>    sb = sb &amp; &quot;###FormatID###&quot; &amp; vbCrLf &amp; fmtId &amp; vbCrLf
-<a id="__codelineno-0-445" name="__codelineno-0-445" href="#__codelineno-0-445"></a>    &#39; [B30 2026-06-12] write UpdatedAt (and CreatedAt on register) so the
-<a id="__codelineno-0-446" name="__codelineno-0-446" href="#__codelineno-0-446"></a>    &#39; M-08 result grid&#39;s update-date column and its descending sort work
-<a id="__codelineno-0-447" name="__codelineno-0-447" href="#__codelineno-0-447"></a>    &#39; (search reads the in-file UpdatedAt key, not the file mtime).
-<a id="__codelineno-0-448" name="__codelineno-0-448" href="#__codelineno-0-448"></a>    If mode &lt;&gt; &quot;edit&quot; Then
-<a id="__codelineno-0-449" name="__codelineno-0-449" href="#__codelineno-0-449"></a>        sb = sb &amp; &quot;###CreatedAt###&quot; &amp; vbCrLf &amp; Format$(Now, &quot;yyyy-mm-dd hh:nn&quot;) &amp; vbCrLf
+<a id="__codelineno-0-443" name="__codelineno-0-443" href="#__codelineno-0-443"></a>    sb = "###KnowledgeNo###" &amp; vbCrLf &amp; knowledgeId &amp; vbCrLf
+<a id="__codelineno-0-444" name="__codelineno-0-444" href="#__codelineno-0-444"></a>    sb = sb &amp; "###FormatID###" &amp; vbCrLf &amp; fmtId &amp; vbCrLf
+<a id="__codelineno-0-445" name="__codelineno-0-445" href="#__codelineno-0-445"></a>    ' [B30 2026-06-12] write UpdatedAt (and CreatedAt on register) so the
+<a id="__codelineno-0-446" name="__codelineno-0-446" href="#__codelineno-0-446"></a>    ' M-08 result grid's update-date column and its descending sort work
+<a id="__codelineno-0-447" name="__codelineno-0-447" href="#__codelineno-0-447"></a>    ' (search reads the in-file UpdatedAt key, not the file mtime).
+<a id="__codelineno-0-448" name="__codelineno-0-448" href="#__codelineno-0-448"></a>    If mode &lt;&gt; "edit" Then
+<a id="__codelineno-0-449" name="__codelineno-0-449" href="#__codelineno-0-449"></a>        sb = sb &amp; "###CreatedAt###" &amp; vbCrLf &amp; Format$(Now, "yyyy-mm-dd hh:nn") &amp; vbCrLf
 <a id="__codelineno-0-450" name="__codelineno-0-450" href="#__codelineno-0-450"></a>    Else
-<a id="__codelineno-0-451" name="__codelineno-0-451" href="#__codelineno-0-451"></a>        &#39; [B44 2026-07-02] edit rewrites the whole file and was silently
-<a id="__codelineno-0-452" name="__codelineno-0-452" href="#__codelineno-0-452"></a>        &#39; dropping CreatedAt on every update. Carry it over from the file.
+<a id="__codelineno-0-451" name="__codelineno-0-451" href="#__codelineno-0-451"></a>        ' [B44 2026-07-02] edit rewrites the whole file and was silently
+<a id="__codelineno-0-452" name="__codelineno-0-452" href="#__codelineno-0-452"></a>        ' dropping CreatedAt on every update. Carry it over from the file.
 <a id="__codelineno-0-453" name="__codelineno-0-453" href="#__codelineno-0-453"></a>        Dim oldD As Object
 <a id="__codelineno-0-454" name="__codelineno-0-454" href="#__codelineno-0-454"></a>        Set oldD = modKnowledgeFileIO.LoadKnowledge(knowledgeId)
 <a id="__codelineno-0-455" name="__codelineno-0-455" href="#__codelineno-0-455"></a>        If Not oldD Is Nothing Then
-<a id="__codelineno-0-456" name="__codelineno-0-456" href="#__codelineno-0-456"></a>            If oldD.Exists(&quot;CreatedAt&quot;) Then
-<a id="__codelineno-0-457" name="__codelineno-0-457" href="#__codelineno-0-457"></a>                If Len(Trim$(CStr(oldD(&quot;CreatedAt&quot;)))) &gt; 0 Then
-<a id="__codelineno-0-458" name="__codelineno-0-458" href="#__codelineno-0-458"></a>                    sb = sb &amp; &quot;###CreatedAt###&quot; &amp; vbCrLf &amp; CStr(oldD(&quot;CreatedAt&quot;)) &amp; vbCrLf
+<a id="__codelineno-0-456" name="__codelineno-0-456" href="#__codelineno-0-456"></a>            If oldD.Exists("CreatedAt") Then
+<a id="__codelineno-0-457" name="__codelineno-0-457" href="#__codelineno-0-457"></a>                If Len(Trim$(CStr(oldD("CreatedAt")))) &gt; 0 Then
+<a id="__codelineno-0-458" name="__codelineno-0-458" href="#__codelineno-0-458"></a>                    sb = sb &amp; "###CreatedAt###" &amp; vbCrLf &amp; CStr(oldD("CreatedAt")) &amp; vbCrLf
 <a id="__codelineno-0-459" name="__codelineno-0-459" href="#__codelineno-0-459"></a>                End If
 <a id="__codelineno-0-460" name="__codelineno-0-460" href="#__codelineno-0-460"></a>            End If
 <a id="__codelineno-0-461" name="__codelineno-0-461" href="#__codelineno-0-461"></a>        End If
 <a id="__codelineno-0-462" name="__codelineno-0-462" href="#__codelineno-0-462"></a>    End If
-<a id="__codelineno-0-463" name="__codelineno-0-463" href="#__codelineno-0-463"></a>    sb = sb &amp; &quot;###UpdatedAt###&quot; &amp; vbCrLf &amp; Format$(Now, &quot;yyyy-mm-dd hh:nn&quot;) &amp; vbCrLf
+<a id="__codelineno-0-463" name="__codelineno-0-463" href="#__codelineno-0-463"></a>    sb = sb &amp; "###UpdatedAt###" &amp; vbCrLf &amp; Format$(Now, "yyyy-mm-dd hh:nn") &amp; vbCrLf
 <a id="__codelineno-0-464" name="__codelineno-0-464" href="#__codelineno-0-464"></a>
-<a id="__codelineno-0-465" name="__codelineno-0-465" href="#__codelineno-0-465"></a>    &#39; Phase O-2: look up fieldName via renderer&#39;s ctlName -&gt; fieldName map
-<a id="__codelineno-0-466" name="__codelineno-0-466" href="#__codelineno-0-466"></a>    &#39; so multi-byte JP field names (???? / ???????? / etc) persist correctly.
-<a id="__codelineno-0-467" name="__codelineno-0-467" href="#__codelineno-0-467"></a>    &#39; txtFormatId is the format selector and is NOT a knowledge field, skip.
+<a id="__codelineno-0-465" name="__codelineno-0-465" href="#__codelineno-0-465"></a>    ' Phase O-2: look up fieldName via renderer's ctlName -&gt; fieldName map
+<a id="__codelineno-0-466" name="__codelineno-0-466" href="#__codelineno-0-466"></a>    ' so multi-byte JP field names (???? / ???????? / etc) persist correctly.
+<a id="__codelineno-0-467" name="__codelineno-0-467" href="#__codelineno-0-467"></a>    ' txtFormatId is the format selector and is NOT a knowledge field, skip.
 <a id="__codelineno-0-468" name="__codelineno-0-468" href="#__codelineno-0-468"></a>    Dim ctl As Object
-<a id="__codelineno-0-469" name="__codelineno-0-469" href="#__codelineno-0-469"></a>    For Each ctl In AllFormControls(frm)   &#39; R-3-χ-4: frScroll frame 内の field も列挙
+<a id="__codelineno-0-469" name="__codelineno-0-469" href="#__codelineno-0-469"></a>    For Each ctl In AllFormControls(frm)   ' R-3-χ-4: frScroll frame 内の field も列挙
 <a id="__codelineno-0-470" name="__codelineno-0-470" href="#__codelineno-0-470"></a>        Dim nm As String
 <a id="__codelineno-0-471" name="__codelineno-0-471" href="#__codelineno-0-471"></a>        nm = ctl.Name
-<a id="__codelineno-0-472" name="__codelineno-0-472" href="#__codelineno-0-472"></a>        If Left(nm, 4) = &quot;ctl_&quot; And nm &lt;&gt; &quot;txtFormatId&quot; Then
+<a id="__codelineno-0-472" name="__codelineno-0-472" href="#__codelineno-0-472"></a>        If Left(nm, 4) = "ctl_" And nm &lt;&gt; "txtFormatId" Then
 <a id="__codelineno-0-473" name="__codelineno-0-473" href="#__codelineno-0-473"></a>            Dim fldName As String
 <a id="__codelineno-0-474" name="__codelineno-0-474" href="#__codelineno-0-474"></a>            fldName = m_renderer.GetFieldNameForCtl(nm)
 <a id="__codelineno-0-475" name="__codelineno-0-475" href="#__codelineno-0-475"></a>            If Len(fldName) = 0 Then fldName = Mid(nm, 5)
 <a id="__codelineno-0-476" name="__codelineno-0-476" href="#__codelineno-0-476"></a>            Dim val As String
-<a id="__codelineno-0-477" name="__codelineno-0-477" href="#__codelineno-0-477"></a>            If TypeName(ctl) = &quot;TextBox&quot; Then
-<a id="__codelineno-0-478" name="__codelineno-0-478" href="#__codelineno-0-478"></a>                &#39; Phase R-2 F-4: a field still showing its placeholder = empty.
-<a id="__codelineno-0-479" name="__codelineno-0-479" href="#__codelineno-0-479"></a>                If CStr(ctl.Tag) = &quot;PLACEHOLDER&quot; Then
-<a id="__codelineno-0-480" name="__codelineno-0-480" href="#__codelineno-0-480"></a>                    val = &quot;&quot;
+<a id="__codelineno-0-477" name="__codelineno-0-477" href="#__codelineno-0-477"></a>            If TypeName(ctl) = "TextBox" Then
+<a id="__codelineno-0-478" name="__codelineno-0-478" href="#__codelineno-0-478"></a>                ' Phase R-2 F-4: a field still showing its placeholder = empty.
+<a id="__codelineno-0-479" name="__codelineno-0-479" href="#__codelineno-0-479"></a>                If CStr(ctl.Tag) = "PLACEHOLDER" Then
+<a id="__codelineno-0-480" name="__codelineno-0-480" href="#__codelineno-0-480"></a>                    val = ""
 <a id="__codelineno-0-481" name="__codelineno-0-481" href="#__codelineno-0-481"></a>                Else
 <a id="__codelineno-0-482" name="__codelineno-0-482" href="#__codelineno-0-482"></a>                    val = CStr(ctl.Text)
 <a id="__codelineno-0-483" name="__codelineno-0-483" href="#__codelineno-0-483"></a>                End If
-<a id="__codelineno-0-484" name="__codelineno-0-484" href="#__codelineno-0-484"></a>            ElseIf TypeName(ctl) = &quot;ComboBox&quot; Then
+<a id="__codelineno-0-484" name="__codelineno-0-484" href="#__codelineno-0-484"></a>            ElseIf TypeName(ctl) = "ComboBox" Then
 <a id="__codelineno-0-485" name="__codelineno-0-485" href="#__codelineno-0-485"></a>                val = CStr(ctl.Value)
 <a id="__codelineno-0-486" name="__codelineno-0-486" href="#__codelineno-0-486"></a>            Else
-<a id="__codelineno-0-487" name="__codelineno-0-487" href="#__codelineno-0-487"></a>                val = &quot;&quot;
+<a id="__codelineno-0-487" name="__codelineno-0-487" href="#__codelineno-0-487"></a>                val = ""
 <a id="__codelineno-0-488" name="__codelineno-0-488" href="#__codelineno-0-488"></a>            End If
-<a id="__codelineno-0-489" name="__codelineno-0-489" href="#__codelineno-0-489"></a>            sb = sb &amp; &quot;###&quot; &amp; fldName &amp; &quot;###&quot; &amp; vbCrLf &amp; val &amp; vbCrLf
+<a id="__codelineno-0-489" name="__codelineno-0-489" href="#__codelineno-0-489"></a>            sb = sb &amp; "###" &amp; fldName &amp; "###" &amp; vbCrLf &amp; val &amp; vbCrLf
 <a id="__codelineno-0-490" name="__codelineno-0-490" href="#__codelineno-0-490"></a>        End If
 <a id="__codelineno-0-491" name="__codelineno-0-491" href="#__codelineno-0-491"></a>    Next ctl
 <a id="__codelineno-0-492" name="__codelineno-0-492" href="#__codelineno-0-492"></a>
-<a id="__codelineno-0-493" name="__codelineno-0-493" href="#__codelineno-0-493"></a>    &#39; Write to data_dir using FileSystemObject so we control encoding.
+<a id="__codelineno-0-493" name="__codelineno-0-493" href="#__codelineno-0-493"></a>    ' Write to data_dir using FileSystemObject so we control encoding.
 <a id="__codelineno-0-494" name="__codelineno-0-494" href="#__codelineno-0-494"></a>    Dim filePath As String
 <a id="__codelineno-0-495" name="__codelineno-0-495" href="#__codelineno-0-495"></a>    filePath = modKnowledgeFileIO.DataFilePathForSave(knowledgeId, fmtId)
 <a id="__codelineno-0-496" name="__codelineno-0-496" href="#__codelineno-0-496"></a>    Dim adoStream As Object
-<a id="__codelineno-0-497" name="__codelineno-0-497" href="#__codelineno-0-497"></a>    Set adoStream = CreateObject(&quot;ADODB.Stream&quot;)
+<a id="__codelineno-0-497" name="__codelineno-0-497" href="#__codelineno-0-497"></a>    Set adoStream = CreateObject("ADODB.Stream")
 <a id="__codelineno-0-498" name="__codelineno-0-498" href="#__codelineno-0-498"></a>    adoStream.Type = 2
-<a id="__codelineno-0-499" name="__codelineno-0-499" href="#__codelineno-0-499"></a>    adoStream.Charset = &quot;Shift_JIS&quot;
+<a id="__codelineno-0-499" name="__codelineno-0-499" href="#__codelineno-0-499"></a>    adoStream.Charset = "Shift_JIS"
 <a id="__codelineno-0-500" name="__codelineno-0-500" href="#__codelineno-0-500"></a>    adoStream.Open
 <a id="__codelineno-0-501" name="__codelineno-0-501" href="#__codelineno-0-501"></a>    adoStream.WriteText sb
-<a id="__codelineno-0-502" name="__codelineno-0-502" href="#__codelineno-0-502"></a>    adoStream.SaveToFile filePath, 2  &#39; overwrite
+<a id="__codelineno-0-502" name="__codelineno-0-502" href="#__codelineno-0-502"></a>    adoStream.SaveToFile filePath, 2  ' overwrite
 <a id="__codelineno-0-503" name="__codelineno-0-503" href="#__codelineno-0-503"></a>    adoStream.Close
 <a id="__codelineno-0-504" name="__codelineno-0-504" href="#__codelineno-0-504"></a>
 <a id="__codelineno-0-505" name="__codelineno-0-505" href="#__codelineno-0-505"></a>    PersistFromActiveForm = knowledgeId
-<a id="__codelineno-0-506" name="__codelineno-0-506" href="#__codelineno-0-506"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1608] modUserFormCallback.PersistFromActiveForm EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-506" name="__codelineno-0-506" href="#__codelineno-0-506"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1608] modUserFormCallback.PersistFromActiveForm EXIT-OK"  ' [ADR-0100]
 <a id="__codelineno-0-507" name="__codelineno-0-507" href="#__codelineno-0-507"></a>    Exit Function
 <a id="__codelineno-0-508" name="__codelineno-0-508" href="#__codelineno-0-508"></a>ErrHandler:
-<a id="__codelineno-0-509" name="__codelineno-0-509" href="#__codelineno-0-509"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print &quot;[D-1609] modUserFormCallback.PersistFromActiveForm EXIT-ERR &quot; &amp; &quot;errNum=&quot; &amp; Err.Number &amp; &quot; desc=&quot; &amp; Err.Description  &#39; [ADR-0100]
-<a id="__codelineno-0-510" name="__codelineno-0-510" href="#__codelineno-0-510"></a>    Debug.Print &quot;[ERR] PersistFromActiveForm: &quot; &amp; Err.Number &amp; &quot; &quot; &amp; Err.Description
-<a id="__codelineno-0-511" name="__codelineno-0-511" href="#__codelineno-0-511"></a>    PersistFromActiveForm = &quot;&quot;
+<a id="__codelineno-0-509" name="__codelineno-0-509" href="#__codelineno-0-509"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print "[D-1609] modUserFormCallback.PersistFromActiveForm EXIT-ERR " &amp; "errNum=" &amp; Err.Number &amp; " desc=" &amp; Err.Description  ' [ADR-0100]
+<a id="__codelineno-0-510" name="__codelineno-0-510" href="#__codelineno-0-510"></a>    Debug.Print "[ERR] PersistFromActiveForm: " &amp; Err.Number &amp; " " &amp; Err.Description
+<a id="__codelineno-0-511" name="__codelineno-0-511" href="#__codelineno-0-511"></a>    PersistFromActiveForm = ""
 <a id="__codelineno-0-512" name="__codelineno-0-512" href="#__codelineno-0-512"></a>End Function
 <a id="__codelineno-0-513" name="__codelineno-0-513" href="#__codelineno-0-513"></a>
-<a id="__codelineno-0-514" name="__codelineno-0-514" href="#__codelineno-0-514"></a>&#39; Test-mode public wrapper around GenerateKnowledgeId (Phase N-5 E2E).
+<a id="__codelineno-0-514" name="__codelineno-0-514" href="#__codelineno-0-514"></a>' Test-mode public wrapper around GenerateKnowledgeId (Phase N-5 E2E).
 <a id="__codelineno-0-515" name="__codelineno-0-515" href="#__codelineno-0-515"></a>Public Function TestGenerateKnowledgeId(ByVal formatId As String) As String
-<a id="__codelineno-0-516" name="__codelineno-0-516" href="#__codelineno-0-516"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1610] modUserFormCallback.TestGenerateKnowledgeId ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-516" name="__codelineno-0-516" href="#__codelineno-0-516"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1610] modUserFormCallback.TestGenerateKnowledgeId ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-517" name="__codelineno-0-517" href="#__codelineno-0-517"></a>    TestGenerateKnowledgeId = GenerateKnowledgeId(formatId)
 <a id="__codelineno-0-518" name="__codelineno-0-518" href="#__codelineno-0-518"></a>End Function
 <a id="__codelineno-0-519" name="__codelineno-0-519" href="#__codelineno-0-519"></a>
-<a id="__codelineno-0-520" name="__codelineno-0-520" href="#__codelineno-0-520"></a>&#39; Generate a knowledge id: &lt;formatId&gt;-&lt;YYYY&gt;-&lt;NNNN&gt;. NNNN scans data_dir
-<a id="__codelineno-0-521" name="__codelineno-0-521" href="#__codelineno-0-521"></a>&#39; for the largest existing suffix and uses +1.
+<a id="__codelineno-0-520" name="__codelineno-0-520" href="#__codelineno-0-520"></a>' Generate a knowledge id: &lt;formatId&gt;-&lt;YYYY&gt;-&lt;NNNN&gt;. NNNN scans data_dir
+<a id="__codelineno-0-521" name="__codelineno-0-521" href="#__codelineno-0-521"></a>' for the largest existing suffix and uses +1.
 <a id="__codelineno-0-522" name="__codelineno-0-522" href="#__codelineno-0-522"></a>Private Function GenerateKnowledgeId(ByVal formatId As String) As String
-<a id="__codelineno-0-523" name="__codelineno-0-523" href="#__codelineno-0-523"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1611] modUserFormCallback.GenerateKnowledgeId ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-523" name="__codelineno-0-523" href="#__codelineno-0-523"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1611] modUserFormCallback.GenerateKnowledgeId ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-524" name="__codelineno-0-524" href="#__codelineno-0-524"></a>    Dim yr As String
-<a id="__codelineno-0-525" name="__codelineno-0-525" href="#__codelineno-0-525"></a>    yr = Format$(Year(Now()), &quot;0000&quot;)
+<a id="__codelineno-0-525" name="__codelineno-0-525" href="#__codelineno-0-525"></a>    yr = Format$(Year(Now()), "0000")
 <a id="__codelineno-0-526" name="__codelineno-0-526" href="#__codelineno-0-526"></a>    Dim prefix As String
-<a id="__codelineno-0-527" name="__codelineno-0-527" href="#__codelineno-0-527"></a>    prefix = formatId &amp; &quot;-&quot; &amp; yr &amp; &quot;-&quot;
+<a id="__codelineno-0-527" name="__codelineno-0-527" href="#__codelineno-0-527"></a>    prefix = formatId &amp; "-" &amp; yr &amp; "-"
 <a id="__codelineno-0-528" name="__codelineno-0-528" href="#__codelineno-0-528"></a>    Dim maxNo As Long
 <a id="__codelineno-0-529" name="__codelineno-0-529" href="#__codelineno-0-529"></a>    maxNo = 0
 <a id="__codelineno-0-530" name="__codelineno-0-530" href="#__codelineno-0-530"></a>    Dim fso As Object
-<a id="__codelineno-0-531" name="__codelineno-0-531" href="#__codelineno-0-531"></a>    Set fso = CreateObject(&quot;Scripting.FileSystemObject&quot;)
+<a id="__codelineno-0-531" name="__codelineno-0-531" href="#__codelineno-0-531"></a>    Set fso = CreateObject("Scripting.FileSystemObject")
 <a id="__codelineno-0-532" name="__codelineno-0-532" href="#__codelineno-0-532"></a>    Dim dir As String
 <a id="__codelineno-0-533" name="__codelineno-0-533" href="#__codelineno-0-533"></a>    dir = modKnowledgeFileIO.DataFolderForFormat(formatId)
 <a id="__codelineno-0-534" name="__codelineno-0-534" href="#__codelineno-0-534"></a>    If Not fso.FolderExists(dir) Then
-<a id="__codelineno-0-535" name="__codelineno-0-535" href="#__codelineno-0-535"></a>        GenerateKnowledgeId = prefix &amp; &quot;0001&quot;
-<a id="__codelineno-0-536" name="__codelineno-0-536" href="#__codelineno-0-536"></a>        If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1612] modUserFormCallback.GenerateKnowledgeId EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-535" name="__codelineno-0-535" href="#__codelineno-0-535"></a>        GenerateKnowledgeId = prefix &amp; "0001"
+<a id="__codelineno-0-536" name="__codelineno-0-536" href="#__codelineno-0-536"></a>        If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1612] modUserFormCallback.GenerateKnowledgeId EXIT-OK"  ' [ADR-0100]
 <a id="__codelineno-0-537" name="__codelineno-0-537" href="#__codelineno-0-537"></a>        Exit Function
 <a id="__codelineno-0-538" name="__codelineno-0-538" href="#__codelineno-0-538"></a>    End If
 <a id="__codelineno-0-539" name="__codelineno-0-539" href="#__codelineno-0-539"></a>    Dim f As Object
 <a id="__codelineno-0-540" name="__codelineno-0-540" href="#__codelineno-0-540"></a>    For Each f In fso.GetFolder(dir).Files
-<a id="__codelineno-0-541" name="__codelineno-0-541" href="#__codelineno-0-541"></a>        If LCase(fso.GetExtensionName(f.Name)) = &quot;txt&quot; Then
+<a id="__codelineno-0-541" name="__codelineno-0-541" href="#__codelineno-0-541"></a>        If LCase(fso.GetExtensionName(f.Name)) = "txt" Then
 <a id="__codelineno-0-542" name="__codelineno-0-542" href="#__codelineno-0-542"></a>            Dim base As String
 <a id="__codelineno-0-543" name="__codelineno-0-543" href="#__codelineno-0-543"></a>            base = fso.GetBaseName(f.Name)
 <a id="__codelineno-0-544" name="__codelineno-0-544" href="#__codelineno-0-544"></a>            If InStr(1, base, prefix, vbTextCompare) = 1 Then
@@ -5593,12 +5593,12 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-550" name="__codelineno-0-550" href="#__codelineno-0-550"></a>            End If
 <a id="__codelineno-0-551" name="__codelineno-0-551" href="#__codelineno-0-551"></a>        End If
 <a id="__codelineno-0-552" name="__codelineno-0-552" href="#__codelineno-0-552"></a>    Next f
-<a id="__codelineno-0-553" name="__codelineno-0-553" href="#__codelineno-0-553"></a>    GenerateKnowledgeId = prefix &amp; Format$(maxNo + 1, &quot;0000&quot;)
+<a id="__codelineno-0-553" name="__codelineno-0-553" href="#__codelineno-0-553"></a>    GenerateKnowledgeId = prefix &amp; Format$(maxNo + 1, "0000")
 <a id="__codelineno-0-554" name="__codelineno-0-554" href="#__codelineno-0-554"></a>End Function
 <a id="__codelineno-0-555" name="__codelineno-0-555" href="#__codelineno-0-555"></a>
-<a id="__codelineno-0-556" name="__codelineno-0-556" href="#__codelineno-0-556"></a>&#39; Look up the currently shown dynamic UserForm via the renderer&#39;s stashed name.
+<a id="__codelineno-0-556" name="__codelineno-0-556" href="#__codelineno-0-556"></a>' Look up the currently shown dynamic UserForm via the renderer's stashed name.
 <a id="__codelineno-0-557" name="__codelineno-0-557" href="#__codelineno-0-557"></a>Private Function GetActiveDynForm() As Object
-<a id="__codelineno-0-558" name="__codelineno-0-558" href="#__codelineno-0-558"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1613] modUserFormCallback.GetActiveDynForm ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-558" name="__codelineno-0-558" href="#__codelineno-0-558"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1613] modUserFormCallback.GetActiveDynForm ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-559" name="__codelineno-0-559" href="#__codelineno-0-559"></a>    On Error GoTo ErrHandler
 <a id="__codelineno-0-560" name="__codelineno-0-560" href="#__codelineno-0-560"></a>    If m_renderer Is Nothing Then Exit Function
 <a id="__codelineno-0-561" name="__codelineno-0-561" href="#__codelineno-0-561"></a>    Dim nm As String
@@ -5607,46 +5607,46 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-564" name="__codelineno-0-564" href="#__codelineno-0-564"></a>    For Each uf In VBA.UserForms
 <a id="__codelineno-0-565" name="__codelineno-0-565" href="#__codelineno-0-565"></a>        If uf.Name = nm Then
 <a id="__codelineno-0-566" name="__codelineno-0-566" href="#__codelineno-0-566"></a>            Set GetActiveDynForm = uf
-<a id="__codelineno-0-567" name="__codelineno-0-567" href="#__codelineno-0-567"></a>            If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1614] modUserFormCallback.GetActiveDynForm EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-567" name="__codelineno-0-567" href="#__codelineno-0-567"></a>            If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1614] modUserFormCallback.GetActiveDynForm EXIT-OK"  ' [ADR-0100]
 <a id="__codelineno-0-568" name="__codelineno-0-568" href="#__codelineno-0-568"></a>            Exit Function
 <a id="__codelineno-0-569" name="__codelineno-0-569" href="#__codelineno-0-569"></a>        End If
 <a id="__codelineno-0-570" name="__codelineno-0-570" href="#__codelineno-0-570"></a>    Next uf
 <a id="__codelineno-0-571" name="__codelineno-0-571" href="#__codelineno-0-571"></a>    Set GetActiveDynForm = Nothing
-<a id="__codelineno-0-572" name="__codelineno-0-572" href="#__codelineno-0-572"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1615] modUserFormCallback.GetActiveDynForm EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-572" name="__codelineno-0-572" href="#__codelineno-0-572"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1615] modUserFormCallback.GetActiveDynForm EXIT-OK"  ' [ADR-0100]
 <a id="__codelineno-0-573" name="__codelineno-0-573" href="#__codelineno-0-573"></a>    Exit Function
 <a id="__codelineno-0-574" name="__codelineno-0-574" href="#__codelineno-0-574"></a>ErrHandler:
-<a id="__codelineno-0-575" name="__codelineno-0-575" href="#__codelineno-0-575"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print &quot;[D-1616] modUserFormCallback.GetActiveDynForm EXIT-ERR &quot; &amp; &quot;errNum=&quot; &amp; Err.Number &amp; &quot; desc=&quot; &amp; Err.Description  &#39; [ADR-0100]
+<a id="__codelineno-0-575" name="__codelineno-0-575" href="#__codelineno-0-575"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print "[D-1616] modUserFormCallback.GetActiveDynForm EXIT-ERR " &amp; "errNum=" &amp; Err.Number &amp; " desc=" &amp; Err.Description  ' [ADR-0100]
 <a id="__codelineno-0-576" name="__codelineno-0-576" href="#__codelineno-0-576"></a>    Set GetActiveDynForm = Nothing
 <a id="__codelineno-0-577" name="__codelineno-0-577" href="#__codelineno-0-577"></a>End Function
 <a id="__codelineno-0-578" name="__codelineno-0-578" href="#__codelineno-0-578"></a>
-<a id="__codelineno-0-579" name="__codelineno-0-579" href="#__codelineno-0-579"></a>&#39; [B32 2026-06-12] user decision Q4: invalid date values must BLOCK the
-<a id="__codelineno-0-580" name="__codelineno-0-580" href="#__codelineno-0-580"></a>&#39; persist (the red background was display-only). Mirrors MissingRequiredMessage.
+<a id="__codelineno-0-579" name="__codelineno-0-579" href="#__codelineno-0-579"></a>' [B32 2026-06-12] user decision Q4: invalid date values must BLOCK the
+<a id="__codelineno-0-580" name="__codelineno-0-580" href="#__codelineno-0-580"></a>' persist (the red background was display-only). Mirrors MissingRequiredMessage.
 <a id="__codelineno-0-581" name="__codelineno-0-581" href="#__codelineno-0-581"></a>Private Function InvalidDateMessage() As String
 <a id="__codelineno-0-582" name="__codelineno-0-582" href="#__codelineno-0-582"></a>    On Error GoTo ErrHandler
-<a id="__codelineno-0-583" name="__codelineno-0-583" href="#__codelineno-0-583"></a>    InvalidDateMessage = &quot;&quot;
+<a id="__codelineno-0-583" name="__codelineno-0-583" href="#__codelineno-0-583"></a>    InvalidDateMessage = ""
 <a id="__codelineno-0-584" name="__codelineno-0-584" href="#__codelineno-0-584"></a>    If m_renderer Is Nothing Then Exit Function
 <a id="__codelineno-0-585" name="__codelineno-0-585" href="#__codelineno-0-585"></a>    Dim frm As Object
 <a id="__codelineno-0-586" name="__codelineno-0-586" href="#__codelineno-0-586"></a>    Set frm = GetActiveDynForm()
 <a id="__codelineno-0-587" name="__codelineno-0-587" href="#__codelineno-0-587"></a>    If frm Is Nothing Then Exit Function
 <a id="__codelineno-0-588" name="__codelineno-0-588" href="#__codelineno-0-588"></a>    Dim bad As String
-<a id="__codelineno-0-589" name="__codelineno-0-589" href="#__codelineno-0-589"></a>    bad = &quot;&quot;
+<a id="__codelineno-0-589" name="__codelineno-0-589" href="#__codelineno-0-589"></a>    bad = ""
 <a id="__codelineno-0-590" name="__codelineno-0-590" href="#__codelineno-0-590"></a>    Dim ctl As Object
 <a id="__codelineno-0-591" name="__codelineno-0-591" href="#__codelineno-0-591"></a>    For Each ctl In AllFormControls(frm)
 <a id="__codelineno-0-592" name="__codelineno-0-592" href="#__codelineno-0-592"></a>        Dim nmD As String
 <a id="__codelineno-0-593" name="__codelineno-0-593" href="#__codelineno-0-593"></a>        nmD = ctl.Name
-<a id="__codelineno-0-594" name="__codelineno-0-594" href="#__codelineno-0-594"></a>        If Left(nmD, 4) = &quot;ctl_&quot; Then
+<a id="__codelineno-0-594" name="__codelineno-0-594" href="#__codelineno-0-594"></a>        If Left(nmD, 4) = "ctl_" Then
 <a id="__codelineno-0-595" name="__codelineno-0-595" href="#__codelineno-0-595"></a>            If m_renderer.IsDateCtl(nmD) Then
 <a id="__codelineno-0-596" name="__codelineno-0-596" href="#__codelineno-0-596"></a>                Dim vD As String
-<a id="__codelineno-0-597" name="__codelineno-0-597" href="#__codelineno-0-597"></a>                vD = &quot;&quot;
-<a id="__codelineno-0-598" name="__codelineno-0-598" href="#__codelineno-0-598"></a>                If TypeName(ctl) = &quot;TextBox&quot; Then
-<a id="__codelineno-0-599" name="__codelineno-0-599" href="#__codelineno-0-599"></a>                    If CStr(ctl.Tag) &lt;&gt; &quot;PLACEHOLDER&quot; Then vD = Trim(CStr(ctl.Text))
+<a id="__codelineno-0-597" name="__codelineno-0-597" href="#__codelineno-0-597"></a>                vD = ""
+<a id="__codelineno-0-598" name="__codelineno-0-598" href="#__codelineno-0-598"></a>                If TypeName(ctl) = "TextBox" Then
+<a id="__codelineno-0-599" name="__codelineno-0-599" href="#__codelineno-0-599"></a>                    If CStr(ctl.Tag) &lt;&gt; "PLACEHOLDER" Then vD = Trim(CStr(ctl.Text))
 <a id="__codelineno-0-600" name="__codelineno-0-600" href="#__codelineno-0-600"></a>                End If
 <a id="__codelineno-0-601" name="__codelineno-0-601" href="#__codelineno-0-601"></a>                If Len(vD) &gt; 0 And Not IsDate(vD) Then
 <a id="__codelineno-0-602" name="__codelineno-0-602" href="#__codelineno-0-602"></a>                    Dim fnD As String
 <a id="__codelineno-0-603" name="__codelineno-0-603" href="#__codelineno-0-603"></a>                    fnD = m_renderer.GetFieldNameForCtl(nmD)
 <a id="__codelineno-0-604" name="__codelineno-0-604" href="#__codelineno-0-604"></a>                    If Len(fnD) = 0 Then fnD = Mid(nmD, 5)
 <a id="__codelineno-0-605" name="__codelineno-0-605" href="#__codelineno-0-605"></a>                    If Len(bad) &gt; 0 Then bad = bad &amp; vbCrLf
-<a id="__codelineno-0-606" name="__codelineno-0-606" href="#__codelineno-0-606"></a>                    bad = bad &amp; &quot;・&quot; &amp; fnD
+<a id="__codelineno-0-606" name="__codelineno-0-606" href="#__codelineno-0-606"></a>                    bad = bad &amp; "・" &amp; fnD
 <a id="__codelineno-0-607" name="__codelineno-0-607" href="#__codelineno-0-607"></a>                End If
 <a id="__codelineno-0-608" name="__codelineno-0-608" href="#__codelineno-0-608"></a>            End If
 <a id="__codelineno-0-609" name="__codelineno-0-609" href="#__codelineno-0-609"></a>        End If
@@ -5656,7 +5656,7 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-613" name="__codelineno-0-613" href="#__codelineno-0-613"></a>    End If
 <a id="__codelineno-0-614" name="__codelineno-0-614" href="#__codelineno-0-614"></a>    Exit Function
 <a id="__codelineno-0-615" name="__codelineno-0-615" href="#__codelineno-0-615"></a>ErrHandler:
-<a id="__codelineno-0-616" name="__codelineno-0-616" href="#__codelineno-0-616"></a>    InvalidDateMessage = &quot;&quot;
+<a id="__codelineno-0-616" name="__codelineno-0-616" href="#__codelineno-0-616"></a>    InvalidDateMessage = ""
 <a id="__codelineno-0-617" name="__codelineno-0-617" href="#__codelineno-0-617"></a>End Function
 </code></pre></div>
 
@@ -5719,7 +5719,7 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
       <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.indexes", "toc.integrate", "search.highlight", "search.suggest", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u30b3\u30d4\u30fc\u3057\u307e\u3057\u305f", "clipboard.copy": "\u30af\u30ea\u30c3\u30d7\u30dc\u30fc\u30c9\u3078\u30b3\u30d4\u30fc", "search.result.more.one": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3082\u30461\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.more.other": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3042\u3068#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.none": "\u4f55\u3082\u898b\u3064\u304b\u308a\u307e\u305b\u3093\u3067\u3057\u305f", "search.result.one": "1\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.other": "#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.placeholder": "\u691c\u7d22\u30ad\u30fc\u30ef\u30fc\u30c9\u3092\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044", "search.result.term.missing": "\u691c\u7d22\u306b\u542b\u307e\u308c\u306a\u3044", "select.version": "\u30d0\u30fc\u30b8\u30e7\u30f3\u5207\u308a\u66ff\u3048"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>

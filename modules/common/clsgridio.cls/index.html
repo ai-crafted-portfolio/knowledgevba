@@ -25,7 +25,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -33,7 +33,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -5045,38 +5045,38 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <h2 id="_2">ソースコード<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>VERSION 1.0 CLASS
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>BEGIN
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>  MultiUse = -1  &#39;True
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>  MultiUse = -1  'True
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>End
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>Attribute VB_Name = &quot;clsGridIO&quot;
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>Attribute VB_Name = "clsGridIO"
 <a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>Attribute VB_GlobalNameSpace = False
 <a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>Attribute VB_Creatable = False
 <a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>Attribute VB_PredeclaredId = True
 <a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>Attribute VB_Exposed = False
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>&#39; ============================================================
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>&#39; Grid (table) I/O helper (Sprint2 SRP split, ASCII-only)
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>&#39; VB_PredeclaredId = True : callable as clsGridIO.Xxx
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>&#39; ============================================================
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>' ============================================================
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>' Grid (table) I/O helper (Sprint2 SRP split, ASCII-only)
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>' VB_PredeclaredId = True : callable as clsGridIO.Xxx
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>' ============================================================
 <a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>Option Explicit
 <a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>
 <a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>Private Const DEFAULT_GRID_ROWS As Long = 50
 <a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>
-<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>&#39; Read GRID rows from target into Collection of Dict (1 Dict per row)
-<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>&#39; columns from GridSection.Columns (csv) or default Name,Type,Required
-<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>&#39; iter19 ADR-0090: ui_seed Columns CSV uses v2.3 keys
-<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>&#39;   (fieldName/fieldType/required/options) but downstream (SaveFormat_Workflow,
-<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>&#39;   WriteFormatDictToCells.Row-&gt;FieldName etc.) expects canonical keys
-<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>&#39;   (Name/Type/Required/Options). NormalizeColumnNameToCanonical bridges both
-<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>&#39;   without mutating ui_seed (which is SSOT for visible column headers).
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>' Read GRID rows from target into Collection of Dict (1 Dict per row)
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>' columns from GridSection.Columns (csv) or default Name,Type,Required
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>' iter19 ADR-0090: ui_seed Columns CSV uses v2.3 keys
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>'   (fieldName/fieldType/required/options) but downstream (SaveFormat_Workflow,
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>'   WriteFormatDictToCells.Row-&gt;FieldName etc.) expects canonical keys
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>'   (Name/Type/Required/Options). NormalizeColumnNameToCanonical bridges both
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>'   without mutating ui_seed (which is SSOT for visible column headers).
 <a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>Public Function ReadGridFields(ByVal target As Object, ByVal gridSec As Object, ByVal mode As String) As Collection
-<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0488] clsGridIO.ReadGridFields ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0488] clsGridIO.ReadGridFields ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>    Dim fields As New Collection
 <a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>    Dim startCellAddr As String, endCellAddr As String, columnsCsv As String
-<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>    startCellAddr = gridSec.GetValue(&quot;StartCell&quot;)
-<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>    endCellAddr = gridSec.GetValue(&quot;EndCell&quot;)
-<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>    columnsCsv = gridSec.GetValue(&quot;Columns&quot;)
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>    startCellAddr = gridSec.GetValue("StartCell")
+<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>    endCellAddr = gridSec.GetValue("EndCell")
+<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>    columnsCsv = gridSec.GetValue("Columns")
 <a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>    If Len(startCellAddr) = 0 Then
 <a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>        Set ReadGridFields = fields
-<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>        If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0489] clsGridIO.ReadGridFields EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>        If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0489] clsGridIO.ReadGridFields EXIT-OK"  ' [ADR-0100]
 <a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>        Exit Function
 <a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>    End If
 <a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>    Dim columnNames() As String
@@ -5088,7 +5088,7 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>    Dim rowIdx As Long
 <a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>    For rowIdx = 1 To maxRows
 <a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>        Dim rowDict As Object
-<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>        Set rowDict = CreateObject(&quot;Scripting.Dictionary&quot;)
+<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>        Set rowDict = CreateObject("Scripting.Dictionary")
 <a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>        Dim hasAny As Boolean
 <a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>        hasAny = False
 <a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>        Dim c As Long
@@ -5099,48 +5099,48 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a>            canonicalName = NormalizeColumnNameToCanonical(colName)
 <a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a>            cellAddr = clsCellAddrHelper.OffsetCellAddr(startCellAddr, rowIdx - 1, c)
 <a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a>            v = clsCellIO.ReadCellValue(target, cellAddr)
-<a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>            &#39; [B45 2026-07-02] rows column: normalize full-width digits so a
-<a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a>            &#39; Japanese-IME &quot;5&quot; (full width) saves and validates like &quot;5&quot;.
-<a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a>            If LCase$(canonicalName) = &quot;rows&quot; Then v = Trim$(StrConv(v, vbNarrow))
-<a id="__codelineno-0-60" name="__codelineno-0-60" href="#__codelineno-0-60"></a>            &#39; Store under canonical key so downstream Workflow accessors
-<a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a>            &#39; (Name/Type/Required/Options) find the value regardless of CSV form.
+<a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>            ' [B45 2026-07-02] rows column: normalize full-width digits so a
+<a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a>            ' Japanese-IME "5" (full width) saves and validates like "5".
+<a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a>            If LCase$(canonicalName) = "rows" Then v = Trim$(StrConv(v, vbNarrow))
+<a id="__codelineno-0-60" name="__codelineno-0-60" href="#__codelineno-0-60"></a>            ' Store under canonical key so downstream Workflow accessors
+<a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a>            ' (Name/Type/Required/Options) find the value regardless of CSV form.
 <a id="__codelineno-0-62" name="__codelineno-0-62" href="#__codelineno-0-62"></a>            rowDict(canonicalName) = v
 <a id="__codelineno-0-63" name="__codelineno-0-63" href="#__codelineno-0-63"></a>            If Len(v) &gt; 0 Then hasAny = True
 <a id="__codelineno-0-64" name="__codelineno-0-64" href="#__codelineno-0-64"></a>        Next c
 <a id="__codelineno-0-65" name="__codelineno-0-65" href="#__codelineno-0-65"></a>        If hasAny Then
 <a id="__codelineno-0-66" name="__codelineno-0-66" href="#__codelineno-0-66"></a>            Dim nameVal As String
-<a id="__codelineno-0-67" name="__codelineno-0-67" href="#__codelineno-0-67"></a>            nameVal = &quot;&quot;
-<a id="__codelineno-0-68" name="__codelineno-0-68" href="#__codelineno-0-68"></a>            If rowDict.Exists(&quot;Name&quot;) Then nameVal = CStr(rowDict(&quot;Name&quot;))
+<a id="__codelineno-0-67" name="__codelineno-0-67" href="#__codelineno-0-67"></a>            nameVal = ""
+<a id="__codelineno-0-68" name="__codelineno-0-68" href="#__codelineno-0-68"></a>            If rowDict.Exists("Name") Then nameVal = CStr(rowDict("Name"))
 <a id="__codelineno-0-69" name="__codelineno-0-69" href="#__codelineno-0-69"></a>            If Len(nameVal) &gt; 0 Then
-<a id="__codelineno-0-70" name="__codelineno-0-70" href="#__codelineno-0-70"></a>                If rowDict.Exists(&quot;Type&quot;) Then
+<a id="__codelineno-0-70" name="__codelineno-0-70" href="#__codelineno-0-70"></a>                If rowDict.Exists("Type") Then
 <a id="__codelineno-0-71" name="__codelineno-0-71" href="#__codelineno-0-71"></a>                    Dim t As String
-<a id="__codelineno-0-72" name="__codelineno-0-72" href="#__codelineno-0-72"></a>                    t = LCase(CStr(rowDict(&quot;Type&quot;)))
+<a id="__codelineno-0-72" name="__codelineno-0-72" href="#__codelineno-0-72"></a>                    t = LCase(CStr(rowDict("Type")))
 <a id="__codelineno-0-73" name="__codelineno-0-73" href="#__codelineno-0-73"></a>                    If Not IsValidFieldType(t) Then
-<a id="__codelineno-0-74" name="__codelineno-0-74" href="#__codelineno-0-74"></a>                        If mode = &quot;strict&quot; Then
-<a id="__codelineno-0-75" name="__codelineno-0-75" href="#__codelineno-0-75"></a>                            Err.Raise vbObjectError + 9203, &quot;clsGridIO.ReadGridFields&quot;, _
-<a id="__codelineno-0-76" name="__codelineno-0-76" href="#__codelineno-0-76"></a>                                      &quot;Invalid FieldType: &quot; &amp; t
+<a id="__codelineno-0-74" name="__codelineno-0-74" href="#__codelineno-0-74"></a>                        If mode = "strict" Then
+<a id="__codelineno-0-75" name="__codelineno-0-75" href="#__codelineno-0-75"></a>                            Err.Raise vbObjectError + 9203, "clsGridIO.ReadGridFields", _
+<a id="__codelineno-0-76" name="__codelineno-0-76" href="#__codelineno-0-76"></a>                                      "Invalid FieldType: " &amp; t
 <a id="__codelineno-0-77" name="__codelineno-0-77" href="#__codelineno-0-77"></a>                        End If
 <a id="__codelineno-0-78" name="__codelineno-0-78" href="#__codelineno-0-78"></a>                        GoTo NextRow
 <a id="__codelineno-0-79" name="__codelineno-0-79" href="#__codelineno-0-79"></a>                    End If
 <a id="__codelineno-0-80" name="__codelineno-0-80" href="#__codelineno-0-80"></a>                End If
-<a id="__codelineno-0-81" name="__codelineno-0-81" href="#__codelineno-0-81"></a>                If rowDict.Exists(&quot;Options&quot;) Then
+<a id="__codelineno-0-81" name="__codelineno-0-81" href="#__codelineno-0-81"></a>                If rowDict.Exists("Options") Then
 <a id="__codelineno-0-82" name="__codelineno-0-82" href="#__codelineno-0-82"></a>                    Dim optStr As String
-<a id="__codelineno-0-83" name="__codelineno-0-83" href="#__codelineno-0-83"></a>                    optStr = CStr(rowDict(&quot;Options&quot;))
+<a id="__codelineno-0-83" name="__codelineno-0-83" href="#__codelineno-0-83"></a>                    optStr = CStr(rowDict("Options"))
 <a id="__codelineno-0-84" name="__codelineno-0-84" href="#__codelineno-0-84"></a>                    If Len(optStr) &gt; 0 Then
-<a id="__codelineno-0-85" name="__codelineno-0-85" href="#__codelineno-0-85"></a>                        &#39; 2026-06-11 fix: M-03 cell input is comma-separated (spec),
-<a id="__codelineno-0-86" name="__codelineno-0-86" href="#__codelineno-0-86"></a>                        &#39; the canonical file format is pipe-separated (FAULT/SAGYO),
-<a id="__codelineno-0-87" name="__codelineno-0-87" href="#__codelineno-0-87"></a>                        &#39; and the old code split on vbLf (matched nothing).
-<a id="__codelineno-0-88" name="__codelineno-0-88" href="#__codelineno-0-88"></a>                        &#39; Normalize comma/vbLf to pipe, then split.
-<a id="__codelineno-0-89" name="__codelineno-0-89" href="#__codelineno-0-89"></a>                        optStr = Replace(optStr, vbLf, &quot;|&quot;)
-<a id="__codelineno-0-90" name="__codelineno-0-90" href="#__codelineno-0-90"></a>                        optStr = Replace(optStr, &quot;,&quot;, &quot;|&quot;)
-<a id="__codelineno-0-91" name="__codelineno-0-91" href="#__codelineno-0-91"></a>                        optStr = Replace(optStr, ChrW(&amp;HFF0C), &quot;|&quot;)   &#39; full-width comma
+<a id="__codelineno-0-85" name="__codelineno-0-85" href="#__codelineno-0-85"></a>                        ' 2026-06-11 fix: M-03 cell input is comma-separated (spec),
+<a id="__codelineno-0-86" name="__codelineno-0-86" href="#__codelineno-0-86"></a>                        ' the canonical file format is pipe-separated (FAULT/SAGYO),
+<a id="__codelineno-0-87" name="__codelineno-0-87" href="#__codelineno-0-87"></a>                        ' and the old code split on vbLf (matched nothing).
+<a id="__codelineno-0-88" name="__codelineno-0-88" href="#__codelineno-0-88"></a>                        ' Normalize comma/vbLf to pipe, then split.
+<a id="__codelineno-0-89" name="__codelineno-0-89" href="#__codelineno-0-89"></a>                        optStr = Replace(optStr, vbLf, "|")
+<a id="__codelineno-0-90" name="__codelineno-0-90" href="#__codelineno-0-90"></a>                        optStr = Replace(optStr, ",", "|")
+<a id="__codelineno-0-91" name="__codelineno-0-91" href="#__codelineno-0-91"></a>                        optStr = Replace(optStr, ChrW(&amp;HFF0C), "|")   ' full-width comma
 <a id="__codelineno-0-92" name="__codelineno-0-92" href="#__codelineno-0-92"></a>                        Dim opts() As String
-<a id="__codelineno-0-93" name="__codelineno-0-93" href="#__codelineno-0-93"></a>                        opts = Split(optStr, &quot;|&quot;)
+<a id="__codelineno-0-93" name="__codelineno-0-93" href="#__codelineno-0-93"></a>                        opts = Split(optStr, "|")
 <a id="__codelineno-0-94" name="__codelineno-0-94" href="#__codelineno-0-94"></a>                        Dim oi As Long
 <a id="__codelineno-0-95" name="__codelineno-0-95" href="#__codelineno-0-95"></a>                        For oi = LBound(opts) To UBound(opts)
 <a id="__codelineno-0-96" name="__codelineno-0-96" href="#__codelineno-0-96"></a>                            opts(oi) = Trim(opts(oi))
 <a id="__codelineno-0-97" name="__codelineno-0-97" href="#__codelineno-0-97"></a>                        Next oi
-<a id="__codelineno-0-98" name="__codelineno-0-98" href="#__codelineno-0-98"></a>                        rowDict(&quot;Options&quot;) = opts
+<a id="__codelineno-0-98" name="__codelineno-0-98" href="#__codelineno-0-98"></a>                        rowDict("Options") = opts
 <a id="__codelineno-0-99" name="__codelineno-0-99" href="#__codelineno-0-99"></a>                    End If
 <a id="__codelineno-0-100" name="__codelineno-0-100" href="#__codelineno-0-100"></a>                End If
 <a id="__codelineno-0-101" name="__codelineno-0-101" href="#__codelineno-0-101"></a>                fields.Add rowDict
@@ -5151,13 +5151,13 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-106" name="__codelineno-0-106" href="#__codelineno-0-106"></a>    Set ReadGridFields = fields
 <a id="__codelineno-0-107" name="__codelineno-0-107" href="#__codelineno-0-107"></a>End Function
 <a id="__codelineno-0-108" name="__codelineno-0-108" href="#__codelineno-0-108"></a>
-<a id="__codelineno-0-109" name="__codelineno-0-109" href="#__codelineno-0-109"></a>&#39; Write Collection of Dict to GRID rows on target
+<a id="__codelineno-0-109" name="__codelineno-0-109" href="#__codelineno-0-109"></a>' Write Collection of Dict to GRID rows on target
 <a id="__codelineno-0-110" name="__codelineno-0-110" href="#__codelineno-0-110"></a>Public Sub WriteGridFields(ByVal target As Object, ByVal gridSec As Object, ByVal fields As Object)
-<a id="__codelineno-0-111" name="__codelineno-0-111" href="#__codelineno-0-111"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0490] clsGridIO.WriteGridFields ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-111" name="__codelineno-0-111" href="#__codelineno-0-111"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0490] clsGridIO.WriteGridFields ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-112" name="__codelineno-0-112" href="#__codelineno-0-112"></a>    Dim startCellAddr As String, endCellAddr As String, columnsCsv As String
-<a id="__codelineno-0-113" name="__codelineno-0-113" href="#__codelineno-0-113"></a>    startCellAddr = gridSec.GetValue(&quot;StartCell&quot;)
-<a id="__codelineno-0-114" name="__codelineno-0-114" href="#__codelineno-0-114"></a>    endCellAddr = gridSec.GetValue(&quot;EndCell&quot;)
-<a id="__codelineno-0-115" name="__codelineno-0-115" href="#__codelineno-0-115"></a>    columnsCsv = gridSec.GetValue(&quot;Columns&quot;)
+<a id="__codelineno-0-113" name="__codelineno-0-113" href="#__codelineno-0-113"></a>    startCellAddr = gridSec.GetValue("StartCell")
+<a id="__codelineno-0-114" name="__codelineno-0-114" href="#__codelineno-0-114"></a>    endCellAddr = gridSec.GetValue("EndCell")
+<a id="__codelineno-0-115" name="__codelineno-0-115" href="#__codelineno-0-115"></a>    columnsCsv = gridSec.GetValue("Columns")
 <a id="__codelineno-0-116" name="__codelineno-0-116" href="#__codelineno-0-116"></a>    If Len(startCellAddr) = 0 Then Exit Sub
 <a id="__codelineno-0-117" name="__codelineno-0-117" href="#__codelineno-0-117"></a>    Dim columnNames() As String
 <a id="__codelineno-0-118" name="__codelineno-0-118" href="#__codelineno-0-118"></a>    columnNames = SplitColumns(columnsCsv)
@@ -5178,18 +5178,18 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-133" name="__codelineno-0-133" href="#__codelineno-0-133"></a>                Dim colName As String, cellAddr As String, valStr As String
 <a id="__codelineno-0-134" name="__codelineno-0-134" href="#__codelineno-0-134"></a>                Dim canonicalName2 As String
 <a id="__codelineno-0-135" name="__codelineno-0-135" href="#__codelineno-0-135"></a>                colName = Trim(columnNames(c))
-<a id="__codelineno-0-136" name="__codelineno-0-136" href="#__codelineno-0-136"></a>                &#39; iter19 ADR-0090: Read canonical key from row dict regardless
-<a id="__codelineno-0-137" name="__codelineno-0-137" href="#__codelineno-0-137"></a>                &#39; of CSV form (&quot;fieldName&quot; -&gt; &quot;Name&quot;, etc.).
+<a id="__codelineno-0-136" name="__codelineno-0-136" href="#__codelineno-0-136"></a>                ' iter19 ADR-0090: Read canonical key from row dict regardless
+<a id="__codelineno-0-137" name="__codelineno-0-137" href="#__codelineno-0-137"></a>                ' of CSV form ("fieldName" -&gt; "Name", etc.).
 <a id="__codelineno-0-138" name="__codelineno-0-138" href="#__codelineno-0-138"></a>                canonicalName2 = NormalizeColumnNameToCanonical(colName)
 <a id="__codelineno-0-139" name="__codelineno-0-139" href="#__codelineno-0-139"></a>                cellAddr = clsCellAddrHelper.OffsetCellAddr(startCellAddr, i - 1, c)
-<a id="__codelineno-0-140" name="__codelineno-0-140" href="#__codelineno-0-140"></a>                valStr = &quot;&quot;
+<a id="__codelineno-0-140" name="__codelineno-0-140" href="#__codelineno-0-140"></a>                valStr = ""
 <a id="__codelineno-0-141" name="__codelineno-0-141" href="#__codelineno-0-141"></a>                If rowItem.Exists(canonicalName2) Then
 <a id="__codelineno-0-142" name="__codelineno-0-142" href="#__codelineno-0-142"></a>                    Dim v As Variant
 <a id="__codelineno-0-143" name="__codelineno-0-143" href="#__codelineno-0-143"></a>                    v = rowItem(canonicalName2)
 <a id="__codelineno-0-144" name="__codelineno-0-144" href="#__codelineno-0-144"></a>                    If IsArray(v) Then
 <a id="__codelineno-0-145" name="__codelineno-0-145" href="#__codelineno-0-145"></a>                        valStr = JoinArray(v, vbLf)
 <a id="__codelineno-0-146" name="__codelineno-0-146" href="#__codelineno-0-146"></a>                    ElseIf IsNull(v) Then
-<a id="__codelineno-0-147" name="__codelineno-0-147" href="#__codelineno-0-147"></a>                        valStr = &quot;&quot;
+<a id="__codelineno-0-147" name="__codelineno-0-147" href="#__codelineno-0-147"></a>                        valStr = ""
 <a id="__codelineno-0-148" name="__codelineno-0-148" href="#__codelineno-0-148"></a>                    Else
 <a id="__codelineno-0-149" name="__codelineno-0-149" href="#__codelineno-0-149"></a>                        valStr = CStr(v)
 <a id="__codelineno-0-150" name="__codelineno-0-150" href="#__codelineno-0-150"></a>                    End If
@@ -5203,24 +5203,24 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-158" name="__codelineno-0-158" href="#__codelineno-0-158"></a>    For r = writtenRows + 1 To maxRows
 <a id="__codelineno-0-159" name="__codelineno-0-159" href="#__codelineno-0-159"></a>        Dim cc As Long
 <a id="__codelineno-0-160" name="__codelineno-0-160" href="#__codelineno-0-160"></a>        For cc = 0 To colCount - 1
-<a id="__codelineno-0-161" name="__codelineno-0-161" href="#__codelineno-0-161"></a>            clsCellIO.WriteCellValue target, clsCellAddrHelper.OffsetCellAddr(startCellAddr, r - 1, cc), &quot;&quot;
+<a id="__codelineno-0-161" name="__codelineno-0-161" href="#__codelineno-0-161"></a>            clsCellIO.WriteCellValue target, clsCellAddrHelper.OffsetCellAddr(startCellAddr, r - 1, cc), ""
 <a id="__codelineno-0-162" name="__codelineno-0-162" href="#__codelineno-0-162"></a>        Next cc
 <a id="__codelineno-0-163" name="__codelineno-0-163" href="#__codelineno-0-163"></a>    Next r
-<a id="__codelineno-0-164" name="__codelineno-0-164" href="#__codelineno-0-164"></a>    &#39; [USER-REQ 2026-06-09] Dynamic grid border sizing on load.
-<a id="__codelineno-0-165" name="__codelineno-0-165" href="#__codelineno-0-165"></a>    &#39; (a) Apply thin borders to all data rows so data does not visually
-<a id="__codelineno-0-166" name="__codelineno-0-166" href="#__codelineno-0-166"></a>    &#39;     overflow past the pre-allocated grid (InitialRows boundary).
-<a id="__codelineno-0-167" name="__codelineno-0-167" href="#__codelineno-0-167"></a>    &#39; (b) Clear borders on rows past data so empty rows do not show
-<a id="__codelineno-0-168" name="__codelineno-0-168" href="#__codelineno-0-168"></a>    &#39;     leftover lines from a previous larger grid.
+<a id="__codelineno-0-164" name="__codelineno-0-164" href="#__codelineno-0-164"></a>    ' [USER-REQ 2026-06-09] Dynamic grid border sizing on load.
+<a id="__codelineno-0-165" name="__codelineno-0-165" href="#__codelineno-0-165"></a>    ' (a) Apply thin borders to all data rows so data does not visually
+<a id="__codelineno-0-166" name="__codelineno-0-166" href="#__codelineno-0-166"></a>    '     overflow past the pre-allocated grid (InitialRows boundary).
+<a id="__codelineno-0-167" name="__codelineno-0-167" href="#__codelineno-0-167"></a>    ' (b) Clear borders on rows past data so empty rows do not show
+<a id="__codelineno-0-168" name="__codelineno-0-168" href="#__codelineno-0-168"></a>    '     leftover lines from a previous larger grid.
 <a id="__codelineno-0-169" name="__codelineno-0-169" href="#__codelineno-0-169"></a>    If writtenRows &gt; 0 Then
 <a id="__codelineno-0-170" name="__codelineno-0-170" href="#__codelineno-0-170"></a>        On Error Resume Next
-<a id="__codelineno-0-171" name="__codelineno-0-171" href="#__codelineno-0-171"></a>        &#39; [USER-REQ 2026-06-09] Unlock grid data cells so user can edit them
-<a id="__codelineno-0-172" name="__codelineno-0-172" href="#__codelineno-0-172"></a>        &#39; directly even when sheet protection (ProtectSheet &quot;light&quot;) is on.
-<a id="__codelineno-0-173" name="__codelineno-0-173" href="#__codelineno-0-173"></a>        &#39; Spec: M-03 GRID = direct cell edit (短い値はセル直接編集).
+<a id="__codelineno-0-171" name="__codelineno-0-171" href="#__codelineno-0-171"></a>        ' [USER-REQ 2026-06-09] Unlock grid data cells so user can edit them
+<a id="__codelineno-0-172" name="__codelineno-0-172" href="#__codelineno-0-172"></a>        ' directly even when sheet protection (ProtectSheet "light") is on.
+<a id="__codelineno-0-173" name="__codelineno-0-173" href="#__codelineno-0-173"></a>        ' Spec: M-03 GRID = direct cell edit (短い値はセル直接編集).
 <a id="__codelineno-0-174" name="__codelineno-0-174" href="#__codelineno-0-174"></a>        Dim unlockFirst As String, unlockLast As String
 <a id="__codelineno-0-175" name="__codelineno-0-175" href="#__codelineno-0-175"></a>        unlockFirst = clsCellAddrHelper.OffsetCellAddr(startCellAddr, 0, 0)
 <a id="__codelineno-0-176" name="__codelineno-0-176" href="#__codelineno-0-176"></a>        unlockLast = clsCellAddrHelper.OffsetCellAddr(startCellAddr, writtenRows - 1, colCount - 1)
 <a id="__codelineno-0-177" name="__codelineno-0-177" href="#__codelineno-0-177"></a>        Dim unlockRng As Object
-<a id="__codelineno-0-178" name="__codelineno-0-178" href="#__codelineno-0-178"></a>        Set unlockRng = target.Range(unlockFirst &amp; &quot;:&quot; &amp; unlockLast)
+<a id="__codelineno-0-178" name="__codelineno-0-178" href="#__codelineno-0-178"></a>        Set unlockRng = target.Range(unlockFirst &amp; ":" &amp; unlockLast)
 <a id="__codelineno-0-179" name="__codelineno-0-179" href="#__codelineno-0-179"></a>        Dim sheetWasProtected As Boolean
 <a id="__codelineno-0-180" name="__codelineno-0-180" href="#__codelineno-0-180"></a>        sheetWasProtected = False
 <a id="__codelineno-0-181" name="__codelineno-0-181" href="#__codelineno-0-181"></a>        If target.ProtectContents Then
@@ -5229,27 +5229,27 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-184" name="__codelineno-0-184" href="#__codelineno-0-184"></a>        End If
 <a id="__codelineno-0-185" name="__codelineno-0-185" href="#__codelineno-0-185"></a>        unlockRng.Locked = False
 <a id="__codelineno-0-186" name="__codelineno-0-186" href="#__codelineno-0-186"></a>        If sheetWasProtected Then
-<a id="__codelineno-0-187" name="__codelineno-0-187" href="#__codelineno-0-187"></a>            target.Protect Password:=&quot;&quot;, UserInterfaceOnly:=True, _
+<a id="__codelineno-0-187" name="__codelineno-0-187" href="#__codelineno-0-187"></a>            target.Protect Password:="", UserInterfaceOnly:=True, _
 <a id="__codelineno-0-188" name="__codelineno-0-188" href="#__codelineno-0-188"></a>                            AllowFormattingCells:=True, _
 <a id="__codelineno-0-189" name="__codelineno-0-189" href="#__codelineno-0-189"></a>                            AllowFormattingColumns:=True, _
 <a id="__codelineno-0-190" name="__codelineno-0-190" href="#__codelineno-0-190"></a>                            AllowFormattingRows:=True
 <a id="__codelineno-0-191" name="__codelineno-0-191" href="#__codelineno-0-191"></a>        End If
-<a id="__codelineno-0-192" name="__codelineno-0-192" href="#__codelineno-0-192"></a>        &#39; (a) borders on data rows
+<a id="__codelineno-0-192" name="__codelineno-0-192" href="#__codelineno-0-192"></a>        ' (a) borders on data rows
 <a id="__codelineno-0-193" name="__codelineno-0-193" href="#__codelineno-0-193"></a>        Dim dataFirstAddr As String, dataLastAddr As String
 <a id="__codelineno-0-194" name="__codelineno-0-194" href="#__codelineno-0-194"></a>        dataFirstAddr = clsCellAddrHelper.OffsetCellAddr(startCellAddr, 0, 0)
 <a id="__codelineno-0-195" name="__codelineno-0-195" href="#__codelineno-0-195"></a>        dataLastAddr = clsCellAddrHelper.OffsetCellAddr(startCellAddr, writtenRows - 1, colCount - 1)
 <a id="__codelineno-0-196" name="__codelineno-0-196" href="#__codelineno-0-196"></a>        Dim dataRng As Object
-<a id="__codelineno-0-197" name="__codelineno-0-197" href="#__codelineno-0-197"></a>        Set dataRng = target.Range(dataFirstAddr &amp; &quot;:&quot; &amp; dataLastAddr)
-<a id="__codelineno-0-198" name="__codelineno-0-198" href="#__codelineno-0-198"></a>        &#39; xlEdgeLeft=7, xlEdgeTop=8, xlEdgeBottom=9, xlEdgeRight=10
-<a id="__codelineno-0-199" name="__codelineno-0-199" href="#__codelineno-0-199"></a>        &#39; xlInsideVertical=11, xlInsideHorizontal=12
-<a id="__codelineno-0-200" name="__codelineno-0-200" href="#__codelineno-0-200"></a>        &#39; xlContinuous=1, xlThin=2
+<a id="__codelineno-0-197" name="__codelineno-0-197" href="#__codelineno-0-197"></a>        Set dataRng = target.Range(dataFirstAddr &amp; ":" &amp; dataLastAddr)
+<a id="__codelineno-0-198" name="__codelineno-0-198" href="#__codelineno-0-198"></a>        ' xlEdgeLeft=7, xlEdgeTop=8, xlEdgeBottom=9, xlEdgeRight=10
+<a id="__codelineno-0-199" name="__codelineno-0-199" href="#__codelineno-0-199"></a>        ' xlInsideVertical=11, xlInsideHorizontal=12
+<a id="__codelineno-0-200" name="__codelineno-0-200" href="#__codelineno-0-200"></a>        ' xlContinuous=1, xlThin=2
 <a id="__codelineno-0-201" name="__codelineno-0-201" href="#__codelineno-0-201"></a>        Dim bdIdx As Variant
 <a id="__codelineno-0-202" name="__codelineno-0-202" href="#__codelineno-0-202"></a>        For Each bdIdx In Array(7, 8, 9, 10, 11, 12)
-<a id="__codelineno-0-203" name="__codelineno-0-203" href="#__codelineno-0-203"></a>            dataRng.Borders(CLng(bdIdx)).LineStyle = 1  &#39; xlContinuous
-<a id="__codelineno-0-204" name="__codelineno-0-204" href="#__codelineno-0-204"></a>            dataRng.Borders(CLng(bdIdx)).Weight = 2     &#39; xlThin
-<a id="__codelineno-0-205" name="__codelineno-0-205" href="#__codelineno-0-205"></a>            dataRng.Borders(CLng(bdIdx)).Color = RGB(191, 191, 191)  &#39; #BFBFBF per spec
+<a id="__codelineno-0-203" name="__codelineno-0-203" href="#__codelineno-0-203"></a>            dataRng.Borders(CLng(bdIdx)).LineStyle = 1  ' xlContinuous
+<a id="__codelineno-0-204" name="__codelineno-0-204" href="#__codelineno-0-204"></a>            dataRng.Borders(CLng(bdIdx)).Weight = 2     ' xlThin
+<a id="__codelineno-0-205" name="__codelineno-0-205" href="#__codelineno-0-205"></a>            dataRng.Borders(CLng(bdIdx)).Color = RGB(191, 191, 191)  ' #BFBFBF per spec
 <a id="__codelineno-0-206" name="__codelineno-0-206" href="#__codelineno-0-206"></a>        Next bdIdx
-<a id="__codelineno-0-207" name="__codelineno-0-207" href="#__codelineno-0-207"></a>        &#39; (b) clear borders past data, up to maxRows
+<a id="__codelineno-0-207" name="__codelineno-0-207" href="#__codelineno-0-207"></a>        ' (b) clear borders past data, up to maxRows
 <a id="__codelineno-0-208" name="__codelineno-0-208" href="#__codelineno-0-208"></a>        If writtenRows &lt; maxRows Then
 <a id="__codelineno-0-209" name="__codelineno-0-209" href="#__codelineno-0-209"></a>            Dim firstEmptyRow As Long, lastEmptyRow As Long
 <a id="__codelineno-0-210" name="__codelineno-0-210" href="#__codelineno-0-210"></a>            firstEmptyRow = writtenRows + 1
@@ -5258,42 +5258,42 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-213" name="__codelineno-0-213" href="#__codelineno-0-213"></a>            firstAddr = clsCellAddrHelper.OffsetCellAddr(startCellAddr, firstEmptyRow - 1, 0)
 <a id="__codelineno-0-214" name="__codelineno-0-214" href="#__codelineno-0-214"></a>            lastAddr = clsCellAddrHelper.OffsetCellAddr(startCellAddr, lastEmptyRow - 1, colCount - 1)
 <a id="__codelineno-0-215" name="__codelineno-0-215" href="#__codelineno-0-215"></a>            Dim emptyRng As Object
-<a id="__codelineno-0-216" name="__codelineno-0-216" href="#__codelineno-0-216"></a>            Set emptyRng = target.Range(firstAddr &amp; &quot;:&quot; &amp; lastAddr)
-<a id="__codelineno-0-217" name="__codelineno-0-217" href="#__codelineno-0-217"></a>            emptyRng.Borders.LineStyle = -4142  &#39; xlLineStyleNone
+<a id="__codelineno-0-216" name="__codelineno-0-216" href="#__codelineno-0-216"></a>            Set emptyRng = target.Range(firstAddr &amp; ":" &amp; lastAddr)
+<a id="__codelineno-0-217" name="__codelineno-0-217" href="#__codelineno-0-217"></a>            emptyRng.Borders.LineStyle = -4142  ' xlLineStyleNone
 <a id="__codelineno-0-218" name="__codelineno-0-218" href="#__codelineno-0-218"></a>        End If
 <a id="__codelineno-0-219" name="__codelineno-0-219" href="#__codelineno-0-219"></a>        On Error GoTo 0
 <a id="__codelineno-0-220" name="__codelineno-0-220" href="#__codelineno-0-220"></a>    End If
-<a id="__codelineno-0-221" name="__codelineno-0-221" href="#__codelineno-0-221"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0491] clsGridIO.WriteGridFields EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-221" name="__codelineno-0-221" href="#__codelineno-0-221"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0491] clsGridIO.WriteGridFields EXIT-OK"  ' [ADR-0100]
 <a id="__codelineno-0-222" name="__codelineno-0-222" href="#__codelineno-0-222"></a>End Sub
 <a id="__codelineno-0-223" name="__codelineno-0-223" href="#__codelineno-0-223"></a>
 <a id="__codelineno-0-224" name="__codelineno-0-224" href="#__codelineno-0-224"></a>Public Function IsValidFieldType(ByVal t As String) As Boolean
-<a id="__codelineno-0-225" name="__codelineno-0-225" href="#__codelineno-0-225"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0492] clsGridIO.IsValidFieldType ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-225" name="__codelineno-0-225" href="#__codelineno-0-225"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0492] clsGridIO.IsValidFieldType ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-226" name="__codelineno-0-226" href="#__codelineno-0-226"></a>    Dim lt As String
 <a id="__codelineno-0-227" name="__codelineno-0-227" href="#__codelineno-0-227"></a>    lt = LCase(t)
 <a id="__codelineno-0-228" name="__codelineno-0-228" href="#__codelineno-0-228"></a>    Select Case lt
-<a id="__codelineno-0-229" name="__codelineno-0-229" href="#__codelineno-0-229"></a>        Case &quot;string&quot;, &quot;text&quot;, &quot;long&quot;, &quot;integer&quot;, &quot;double&quot;, &quot;number&quot;, _
-<a id="__codelineno-0-230" name="__codelineno-0-230" href="#__codelineno-0-230"></a>             &quot;date&quot;, &quot;datetime&quot;, &quot;boolean&quot;, &quot;dropdown&quot;, &quot;list&quot;, &quot;&quot;
+<a id="__codelineno-0-229" name="__codelineno-0-229" href="#__codelineno-0-229"></a>        Case "string", "text", "long", "integer", "double", "number", _
+<a id="__codelineno-0-230" name="__codelineno-0-230" href="#__codelineno-0-230"></a>             "date", "datetime", "boolean", "dropdown", "list", ""
 <a id="__codelineno-0-231" name="__codelineno-0-231" href="#__codelineno-0-231"></a>            IsValidFieldType = True
-<a id="__codelineno-0-232" name="__codelineno-0-232" href="#__codelineno-0-232"></a>            If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0493] clsGridIO.IsValidFieldType EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-232" name="__codelineno-0-232" href="#__codelineno-0-232"></a>            If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0493] clsGridIO.IsValidFieldType EXIT-OK"  ' [ADR-0100]
 <a id="__codelineno-0-233" name="__codelineno-0-233" href="#__codelineno-0-233"></a>            Exit Function
 <a id="__codelineno-0-234" name="__codelineno-0-234" href="#__codelineno-0-234"></a>    End Select
-<a id="__codelineno-0-235" name="__codelineno-0-235" href="#__codelineno-0-235"></a>    &#39; iter19 ADR-0090 / ADR-0088: accept canonical CJK base-type names
-<a id="__codelineno-0-236" name="__codelineno-0-236" href="#__codelineno-0-236"></a>    &#39; (NormalizeFieldType output: 単一行 / 複数行 / 日付 / 選択). Without this,
-<a id="__codelineno-0-237" name="__codelineno-0-237" href="#__codelineno-0-237"></a>    &#39; ReadGridFields drops every CJK-typed row, leaving SaveFormat with 0
-<a id="__codelineno-0-238" name="__codelineno-0-238" href="#__codelineno-0-238"></a>    &#39; fields and Btn_LoadFormat verifies failing with sample=&quot;&quot; (case 17/18).
+<a id="__codelineno-0-235" name="__codelineno-0-235" href="#__codelineno-0-235"></a>    ' iter19 ADR-0090 / ADR-0088: accept canonical CJK base-type names
+<a id="__codelineno-0-236" name="__codelineno-0-236" href="#__codelineno-0-236"></a>    ' (NormalizeFieldType output: 単一行 / 複数行 / 日付 / 選択). Without this,
+<a id="__codelineno-0-237" name="__codelineno-0-237" href="#__codelineno-0-237"></a>    ' ReadGridFields drops every CJK-typed row, leaving SaveFormat with 0
+<a id="__codelineno-0-238" name="__codelineno-0-238" href="#__codelineno-0-238"></a>    ' fields and Btn_LoadFormat verifies failing with sample="" (case 17/18).
 <a id="__codelineno-0-239" name="__codelineno-0-239" href="#__codelineno-0-239"></a>    Dim single_line As String, multi_line As String
 <a id="__codelineno-0-240" name="__codelineno-0-240" href="#__codelineno-0-240"></a>    Dim date_type As String, select_type As String
 <a id="__codelineno-0-241" name="__codelineno-0-241" href="#__codelineno-0-241"></a>    single_line = ChrW(&amp;H5358) &amp; ChrW(&amp;H4E00) &amp; ChrW(&amp;H884C)
 <a id="__codelineno-0-242" name="__codelineno-0-242" href="#__codelineno-0-242"></a>    multi_line = ChrW(&amp;H8907) &amp; ChrW(&amp;H6570) &amp; ChrW(&amp;H884C)
 <a id="__codelineno-0-243" name="__codelineno-0-243" href="#__codelineno-0-243"></a>    date_type = ChrW(&amp;H65E5) &amp; ChrW(&amp;H4ED8)
 <a id="__codelineno-0-244" name="__codelineno-0-244" href="#__codelineno-0-244"></a>    select_type = ChrW(&amp;H9078) &amp; ChrW(&amp;H629E)
-<a id="__codelineno-0-245" name="__codelineno-0-245" href="#__codelineno-0-245"></a>    &#39; 2026-06-11 fix (C-03-001): the M-03 grid carries UI labels (6 values)
-<a id="__codelineno-0-246" name="__codelineno-0-246" href="#__codelineno-0-246"></a>    &#39; and they reach this validator BEFORE NormalizeFieldType runs. The four
-<a id="__codelineno-0-247" name="__codelineno-0-247" href="#__codelineno-0-247"></a>    &#39; labels below were rejected, so rows typed with them were silently
-<a id="__codelineno-0-248" name="__codelineno-0-248" href="#__codelineno-0-248"></a>    &#39; dropped in warn mode (fields lost on save).
+<a id="__codelineno-0-245" name="__codelineno-0-245" href="#__codelineno-0-245"></a>    ' 2026-06-11 fix (C-03-001): the M-03 grid carries UI labels (6 values)
+<a id="__codelineno-0-246" name="__codelineno-0-246" href="#__codelineno-0-246"></a>    ' and they reach this validator BEFORE NormalizeFieldType runs. The four
+<a id="__codelineno-0-247" name="__codelineno-0-247" href="#__codelineno-0-247"></a>    ' labels below were rejected, so rows typed with them were silently
+<a id="__codelineno-0-248" name="__codelineno-0-248" href="#__codelineno-0-248"></a>    ' dropped in warn mode (fields lost on save).
 <a id="__codelineno-0-249" name="__codelineno-0-249" href="#__codelineno-0-249"></a>    Dim lbl_1line As String, lbl_multiline As String
 <a id="__codelineno-0-250" name="__codelineno-0-250" href="#__codelineno-0-250"></a>    Dim lbl_number As String, lbl_check As String
-<a id="__codelineno-0-251" name="__codelineno-0-251" href="#__codelineno-0-251"></a>    lbl_1line = &quot;1&quot; &amp; ChrW(&amp;H884C) &amp; ChrW(&amp;H30C6) &amp; ChrW(&amp;H30AD) &amp; ChrW(&amp;H30B9) &amp; ChrW(&amp;H30C8)
+<a id="__codelineno-0-251" name="__codelineno-0-251" href="#__codelineno-0-251"></a>    lbl_1line = "1" &amp; ChrW(&amp;H884C) &amp; ChrW(&amp;H30C6) &amp; ChrW(&amp;H30AD) &amp; ChrW(&amp;H30B9) &amp; ChrW(&amp;H30C8)
 <a id="__codelineno-0-252" name="__codelineno-0-252" href="#__codelineno-0-252"></a>    lbl_multiline = ChrW(&amp;H8907) &amp; ChrW(&amp;H6570) &amp; ChrW(&amp;H884C) &amp; ChrW(&amp;H30C6) &amp; ChrW(&amp;H30AD) &amp; ChrW(&amp;H30B9) &amp; ChrW(&amp;H30C8)
 <a id="__codelineno-0-253" name="__codelineno-0-253" href="#__codelineno-0-253"></a>    lbl_number = ChrW(&amp;H6570) &amp; ChrW(&amp;H5024)
 <a id="__codelineno-0-254" name="__codelineno-0-254" href="#__codelineno-0-254"></a>    lbl_check = ChrW(&amp;H30C1) &amp; ChrW(&amp;H30A7) &amp; ChrW(&amp;H30C3) &amp; ChrW(&amp;H30AF)
@@ -5307,58 +5307,58 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-262" name="__codelineno-0-262" href="#__codelineno-0-262"></a>End Function
 <a id="__codelineno-0-263" name="__codelineno-0-263" href="#__codelineno-0-263"></a>
 <a id="__codelineno-0-264" name="__codelineno-0-264" href="#__codelineno-0-264"></a>Public Function JoinArray(ByVal arr As Variant, ByVal sep As String) As String
-<a id="__codelineno-0-265" name="__codelineno-0-265" href="#__codelineno-0-265"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0494] clsGridIO.JoinArray ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-265" name="__codelineno-0-265" href="#__codelineno-0-265"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0494] clsGridIO.JoinArray ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-266" name="__codelineno-0-266" href="#__codelineno-0-266"></a>    Dim s As String
-<a id="__codelineno-0-267" name="__codelineno-0-267" href="#__codelineno-0-267"></a>    s = &quot;&quot;
+<a id="__codelineno-0-267" name="__codelineno-0-267" href="#__codelineno-0-267"></a>    s = ""
 <a id="__codelineno-0-268" name="__codelineno-0-268" href="#__codelineno-0-268"></a>    Dim i As Long
 <a id="__codelineno-0-269" name="__codelineno-0-269" href="#__codelineno-0-269"></a>    For i = LBound(arr) To UBound(arr)
 <a id="__codelineno-0-270" name="__codelineno-0-270" href="#__codelineno-0-270"></a>        If i &gt; LBound(arr) Then s = s &amp; sep
 <a id="__codelineno-0-271" name="__codelineno-0-271" href="#__codelineno-0-271"></a>        s = s &amp; CStr(arr(i))
 <a id="__codelineno-0-272" name="__codelineno-0-272" href="#__codelineno-0-272"></a>    Next i
 <a id="__codelineno-0-273" name="__codelineno-0-273" href="#__codelineno-0-273"></a>    JoinArray = s
-<a id="__codelineno-0-274" name="__codelineno-0-274" href="#__codelineno-0-274"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0495] clsGridIO.JoinArray EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-274" name="__codelineno-0-274" href="#__codelineno-0-274"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0495] clsGridIO.JoinArray EXIT-OK"  ' [ADR-0100]
 <a id="__codelineno-0-275" name="__codelineno-0-275" href="#__codelineno-0-275"></a>End Function
 <a id="__codelineno-0-276" name="__codelineno-0-276" href="#__codelineno-0-276"></a>
-<a id="__codelineno-0-277" name="__codelineno-0-277" href="#__codelineno-0-277"></a>&#39; iter19 ADR-0090: Map ui_seed column-CSV keys to canonical row-dict keys used
-<a id="__codelineno-0-278" name="__codelineno-0-278" href="#__codelineno-0-278"></a>&#39; by SaveFormat_Workflow / LoadFormat_Workflow / WriteFormatDictToCells.
-<a id="__codelineno-0-279" name="__codelineno-0-279" href="#__codelineno-0-279"></a>&#39; ui_seed (v2.3 M-03.txt) declares Columns=No,seq,fieldName,fieldType,required,
-<a id="__codelineno-0-280" name="__codelineno-0-280" href="#__codelineno-0-280"></a>&#39; rows,options. Existing workflows store rows under Name/Type/Required/Options.
-<a id="__codelineno-0-281" name="__codelineno-0-281" href="#__codelineno-0-281"></a>&#39; Aliases unify both forms without changing ui_seed (which is the visible header
-<a id="__codelineno-0-282" name="__codelineno-0-282" href="#__codelineno-0-282"></a>&#39; SSOT) or Workflow keys (which are the in-memory canonical form).
+<a id="__codelineno-0-277" name="__codelineno-0-277" href="#__codelineno-0-277"></a>' iter19 ADR-0090: Map ui_seed column-CSV keys to canonical row-dict keys used
+<a id="__codelineno-0-278" name="__codelineno-0-278" href="#__codelineno-0-278"></a>' by SaveFormat_Workflow / LoadFormat_Workflow / WriteFormatDictToCells.
+<a id="__codelineno-0-279" name="__codelineno-0-279" href="#__codelineno-0-279"></a>' ui_seed (v2.3 M-03.txt) declares Columns=No,seq,fieldName,fieldType,required,
+<a id="__codelineno-0-280" name="__codelineno-0-280" href="#__codelineno-0-280"></a>' rows,options. Existing workflows store rows under Name/Type/Required/Options.
+<a id="__codelineno-0-281" name="__codelineno-0-281" href="#__codelineno-0-281"></a>' Aliases unify both forms without changing ui_seed (which is the visible header
+<a id="__codelineno-0-282" name="__codelineno-0-282" href="#__codelineno-0-282"></a>' SSOT) or Workflow keys (which are the in-memory canonical form).
 <a id="__codelineno-0-283" name="__codelineno-0-283" href="#__codelineno-0-283"></a>Public Function NormalizeColumnNameToCanonical(ByVal raw As String) As String
-<a id="__codelineno-0-284" name="__codelineno-0-284" href="#__codelineno-0-284"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0496] clsGridIO.NormalizeColumnNameToCanonical ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-284" name="__codelineno-0-284" href="#__codelineno-0-284"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0496] clsGridIO.NormalizeColumnNameToCanonical ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-285" name="__codelineno-0-285" href="#__codelineno-0-285"></a>    Dim t As String
 <a id="__codelineno-0-286" name="__codelineno-0-286" href="#__codelineno-0-286"></a>    t = LCase(Trim(raw))
 <a id="__codelineno-0-287" name="__codelineno-0-287" href="#__codelineno-0-287"></a>    Select Case t
-<a id="__codelineno-0-288" name="__codelineno-0-288" href="#__codelineno-0-288"></a>        Case &quot;fieldname&quot;, &quot;name&quot;
-<a id="__codelineno-0-289" name="__codelineno-0-289" href="#__codelineno-0-289"></a>            NormalizeColumnNameToCanonical = &quot;Name&quot;
-<a id="__codelineno-0-290" name="__codelineno-0-290" href="#__codelineno-0-290"></a>        Case &quot;fieldtype&quot;, &quot;type&quot;
-<a id="__codelineno-0-291" name="__codelineno-0-291" href="#__codelineno-0-291"></a>            NormalizeColumnNameToCanonical = &quot;Type&quot;
-<a id="__codelineno-0-292" name="__codelineno-0-292" href="#__codelineno-0-292"></a>        Case &quot;required&quot;
-<a id="__codelineno-0-293" name="__codelineno-0-293" href="#__codelineno-0-293"></a>            NormalizeColumnNameToCanonical = &quot;Required&quot;
-<a id="__codelineno-0-294" name="__codelineno-0-294" href="#__codelineno-0-294"></a>        Case &quot;options&quot;
-<a id="__codelineno-0-295" name="__codelineno-0-295" href="#__codelineno-0-295"></a>            NormalizeColumnNameToCanonical = &quot;Options&quot;
+<a id="__codelineno-0-288" name="__codelineno-0-288" href="#__codelineno-0-288"></a>        Case "fieldname", "name"
+<a id="__codelineno-0-289" name="__codelineno-0-289" href="#__codelineno-0-289"></a>            NormalizeColumnNameToCanonical = "Name"
+<a id="__codelineno-0-290" name="__codelineno-0-290" href="#__codelineno-0-290"></a>        Case "fieldtype", "type"
+<a id="__codelineno-0-291" name="__codelineno-0-291" href="#__codelineno-0-291"></a>            NormalizeColumnNameToCanonical = "Type"
+<a id="__codelineno-0-292" name="__codelineno-0-292" href="#__codelineno-0-292"></a>        Case "required"
+<a id="__codelineno-0-293" name="__codelineno-0-293" href="#__codelineno-0-293"></a>            NormalizeColumnNameToCanonical = "Required"
+<a id="__codelineno-0-294" name="__codelineno-0-294" href="#__codelineno-0-294"></a>        Case "options"
+<a id="__codelineno-0-295" name="__codelineno-0-295" href="#__codelineno-0-295"></a>            NormalizeColumnNameToCanonical = "Options"
 <a id="__codelineno-0-296" name="__codelineno-0-296" href="#__codelineno-0-296"></a>        Case Else
-<a id="__codelineno-0-297" name="__codelineno-0-297" href="#__codelineno-0-297"></a>            &#39; Pass-through for No / seq / rows / future columns.
+<a id="__codelineno-0-297" name="__codelineno-0-297" href="#__codelineno-0-297"></a>            ' Pass-through for No / seq / rows / future columns.
 <a id="__codelineno-0-298" name="__codelineno-0-298" href="#__codelineno-0-298"></a>            NormalizeColumnNameToCanonical = Trim(raw)
 <a id="__codelineno-0-299" name="__codelineno-0-299" href="#__codelineno-0-299"></a>    End Select
-<a id="__codelineno-0-300" name="__codelineno-0-300" href="#__codelineno-0-300"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0497] clsGridIO.NormalizeColumnNameToCanonical EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-300" name="__codelineno-0-300" href="#__codelineno-0-300"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0497] clsGridIO.NormalizeColumnNameToCanonical EXIT-OK"  ' [ADR-0100]
 <a id="__codelineno-0-301" name="__codelineno-0-301" href="#__codelineno-0-301"></a>End Function
 <a id="__codelineno-0-302" name="__codelineno-0-302" href="#__codelineno-0-302"></a>
-<a id="__codelineno-0-303" name="__codelineno-0-303" href="#__codelineno-0-303"></a>&#39; Parse &quot;Name,Type,Required&quot; -&gt; array. Default if empty.
+<a id="__codelineno-0-303" name="__codelineno-0-303" href="#__codelineno-0-303"></a>' Parse "Name,Type,Required" -&gt; array. Default if empty.
 <a id="__codelineno-0-304" name="__codelineno-0-304" href="#__codelineno-0-304"></a>Private Function SplitColumns(ByVal columnsCsv As String) As String()
-<a id="__codelineno-0-305" name="__codelineno-0-305" href="#__codelineno-0-305"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0498] clsGridIO.SplitColumns ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-305" name="__codelineno-0-305" href="#__codelineno-0-305"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0498] clsGridIO.SplitColumns ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-306" name="__codelineno-0-306" href="#__codelineno-0-306"></a>    Dim cols() As String
 <a id="__codelineno-0-307" name="__codelineno-0-307" href="#__codelineno-0-307"></a>    If Len(columnsCsv) &gt; 0 Then
-<a id="__codelineno-0-308" name="__codelineno-0-308" href="#__codelineno-0-308"></a>        cols = Split(columnsCsv, &quot;,&quot;)
+<a id="__codelineno-0-308" name="__codelineno-0-308" href="#__codelineno-0-308"></a>        cols = Split(columnsCsv, ",")
 <a id="__codelineno-0-309" name="__codelineno-0-309" href="#__codelineno-0-309"></a>    Else
 <a id="__codelineno-0-310" name="__codelineno-0-310" href="#__codelineno-0-310"></a>        ReDim cols(2)
-<a id="__codelineno-0-311" name="__codelineno-0-311" href="#__codelineno-0-311"></a>        cols(0) = &quot;Name&quot;
-<a id="__codelineno-0-312" name="__codelineno-0-312" href="#__codelineno-0-312"></a>        cols(1) = &quot;Type&quot;
-<a id="__codelineno-0-313" name="__codelineno-0-313" href="#__codelineno-0-313"></a>        cols(2) = &quot;Required&quot;
+<a id="__codelineno-0-311" name="__codelineno-0-311" href="#__codelineno-0-311"></a>        cols(0) = "Name"
+<a id="__codelineno-0-312" name="__codelineno-0-312" href="#__codelineno-0-312"></a>        cols(1) = "Type"
+<a id="__codelineno-0-313" name="__codelineno-0-313" href="#__codelineno-0-313"></a>        cols(2) = "Required"
 <a id="__codelineno-0-314" name="__codelineno-0-314" href="#__codelineno-0-314"></a>    End If
 <a id="__codelineno-0-315" name="__codelineno-0-315" href="#__codelineno-0-315"></a>    SplitColumns = cols
-<a id="__codelineno-0-316" name="__codelineno-0-316" href="#__codelineno-0-316"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0499] clsGridIO.SplitColumns EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-316" name="__codelineno-0-316" href="#__codelineno-0-316"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0499] clsGridIO.SplitColumns EXIT-OK"  ' [ADR-0100]
 <a id="__codelineno-0-317" name="__codelineno-0-317" href="#__codelineno-0-317"></a>End Function
 </code></pre></div>
 
@@ -5421,7 +5421,7 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
       <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.indexes", "toc.integrate", "search.highlight", "search.suggest", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u30b3\u30d4\u30fc\u3057\u307e\u3057\u305f", "clipboard.copy": "\u30af\u30ea\u30c3\u30d7\u30dc\u30fc\u30c9\u3078\u30b3\u30d4\u30fc", "search.result.more.one": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3082\u30461\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.more.other": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3042\u3068#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.none": "\u4f55\u3082\u898b\u3064\u304b\u308a\u307e\u305b\u3093\u3067\u3057\u305f", "search.result.one": "1\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.other": "#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.placeholder": "\u691c\u7d22\u30ad\u30fc\u30ef\u30fc\u30c9\u3092\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044", "search.result.term.missing": "\u691c\u7d22\u306b\u542b\u307e\u308c\u306a\u3044", "select.version": "\u30d0\u30fc\u30b8\u30e7\u30f3\u5207\u308a\u66ff\u3048"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>

@@ -25,7 +25,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -33,7 +33,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -5045,24 +5045,24 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <h2 id="_2">ソースコード<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>VERSION 1.0 CLASS
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>BEGIN
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>  MultiUse = -1  &#39;True
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>  MultiUse = -1  'True
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>END
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>Attribute VB_Name = &quot;clsControlSpec&quot;
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>Attribute VB_Name = "clsControlSpec"
 <a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>Attribute VB_GlobalNameSpace = False
 <a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>Attribute VB_Creatable = False
 <a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>Attribute VB_PredeclaredId = False
 <a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>Attribute VB_Exposed = False
 <a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>Option Explicit
 <a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>&#39; ================================================================
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>&#39; クラス: clsControlSpec (ビジネスロジック層 / 値オブジェクト)
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>&#39; 概要:   1 つの UserForm 上 Control の宣言情報を保持する ValueObject。
-<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>&#39;         ControlType / Name / Left / Top / Width / Height / Caption / OnClick
-<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>&#39;         を Private 変数 + Property Get/Let で公開する (R11 準拠)。
-<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>&#39; 依存先: なし
-<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>&#39; 備考:   状態を持つので .cls (vba-coding-standards R10/R11)。
-<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>&#39;         OnClick はマクロ名 (Application.Run で呼ぶ)。
-<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>&#39; ================================================================
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>' ================================================================
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>' クラス: clsControlSpec (ビジネスロジック層 / 値オブジェクト)
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>' 概要:   1 つの UserForm 上 Control の宣言情報を保持する ValueObject。
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>'         ControlType / Name / Left / Top / Width / Height / Caption / OnClick
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>'         を Private 変数 + Property Get/Let で公開する (R11 準拠)。
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>' 依存先: なし
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>' 備考:   状態を持つので .cls (vba-coding-standards R10/R11)。
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>'         OnClick はマクロ名 (Application.Run で呼ぶ)。
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>' ================================================================
 <a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>
 <a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>Private m_controlType As String
 <a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>Private m_name As String
@@ -5073,101 +5073,101 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>Private m_caption As String
 <a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>Private m_onClick As String
 <a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>
-<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>&#39; --- ControlType ---
+<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>' --- ControlType ---
 <a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>Public Property Get ControlType() As String
-<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0416] clsControlSpec.ControlType ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0416] clsControlSpec.ControlType ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>    ControlType = m_controlType
 <a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>End Property
 <a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>Public Property Let ControlType(ByVal v As String)
-<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0417] clsControlSpec.ControlType ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0417] clsControlSpec.ControlType ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>    m_controlType = v
 <a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>End Property
 <a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>
-<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>&#39; --- Name ---
+<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>' --- Name ---
 <a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>Public Property Get Name() As String
-<a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0418] clsControlSpec.Name ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0418] clsControlSpec.Name ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>    Name = m_name
 <a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>End Property
 <a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>Public Property Let Name(ByVal v As String)
-<a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0419] clsControlSpec.Name ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0419] clsControlSpec.Name ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>    m_name = v
 <a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>End Property
 <a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>
-<a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>&#39; --- Left ---
+<a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>' --- Left ---
 <a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a>Public Property Get Left() As Long
-<a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0420] clsControlSpec.Left ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0420] clsControlSpec.Left ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a>    Left = m_left
 <a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a>End Property
 <a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a>Public Property Let Left(ByVal v As Long)
-<a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0421] clsControlSpec.Left ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0421] clsControlSpec.Left ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a>    m_left = v
 <a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a>End Property
 <a id="__codelineno-0-60" name="__codelineno-0-60" href="#__codelineno-0-60"></a>
-<a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a>&#39; --- Top ---
+<a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a>' --- Top ---
 <a id="__codelineno-0-62" name="__codelineno-0-62" href="#__codelineno-0-62"></a>Public Property Get Top() As Long
-<a id="__codelineno-0-63" name="__codelineno-0-63" href="#__codelineno-0-63"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0422] clsControlSpec.Top ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-63" name="__codelineno-0-63" href="#__codelineno-0-63"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0422] clsControlSpec.Top ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-64" name="__codelineno-0-64" href="#__codelineno-0-64"></a>    Top = m_top
 <a id="__codelineno-0-65" name="__codelineno-0-65" href="#__codelineno-0-65"></a>End Property
 <a id="__codelineno-0-66" name="__codelineno-0-66" href="#__codelineno-0-66"></a>Public Property Let Top(ByVal v As Long)
-<a id="__codelineno-0-67" name="__codelineno-0-67" href="#__codelineno-0-67"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0423] clsControlSpec.Top ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-67" name="__codelineno-0-67" href="#__codelineno-0-67"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0423] clsControlSpec.Top ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-68" name="__codelineno-0-68" href="#__codelineno-0-68"></a>    m_top = v
 <a id="__codelineno-0-69" name="__codelineno-0-69" href="#__codelineno-0-69"></a>End Property
 <a id="__codelineno-0-70" name="__codelineno-0-70" href="#__codelineno-0-70"></a>
-<a id="__codelineno-0-71" name="__codelineno-0-71" href="#__codelineno-0-71"></a>&#39; --- Width ---
+<a id="__codelineno-0-71" name="__codelineno-0-71" href="#__codelineno-0-71"></a>' --- Width ---
 <a id="__codelineno-0-72" name="__codelineno-0-72" href="#__codelineno-0-72"></a>Public Property Get Width() As Long
-<a id="__codelineno-0-73" name="__codelineno-0-73" href="#__codelineno-0-73"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0424] clsControlSpec.Width ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-73" name="__codelineno-0-73" href="#__codelineno-0-73"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0424] clsControlSpec.Width ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-74" name="__codelineno-0-74" href="#__codelineno-0-74"></a>    Width = m_width
 <a id="__codelineno-0-75" name="__codelineno-0-75" href="#__codelineno-0-75"></a>End Property
 <a id="__codelineno-0-76" name="__codelineno-0-76" href="#__codelineno-0-76"></a>Public Property Let Width(ByVal v As Long)
-<a id="__codelineno-0-77" name="__codelineno-0-77" href="#__codelineno-0-77"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0425] clsControlSpec.Width ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-77" name="__codelineno-0-77" href="#__codelineno-0-77"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0425] clsControlSpec.Width ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-78" name="__codelineno-0-78" href="#__codelineno-0-78"></a>    m_width = v
 <a id="__codelineno-0-79" name="__codelineno-0-79" href="#__codelineno-0-79"></a>End Property
 <a id="__codelineno-0-80" name="__codelineno-0-80" href="#__codelineno-0-80"></a>
-<a id="__codelineno-0-81" name="__codelineno-0-81" href="#__codelineno-0-81"></a>&#39; --- Height ---
+<a id="__codelineno-0-81" name="__codelineno-0-81" href="#__codelineno-0-81"></a>' --- Height ---
 <a id="__codelineno-0-82" name="__codelineno-0-82" href="#__codelineno-0-82"></a>Public Property Get Height() As Long
-<a id="__codelineno-0-83" name="__codelineno-0-83" href="#__codelineno-0-83"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0426] clsControlSpec.Height ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-83" name="__codelineno-0-83" href="#__codelineno-0-83"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0426] clsControlSpec.Height ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-84" name="__codelineno-0-84" href="#__codelineno-0-84"></a>    Height = m_height
 <a id="__codelineno-0-85" name="__codelineno-0-85" href="#__codelineno-0-85"></a>End Property
 <a id="__codelineno-0-86" name="__codelineno-0-86" href="#__codelineno-0-86"></a>Public Property Let Height(ByVal v As Long)
-<a id="__codelineno-0-87" name="__codelineno-0-87" href="#__codelineno-0-87"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0427] clsControlSpec.Height ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-87" name="__codelineno-0-87" href="#__codelineno-0-87"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0427] clsControlSpec.Height ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-88" name="__codelineno-0-88" href="#__codelineno-0-88"></a>    m_height = v
 <a id="__codelineno-0-89" name="__codelineno-0-89" href="#__codelineno-0-89"></a>End Property
 <a id="__codelineno-0-90" name="__codelineno-0-90" href="#__codelineno-0-90"></a>
-<a id="__codelineno-0-91" name="__codelineno-0-91" href="#__codelineno-0-91"></a>&#39; --- Caption ---
+<a id="__codelineno-0-91" name="__codelineno-0-91" href="#__codelineno-0-91"></a>' --- Caption ---
 <a id="__codelineno-0-92" name="__codelineno-0-92" href="#__codelineno-0-92"></a>Public Property Get Caption() As String
-<a id="__codelineno-0-93" name="__codelineno-0-93" href="#__codelineno-0-93"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0428] clsControlSpec.Caption ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-93" name="__codelineno-0-93" href="#__codelineno-0-93"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0428] clsControlSpec.Caption ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-94" name="__codelineno-0-94" href="#__codelineno-0-94"></a>    Caption = m_caption
 <a id="__codelineno-0-95" name="__codelineno-0-95" href="#__codelineno-0-95"></a>End Property
 <a id="__codelineno-0-96" name="__codelineno-0-96" href="#__codelineno-0-96"></a>Public Property Let Caption(ByVal v As String)
-<a id="__codelineno-0-97" name="__codelineno-0-97" href="#__codelineno-0-97"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0429] clsControlSpec.Caption ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-97" name="__codelineno-0-97" href="#__codelineno-0-97"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0429] clsControlSpec.Caption ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-98" name="__codelineno-0-98" href="#__codelineno-0-98"></a>    m_caption = v
 <a id="__codelineno-0-99" name="__codelineno-0-99" href="#__codelineno-0-99"></a>End Property
 <a id="__codelineno-0-100" name="__codelineno-0-100" href="#__codelineno-0-100"></a>
-<a id="__codelineno-0-101" name="__codelineno-0-101" href="#__codelineno-0-101"></a>&#39; --- OnClick (マクロ名) ---
+<a id="__codelineno-0-101" name="__codelineno-0-101" href="#__codelineno-0-101"></a>' --- OnClick (マクロ名) ---
 <a id="__codelineno-0-102" name="__codelineno-0-102" href="#__codelineno-0-102"></a>Public Property Get OnClick() As String
-<a id="__codelineno-0-103" name="__codelineno-0-103" href="#__codelineno-0-103"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0430] clsControlSpec.OnClick ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-103" name="__codelineno-0-103" href="#__codelineno-0-103"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0430] clsControlSpec.OnClick ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-104" name="__codelineno-0-104" href="#__codelineno-0-104"></a>    OnClick = m_onClick
 <a id="__codelineno-0-105" name="__codelineno-0-105" href="#__codelineno-0-105"></a>End Property
 <a id="__codelineno-0-106" name="__codelineno-0-106" href="#__codelineno-0-106"></a>Public Property Let OnClick(ByVal v As String)
-<a id="__codelineno-0-107" name="__codelineno-0-107" href="#__codelineno-0-107"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0431] clsControlSpec.OnClick ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-107" name="__codelineno-0-107" href="#__codelineno-0-107"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0431] clsControlSpec.OnClick ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-108" name="__codelineno-0-108" href="#__codelineno-0-108"></a>    m_onClick = v
 <a id="__codelineno-0-109" name="__codelineno-0-109" href="#__codelineno-0-109"></a>End Property
 <a id="__codelineno-0-110" name="__codelineno-0-110" href="#__codelineno-0-110"></a>
-<a id="__codelineno-0-111" name="__codelineno-0-111" href="#__codelineno-0-111"></a>&#39; ================================================================
-<a id="__codelineno-0-112" name="__codelineno-0-112" href="#__codelineno-0-112"></a>&#39; 関数名: Init
-<a id="__codelineno-0-113" name="__codelineno-0-113" href="#__codelineno-0-113"></a>&#39; 概要:   全プロパティを 1 回でセットする初期化メソッド
-<a id="__codelineno-0-114" name="__codelineno-0-114" href="#__codelineno-0-114"></a>&#39; 引数:   cType   - &quot;Label&quot;/&quot;TextBox&quot;/&quot;Button&quot;/&quot;Image&quot;/&quot;ListBox&quot;/&quot;ComboBox&quot;
-<a id="__codelineno-0-115" name="__codelineno-0-115" href="#__codelineno-0-115"></a>&#39;         nm      - Control 名 (Form 内で一意)
-<a id="__codelineno-0-116" name="__codelineno-0-116" href="#__codelineno-0-116"></a>&#39;         l/t/w/h - Left/Top/Width/Height (points)
-<a id="__codelineno-0-117" name="__codelineno-0-117" href="#__codelineno-0-117"></a>&#39;         cap     - Caption (Label/Button/CheckBox 用、省略可)
-<a id="__codelineno-0-118" name="__codelineno-0-118" href="#__codelineno-0-118"></a>&#39;         onClk   - OnClick マクロ名 (Button 用、省略可)
-<a id="__codelineno-0-119" name="__codelineno-0-119" href="#__codelineno-0-119"></a>&#39; ================================================================
+<a id="__codelineno-0-111" name="__codelineno-0-111" href="#__codelineno-0-111"></a>' ================================================================
+<a id="__codelineno-0-112" name="__codelineno-0-112" href="#__codelineno-0-112"></a>' 関数名: Init
+<a id="__codelineno-0-113" name="__codelineno-0-113" href="#__codelineno-0-113"></a>' 概要:   全プロパティを 1 回でセットする初期化メソッド
+<a id="__codelineno-0-114" name="__codelineno-0-114" href="#__codelineno-0-114"></a>' 引数:   cType   - "Label"/"TextBox"/"Button"/"Image"/"ListBox"/"ComboBox"
+<a id="__codelineno-0-115" name="__codelineno-0-115" href="#__codelineno-0-115"></a>'         nm      - Control 名 (Form 内で一意)
+<a id="__codelineno-0-116" name="__codelineno-0-116" href="#__codelineno-0-116"></a>'         l/t/w/h - Left/Top/Width/Height (points)
+<a id="__codelineno-0-117" name="__codelineno-0-117" href="#__codelineno-0-117"></a>'         cap     - Caption (Label/Button/CheckBox 用、省略可)
+<a id="__codelineno-0-118" name="__codelineno-0-118" href="#__codelineno-0-118"></a>'         onClk   - OnClick マクロ名 (Button 用、省略可)
+<a id="__codelineno-0-119" name="__codelineno-0-119" href="#__codelineno-0-119"></a>' ================================================================
 <a id="__codelineno-0-120" name="__codelineno-0-120" href="#__codelineno-0-120"></a>Public Sub Init(ByVal cType As String, ByVal nm As String, _
 <a id="__codelineno-0-121" name="__codelineno-0-121" href="#__codelineno-0-121"></a>                 ByVal l As Long, ByVal t As Long, _
 <a id="__codelineno-0-122" name="__codelineno-0-122" href="#__codelineno-0-122"></a>                 ByVal w As Long, ByVal h As Long, _
-<a id="__codelineno-0-123" name="__codelineno-0-123" href="#__codelineno-0-123"></a>                 Optional ByVal cap As String = &quot;&quot;, _
-<a id="__codelineno-0-124" name="__codelineno-0-124" href="#__codelineno-0-124"></a>                 Optional ByVal onClk As String = &quot;&quot;)
-<a id="__codelineno-0-125" name="__codelineno-0-125" href="#__codelineno-0-125"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0432] clsControlSpec.Init ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-123" name="__codelineno-0-123" href="#__codelineno-0-123"></a>                 Optional ByVal cap As String = "", _
+<a id="__codelineno-0-124" name="__codelineno-0-124" href="#__codelineno-0-124"></a>                 Optional ByVal onClk As String = "")
+<a id="__codelineno-0-125" name="__codelineno-0-125" href="#__codelineno-0-125"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0432] clsControlSpec.Init ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-126" name="__codelineno-0-126" href="#__codelineno-0-126"></a>    m_controlType = cType
 <a id="__codelineno-0-127" name="__codelineno-0-127" href="#__codelineno-0-127"></a>    m_name = nm
 <a id="__codelineno-0-128" name="__codelineno-0-128" href="#__codelineno-0-128"></a>    m_left = l
@@ -5176,7 +5176,7 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-131" name="__codelineno-0-131" href="#__codelineno-0-131"></a>    m_height = h
 <a id="__codelineno-0-132" name="__codelineno-0-132" href="#__codelineno-0-132"></a>    m_caption = cap
 <a id="__codelineno-0-133" name="__codelineno-0-133" href="#__codelineno-0-133"></a>    m_onClick = onClk
-<a id="__codelineno-0-134" name="__codelineno-0-134" href="#__codelineno-0-134"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0433] clsControlSpec.Init EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-134" name="__codelineno-0-134" href="#__codelineno-0-134"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0433] clsControlSpec.Init EXIT-OK"  ' [ADR-0100]
 <a id="__codelineno-0-135" name="__codelineno-0-135" href="#__codelineno-0-135"></a>End Sub
 </code></pre></div>
 
@@ -5239,7 +5239,7 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
       <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.indexes", "toc.integrate", "search.highlight", "search.suggest", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u30b3\u30d4\u30fc\u3057\u307e\u3057\u305f", "clipboard.copy": "\u30af\u30ea\u30c3\u30d7\u30dc\u30fc\u30c9\u3078\u30b3\u30d4\u30fc", "search.result.more.one": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3082\u30461\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.more.other": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3042\u3068#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.none": "\u4f55\u3082\u898b\u3064\u304b\u308a\u307e\u305b\u3093\u3067\u3057\u305f", "search.result.one": "1\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.other": "#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.placeholder": "\u691c\u7d22\u30ad\u30fc\u30ef\u30fc\u30c9\u3092\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044", "search.result.term.missing": "\u691c\u7d22\u306b\u542b\u307e\u308c\u306a\u3044", "select.version": "\u30d0\u30fc\u30b8\u30e7\u30f3\u5207\u308a\u66ff\u3048"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>

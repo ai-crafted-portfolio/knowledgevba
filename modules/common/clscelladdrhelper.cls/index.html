@@ -25,7 +25,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -33,7 +33,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -5045,73 +5045,73 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <h2 id="_2">ソースコード<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>VERSION 1.0 CLASS
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>BEGIN
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>  MultiUse = -1  &#39;True
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>  MultiUse = -1  'True
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>End
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>Attribute VB_Name = &quot;clsCellAddrHelper&quot;
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>Attribute VB_Name = "clsCellAddrHelper"
 <a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>Attribute VB_GlobalNameSpace = False
 <a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>Attribute VB_Creatable = False
 <a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>Attribute VB_PredeclaredId = True
 <a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>Attribute VB_Exposed = False
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>&#39; ============================================================
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>&#39; Cell address helper (Sprint2 SRP split, ASCII-only)
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>&#39; VB_PredeclaredId = True : callable as clsCellAddrHelper.Xxx
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>&#39; ============================================================
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>' ============================================================
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>' Cell address helper (Sprint2 SRP split, ASCII-only)
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>' VB_PredeclaredId = True : callable as clsCellAddrHelper.Xxx
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>' ============================================================
 <a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>Option Explicit
 <a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>
-<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>&#39; Convert column index (1=A, 26=Z, 27=AA...) to letter
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>' Convert column index (1=A, 26=Z, 27=AA...) to letter
 <a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>Public Function ColLetter(ByVal colNum As Long) As String
-<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0394] clsCellAddrHelper.ColLetter ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0394] clsCellAddrHelper.ColLetter ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>    Dim result As String
-<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>    result = &quot;&quot;
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>    result = ""
 <a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>    Do While colNum &gt; 0
 <a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>        Dim r As Long
 <a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>        r = ((colNum - 1) Mod 26)
-<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>        result = Chr$(Asc(&quot;A&quot;) + r) &amp; result
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>        result = Chr$(Asc("A") + r) &amp; result
 <a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>        colNum = (colNum - 1) \ 26
 <a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>    Loop
 <a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>    ColLetter = result
-<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0395] clsCellAddrHelper.ColLetter EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0395] clsCellAddrHelper.ColLetter EXIT-OK"  ' [ADR-0100]
 <a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>End Function
 <a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>
-<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>&#39; Parse &quot;C3&quot; -&gt; col=3, row=3 (via ByRef)
+<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>' Parse "C3" -&gt; col=3, row=3 (via ByRef)
 <a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>Public Sub ParseCellAddr(ByVal addr As String, ByRef colNum As Long, ByRef rowNum As Long)
-<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0396] clsCellAddrHelper.ParseCellAddr ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0396] clsCellAddrHelper.ParseCellAddr ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>    Dim i As Long
 <a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>    Dim letters As String, digits As String
-<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>    letters = &quot;&quot;
-<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>    digits = &quot;&quot;
+<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>    letters = ""
+<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>    digits = ""
 <a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>    For i = 1 To Len(addr)
 <a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>        Dim ch As String
 <a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>        ch = Mid(addr, i, 1)
-<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>        If ch &gt;= &quot;0&quot; And ch &lt;= &quot;9&quot; Then
+<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>        If ch &gt;= "0" And ch &lt;= "9" Then
 <a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>            digits = digits &amp; ch
-<a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>        ElseIf (ch &gt;= &quot;A&quot; And ch &lt;= &quot;Z&quot;) Or (ch &gt;= &quot;a&quot; And ch &lt;= &quot;z&quot;) Then
+<a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>        ElseIf (ch &gt;= "A" And ch &lt;= "Z") Or (ch &gt;= "a" And ch &lt;= "z") Then
 <a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>            letters = letters &amp; UCase(ch)
 <a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>        End If
 <a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>    Next i
 <a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>    rowNum = CLng(Val(digits))
 <a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>    colNum = 0
 <a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>    For i = 1 To Len(letters)
-<a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>        colNum = colNum * 26 + (Asc(Mid(letters, i, 1)) - Asc(&quot;A&quot;) + 1)
+<a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>        colNum = colNum * 26 + (Asc(Mid(letters, i, 1)) - Asc("A") + 1)
 <a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>    Next i
-<a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0397] clsCellAddrHelper.ParseCellAddr EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0397] clsCellAddrHelper.ParseCellAddr EXIT-OK"  ' [ADR-0100]
 <a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a>End Sub
 <a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a>
-<a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a>&#39; Offset a cell address by (rowOffset, colOffset)
+<a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a>' Offset a cell address by (rowOffset, colOffset)
 <a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a>Public Function OffsetCellAddr(ByVal baseCellAddr As String, ByVal rowOffset As Long, ByVal colOffset As Long) As String
-<a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0398] clsCellAddrHelper.OffsetCellAddr ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0398] clsCellAddrHelper.OffsetCellAddr ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a>    Dim baseCol As Long, baseRow As Long
 <a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a>    ParseCellAddr baseCellAddr, baseCol, baseRow
 <a id="__codelineno-0-60" name="__codelineno-0-60" href="#__codelineno-0-60"></a>    Dim newCol As Long, newRow As Long
 <a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a>    newCol = baseCol + colOffset
 <a id="__codelineno-0-62" name="__codelineno-0-62" href="#__codelineno-0-62"></a>    newRow = baseRow + rowOffset
 <a id="__codelineno-0-63" name="__codelineno-0-63" href="#__codelineno-0-63"></a>    OffsetCellAddr = ColLetter(newCol) &amp; CStr(newRow)
-<a id="__codelineno-0-64" name="__codelineno-0-64" href="#__codelineno-0-64"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0399] clsCellAddrHelper.OffsetCellAddr EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-64" name="__codelineno-0-64" href="#__codelineno-0-64"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0399] clsCellAddrHelper.OffsetCellAddr EXIT-OK"  ' [ADR-0100]
 <a id="__codelineno-0-65" name="__codelineno-0-65" href="#__codelineno-0-65"></a>End Function
 <a id="__codelineno-0-66" name="__codelineno-0-66" href="#__codelineno-0-66"></a>
-<a id="__codelineno-0-67" name="__codelineno-0-67" href="#__codelineno-0-67"></a>&#39; GRID row capacity: end-start+1 (rows) if endCellAddr provided, else default
+<a id="__codelineno-0-67" name="__codelineno-0-67" href="#__codelineno-0-67"></a>' GRID row capacity: end-start+1 (rows) if endCellAddr provided, else default
 <a id="__codelineno-0-68" name="__codelineno-0-68" href="#__codelineno-0-68"></a>Public Function CalcGridRowCapacity(ByVal startCellAddr As String, ByVal endCellAddr As String, ByVal defaultRows As Long) As Long
-<a id="__codelineno-0-69" name="__codelineno-0-69" href="#__codelineno-0-69"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0400] clsCellAddrHelper.CalcGridRowCapacity ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-69" name="__codelineno-0-69" href="#__codelineno-0-69"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0400] clsCellAddrHelper.CalcGridRowCapacity ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-70" name="__codelineno-0-70" href="#__codelineno-0-70"></a>    If Len(endCellAddr) &gt; 0 Then
 <a id="__codelineno-0-71" name="__codelineno-0-71" href="#__codelineno-0-71"></a>        Dim sCol As Long, sRow As Long, eCol As Long, eRow As Long
 <a id="__codelineno-0-72" name="__codelineno-0-72" href="#__codelineno-0-72"></a>        ParseCellAddr startCellAddr, sCol, sRow
@@ -5120,7 +5120,7 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-75" name="__codelineno-0-75" href="#__codelineno-0-75"></a>    Else
 <a id="__codelineno-0-76" name="__codelineno-0-76" href="#__codelineno-0-76"></a>        CalcGridRowCapacity = defaultRows
 <a id="__codelineno-0-77" name="__codelineno-0-77" href="#__codelineno-0-77"></a>    End If
-<a id="__codelineno-0-78" name="__codelineno-0-78" href="#__codelineno-0-78"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-0401] clsCellAddrHelper.CalcGridRowCapacity EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-78" name="__codelineno-0-78" href="#__codelineno-0-78"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-0401] clsCellAddrHelper.CalcGridRowCapacity EXIT-OK"  ' [ADR-0100]
 <a id="__codelineno-0-79" name="__codelineno-0-79" href="#__codelineno-0-79"></a>End Function
 </code></pre></div>
 
@@ -5183,7 +5183,7 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
       <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.indexes", "toc.integrate", "search.highlight", "search.suggest", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u30b3\u30d4\u30fc\u3057\u307e\u3057\u305f", "clipboard.copy": "\u30af\u30ea\u30c3\u30d7\u30dc\u30fc\u30c9\u3078\u30b3\u30d4\u30fc", "search.result.more.one": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3082\u30461\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.more.other": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3042\u3068#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.none": "\u4f55\u3082\u898b\u3064\u304b\u308a\u307e\u305b\u3093\u3067\u3057\u305f", "search.result.one": "1\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.other": "#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.placeholder": "\u691c\u7d22\u30ad\u30fc\u30ef\u30fc\u30c9\u3092\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044", "search.result.term.missing": "\u691c\u7d22\u306b\u542b\u307e\u308c\u306a\u3044", "select.version": "\u30d0\u30fc\u30b8\u30e7\u30f3\u5207\u308a\u66ff\u3048"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>

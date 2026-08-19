@@ -25,7 +25,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -33,7 +33,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -5043,65 +5043,65 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 </blockquote>
 <hr />
 <h2 id="_2">ソースコード<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Attribute VB_Name = &quot;modStanzaIO&quot;
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>&#39; ================================================================
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>&#39; モジュール: modStanzaIO（Phase 2 task 2.5 / ユーティリティ層）
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>&#39; 概要:       スタンザ .txt の read/write primitive（[SECTION]+key=value 汎用形式）
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>&#39;             ADR-0053 §2.9 外部 I/O 独立化規則順守
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>&#39;             v2_stanza_parser_spec.md §1 / §2 / §6 準拠
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>&#39; Version:    v2.2 (2026-05-23, task 2.11: UI スタンザ検証層 UI-SCHEMA-205-209 追加)
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>&#39; 依存先:     ClsStanzaSection（出力型）
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>&#39; 関連:       ADR-0053 §2.9、ADR-0049 §4(f) Write 末尾切断対策
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>&#39;             Q18（公開 I/F 5 関数：ParseStanzaFile / ParseStanzaString / WriteStanzaFile / ParseMultiStanza / ValidateStanza）
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>&#39;             Q24（`#` コメント行許容、行頭のみ、parser が無視）
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>&#39;             Q15（CRLF 必須、LF 単独 / CR 単独 / 混在は reject、LogError）
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>&#39; 重要:       knowledge .txt は v2.1 で新スタンザ形式（###xxx###、Q47）を採用、
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>&#39;             knowledge 専用 parser は modKnowledgeFileIO 内に独立実装（本 module は format/UI/config のみ対象）
-<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>&#39; ================================================================
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Attribute VB_Name = "modStanzaIO"
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>' ================================================================
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>' モジュール: modStanzaIO（Phase 2 task 2.5 / ユーティリティ層）
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>' 概要:       スタンザ .txt の read/write primitive（[SECTION]+key=value 汎用形式）
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>'             ADR-0053 §2.9 外部 I/O 独立化規則順守
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>'             v2_stanza_parser_spec.md §1 / §2 / §6 準拠
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>' Version:    v2.2 (2026-05-23, task 2.11: UI スタンザ検証層 UI-SCHEMA-205-209 追加)
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>' 依存先:     ClsStanzaSection（出力型）
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>' 関連:       ADR-0053 §2.9、ADR-0049 §4(f) Write 末尾切断対策
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>'             Q18（公開 I/F 5 関数：ParseStanzaFile / ParseStanzaString / WriteStanzaFile / ParseMultiStanza / ValidateStanza）
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>'             Q24（`#` コメント行許容、行頭のみ、parser が無視）
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>'             Q15（CRLF 必須、LF 単独 / CR 単独 / 混在は reject、LogError）
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>' 重要:       knowledge .txt は v2.1 で新スタンザ形式（###xxx###、Q47）を採用、
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>'             knowledge 専用 parser は modKnowledgeFileIO 内に独立実装（本 module は format/UI/config のみ対象）
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>' ================================================================
 <a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>Option Explicit
 <a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>
-<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>&#39; ----------------------------------------------------------------
-<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>&#39; 定数
-<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>&#39; ----------------------------------------------------------------
-<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>Private Const STANZA_SEP As String = &quot;===&quot;
-<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>Private Const CHARSET_SJIS As String = &quot;Shift_JIS&quot;
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>' ----------------------------------------------------------------
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>' 定数
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>' ----------------------------------------------------------------
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>Private Const STANZA_SEP As String = "==="
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>Private Const CHARSET_SJIS As String = "Shift_JIS"
 <a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>
-<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>&#39; --- v2.2 task 2.11: UI スタンザ検証 UI-SCHEMA-205-209 用の定数 ---
-<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>Private Const SEV_ERROR As String = &quot;ERROR&quot;
-<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>Private Const SEV_WARN As String = &quot;WARN&quot;
-<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>Private Const LOGID_INPUT_NAME_MISSING As String = &quot;UI-SCHEMA-205&quot;
-<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>Private Const LOGID_INPUT_NAME_DUPLICATE As String = &quot;UI-SCHEMA-206&quot;
-<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>Private Const LOGID_GRID_ENDCELL_MISSING As String = &quot;UI-SCHEMA-207&quot;
-<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>Private Const LOGID_GRID_COLUMNS_COLON As String = &quot;UI-SCHEMA-208&quot;
-<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>Private Const LOGID_GRID_HEADER_MISMATCH As String = &quot;UI-SCHEMA-209&quot;
-<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>Private Const SECTION_INPUT As String = &quot;INPUT&quot;
-<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>Private Const SECTION_GRID As String = &quot;GRID&quot;
-<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>Private Const KEY_NAME As String = &quot;Name&quot;
-<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>Private Const KEY_ENDCELL As String = &quot;EndCell&quot;
-<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>Private Const KEY_COLUMNS As String = &quot;Columns&quot;
-<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>Private Const KEY_COLUMN_HEADERS As String = &quot;ColumnHeaders&quot;
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>' --- v2.2 task 2.11: UI スタンザ検証 UI-SCHEMA-205-209 用の定数 ---
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>Private Const SEV_ERROR As String = "ERROR"
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>Private Const SEV_WARN As String = "WARN"
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>Private Const LOGID_INPUT_NAME_MISSING As String = "UI-SCHEMA-205"
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>Private Const LOGID_INPUT_NAME_DUPLICATE As String = "UI-SCHEMA-206"
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>Private Const LOGID_GRID_ENDCELL_MISSING As String = "UI-SCHEMA-207"
+<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>Private Const LOGID_GRID_COLUMNS_COLON As String = "UI-SCHEMA-208"
+<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>Private Const LOGID_GRID_HEADER_MISMATCH As String = "UI-SCHEMA-209"
+<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>Private Const SECTION_INPUT As String = "INPUT"
+<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>Private Const SECTION_GRID As String = "GRID"
+<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>Private Const KEY_NAME As String = "Name"
+<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>Private Const KEY_ENDCELL As String = "EndCell"
+<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>Private Const KEY_COLUMNS As String = "Columns"
+<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>Private Const KEY_COLUMN_HEADERS As String = "ColumnHeaders"
 <a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>
 <a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>
-<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>&#39; ----------------------------------------------------------------
-<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>&#39; Public I/F: 読込
-<a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>&#39; ----------------------------------------------------------------
+<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>' ----------------------------------------------------------------
+<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>' Public I/F: 読込
+<a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>' ----------------------------------------------------------------
 <a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>
-<a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>&#39; ================================================================
-<a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>&#39; 関数名: ParseStanzaFile
-<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>&#39; 概要:   スタンザファイル全文を Shift_JIS で読込み、セクションリストを返す
-<a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>&#39; 引数:   ByVal filePath As String - ファイルパス
-<a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>&#39; 戻り値: Collection - 要素は ClsStanzaSection
-<a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>&#39; 備考:   ファイル不在 / 文字コード不一致は呼出側でハンドル
-<a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>&#39; ================================================================
+<a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>' ================================================================
+<a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>' 関数名: ParseStanzaFile
+<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>' 概要:   スタンザファイル全文を Shift_JIS で読込み、セクションリストを返す
+<a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>' 引数:   ByVal filePath As String - ファイルパス
+<a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>' 戻り値: Collection - 要素は ClsStanzaSection
+<a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>' 備考:   ファイル不在 / 文字コード不一致は呼出側でハンドル
+<a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>' ================================================================
 <a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>Public Function ParseStanzaFile(ByVal filePath As String) As Collection
-<a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1384] modStanzaIO.ParseStanzaFile ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1384] modStanzaIO.ParseStanzaFile ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a>    On Error GoTo ErrHandler
 <a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a>
 <a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a>    Dim ado As Object
 <a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a>    Dim allText As String
 <a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>
-<a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a>    Set ado = CreateObject(&quot;ADODB.Stream&quot;)
-<a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a>    ado.Type = 2  &#39; adTypeText
+<a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a>    Set ado = CreateObject("ADODB.Stream")
+<a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a>    ado.Type = 2  ' adTypeText
 <a id="__codelineno-0-60" name="__codelineno-0-60" href="#__codelineno-0-60"></a>    ado.Charset = CHARSET_SJIS
 <a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a>    ado.Open
 <a id="__codelineno-0-62" name="__codelineno-0-62" href="#__codelineno-0-62"></a>    ado.LoadFromFile filePath
@@ -5109,23 +5109,23 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-64" name="__codelineno-0-64" href="#__codelineno-0-64"></a>    ado.Close
 <a id="__codelineno-0-65" name="__codelineno-0-65" href="#__codelineno-0-65"></a>
 <a id="__codelineno-0-66" name="__codelineno-0-66" href="#__codelineno-0-66"></a>    Set ParseStanzaFile = ParseStanzaString(allText)
-<a id="__codelineno-0-67" name="__codelineno-0-67" href="#__codelineno-0-67"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1385] modStanzaIO.ParseStanzaFile EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-67" name="__codelineno-0-67" href="#__codelineno-0-67"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1385] modStanzaIO.ParseStanzaFile EXIT-OK"  ' [ADR-0100]
 <a id="__codelineno-0-68" name="__codelineno-0-68" href="#__codelineno-0-68"></a>    Exit Function
 <a id="__codelineno-0-69" name="__codelineno-0-69" href="#__codelineno-0-69"></a>
 <a id="__codelineno-0-70" name="__codelineno-0-70" href="#__codelineno-0-70"></a>ErrHandler:
-<a id="__codelineno-0-71" name="__codelineno-0-71" href="#__codelineno-0-71"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print &quot;[D-1386] modStanzaIO.ParseStanzaFile EXIT-ERR &quot; &amp; &quot;errNum=&quot; &amp; Err.Number &amp; &quot; desc=&quot; &amp; Err.Description  &#39; [ADR-0100]
-<a id="__codelineno-0-72" name="__codelineno-0-72" href="#__codelineno-0-72"></a>    &#39; エラー時は空 Collection を返す（呼出側で件数 0 判定）
+<a id="__codelineno-0-71" name="__codelineno-0-71" href="#__codelineno-0-71"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print "[D-1386] modStanzaIO.ParseStanzaFile EXIT-ERR " &amp; "errNum=" &amp; Err.Number &amp; " desc=" &amp; Err.Description  ' [ADR-0100]
+<a id="__codelineno-0-72" name="__codelineno-0-72" href="#__codelineno-0-72"></a>    ' エラー時は空 Collection を返す（呼出側で件数 0 判定）
 <a id="__codelineno-0-73" name="__codelineno-0-73" href="#__codelineno-0-73"></a>    Set ParseStanzaFile = New Collection
 <a id="__codelineno-0-74" name="__codelineno-0-74" href="#__codelineno-0-74"></a>End Function
 <a id="__codelineno-0-75" name="__codelineno-0-75" href="#__codelineno-0-75"></a>
-<a id="__codelineno-0-76" name="__codelineno-0-76" href="#__codelineno-0-76"></a>&#39; ================================================================
-<a id="__codelineno-0-77" name="__codelineno-0-77" href="#__codelineno-0-77"></a>&#39; 関数名: ParseStanzaString
-<a id="__codelineno-0-78" name="__codelineno-0-78" href="#__codelineno-0-78"></a>&#39; 概要:   スタンザ文字列を parse、セクションリストを返す
-<a id="__codelineno-0-79" name="__codelineno-0-79" href="#__codelineno-0-79"></a>&#39; 引数:   ByVal stanzaText As String - スタンザ全文
-<a id="__codelineno-0-80" name="__codelineno-0-80" href="#__codelineno-0-80"></a>&#39; 戻り値: Collection - 要素は ClsStanzaSection
-<a id="__codelineno-0-81" name="__codelineno-0-81" href="#__codelineno-0-81"></a>&#39; ================================================================
+<a id="__codelineno-0-76" name="__codelineno-0-76" href="#__codelineno-0-76"></a>' ================================================================
+<a id="__codelineno-0-77" name="__codelineno-0-77" href="#__codelineno-0-77"></a>' 関数名: ParseStanzaString
+<a id="__codelineno-0-78" name="__codelineno-0-78" href="#__codelineno-0-78"></a>' 概要:   スタンザ文字列を parse、セクションリストを返す
+<a id="__codelineno-0-79" name="__codelineno-0-79" href="#__codelineno-0-79"></a>' 引数:   ByVal stanzaText As String - スタンザ全文
+<a id="__codelineno-0-80" name="__codelineno-0-80" href="#__codelineno-0-80"></a>' 戻り値: Collection - 要素は ClsStanzaSection
+<a id="__codelineno-0-81" name="__codelineno-0-81" href="#__codelineno-0-81"></a>' ================================================================
 <a id="__codelineno-0-82" name="__codelineno-0-82" href="#__codelineno-0-82"></a>Public Function ParseStanzaString(ByVal stanzaText As String) As Collection
-<a id="__codelineno-0-83" name="__codelineno-0-83" href="#__codelineno-0-83"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1387] modStanzaIO.ParseStanzaString ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-83" name="__codelineno-0-83" href="#__codelineno-0-83"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1387] modStanzaIO.ParseStanzaString ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-84" name="__codelineno-0-84" href="#__codelineno-0-84"></a>    Dim result As Collection
 <a id="__codelineno-0-85" name="__codelineno-0-85" href="#__codelineno-0-85"></a>    Dim lines As Variant
 <a id="__codelineno-0-86" name="__codelineno-0-86" href="#__codelineno-0-86"></a>    Dim i As Long
@@ -5137,17 +5137,17 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-92" name="__codelineno-0-92" href="#__codelineno-0-92"></a>    Dim value As String
 <a id="__codelineno-0-93" name="__codelineno-0-93" href="#__codelineno-0-93"></a>
 <a id="__codelineno-0-94" name="__codelineno-0-94" href="#__codelineno-0-94"></a>    Set result = New Collection
-<a id="__codelineno-0-95" name="__codelineno-0-95" href="#__codelineno-0-95"></a>    &#39; 改行正規化（CRLF / LF / CR を LF に統一して Split）
+<a id="__codelineno-0-95" name="__codelineno-0-95" href="#__codelineno-0-95"></a>    ' 改行正規化（CRLF / LF / CR を LF に統一して Split）
 <a id="__codelineno-0-96" name="__codelineno-0-96" href="#__codelineno-0-96"></a>    stanzaText = Replace(stanzaText, vbCrLf, vbLf)
 <a id="__codelineno-0-97" name="__codelineno-0-97" href="#__codelineno-0-97"></a>    stanzaText = Replace(stanzaText, vbCr, vbLf)
 <a id="__codelineno-0-98" name="__codelineno-0-98" href="#__codelineno-0-98"></a>    lines = Split(stanzaText, vbLf)
 <a id="__codelineno-0-99" name="__codelineno-0-99" href="#__codelineno-0-99"></a>
 <a id="__codelineno-0-100" name="__codelineno-0-100" href="#__codelineno-0-100"></a>    For i = LBound(lines) To UBound(lines)
 <a id="__codelineno-0-101" name="__codelineno-0-101" href="#__codelineno-0-101"></a>        line = CStr(lines(i))
-<a id="__codelineno-0-102" name="__codelineno-0-102" href="#__codelineno-0-102"></a>        &#39; 空行 / コメント
+<a id="__codelineno-0-102" name="__codelineno-0-102" href="#__codelineno-0-102"></a>        ' 空行 / コメント
 <a id="__codelineno-0-103" name="__codelineno-0-103" href="#__codelineno-0-103"></a>        If Len(Trim(line)) = 0 Then GoTo NextLine
-<a id="__codelineno-0-104" name="__codelineno-0-104" href="#__codelineno-0-104"></a>        If Left(Trim(line), 1) = &quot;#&quot; Then GoTo NextLine
-<a id="__codelineno-0-105" name="__codelineno-0-105" href="#__codelineno-0-105"></a>        &#39; セクション区切り
+<a id="__codelineno-0-104" name="__codelineno-0-104" href="#__codelineno-0-104"></a>        If Left(Trim(line), 1) = "#" Then GoTo NextLine
+<a id="__codelineno-0-105" name="__codelineno-0-105" href="#__codelineno-0-105"></a>        ' セクション区切り
 <a id="__codelineno-0-106" name="__codelineno-0-106" href="#__codelineno-0-106"></a>        If Trim(line) = STANZA_SEP Then
 <a id="__codelineno-0-107" name="__codelineno-0-107" href="#__codelineno-0-107"></a>            If Not currentSection Is Nothing Then
 <a id="__codelineno-0-108" name="__codelineno-0-108" href="#__codelineno-0-108"></a>                result.Add currentSection
@@ -5155,7 +5155,7 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-110" name="__codelineno-0-110" href="#__codelineno-0-110"></a>            End If
 <a id="__codelineno-0-111" name="__codelineno-0-111" href="#__codelineno-0-111"></a>            GoTo NextLine
 <a id="__codelineno-0-112" name="__codelineno-0-112" href="#__codelineno-0-112"></a>        End If
-<a id="__codelineno-0-113" name="__codelineno-0-113" href="#__codelineno-0-113"></a>        &#39; セクションヘッダ [...]
+<a id="__codelineno-0-113" name="__codelineno-0-113" href="#__codelineno-0-113"></a>        ' セクションヘッダ [...]
 <a id="__codelineno-0-114" name="__codelineno-0-114" href="#__codelineno-0-114"></a>        sectionMatch = ExtractSectionName(line)
 <a id="__codelineno-0-115" name="__codelineno-0-115" href="#__codelineno-0-115"></a>        If Len(sectionMatch) &gt; 0 Then
 <a id="__codelineno-0-116" name="__codelineno-0-116" href="#__codelineno-0-116"></a>            If Not currentSection Is Nothing Then
@@ -5165,40 +5165,40 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-120" name="__codelineno-0-120" href="#__codelineno-0-120"></a>            currentSection.Init sectionMatch, i + 1
 <a id="__codelineno-0-121" name="__codelineno-0-121" href="#__codelineno-0-121"></a>            GoTo NextLine
 <a id="__codelineno-0-122" name="__codelineno-0-122" href="#__codelineno-0-122"></a>        End If
-<a id="__codelineno-0-123" name="__codelineno-0-123" href="#__codelineno-0-123"></a>        &#39; key=value
-<a id="__codelineno-0-124" name="__codelineno-0-124" href="#__codelineno-0-124"></a>        eqPos = InStr(line, &quot;=&quot;)
+<a id="__codelineno-0-123" name="__codelineno-0-123" href="#__codelineno-0-123"></a>        ' key=value
+<a id="__codelineno-0-124" name="__codelineno-0-124" href="#__codelineno-0-124"></a>        eqPos = InStr(line, "=")
 <a id="__codelineno-0-125" name="__codelineno-0-125" href="#__codelineno-0-125"></a>        If eqPos &gt; 0 And Not currentSection Is Nothing Then
 <a id="__codelineno-0-126" name="__codelineno-0-126" href="#__codelineno-0-126"></a>            key = Trim(Left(line, eqPos - 1))
-<a id="__codelineno-0-127" name="__codelineno-0-127" href="#__codelineno-0-127"></a>            value = Mid(line, eqPos + 1)  &#39; 右辺は trim しない（意味のある空白）
-<a id="__codelineno-0-128" name="__codelineno-0-128" href="#__codelineno-0-128"></a>            &#39; エスケープ展開: \\n -&gt; LF, \\\\ -&gt; \\
-<a id="__codelineno-0-129" name="__codelineno-0-129" href="#__codelineno-0-129"></a>            value = Replace(value, &quot;\n&quot;, vbLf)
-<a id="__codelineno-0-130" name="__codelineno-0-130" href="#__codelineno-0-130"></a>            value = Replace(value, &quot;\\&quot;, &quot;\&quot;)
+<a id="__codelineno-0-127" name="__codelineno-0-127" href="#__codelineno-0-127"></a>            value = Mid(line, eqPos + 1)  ' 右辺は trim しない（意味のある空白）
+<a id="__codelineno-0-128" name="__codelineno-0-128" href="#__codelineno-0-128"></a>            ' エスケープ展開: \\n -&gt; LF, \\\\ -&gt; \\
+<a id="__codelineno-0-129" name="__codelineno-0-129" href="#__codelineno-0-129"></a>            value = Replace(value, "\n", vbLf)
+<a id="__codelineno-0-130" name="__codelineno-0-130" href="#__codelineno-0-130"></a>            value = Replace(value, "\\", "\")
 <a id="__codelineno-0-131" name="__codelineno-0-131" href="#__codelineno-0-131"></a>            currentSection.SetValue key, value
 <a id="__codelineno-0-132" name="__codelineno-0-132" href="#__codelineno-0-132"></a>        End If
 <a id="__codelineno-0-133" name="__codelineno-0-133" href="#__codelineno-0-133"></a>NextLine:
 <a id="__codelineno-0-134" name="__codelineno-0-134" href="#__codelineno-0-134"></a>    Next i
 <a id="__codelineno-0-135" name="__codelineno-0-135" href="#__codelineno-0-135"></a>
-<a id="__codelineno-0-136" name="__codelineno-0-136" href="#__codelineno-0-136"></a>    &#39; 最終セクションを追加
+<a id="__codelineno-0-136" name="__codelineno-0-136" href="#__codelineno-0-136"></a>    ' 最終セクションを追加
 <a id="__codelineno-0-137" name="__codelineno-0-137" href="#__codelineno-0-137"></a>    If Not currentSection Is Nothing Then
 <a id="__codelineno-0-138" name="__codelineno-0-138" href="#__codelineno-0-138"></a>        result.Add currentSection
 <a id="__codelineno-0-139" name="__codelineno-0-139" href="#__codelineno-0-139"></a>    End If
 <a id="__codelineno-0-140" name="__codelineno-0-140" href="#__codelineno-0-140"></a>
 <a id="__codelineno-0-141" name="__codelineno-0-141" href="#__codelineno-0-141"></a>    Set ParseStanzaString = result
-<a id="__codelineno-0-142" name="__codelineno-0-142" href="#__codelineno-0-142"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1388] modStanzaIO.ParseStanzaString EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-142" name="__codelineno-0-142" href="#__codelineno-0-142"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1388] modStanzaIO.ParseStanzaString EXIT-OK"  ' [ADR-0100]
 <a id="__codelineno-0-143" name="__codelineno-0-143" href="#__codelineno-0-143"></a>End Function
 <a id="__codelineno-0-144" name="__codelineno-0-144" href="#__codelineno-0-144"></a>
-<a id="__codelineno-0-145" name="__codelineno-0-145" href="#__codelineno-0-145"></a>&#39; ----------------------------------------------------------------
-<a id="__codelineno-0-146" name="__codelineno-0-146" href="#__codelineno-0-146"></a>&#39; Public I/F: 書込
-<a id="__codelineno-0-147" name="__codelineno-0-147" href="#__codelineno-0-147"></a>&#39; ----------------------------------------------------------------
+<a id="__codelineno-0-145" name="__codelineno-0-145" href="#__codelineno-0-145"></a>' ----------------------------------------------------------------
+<a id="__codelineno-0-146" name="__codelineno-0-146" href="#__codelineno-0-146"></a>' Public I/F: 書込
+<a id="__codelineno-0-147" name="__codelineno-0-147" href="#__codelineno-0-147"></a>' ----------------------------------------------------------------
 <a id="__codelineno-0-148" name="__codelineno-0-148" href="#__codelineno-0-148"></a>
-<a id="__codelineno-0-149" name="__codelineno-0-149" href="#__codelineno-0-149"></a>&#39; ================================================================
-<a id="__codelineno-0-150" name="__codelineno-0-150" href="#__codelineno-0-150"></a>&#39; 関数名: WriteStanzaFile
-<a id="__codelineno-0-151" name="__codelineno-0-151" href="#__codelineno-0-151"></a>&#39; 概要:   セクションリストをスタンザ書式で Shift_JIS + CRLF で書出
-<a id="__codelineno-0-152" name="__codelineno-0-152" href="#__codelineno-0-152"></a>&#39; 引数:   ByVal filePath As String         - 出力先
-<a id="__codelineno-0-153" name="__codelineno-0-153" href="#__codelineno-0-153"></a>&#39;         ByVal sections As Collection     - ClsStanzaSection のリスト
-<a id="__codelineno-0-154" name="__codelineno-0-154" href="#__codelineno-0-154"></a>&#39; ================================================================
+<a id="__codelineno-0-149" name="__codelineno-0-149" href="#__codelineno-0-149"></a>' ================================================================
+<a id="__codelineno-0-150" name="__codelineno-0-150" href="#__codelineno-0-150"></a>' 関数名: WriteStanzaFile
+<a id="__codelineno-0-151" name="__codelineno-0-151" href="#__codelineno-0-151"></a>' 概要:   セクションリストをスタンザ書式で Shift_JIS + CRLF で書出
+<a id="__codelineno-0-152" name="__codelineno-0-152" href="#__codelineno-0-152"></a>' 引数:   ByVal filePath As String         - 出力先
+<a id="__codelineno-0-153" name="__codelineno-0-153" href="#__codelineno-0-153"></a>'         ByVal sections As Collection     - ClsStanzaSection のリスト
+<a id="__codelineno-0-154" name="__codelineno-0-154" href="#__codelineno-0-154"></a>' ================================================================
 <a id="__codelineno-0-155" name="__codelineno-0-155" href="#__codelineno-0-155"></a>Public Sub WriteStanzaFile(ByVal filePath As String, ByVal sections As Collection)
-<a id="__codelineno-0-156" name="__codelineno-0-156" href="#__codelineno-0-156"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1389] modStanzaIO.WriteStanzaFile ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-156" name="__codelineno-0-156" href="#__codelineno-0-156"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1389] modStanzaIO.WriteStanzaFile ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-157" name="__codelineno-0-157" href="#__codelineno-0-157"></a>    On Error GoTo ErrHandler
 <a id="__codelineno-0-158" name="__codelineno-0-158" href="#__codelineno-0-158"></a>
 <a id="__codelineno-0-159" name="__codelineno-0-159" href="#__codelineno-0-159"></a>    Dim ado As Object
@@ -5209,103 +5209,103 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-164" name="__codelineno-0-164" href="#__codelineno-0-164"></a>
 <a id="__codelineno-0-165" name="__codelineno-0-165" href="#__codelineno-0-165"></a>    content = vbNullString
 <a id="__codelineno-0-166" name="__codelineno-0-166" href="#__codelineno-0-166"></a>    For Each sec In sections
-<a id="__codelineno-0-167" name="__codelineno-0-167" href="#__codelineno-0-167"></a>        content = content &amp; &quot;[&quot; &amp; sec.SectionName &amp; &quot;]&quot; &amp; vbCrLf
+<a id="__codelineno-0-167" name="__codelineno-0-167" href="#__codelineno-0-167"></a>        content = content &amp; "[" &amp; sec.SectionName &amp; "]" &amp; vbCrLf
 <a id="__codelineno-0-168" name="__codelineno-0-168" href="#__codelineno-0-168"></a>        For Each key In sec.KeyValues.Keys
 <a id="__codelineno-0-169" name="__codelineno-0-169" href="#__codelineno-0-169"></a>            escapedValue = EscapeStanzaValue(CStr(sec.GetValue(CStr(key))))
-<a id="__codelineno-0-170" name="__codelineno-0-170" href="#__codelineno-0-170"></a>            content = content &amp; CStr(key) &amp; &quot;=&quot; &amp; escapedValue &amp; vbCrLf
+<a id="__codelineno-0-170" name="__codelineno-0-170" href="#__codelineno-0-170"></a>            content = content &amp; CStr(key) &amp; "=" &amp; escapedValue &amp; vbCrLf
 <a id="__codelineno-0-171" name="__codelineno-0-171" href="#__codelineno-0-171"></a>        Next key
 <a id="__codelineno-0-172" name="__codelineno-0-172" href="#__codelineno-0-172"></a>        content = content &amp; STANZA_SEP &amp; vbCrLf
 <a id="__codelineno-0-173" name="__codelineno-0-173" href="#__codelineno-0-173"></a>    Next sec
 <a id="__codelineno-0-174" name="__codelineno-0-174" href="#__codelineno-0-174"></a>
-<a id="__codelineno-0-175" name="__codelineno-0-175" href="#__codelineno-0-175"></a>    Set ado = CreateObject(&quot;ADODB.Stream&quot;)
+<a id="__codelineno-0-175" name="__codelineno-0-175" href="#__codelineno-0-175"></a>    Set ado = CreateObject("ADODB.Stream")
 <a id="__codelineno-0-176" name="__codelineno-0-176" href="#__codelineno-0-176"></a>    ado.Type = 2
 <a id="__codelineno-0-177" name="__codelineno-0-177" href="#__codelineno-0-177"></a>    ado.Charset = CHARSET_SJIS
 <a id="__codelineno-0-178" name="__codelineno-0-178" href="#__codelineno-0-178"></a>    ado.Open
 <a id="__codelineno-0-179" name="__codelineno-0-179" href="#__codelineno-0-179"></a>    ado.WriteText content
-<a id="__codelineno-0-180" name="__codelineno-0-180" href="#__codelineno-0-180"></a>    ado.SaveToFile filePath, 2  &#39; adSaveCreateOverWrite
+<a id="__codelineno-0-180" name="__codelineno-0-180" href="#__codelineno-0-180"></a>    ado.SaveToFile filePath, 2  ' adSaveCreateOverWrite
 <a id="__codelineno-0-181" name="__codelineno-0-181" href="#__codelineno-0-181"></a>    ado.Close
-<a id="__codelineno-0-182" name="__codelineno-0-182" href="#__codelineno-0-182"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1390] modStanzaIO.WriteStanzaFile EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-182" name="__codelineno-0-182" href="#__codelineno-0-182"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1390] modStanzaIO.WriteStanzaFile EXIT-OK"  ' [ADR-0100]
 <a id="__codelineno-0-183" name="__codelineno-0-183" href="#__codelineno-0-183"></a>    Exit Sub
 <a id="__codelineno-0-184" name="__codelineno-0-184" href="#__codelineno-0-184"></a>
 <a id="__codelineno-0-185" name="__codelineno-0-185" href="#__codelineno-0-185"></a>ErrHandler:
-<a id="__codelineno-0-186" name="__codelineno-0-186" href="#__codelineno-0-186"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print &quot;[D-1391] modStanzaIO.WriteStanzaFile EXIT-ERR &quot; &amp; &quot;errNum=&quot; &amp; Err.Number &amp; &quot; desc=&quot; &amp; Err.Description  &#39; [ADR-0100]
-<a id="__codelineno-0-187" name="__codelineno-0-187" href="#__codelineno-0-187"></a>    Err.Raise Err.Number, &quot;modStanzaIO.WriteStanzaFile&quot;, _
-<a id="__codelineno-0-188" name="__codelineno-0-188" href="#__codelineno-0-188"></a>              &quot;WriteStanzaFile failed for &quot; &amp; filePath &amp; &quot;: &quot; &amp; Err.Description
+<a id="__codelineno-0-186" name="__codelineno-0-186" href="#__codelineno-0-186"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print "[D-1391] modStanzaIO.WriteStanzaFile EXIT-ERR " &amp; "errNum=" &amp; Err.Number &amp; " desc=" &amp; Err.Description  ' [ADR-0100]
+<a id="__codelineno-0-187" name="__codelineno-0-187" href="#__codelineno-0-187"></a>    Err.Raise Err.Number, "modStanzaIO.WriteStanzaFile", _
+<a id="__codelineno-0-188" name="__codelineno-0-188" href="#__codelineno-0-188"></a>              "WriteStanzaFile failed for " &amp; filePath &amp; ": " &amp; Err.Description
 <a id="__codelineno-0-189" name="__codelineno-0-189" href="#__codelineno-0-189"></a>End Sub
 <a id="__codelineno-0-190" name="__codelineno-0-190" href="#__codelineno-0-190"></a>
-<a id="__codelineno-0-191" name="__codelineno-0-191" href="#__codelineno-0-191"></a>&#39; ================================================================
-<a id="__codelineno-0-192" name="__codelineno-0-192" href="#__codelineno-0-192"></a>&#39; Private helpers (restored after CP932 truncate)
-<a id="__codelineno-0-193" name="__codelineno-0-193" href="#__codelineno-0-193"></a>&#39; ================================================================
+<a id="__codelineno-0-191" name="__codelineno-0-191" href="#__codelineno-0-191"></a>' ================================================================
+<a id="__codelineno-0-192" name="__codelineno-0-192" href="#__codelineno-0-192"></a>' Private helpers (restored after CP932 truncate)
+<a id="__codelineno-0-193" name="__codelineno-0-193" href="#__codelineno-0-193"></a>' ================================================================
 <a id="__codelineno-0-194" name="__codelineno-0-194" href="#__codelineno-0-194"></a>
-<a id="__codelineno-0-195" name="__codelineno-0-195" href="#__codelineno-0-195"></a>&#39; &quot;[FOO]&quot; 形式の行からセクション名を抽出、それ以外は &quot;&quot;
+<a id="__codelineno-0-195" name="__codelineno-0-195" href="#__codelineno-0-195"></a>' "[FOO]" 形式の行からセクション名を抽出、それ以外は ""
 <a id="__codelineno-0-196" name="__codelineno-0-196" href="#__codelineno-0-196"></a>Private Function ExtractSectionName(ByVal line As String) As String
-<a id="__codelineno-0-197" name="__codelineno-0-197" href="#__codelineno-0-197"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1392] modStanzaIO.ExtractSectionName ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-197" name="__codelineno-0-197" href="#__codelineno-0-197"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1392] modStanzaIO.ExtractSectionName ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-198" name="__codelineno-0-198" href="#__codelineno-0-198"></a>    Dim s As String
 <a id="__codelineno-0-199" name="__codelineno-0-199" href="#__codelineno-0-199"></a>    s = Trim(line)
-<a id="__codelineno-0-200" name="__codelineno-0-200" href="#__codelineno-0-200"></a>    If Len(s) &gt;= 2 And Left(s, 1) = &quot;[&quot; And Right(s, 1) = &quot;]&quot; Then
+<a id="__codelineno-0-200" name="__codelineno-0-200" href="#__codelineno-0-200"></a>    If Len(s) &gt;= 2 And Left(s, 1) = "[" And Right(s, 1) = "]" Then
 <a id="__codelineno-0-201" name="__codelineno-0-201" href="#__codelineno-0-201"></a>        ExtractSectionName = Mid(s, 2, Len(s) - 2)
 <a id="__codelineno-0-202" name="__codelineno-0-202" href="#__codelineno-0-202"></a>    Else
-<a id="__codelineno-0-203" name="__codelineno-0-203" href="#__codelineno-0-203"></a>        ExtractSectionName = &quot;&quot;
+<a id="__codelineno-0-203" name="__codelineno-0-203" href="#__codelineno-0-203"></a>        ExtractSectionName = ""
 <a id="__codelineno-0-204" name="__codelineno-0-204" href="#__codelineno-0-204"></a>    End If
-<a id="__codelineno-0-205" name="__codelineno-0-205" href="#__codelineno-0-205"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1393] modStanzaIO.ExtractSectionName EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-205" name="__codelineno-0-205" href="#__codelineno-0-205"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1393] modStanzaIO.ExtractSectionName EXIT-OK"  ' [ADR-0100]
 <a id="__codelineno-0-206" name="__codelineno-0-206" href="#__codelineno-0-206"></a>End Function
 <a id="__codelineno-0-207" name="__codelineno-0-207" href="#__codelineno-0-207"></a>
-<a id="__codelineno-0-208" name="__codelineno-0-208" href="#__codelineno-0-208"></a>&#39; エスケープ: \ -&gt; \, CR -&gt; \r, LF -&gt; \n, = の左辺で問題になる場合に備えて = はそのまま
+<a id="__codelineno-0-208" name="__codelineno-0-208" href="#__codelineno-0-208"></a>' エスケープ: \ -&gt; \, CR -&gt; \r, LF -&gt; \n, = の左辺で問題になる場合に備えて = はそのまま
 <a id="__codelineno-0-209" name="__codelineno-0-209" href="#__codelineno-0-209"></a>Public Function EscapeStanzaValue(ByVal v As String) As String
-<a id="__codelineno-0-210" name="__codelineno-0-210" href="#__codelineno-0-210"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1394] modStanzaIO.EscapeStanzaValue ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-210" name="__codelineno-0-210" href="#__codelineno-0-210"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1394] modStanzaIO.EscapeStanzaValue ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-211" name="__codelineno-0-211" href="#__codelineno-0-211"></a>    Dim s As String
 <a id="__codelineno-0-212" name="__codelineno-0-212" href="#__codelineno-0-212"></a>    s = v
-<a id="__codelineno-0-213" name="__codelineno-0-213" href="#__codelineno-0-213"></a>    s = Replace(s, &quot;\&quot;, &quot;\\&quot;)
-<a id="__codelineno-0-214" name="__codelineno-0-214" href="#__codelineno-0-214"></a>    s = Replace(s, vbCrLf, &quot;\n&quot;)
-<a id="__codelineno-0-215" name="__codelineno-0-215" href="#__codelineno-0-215"></a>    s = Replace(s, vbLf, &quot;\n&quot;)
-<a id="__codelineno-0-216" name="__codelineno-0-216" href="#__codelineno-0-216"></a>    s = Replace(s, vbCr, &quot;\n&quot;)
+<a id="__codelineno-0-213" name="__codelineno-0-213" href="#__codelineno-0-213"></a>    s = Replace(s, "\", "\\")
+<a id="__codelineno-0-214" name="__codelineno-0-214" href="#__codelineno-0-214"></a>    s = Replace(s, vbCrLf, "\n")
+<a id="__codelineno-0-215" name="__codelineno-0-215" href="#__codelineno-0-215"></a>    s = Replace(s, vbLf, "\n")
+<a id="__codelineno-0-216" name="__codelineno-0-216" href="#__codelineno-0-216"></a>    s = Replace(s, vbCr, "\n")
 <a id="__codelineno-0-217" name="__codelineno-0-217" href="#__codelineno-0-217"></a>    EscapeStanzaValue = s
-<a id="__codelineno-0-218" name="__codelineno-0-218" href="#__codelineno-0-218"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1395] modStanzaIO.EscapeStanzaValue EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-218" name="__codelineno-0-218" href="#__codelineno-0-218"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1395] modStanzaIO.EscapeStanzaValue EXIT-OK"  ' [ADR-0100]
 <a id="__codelineno-0-219" name="__codelineno-0-219" href="#__codelineno-0-219"></a>End Function
 <a id="__codelineno-0-220" name="__codelineno-0-220" href="#__codelineno-0-220"></a>
-<a id="__codelineno-0-221" name="__codelineno-0-221" href="#__codelineno-0-221"></a>&#39; 逆エスケープ: \n -&gt; vbLf, \\ -&gt; \
+<a id="__codelineno-0-221" name="__codelineno-0-221" href="#__codelineno-0-221"></a>' 逆エスケープ: \n -&gt; vbLf, \\ -&gt; \
 <a id="__codelineno-0-222" name="__codelineno-0-222" href="#__codelineno-0-222"></a>Public Function UnescapeStanzaValue(ByVal v As String) As String
-<a id="__codelineno-0-223" name="__codelineno-0-223" href="#__codelineno-0-223"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1396] modStanzaIO.UnescapeStanzaValue ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-223" name="__codelineno-0-223" href="#__codelineno-0-223"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1396] modStanzaIO.UnescapeStanzaValue ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-224" name="__codelineno-0-224" href="#__codelineno-0-224"></a>    Dim s As String
 <a id="__codelineno-0-225" name="__codelineno-0-225" href="#__codelineno-0-225"></a>    s = v
-<a id="__codelineno-0-226" name="__codelineno-0-226" href="#__codelineno-0-226"></a>    &#39; 一旦プレースホルダ経由で順序保証
-<a id="__codelineno-0-227" name="__codelineno-0-227" href="#__codelineno-0-227"></a>    s = Replace(s, &quot;\\&quot;, Chr(1))
-<a id="__codelineno-0-228" name="__codelineno-0-228" href="#__codelineno-0-228"></a>    s = Replace(s, &quot;\n&quot;, vbLf)
-<a id="__codelineno-0-229" name="__codelineno-0-229" href="#__codelineno-0-229"></a>    s = Replace(s, Chr(1), &quot;\&quot;)
+<a id="__codelineno-0-226" name="__codelineno-0-226" href="#__codelineno-0-226"></a>    ' 一旦プレースホルダ経由で順序保証
+<a id="__codelineno-0-227" name="__codelineno-0-227" href="#__codelineno-0-227"></a>    s = Replace(s, "\\", Chr(1))
+<a id="__codelineno-0-228" name="__codelineno-0-228" href="#__codelineno-0-228"></a>    s = Replace(s, "\n", vbLf)
+<a id="__codelineno-0-229" name="__codelineno-0-229" href="#__codelineno-0-229"></a>    s = Replace(s, Chr(1), "\")
 <a id="__codelineno-0-230" name="__codelineno-0-230" href="#__codelineno-0-230"></a>    UnescapeStanzaValue = s
-<a id="__codelineno-0-231" name="__codelineno-0-231" href="#__codelineno-0-231"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1397] modStanzaIO.UnescapeStanzaValue EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-231" name="__codelineno-0-231" href="#__codelineno-0-231"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1397] modStanzaIO.UnescapeStanzaValue EXIT-OK"  ' [ADR-0100]
 <a id="__codelineno-0-232" name="__codelineno-0-232" href="#__codelineno-0-232"></a>End Function
 <a id="__codelineno-0-233" name="__codelineno-0-233" href="#__codelineno-0-233"></a>
-<a id="__codelineno-0-234" name="__codelineno-0-234" href="#__codelineno-0-234"></a>&#39; ----------------------------------------------------------------
-<a id="__codelineno-0-235" name="__codelineno-0-235" href="#__codelineno-0-235"></a>&#39; Public I/F: UI スタンザ検証（v2.2 task 2.11、UI-SCHEMA-205-209）
-<a id="__codelineno-0-236" name="__codelineno-0-236" href="#__codelineno-0-236"></a>&#39; ----------------------------------------------------------------
-<a id="__codelineno-0-237" name="__codelineno-0-237" href="#__codelineno-0-237"></a>&#39; 検証層は v2_stanza_parser_spec.md §3 のとおり parse とは別 Function。
-<a id="__codelineno-0-238" name="__codelineno-0-238" href="#__codelineno-0-238"></a>&#39; 本 task 2.11 の範囲は UI スタンザ固有検証のうち v2.2 で新設された
-<a id="__codelineno-0-239" name="__codelineno-0-239" href="#__codelineno-0-239"></a>&#39; UI-SCHEMA-205-209 の 5 件のみ。共通検証(001-102)・既存 UI 固有検証
-<a id="__codelineno-0-240" name="__codelineno-0-240" href="#__codelineno-0-240"></a>&#39; (201-204)・フォーマット/config 固有検証は本 task の範囲外（未実装）。
-<a id="__codelineno-0-241" name="__codelineno-0-241" href="#__codelineno-0-241"></a>&#39; 結果は ClsStanzaValidationResult（Errors/Warnings に ClsStanzaValidationIssue）。
-<a id="__codelineno-0-242" name="__codelineno-0-242" href="#__codelineno-0-242"></a>&#39; ----------------------------------------------------------------
+<a id="__codelineno-0-234" name="__codelineno-0-234" href="#__codelineno-0-234"></a>' ----------------------------------------------------------------
+<a id="__codelineno-0-235" name="__codelineno-0-235" href="#__codelineno-0-235"></a>' Public I/F: UI スタンザ検証（v2.2 task 2.11、UI-SCHEMA-205-209）
+<a id="__codelineno-0-236" name="__codelineno-0-236" href="#__codelineno-0-236"></a>' ----------------------------------------------------------------
+<a id="__codelineno-0-237" name="__codelineno-0-237" href="#__codelineno-0-237"></a>' 検証層は v2_stanza_parser_spec.md §3 のとおり parse とは別 Function。
+<a id="__codelineno-0-238" name="__codelineno-0-238" href="#__codelineno-0-238"></a>' 本 task 2.11 の範囲は UI スタンザ固有検証のうち v2.2 で新設された
+<a id="__codelineno-0-239" name="__codelineno-0-239" href="#__codelineno-0-239"></a>' UI-SCHEMA-205-209 の 5 件のみ。共通検証(001-102)・既存 UI 固有検証
+<a id="__codelineno-0-240" name="__codelineno-0-240" href="#__codelineno-0-240"></a>' (201-204)・フォーマット/config 固有検証は本 task の範囲外（未実装）。
+<a id="__codelineno-0-241" name="__codelineno-0-241" href="#__codelineno-0-241"></a>' 結果は ClsStanzaValidationResult（Errors/Warnings に ClsStanzaValidationIssue）。
+<a id="__codelineno-0-242" name="__codelineno-0-242" href="#__codelineno-0-242"></a>' ----------------------------------------------------------------
 <a id="__codelineno-0-243" name="__codelineno-0-243" href="#__codelineno-0-243"></a>
-<a id="__codelineno-0-244" name="__codelineno-0-244" href="#__codelineno-0-244"></a>&#39; ================================================================
-<a id="__codelineno-0-245" name="__codelineno-0-245" href="#__codelineno-0-245"></a>&#39; 関数名: ValidateUiStanza
-<a id="__codelineno-0-246" name="__codelineno-0-246" href="#__codelineno-0-246"></a>&#39; 概要:   parse 済み UI スタンザのセクション集合に v2.2 追加の UI スタンザ
-<a id="__codelineno-0-247" name="__codelineno-0-247" href="#__codelineno-0-247"></a>&#39;         固有検証 UI-SCHEMA-205-209 を実施する。
-<a id="__codelineno-0-248" name="__codelineno-0-248" href="#__codelineno-0-248"></a>&#39;         （v2_stanza_parser_spec.md §3.2 v2.2 / migration_plan §0.6.2 task 2.11）
-<a id="__codelineno-0-249" name="__codelineno-0-249" href="#__codelineno-0-249"></a>&#39; 引数:   ByVal sections As Collection - ParseStanzaFile/String の戻り値
-<a id="__codelineno-0-250" name="__codelineno-0-250" href="#__codelineno-0-250"></a>&#39;         ByVal filePath As String     - エラー報告用ファイルパス（空可）
-<a id="__codelineno-0-251" name="__codelineno-0-251" href="#__codelineno-0-251"></a>&#39; 戻り値: ClsStanzaValidationResult - ERROR/WARN を集約した検証結果
-<a id="__codelineno-0-252" name="__codelineno-0-252" href="#__codelineno-0-252"></a>&#39; 備考:   検出ルール一覧
-<a id="__codelineno-0-253" name="__codelineno-0-253" href="#__codelineno-0-253"></a>&#39;           UI-SCHEMA-205 ERROR [INPUT].Name 不在（キー無し or 空値）
-<a id="__codelineno-0-254" name="__codelineno-0-254" href="#__codelineno-0-254"></a>&#39;           UI-SCHEMA-206 ERROR 同一スタンザ内で [INPUT].Name 重複
-<a id="__codelineno-0-255" name="__codelineno-0-255" href="#__codelineno-0-255"></a>&#39;           UI-SCHEMA-207 ERROR [GRID].EndCell 不在（キー無し or 空値）
-<a id="__codelineno-0-256" name="__codelineno-0-256" href="#__codelineno-0-256"></a>&#39;           UI-SCHEMA-208 ERROR [GRID].Columns に &#39;:&#39; 残存（旧 v2.1 装飾記法）
-<a id="__codelineno-0-257" name="__codelineno-0-257" href="#__codelineno-0-257"></a>&#39;           UI-SCHEMA-209 WARN  [GRID].ColumnHeaders と Columns のトークン数不一致
-<a id="__codelineno-0-258" name="__codelineno-0-258" href="#__codelineno-0-258"></a>&#39; ================================================================
+<a id="__codelineno-0-244" name="__codelineno-0-244" href="#__codelineno-0-244"></a>' ================================================================
+<a id="__codelineno-0-245" name="__codelineno-0-245" href="#__codelineno-0-245"></a>' 関数名: ValidateUiStanza
+<a id="__codelineno-0-246" name="__codelineno-0-246" href="#__codelineno-0-246"></a>' 概要:   parse 済み UI スタンザのセクション集合に v2.2 追加の UI スタンザ
+<a id="__codelineno-0-247" name="__codelineno-0-247" href="#__codelineno-0-247"></a>'         固有検証 UI-SCHEMA-205-209 を実施する。
+<a id="__codelineno-0-248" name="__codelineno-0-248" href="#__codelineno-0-248"></a>'         （v2_stanza_parser_spec.md §3.2 v2.2 / migration_plan §0.6.2 task 2.11）
+<a id="__codelineno-0-249" name="__codelineno-0-249" href="#__codelineno-0-249"></a>' 引数:   ByVal sections As Collection - ParseStanzaFile/String の戻り値
+<a id="__codelineno-0-250" name="__codelineno-0-250" href="#__codelineno-0-250"></a>'         ByVal filePath As String     - エラー報告用ファイルパス（空可）
+<a id="__codelineno-0-251" name="__codelineno-0-251" href="#__codelineno-0-251"></a>' 戻り値: ClsStanzaValidationResult - ERROR/WARN を集約した検証結果
+<a id="__codelineno-0-252" name="__codelineno-0-252" href="#__codelineno-0-252"></a>' 備考:   検出ルール一覧
+<a id="__codelineno-0-253" name="__codelineno-0-253" href="#__codelineno-0-253"></a>'           UI-SCHEMA-205 ERROR [INPUT].Name 不在（キー無し or 空値）
+<a id="__codelineno-0-254" name="__codelineno-0-254" href="#__codelineno-0-254"></a>'           UI-SCHEMA-206 ERROR 同一スタンザ内で [INPUT].Name 重複
+<a id="__codelineno-0-255" name="__codelineno-0-255" href="#__codelineno-0-255"></a>'           UI-SCHEMA-207 ERROR [GRID].EndCell 不在（キー無し or 空値）
+<a id="__codelineno-0-256" name="__codelineno-0-256" href="#__codelineno-0-256"></a>'           UI-SCHEMA-208 ERROR [GRID].Columns に ':' 残存（旧 v2.1 装飾記法）
+<a id="__codelineno-0-257" name="__codelineno-0-257" href="#__codelineno-0-257"></a>'           UI-SCHEMA-209 WARN  [GRID].ColumnHeaders と Columns のトークン数不一致
+<a id="__codelineno-0-258" name="__codelineno-0-258" href="#__codelineno-0-258"></a>' ================================================================
 <a id="__codelineno-0-259" name="__codelineno-0-259" href="#__codelineno-0-259"></a>Public Function ValidateUiStanza( _
 <a id="__codelineno-0-260" name="__codelineno-0-260" href="#__codelineno-0-260"></a>    ByVal sections As Collection, _
 <a id="__codelineno-0-261" name="__codelineno-0-261" href="#__codelineno-0-261"></a>    ByVal filePath As String _
 <a id="__codelineno-0-262" name="__codelineno-0-262" href="#__codelineno-0-262"></a>) As ClsStanzaValidationResult
-<a id="__codelineno-0-263" name="__codelineno-0-263" href="#__codelineno-0-263"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1398] modStanzaIO.ValidateUiStanza ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-263" name="__codelineno-0-263" href="#__codelineno-0-263"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1398] modStanzaIO.ValidateUiStanza ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-264" name="__codelineno-0-264" href="#__codelineno-0-264"></a>    On Error GoTo ErrHandler
 <a id="__codelineno-0-265" name="__codelineno-0-265" href="#__codelineno-0-265"></a>
 <a id="__codelineno-0-266" name="__codelineno-0-266" href="#__codelineno-0-266"></a>    Dim result As ClsStanzaValidationResult
@@ -5316,29 +5316,29 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-271" name="__codelineno-0-271" href="#__codelineno-0-271"></a>
 <a id="__codelineno-0-272" name="__codelineno-0-272" href="#__codelineno-0-272"></a>    If sections Is Nothing Then
 <a id="__codelineno-0-273" name="__codelineno-0-273" href="#__codelineno-0-273"></a>        Set ValidateUiStanza = result
-<a id="__codelineno-0-274" name="__codelineno-0-274" href="#__codelineno-0-274"></a>        If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1399] modStanzaIO.ValidateUiStanza EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-274" name="__codelineno-0-274" href="#__codelineno-0-274"></a>        If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1399] modStanzaIO.ValidateUiStanza EXIT-OK"  ' [ADR-0100]
 <a id="__codelineno-0-275" name="__codelineno-0-275" href="#__codelineno-0-275"></a>        Exit Function
 <a id="__codelineno-0-276" name="__codelineno-0-276" href="#__codelineno-0-276"></a>    End If
 <a id="__codelineno-0-277" name="__codelineno-0-277" href="#__codelineno-0-277"></a>
-<a id="__codelineno-0-278" name="__codelineno-0-278" href="#__codelineno-0-278"></a>    &#39; UI-SCHEMA-205 / 206: [INPUT].Name の不在・重複
-<a id="__codelineno-0-279" name="__codelineno-0-279" href="#__codelineno-0-279"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_DEBUG Then Debug.Print &quot;[D-1402] modStanzaIO.ValidateUiStanza STEP-1 pre ValidateInputNames&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-278" name="__codelineno-0-278" href="#__codelineno-0-278"></a>    ' UI-SCHEMA-205 / 206: [INPUT].Name の不在・重複
+<a id="__codelineno-0-279" name="__codelineno-0-279" href="#__codelineno-0-279"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_DEBUG Then Debug.Print "[D-1402] modStanzaIO.ValidateUiStanza STEP-1 pre ValidateInputNames"  ' [ADR-0100]
 <a id="__codelineno-0-280" name="__codelineno-0-280" href="#__codelineno-0-280"></a>    Call ValidateInputNames(result, sections, filePath)
 <a id="__codelineno-0-281" name="__codelineno-0-281" href="#__codelineno-0-281"></a>
-<a id="__codelineno-0-282" name="__codelineno-0-282" href="#__codelineno-0-282"></a>    &#39; UI-SCHEMA-207 / 208 / 209: [GRID] 各セクションの検証
+<a id="__codelineno-0-282" name="__codelineno-0-282" href="#__codelineno-0-282"></a>    ' UI-SCHEMA-207 / 208 / 209: [GRID] 各セクションの検証
 <a id="__codelineno-0-283" name="__codelineno-0-283" href="#__codelineno-0-283"></a>    For Each sec In sections
 <a id="__codelineno-0-284" name="__codelineno-0-284" href="#__codelineno-0-284"></a>        If sec.SectionName = SECTION_GRID Then
-<a id="__codelineno-0-285" name="__codelineno-0-285" href="#__codelineno-0-285"></a>            If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_DEBUG Then Debug.Print &quot;[D-1403] modStanzaIO.ValidateUiStanza STEP-2 pre ValidateGridSection&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-285" name="__codelineno-0-285" href="#__codelineno-0-285"></a>            If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_DEBUG Then Debug.Print "[D-1403] modStanzaIO.ValidateUiStanza STEP-2 pre ValidateGridSection"  ' [ADR-0100]
 <a id="__codelineno-0-286" name="__codelineno-0-286" href="#__codelineno-0-286"></a>            Call ValidateGridSection(result, sec, filePath)
 <a id="__codelineno-0-287" name="__codelineno-0-287" href="#__codelineno-0-287"></a>        End If
 <a id="__codelineno-0-288" name="__codelineno-0-288" href="#__codelineno-0-288"></a>    Next sec
 <a id="__codelineno-0-289" name="__codelineno-0-289" href="#__codelineno-0-289"></a>
 <a id="__codelineno-0-290" name="__codelineno-0-290" href="#__codelineno-0-290"></a>    Set ValidateUiStanza = result
-<a id="__codelineno-0-291" name="__codelineno-0-291" href="#__codelineno-0-291"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1400] modStanzaIO.ValidateUiStanza EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-291" name="__codelineno-0-291" href="#__codelineno-0-291"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1400] modStanzaIO.ValidateUiStanza EXIT-OK"  ' [ADR-0100]
 <a id="__codelineno-0-292" name="__codelineno-0-292" href="#__codelineno-0-292"></a>    Exit Function
 <a id="__codelineno-0-293" name="__codelineno-0-293" href="#__codelineno-0-293"></a>
 <a id="__codelineno-0-294" name="__codelineno-0-294" href="#__codelineno-0-294"></a>ErrHandler:
-<a id="__codelineno-0-295" name="__codelineno-0-295" href="#__codelineno-0-295"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print &quot;[D-1401] modStanzaIO.ValidateUiStanza EXIT-ERR &quot; &amp; &quot;errNum=&quot; &amp; Err.Number &amp; &quot; desc=&quot; &amp; Err.Description  &#39; [ADR-0100]
-<a id="__codelineno-0-296" name="__codelineno-0-296" href="#__codelineno-0-296"></a>    &#39; 例外時もこれまでに収集した result を返す（result 未生成なら空を返す）
+<a id="__codelineno-0-295" name="__codelineno-0-295" href="#__codelineno-0-295"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_ERROR Then Debug.Print "[D-1401] modStanzaIO.ValidateUiStanza EXIT-ERR " &amp; "errNum=" &amp; Err.Number &amp; " desc=" &amp; Err.Description  ' [ADR-0100]
+<a id="__codelineno-0-296" name="__codelineno-0-296" href="#__codelineno-0-296"></a>    ' 例外時もこれまでに収集した result を返す（result 未生成なら空を返す）
 <a id="__codelineno-0-297" name="__codelineno-0-297" href="#__codelineno-0-297"></a>    If result Is Nothing Then
 <a id="__codelineno-0-298" name="__codelineno-0-298" href="#__codelineno-0-298"></a>        Set result = New ClsStanzaValidationResult
 <a id="__codelineno-0-299" name="__codelineno-0-299" href="#__codelineno-0-299"></a>        result.Init
@@ -5346,122 +5346,122 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-301" name="__codelineno-0-301" href="#__codelineno-0-301"></a>    Set ValidateUiStanza = result
 <a id="__codelineno-0-302" name="__codelineno-0-302" href="#__codelineno-0-302"></a>End Function
 <a id="__codelineno-0-303" name="__codelineno-0-303" href="#__codelineno-0-303"></a>
-<a id="__codelineno-0-304" name="__codelineno-0-304" href="#__codelineno-0-304"></a>&#39; ================================================================
-<a id="__codelineno-0-305" name="__codelineno-0-305" href="#__codelineno-0-305"></a>&#39; 関数名: ValidateInputNames
-<a id="__codelineno-0-306" name="__codelineno-0-306" href="#__codelineno-0-306"></a>&#39; 概要:   [INPUT] セクションを走査し UI-SCHEMA-205（Name 不在）と
-<a id="__codelineno-0-307" name="__codelineno-0-307" href="#__codelineno-0-307"></a>&#39;         UI-SCHEMA-206（同一スタンザ内 Name 重複）を検出する。
-<a id="__codelineno-0-308" name="__codelineno-0-308" href="#__codelineno-0-308"></a>&#39;         Name は入力欄の論理キーで 1 画面（1 スタンザ）内で一意（ギャップ A）。
-<a id="__codelineno-0-309" name="__codelineno-0-309" href="#__codelineno-0-309"></a>&#39; 引数:   ByRef outResult As ClsStanzaValidationResult - 検証結果（追記先）
-<a id="__codelineno-0-310" name="__codelineno-0-310" href="#__codelineno-0-310"></a>&#39;         ByVal sections As Collection                 - セクション集合
-<a id="__codelineno-0-311" name="__codelineno-0-311" href="#__codelineno-0-311"></a>&#39;         ByVal filePath As String                     - ファイルパス
-<a id="__codelineno-0-312" name="__codelineno-0-312" href="#__codelineno-0-312"></a>&#39; 戻り値: なし（outResult に issue を追記）
-<a id="__codelineno-0-313" name="__codelineno-0-313" href="#__codelineno-0-313"></a>&#39; 備考:   Name 空値も「不在」と同等に 205 扱い（canonical modEntryKnowledge は
-<a id="__codelineno-0-314" name="__codelineno-0-314" href="#__codelineno-0-314"></a>&#39;         strict 時 Name 空で Err.Raise 9001。空キーは入力欄を特定できない）。
-<a id="__codelineno-0-315" name="__codelineno-0-315" href="#__codelineno-0-315"></a>&#39; ================================================================
+<a id="__codelineno-0-304" name="__codelineno-0-304" href="#__codelineno-0-304"></a>' ================================================================
+<a id="__codelineno-0-305" name="__codelineno-0-305" href="#__codelineno-0-305"></a>' 関数名: ValidateInputNames
+<a id="__codelineno-0-306" name="__codelineno-0-306" href="#__codelineno-0-306"></a>' 概要:   [INPUT] セクションを走査し UI-SCHEMA-205（Name 不在）と
+<a id="__codelineno-0-307" name="__codelineno-0-307" href="#__codelineno-0-307"></a>'         UI-SCHEMA-206（同一スタンザ内 Name 重複）を検出する。
+<a id="__codelineno-0-308" name="__codelineno-0-308" href="#__codelineno-0-308"></a>'         Name は入力欄の論理キーで 1 画面（1 スタンザ）内で一意（ギャップ A）。
+<a id="__codelineno-0-309" name="__codelineno-0-309" href="#__codelineno-0-309"></a>' 引数:   ByRef outResult As ClsStanzaValidationResult - 検証結果（追記先）
+<a id="__codelineno-0-310" name="__codelineno-0-310" href="#__codelineno-0-310"></a>'         ByVal sections As Collection                 - セクション集合
+<a id="__codelineno-0-311" name="__codelineno-0-311" href="#__codelineno-0-311"></a>'         ByVal filePath As String                     - ファイルパス
+<a id="__codelineno-0-312" name="__codelineno-0-312" href="#__codelineno-0-312"></a>' 戻り値: なし（outResult に issue を追記）
+<a id="__codelineno-0-313" name="__codelineno-0-313" href="#__codelineno-0-313"></a>' 備考:   Name 空値も「不在」と同等に 205 扱い（canonical modEntryKnowledge は
+<a id="__codelineno-0-314" name="__codelineno-0-314" href="#__codelineno-0-314"></a>'         strict 時 Name 空で Err.Raise 9001。空キーは入力欄を特定できない）。
+<a id="__codelineno-0-315" name="__codelineno-0-315" href="#__codelineno-0-315"></a>' ================================================================
 <a id="__codelineno-0-316" name="__codelineno-0-316" href="#__codelineno-0-316"></a>Private Sub ValidateInputNames( _
 <a id="__codelineno-0-317" name="__codelineno-0-317" href="#__codelineno-0-317"></a>    ByRef outResult As ClsStanzaValidationResult, _
 <a id="__codelineno-0-318" name="__codelineno-0-318" href="#__codelineno-0-318"></a>    ByVal sections As Collection, _
 <a id="__codelineno-0-319" name="__codelineno-0-319" href="#__codelineno-0-319"></a>    ByVal filePath As String _
 <a id="__codelineno-0-320" name="__codelineno-0-320" href="#__codelineno-0-320"></a>)
-<a id="__codelineno-0-321" name="__codelineno-0-321" href="#__codelineno-0-321"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1404] modStanzaIO.ValidateInputNames ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-321" name="__codelineno-0-321" href="#__codelineno-0-321"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1404] modStanzaIO.ValidateInputNames ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-322" name="__codelineno-0-322" href="#__codelineno-0-322"></a>    Dim sec As ClsStanzaSection
 <a id="__codelineno-0-323" name="__codelineno-0-323" href="#__codelineno-0-323"></a>    Dim nameValue As String
 <a id="__codelineno-0-324" name="__codelineno-0-324" href="#__codelineno-0-324"></a>    Dim seenNames As Object
 <a id="__codelineno-0-325" name="__codelineno-0-325" href="#__codelineno-0-325"></a>
-<a id="__codelineno-0-326" name="__codelineno-0-326" href="#__codelineno-0-326"></a>    Set seenNames = CreateObject(&quot;Scripting.Dictionary&quot;)
+<a id="__codelineno-0-326" name="__codelineno-0-326" href="#__codelineno-0-326"></a>    Set seenNames = CreateObject("Scripting.Dictionary")
 <a id="__codelineno-0-327" name="__codelineno-0-327" href="#__codelineno-0-327"></a>
 <a id="__codelineno-0-328" name="__codelineno-0-328" href="#__codelineno-0-328"></a>    For Each sec In sections
 <a id="__codelineno-0-329" name="__codelineno-0-329" href="#__codelineno-0-329"></a>        If sec.SectionName = SECTION_INPUT Then
 <a id="__codelineno-0-330" name="__codelineno-0-330" href="#__codelineno-0-330"></a>            nameValue = Trim(sec.GetValue(KEY_NAME))
 <a id="__codelineno-0-331" name="__codelineno-0-331" href="#__codelineno-0-331"></a>            If (Not sec.HasKey(KEY_NAME)) Or Len(nameValue) = 0 Then
-<a id="__codelineno-0-332" name="__codelineno-0-332" href="#__codelineno-0-332"></a>                If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_DEBUG Then Debug.Print &quot;[D-1406] modStanzaIO.ValidateInputNames STEP-1 pre AddUiIssue&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-332" name="__codelineno-0-332" href="#__codelineno-0-332"></a>                If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_DEBUG Then Debug.Print "[D-1406] modStanzaIO.ValidateInputNames STEP-1 pre AddUiIssue"  ' [ADR-0100]
 <a id="__codelineno-0-333" name="__codelineno-0-333" href="#__codelineno-0-333"></a>                Call AddUiIssue(outResult, SEV_ERROR, LOGID_INPUT_NAME_MISSING, _
 <a id="__codelineno-0-334" name="__codelineno-0-334" href="#__codelineno-0-334"></a>                    filePath, sec.LineNumber, SECTION_INPUT, KEY_NAME, _
-<a id="__codelineno-0-335" name="__codelineno-0-335" href="#__codelineno-0-335"></a>                    &quot;[INPUT].Name &quot; &amp; ChrW(&amp;H304C) &amp; ChrW(&amp;H4E0D) &amp; ChrW(&amp;H5728) &amp; ChrW(&amp;H307E) &amp; ChrW(&amp;H305F) &amp; ChrW(&amp;H306F) &amp; ChrW(&amp;H7A7A) &amp; ChrW(&amp;H5024) &amp; ChrW(&amp;H3067) &amp; ChrW(&amp;H3059) &amp; ChrW(&amp;HFF08) &amp; ChrW(&amp;H5165) &amp; ChrW(&amp;H529B) &amp; ChrW(&amp;H6B04) &amp; ChrW(&amp;H306E) &amp; ChrW(&amp;H8AD6) &amp; ChrW(&amp;H7406) &amp; ChrW(&amp;H30AD) &amp; ChrW(&amp;H30FC) &amp; ChrW(&amp;H3001) &amp; ChrW(&amp;H753B) &amp; ChrW(&amp;H9762) &amp; ChrW(&amp;H5185) &amp; ChrW(&amp;H4E00) &amp; ChrW(&amp;H610F) &amp; ChrW(&amp;H30FB) &amp; ChrW(&amp;H5FC5) &amp; ChrW(&amp;H9808) &amp; ChrW(&amp;HFF09))
+<a id="__codelineno-0-335" name="__codelineno-0-335" href="#__codelineno-0-335"></a>                    "[INPUT].Name " &amp; ChrW(&amp;H304C) &amp; ChrW(&amp;H4E0D) &amp; ChrW(&amp;H5728) &amp; ChrW(&amp;H307E) &amp; ChrW(&amp;H305F) &amp; ChrW(&amp;H306F) &amp; ChrW(&amp;H7A7A) &amp; ChrW(&amp;H5024) &amp; ChrW(&amp;H3067) &amp; ChrW(&amp;H3059) &amp; ChrW(&amp;HFF08) &amp; ChrW(&amp;H5165) &amp; ChrW(&amp;H529B) &amp; ChrW(&amp;H6B04) &amp; ChrW(&amp;H306E) &amp; ChrW(&amp;H8AD6) &amp; ChrW(&amp;H7406) &amp; ChrW(&amp;H30AD) &amp; ChrW(&amp;H30FC) &amp; ChrW(&amp;H3001) &amp; ChrW(&amp;H753B) &amp; ChrW(&amp;H9762) &amp; ChrW(&amp;H5185) &amp; ChrW(&amp;H4E00) &amp; ChrW(&amp;H610F) &amp; ChrW(&amp;H30FB) &amp; ChrW(&amp;H5FC5) &amp; ChrW(&amp;H9808) &amp; ChrW(&amp;HFF09))
 <a id="__codelineno-0-336" name="__codelineno-0-336" href="#__codelineno-0-336"></a>            ElseIf seenNames.Exists(nameValue) Then
-<a id="__codelineno-0-337" name="__codelineno-0-337" href="#__codelineno-0-337"></a>                If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_DEBUG Then Debug.Print &quot;[D-1407] modStanzaIO.ValidateInputNames STEP-2 pre AddUiIssue&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-337" name="__codelineno-0-337" href="#__codelineno-0-337"></a>                If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_DEBUG Then Debug.Print "[D-1407] modStanzaIO.ValidateInputNames STEP-2 pre AddUiIssue"  ' [ADR-0100]
 <a id="__codelineno-0-338" name="__codelineno-0-338" href="#__codelineno-0-338"></a>                Call AddUiIssue(outResult, SEV_ERROR, LOGID_INPUT_NAME_DUPLICATE, _
 <a id="__codelineno-0-339" name="__codelineno-0-339" href="#__codelineno-0-339"></a>                    filePath, sec.LineNumber, SECTION_INPUT, KEY_NAME, _
-<a id="__codelineno-0-340" name="__codelineno-0-340" href="#__codelineno-0-340"></a>                    &quot;[INPUT].Name &#39;&quot; &amp; nameValue &amp; &quot;&#39; &quot; &amp; ChrW(&amp;H304C) &amp; ChrW(&amp;H540C) &amp; ChrW(&amp;H4E00) &amp; ChrW(&amp;H30B9) &amp; ChrW(&amp;H30BF) &amp; ChrW(&amp;H30F3) &amp; ChrW(&amp;H30B6) &amp; ChrW(&amp;H5185) &amp; ChrW(&amp;H3067) &amp; ChrW(&amp;H91CD) &amp; ChrW(&amp;H8907) &amp; ChrW(&amp;H3057) &amp; ChrW(&amp;H3066) &amp; ChrW(&amp;H3044) &amp; ChrW(&amp;H307E) &amp; ChrW(&amp;H3059))
+<a id="__codelineno-0-340" name="__codelineno-0-340" href="#__codelineno-0-340"></a>                    "[INPUT].Name '" &amp; nameValue &amp; "' " &amp; ChrW(&amp;H304C) &amp; ChrW(&amp;H540C) &amp; ChrW(&amp;H4E00) &amp; ChrW(&amp;H30B9) &amp; ChrW(&amp;H30BF) &amp; ChrW(&amp;H30F3) &amp; ChrW(&amp;H30B6) &amp; ChrW(&amp;H5185) &amp; ChrW(&amp;H3067) &amp; ChrW(&amp;H91CD) &amp; ChrW(&amp;H8907) &amp; ChrW(&amp;H3057) &amp; ChrW(&amp;H3066) &amp; ChrW(&amp;H3044) &amp; ChrW(&amp;H307E) &amp; ChrW(&amp;H3059))
 <a id="__codelineno-0-341" name="__codelineno-0-341" href="#__codelineno-0-341"></a>            Else
 <a id="__codelineno-0-342" name="__codelineno-0-342" href="#__codelineno-0-342"></a>                seenNames.Add nameValue, True
 <a id="__codelineno-0-343" name="__codelineno-0-343" href="#__codelineno-0-343"></a>            End If
 <a id="__codelineno-0-344" name="__codelineno-0-344" href="#__codelineno-0-344"></a>        End If
 <a id="__codelineno-0-345" name="__codelineno-0-345" href="#__codelineno-0-345"></a>    Next sec
-<a id="__codelineno-0-346" name="__codelineno-0-346" href="#__codelineno-0-346"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1405] modStanzaIO.ValidateInputNames EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-346" name="__codelineno-0-346" href="#__codelineno-0-346"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1405] modStanzaIO.ValidateInputNames EXIT-OK"  ' [ADR-0100]
 <a id="__codelineno-0-347" name="__codelineno-0-347" href="#__codelineno-0-347"></a>End Sub
 <a id="__codelineno-0-348" name="__codelineno-0-348" href="#__codelineno-0-348"></a>
-<a id="__codelineno-0-349" name="__codelineno-0-349" href="#__codelineno-0-349"></a>&#39; ================================================================
-<a id="__codelineno-0-350" name="__codelineno-0-350" href="#__codelineno-0-350"></a>&#39; 関数名: ValidateGridSection
-<a id="__codelineno-0-351" name="__codelineno-0-351" href="#__codelineno-0-351"></a>&#39; 概要:   [GRID] セクション 1 件に UI-SCHEMA-207/208/209 を検出する。
-<a id="__codelineno-0-352" name="__codelineno-0-352" href="#__codelineno-0-352"></a>&#39; 引数:   ByRef outResult As ClsStanzaValidationResult - 検証結果（追記先）
-<a id="__codelineno-0-353" name="__codelineno-0-353" href="#__codelineno-0-353"></a>&#39;         ByVal sec As ClsStanzaSection                - [GRID] セクション
-<a id="__codelineno-0-354" name="__codelineno-0-354" href="#__codelineno-0-354"></a>&#39;         ByVal filePath As String                     - ファイルパス
-<a id="__codelineno-0-355" name="__codelineno-0-355" href="#__codelineno-0-355"></a>&#39; 戻り値: なし（outResult に issue を追記）
-<a id="__codelineno-0-356" name="__codelineno-0-356" href="#__codelineno-0-356"></a>&#39; 備考:   208 の &#39;:&#39; 検出は [GRID] 限定。[FORM_FROM_FORMAT]/[GRID_FROM_FORMAT]
-<a id="__codelineno-0-357" name="__codelineno-0-357" href="#__codelineno-0-357"></a>&#39;         の Columns は &#39;見出し:幅&#39; 形式で &#39;:&#39; を含むが、本 Sub は呼出元
-<a id="__codelineno-0-358" name="__codelineno-0-358" href="#__codelineno-0-358"></a>&#39;         ValidateUiStanza で SectionName=GRID のみに適用されるため対象外。
-<a id="__codelineno-0-359" name="__codelineno-0-359" href="#__codelineno-0-359"></a>&#39; ================================================================
+<a id="__codelineno-0-349" name="__codelineno-0-349" href="#__codelineno-0-349"></a>' ================================================================
+<a id="__codelineno-0-350" name="__codelineno-0-350" href="#__codelineno-0-350"></a>' 関数名: ValidateGridSection
+<a id="__codelineno-0-351" name="__codelineno-0-351" href="#__codelineno-0-351"></a>' 概要:   [GRID] セクション 1 件に UI-SCHEMA-207/208/209 を検出する。
+<a id="__codelineno-0-352" name="__codelineno-0-352" href="#__codelineno-0-352"></a>' 引数:   ByRef outResult As ClsStanzaValidationResult - 検証結果（追記先）
+<a id="__codelineno-0-353" name="__codelineno-0-353" href="#__codelineno-0-353"></a>'         ByVal sec As ClsStanzaSection                - [GRID] セクション
+<a id="__codelineno-0-354" name="__codelineno-0-354" href="#__codelineno-0-354"></a>'         ByVal filePath As String                     - ファイルパス
+<a id="__codelineno-0-355" name="__codelineno-0-355" href="#__codelineno-0-355"></a>' 戻り値: なし（outResult に issue を追記）
+<a id="__codelineno-0-356" name="__codelineno-0-356" href="#__codelineno-0-356"></a>' 備考:   208 の ':' 検出は [GRID] 限定。[FORM_FROM_FORMAT]/[GRID_FROM_FORMAT]
+<a id="__codelineno-0-357" name="__codelineno-0-357" href="#__codelineno-0-357"></a>'         の Columns は '見出し:幅' 形式で ':' を含むが、本 Sub は呼出元
+<a id="__codelineno-0-358" name="__codelineno-0-358" href="#__codelineno-0-358"></a>'         ValidateUiStanza で SectionName=GRID のみに適用されるため対象外。
+<a id="__codelineno-0-359" name="__codelineno-0-359" href="#__codelineno-0-359"></a>' ================================================================
 <a id="__codelineno-0-360" name="__codelineno-0-360" href="#__codelineno-0-360"></a>Private Sub ValidateGridSection( _
 <a id="__codelineno-0-361" name="__codelineno-0-361" href="#__codelineno-0-361"></a>    ByRef outResult As ClsStanzaValidationResult, _
 <a id="__codelineno-0-362" name="__codelineno-0-362" href="#__codelineno-0-362"></a>    ByVal sec As ClsStanzaSection, _
 <a id="__codelineno-0-363" name="__codelineno-0-363" href="#__codelineno-0-363"></a>    ByVal filePath As String _
 <a id="__codelineno-0-364" name="__codelineno-0-364" href="#__codelineno-0-364"></a>)
-<a id="__codelineno-0-365" name="__codelineno-0-365" href="#__codelineno-0-365"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1408] modStanzaIO.ValidateGridSection ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-365" name="__codelineno-0-365" href="#__codelineno-0-365"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1408] modStanzaIO.ValidateGridSection ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-366" name="__codelineno-0-366" href="#__codelineno-0-366"></a>    Dim columnsValue As String
 <a id="__codelineno-0-367" name="__codelineno-0-367" href="#__codelineno-0-367"></a>    Dim headersValue As String
 <a id="__codelineno-0-368" name="__codelineno-0-368" href="#__codelineno-0-368"></a>    Dim columnsCount As Long
 <a id="__codelineno-0-369" name="__codelineno-0-369" href="#__codelineno-0-369"></a>    Dim headersCount As Long
 <a id="__codelineno-0-370" name="__codelineno-0-370" href="#__codelineno-0-370"></a>
-<a id="__codelineno-0-371" name="__codelineno-0-371" href="#__codelineno-0-371"></a>    &#39; UI-SCHEMA-207: EndCell 不在（キー無し or 空値）
+<a id="__codelineno-0-371" name="__codelineno-0-371" href="#__codelineno-0-371"></a>    ' UI-SCHEMA-207: EndCell 不在（キー無し or 空値）
 <a id="__codelineno-0-372" name="__codelineno-0-372" href="#__codelineno-0-372"></a>    If (Not sec.HasKey(KEY_ENDCELL)) Or Len(Trim(sec.GetValue(KEY_ENDCELL))) = 0 Then
-<a id="__codelineno-0-373" name="__codelineno-0-373" href="#__codelineno-0-373"></a>        If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_DEBUG Then Debug.Print &quot;[D-1410] modStanzaIO.ValidateGridSection STEP-1 pre AddUiIssue&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-373" name="__codelineno-0-373" href="#__codelineno-0-373"></a>        If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_DEBUG Then Debug.Print "[D-1410] modStanzaIO.ValidateGridSection STEP-1 pre AddUiIssue"  ' [ADR-0100]
 <a id="__codelineno-0-374" name="__codelineno-0-374" href="#__codelineno-0-374"></a>        Call AddUiIssue(outResult, SEV_ERROR, LOGID_GRID_ENDCELL_MISSING, _
 <a id="__codelineno-0-375" name="__codelineno-0-375" href="#__codelineno-0-375"></a>            filePath, sec.LineNumber, SECTION_GRID, KEY_ENDCELL, _
-<a id="__codelineno-0-376" name="__codelineno-0-376" href="#__codelineno-0-376"></a>            &quot;[GRID].EndCell &quot; &amp; ChrW(&amp;H304C) &amp; ChrW(&amp;H4E0D) &amp; ChrW(&amp;H5728) &amp; ChrW(&amp;H307E) &amp; ChrW(&amp;H305F) &amp; ChrW(&amp;H306F) &amp; ChrW(&amp;H7A7A) &amp; ChrW(&amp;H5024) &amp; ChrW(&amp;H3067) &amp; ChrW(&amp;H3059) &amp; ChrW(&amp;HFF08) &amp; ChrW(&amp;H30C7) &amp; ChrW(&amp;H30FC) &amp; ChrW(&amp;H30BF) &amp; ChrW(&amp;H884C) &amp; ChrW(&amp;H5BB9) &amp; ChrW(&amp;H91CF) &amp; ChrW(&amp;H7B97) &amp; ChrW(&amp;H51FA) &amp; ChrW(&amp;H306B) &amp; ChrW(&amp;H5FC5) &amp; ChrW(&amp;H9808) &amp; ChrW(&amp;H3001) &amp; ChrW(&amp;H30AE) &amp; ChrW(&amp;H30E3) &amp; ChrW(&amp;H30C3) &amp; ChrW(&amp;H30D7) &amp; &quot; B&quot; &amp; ChrW(&amp;HFF09))
+<a id="__codelineno-0-376" name="__codelineno-0-376" href="#__codelineno-0-376"></a>            "[GRID].EndCell " &amp; ChrW(&amp;H304C) &amp; ChrW(&amp;H4E0D) &amp; ChrW(&amp;H5728) &amp; ChrW(&amp;H307E) &amp; ChrW(&amp;H305F) &amp; ChrW(&amp;H306F) &amp; ChrW(&amp;H7A7A) &amp; ChrW(&amp;H5024) &amp; ChrW(&amp;H3067) &amp; ChrW(&amp;H3059) &amp; ChrW(&amp;HFF08) &amp; ChrW(&amp;H30C7) &amp; ChrW(&amp;H30FC) &amp; ChrW(&amp;H30BF) &amp; ChrW(&amp;H884C) &amp; ChrW(&amp;H5BB9) &amp; ChrW(&amp;H91CF) &amp; ChrW(&amp;H7B97) &amp; ChrW(&amp;H51FA) &amp; ChrW(&amp;H306B) &amp; ChrW(&amp;H5FC5) &amp; ChrW(&amp;H9808) &amp; ChrW(&amp;H3001) &amp; ChrW(&amp;H30AE) &amp; ChrW(&amp;H30E3) &amp; ChrW(&amp;H30C3) &amp; ChrW(&amp;H30D7) &amp; " B" &amp; ChrW(&amp;HFF09))
 <a id="__codelineno-0-377" name="__codelineno-0-377" href="#__codelineno-0-377"></a>    End If
 <a id="__codelineno-0-378" name="__codelineno-0-378" href="#__codelineno-0-378"></a>
 <a id="__codelineno-0-379" name="__codelineno-0-379" href="#__codelineno-0-379"></a>    columnsValue = sec.GetValue(KEY_COLUMNS)
 <a id="__codelineno-0-380" name="__codelineno-0-380" href="#__codelineno-0-380"></a>
-<a id="__codelineno-0-381" name="__codelineno-0-381" href="#__codelineno-0-381"></a>    &#39; UI-SCHEMA-208: Columns に &#39;:&#39; 残存（v2.2 で論理列名のみの CSV と確定）
+<a id="__codelineno-0-381" name="__codelineno-0-381" href="#__codelineno-0-381"></a>    ' UI-SCHEMA-208: Columns に ':' 残存（v2.2 で論理列名のみの CSV と確定）
 <a id="__codelineno-0-382" name="__codelineno-0-382" href="#__codelineno-0-382"></a>    If sec.HasKey(KEY_COLUMNS) Then
-<a id="__codelineno-0-383" name="__codelineno-0-383" href="#__codelineno-0-383"></a>        If InStr(columnsValue, &quot;:&quot;) &gt; 0 Then
-<a id="__codelineno-0-384" name="__codelineno-0-384" href="#__codelineno-0-384"></a>            If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_DEBUG Then Debug.Print &quot;[D-1411] modStanzaIO.ValidateGridSection STEP-2 pre AddUiIssue&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-383" name="__codelineno-0-383" href="#__codelineno-0-383"></a>        If InStr(columnsValue, ":") &gt; 0 Then
+<a id="__codelineno-0-384" name="__codelineno-0-384" href="#__codelineno-0-384"></a>            If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_DEBUG Then Debug.Print "[D-1411] modStanzaIO.ValidateGridSection STEP-2 pre AddUiIssue"  ' [ADR-0100]
 <a id="__codelineno-0-385" name="__codelineno-0-385" href="#__codelineno-0-385"></a>            Call AddUiIssue(outResult, SEV_ERROR, LOGID_GRID_COLUMNS_COLON, _
 <a id="__codelineno-0-386" name="__codelineno-0-386" href="#__codelineno-0-386"></a>                filePath, sec.LineNumber, SECTION_GRID, KEY_COLUMNS, _
-<a id="__codelineno-0-387" name="__codelineno-0-387" href="#__codelineno-0-387"></a>                &quot;[GRID].Columns &quot; &amp; ChrW(&amp;H306B) &amp; &quot; &#39;:&#39; &quot; &amp; ChrW(&amp;H304C) &amp; ChrW(&amp;H6B8B) &amp; ChrW(&amp;H5B58) &amp; ChrW(&amp;HFF08) &amp; ChrW(&amp;H65E7) &amp; ChrW(&amp;H88C5) &amp; ChrW(&amp;H98FE) &amp; ChrW(&amp;H8A18) &amp; ChrW(&amp;H6CD5) &amp; ChrW(&amp;H3002) &amp; ChrW(&amp;H88C5) &amp; ChrW(&amp;H98FE) &amp; ChrW(&amp;H306F) &amp; &quot; ColumnHeaders &quot; &amp; ChrW(&amp;H3078) &amp; ChrW(&amp;H5206) &amp; ChrW(&amp;H96E2) &amp; ChrW(&amp;HFF09))
+<a id="__codelineno-0-387" name="__codelineno-0-387" href="#__codelineno-0-387"></a>                "[GRID].Columns " &amp; ChrW(&amp;H306B) &amp; " ':' " &amp; ChrW(&amp;H304C) &amp; ChrW(&amp;H6B8B) &amp; ChrW(&amp;H5B58) &amp; ChrW(&amp;HFF08) &amp; ChrW(&amp;H65E7) &amp; ChrW(&amp;H88C5) &amp; ChrW(&amp;H98FE) &amp; ChrW(&amp;H8A18) &amp; ChrW(&amp;H6CD5) &amp; ChrW(&amp;H3002) &amp; ChrW(&amp;H88C5) &amp; ChrW(&amp;H98FE) &amp; ChrW(&amp;H306F) &amp; " ColumnHeaders " &amp; ChrW(&amp;H3078) &amp; ChrW(&amp;H5206) &amp; ChrW(&amp;H96E2) &amp; ChrW(&amp;HFF09))
 <a id="__codelineno-0-388" name="__codelineno-0-388" href="#__codelineno-0-388"></a>        End If
 <a id="__codelineno-0-389" name="__codelineno-0-389" href="#__codelineno-0-389"></a>    End If
 <a id="__codelineno-0-390" name="__codelineno-0-390" href="#__codelineno-0-390"></a>
-<a id="__codelineno-0-391" name="__codelineno-0-391" href="#__codelineno-0-391"></a>    &#39; UI-SCHEMA-209: ColumnHeaders（任意キー）と Columns のトークン数不一致
+<a id="__codelineno-0-391" name="__codelineno-0-391" href="#__codelineno-0-391"></a>    ' UI-SCHEMA-209: ColumnHeaders（任意キー）と Columns のトークン数不一致
 <a id="__codelineno-0-392" name="__codelineno-0-392" href="#__codelineno-0-392"></a>    If sec.HasKey(KEY_COLUMN_HEADERS) And sec.HasKey(KEY_COLUMNS) Then
 <a id="__codelineno-0-393" name="__codelineno-0-393" href="#__codelineno-0-393"></a>        headersValue = sec.GetValue(KEY_COLUMN_HEADERS)
 <a id="__codelineno-0-394" name="__codelineno-0-394" href="#__codelineno-0-394"></a>        columnsCount = CountCsvTokens(columnsValue)
 <a id="__codelineno-0-395" name="__codelineno-0-395" href="#__codelineno-0-395"></a>        headersCount = CountCsvTokens(headersValue)
 <a id="__codelineno-0-396" name="__codelineno-0-396" href="#__codelineno-0-396"></a>        If columnsCount &lt;&gt; headersCount Then
-<a id="__codelineno-0-397" name="__codelineno-0-397" href="#__codelineno-0-397"></a>            If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_DEBUG Then Debug.Print &quot;[D-1412] modStanzaIO.ValidateGridSection STEP-3 pre AddUiIssue&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-397" name="__codelineno-0-397" href="#__codelineno-0-397"></a>            If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_DEBUG Then Debug.Print "[D-1412] modStanzaIO.ValidateGridSection STEP-3 pre AddUiIssue"  ' [ADR-0100]
 <a id="__codelineno-0-398" name="__codelineno-0-398" href="#__codelineno-0-398"></a>            Call AddUiIssue(outResult, SEV_WARN, LOGID_GRID_HEADER_MISMATCH, _
 <a id="__codelineno-0-399" name="__codelineno-0-399" href="#__codelineno-0-399"></a>                filePath, sec.LineNumber, SECTION_GRID, KEY_COLUMN_HEADERS, _
-<a id="__codelineno-0-400" name="__codelineno-0-400" href="#__codelineno-0-400"></a>                &quot;[GRID].ColumnHeaders(&quot; &amp; headersCount &amp; &quot;) &quot; &amp; ChrW(&amp;H3068) &amp; &quot; Columns(&quot; &amp; _
-<a id="__codelineno-0-401" name="__codelineno-0-401" href="#__codelineno-0-401"></a>                columnsCount &amp; &quot;) &quot; &amp; ChrW(&amp;H306E) &amp; ChrW(&amp;H30C8) &amp; ChrW(&amp;H30FC) &amp; ChrW(&amp;H30AF) &amp; ChrW(&amp;H30F3) &amp; ChrW(&amp;H6570) &amp; ChrW(&amp;H304C) &amp; ChrW(&amp;H4E0D) &amp; ChrW(&amp;H4E00) &amp; ChrW(&amp;H81F4) &amp; ChrW(&amp;H3067) &amp; ChrW(&amp;H3059))
+<a id="__codelineno-0-400" name="__codelineno-0-400" href="#__codelineno-0-400"></a>                "[GRID].ColumnHeaders(" &amp; headersCount &amp; ") " &amp; ChrW(&amp;H3068) &amp; " Columns(" &amp; _
+<a id="__codelineno-0-401" name="__codelineno-0-401" href="#__codelineno-0-401"></a>                columnsCount &amp; ") " &amp; ChrW(&amp;H306E) &amp; ChrW(&amp;H30C8) &amp; ChrW(&amp;H30FC) &amp; ChrW(&amp;H30AF) &amp; ChrW(&amp;H30F3) &amp; ChrW(&amp;H6570) &amp; ChrW(&amp;H304C) &amp; ChrW(&amp;H4E0D) &amp; ChrW(&amp;H4E00) &amp; ChrW(&amp;H81F4) &amp; ChrW(&amp;H3067) &amp; ChrW(&amp;H3059))
 <a id="__codelineno-0-402" name="__codelineno-0-402" href="#__codelineno-0-402"></a>        End If
 <a id="__codelineno-0-403" name="__codelineno-0-403" href="#__codelineno-0-403"></a>    End If
-<a id="__codelineno-0-404" name="__codelineno-0-404" href="#__codelineno-0-404"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1409] modStanzaIO.ValidateGridSection EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-404" name="__codelineno-0-404" href="#__codelineno-0-404"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1409] modStanzaIO.ValidateGridSection EXIT-OK"  ' [ADR-0100]
 <a id="__codelineno-0-405" name="__codelineno-0-405" href="#__codelineno-0-405"></a>End Sub
 <a id="__codelineno-0-406" name="__codelineno-0-406" href="#__codelineno-0-406"></a>
-<a id="__codelineno-0-407" name="__codelineno-0-407" href="#__codelineno-0-407"></a>&#39; ================================================================
-<a id="__codelineno-0-408" name="__codelineno-0-408" href="#__codelineno-0-408"></a>&#39; 関数名: AddUiIssue
-<a id="__codelineno-0-409" name="__codelineno-0-409" href="#__codelineno-0-409"></a>&#39; 概要:   ClsStanzaValidationIssue を生成し検証結果へ追記する内部ヘルパ。
-<a id="__codelineno-0-410" name="__codelineno-0-410" href="#__codelineno-0-410"></a>&#39; 引数:   ByRef outResult As ClsStanzaValidationResult - 追記先
-<a id="__codelineno-0-411" name="__codelineno-0-411" href="#__codelineno-0-411"></a>&#39;         ByVal severity As String    - SEV_ERROR / SEV_WARN
-<a id="__codelineno-0-412" name="__codelineno-0-412" href="#__codelineno-0-412"></a>&#39;         ByVal logId As String       - LogID（例 UI-SCHEMA-205）
-<a id="__codelineno-0-413" name="__codelineno-0-413" href="#__codelineno-0-413"></a>&#39;         ByVal filePath As String    - ファイルパス
-<a id="__codelineno-0-414" name="__codelineno-0-414" href="#__codelineno-0-414"></a>&#39;         ByVal lineNumber As Long    - セクション開始行番号
-<a id="__codelineno-0-415" name="__codelineno-0-415" href="#__codelineno-0-415"></a>&#39;         ByVal sectionName As String - セクション名
-<a id="__codelineno-0-416" name="__codelineno-0-416" href="#__codelineno-0-416"></a>&#39;         ByVal keyName As String     - key 名
-<a id="__codelineno-0-417" name="__codelineno-0-417" href="#__codelineno-0-417"></a>&#39;         ByVal message As String     - 人間可読メッセージ
-<a id="__codelineno-0-418" name="__codelineno-0-418" href="#__codelineno-0-418"></a>&#39; 戻り値: なし
-<a id="__codelineno-0-419" name="__codelineno-0-419" href="#__codelineno-0-419"></a>&#39; ================================================================
+<a id="__codelineno-0-407" name="__codelineno-0-407" href="#__codelineno-0-407"></a>' ================================================================
+<a id="__codelineno-0-408" name="__codelineno-0-408" href="#__codelineno-0-408"></a>' 関数名: AddUiIssue
+<a id="__codelineno-0-409" name="__codelineno-0-409" href="#__codelineno-0-409"></a>' 概要:   ClsStanzaValidationIssue を生成し検証結果へ追記する内部ヘルパ。
+<a id="__codelineno-0-410" name="__codelineno-0-410" href="#__codelineno-0-410"></a>' 引数:   ByRef outResult As ClsStanzaValidationResult - 追記先
+<a id="__codelineno-0-411" name="__codelineno-0-411" href="#__codelineno-0-411"></a>'         ByVal severity As String    - SEV_ERROR / SEV_WARN
+<a id="__codelineno-0-412" name="__codelineno-0-412" href="#__codelineno-0-412"></a>'         ByVal logId As String       - LogID（例 UI-SCHEMA-205）
+<a id="__codelineno-0-413" name="__codelineno-0-413" href="#__codelineno-0-413"></a>'         ByVal filePath As String    - ファイルパス
+<a id="__codelineno-0-414" name="__codelineno-0-414" href="#__codelineno-0-414"></a>'         ByVal lineNumber As Long    - セクション開始行番号
+<a id="__codelineno-0-415" name="__codelineno-0-415" href="#__codelineno-0-415"></a>'         ByVal sectionName As String - セクション名
+<a id="__codelineno-0-416" name="__codelineno-0-416" href="#__codelineno-0-416"></a>'         ByVal keyName As String     - key 名
+<a id="__codelineno-0-417" name="__codelineno-0-417" href="#__codelineno-0-417"></a>'         ByVal message As String     - 人間可読メッセージ
+<a id="__codelineno-0-418" name="__codelineno-0-418" href="#__codelineno-0-418"></a>' 戻り値: なし
+<a id="__codelineno-0-419" name="__codelineno-0-419" href="#__codelineno-0-419"></a>' ================================================================
 <a id="__codelineno-0-420" name="__codelineno-0-420" href="#__codelineno-0-420"></a>Private Sub AddUiIssue( _
 <a id="__codelineno-0-421" name="__codelineno-0-421" href="#__codelineno-0-421"></a>    ByRef outResult As ClsStanzaValidationResult, _
 <a id="__codelineno-0-422" name="__codelineno-0-422" href="#__codelineno-0-422"></a>    ByVal severity As String, _
@@ -5472,29 +5472,29 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
 <a id="__codelineno-0-427" name="__codelineno-0-427" href="#__codelineno-0-427"></a>    ByVal keyName As String, _
 <a id="__codelineno-0-428" name="__codelineno-0-428" href="#__codelineno-0-428"></a>    ByVal message As String _
 <a id="__codelineno-0-429" name="__codelineno-0-429" href="#__codelineno-0-429"></a>)
-<a id="__codelineno-0-430" name="__codelineno-0-430" href="#__codelineno-0-430"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1413] modStanzaIO.AddUiIssue ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-430" name="__codelineno-0-430" href="#__codelineno-0-430"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1413] modStanzaIO.AddUiIssue ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-431" name="__codelineno-0-431" href="#__codelineno-0-431"></a>    Dim issue As ClsStanzaValidationIssue
 <a id="__codelineno-0-432" name="__codelineno-0-432" href="#__codelineno-0-432"></a>    Set issue = New ClsStanzaValidationIssue
 <a id="__codelineno-0-433" name="__codelineno-0-433" href="#__codelineno-0-433"></a>    issue.Init severity, logId, filePath, lineNumber, sectionName, keyName, message
 <a id="__codelineno-0-434" name="__codelineno-0-434" href="#__codelineno-0-434"></a>    outResult.AddIssue issue
 <a id="__codelineno-0-435" name="__codelineno-0-435" href="#__codelineno-0-435"></a>End Sub
 <a id="__codelineno-0-436" name="__codelineno-0-436" href="#__codelineno-0-436"></a>
-<a id="__codelineno-0-437" name="__codelineno-0-437" href="#__codelineno-0-437"></a>&#39; ================================================================
-<a id="__codelineno-0-438" name="__codelineno-0-438" href="#__codelineno-0-438"></a>&#39; 関数名: CountCsvTokens
-<a id="__codelineno-0-439" name="__codelineno-0-439" href="#__codelineno-0-439"></a>&#39; 概要:   カンマ区切り文字列のトークン数を返す（空文字列は 0 件）。
-<a id="__codelineno-0-440" name="__codelineno-0-440" href="#__codelineno-0-440"></a>&#39; 引数:   ByVal csvValue As String - カンマ区切り文字列
-<a id="__codelineno-0-441" name="__codelineno-0-441" href="#__codelineno-0-441"></a>&#39; 戻り値: Long - トークン数
-<a id="__codelineno-0-442" name="__codelineno-0-442" href="#__codelineno-0-442"></a>&#39; ================================================================
+<a id="__codelineno-0-437" name="__codelineno-0-437" href="#__codelineno-0-437"></a>' ================================================================
+<a id="__codelineno-0-438" name="__codelineno-0-438" href="#__codelineno-0-438"></a>' 関数名: CountCsvTokens
+<a id="__codelineno-0-439" name="__codelineno-0-439" href="#__codelineno-0-439"></a>' 概要:   カンマ区切り文字列のトークン数を返す（空文字列は 0 件）。
+<a id="__codelineno-0-440" name="__codelineno-0-440" href="#__codelineno-0-440"></a>' 引数:   ByVal csvValue As String - カンマ区切り文字列
+<a id="__codelineno-0-441" name="__codelineno-0-441" href="#__codelineno-0-441"></a>' 戻り値: Long - トークン数
+<a id="__codelineno-0-442" name="__codelineno-0-442" href="#__codelineno-0-442"></a>' ================================================================
 <a id="__codelineno-0-443" name="__codelineno-0-443" href="#__codelineno-0-443"></a>Private Function CountCsvTokens(ByVal csvValue As String) As Long
-<a id="__codelineno-0-444" name="__codelineno-0-444" href="#__codelineno-0-444"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1414] modStanzaIO.CountCsvTokens ENTER&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-444" name="__codelineno-0-444" href="#__codelineno-0-444"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1414] modStanzaIO.CountCsvTokens ENTER"  ' [ADR-0100]
 <a id="__codelineno-0-445" name="__codelineno-0-445" href="#__codelineno-0-445"></a>    Dim parts As Variant
 <a id="__codelineno-0-446" name="__codelineno-0-446" href="#__codelineno-0-446"></a>    If Len(csvValue) = 0 Then
 <a id="__codelineno-0-447" name="__codelineno-0-447" href="#__codelineno-0-447"></a>        CountCsvTokens = 0
 <a id="__codelineno-0-448" name="__codelineno-0-448" href="#__codelineno-0-448"></a>    Else
-<a id="__codelineno-0-449" name="__codelineno-0-449" href="#__codelineno-0-449"></a>        parts = Split(csvValue, &quot;,&quot;)
+<a id="__codelineno-0-449" name="__codelineno-0-449" href="#__codelineno-0-449"></a>        parts = Split(csvValue, ",")
 <a id="__codelineno-0-450" name="__codelineno-0-450" href="#__codelineno-0-450"></a>        CountCsvTokens = UBound(parts) - LBound(parts) + 1
 <a id="__codelineno-0-451" name="__codelineno-0-451" href="#__codelineno-0-451"></a>    End If
-<a id="__codelineno-0-452" name="__codelineno-0-452" href="#__codelineno-0-452"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print &quot;[D-1415] modStanzaIO.CountCsvTokens EXIT-OK&quot;  &#39; [ADR-0100]
+<a id="__codelineno-0-452" name="__codelineno-0-452" href="#__codelineno-0-452"></a>    If modCommon.gDebugLevel &gt;= DEBUG_LEVEL_TRACE Then Debug.Print "[D-1415] modStanzaIO.CountCsvTokens EXIT-OK"  ' [ADR-0100]
 <a id="__codelineno-0-453" name="__codelineno-0-453" href="#__codelineno-0-453"></a>End Function
 </code></pre></div>
 
@@ -5557,7 +5557,7 @@ UTF-8 で保存すると VBA Import 時に日本語が文字化けして動か�
       <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.indexes", "toc.integrate", "search.highlight", "search.suggest", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u30b3\u30d4\u30fc\u3057\u307e\u3057\u305f", "clipboard.copy": "\u30af\u30ea\u30c3\u30d7\u30dc\u30fc\u30c9\u3078\u30b3\u30d4\u30fc", "search.result.more.one": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3082\u30461\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.more.other": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3042\u3068#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.none": "\u4f55\u3082\u898b\u3064\u304b\u308a\u307e\u305b\u3093\u3067\u3057\u305f", "search.result.one": "1\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.other": "#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.placeholder": "\u691c\u7d22\u30ad\u30fc\u30ef\u30fc\u30c9\u3092\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044", "search.result.term.missing": "\u691c\u7d22\u306b\u542b\u307e\u308c\u306a\u3044", "select.version": "\u30d0\u30fc\u30b8\u30e7\u30f3\u5207\u308a\u66ff\u3048"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>
