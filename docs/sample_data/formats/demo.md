@@ -30,7 +30,7 @@ FieldName=手順書
 FieldType=複数行リッチ
 Required=FALSE
 Rows=12
-fieldPlaceholder=（例）【見出し】 概要  と書くと見出しになります
+fieldPlaceholder=（例）【見出し】〜【見出しここまで】 で囲むと見出しになります
 searchTarget=FALSE
 ===
 [FIELD]
@@ -46,7 +46,7 @@ FieldName=添付
 FieldType=ファイルリンク
 Required=FALSE
 Rows=4
-fieldPlaceholder=（例）［ファイル選択］ボタンで選ぶとパスが1行ずつ入ります
+fieldPlaceholder=（例）［ファイル選択］はローカル、［URL追加］は Box 等の https リンク
 searchTarget=FALSE
 ===
 [FIELD]
