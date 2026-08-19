@@ -10,11 +10,13 @@ description: 全文コピペでローカル実行する knowledgevba v2.3.2 イ�
 
 作業を **2 段** に分けています。STEP1 が成功して STEP2 で失敗した場合は
 「ファイル生成は OK / 取り込み段で失敗」と切り分けられます。
+インストール後に中身が空だと動きが分かりにくいので、**任意の STEP3 (サンプルデータ投入)** も用意しています。
 
 | 段 | スクリプト | 何をするか |
 |---|---|---|
 | STEP 1/2 | `kvba_1_files.ps1` | VBA モジュール・ソース・ui_seed を展開し、blank の 管理.xlsm / 検索.xlsm を生成 (Excel への取り込みはしない) |
 | STEP 2/2 | `kvba_2_import.ps1` | STEP1 が置いたモジュールを 管理.xlsm / 検索.xlsm へ Import し Setup を実行 |
+| STEP 3/3 (任意) | `kvba_3_sample.ps1` | サンプルのフォーマット定義 4 件 + ナレッジ 14 件を `C:\KnowledgeMgr\` に作成 (既存ファイルは上書きしない) |
 
 書き込み先はユーザ領域 (`C:\KnowledgeMgr\dist` と `C:\KnowledgeMgr\`) のみです。
 開発ツリーへの書き込みは guardrail が拒否します。
@@ -53,7 +55,7 @@ Excel → ファイル → オプション → トラスト センター → ト
 
 ### STEP1 ファイル全文
 
-下のコードを **すべて** コピーしてください (1.6 MB / sha256 `e9f6d0e5659df3b138b2261bfbb3bf8c40353000a0bdba81b687bf60af9e405a` / generated 2026-08-19 09:13)。
+下のコードを **すべて** コピーしてください (1.6 MB / sha256 `e9f6d0e5659df3b138b2261bfbb3bf8c40353000a0bdba81b687bf60af9e405a` / generated 2026-08-19 07:34)。
 
 ```powershell
 # ============================================================
@@ -21572,7 +21574,7 @@ exit 0
 
 ### STEP2 ファイル全文
 
-下のコードを **すべて** コピーしてください (7 KB / sha256 `ea95e66f7ee1eafd817bd3e1af9bfada3859974b5d6479ede5a77e1de061e5ff` / generated 2026-08-19 09:13)。
+下のコードを **すべて** コピーしてください (7 KB / sha256 `ea95e66f7ee1eafd817bd3e1af9bfada3859974b5d6479ede5a77e1de061e5ff` / generated 2026-08-19 07:34)。
 
 ```powershell
 # ============================================================
@@ -21708,5 +21710,438 @@ if ($rcTotal -eq 0) {
     Log '=== FAILED at STEP 2/2 (import/setup). STEP 1 files are intact; see log above. ==='
     exit 1
 }
+# === KVBA_EOF_V23 ===
+```
+
+---
+
+## STEP 3/3 (任意) — サンプルデータの投入
+
+インストール直後は中身が空です。**サンプルのフォーマット定義とナレッジデータをまとめて作成する**
+スクリプトを用意しました。インストール自体には不要なので、不要なら実行しなくて構いません。
+
+投入されるもの (フォーマット定義 4 件 / ナレッジ 14 件):
+
+| 種類 | 作成先 | 内容 |
+|---|---|---|
+| フォーマット定義 | `C:\KnowledgeMgr\formats\` | テスト標準 / 障害対応 (FAULT) / 作業手順書 (SAGYO) / 新入力型デモ (DEMO) |
+| ナレッジデータ | `C:\KnowledgeMgr\data\` | 上記フォーマットのサンプルナレッジ |
+
+**DEMO (新入力型デモ)** は、**複数行（リッチ）** / **複数行（コピー）** / **ファイル（リンク）** の
+3 つの入力型を 1 つのフォーマットでまとめて体験できるサンプルです。
+
+> **既存ファイルは上書きしません。** 同名のファイルが既にある場合はスキップし、
+> 画面に `[skip] already exists: ...` と出ます。上書きしたい場合だけ末尾に `-Force` を付けて実行してください。
+
+### 手順 (この操作はすべてご自身で行う必要があります)
+
+1. 先に **STEP 1/2 と STEP 2/2 を実行**しておく (フォルダとブックが無い状態では意味がないため)。
+2. 下の STEP3 コードブロックを **全文コピー** し、メモ帳に貼り付けて
+   **`kvba_3_sample.ps1`** という名前で保存する (文字コードは任意。全文 ASCII です)。
+3. PowerShell を開き、保存したフォルダで次を実行する:
+   ```
+   powershell -NoProfile -ExecutionPolicy Bypass -File kvba_3_sample.ps1
+   ```
+   既存のサンプルを上書きし直したい場合はこちら:
+   ```
+   powershell -NoProfile -ExecutionPolicy Bypass -File kvba_3_sample.ps1 -Force
+   ```
+4. 画面に `STEP 3/3 complete: sample data ready.` と出れば成功。
+   ログは `C:\KnowledgeMgr\install_step3_sample.log` に残ります。
+5. `C:\KnowledgeMgr\dist\検索.xlsm` を開く。「ナレッジ検索」シートのキーワード欄に
+   例えば `UPS` と入力し **［検索］** を押す → 検索結果が一覧表示される。
+6. 一覧の行を **ダブルクリック** すると、そのナレッジの表示画面が開く。
+7. 新しい入力型を見るときは、キーワードに `復旧` と入力して **［検索］** →
+   `DEMO-0001` の行をダブルクリック。見出し・太字・**コピーボタン付きコードブロック**・
+   添付ファイルの **［開く］** ボタンが表示されます。
+8. 自分で入力を試すときは、「ナレッジ登録」シートの **［新規登録］** を押し、
+   フォーマットで **「新入力型デモ」** を選ぶ。リッチ欄の **［ブロック］／［見出し］／［太字］** と、
+   画面下の **［表示］** (記法の反映確認) を試せます。
+
+> ダブルクリックで実行したい場合は、同じフォルダに次を `kvba_3_sample.bat` として保存:
+> ```bat
+> @echo off
+> powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0kvba_3_sample.ps1"
+> pause
+> ```
+
+### STEP3 ファイル全文
+
+下のコードを **すべて** コピーしてください (24 KB / sha256 `bcde3dce58701ac5beda48f7ea464d56a6fbb292022bc4400f5d47fda47e6f42` / generated 2026-08-19 07:34)。
+
+```powershell
+# ============================================================
+# knowledgevba sample data STEP 3/3 (optional)
+# (generated file - DO NOT EDIT)
+# built: 2026-08-19 07:33:59  by build_sample_data.py
+# samples: 18  manifest-sha256: 58461a9c827317d045dbeb9acc45c728055edd62c1dd345f05c19d2ff107e1a8
+# This file is pure ASCII. Japanese file bodies are base64(Shift_JIS)-encoded.
+# Run this AFTER kvba_2_import.ps1 (STEP 2/2). Existing files are kept unless -Force.
+# ============================================================
+[CmdletBinding()]
+param(
+    [string]$KnowledgeDir = 'C:\KnowledgeMgr',
+    [switch]$Force
+)
+$ErrorActionPreference = 'Stop'
+
+# ---- self integrity check (detects copy-paste truncation) ----
+$self = $MyInvocation.MyCommand.Definition
+$selfLines = [System.IO.File]::ReadAllLines($self)
+$lastLine = ($selfLines | Where-Object { $_.Trim() -ne '' } | Select-Object -Last 1)
+if ($lastLine -ne '# === KVBA_EOF_V23 ===') {
+    Write-Host '[FATAL] this script is truncated (EOF marker missing).' -ForegroundColor Red
+    Write-Host '        Re-copy the FULL code block and retry.' -ForegroundColor Red
+    exit 9
+}
+
+function DecodeName([string]$b64) {
+    return [System.Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($b64))
+}
+
+$LogPath = $null
+function Log([string]$m) {
+    $line = ('[{0}] {1}' -f (Get-Date -Format 'HH:mm:ss'), $m)
+    if ($LogPath) { Add-Content -LiteralPath $LogPath -Value $line -Encoding UTF8 }
+    Write-Host $line
+}
+
+# ---- guardrail: write only under $KnowledgeDir, never into dev trees ----
+$KnowledgeDir = [System.IO.Path]::GetFullPath($KnowledgeDir)
+$denyRoots = @('C:\kvba\publish', 'C:\kvba\uat', 'C:\decisions')
+foreach ($d in $denyRoots) {
+    if ($KnowledgeDir.TrimEnd('\').ToLowerInvariant().StartsWith($d.ToLowerInvariant())) {
+        Write-Host ('[FATAL] KnowledgeDir points into a protected dev tree: ' + $KnowledgeDir) -ForegroundColor Red
+        exit 8
+    }
+}
+function Assert-SafePath([string]$p) {
+    $full = [System.IO.Path]::GetFullPath($p)
+    if (-not $full.ToLowerInvariant().StartsWith($KnowledgeDir.ToLowerInvariant())) {
+        throw ('guardrail violation: write outside KnowledgeDir: ' + $full)
+    }
+    foreach ($d in $script:denyRoots) {
+        if ($full.ToLowerInvariant().StartsWith($d.ToLowerInvariant())) {
+            throw ('guardrail violation: write into protected dev tree: ' + $full)
+        }
+    }
+    return $full
+}
+
+$sha256 = [System.Security.Cryptography.SHA256]::Create()
+$script:nWritten = 0
+$script:nSkipped = 0
+function Write-Sample([string]$relB64, [string]$expectedSha, [string]$b64) {
+    $rel = DecodeName $relB64
+    $bytes = [Convert]::FromBase64String($b64)
+    $actual = ([System.BitConverter]::ToString($sha256.ComputeHash($bytes)) -replace '-', '').ToLowerInvariant()
+    if ($actual -ne $expectedSha) {
+        throw ('sample payload corrupted (sha256 mismatch): ' + $rel)
+    }
+    $full = Assert-SafePath (Join-Path $KnowledgeDir $rel)
+    $dir = Split-Path -Parent $full
+    if (-not (Test-Path -LiteralPath $dir)) { New-Item -ItemType Directory -Force -Path $dir | Out-Null }
+    if ((Test-Path -LiteralPath $full) -and (-not $Force)) {
+        $script:nSkipped++
+        Log ('[skip] already exists: ' + $rel)
+        return
+    }
+    [System.IO.File]::WriteAllBytes($full, $bytes)
+    $script:nWritten++
+}
+
+foreach ($d in @('', 'data', 'formats')) {
+    $p = Join-Path $KnowledgeDir $d
+    if (-not (Test-Path -LiteralPath $p)) { New-Item -ItemType Directory -Force -Path $p | Out-Null }
+}
+$LogPath = Join-Path $KnowledgeDir 'install_step3_sample.log'
+'' | Set-Content -LiteralPath $LogPath -Encoding UTF8
+Log ('=== knowledgevba STEP 3/3 (sample data) start (KnowledgeDir=' + $KnowledgeDir + ') ===')
+if ($Force) {
+    Log 'mode: -Force (existing files WILL be overwritten)'
+} else {
+    Log 'mode: safe (existing files are kept; re-run with -Force to overwrite)'
+}
+
+# ---- sample payloads (formats + data) ----
+Write-Sample 'Zm9ybWF0c1xERU1PLnR4dA==' '7b311024bd9e1d8243aef36e00927cf70ea3882bac15a3bb80a59333e65bcfa7' @'
+W0ZPUk1BVF0NCkZvcm1hdElkPURFTU8NCkZvcm1hdE5hbWU9kFaT/JfNjF6DZoOCDQo9PT0NCltG
+SUVMRF0NCkZpZWxkTmFtZT2Mj5a8DQpGaWVsZFR5cGU9klCI6o1zDQpSZXF1aXJlZD1UUlVFDQpN
+YXhMZW5ndGg9MTIwDQpmaWVsZFBsYWNlaG9sZGVyPYFpl+GBaoNUgVuDcoNYlZyLjI7oj4cNCnNl
+YXJjaFRhcmdldD1UUlVFDQo9PT0NCltGSUVMRF0NCkZpZWxkTmFtZT2O6I+Hj5ENCkZpZWxkVHlw
+ZT2VoZCUjXODioNig2ANClJlcXVpcmVkPUZBTFNFDQpSb3dzPTEyDQpmaWVsZFBsYWNlaG9sZGVy
+PYFpl+GBaiMgilSXdiCCxo+Rgq2Cxoypj2+CtYLJgsiC6ILcgrcNCnNlYXJjaFRhcmdldD1GQUxT
+RQ0KPT09DQpbRklFTERdDQpGaWVsZE5hbWU9kuiMXoNSg32Dk4NoDQpGaWVsZFR5cGU9laGQlI1z
+g1KDc4FbDQpSZXF1aXJlZD1GQUxTRQ0KUm93cz00DQpmaWVsZFBsYWNlaG9sZGVyPYFpl+GBaoLm
+gq2OZ4Kkg1KDfYOTg2iC8JNcgsGCxIKogq2CxpVcjqaJ5pbKgqmC54LcgsaC34LEg1KDc4FbgsWC
+q4LcgrcNCnNlYXJjaFRhcmdldD1GQUxTRQ0KPT09DQpbRklFTERdDQpGaWVsZE5hbWU9k1mVdA0K
+RmllbGRUeXBlPYN0g0CDQ4OLg4qDk4NODQpSZXF1aXJlZD1GQUxTRQ0KUm93cz00DQpmaWVsZFBs
+YWNlaG9sZGVyPYFpl+GBaoFtg3SDQINDg4uRSZHwgW6De4Neg5OCxZFJgtSCxoNwg1iCqjGNc4K4
+gsKT/ILogtyCtw0Kc2VhcmNoVGFyZ2V0PUZBTFNFDQo9PT0NCltGSUVMRF0NCkZpZWxkTmFtZT2K
+bZRGjtINCkZpZWxkVHlwZT2SUIjqjXMNClJlcXVpcmVkPUZBTFNFDQpNYXhMZW5ndGg9NDANCmZp
+ZWxkUGxhY2Vob2xkZXI9gWmX4YFqjlKTYyCRvphZDQpzZWFyY2hUYXJnZXQ9RkFMU0UNCg==
+'@
+Write-Sample 'Zm9ybWF0c1xGQVVMVC50eHQ=' '6734d9a6a821bebd989bef8cc2bc7eb391e75a521608ae64cab3eb1b99ed2537' @'
+W0ZPUk1BVF0NCkZvcm1hdElkPUZBVUxUDQpGb3JtYXROYW1lPY/hilGRzomeDQo9PT0NCltGSUVM
+RF0NCkZpZWxkTmFtZT2Mj5a8DQpGaWVsZFR5cGU9klCI6o1zDQpSZXF1aXJlZD1UUlVFDQpNYXhM
+ZW5ndGg9MTIwDQpmaWVsZFBsYWNlaG9sZGVyPYFpl+GBaoxvl52DVoNYg2WDgILWg42DT4NDg5OC
+xYKrgsiCog0Kc2VhcmNoVGFyZ2V0PVRSVUUNCj09PQ0KW0ZJRUxEXQ0KRmllbGROYW1lPZStkLaT
++o6eDQpGaWVsZFR5cGU9k/qVdA0KUmVxdWlyZWQ9VFJVRQ0KZmllbGRQbGFjZWhvbGRlcj2BaZfh
+gWoyMDI2LTA2LTA5IDEwOjMwDQpzZWFyY2hUYXJnZXQ9VFJVRQ0KPT09DQpbRklFTERdDQpGaWVs
+ZE5hbWU9klOTlo7SDQpGaWVsZFR5cGU9klCI6o1zDQpSZXF1aXJlZD1GQUxTRQ0KTWF4TGVuZ3Ro
+PTQwDQpmaWVsZFBsYWNlaG9sZGVyPYFpl+GBao5Sk2Mgkb6YWQ0Kc2VhcmNoVGFyZ2V0PVRSVUUN
+Cj09PQ0KW0ZJRUxEXQ0KRmllbGROYW1lPYNKg2WDU4OKDQpGaWVsZFR5cGU9kUmR8A0KUmVxdWly
+ZWQ9RkFMU0UNCkRyb3Bkb3duT3B0aW9ucz2DQYN2g4qP4YpRfINDg5ODdIOJj+GKUXyDbINig2eD
+j4Fbg06P4YpRfINag0yDhYOKg2WDQg0KZmllbGRQbGFjZWhvbGRlcj2BaZfhgWqDQYN2g4qP4YpR
+DQpzZWFyY2hUYXJnZXQ9RkFMU0UNCj09PQ0KW0ZJRUxEXQ0KRmllbGROYW1lPZdEkOaTeA0KRmll
+bGRUeXBlPZFJkfANClJlcXVpcmVkPUZBTFNFDQpEcm9wZG93bk9wdGlvbnM9kuF8koZ8jYJ8i9mL
+fQ0KZmllbGRQbGFjZWhvbGRlcj2BaZfhgWqNgg0Kc2VhcmNoVGFyZ2V0PUZBTFNFDQo9PT0NCltG
+SUVMRF0NCkZpZWxkTmFtZT2KVJd2DQpGaWVsZFR5cGU9laGQlI1zDQpSZXF1aXJlZD1UUlVFDQpS
+b3dzPTQNCmZpZWxkUGxhY2Vob2xkZXI9gWmX4YFqiZ6Tmo6eitSCqpLKj+2CzDEwlHuIyI/jgsmR
+nYnBDQpzZWFyY2hUYXJnZXQ9RkFMU0UNCj09PQ0KW0ZJRUxEXQ0KRmllbGROYW1lPYy0iPYNCkZp
+ZWxkVHlwZT2VoZCUjXMNClJlcXVpcmVkPUZBTFNFDQpSb3dzPTQNCmZpZWxkUGxhY2Vob2xkZXI9
+gWmX4YFqkreOnorUg2eDiYOTg1WDToNWg4eDk4LMl92Qzw0Kc2VhcmNoVGFyZ2V0PUZBTFNFDQo9
+PT0NCg==
+'@
+Write-Sample 'Zm9ybWF0c1xGTVQtMDAxLnR4dA==' '042600e450c487f0af2086c235580d866e11df8bd72a39ed72983deedcd55631' @'
+W0ZPUk1BVF0NCkZvcm1hdElkPUZNVC0wMDENCkZvcm1hdE5hbWU9g2WDWINnlVePgIN0g0iBW4N9
+g2KDZw0KPT09DQpbRklFTERdDQpGaWVsZE5hbWU9jI+WvA0KRmllbGRUeXBlPZJQiOqNcw0KUmVx
+dWlyZWQ9VFJVRQ0KTWF4TGVuZ3RoPTEyMA0KZmllbGRQbGFjZWhvbGRlcj2BaZfhgWqM2otxkc6J
+noN9g2qDhYNBg4sNCnNlYXJjaFRhcmdldD1UUlVFDQo9PT0NCltGSUVMRF0NCkZpZWxkTmFtZT2T
+4JdlDQpGaWVsZFR5cGU9laGQlI1zDQpSZXF1aXJlZD1UUlVFDQpSb3dzPTUNClNjcm9sbD1UUlVF
+DQpmaWVsZFBsYWNlaG9sZGVyPYFpl+GBapHOiZ6CzJesguqC4o7oj4eC8ItMk/yCtYLEgq2CvoKz
+gqINCnNlYXJjaFRhcmdldD1UUlVFDQo9PT0NCltGSUVMRF0NCkZpZWxkTmFtZT2U9Y1sDQpGaWVs
+ZFR5cGU9laGQlI1zDQpSZXF1aXJlZD1GQUxTRQ0KUm93cz0zDQpTY3JvbGw9RkFMU0UNCmZpZWxk
+UGxhY2Vob2xkZXI9gWmX4YFqko2I046WjYCC4pXikauP7pXxDQpzZWFyY2hUYXJnZXQ9VFJVRQ0K
+PT09DQpbRklFTERdDQpGaWVsZE5hbWU9jeyQrJP6DQpGaWVsZFR5cGU9k/qOng0KUmVxdWlyZWQ9
+RkFMU0UNCmZpZWxkUGxhY2Vob2xkZXI9gWmX4YFqMjAyNi0wNi0wOQ0Kc2VhcmNoVGFyZ2V0PUZB
+TFNFDQo9PT0NCltGSUVMRF0NCkZpZWxkTmFtZT2DSoNlg1ODig0KRmllbGRUeXBlPZFJkfANClJl
+cXVpcmVkPUZBTFNFDQpEcm9wZG93bk9wdGlvbnM9j2SXdpN4MXyPZJd2k3gyfI9kl3aTeDMNCmZp
+ZWxkUGxhY2Vob2xkZXI9gWmX4YFqj2SXdpN4Mg0Kc2VhcmNoVGFyZ2V0PUZBTFNFDQo9PT0NCg==
+'@
+Write-Sample 'Zm9ybWF0c1xTQUdZTy50eHQ=' 'caf88ad15cbf196bf61abe1e08171f36a50867bdcac3e269e6ecf4e89d3f608b' @'
+W0ZPUk1BVF0NCkZvcm1hdElkPVNBR1lPDQpGb3JtYXROYW1lPY3si8aO6I+Hj5ENCj09PQ0KW0ZJ
+RUxEXQ0KRmllbGROYW1lPY7oj4ePkZTUjYYNCkZpZWxkVHlwZT2SUIjqjXMNClJlcXVpcmVkPVRS
+VUUNCk1heExlbmd0aD0yMA0KZmllbGRQbGFjZWhvbGRlcj2BaZfhgWpPUFMtMDAxDQpzZWFyY2hU
+YXJnZXQ9VFJVRQ0KPT09DQpbRklFTERdDQpGaWVsZE5hbWU9jeyLxpa8DQpGaWVsZFR5cGU9klCI
+6o1zDQpSZXF1aXJlZD1UUlVFDQpNYXhMZW5ndGg9MTIwDQpmaWVsZFBsYWNlaG9sZGVyPYFpl+GB
+aoNUgVuDb466VVBTjI6On5NfjJ8NCnNlYXJjaFRhcmdldD1UUlVFDQo9PT0NCltGSUVMRF0NCkZp
+ZWxkTmFtZT2Rzo/bkN2U9Q0KRmllbGRUeXBlPZJQiOqNcw0KUmVxdWlyZWQ9VFJVRQ0KTWF4TGVu
+Z3RoPTEyMA0KZmllbGRQbGFjZWhvbGRlcj2BaZfhgWqDVIFbg2+OujFGIFVQU5Z7kcwNCnNlYXJj
+aFRhcmdldD1UUlVFDQo9PT0NCltGSUVMRF0NCkZpZWxkTmFtZT2N7IvGi+aVqg0KRmllbGRUeXBl
+PZFJkfANClJlcXVpcmVkPUZBTFNFDQpEcm9wZG93bk9wdGlvbnM9jI6On5NfjJ98j1SOn5NfjJ98
+k/qOn5NfjJ98i9mLfZHOiZ4NCmZpZWxkUGxhY2Vob2xkZXI9gWmX4YFqjI6On5NfjJ8NCnNlYXJj
+aFRhcmdldD1GQUxTRQ0KPT09DQpbRklFTERdDQpGaWVsZE5hbWU9iuuMr5N4DQpGaWVsZFR5cGU9
+kUmR8A0KUmVxdWlyZWQ9RkFMU0UNCkRyb3Bkb3duT3B0aW9ucz2S4XyShnyNgg0KZmllbGRQbGFj
+ZWhvbGRlcj2BaZfhgWqShg0Kc2VhcmNoVGFyZ2V0PUZBTFNFDQo9PT0NCltGSUVMRF0NCkZpZWxk
+TmFtZT2N7IvGl1yS6JP6jp4NCkZpZWxkVHlwZT2T+pV0DQpSZXF1aXJlZD1GQUxTRQ0KZmllbGRQ
+bGFjZWhvbGRlcj2BaZfhgWoyMDI2LTA3LTE1IDIyOjAwDQpzZWFyY2hUYXJnZXQ9RkFMU0UNCj09
+PQ0KW0ZJRUxEXQ0KRmllbGROYW1lPZVLl3aCyI6Rjd4NCkZpZWxkVHlwZT2VoZCUjXMNClJlcXVp
+cmVkPUZBTFNFDQpSb3dzPTMNCmZpZWxkUGxhY2Vob2xkZXI9gWmX4YFqk2SLQ5DiiY+O6JHciOqO
+rg0Kc2VhcmNoVGFyZ2V0PUZBTFNFDQo9PT0NCltGSUVMRF0NCkZpZWxkTmFtZT2N7IvGjuiPhw0K
+RmllbGRUeXBlPZWhkJSNcw0KUmVxdWlyZWQ9VFJVRQ0KUm93cz04DQpmaWVsZFBsYWNlaG9sZGVy
+PYFpl+GBajEuII6WkU+CyZLKkm0gMi4gjqmMyJBmkmZMRUSKbZRGIDMuIJNkiLORqpLoDQpzZWFy
+Y2hUYXJnZXQ9RkFMU0UNCj09PQ0KW0ZJRUxEXQ0KRmllbGROYW1lPY5nl3CCt4LpjUiL74FFlZSV
+aQ0KRmllbGRUeXBlPZJQiOqNcw0KUmVxdWlyZWQ9RkFMU0UNCk1heExlbmd0aD0xMjANCmZpZWxk
+UGxhY2Vob2xkZXI9gWmX4YFqg2aDV4Neg4uDZYNYg16BQZNfjJ+VXA0Kc2VhcmNoVGFyZ2V0PUZB
+TFNFDQo9PT0NCltGSUVMRF0NCkZpZWxkTmFtZT2IwJFTj+OCzJKNiNMNCkZpZWxkVHlwZT2VoZCU
+jXMNClJlcXVpcmVkPUZBTFNFDQpSb3dzPTQNCmZpZWxkUGxhY2Vob2xkZXI9gWmX4YFqlUuCuDKW
+vIjIj+OCxY3si8aCt4LpgrGCxg0Kc2VhcmNoVGFyZ2V0PUZBTFNFDQo9PT0NCltGSUVMRF0NCkZp
+ZWxkTmFtZT2KbZRGjtINCkZpZWxkVHlwZT2SUIjqjXMNClJlcXVpcmVkPUZBTFNFDQpNYXhMZW5n
+dGg9NDANCmZpZWxkUGxhY2Vob2xkZXI9gWmX4YFqjk+SSiCRvphZDQpzZWFyY2hUYXJnZXQ9RkFM
+U0UNCj09PQ0K
+'@
+Write-Sample 'ZGF0YVxERU1PLTAwMDEudHh0' '2bef60b3a91798c121d1b4d74eaf0d45b21f5cdb0a28a3de3a5f04e5f4807485' @'
+IyMjZm9ybWF0SWQjIyMNCkRFTU8NCiMjI4yPlrwjIyMNCoNUgVuDcoNYlZyLjI7oj4eBaZBWk/yX
+zYxeg2aDgoFqDQojIyOO6I+Hj5EjIyMNCiMgilSXdg0KlnuU1INUgVuDcoNYgqqS4o5+grWCvYLG
+gquCzJWci4yO6I+HgsWCt4FCKiqN7IvGkU+CyZDTlEOO0oLMj7OURoKqlUuXdioqgUINCiMgg1KD
+fYOTg2gNCojIibqC8I+HgsmOwI1zgrWCxIKtgr6Cs4KiOg0KYGBgDQpzdWRvIHN5c3RlbWN0bCBz
+dG9wIGFwcA0Kc3VkbyBzeXN0ZW1jdGwgc3RhcnQgYXBwDQp0YWlsIC1mIC92YXIvbG9nL2FwcC5s
+b2cNCmBgYA0KIyCKbZRGDQqDd4OLg1iDYINGg2KDToKqIDIwMCCC8JXUgreCsYLGgUINCiMjI5Lo
+jF6DUoN9g5ODaCMjIw0Kc3VkbyBzeXN0ZW1jdGwgc3RhdHVzIGFwcA0Kam91cm5hbGN0bCAtdSBh
+cHAgLS1zaW5jZSAiMSBob3VyIGFnbyINCiMjI5NZlXQjIyMNCkM6XEtub3dsZWRnZU1nclxkaXN0
+XIrHl50ueGxzbQ0KQzpcS25vd2xlZGdlTWdyXGRpc3RcjJ+N9S54bHNtDQojIyOKbZRGjtIjIyMN
+Co5Sk2Mgkb6YWQ0K
+'@
+Write-Sample 'ZGF0YVxGQVVMVC0wMDAxLnR4dA==' 'ba6a002adac3b553667533fc126e05dff06ad149be145814eeda835730609112' @'
+IyMjZm9ybWF0SWQjIyMNCkZBVUxUDQojIyOMj5a8IyMjDQqMb5edg1aDWINlg4CC1oONg0+DQ4OT
+gsWCq4LIgqINCiMjI5StkLaT+o6eIyMjDQoyMDI2LTA2LTA4IDA5OjE1DQojIyOSU5OWjtIjIyMN
+CpfpltggjJKI6g0KIyMjg0qDZYNTg4ojIyMNCoNBg3aDio/hilENCiMjI5dEkOaTeCMjIw0KjYIN
+CiMjI46Wj9sjIyMNCoxvl52VlILMM5a8gqmC54xvl52DVoNYg2WDgIFpS0VJUkktV0VCgWqCyYON
+g0+DQ4OTgsWCq4LIgqKCxphBl42BQg0KSUSCxoNwg1iDj4Fbg2iC8JCzgrWCrZP8l82CtYLEguCB
+dZRGj9iDR4OJgVuBdoLGgsiC6YFCDQqRvJWUj5CCqYLngs2Qs4/tgsmDjYNPg0ODk4LFgquCxIKi
+gumBQg0KIyMjjLSI9iMjIw0KlEaP2INUgVuDb5GkgsyMb5edlZRBRJhBjGeQ3ZLogqqI6o6ek0mC
+yZDYguqCxIKigr2BQg0KMDg6MzCCyY1zgu2C6oK9kuiK+oOBg5ODZYNpg5ODWIzjgUFBRJhBjGeC
+zI3Ei06TroKqjXOC7YLqgsSCooLIgqmCwYK9gUINCg==
+'@
+Write-Sample 'ZGF0YVxGQVVMVC0wMDAyLnR4dA==' '9772aeaf5507149c2652b09ff28d68c35b35debdc871403332697d97dcb4b995' @'
+IyMjZm9ybWF0SWQjIyMNCkZBVUxUDQojIyOMj5a8IyMjDQqDdoOKg5ODXpWhjYeLQIKqjoaLbILc
+guiDR4OJgVuCxZLijn4NCiMjI5StkLaT+o6eIyMjDQoyMDI2LTA2LTA3IDE0OjMwDQojIyOSU5OW
+jtIjIyMNCo2yk6EglPyN5w0KIyMjg0qDZYNTg4ojIyMNCoNugVuDaINFg0aDQY/hilENCiMjI5dE
+kOaTeCMjIw0KkoYNCiMjI46Wj9sjIyMNCjOKS4ukl3CDdIONg0GCzJWhjYeLQIFpQ2Fub24gaVIt
+QURWIEM1NTYwgWqCqo6Gi2yC3ILog0eDiYFbgsWS4o5+gUINCoNHg4mBW4NSgVuDaIF1RTAwMC0w
+MDAxgXaCqpVcjqaCs4LqgUGXcI6GgvCO5oLoj5yCooLEguCDR4OJgVuCqo/BgqaCyIKigUINCiMj
+I4y0iPYjIyMNCpLokoWDhoNqg2KDZ4LMk+CVlILJj6yCs4LIjoaV0IKqjmOXr4K1gsSCooK9gUIN
+CpXbjueLxo7SgvCMxILRgUGS6JKFg4aDaoNig2eT4JWUgvCQtJF8grWCxJWci4yBQg0K
+'@
+Write-Sample 'ZGF0YVxGQVVMVC0wMDAzLnR4dA==' 'c93ccc75f827ac4ce3e9fa9ad945cc748eb1bf1cd920015ad661aa3349182e46' @'
+IyMjZm9ybWF0SWQjIyMNCkZBVUxUDQojIyOMj5a8IyMjDQqO0JPgV2ktRmmCqpJmkbGTSYLJkNiS
+ZoKzguqC6Q0KIyMjlK2QtpP6jp4jIyMNCjIwMjYtMDYtMDUgMTE6MDANCiMjI5JTk5aO0iMjIw0K
+k2OShiCXUpT8DQojIyODSoNlg1ODiiMjIw0Kg2yDYoNng4+BW4NOj+GKUQ0KIyMjl0SQ5pN4IyMj
+DQqShg0KIyMjjpaP2yMjIw0KiWOLxpWUg0eDioNBgWk0ikuT7JGkgWqCzFdpLUZpgqozMJWqgWAx
+jp6K1IKogquCyTWBYDEwlWKS9pN4kNiSZoKzguqC6YFCDQqTr4N0g42DQZZrkaSCzZCzj+2BQpfX
+kNqDR4OKg0GCyYLgiWWLv4KgguiBQg0KIyMjjLSI9iMjIw0Kk+yRpILMQVCBaUNpc2NvIENhdGFs
+eXN0IDkxMjCBaoLMg2CDg4Nsg4uQ3ZLogqqX15DaQVCCxo9klaGCtYLEgqKCvYFCDQqOqZOug2CD
+g4Nsg4uRSZHwgvCXTIz4ibuCtYFBjcSLTpOugsWJ8I/BgUINCg==
+'@
+Write-Sample 'ZGF0YVxGQVVMVC0wMDA0LnR4dA==' 'b883b45fb157ad3d71b96a47972e2ebddc427ce781ed60a88e91ef89173cad56' @'
+IyMjZm9ybWF0SWQjIyMNCkZBVUxUDQojIyOMj5a8IyMjDQqDgYFbg4uRl5BNkniJhA0KIyMjlK2Q
+tpP6jp4jIyMNCjIwMjYtMDYtMDcgMTQ6MjINCiMjI5JTk5aO0iMjIw0KjbKToSCMkojqDQojIyOD
+SoNlg1ODiiMjIw0Kg0GDdoOKj+GKUQ0KIyMjl0SQ5pN4IyMjDQqShg0KIyMjilSXdiMjIw0KjtCT
+4IOBgVuDi4LMkZeQTZJ4iYSCqpStkLaBQpLKj+0ylaqIyJPggsmRl5BNiq6XuYK3gumCqjMwlaqI
+yI/jkdKCvYKzguqC6Y6Wj9uCqpWhkJSUrZC2gUKO85BNg42DT4Lwim2URoK3gumCxojqlZSCzIOB
+g2KDWoFbg1eCzILdgqqJZYu/gvCO84KvgsSCooK9gUINCiMjI4y0iPYjIyMNCoOBgVuDi4NUgVuD
+b4LMg0yDhYFbgqqLbILcgsGCxIKoguiBQZPBkuiCzIi2kOaDaIOBg0ODk4LWgsyRl5BNgqqR2ILB
+gsSCooK9gUJTTVRQkNqRsYN2gVuDi4LMkN2S6IKqj6yCs4K3gqyCvYKxgsaCqoy0iPaBQoN2gVuD
+i5CUgvCRnYLigrWCxInwj8GBQg0KIyMjQ3JlYXRlZEF0IyMjDQoyMDI2LTA2LTA5IDEwOjAwDQoj
+IyNVcGRhdGVkQXQjIyMNCjIwMjYtMDYtMDkgMTI6MDANCg==
+'@
+Write-Sample 'ZGF0YVxGQVVMVC0wMDA1LnR4dA==' '054fa21ddf0ddf77eaec87f6ea0f0c5325e260ee732e57f759a9a982702679e1' @'
+IyMjZm9ybWF0SWQjIyMNCkZBVUxUDQojIyOMj5a8IyMjDQqWe5TUREKDVIFbg2+JnpOakniJhA0K
+IyMjlK2QtpP6jp4jIyMNCjIwMjYtMDYtMDUgMDk6MDANCiMjI5JTk5aO0iMjIw0Kl+mW2CCU/I3n
+DQojIyODSoNlg1ODiiMjIw0Kg0ODk4N0g4mP4YpRDQojIyOXRJDmk3gjIyMNCo2CDQojIyOKVJd2
+IyMjDQqWe5TUREKDVIFbg2+CzImek5qOnorUgqqSyo/tgswxMJR7iMiP44LJkZ2JwYFClaGQlILM
+g0GDdoOKgsWDXoNDg4CDQYNFg2eCqpStkLaBQorEjouDX4Nig1aDhYN7gVuDaILFQ1BVjmeXcJem
+gqo5OCWCyZJCgrWCxIKigr2BQg0KIyMjjLSI9iMjIw0KkreOnorUg2eDiYOTg1WDToNWg4eDk4LM
+l92Qz4LJguaC6IONg2KDTpHSgr+CqpG9lK2BQoNvg2KDYINXg4eDdYLMjsCRlYN+g1iCxWNvbW1p
+dIKqkniC6oLEgqKCvYFCg2eDiYOTg1WDToNWg4eDk4urikWC8IypkryCtYLEifCPwYFCDQojIyND
+cmVhdGVkQXQjIyMNCjIwMjYtMDYtMDkgMTA6MDANCiMjI1VwZGF0ZWRBdCMjIw0KMjAyNi0wNi0w
+OSAxMjowMA0K
+'@
+Write-Sample 'ZGF0YVxGQVVMVC0wMDA2LnR4dA==' 'b201403011f41751f8fc119cb557e73cacd436f39f11c23fc863d86fe7abeacd' @'
+IyMjZm9ybWF0SWQjIyMNCkZBVUxUDQojIyOMj5a8IyMjDQpWUE6Q2pGxlXOJwg0KIyMjlK2QtpP6
+jp4jIyMNCjIwMjYtMDYtMDQgMDg6NDUNCiMjI5JTk5aO0iMjIw0KjYKLtCCSvJBsDQojIyODSoNl
+g1ODiiMjIw0Kg2yDYoNng4+BW4NOj+GKUQ0KIyMjl0SQ5pN4IyMjDQqL2Yt9DQojIyOKVJd2IyMj
+DQqN3ZHui86WsY7SgqpWUE6CyZDakbGCxYKrgsiCoo/zi7WCqpStkLaBQjEwlryIyI/jgqmC55Ov
+jp6CyZbigqKNh4LtgrmBQlZQToNRgVuDZ4NFg0aDQ4LMg42DT4Lwim2URoK3gumCxpRGj9iDR4OJ
+gVuCqpG9kJSLTJhegrOC6oLEgqKCvYFCDQojIyOMtIj2IyMjDQpWUE6URo/Yl3BMREFQg1SBW4Nv
+gqqJnpOagrWCxIKigsiCqYLBgr2BQkxEQVCDVIFbg2+CzIOBg4KDipVzkauCxY3Ei06TroKqlUuX
+doK+gsGCvYFCDQojIyNDcmVhdGVkQXQjIyMNCjIwMjYtMDYtMDkgMTA6MDANCiMjI1VwZGF0ZWRB
+dCMjIw0KMjAyNi0wNi0wOSAxMjowMA0K
+'@
+Write-Sample 'ZGF0YVxGQVVMVC0wMDA3LnR4dA==' '6883128d5b2bb02897f4d6cc55fe9dbdad178369871b10e2bc8f36b61f216159' @'
+IyMjZm9ybWF0SWQjIyMNCkZBVUxUDQojIyOMj5a8IyMjDQqDdINAg0ODi4NUgVuDb5dll8qVc5Gr
+DQojIyOUrZC2k/qOniMjIw0KMjAyNi0wNi0wMyAxNjoxMA0KIyMjklOTlo7SIyMjDQqShpG6IJHl
+leMNCiMjI4NKg2WDU4OKIyMjDQqDQ4OTg3SDiY/hilENCiMjI5dEkOaTeCMjIw0KkoYNCiMjI4pU
+l3YjIyMNCoN0g0CDQ4OLg1SBW4NvgsyL84Krl2WXyoKqMyWC8JDYguiBQY+RgquNnoLdg0eDiYFb
+gqqUrZC2gUKDhoFbg1WCqoN0g0CDQ4OLlduRtoLFgquCyIKiluKR6IKqjLCN3Ym7gUINCiMjI4y0
+iPYjIyMNCozDgqKDjYNPg3SDQINDg4uCxojqjp6DdINAg0ODi4KqkeWXyoLJjmOCwYLEgqKCvYFC
+jI6On4NOg4qBW4OTg0GDYoN2g1iDToOKg3aDZ4KqkOaMjoKpgueTroKigsSCooLIgqmCwYK9gUIN
+CiMjI0NyZWF0ZWRBdCMjIw0KMjAyNi0wNi0wOSAxMDowMA0KIyMjVXBkYXRlZEF0IyMjDQoyMDI2
+LTA2LTA5IDEyOjAwDQo=
+'@
+Write-Sample 'ZGF0YVxTQUdZTy0wMDAxLnR4dA==' '7be7b5b0d85c2155749a5b8e5a33be6fb4ccd321fb015f0b5671be14b3b7a166' @'
+IyMjZm9ybWF0SWQjIyMNClNBR1lPDQojIyOO6I+Hj5GU1I2GIyMjDQpPUFMtMDAxDQojIyON7IvG
+lrwjIyMNCoNUgVuDb466VVBTkuiK+pNfjJ8NCiMjI5HOj9uQ3ZT1IyMjDQqDVIFbg2+OujFGIFVQ
+U5Z7kcyBaUFQQyBTbWFydC1VUFMgMzAwMIFqDQojIyON7IvGi+aVqiMjIw0KkuiK+pNfjJ8NCiMj
+I4rrjK+TeCMjIw0KkoYNCiMjI43si8aXXJLok/qOniMjIw0KMjAyNi0wNy0xNSAyMjowMA0KIyMj
+lUuXdoLIjpGKaSMjIw0Kk2SLQ47llEOLWo9wjtKR5o5Pju0NCiMjI43si8aO6I+HIyMjDQoxLiCO
+lpFPgsmDVoNYg2WDgJWUkVOI9YLWjeyLxpLKkm2DgYFbg4uC8JGXkE0NCjIuIFVQU4LMjqmMyJBm
+kmZMRUSCzI/zkdSC8JbajouKbZRGDQozLiCDb4Nig2WDipNkiLOC8INlg1iDXoLFjHaRqoFpMTMu
+OFaBfTAuMlaIyJPggsWCoILpgrGCxoFqDQo0LiBVUFOCzJOujeyDZYNYg2eDgoFbg2iC8I7AjXMN
+CjUuIINlg1iDZ4yLicqC8JNfjJ+VXILJi0yYXg0KNi4gk1+Mn4qul7mV8Y2Qg4GBW4OLgvCDVoNY
+g2WDgJWUkVOI9YLWkZeQTQ0KIyMjjmeXcIK3gumNSIvvgUWVlJVpIyMjDQqDZoNXg16Di4Nlg1iD
+XoFBk1+Mn5VcgUGQ4omPjuiR3A0KIyMjiMCRU4/jgsySjYjTIyMjDQqVS4K4Mpa8iMiP44LFjeyL
+xoK3gumCsYLGgUINCoq0k2SWaI5+gsyCvYLfkOKJj47okdyC8JKFl3CCt4LpgrGCxoFCDQqTX4yf
+koaCzZG8gsyDWINeg2KDdIKqjOuCwYLEi0CK7YLJkEeC6oLIgqKC5oKkgUGT/Iz7gsmDSoOJgVuD
+UoFbg5OC8JDdknWCt4LpgUINCiMjI4ptlEaO0iMjIw0KjlKTYyCRvphZDQo=
+'@
+Write-Sample 'ZGF0YVxTQUdZTy0wMDAyLnR4dA==' '8da00cb7e145009a8fea96ee29b2bd50c5322d4047d6ed471cd8d5e292bd947d' @'
+IyMjZm9ybWF0SWQjIyMNClNBR1lPDQojIyOO6I+Hj5GU1I2GIyMjDQpPUFMtMDAyDQojIyON7IvG
+lrwjIyMNCoxvl52DVoNYg2WDgIyOjp+Db4Nig06DQYNig3YNCiMjI5HOj9uQ3ZT1IyMjDQqMb5ed
+g1SBW4NvgWlLRUlSSS1TVlIwMYFqDQojIyON7IvGi+aVqiMjIw0KkuiK+pNfjJ8NCiMjI4rrjK+T
+eCMjIw0KkuENCiMjI43si8aXXJLok/qOniMjIw0KMjAyNi0wNi0zMCAyMzozMA0KIyMjlUuXdoLI
+jpGKaSMjIw0KDQojIyON7IvGjuiPhyMjIw0KMS4gjG+XnYNWg1iDZYOAgqqXmJdwgrOC6oLEgqKC
+yIKigrGCxoLwim2URg0KMi4gS0VJUkktU1ZSMDGCyVJEUJDakbENCjMuIEM6XEJhY2t1cFxtb250
+aGx5X2JhY2t1cC5iYXQggvCOwI1zDQo0LiCOwI1zg42DT4Lwim2URoK1gUGDR4OJgVuCqpazgqKC
+sYLGgvCKbZRGDQo1LiCDb4Nig06DQYNig3aDdINAg0ODi4KqIFo6XGJhY2t1cFxZWVlZTU1cIILJ
+jeyQrIKzguqCvYKxgsaC8IptlEYNCjYuIIN0g0CDQ4OLg1SDQ4NZgqqRT4yOlOSBfTEwJYjIk+CC
+xYKggumCsYLGgvCKbZRGDQo3LiCKrpe5lfGNkILwjG+XnZWUkreC1oOBgVuDiw0KIyMjjmeXcIK3
+gumNSIvvgUWVlJVpIyMjDQqCyIK1DQojIyOIwJFTj+OCzJKNiNMjIyMNCpVLgriN7IvGj0mXuYzj
+gsmDb4Nig06DQYNig3aDdINAg0ODi4LMkbaN3YLwim2URoK3gumCsYLGgUINCpaciOqDb4Nig06D
+QYNig3aOuJRzjp6CzYNWg1iDZYOAlZSCyZGmmEGXjYFCDQojIyOKbZRGjtIjIyMNCpfpltggjJKI
+6g0K
+'@
+Write-Sample 'ZGF0YVxTQUdZTy0wMDAzLnR4dA==' 'e1ee4ed57955042241abd7f791e0b9c8cc70b5284bdfcfb2ab722056fffc0059' @'
+IyMjZm9ybWF0SWQjIyMNClNBR1lPDQojIyOO6I+Hj5GU1I2GIyMjDQpPUFMtMDAzDQojIyON7IvG
+lrwjIyMNCpBWk/yO0Ij1UEODTINig2WDQoOTg08NCiMjI5HOj9uQ3ZT1IyMjDQqDbYFbg2dQQ4Fp
+SFAgRWxpdGVCb29rIDg0MCBHMTCBag0KIyMjjeyLxovmlaojIyMNCpBWi0uQ3ZJ1DQojIyOK64yv
+k3gjIyMNCpLhDQojIyON7IvGl1yS6JP6jp4jIyMNCg0KIyMjlUuXdoLIjpGKaSMjIw0KDQojIyON
+7IvGjuiPhyMjIw0KMS4gkmmDe4Fbg4uCqYLnjuaC6I9vgrWBQYpPkZWCzI+dgvCTX4yfDQoyLiCT
+ZIy5k4qT/IK1gUFXaW5kb3dzj4mK+oNag2KDZ4NBg2KDdoLwiq6XuQ0KMy4gQUSOUYnBgWmDaIOB
+g0ODkzogY29ycC5leGFtcGxlLmxvY2FsgWoNCjQuIINPg4uBW4N2g3yDioNWgVuCqpNLl3CCs4Lq
+gr2CsYLGgvCKbZRGDQo1LiCVS5B7g1yDdINngWlPZmZpY2WBQVNsYWNrgUGO0JPgVlBOgWqC8IND
+g5ODWINngVuDiw0KNi4gg3aDioOTg16C8Iukl0yDdoOKg5ODXoLGgrWCxJLHicENCjcuIJOujeyK
+bZRGg2CDRoNig06DioNYg2eCyYmIgsGCxIpljYCW2oLwim2URg0KOC4gkluWlorHl52R5JKggsmD
+VoOKg0GDi5TUjYaBRU1BQ4FFl5iXcI7SlryC8JNvmF4NCiMjI45nl3CCt4LpjUiL74FFlZSVaSMj
+Iw0KQUODQYNfg3aDXoFBTEFOg1CBW4N1g4uBQY+JivqQ3ZLol3BVU0KDgYOCg4oNCiMjI4jAkVOP
+44LMko2I0yMjIw0KQUSOUYnBgtyCxYLNjtCT4INsg2KDZ4OPgVuDToLMk+CRpILFjXOCpIKxgsaB
+Qg0Kj4mK+oNwg1iDj4Fbg2iCzZDdkuiM44K3gq6CyZZ7kGyC1pXPjViC8JGjgreCsYLGgUINCiMj
+I4ptlEaO0iMjIw0KjbKToSCU/I3nDQo=
+'@
+Write-Sample 'ZGF0YVxTQUdZTy0wMDA0LnR4dA==' '64887f6b10ebcec8f150d1a34278fe5abf6b72027c7df471efdda1edfbbeae1f' @'
+IyMjZm9ybWF0SWQjIyMNClNBR1lPDQojIyOO6I+Hj5GU1I2GIyMjDQpPUFMtMDAyDQojIyON7IvG
+lrwjIyMNCoNvg2KDToNBg2KDdoNUgVuDb5dll8qDYINGg2KDTg0KIyMjkc6P25DdlPUjIyMNCoNv
+g2KDToNBg2KDdoNUgVuDbyBCS1AtUFJJTUFSWQ0KIyMjjeyLxovmlaojIyMNCo9Ujp+TX4yfDQoj
+IyOK64yvk3gjIyMNCpLhDQojIyON7IvGl1yS6JP6jp4jIyMNCjIwMjYtMDYtMTUgMDI6MDANCiMj
+I5VLl3aCyI6Rjd4jIyMNCoLIgrWBaYOKg4KBW4NnjeyLxoLMgt2Bag0KIyMjjeyLxo7oj4cjIyMN
+CjEuIFNTSCCCxYNvg2KDToNBg2KDdoNUgVuDb4LWg42DT4NDg5MNCjIuIGRmIC1oIINSg32Dk4No
+gsWKZYNwgVuDZYNCg1aDh4OTgsyOZ5dwl6aC8IptlEYNCjMuIDgwJZK0gsyDcIFbg2WDQoNWg4eD
+k4KqgqCC6oLOg0GDiYFbg2cNCjQuIIONg0+C8I7Qk+BXaWtpgtaLTJheDQojIyOOZ5dwgreC6Y1I
+i++BRZWUlWkjIyMNCorHl52SW5aWgWmDioOCgVuDZ4Nmg1iDToNng2KDdoFqDQojIyOIwJFTj+OC
+zJKNiNMjIyMNCpZ7lNSDWoNPg4GDk4NngtaCzINBg06DWoNYgs0gVlBOIIxvl1KCzILdgUKDUoN9
+g5ODaILNg1KDc4N5gsWOwI1zgUINCiMjI4ptlEaO0iMjIw0KkM6TYyCNXw0KIyMjQ3JlYXRlZEF0
+IyMjDQoyMDI2LTA2LTA5IDEwOjAwDQojIyNVcGRhdGVkQXQjIyMNCjIwMjYtMDYtMDkgMTI6MDAN
+Cg==
+'@
+Write-Sample 'ZGF0YVxTQUdZTy0wMDA1LnR4dA==' '62f9df1ca24f3c3100148f57a228e595848611f60a0a878e130b2d92982d20bc' @'
+IyMjZm9ybWF0SWQjIyMNClNBR1lPDQojIyOO6I+Hj5GU1I2GIyMjDQpPUFMtMDAzDQojIyON7IvG
+lrwjIyMNCorEjouDSoOBg4mYXonmkZWSdYOBg5ODZYNpg5ODWA0KIyMjkc6P25DdlPUjIyMNCorE
+jouDSoOBg4mYXonmkZWSdURWUi0xMDENCiMjI43si8aL5pWqIyMjDQqMjo6fk1+Mnw0KIyMjiuuM
+r5N4IyMjDQqShg0KIyMjjeyLxpdckuiT+o6eIyMjDQoyMDI2LTA3LTEwIDIyOjAwDQojIyOVS5d2
+gsiOkY3eIyMjDQqXXJT1SEREIDGR5IFBg2iDiYNDg2+DWoNig2eBQZZokG+O6JHcDQojIyON7IvG
+juiPhyMjIw0KMS4gmF6J5pLijn6DWINQg1eDhYFbg4uC8I6WkU+CyZNvmF4NCjIuIJNkjLmO1ZJm
+kU+CyYNvg2KDToNBg2KDdoqul7mC8IptlEYNCjMuIEhERI7mguiKT4K1gaiM8Iq3gaiO5oLolXSC
+rw0KNC4gjcSLTpOugrWCxJOujeyKbZRGDQo1LiCDZYNYg2eYXonmgvAxjp6K1I7AjnsNCiMjI45n
+l3CCt4LpjUiL74FFlZSVaSMjIw0Kg3aDiYNYg2iDiYNDg2+BQYNng4uDToNYg2iDiYNDg2+BQZZo
+kG+O6JHcDQojIyOIwJFTj+OCzJKNiNMjIyMNCpBblumR0Y3si8aCzIK9gt8ylryVS5B7gUKLcpen
+jmeXcI6egs2TXZN8ko2I04FCDQojIyOKbZRGjtIjIyMNCo+8lnsgl8eT8Q0KIyMjQ3JlYXRlZEF0
+IyMjDQoyMDI2LTA2LTA5IDEwOjAwDQojIyNVcGRhdGVkQXQjIyMNCjIwMjYtMDYtMDkgMTI6MDAN
+Cg==
+'@
+Write-Sample 'ZGF0YVxTQUdZTy0wMDA2LnR4dA==' 'ea536ae8b0c456070f7cab46d5a6a8a08f686a244f5778ceb154291c61d33df6' @'
+IyMjZm9ybWF0SWQjIyMNClNBR1lPDQojIyOO6I+Hj5GU1I2GIyMjDQpPUFMtMDA0DQojIyON7IvG
+lrwjIyMNCoN0g0CDQ4NBg0WDSIFbg4uQ3ZLolc+NWA0KIyMjkc6P25DdlPUjIyMNCourikWDdINA
+g0ODQYNFg0iBW4OLIEZXLUVER0UNCiMjI43si8aL5pWqIyMjDQqL2Yt9kc6Jng0KIyMjiuuMr5N4
+IyMjDQqNgg0KIyMjjeyLxpdckuiT+o6eIyMjDQoyMDI2LTA2LTEyIDIxOjAwDQojIyOVS5d2gsiO
+kY3eIyMjDQqCyIK1DQojIyON7IvGjuiPhyMjIw0KMS4gjpaRT4LJlc+NWJPgl2WCzIOMg3KDhYFb
+gWkylryIyI/jgWoNCjIuIJDdkuiDb4Nig06DQYNig3aC8I7mk74NCjMuIJXPjViDUoN9g5ODaILw
+jsCNcw0KNC4gg2WDWINng2eDiYN0g0KDYoNOgsWTro3sim2URg0KNS4gjriUc46egs2Rpo3AgsmD
+b4Nig06DQYNig3aCqYLnlZyMsw0KIyMjjmeXcIK3gumNSIvvgUWVlJVpIyMjDQqKx5edkluWlg0K
+IyMjiMCRU4/jgsySjYjTIyMjDQqWe5TUiWWLv5HlgsyN7IvGgsyCvYLfgUGVS4K4Mpa8iMiP44LF
+jsCOe4FCg42BW4OLg2+DYoNOjuiPh4LwjpaRT4ptlEaBQg0KIyMjim2URo7SIyMjDQqQWJNjIIyS
+kb4NCiMjI0NyZWF0ZWRBdCMjIw0KMjAyNi0wNi0wOSAxMDowMA0KIyMjVXBkYXRlZEF0IyMjDQoy
+MDI2LTA2LTA5IDEyOjAwDQo=
+'@
+
+Log ('[OK] sample data: ' + $script:nWritten + ' written, ' + $script:nSkipped + ' skipped (already existed)')
+Write-Host ''
+Write-Host '======================================================' -ForegroundColor Green
+Write-Host ' STEP 3/3 complete: sample data ready.' -ForegroundColor Green
+Write-Host ('  formats -> ' + (Join-Path $KnowledgeDir 'formats')) -ForegroundColor Green
+Write-Host ('  data    -> ' + (Join-Path $KnowledgeDir 'data')) -ForegroundColor Green
+Write-Host ' Open KnowledgeMgr\dist\ workbooks and search to see the samples.' -ForegroundColor Green
+Write-Host '======================================================' -ForegroundColor Green
+exit 0
 # === KVBA_EOF_V23 ===
 ```

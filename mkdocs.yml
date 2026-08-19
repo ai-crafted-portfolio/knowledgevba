@@ -104,6 +104,7 @@ nav:
           - FMT-001 テスト標準フォーマット: sample_data/formats/fmt-001.md
           - FAULT 障害対応: sample_data/formats/fault.md
           - SAGYO 作業手順書: sample_data/formats/sagyo.md
+          - DEMO 新入力型デモ: sample_data/formats/demo.md
       - ナレッジデータ:
           - FAULT-0001 経理システムへログインできない: sample_data/data/fault-0001.md
           - FAULT-0002: sample_data/data/fault-0002.md
@@ -118,6 +119,7 @@ nav:
           - SAGYO-0004 バックアップサーバ容量チェック: sample_data/data/sagyo-0004.md
           - SAGYO-0005 監視カメラ録画装置メンテナンス: sample_data/data/sagyo-0005.md
           - SAGYO-0006 ファイアウォール設定変更: sample_data/data/sagyo-0006.md
+          - DEMO-0001 サービス復旧手順（新入力型デモ）: sample_data/data/demo-0001.md
   - モジュール一覧:
       - 一覧: modules/index.md
       - 管理.xlsm 用:
