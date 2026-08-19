@@ -30,7 +30,7 @@ FieldName=手順書
 FieldType=複数行リッチ
 Required=FALSE
 Rows=12
-fieldPlaceholder=（例）# 概要 と書くと見出しになります
+fieldPlaceholder=（例）【見出し】 概要  と書くと見出しになります
 searchTarget=FALSE
 ===
 [FIELD]
