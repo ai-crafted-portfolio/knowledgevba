@@ -774,6 +774,39 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        入力欄に付くボタン
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        保存する前に仕上がりを見る（［表示］）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#word-excel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Word / Excel に書き出す
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -5100,7 +5133,7 @@
 <ul>
 <li>必須の項目には印が付いています。空のままだと登録できないので、まず必須から埋めます。</li>
 <li>日付の項目は『2026/06/17』のように、年／月／日をスラッシュで区切って入力します。</li>
-<li>長い説明を改行したいときは、セルの中で Alt キーを押しながら Enter キーを押します。</li>
+<li>複数行の欄で改行したいときは、そのまま <code>Enter</code> キーを押します（改行が入ります）。</li>
 <li>型に合わない値（数値欄に文字など）は登録時に知らせてくれるので、表示に従って直します。</li>
 </ul>
 <div class="admonition tip">
@@ -5116,6 +5149,111 @@
 <div class="admonition tip">
 <p class="admonition-title">安心ポイント</p>
 <p>修正・削除のときは、変更前の内容が <code>backup</code> フォルダに自動で控えとして残ります。</p>
+</div>
+<h2 id="_5">入力欄に付くボタン<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
+<p>フォーマットの型によって、入力欄のそばにボタンが出ます。押し方は次のとおりです。
+（型そのものの説明は<a href="../types/">フィールド型の説明</a>を参照してください。）</p>
+<table>
+<thead>
+<tr>
+<th>ボタン</th>
+<th>出る場所</th>
+<th>押すと</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>［ブロック］［見出し］［太字］</td>
+<td>複数行（リッチ）の欄の上</td>
+<td>カーソルのある行（選択中ならその範囲）を装飾の記法で囲みます</td>
+</tr>
+<tr>
+<td>［ファイル選択］</td>
+<td>ファイル（リンク）の欄の上</td>
+<td>ファイル選択ダイアログが開き、選んだファイルのパスが 1 行 1 件で追加されます（<code>Ctrl</code> で複数選択可）</td>
+</tr>
+<tr>
+<td>［URL追加］</td>
+<td>ファイル（リンク）の欄の上</td>
+<td>アドレスの入力を求められます。<code>https://</code> から始まるリンクを貼って『OK』を押すと 1 行追加されます</td>
+</tr>
+<tr>
+<td>［コピー］</td>
+<td>表示画面（複数行（コピー）の項目名の右／リッチのコード枠の右上）</td>
+<td>その内容をクリップボードにコピーします</td>
+</tr>
+<tr>
+<td>［開く］</td>
+<td>表示画面（ファイル（リンク）の 1 件ごと）</td>
+<td>ローカルのファイルは既定のアプリ、URL は既定のブラウザで開きます</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_6">保存する前に仕上がりを見る（［表示］）<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
+<p>複数行（リッチ）またはファイル（リンク）の項目を含むフォーマットでは、
+登録・編集画面の下に <strong>［表示］</strong> ボタンが出ます。</p>
+<ol>
+<li>一通り入力します（まだ登録しなくてかまいません）。</li>
+<li><strong>［表示］</strong> を押します。いま入力中の内容が、検索結果から開いたときと同じ見た目で別ウィンドウに表示されます。</li>
+<li>見出しやコード枠の見え方を確認します。直したいところがあれば、ウィンドウを閉じて入力に戻ります。</li>
+<li>問題なければ『登録』（編集中なら『更新』）を押します。</li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">ウィンドウの大きさ</p>
+<p>表示ウィンドウは、右上の最大化ボタンのほか、<strong>ウィンドウの端をドラッグ</strong>しても大きさを変えられます。</p>
+</div>
+<h2 id="word-excel">Word / Excel に書き出す<a class="headerlink" href="#word-excel" title="Permanent link">&para;</a></h2>
+<p>登録したナレッジは、Word 文書や Excel 一覧として書き出せます。
+<strong>［Word出力］［Excel一覧］</strong> の 2 つのボタンは、次の 2 か所に出ます。</p>
+<ul>
+<li>検索結果からナレッジを表示したウィンドウ</li>
+<li>登録・編集画面の <strong>［表示］</strong> で開いたプレビューウィンドウ（<strong>まだ保存していない内容でも書き出せます</strong>）</li>
+</ul>
+<p><strong>利用者がすること</strong></p>
+<ol>
+<li>書き出したいナレッジを表示します（検索結果をダブルクリック、または登録画面で［表示］）。</li>
+<li><strong>［Word出力］</strong> を押すと、そのナレッジ 1 件が 1 つの Word 文書になります。
+   <strong>［Excel一覧］</strong> を押すと、<strong>同じフォーマットの全ナレッジ</strong>が 1 枚の一覧表になります。</li>
+<li>
+<p>出来上がったファイルは <strong>自動的に開きます</strong>。保存先は次の固定フォルダです。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>C:\KnowledgeMgr\export\
+</code></pre></div>
+</li>
+<li>
+<p>別の場所に置きたいときは、開いた Word / Excel で『名前を付けて保存』するか、
+   エクスプローラーで上のフォルダから移動してください。</p>
+</li>
+</ol>
+<p><strong>書き出しの中身</strong></p>
+<table>
+<thead>
+<tr>
+<th>出力</th>
+<th>ファイル名</th>
+<th>中身</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Word</td>
+<td><code>ナレッジ番号_件名_日時.docx</code></td>
+<td>ナレッジ 1 件。見出しは太字、リッチのコード枠は等幅＋灰色の網かけ、ファイル（リンク）はクリックできるリンクになります</td>
+</tr>
+<tr>
+<td>Excel</td>
+<td><code>フォーマットID_一覧_日時.xlsx</code></td>
+<td>そのフォーマットの全ナレッジ。1 行 1 ナレッジ。列は ナレッジ番号／登録日／更新日＋フォーマットの全項目。見出し行にオートフィルタが付きます</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition warning">
+<p class="admonition-title">事前に必要なもの</p>
+<ul>
+<li><strong>［Word出力］には Word、［Excel一覧］には Excel が必要です。</strong> 入っていない場合はメッセージが出て中止されます。</li>
+<li>出力フォルダ <code>C:\KnowledgeMgr\export\</code> は、最初の書き出しのときに自動で作られます。事前の作成は不要です。</li>
+<li>ボタンは連打しないでください（書き出しが終わるまで次の操作は受け付けません）。</li>
+<li>Excel の一覧では、リッチの記法（<code>【見出し】</code> など）は取り除かれ、読みやすい素の文章で入ります。</li>
+</ul>
 </div>
 
 

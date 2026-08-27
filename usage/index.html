@@ -1060,6 +1060,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#23-word-excel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 Word / Excel に書き出す
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -5295,7 +5306,9 @@
 <li>フォーマットに応じたフィールドが画面上に展開されるので、内容を入力<ul>
 <li>必須項目には印が付いています。空のままだと登録できません</li>
 <li>日付フィールドは <code>YYYY/MM/DD</code> の形式で入力</li>
-<li>複数行の説明は、セル内で <code>Alt+Enter</code> で改行できます</li>
+<li>複数行の入力欄では、そのまま <code>Enter</code> キーで改行できます</li>
+<li>型によっては入力欄のそばにボタンが出ます（［ブロック］［見出し］［太字］／［ファイル選択］［URL追加］）。使い方は<a href="../manual/types/">フィールド型の説明</a>を参照</li>
+<li>リッチ型・ファイル型を含むフォーマットでは <strong>[表示]</strong> ボタンが出ます。押すと、保存前の内容を表示画面と同じ見た目で確認できます</li>
 </ul>
 </li>
 <li><strong>[登録]</strong> ボタンをクリック</li>
@@ -5344,9 +5357,29 @@
 <h3 id="22">2.2 検索結果から詳細を表示する<a class="headerlink" href="#22" title="Permanent link">&para;</a></h3>
 <ol>
 <li>一覧の中で見たい行を <strong>ダブルクリック</strong></li>
-<li><strong>「ナレッジ詳細」シート（M-09）</strong> が開き、全フィールドが表示されます</li>
-<li>戻るには上の <strong>[検索に戻る]</strong> ボタンをクリック</li>
+<li><strong>ナレッジ詳細のウィンドウ</strong>が開き、全フィールドが表示されます<ul>
+<li>右上の最大化ボタン、またはウィンドウの端のドラッグで大きさを変えられます</li>
+<li>複数行（コピー）の項目、リッチのコード枠には <strong>[コピー]</strong> が付きます</li>
+<li>ファイル（リンク）の項目には 1 件ごとに <strong>[開く]</strong> が付きます（既定のアプリ／既定のブラウザで開きます）</li>
+</ul>
+</li>
+<li>閉じるには <strong>[閉じる]</strong> ボタンをクリック</li>
 </ol>
+<h3 id="23-word-excel">2.3 Word / Excel に書き出す<a class="headerlink" href="#23-word-excel" title="Permanent link">&para;</a></h3>
+<p>ナレッジ詳細のウィンドウ（および登録画面の <strong>[表示]</strong> プレビュー）には、
+<strong>[Word出力]</strong> と <strong>[Excel一覧]</strong> のボタンがあります。</p>
+<ol>
+<li>書き出したいナレッジを表示する</li>
+<li><strong>[Word出力]</strong> … そのナレッジ 1 件を 1 つの Word 文書にする
+   <strong>[Excel一覧]</strong> … 同じフォーマットの全ナレッジを 1 枚の一覧表にする</li>
+<li>出来上がったファイルは自動で開きます。保存先は <code>C:\KnowledgeMgr\export\</code>（初回に自動作成）</li>
+<li>別の場所に置きたい場合は、開いたアプリで『名前を付けて保存』するか、エクスプローラーで移動してください</li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">必要なもの</p>
+<p>[Word出力] には Word、[Excel一覧] には Excel が必要です。未インストールの場合はメッセージが出て中止されます。
+くわしくは<a href="../manual/register/">登録・編集の流れ</a>を参照してください。</p>
+</div>
 <hr />
 <h2 id="3-xlsm">3. フォーマットを管理する（管理.xlsm）<a class="headerlink" href="#3-xlsm" title="Permanent link">&para;</a></h2>
 <h3 id="31">3.1 フォーマット一覧を見る<a class="headerlink" href="#31" title="Permanent link">&para;</a></h3>

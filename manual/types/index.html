@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="フォーマットの項目に設定できる型（単一行・複数行・日付・選択）と、各項目の属性を全件説明します">
+        <meta name="description" content="フォーマットの項目に設定できる型（単一行・複数行・複数行コピー・複数行リッチ・ファイルリンク・日付・選択）と、各項目の属性を全件説明します">
       
       
         <meta name="author" content="ai-crafted-portfolio">
@@ -809,10 +809,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4" class="md-nav__link">
+  <a href="#7" class="md-nav__link">
     <span class="md-ellipsis">
       
-        保存される型は 4 種類
+        保存される型は 7 種類
       
     </span>
   </a>
@@ -857,7 +857,7 @@
   <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
-        日付
+        複数行（コピー）
       
     </span>
   </a>
@@ -866,6 +866,39 @@
         
           <li class="md-nav__item">
   <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        複数行（リッチ）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ファイル（リンク）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        日付
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
     <span class="md-ellipsis">
       
         選択（選択・チェック）
@@ -881,7 +914,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
+  <a href="#_10" class="md-nav__link">
     <span class="md-ellipsis">
       
         項目に設定できる属性
@@ -892,7 +925,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_8" class="md-nav__link">
+  <a href="#_11" class="md-nav__link">
     <span class="md-ellipsis">
       
         型の選び方のヒント
@@ -903,7 +936,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_9" class="md-nav__link">
+  <a href="#_12" class="md-nav__link">
     <span class="md-ellipsis">
       
         関連ページ
@@ -5171,7 +5204,7 @@
 型によって、入力欄の見た目（1 行か、複数行か、カレンダーか、選択肢か）と、保存される値の形が決まります。</p>
 <p>このページでは、設計画面で選べる型と、各項目に設定できる属性をすべて説明します。</p>
 <h2 id="_2">設計画面で選べる型<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
-<p>フォーマット設計画面の「型」の欄では、次の 6 種類から選べます。</p>
+<p>フォーマット設計画面の「型」の欄では、次の 9 種類から選べます。</p>
 <table>
 <thead>
 <tr>
@@ -5193,6 +5226,24 @@
 <td>改行できる広い入力欄</td>
 <td>概要・原因・対応内容など長い文章</td>
 <td>応答時間が通常の 10 倍以上に増加</td>
+</tr>
+<tr>
+<td>複数行（コピー）</td>
+<td>広い入力欄。表示画面では欄ごと［コピー］できる</td>
+<td>コマンド・定型文など、まるごと貼り付けて使う内容</td>
+<td>sudo systemctl status app</td>
+</tr>
+<tr>
+<td>複数行（リッチ）</td>
+<td>広い入力欄＋［ブロック］［見出し］［太字］の 3 ボタン</td>
+<td>手順書・調査メモなど、見出しやコード例を含む長文</td>
+<td>（下の「リッチの書き方」を参照）</td>
+</tr>
+<tr>
+<td>ファイル（リンク）</td>
+<td>広い入力欄＋［ファイル選択］［URL追加］。表示画面では 1 件ごとに［開く］</td>
+<td>手順書 PDF、Box や SharePoint の共有リンク</td>
+<td>C:\手順\復旧手順.pdf</td>
 </tr>
 <tr>
 <td>数値</td>
@@ -5220,8 +5271,8 @@
 </tr>
 </tbody>
 </table>
-<h2 id="4">保存される型は 4 種類<a class="headerlink" href="#4" title="Permanent link">&para;</a></h2>
-<p>設計画面では 6 種類から選べますが、保存されるときには次の <strong>4 種類</strong> に整理されます。
+<h2 id="7">保存される型は 7 種類<a class="headerlink" href="#7" title="Permanent link">&para;</a></h2>
+<p>設計画面では 9 種類から選べますが、保存されるときには次の <strong>7 種類</strong> に整理されます。
 入力欄の見た目はそのままで、内部的にまとめて扱われるだけなので、使い方を意識する必要はありません。</p>
 <table>
 <thead>
@@ -5242,6 +5293,18 @@
 <tr>
 <td>複数行テキスト</td>
 <td>複数行</td>
+</tr>
+<tr>
+<td>複数行（コピー）</td>
+<td>複数行コピー</td>
+</tr>
+<tr>
+<td>複数行（リッチ）</td>
+<td>複数行リッチ</td>
+</tr>
+<tr>
+<td>ファイル（リンク）</td>
+<td>ファイルリンク</td>
 </tr>
 <tr>
 <td>日付</td>
@@ -5289,19 +5352,111 @@
 </ul>
 <p>既定は <code>FALSE</code>（バー無し）です。長文を入力する欄には <code>TRUE</code> を指定してください。</p>
 </div>
-<h3 id="_5">日付<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h3>
+<h3 id="_5">複数行（コピー）<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>入力欄</strong>：改行できる広い入力欄です。入力のしかたは「複数行テキスト」と同じです。</li>
+<li><strong>表示画面</strong>：項目名の右に <strong>［コピー］</strong> ボタンが出ます。押すと、その項目の中身が<strong>まるごと</strong>クリップボードにコピーされます。</li>
+<li><strong>用途</strong>：実行コマンド、定型の連絡文など、そのまま貼り付けて使う内容に向きます。</li>
+</ul>
+<p><strong>利用者がすること</strong></p>
+<ol>
+<li>登録画面で、その欄にコマンドや定型文をそのまま入力します（記法は不要です）。</li>
+<li>使うときは、検索結果からナレッジを表示し、項目名の右の［コピー］を押します。</li>
+<li>貼り付け先（ターミナル、メールなど）で <code>Ctrl</code> + <code>V</code> を押します。</li>
+</ol>
+<h3 id="_6">複数行（リッチ）<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h3>
+<p>見出し・太字・コピーできるコード枠を含む長文を書ける欄です。
+入力欄の上に <strong>［ブロック］［見出し］［太字］</strong> の 3 つのボタンが並びます。</p>
+<p><strong>利用者がすること（装飾の付け方）</strong></p>
+<ol>
+<li>装飾したい行にカーソルを置きます（複数行なら、その範囲を選択します）。</li>
+<li>［見出し］［太字］［ブロック］のいずれかを押します。選んだ行が下の記法で囲まれます。</li>
+<li>仕上がりを確かめるときは、画面下の <strong>［表示］</strong> ボタンを押します（プレビューが別ウィンドウで開きます）。</li>
+<li>問題なければ『登録』または『更新』を押します。</li>
+</ol>
+<p><strong>リッチの書き方（記法）</strong></p>
+<p>ボタンは下の記法を入れるだけなので、手で書いても同じ結果になります。<strong>3 種類とも「囲む」書き方</strong>で統一されています。</p>
+<table>
+<thead>
+<tr>
+<th>付けたい装飾</th>
+<th>書き方</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>見出し</td>
+<td><code>【見出し】</code> と <code>【見出しここまで】</code> で挟む</td>
+</tr>
+<tr>
+<td>太字の段落</td>
+<td><code>【太字】</code> と <code>【太字ここまで】</code> で挟む</td>
+</tr>
+<tr>
+<td>コピーできるコード枠</td>
+<td><code>【ブロック】</code> と <code>【ブロックここまで】</code> で挟む</td>
+</tr>
+</tbody>
+</table>
+<p>記入例:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>【見出し】
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>概要
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>【見出しここまで】
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>【太字】
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>作業前に責任者の承認が必要です。
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>【太字ここまで】
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>本番サービスが停止したときの復旧手順です。
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>【ブロック】
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>sudo systemctl stop app
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>sudo systemctl start app
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>【ブロックここまで】
+</code></pre></div>
+<p><strong>表示画面での見え方</strong></p>
+<ul>
+<li>見出し … 大きめの太字で表示されます。</li>
+<li>太字 … 太字の段落で表示されます。</li>
+<li>ブロック … 等幅フォントの枠で表示され、枠の右上に <strong>［コピー］</strong> が付きます。押すとその枠の中身だけをコピーできます。</li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">記法で気をつけること</p>
+<ul>
+<li>囲みの記号は<strong>全角の角かっこ</strong>（<code>【</code> <code>】</code>）です。半角の <code>#</code> を並べた <code>###ブロック###</code> のような書き方はしないでください。ナレッジの保存形式で使っている区切り記号と同じ形になり、その行から先が保存されません。</li>
+<li>開始と終了は<strong>それぞれ独立した行</strong>に置きます（ボタンで付ければ自動的にそうなります）。</li>
+<li>装飾を入れ子にすることはできません。すでに囲まれている場所でボタンを押しても、二重には囲みません。</li>
+</ul>
+</div>
+<h3 id="_7">ファイル（リンク）<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
+<p>ファイルの<strong>場所（パス）や URL だけ</strong>を保存する欄です。ファイルの実体はコピーされないので、ナレッジの保存容量は増えません。</p>
+<p><strong>利用者がすること</strong></p>
+<ol>
+<li>登録画面で <strong>［ファイル選択］</strong> を押し、ダイアログでファイルを選びます（<code>Ctrl</code> を押しながらで複数選択できます）。選んだファイルの絶対パスが 1 行 1 件で追加されます。</li>
+<li>Box や SharePoint のような Web のリンクを入れるときは <strong>［URL追加］</strong> を押し、<code>https://</code> から始まるアドレスを貼り付けて『OK』を押します。</li>
+<li>直接キーボードで書いてもかまいません（1 行に 1 件）。</li>
+<li>表示画面では 1 件ごとに <strong>［開く］</strong> ボタンが出ます。押すと、ローカルのファイルは<strong>既定のアプリ</strong>で、URL は<strong>既定のブラウザ</strong>で開きます。</li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">扱えるリンクの種類</p>
+<ul>
+<li>ローカルのパス（<code>C:\手順\復旧手順.pdf</code>）、共有フォルダの UNC パス（<code>\\server\share\file.xlsx</code>）、
+  <code>http</code> / <code>https</code> / <code>ftp</code> / <code>ftps</code> / <code>mailto</code> / <code>file</code> で始まる URL が使えます。</li>
+<li><code>javascript:</code> など、それ以外の書き出しは安全のため開きません。</li>
+<li>［開く］は連打しても 1 回しか動きません（開き終わるまで、および完了後 1.5 秒は受け付けません）。</li>
+<li><strong>リンクなので、元のファイルを移動・削除すると開けなくなります。</strong> 共有フォルダなど、動かない場所に置いてから登録してください。</li>
+</ul>
+</div>
+<h3 id="_8">日付<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>入力欄</strong>：日付を入れる欄です。</li>
 <li><strong>用途</strong>：発生日時、対応日など。</li>
 <li><strong>入力例</strong>：<code>2026-06-09</code> や <code>2026-06-09 10:30</code> のように入力します。</li>
 </ul>
-<h3 id="_6">選択（選択・チェック）<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h3>
+<h3 id="_9">選択（選択・チェック）<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>入力欄</strong>：あらかじめ用意した候補から 1 つ選ぶ欄です。</li>
 <li><strong>用途</strong>：カテゴリ、優先度など、決まった候補から選ぶ項目に向きます。</li>
 <li><strong>候補の指定</strong>：項目の「選択肢」に候補を縦棒 <code>|</code> で区切って並べます（例：<code>低|中|高|緊急</code>）。</li>
 </ul>
-<h2 id="_7">項目に設定できる属性<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
+<h2 id="_10">項目に設定できる属性<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h2>
 <p>フォーマットの各項目には、型のほかに次の属性を設定できます。
 これらはフォーマット定義ファイルに保存されます（書式は<a href="../config/">外部設定ファイル</a>のページを参照）。</p>
 <table>
@@ -5325,7 +5480,7 @@
 <tr>
 <td>型</td>
 <td>入力欄の種類</td>
-<td>単一行 / 複数行 / 日付 / 選択</td>
+<td>単一行 / 複数行 / 複数行コピー / 複数行リッチ / ファイルリンク / 日付 / 選択</td>
 <td>（必須）</td>
 <td>単一行</td>
 </tr>
@@ -5345,8 +5500,8 @@
 </tr>
 <tr>
 <td>行数</td>
-<td>複数行のときの入力欄の高さ</td>
-<td>数字（複数行で使用）</td>
+<td>複数行系のときの入力欄の高さ</td>
+<td>数字（複数行／複数行（コピー）／複数行（リッチ）／ファイル（リンク）で使用）</td>
 <td>指定なし＝標準の高さ</td>
 <td>4</td>
 </tr>
@@ -5384,13 +5539,16 @@
 <p class="admonition-title">真偽を表す値の書き方</p>
 <p>「必須」「スクロール」「検索対象」のように 2 択で指定する項目は、すべて大文字で <code>TRUE</code> または <code>FALSE</code> と書きます。</p>
 </div>
-<h2 id="_8">型の選び方のヒント<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
+<h2 id="_11">型の選び方のヒント<a class="headerlink" href="#_11" title="Permanent link">&para;</a></h2>
 <ul>
 <li>短い 1 行の入力なら <strong>1 行テキスト</strong>、長い文章なら <strong>複数行テキスト</strong> を選びます。</li>
+<li>そのまま貼り付けて使う内容（コマンド・定型文）は <strong>複数行（コピー）</strong> にすると、表示画面から 1 押しでコピーできます。</li>
+<li>見出しや手順・コード例が混ざる長文は <strong>複数行（リッチ）</strong> にすると、読みやすく整理できます。</li>
+<li>手順書 PDF や共有リンクを添えたいときは <strong>ファイル（リンク）</strong> を使います。本文に長い URL を貼るより見やすくなります。</li>
 <li>カテゴリや優先度のように候補が決まっているなら <strong>選択</strong> にすると、入力のばらつきを防げます。</li>
 <li>検索でよく使う項目は「検索対象」を <code>TRUE</code> にしておくと、その内容で絞り込めます。</li>
 </ul>
-<h2 id="_9">関連ページ<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
+<h2 id="_12">関連ページ<a class="headerlink" href="#_12" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="../format/">フォーマット設計の流れ</a></li>
 <li><a href="../config/">外部設定ファイル</a></li>
