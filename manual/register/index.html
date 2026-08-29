@@ -5183,9 +5183,9 @@
 <td>その内容をクリップボードにコピーします</td>
 </tr>
 <tr>
-<td>［開く］</td>
+<td>［パスをコピー］</td>
 <td>表示画面（ファイル（リンク）の 1 件ごと）</td>
-<td>ローカルのファイルは既定のアプリ、URL は既定のブラウザで開きます</td>
+<td>その行のパス／URL をクリップボードにコピーします。エクスプローラやブラウザに貼って開いてください</td>
 </tr>
 </tbody>
 </table>
@@ -5215,13 +5215,12 @@
 <li><strong>［Word出力］</strong> を押すと、そのナレッジ 1 件が 1 つの Word 文書になります。
    <strong>［Excel一覧］</strong> を押すと、<strong>同じフォーマットの全ナレッジ</strong>が 1 枚の一覧表になります。</li>
 <li>
-<p>出来上がったファイルは <strong>自動的に開きます</strong>。保存先は次の固定フォルダです。</p>
+<p>出来上がったファイルは次の固定フォルダに保存されます（<strong>自動では開きません</strong>。保存先が画面下部に表示されます）。</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>C:\KnowledgeMgr\export\
 </code></pre></div>
 </li>
 <li>
-<p>別の場所に置きたいときは、開いた Word / Excel で『名前を付けて保存』するか、
-   エクスプローラーで上のフォルダから移動してください。</p>
+<p>エクスプローラーで上のフォルダを開いて、ファイルをダブルクリックしてください。別の場所に置きたいときはそこから移動します。</p>
 </li>
 </ol>
 <p><strong>書き出しの中身</strong></p>
@@ -5249,7 +5248,7 @@
 <div class="admonition warning">
 <p class="admonition-title">事前に必要なもの</p>
 <ul>
-<li><strong>［Word出力］には Word、［Excel一覧］には Excel が必要です。</strong> 入っていない場合はメッセージが出て中止されます。</li>
+<li>ファイルを作るだけなので、<strong>Word が入っていない環境でも［Word出力］は使えます</strong>（開くには Word が必要です）。</li>
 <li>出力フォルダ <code>C:\KnowledgeMgr\export\</code> は、最初の書き出しのときに自動で作られます。事前の作成は不要です。</li>
 <li>ボタンは連打しないでください（書き出しが終わるまで次の操作は受け付けません）。</li>
 <li>Excel の一覧では、リッチの記法（<code>【見出し】</code> など）は取り除かれ、読みやすい素の文章で入ります。</li>
